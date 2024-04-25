@@ -20,8 +20,3 @@ To eject from Expo, run `expo eject` in your project directory. Follow the promp
 ## Image Links
 
 For simplicity, links were used for images within the project. If any image is missing or you encounter issues, feel free to contact me. Alternatively, if you prefer to include the image files directly in the repository, let me know, and I will update the project accordingly.
-
-## Contact
-
-If you have any questions, suggestions, or concerns regarding this project, don't hesitate to reach out to me at [sannimaryam134@gmail.com](mailto:sannimaryam134@gmail.com).
-
