@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Top from '../components/top';
 
 function MyComponent() {
   const navigation = useNavigation(); // Accessing navigation object using useNavigation hook
@@ -35,10 +36,12 @@ function MyComponent() {
   };
 
   return (
+    <View style={{ height: '90%' }}>
+    <Top/ >
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' }}>
           <View style={{ marginLeft: 10 }}>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 20 }}>
               <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 10, alignItems: 'center', justifyContent: 'center', }}>
                 <View style={{
                   width: 30,
@@ -50,36 +53,36 @@ function MyComponent() {
                 }}>
                   <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>1</Text>
                 </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
                   width: 30,
                   height: 30,
                   borderRadius: 40,
-                  backgroundColor: '#F5F5F5',
+                  backgroundColor: '#FFEBCC',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 5,
                 }}>
                   <Text style={{ color: 'white', fontSize: 16 }}>2</Text>
                 </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
                   width: 30,
                   height: 30,
                   borderRadius: 40,
-                  backgroundColor: '#F5F5F5',
+                  backgroundColor: '#FFEBCC',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 5,
                 }}>
                   <Text style={{ color: 'white', fontSize: 16 }}>3</Text>
                 </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
                   width: 30,
                   height: 30,
                   borderRadius: 40,
-                  backgroundColor: '#F5F5F5',
+                  backgroundColor: '#FFEBCC',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 5,
@@ -206,7 +209,7 @@ function MyComponent() {
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: -5, justifyContent: 'space-between', paddingHorizontal: 20 }}>
+        <View style={{ flexDirection: 'row', marginTop: 3, justifyContent: 'space-between', paddingHorizontal: 20 }}>
           <TouchableOpacity
             style={{
               backgroundColor: '#d3f9d8',
@@ -234,7 +237,7 @@ function MyComponent() {
           </TouchableOpacity>
         </View>
       </View>
-    
+    </View>
   );
 }
 

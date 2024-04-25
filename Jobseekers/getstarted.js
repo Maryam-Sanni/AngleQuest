@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Top from '../components/top';
 
 const TextBlock = ({ text }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -12,7 +13,7 @@ const TextBlock = ({ text }) => {
   };
 
   const handleClick = () => {
-    // Perform action when clicked
+    
   };
 
   return (
@@ -28,12 +29,13 @@ const TextBlock = ({ text }) => {
         maxWidth: '100%',
         fontSize: 16,
         borderRadius: 3,
-        backgroundColor: isHovered ? '#A1be95' : '#dbeed4', // Transparent background
+        backgroundColor: isHovered ? '#A1be95' : '#dbeed4', 
         color: '#f8faf8',
-        width: 500,
-        height: 60,
+        width: 300,
+        height: 300,
         cursor: 'pointer',
-        boxShadow: '0 0 5px #f8faf8'
+        boxShadow: '0 0 5px #666', // Shadow effect
+        marginRight: 10, // Spacing between text blocks
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -51,24 +53,30 @@ function MyComponent() {
   ];
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: 'white',
-        backgroundSize: 'cover',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <div>
+      <Top />
       <div
         style={{
-          padding: '20px',
+          minHeight: '100vh',
+          backgroundColor: 'white',
+          backgroundSize: 'cover',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
         }}
       >
-        {textBlocks.map((text, index) => (
-          <TextBlock key={index} text={text} />
-        ))}
+        <div style={{ fontWeight: "bold", fontSize: 24, color: "#206C00", marginBottom: '15px' }}>Get Started</div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {textBlocks.map((text, index) => (
+            <TextBlock key={index} text={text} />
+          ))}
+        </div>
       </div>
     </div>
   );

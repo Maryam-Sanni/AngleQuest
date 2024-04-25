@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
 import appleLogo from '../assets/apple.jpg';
+import Top from '../components/top';
 
 function MyComponent() {
   return (
+    <View style={{ height: '63%' }}>
+    <Top/ >
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         <View style={styles.content}>
@@ -26,7 +29,6 @@ function MyComponent() {
             <View style={styles.inputField}>
               <Text style={styles.label}>Card Number</Text>
               <View style={styles.inputContainer}>
-                <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/99072f4d1f4bdf8ccfa58ea7e57daea8a5358539cb0412a86aac38eaa13dd1d7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={styles.icon} />
                 <TextInput style={styles.input} placeholder="1111 2222 3333 4444" />
               </View>
             </View>
@@ -73,6 +75,7 @@ function MyComponent() {
         </View>
       </View>
     </ScrollView>
+    </View>
   );
 }
 
@@ -102,7 +105,6 @@ const styles = StyleSheet.create({
   },
   inputField: {
     marginBottom: 20,
-    outline: 'none'
   },
   label: {
     fontSize: 14,
@@ -111,13 +113,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    marginTop: 5, 
   },
   icon: {
     width: 24,
@@ -125,11 +120,15 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    marginLeft: 5,
-    color: 'black',
-  outline: 'none',
-  borderColor: 'transparent',
-  borderWidth: 0,
+    marginLeft: 0,
+    color: 'black', 
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    marginTop: 5,
+
   },
   saveButton: {
     marginBottom: 10,

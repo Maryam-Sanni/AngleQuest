@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import Top from '../components/top';
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,8 @@ const ResetPasswordForm = () => {
   };
 
   return (
+    <View style={{ height: '90%' }}>
+      <Top/ >
     <View style={styles.container}>
       <Text style={styles.title}>Reset Your Password</Text>
       <View style={styles.inputContainer}>
@@ -51,6 +54,7 @@ const ResetPasswordForm = () => {
       <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
         <Text style={styles.buttonText}>Reset Password</Text>
       </TouchableOpacity>
+    </View>
     </View>
   );
 };

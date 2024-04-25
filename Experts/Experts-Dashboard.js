@@ -72,11 +72,10 @@ function MyComponent() {
               <Text style={styles.jobsprogress}>Upcoming - 02</Text>
             </View>
             <View style={styles.scorecontainer}>
-            <TouchableOpacity onPress={handleBalancePress}>
-              
-              <Text style={styles.scoretitle}>Available Balance</Text>
-              <Text style={styles.scoreaverage}>$1,234.00</Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={onPress} style={styles.tcontainer}>
+      <Text style={styles.title}>Available Balance</Text>
+      <Text style={styles.amount}>$1,234.00</Text>
+    </TouchableOpacity>
           </View>
           </View>
           <View style={styles.parentcontainer}>
@@ -350,7 +349,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center'
-  }
+  },
+  tcontainer: {
+    alignItems: 'center',
+  },
 });
 
 export default MyComponent;

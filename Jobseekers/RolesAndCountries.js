@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import Top from '../components/top';
 
 function MyComponent() {
   const navigation = useNavigation(); // Get the navigation object
@@ -73,10 +74,12 @@ function MyComponent() {
   };
 
   return (
+    <View style={{ flex: 1 }}>
+    <Top/ >
     <View style={styles.pageContainer}>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 40, alignItems: 'center', justifyContent: 'center', }}>
+          <View style={{ flexDirection: 'row', marginTop: -20, marginBottom: 40, alignItems: 'center', justifyContent: 'center', }}>
             <View style={{
               width: 30,
               height: 30,
@@ -111,12 +114,12 @@ function MyComponent() {
             }}>
               <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>3</Text>
             </View>
-            <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+            <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
               width: 30,
               height: 30,
               borderRadius: 40,
-              backgroundColor: '#F5F5F5',
+              backgroundColor: '#FFEBCC',
               alignItems: 'center',
               justifyContent: 'center',
               marginLeft: 5,
@@ -216,6 +219,7 @@ function MyComponent() {
         <Text style={styles.saveAndContinueButtonText}>Save & Continue</Text>
       </TouchableOpacity>
     </View>
+    </View>
   );
 }
 
@@ -234,7 +238,7 @@ const styles = StyleSheet.create({
   headingContainer: {
     alignItems: 'left',
     marginBottom: -40,
-    marginTop: 30
+    marginTop: 20
   },
   heading: {
     fontSize: 18,

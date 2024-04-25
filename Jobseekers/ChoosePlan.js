@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Top from '../components/top';
 
 function MyComponent() {
   const navigation = useNavigation(); // Get navigation object
@@ -22,6 +23,8 @@ function MyComponent() {
   };
 
   return (
+    <View style={{ height: '90%' }}>
+    <Top/ >
     <View style={{ maxWidth: 768, margin: 'auto', textAlign: 'center' }}>
       {/* Heading */}
       <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginBottom: 5, marginTop: 5 }}>Choose a Plan </Text>
@@ -141,6 +144,7 @@ function MyComponent() {
           </View>
         </TouchableOpacity>
       </View>
+    </View>
     </View>
   );
 }

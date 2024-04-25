@@ -42,7 +42,7 @@ const MyComponent = () => {
     // Perform sign up logic here
 
     // Navigate to VerifyEmail screen
-    navigation.navigate('Homepage');
+    navigation.navigate('About');
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; 
 import { useNavigation } from '@react-navigation/native'; 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import Top from '../components/top';
 
 function InputField({ label, placeholder, onChange }) { 
   return ( 
@@ -44,18 +45,21 @@ function MyComponent() {
     navigation.navigate('Homepage'); 
   };
 
-  return ( 
+  return (
+<View style={{ height: '90%' }}>
+      <Top/ >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={styles.pageContainer}> 
       <View style={styles.innerContainer}> 
         <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, alignItems: 'center', justifyContent: 'center'}}> 
-          <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', }}> 
+          <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#FFEBCC', alignItems: 'center', justifyContent: 'center', }}> 
             <Text style={{ color: 'white', fontSize: 16 }}>1</Text> 
           </View> 
-          <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} /> 
-          <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', marginLeft: 5, }}> 
+          <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} /> 
+          <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#FFEBCC', alignItems: 'center', justifyContent: 'center', marginLeft: 5, }}> 
             <Text style={{ color: 'white', fontSize: 16 }}>2</Text> 
           </View> 
-          <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} /> 
+          <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} /> 
           <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: 'coral', alignItems: 'center', justifyContent: 'center', marginLeft: 5, }}> 
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>3</Text> 
           </View> 
@@ -81,10 +85,12 @@ function MyComponent() {
           <TextInput placeholder="Country" placeholderTextColor="grey" style={styles.halfInput} onChangeText={setCountry} /> 
         </View> 
         <TouchableOpacity style={styles.saveButtonContainer} onPress={handleSave}> 
-          <Text style={styles.saveButton}>Save & Continue</Text> 
+          <Text style={styles.saveButton}>Submit</Text> 
         </TouchableOpacity> 
       </View> 
     </View> 
+    </ScrollView>
+    </View>
   ); 
 }
 

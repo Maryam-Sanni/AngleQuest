@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
+import Top from '../components/top';
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -127,9 +128,9 @@ const handleSaveEmployment = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow
-    :1 }}>
-     
+    <View style={{ height: '25%' }}>
+      <Top/ >
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <View style={{flex: 1 }}>
           <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, alignItems: 'center', justifyContent: 'center'}}>
@@ -143,24 +144,24 @@ const handleSaveEmployment = () => {
             }}>
               <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>1</Text>
             </View>
-            <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+            <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
               width: 30,
               height: 30,
               borderRadius: 40,
-              backgroundColor: '#F5F5F5',
+              backgroundColor: '#FFEBCC',
               alignItems: 'center',
               justifyContent: 'center',
               marginLeft: 5,
             }}>
               <Text style={{ color: 'white', fontSize: 16 }}>2</Text>
             </View>
-            <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} />
+            <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
               width: 30,
               height: 30,
               borderRadius: 40,
-              backgroundColor: '#F5F5F5',
+              backgroundColor: '#FFEBCC',
               alignItems: 'center',
               justifyContent: 'center',
               marginLeft: 5,
@@ -559,7 +560,7 @@ const handleSaveEmployment = () => {
 
     </View>
     </ScrollView>
-    
+    </View>
   );
 }
 

@@ -76,6 +76,7 @@ const SignUpPage = ({ userEmail }) => {
         <VerificationContent userEmail={userEmail} />
       </View>
     </View>
+   
   );
 };
 

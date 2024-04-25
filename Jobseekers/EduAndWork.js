@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Top from '../components/top';
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -35,15 +36,62 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={{ flexDirection: 'row', marginTop: 14, marginBottom: 10, alignItems: 'center', justifyContent: 'center' }}>
-          {/* Your numbering and indicators */}
-        </View>
-        <Text style={{ marginTop: 10, marginBottom: 10, fontSize: 18, fontWeight: 'bold', color: 'coral' }}>Education & Work Experience</Text>
+    <View style={{ height: '69%' }}>
+    <Top/ >
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginLeft: 400, marginRight: 400 }}>
+    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 10, alignItems: 'center', justifyContent: 'center', }}>
+                <View style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 40,
+                  backgroundColor: '#FFEBCC',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Text style={{ color: 'white', fontSize: 16  }}>1</Text>
+                </View>
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
+                <View style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 40,
+                  backgroundColor: 'coral',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 5,
+                }}>
+                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>2</Text>
+                </View>
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
+                <View style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 40,
+                  backgroundColor: '#FFEBCC',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 5,
+                }}>
+                  <Text style={{ color: 'white', fontSize: 16 }}>3</Text>
+                </View>
+                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
+                <View style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 40,
+                  backgroundColor: '#FFEBCC',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 5,
+                }}>
+                  <Text style={{ color: 'white', fontSize: 18 }}>4</Text>
+                </View>
+              </View>
+        <Text style={{ marginLeft: -300, marginTop: 20, marginBottom: 10, fontSize: 18, fontWeight: 'bold', color: 'coral' }}>Education & Work Experience</Text>
         <View style={{ width: '100%', maxWidth: 1000 }}>
-          <Text style={{ marginTop: 10, fontSize: 14, fontWeight: 'bold', color: 'black' }}>About</Text>
-          <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 32, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
+          <Text style={{ marginTop: 10, fontSize: 14, fontWeight: '600', color: 'black' }}>About</Text>
+          <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 60, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
             <TextInput
               style={{ padding: 6, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'none', borderColor: '#F4F4F4', borderRadius: 5 }}
               placeholder="Type here"
@@ -54,7 +102,7 @@ function MyComponent() {
 
           {/* Education */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 }}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'black' }}>Education</Text>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black' }}>Education</Text>
             <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00' }}>+ Add Another Education</Text>
           </View>
           <View style={{ padding: 10, marginTop: 3.5, borderRadius: 5, backgroundColor: 'white' }}>
@@ -100,7 +148,7 @@ function MyComponent() {
 
           {/* Employment */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 }}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'black' }}>Work Experience</Text>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black' }}>Work Experience</Text>
             <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00' }}>+ Add Another Employment</Text>
           </View>
           <View style={{ padding: 8, marginTop: 3.5, borderRadius: 5, backgroundColor: 'white' }}>
@@ -145,7 +193,7 @@ function MyComponent() {
           </View>
 
           {/* Save & Continue Button */}
-          <View style={{ flexDirection: 'row', marginTop: 25, justifyContent: 'space-between', paddingHorizontal: 20 }}>
+          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between', paddingHorizontal: 20 }}>
             <TouchableOpacity
               style={{
                 backgroundColor: '#d3f9d8',
@@ -157,6 +205,7 @@ function MyComponent() {
                 shadowOpacity: 0.25,
                 shadowRadius: 3.84,
                 elevation: 5,
+                marginLeft: -10
               }}
               onPress={() => console.log('Previous page pressed')}
             >
@@ -174,6 +223,7 @@ function MyComponent() {
                 shadowRadius: 3.84,
                 elevation: 5,
                 marginLeft: 60,
+                marginRight:-10
               }}
               onPress={handleSaveAndContinue}
             >
@@ -181,8 +231,10 @@ function MyComponent() {
             </TouchableOpacity>
           </View>
         </View>
+        </View>
       </ScrollView>
     </View>
+    
   );
 }
 
