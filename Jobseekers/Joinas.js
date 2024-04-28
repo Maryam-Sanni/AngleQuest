@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Top from '../components/top';
 
 const Card = ({ imageSrcs, title, onPress }) => {
   return (
@@ -35,9 +36,9 @@ const MyComponent = () => {
   const handleCardPress = (title) => {
     // Handle the press event here, you can navigate to another screen or perform any action.
     if (title === "Join as a Job Seeker") {
-      navigation.navigate('SignUp'); 
+      navigation.navigate('Sign Up'); 
     } else if (title === "Join as an Expert") {
-      navigation.navigate('Createaccount');
+      navigation.navigate('Create account');
     }
     console.log(`Pressed ${title}`);
   };
@@ -47,6 +48,8 @@ const MyComponent = () => {
   };
 
   return (
+    <View style={{ height: '90%' }}>
+      <Top/ >
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.header}>Join as a Job Seeker, Expert or Recruiter</Text>
       <View style={styles.cardsContainer}>
@@ -64,6 +67,7 @@ const MyComponent = () => {
           <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
         </Text>
       </TouchableOpacity>
+    </View>
     </View>
   );
 };

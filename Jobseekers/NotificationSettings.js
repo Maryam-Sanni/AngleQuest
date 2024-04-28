@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
@@ -6,21 +6,28 @@ import Topbar from '../components/topbar';
 
 function MyComponent() {
   const navigation = useNavigation();
+  const [isNewsChecked, setIsNewsChecked] = useState(false);
+  const [isTipsChecked, setIsTipsChecked] = useState(false);
+  const [isMessagesChecked, setIsMessagesChecked] = useState(false);
+  const [isFeedbacksChecked, setIsFeedbacksChecked] = useState(false);
+  const [isRemindersChecked, setIsRemindersChecked] = useState(false);
+  const [isPushFeedbacksChecked, setIsPushFeedbacksChecked] = useState(false);
+  const [isPushRemindersChecked, setIsPushRemindersChecked] = useState(false);
 
   const goToAccountSettings = () => {
-    navigation.navigate('AccountSettings');
+    navigation.navigate('Account Settings');
   };
 
   const goToResetPassword = () => {
-    navigation.navigate('ResetPassword');
+    navigation.navigate('Reset Password');
   };
 
   const goToNotificationSettings = () => {
-    navigation.navigate('NotificationSettings');
+    navigation.navigate('Notification Settings');
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('BillingsandPayment');
+    navigation.navigate('Billings and Payment');
   };
 
   return (
@@ -43,35 +50,55 @@ function MyComponent() {
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>News and updates</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 12, color: 'black' }}>Receive the latest news about products and feature updates.</Text>
-                    <CheckBox style={{ marginRight: 10 }} />
+                    <CheckBox
+        style={{ marginRight: 10}}
+        value={isNewsChecked}
+        onValueChange={setIsNewsChecked}
+      />
                   </View>
                 </View>
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Tips and tutorials</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 12, color: 'black' }}>Tips on getting more out of our services.</Text>
-                    <CheckBox style={{ marginRight: 10 }} />
+                    <CheckBox
+        style={{ marginRight: 10}}
+        value={isTipsChecked}
+        onValueChange={setIsTipsChecked}
+      />
                   </View>
                 </View>
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Messages</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 12, color: 'black' }}>Message notifications relating to career advice sent to email.</Text>
-                    <CheckBox style={{ marginRight: 10 }} />
+                    <CheckBox
+        style={{ marginRight: 10}}
+        value={isMessagesChecked}
+        onValueChange={setIsMessagesChecked}
+      />
                   </View>
                 </View>
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 12, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
-                    <CheckBox style={{ marginRight: 10 }} />
+                    <CheckBox
+        style={{ marginRight: 10}}
+        value={isFeedbacksChecked}
+        onValueChange={setIsFeedbacksChecked}
+      />
                   </View>
                 </View>
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 12, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
-                    <CheckBox style={{ marginRight: 10 }} />
+                    <CheckBox
+        style={{ marginRight: 10}}
+        value={isRemindersChecked}
+        onValueChange={setIsRemindersChecked}
+      />
                   </View>
                 </View>
               </View>
@@ -88,14 +115,22 @@ function MyComponent() {
                 <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 12, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
-                  <CheckBox style={{ marginRight: 10 }} />
+                  <CheckBox
+        style={{ marginRight: 10}}
+        value={isPushFeedbacksChecked}
+        onValueChange={setIsPushFeedbacksChecked}
+      />
                 </View>
               </View>
               <View>
                 <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 12, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
-                  <CheckBox style={{ marginRight: 10 }} />
+                  <CheckBox
+        style={{ marginRight: 10}}
+        value={isPushRemindersChecked}
+        onValueChange={setIsPushRemindersChecked}
+      />
                 </View>
               </View>
             </View>

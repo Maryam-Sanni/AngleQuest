@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import Sidebar from './components/sidebar';
-import Topbar from './components/topbar';
+import Sidebar from '../components/expertssidebar';
+import Topbar from '../components/expertstopbar';
 
 export default function Profile() {
   return (
-    <View style={{ height: '90%' }}>
+    <View style={{ height: '30%' }}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />
@@ -19,10 +19,10 @@ export default function Profile() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
                     source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
-                    style={{ width: 79, height: 79, borderRadius: 79 }}
+                    style={{ width: 79, height: 79, borderRadius: 79, marginRight: 20 }}
                     resizeMode="cover"
                   />
-                  <View style={{ marginLeft: 10 }}>
+                  <View style={{ marginRight: 800 }}>
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>John Smith</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                       <Image

@@ -35,11 +35,11 @@ const VerificationContent = ({ userEmail }) => {
   const handleVerify = () => {
     // Perform verification logic here
     // Navigate to ChoosePlan page
-    navigation.navigate('ChoosePlan');
+    navigation.navigate('Choose Plan');
   };
 
   const handleChangeEmail = () => {
-    navigation.navigate('SignUp'); // Navigate to sign-up page
+    navigation.navigate('Sign Up'); // Navigate to sign-up page
   };
 
   return (

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { CheckBox } from 'react-native';
+
 
 // SignUpButton component
 const SignUpButton = ({ icon, text }) => (
@@ -22,27 +24,30 @@ const FormInput = ({ placeholder, onChangeText }) => (
   </View>
 );
 
-// MyComponent
+
 const MyComponent = () => {
   const navigation = useNavigation();
-
-  const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const [isChecked, setIsChecked] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Function to handle sign up button press
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  };
+
+
   const handleSignUp = () => {
-    // You can access collected data in firstName, lastName, email, and password variables
     console.log("First Name:", firstName);
     console.log("Last Name:", lastName);
     console.log("Email:", email);
     console.log("Password:", password);
-    // Perform sign up logic here
+    navigation.navigate('Verify Email');
+  };
 
-    // Navigate to VerifyEmail screen
-    navigation.navigate('VerifyEmail');
+  const navigateToTerms = () => {
+    navigation.navigate('Terms of Service');
   };
 
   return (
@@ -67,14 +72,15 @@ const MyComponent = () => {
             <FormInput placeholder="Email" onChangeText={setEmail} />
             <FormInput placeholder="Password" onChangeText={setPassword} />
             <View style={styles.checkboxContainer}>
-              <TouchableOpacity style={styles.checkbox} onPress={() => setIsChecked(!isChecked)}> {/* Toggle the state */}
-                {isChecked ? (
-                  <Image source={require('../assets/checked.jpg')} style={styles.checkedIcon} />
-                ) : (
-                  <Image source={require('../assets/unchecked.jpg')} style={styles.checkedIcon} />
-                )}
+              <CheckBox
+                value={isChecked}
+                onValueChange={toggleCheckbox}
+                style={styles.checkbox}
+                tintColors={{ true: 'coral', false: '#ccc' }}
+              />
+              <TouchableOpacity onPress={navigateToTerms}>
+                <Text style={{ color: 'black', fontSize: 14, }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
-              <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>I agree to the Terms of Service & Privacy Policy</Text>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
               <Text style={styles.submitButtonText}>Sign up</Text>
@@ -87,25 +93,24 @@ const MyComponent = () => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: 'white', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   container: {
-    flexDirection: 'row', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   contentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1, 
+    flex: 1,
   },
   formContainer: {
     backgroundColor: '#fffff',
@@ -159,18 +164,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    marginRight: 15,
-    borderWidth: 1,
-    borderColor: '#FFF',
-    borderRadius: 3,
-  },
-  checkedIcon: {
-    width: 100,
-    height: 100,
-    marginTop: -38,
-    marginLeft: -20
+    width: 18,
+    height: 18,
+    marginRight: 10,
   },
   submitButton: {
     backgroundColor: 'coral',
@@ -187,7 +183,7 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'contain',
     width: 350,
-    height: 580, 
+    height: 580,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
   },

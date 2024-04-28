@@ -15,7 +15,7 @@ function MyComponent() {
 
   const handleItemClick = (item) => {
     if (item === menuItems[0]) {
-      setShowMenu(false); // Hide the menu if the first menu item is clicked
+      setShowMenu(false); // Directly set showMenu to false if the first menu item is clicked
     } else {
       setClickedItem(clickedItem === item ? null : item);
       // Navigate to respective screens based on menu item clicked
@@ -39,7 +39,7 @@ function MyComponent() {
           navigation.navigate('Feedbacks');
           break;
         case "Coaching Hubs":
-          navigation.navigate('CoachingHubs');
+          navigation.navigate('Coaching Hubs');
           break;
         case "Messages":
           navigation.navigate('Messages');
@@ -59,7 +59,7 @@ function MyComponent() {
 
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
-    navigation.navigate('MyProfile');
+    navigation.navigate('My Profile');
   };
 
   return (
@@ -232,6 +232,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 7,
   },
+ 
 });
+
+
 
 export default MyComponent;

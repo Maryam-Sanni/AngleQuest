@@ -70,7 +70,7 @@ function MyComponent() {
     console.log("Countries:", countries);
 
     // Navigate to the "SocialsAndAddress" page
-    navigation.navigate('SocialsAndAddress');
+    navigation.navigate('Socials and address');
   };
 
   return (

@@ -1,14 +1,16 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, CheckBox, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Image, StyleSheet, CheckBox, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import TopBar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
+import Topbar from '../components/expertstopbar';
 
 function MyComponent() {
   const navigation = useNavigation();
+  const [isCVChecked, setIsCVChecked] = useState(false);
+  const [isInterviewResultsChecked, setIsInterviewResultsChecked] = useState(false);
 
   const goToAccountSettings = () => {
-    navigation.navigate('AccountSetup');
+    navigation.navigate('Account Setup');
   };
 
   const goToResetPassword = () => {
@@ -16,16 +18,16 @@ function MyComponent() {
   };
 
   const goToNotificationSettings = () => {
-    navigation.navigate('NotificationSetup');
+    navigation.navigate('Notification Setup');
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('WithdrawalSetup');
+    navigation.navigate('Withdrawal Setup');
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <TopBar />
+      <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <View style={{ flex: 1, backgroundColor: 'white', marginLeft: 230 }}>
@@ -34,23 +36,57 @@ function MyComponent() {
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
                 <Text style={{ color: 'black', marginRight: 77 }}>Full Name</Text>
-                <View style={styles.inputContainer}>
-                  <Text>Moses Calgary</Text>
-                </View>
+                <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                 marginLeft: 5,
+                  borderRadius: 5,
+                 flex: 1,
+                  padding: 10,
+                  maxWidth: '100%',
+                  marginTop: 5,
+                  placeholdertextColor: 'black'
+                }}
+                placeholder="Username"
+              />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
                 <Text style={{ color: 'black', marginRight: 105 }}>Email</Text>
-                <View style={styles.inputContainer}>
-                  <Text>moses.c@gmail.com</Text>
-                </View>
+                <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                 marginLeft: 5,
+                  borderRadius: 5,
+                 flex: 1,
+                  padding: 10,
+                  maxWidth: '100%',
+                  marginTop: 5,
+                  placeholdertextColor: 'black'
+                }}
+                placeholder="user@gmail.com"
+              />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
                 <Text style={{ color: 'black', marginRight: 42}}>Mobile Number</Text>
-                <View style={styles.inputContainer}>
-                  <Text>+1 902 762 5422</Text>
-                </View>
+                <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                 marginLeft: 5,
+                  borderRadius: 5,
+                 flex: 1,
+                  padding: 10,
+                  maxWidth: '100%',
+                  marginTop: 5,
+                  placeholdertextColor: 'black'
+                }}
+                placeholder="+1 902 762 5422"
+              />
               </View>
-              <View style={{ justifyContent: 'center', alignSelf: 'flex-end', paddingHorizontal: 10, paddingVertical: 8, marginTop: 30, backgroundColor: 'coral', borderRadius: 5 }}>
+                
+              <View style={{ justifyContent: 'center', alignSelf: 'flex-end', paddingHorizontal: 10, paddingVertical: 8, marginTop: 20, backgroundColor: 'coral', borderRadius: 5 }}>
                 <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Save Changes</Text>
               </View>
             </View>
@@ -85,25 +121,33 @@ function MyComponent() {
             </View>
           </View>
 
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30, marginLeft: 20, marginRight: 280 }} />
+          <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 20, marginRight: 280 }} />
 
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-            <Text style={{ color: '#206C00', marginTop: 10, fontWeight: 'bold', fontSize: 14, marginLeft: 10 }}>Permissions</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'space-between', marginLeft: 150, marginTop: 30 }}>
-              <View>
-                <Text style={{ fontSize: 13, color: 'black', fontWeight: 'bold' }}>Share CV with Interviewer</Text>
-                <Text style={{ fontSize: 11, color: '#777' }}>Automatically share your CV with interviewer after booking a session</Text>
-                <CheckBox style={{ marginLeft: 400, marginTop: -15 }} />
-              </View>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15, marginLeft: 240 }}>
-            <View>
-              <Text style={{ fontSize: 13, fontWeight: 'bold', color: 'black' }}>Share interview results with Recruiter</Text>
-              <Text style={{ fontSize: 11, color: '#777' }}>Grant interviewers permission to share your interview results with recruiters</Text>
-              <CheckBox style={{ marginLeft: 400, marginTop: -15 }} />
-            </View>
-          </View>
+  <Text style={{ color: '#206C00', marginTop: 10, fontWeight: 'bold', fontSize: 14, marginLeft: 10 }}>Permissions</Text>
+  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'space-between', marginLeft: 150, marginTop: 30 }}>
+    <View>
+      <Text style={{ fontSize: 13, color: 'black', fontWeight: 'bold' }}>Share CV with Interviewer</Text>
+      <Text style={{ fontSize: 11, color: '#777' }}>Automatically share your CV with interviewer after booking a session</Text>
+      <CheckBox
+        style={{ marginLeft: 400, marginTop: -15 }}
+        value={isCVChecked}
+        onValueChange={setIsCVChecked}
+      />
+    </View>
+  </View>
+</View>
+<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15, marginLeft: 240 }}>
+  <View>
+    <Text style={{ fontSize: 13, fontWeight: 'bold', color: 'black' }}>Share interview results with Recruiter</Text>
+    <Text style={{ fontSize: 11, color: '#777' }}>Grant interviewers permission to share your interview results with recruiters</Text>
+    <CheckBox
+      style={{ marginLeft: 400, marginTop: -15 }}
+      value={isInterviewResultsChecked}
+      onValueChange={setIsInterviewResultsChecked}
+    />
+  </View>
+</View>
 
           <View style={{ paddingHorizontal: 8, marginTop: 10  }}>
             <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00', marginTop: 40 }}>Account Deactivation</Text>

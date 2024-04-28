@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SessionRejectConfirmation() {
+    const navigation = useNavigation();
+  const handlegobackpress = () => {
+    navigation.navigate('All Sessions'); // Navigate to Home screen
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
       <View style={{ position: 'absolute', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 25 }}>
@@ -18,7 +24,7 @@ export default function SessionRejectConfirmation() {
           />
         </View>
          <View style={{flexDirection: 'row', marginTop: 10}}>
-        <TouchableOpacity onPress={() => {/* Handle Go back press */}}>
+        <TouchableOpacity onPress={handlegobackpress}>
           <View style={{ width: 135, height: 40, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, backgroundColor: 'white', borderRadius: 5, borderWidth: 1, borderColor: '#F12B2B', justifyContent: 'center', alignItems: 'center', marginRight: 30 }}>
             <Text style={{ textAlign: 'center', color: '#FF7F50', fontSize: 13, fontWeight: '500'}}>Go back</Text>
           </View>

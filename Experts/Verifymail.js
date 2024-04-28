@@ -35,7 +35,7 @@ const VerificationContent = ({ userEmail }) => {
   const handleVerify = () => {
     // Perform verification logic here
     // Navigate to page
-    navigation.navigate('ContactDetails');
+    navigation.navigate('Contact Details');
   };
 
   const handleChangeEmail = () => {

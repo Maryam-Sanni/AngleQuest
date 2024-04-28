@@ -22,19 +22,19 @@ function MyComponent() {
       // Navigate to respective screens based on menu item clicked
       switch(item.label) {
         case "Home":
-          navigation.navigate('Homepage');
+          navigation.navigate('Home - Experts');
           break;
         case "Dashboard":
-          navigation.navigate('DashBoard');
+          navigation.navigate('Dashboard - Experts');
           break;
         case "Sessions":
-          navigation.navigate('AllSessions');
+          navigation.navigate('All Sessions');
           break;
         case "Feedbacks":
-          navigation.navigate('Givefeedback');
+          navigation.navigate('Give feedback');
           break;
         case "Coaching Hubs":
-          navigation.navigate('Messaging');
+          navigation.navigate('Manage Hubs');
           break;
         case "Messages":
           navigation.navigate('Messaging');
@@ -52,6 +52,11 @@ function MyComponent() {
     setClickedItem(null);
   };
 
+  const handleProfileClick = () => {
+    // Navigate to MyProfile screen
+    navigation.navigate('Profile');
+  };
+  
   return (
     <View style={styles.container}>
       {showMenu ? (
@@ -79,6 +84,7 @@ function MyComponent() {
             </TouchableOpacity>
           ))}
           {/* Profile Info */}
+          <TouchableOpacity onPress={handleProfileClick}>
           <View style={styles.divider} />
           <View style={styles.profileInfo}>
             <Image
@@ -90,6 +96,7 @@ function MyComponent() {
               <Text style={{ fontSize: 12, color: '#666' }}>Microsoft Azure</Text>
             </View>
           </View>
+          </TouchableOpacity>
           <View style={styles.divider} />
           {/* Logout */}
           <TouchableOpacity
@@ -99,9 +106,9 @@ function MyComponent() {
             <View style={styles.logoutButton}>
               <Image
                 source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/8619284eda5dda6f5d7db1f24b673d86816adddc50319ac5f1954048b0054972?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }}
-                style={{ width: 20, height: 20, marginRight: 6, marginTop: 5, marginBottom: 30}}
+                style={{ width: 20, height: 20, marginRight: 6, marginTop: 5, marginBottom: 5}}
               />
-              <Text style={{ marginTop: 5, marginBottom: 30, color: clickedItem === "Logout" ? 'coral' : '#666' }}>Logout</Text>
+              <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666' }}>Logout</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -120,7 +127,6 @@ const menuItems = [
   { label: "Feedbacks", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Coaching Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Logout", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/8619284eda5dda6f5d7db1f24b673d86816adddc50319ac5f1954048b0054972?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }
 ];
 
 const styles = StyleSheet.create({
@@ -214,10 +220,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     height: 30,
     width: 160,
-    borderRadius: 0,
+    borderRadius: 10,
+    borderWidth: 1, 
+    backgroundColor: '#EEFFF8',
+    borderColor: '#EEFFF8',
     alignItems: "center",
     padding: 7,
-    marginTop: 100,
+    marginTop: 70,
   },
 });
 

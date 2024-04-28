@@ -161,7 +161,7 @@ function MyComponent() {
   };
 
   const handlecareercoachPress = () => {
-    navigation.navigate('CoachingHubs'); // Navigate to 'CoachingHubs' page
+    navigation.navigate('Coaching Hubs'); // Navigate to 'CoachingHubs' page
   };
 
   return (

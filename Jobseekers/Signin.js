@@ -55,7 +55,7 @@ const MyComponent = () => {
             onChangeText={setPassword}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}
+            onPress={() => navigation.navigate('Forgot Password')}
           >
             <Text style={{fontSize: 12, marginTop: 8, color: 'coral' }}>Forgot Password?</Text>
           </TouchableOpacity>
@@ -66,7 +66,7 @@ const MyComponent = () => {
             <Text style={styles.signInButtonText}>Sign in</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={() => navigation.navigate('Sign Up')}
           >
             <Text style={styles.signUpText}>
               Don't have an account? <Text style={styles.signUpLink}>Join here</Text>

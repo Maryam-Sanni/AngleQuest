@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 
 export default function MyComponent() {
+  const [marginLeft, setMarginLeft] = useState(220); // Initial marginLeft value
+
+
+  const reduceMarginLeft = () => {
+    setMarginLeft(20); // Update marginLeft value
+  };
+
+  const handleMenuToggle = (showMenu) => {
+    if (!showMenu) {
+      reduceMarginLeft(); // Reduce marginLeft when setShowMenu(false) is called
+    }
+  };
+
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: '80%' }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
-        <Sidebar />
-        <View style={{ flex: 1, padding: 20, backgroundColor: "white", marginLeft: 220 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Sidebar setShowMenu={handleMenuToggle} /> 
+        <View style={{ flex: 1, padding: 20, backgroundColor: "white",  marginLeft}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Notifications</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Image

@@ -15,10 +15,10 @@ function MyComponent() {
   const handlePurchasePress = (sectionName) => {
     // Navigate to PaymentDetails page when Purchase button is pressed for Standard or Pro sections
     if (sectionName === 'Standard' || sectionName === 'Pro') {
-      navigation.navigate('PaymentDetails');
+      navigation.navigate('Payment Details');
     } else {
       // Navigate to BasicDetails page for other sections
-      navigation.navigate('BasicDetails');
+      navigation.navigate('Basic Details');
     }
   };
 

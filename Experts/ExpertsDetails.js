@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet, Modal } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "../components/DateTimePickerExpertsModal";
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/top';
 
 function MyComponent() {
     const navigation = useNavigation();
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedTimeRanges, setSelectedTimeRanges] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
+
+  const handleConfirm = (timeRanges) => {
+    setSelectedTimeRanges(timeRanges);
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+   
+  const toggleService = (service) => {
+    if (selectedServices.includes(service)) {
+      setSelectedServices(selectedServices.filter(item => item !== service));
+    } else {
+      setSelectedServices([...selectedServices, service]);
+    }
+  };
     
   const [profileImage, setProfileImage] = useState(null);
   const [firstName, setFirstName] = useState('');
@@ -122,13 +142,14 @@ const handleSaveEmployment = () => {
     console.log('Gender:', gender);
     console.log('Profile Picture:', profileImage);
    
-   
+    
+  
     // Navigate to the VerifyEmail page
-    navigation.navigate('Verifymail');
+    navigation.navigate('Verify mail');
   };
 
   return (
-    <View style={{ height: '25%' }}>
+    <View style={{ height: '28%' }}>
       <Top/ >
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -268,60 +289,55 @@ const handleSaveEmployment = () => {
         {profileImage && (
           <Image source={{ uri: profileImage }} style={{ width: 50, height: 50 }} />
         )}
-          <Text style={{ fontSize: 16, color: "black", marginTop: 20, marginBottom: 10, fontWeight: 'bold', }}>Work Hour</Text>
-          <View style={{ justifyContent: "center", alignItems: "flex-start", padding: 5, borderRadius: 5, backgroundColor: "#A2BE95", marginBottom: 10 }}>
-              <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold', marginBottom: 10, marginLeft: 5, marginTop: 10 }}>Weekdays</Text>
-              <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5 }}>
-                {["Mon", "Tue", "Wed", "Thu", "Fri"].map((day, index) => (
-                  <View key={index} style={{ justifyContent: "center", alignItems: "center", padding: 5, borderRadius: 5, borderColor: "white", borderWidth: 1, marginRight: 5, marginBottom: 5 }}>
-                    <Text style={{ color: "white" }}>{day}</Text>
+          <View style={{  marginTop: 20 }}>
+                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+                    <View style={{ justifyContent: "center", alignItems: "flex-start", padding: 5, borderRadius: 5, backgroundColor: "#A2BE95", marginBottom: 10, marginRight: -70 }}>
+                      <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold', marginBottom: 10, marginLeft: 5, marginTop: 10 }}>Pick a schedule</Text>
+                      <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5 }}>
+                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
+                          <View key={index} style={{ justifyContent: "center", alignItems: "center", padding: 5, borderRadius: 5, borderColor: "white", borderWidth: 1, marginRight: 5, marginBottom: 5 }}>
+                            <Text style={{ color: "white" }}>{day}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "space-between" }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5}}>
+                          <Text style={{ fontSize: 12, color: "white", marginRight: 5 }}>From:</Text>
+                          <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>07:30</Text>
+                        </View>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>am</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
+                        <Text style={{ fontSize: 12, color: "white", marginLeft: 25, marginRight: 5, marginTop: 5 }}>To:</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>07:30</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>am</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
+                      </View>
+        
+                      {selectedTimeRanges.length > 0 && (
+  <View style={styles.availableContainer}>
+    <Text style={styles.availableText}>Available:</Text>
+    {selectedTimeRanges.map((timeRange, index) => (
+      <Text key={index} style={styles.availableTime}>
+        {timeRange.day}: {timeRange.startTime} - {timeRange.endTime}
+      </Text>
+    ))}
+  </View>
+)}
+
+                      <View style={{ justifyContent: "center", alignItems: "center", padding: 25, marginLeft: 155, marginTop: -25 }}>
+                        
+                      </View>
+                    </View>
+                    
+                  </TouchableOpacity>
                   </View>
-                ))}
-              </View>
-              <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5}}>
-                  <Text style={{ fontSize: 12, color: "white", marginRight: 5 }}>From:</Text>
-                  <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>07:30</Text>
-                </View>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>am</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
-               <Text style={{ fontSize: 12, color: "white", marginLeft: 25, marginRight: 5, marginTop: 5 }}>To:</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>07:30</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>am</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
-              </View>
-              
-          </View>
-          <View style={{ justifyContent: "center", alignItems: "flex-start", padding: 5, borderRadius: 5, backgroundColor: "#A2BE95", marginBottom: 10 }}>
-              <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold', marginBottom: 10, marginLeft: 5, marginTop: 10 }}>Weekends</Text>
-              <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5 }}>
-                {["Sat", "Sun"].map((day, index) => (
-                  <View key={index} style={{ justifyContent: "center", alignItems: "center", padding: 5, borderRadius: 5, borderColor: "white", borderWidth: 1, marginRight: 5, marginBottom: 5 }}>
-                    <Text style={{ color: "white" }}>{day}</Text>
-                  </View>
-                ))}
-              </View>
-              <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5}}>
-                  <Text style={{ fontSize: 12, color: "white", marginRight: 5 }}>From:</Text>
-                  <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>07:30</Text>
-                </View>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>am</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
-               <Text style={{ fontSize: 12, color: "white", marginLeft: 25, marginRight: 5, marginTop: 5 }}>To:</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>07:30</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>am</Text>
-                <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
-              </View>  
-          </View>
-          
          
           <View style={{ flexDirection: "row", alignItems: "center" }}>
            <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', marginTop: 20, marginBottom: 10 }}>Service Rendered</Text>
             {["Career Advice", "Interview Sessions"].map((service, index) => (
             <View key={index} style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <TouchableOpacity style={{ height: 15, width: 15, borderRadius: 10, borderWidth: 1, borderColor: "#4A5568", marginRight: 5 }} />
+                <TouchableOpacity onPress={() => toggleService(service)} style={{ height: 15, width: 15, borderRadius: 10, borderWidth: 1, borderColor: "#4A5568", marginRight: 5, backgroundColor: selectedServices.includes(service) ? "#A2BE95" : "transparent" }} />
                 <Text>{service}</Text>
               </View>
             ))}
@@ -560,6 +576,11 @@ const handleSaveEmployment = () => {
 
     </View>
     </ScrollView>
+    <DateTimePickerModal
+        isVisible={isModalVisible}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </View>
   );
 }
@@ -697,7 +718,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  availableContainer: {
+  marginTop: 10,
+    marginLeft: 10, // Adjust the margin according to your preference
+  },
+  availableText: {
+    color: '#FFFFFF', // White color
+  },
+  availableTime: {
+    color: '#FFFFFF', // White color
+  },
 });
 
 export default MyComponent;
-

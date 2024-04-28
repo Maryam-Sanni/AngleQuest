@@ -32,11 +32,15 @@ function MyComponent() {
   };
 
   const handleSaveAndContinue = () => {
-    navigation.navigate('RolesAndCountries');
+    navigation.navigate('Job Preferences');
+  };
+
+  const handlePreviousPage = () => {
+    navigation.navigate('Basic Details'); // Navigating to the "Basic Details" page
   };
 
   return (
-    <View style={{ height: '69%' }}>
+    <View style={{ height: '68%' }}>
     <Top/ >
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginLeft: 400, marginRight: 400 }}>
@@ -193,7 +197,7 @@ function MyComponent() {
           </View>
 
           {/* Save & Continue Button */}
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between', paddingHorizontal: 20 }}>
+          <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, justifyContent: 'space-between', paddingHorizontal: 20 }}>
             <TouchableOpacity
               style={{
                 backgroundColor: '#d3f9d8',
@@ -207,7 +211,7 @@ function MyComponent() {
                 elevation: 5,
                 marginLeft: -10
               }}
-              onPress={() => console.log('Previous page pressed')}
+             onPress={handlePreviousPage}
             >
               <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00' }}>Previous Page</Text>
             </TouchableOpacity>

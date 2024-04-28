@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import Sidebar from './components/sidebar';
-import Topbar from './components/topbar';
+import Sidebar from '../components/expertssidebar';
+import Topbar from '../components/expertstopbar';
 
 function DateTimeRange({ days, timeRange }) {
   return (
@@ -14,46 +14,43 @@ function DateTimeRange({ days, timeRange }) {
 
 export default function Profile() {
   return (
-    <View style={{ height: '90%' }}>
+    <View style={{ height: '35%' }}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ padding: 20 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 5, marginLeft: 230 }}>
-              <View style={{ flex: 1, alignSelf: "flex-start" }}>
-                <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 20, marginBottom: 10 }}>Jobseeker Profile</Text>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Image
-                    source={require("./assets/User.png")}
-                    style={{ width: 100, height: 100, borderRadius: 50, marginTop: 20 }}
-                  />
-                  <View style={{ marginTop: 40, marginRight: 260 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>John Smith</Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3.5 }}>
-                      <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/00e648efb83f97ef0794d800368a6ad24636e8f2ce415b2e1c45f6156d62607e?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={{ width: 15, height: 15 }}
-                      />
-                      <Text style={{ marginLeft: 5, fontSize: 12 }}>Architectural Engineer</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 1 }}>
-                      <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/850489e67e110e1e378aa7319abe9ae108ac518609ed527f0cc3ad25b9c266cf?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={{ width: 15, height: 15 }}
-                      />
-                      <Text style={{ marginLeft: 5, fontSize: 12 }}>London, United Kingdom</Text>
-                    </View>
-                    <Text style={{ marginTop: 3, fontStyle: "italic", color: "#32CD32" }}>Online</Text>
-                    <View style={{ flexDirection: 'column', marginTop: 20, marginLeft: -230 }}>
-                       <Text style={{ alignSelf: "flex-start", fontSize: 14, fontWeight: "600" }}>Appointment</Text>
-                    {/* Date and time range */}
-                    <DateTimeRange days="  Date      " timeRange="15th August, 2024         " />
-                    <DateTimeRange days="  Time      " timeRange="11:00am - 12pm         " />
+          <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 5, marginLeft: 230 }}>
+                <View style={{ flex: 1, alignSelf: "flex-start" }}>
+                  <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 20, marginBottom: 10 }}>Expert Profile</Text>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <Image
+                      source={require("../assets/User.png")}
+                      style={{ width: 100, height: 100, borderRadius: 50, marginTop: 20 }}
+                    />
+                    <View style={{ marginTop: 40, marginRight: 260 }}>
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>John Smith</Text>
+                      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3.5 }}>
+                        <Image
+                          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/00e648efb83f97ef0794d800368a6ad24636e8f2ce415b2e1c45f6156d62607e?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                          style={{ width: 15, height: 15 }}
+                        />
+                        <Text style={{ marginLeft: 5, fontSize: 12 }}>Architectural Engineer</Text>
+                      </View>
+                      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 1 }}>
+                        <Image
+                          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/850489e67e110e1e378aa7319abe9ae108ac518609ed527f0cc3ad25b9c266cf?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                          style={{ width: 15, height: 15 }}
+                        />
+                        <Text style={{ marginLeft: 5, fontSize: 12 }}>London, United Kingdom</Text>
+                      </View>
+                      <Text style={{ marginTop: 3, fontStyle: "italic", color: "#32CD32" }}>Online</Text>
+                      {/* Date and time range */}
+                      <DateTimeRange days=" Mon - Fri " timeRange="09:00pm - 11:00pm GMT+2 " />
+                      <DateTimeRange days=" Sat           " timeRange="10:00am - 01:00pm GMT+2  " />
                     </View>
                   </View>
                 </View>
-              </View>
               <View style={{ flex: 1, alignSelf: "flex-end", marginTop: 30 }}>
                 <View style={{ alignItems: "flex-end", width: 120, marginLeft: 375 }}>
 <View style={{ flexDirection: 'row', marginBottom: 5 }}>

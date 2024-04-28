@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { CheckBox } from 'react-native';
 
 // SignUpButton component
 const SignUpButton = ({ icon, text }) => (
@@ -32,6 +33,10 @@ const MyComponent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  };
+
   // Function to handle sign up button press
   const handleSignUp = () => {
     // You can access collected data in firstName, lastName, email, and password variables
@@ -42,7 +47,11 @@ const MyComponent = () => {
     // Perform sign up logic here
 
     // Navigate to VerifyEmail screen
-    navigation.navigate('About');
+    navigation.navigate('Basic Details-Experts');
+  };
+
+  const navigateToTerms = () => {
+    navigation.navigate('Terms of Service'); // Navigate to the 'Terms' page
   };
 
   return (
@@ -67,15 +76,16 @@ const MyComponent = () => {
             <FormInput placeholder="Email" onChangeText={setEmail} />
             <FormInput placeholder="Password" onChangeText={setPassword} />
             <View style={styles.checkboxContainer}>
-              <TouchableOpacity style={styles.checkbox} onPress={() => setIsChecked(!isChecked)}> {/* Toggle the state */}
-                {isChecked ? (
-                  <Image source={require('../assets/checked.jpg')} style={styles.checkedIcon} />
-                ) : (
-                  <Image source={require('../assets/unchecked.jpg')} style={styles.checkedIcon} />
-                )}
+              <CheckBox
+                value={isChecked}
+                onValueChange={toggleCheckbox}
+                style={styles.checkbox}
+                tintColors={{ true: 'coral', false: '#ccc' }}
+              />
+              <TouchableOpacity onPress={navigateToTerms}> {/* Navigate to Terms page */}
+                <Text style={{ color: 'black', fontSize: 14 }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
-              <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>I agree to the Terms of Service & Privacy Policy</Text>
-            </View>
+              </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
               <Text style={styles.submitButtonText}>Sign up</Text>
             </TouchableOpacity>
@@ -159,12 +169,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    marginRight: 15,
-    borderWidth: 1,
-    borderColor: '#FFF',
-    borderRadius: 3,
+    width: 18,
+    height: 18,
+    marginRight: 10,
   },
   checkedIcon: {
     width: 100,

@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     position: "fixed",
     top: 60,
     bottom: 0,
-    marginRight: 30,
     width: 80,
     backgroundColor: "#f7fff4",
     zIndex: 999,

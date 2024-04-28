@@ -6,9 +6,12 @@ import Topbar from '../components/expertstopbar';
 
 function MyComponent() {
   const navigation = useNavigation();
+  const handleBalancePress = () => {
+    navigation.navigate('RequestPayout'); // Navigate to Requestpayout screen
+  };
 
   const goToAccountSettings = () => {
-    navigation.navigate('AccountSetup');
+    navigation.navigate('Account Setup');
   };
 
   const goToResetPassword = () => {
@@ -16,11 +19,11 @@ function MyComponent() {
   };
 
   const goToNotificationSettings = () => {
-    navigation.navigate('NotificationSetup');
+    navigation.navigate('Notification Setup');
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('WithdrawalSetup');
+    navigation.navigate('Withdrawal Setup');
   };
 
   return (
@@ -35,7 +38,10 @@ function MyComponent() {
                 <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00', marginBottom: 20, marginTop: 10 }}>Add a withdrawal method</Text>
                 <View style={{ alignItems: 'flex-end', marginLeft: 450 }}>
               <Text style={{ fontSize: 14, fontWeight: '600',  }}>Available balance</Text>
-              <Text style={{ fontSize: 17, color: '#206C00', fontWeight: '600', marginTop: 5,  }}>$1,234.00</Text>
+
+              <TouchableOpacity style={styles.button} onPress={handleBalancePress}>
+      <Text style={styles.text}>$1,234.00</Text>
+    </TouchableOpacity>
             </View>
               </View>
               <View style={{ marginBottom: 10, marginTop: 30 }}>
@@ -169,5 +175,24 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 20,
     marginBottom: 5
+  },
+  button: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    marginTop: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    padding: 10,
+  },
+  text: {
+    fontSize: 17,
+    color: '#206C00',
+    fontWeight: '600',
   },
 });

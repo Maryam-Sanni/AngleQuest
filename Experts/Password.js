@@ -1,14 +1,19 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Switch } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from "../components/expertssidebar";
 import Topbar from "../components/expertstopbar";
 
 function MyComponent() {
   const navigation = useNavigation();
+  const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(false);
+
+  const toggleTwoFactorAuth = () => {
+    setTwoFactorAuthEnabled(!twoFactorAuthEnabled);
+  };
 
   const goToAccountSettings = () => {
-    navigation.navigate('AccountSetup');
+    navigation.navigate('Account Setup');
   };
 
   const goToResetPassword = () => {
@@ -16,11 +21,11 @@ function MyComponent() {
   };
 
   const goToNotificationSettings = () => {
-    navigation.navigate('NotificationSetup');
+    navigation.navigate('Notification Setup');
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('WithdrawalSetup');
+    navigation.navigate('Withdrawal Setup');
   };
 
   return (
@@ -116,11 +121,22 @@ function MyComponent() {
           </View>
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Two-factor Authentication</Text>
+            <View style={{flexDirection: "row" }}>
             <Text style={styles.sectionText}>
               Turn on two-factor authentication to help keep your account
               secure. We’ll send a code via email which will be submitted when
               using a new device to login. 
-            </Text>       
+            </Text> 
+            <View style={{marginRight: 10, marginTop: -20 }}>
+            <Switch
+                trackColor={{ false: "grey", true: "coral" }}
+                thumbColor={twoFactorAuthEnabled ? "#fff" : "white"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleTwoFactorAuth}
+                value={twoFactorAuthEnabled}
+              />   
+              </View>
+              </View>        
           </View>
         </View>
 

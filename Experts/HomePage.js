@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -8,8 +9,13 @@ import Topbar from '../components/expertstopbar';
 import TopExperts from '../components/TopExperts';
 
 
-const Card = ({ name, title }) => {
+const Card = ({ name, time }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigation = useNavigation(); // Get navigation object
+  
+  const handleViewProfile = () => {
+    navigation.navigate('Jobseekers Profile'); // Navigate to jobeseekers Profile screen
+  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -18,6 +24,8 @@ const Card = ({ name, title }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  
 
   return (
     <View
@@ -38,9 +46,9 @@ const Card = ({ name, title }) => {
             />
             <View style={{ paddingHorizontal: 14, marginTop: 10, alignItems: 'center' }}>
               <Text style={{ fontSize: 16, fontWeight: "bold", color: "black" }}>{name}</Text>
-              <Text style={{ fontSize: 12, color: "#206c00" }}>{title}</Text>
+              <Text style={{ fontSize: 12, color: "#206c00" }}>{time}</Text>
             </View>
-            <TouchableOpacity
+            <TouchableOpacity onPress={handleViewProfile}
               style={{
                 justifyContent: "center",
                 alignItems: "center",
@@ -48,8 +56,8 @@ const Card = ({ name, title }) => {
                 backgroundColor: isHovered ? "#206C00" : "coral",
                 borderRadius: 3
               }}
-            >
-              <Text style={{ fontSize: 12, fontWeight: "bold", color: "white", paddingHorizontal: 10, paddingVertical: 8 }}>Connect</Text>
+              > 
+              <Text style={{ fontSize: 12, fontWeight: "bold", color: "white", paddingHorizontal: 10, paddingVertical: 8 }}>View Profile</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -61,33 +69,48 @@ const Card = ({ name, title }) => {
 const cardData = [
   {
     backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
+    profileImage: "../assets/useravatar4.png",
+    name: "Aliyah Rahman",
+    time: "Apr. 30, 2024, 10:00 AM",
   },
   {
     backgroundImage: "../assets/card.png",
     profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
+    name: "Ogoh Tochukwu",
+    time: "Jun. 15, 2024, 3:30 PM",
   },
   {
     backgroundImage: "../assets/card.png",
     profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
+    name: "Sophie Dubois",
+    time: "Sept. 22, 2024, 12:15 PM",
   },
   {
     backgroundImage: "../assets/card.png",
     profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
+    name: "Adedare Adeyemi",
+    time: "Dec. 10, 2024, 8:45 AM",
   },
 ];
 
 
 
-function MyComponent() {
+function MyComponent() { 
+  const navigation = useNavigation();
+  const handleBalancePress = () => {
+    navigation.navigate('RequestPayout'); // Navigate to Requestpayout screen
+  };
+
+  const handleSessionsPress = () => {
+    navigation.navigate('All Sessions'); // Navigate to Sessions screen
+  };
+
+  const handleHubPress = () => {
+    navigation.navigate('Manage Hubs'); // Navigate to Hubs screen
+  };
+
+ 
+
   return (
     <View style={{ height: '40%' }}>
       <Topbar />
@@ -104,18 +127,18 @@ function MyComponent() {
 How adept are you in your field?</Text>
               <Text style={{ marginLeft: 20, fontSize: 14, color: '#0F0F0F' }}> Get Paid assisting individuals become the ideal candidate!</Text>
             </View>
-            <TouchableOpacity style={styles.oneononetouchableOpacity} onPress={() => console.log('Image clicked')}>
-              <Text style={styles.HoverlayText}>One-on-one session with Jobseekers</Text>
+            <TouchableOpacity style={styles.oneononetouchableOpacity} onPress={handleSessionsPress}>
+              <Text style={styles.HoverlayText}>One-on-one sessions with Jobseekers</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.careercoachtouchableOpacity} onPress={() => console.log('Image clicked')}>
-              <Text style={styles.HoverlayText}>Create a Coaching hub</Text>
+            <TouchableOpacity style={styles.careercoachtouchableOpacity} onPress={handleHubPress}>
+              <Text style={styles.HoverlayText}>Manage Coaching hubs</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.vettedtouchableOpacity} onPress={() => console.log('Image clicked')}>
-              <Text style={styles.HoverlayText}>Career advice</Text>
+            <TouchableOpacity style={styles.vettedtouchableOpacity} onPress={handleBalancePress}>
+              <Text style={styles.HoverlayText}>Income Overview</Text>
             </TouchableOpacity>
           </View>
 
-          <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginLeft: 340, marginTop: -160 }}>Featured Experts</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginLeft: 340, marginTop: -160 }}>Upcoming Sessions</Text>
           <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 320, marginRight: 100, alignItems: 'center' }}>
             <Image source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/65477bf068a20246e3a4a487aaa4f217113e3e240ed082361e1a4dac2eb2f8c7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }} style={{ width: 0, height: 0 }} />
             <View style={{ flex: 1 }}>
@@ -374,7 +397,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 3,
-    transform: [{ translateX: 10 }],
+    transform: [{ translateX: 5 }],
   },
   TellaFriendtouchableOpacity: {
     position: 'absolute',

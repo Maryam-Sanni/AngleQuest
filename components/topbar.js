@@ -53,7 +53,7 @@ const MyComponent = () => {
     }
     // Navigate to account settings page if icon 2 is pressed
     else if (index === 1) {
-      navigation.navigate('AccountSettings'); // Replace 'AccountSettings' with your actual route name
+      navigation.navigate('Account Settings'); // Replace 'AccountSettings' with your actual route name
     }
   };
 

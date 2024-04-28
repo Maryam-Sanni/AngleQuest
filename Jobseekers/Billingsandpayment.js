@@ -8,19 +8,19 @@ const BillingSettingsPage = () => {
   const navigation = useNavigation(); // Moved inside the component
 
   const goToAccountSettings = () => {
-    navigation.navigate('AccountSettings');
+    navigation.navigate('Account Settings');
   };
 
   const goToResetPassword = () => {
-    navigation.navigate('ResetPassword');
+    navigation.navigate('Reset Password');
   };
 
   const goToNotificationSettings = () => {
-    navigation.navigate('NotificationSettings');
+    navigation.navigate('Notification Settings');
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('BillingsandPayment');
+    navigation.navigate('Billings and Payment');
   };
 
   const [currentPlan] = useState('Standard');

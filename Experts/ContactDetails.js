@@ -42,7 +42,7 @@ function MyComponent() {
     console.log('Collected data:', data); 
 
     // Navigate to HomePage 
-    navigation.navigate('Homepage'); 
+    navigation.navigate('Home - Experts'); 
   };
 
   return (

@@ -49,6 +49,12 @@ import Password from './Experts/Password';
 import NotificationSetup from './Experts/NotificationSetup';
 import WithdrawalSetup from './Experts/WithdrawalSetup';
 import RequestPayout from './Experts/RequestPayout';
+import TermsofService from './components/TermsofService';
+import PrivacyPolicy from './components/Privacy Policy';
+import ManageHubs from './Experts/ManageHub';
+import Profile from './Experts/MyProfile';
+import RejectSession from './Experts/RejectSession';
+import JobseekersProfile from './Experts/JobseekerProfile';
 
 const Stack = createStackNavigator();
 
@@ -57,13 +63,13 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="JoinAs" screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
         <Stack.Screen name="Welcome" component={JoinAs} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
-        <Stack.Screen name="ChoosePlan" component={ChoosePlan} />
-        <Stack.Screen name="BasicDetails" component={BasicDetails} />
-        <Stack.Screen name="EduAndWork" component={EduAndWork} />
-        <Stack.Screen name="RolesAndCountries" component={RolesAndCountries} />
-        <Stack.Screen name="SocialsAndAddress" component={SocialsAndAddress} />
+        <Stack.Screen name="Sign Up" component={SignUp} />
+        <Stack.Screen name="Verify Email" component={VerifyEmail} />
+        <Stack.Screen name="Choose Plan" component={ChoosePlan} />
+        <Stack.Screen name="Basic Details" component={BasicDetails} />
+        <Stack.Screen name="Experience" component={EduAndWork} />
+        <Stack.Screen name="Job Preferences" component={RolesAndCountries} />
+        <Stack.Screen name="Socials and address" component={SocialsAndAddress} />
         <Stack.Screen name="Signin" component={Signin} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
@@ -71,37 +77,43 @@ const App = () => {
         <Stack.Screen name="Experts" component={Experts} />
         <Stack.Screen name="Sessions" component={Sessions} />
         <Stack.Screen name="Feedbacks" component={Feedbacks} />
-        <Stack.Screen name="CoachingHubs" component={CoachingHubs} />
+        <Stack.Screen name="Coaching Hubs" component={CoachingHubs} />
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="Notifications" component={Notifications} />
-        <Stack.Screen name="NotificationSettings" component={NotificationSettings} />
-        <Stack.Screen name="AccountSettings" component={AccountSettings} />
-        <Stack.Screen name="BillingsandPayment" component={BillingsandPayment} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        <Stack.Screen name="MyProfile" component={MyProfile} />
-        <Stack.Screen name="PaymentDetails" component={PaymentDetails} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="Notification Settings" component={NotificationSettings} />
+        <Stack.Screen name="Account Settings" component={AccountSettings} />
+        <Stack.Screen name="Billings and Payment" component={BillingsandPayment} />
+        <Stack.Screen name="Reset Password" component={ResetPassword} />
+        <Stack.Screen name="My Profile" component={MyProfile} />
+        <Stack.Screen name="Payment Details" component={PaymentDetails} />
+        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
         <Stack.Screen name="Refer" component={Refer} />
         <Stack.Screen name="GetStarted" component={GetStarted} />
         <Stack.Screen name="ExpertProfile" component={ExpertProfile} />
         <Stack.Screen name="BookaSession" component={BookaSession} />
         <Stack.Screen name="SendFeedback" component={SendFeedback} />
         <Stack.Screen name="ViewFeedback" component={ViewFeedback} />
-        <Stack.Screen name="Createaccount" component={Createaccount} />
-        <Stack.Screen name="About" component={About} />
-        <Stack.Screen name="Verifymail" component={Verifymail} />
-        <Stack.Screen name="ContactDetails" component={ContactDetails} />
-        <Stack.Screen name="Homepage" component={Homepage} />
-        <Stack.Screen name="DashBoard" component={DashBoard} />
-        <Stack.Screen name="AllSessions" component={AllSessions} />
-        <Stack.Screen name="Givefeedback" component={Givefeedback} />
+        <Stack.Screen name="Create account" component={Createaccount} />
+        <Stack.Screen name="Basic Details-Experts" component={About} />
+        <Stack.Screen name="Verify mail" component={Verifymail} />
+        <Stack.Screen name="Contact Details" component={ContactDetails} />
+        <Stack.Screen name="Home - Experts" component={Homepage} />
+        <Stack.Screen name="Dashboard - Experts" component={DashBoard} />
+        <Stack.Screen name="All Sessions" component={AllSessions} />
+        <Stack.Screen name="Give feedback" component={Givefeedback} />
         <Stack.Screen name="Messaging" component={Messaging} />
-        <Stack.Screen name="AccountSetup" component={AccountSetup} />
+        <Stack.Screen name="Account Setup" component={AccountSetup} />
         <Stack.Screen name="MyNotifications" component={MyNotifications} />
         <Stack.Screen name="Password" component={Password} />
-        <Stack.Screen name="NotificationSetup" component={NotificationSetup} />
-        <Stack.Screen name="WithdrawalSetup" component={WithdrawalSetup} />
+        <Stack.Screen name="Notification Setup" component={NotificationSetup} />
+        <Stack.Screen name="Withdrawal Setup" component={WithdrawalSetup} />
         <Stack.Screen name="RequestPayout" component={RequestPayout} />
+        <Stack.Screen name="Terms of Service" component={TermsofService} />
+        <Stack.Screen name="Privacy Policy" component={PrivacyPolicy} />
+        <Stack.Screen name="Manage Hubs" component={ManageHubs} />
+        <Stack.Screen name="Reject Session" component={RejectSession} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

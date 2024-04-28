@@ -72,12 +72,14 @@ function MyComponent() {
               <Text style={styles.jobsprogress}>Upcoming - 02</Text>
             </View>
             <View style={styles.scorecontainer}>
-            <TouchableOpacity onPress={onPress} style={styles.tcontainer}>
-      <Text style={styles.title}>Available Balance</Text>
-      <Text style={styles.amount}>$1,234.00</Text>
-    </TouchableOpacity>
-          </View>
-          </View>
+  <Text style={styles.scoretitle}>Available Balance</Text>
+  
+    <Text style={styles.scoreaverage}>$1,234.00</Text>
+    
+ 
+</View>
+
+</View>
           <View style={styles.parentcontainer}>
             <View style={styles.graphcontainer}>
               <Text style={styles.graphtitle}>Profile Visits</Text>
@@ -126,6 +128,7 @@ function MyComponent() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     position: 'relative',
     marginLeft: 200,
     marginRight: 0, 
@@ -239,7 +242,7 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   scorecontainer: {
-    flexGrow: 1,
+    flex: 1, 
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
@@ -270,6 +273,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'coral',
     textAlign: 'center',
+  },
+  requestPayoutButton: {
+    backgroundColor: '#56866F',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginLeft: 10,
+  },  
+  balanceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   graphcontainer: {
     marginLeft: 10,
