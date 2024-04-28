@@ -5,7 +5,7 @@ import Sidebar from '../components/expertssidebar';
 
 function MyComponent() {
   return (
-    <View style={{flex: 1 }}>
+    <View style={{height: '90%'}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />

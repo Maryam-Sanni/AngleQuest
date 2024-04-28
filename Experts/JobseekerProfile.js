@@ -14,7 +14,7 @@ function DateTimeRange({ days, timeRange }) {
 
 export default function Profile() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: '35%'}}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />

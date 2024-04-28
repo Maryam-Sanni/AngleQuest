@@ -149,7 +149,7 @@ const handleSaveEmployment = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{height: '28%' }}>
       <Top/ >
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>

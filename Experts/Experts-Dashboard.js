@@ -38,7 +38,7 @@ function MyComponent() {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{height: '70%'}}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />

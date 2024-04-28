@@ -15,7 +15,7 @@ const ResetPasswordForm = () => {
   };
 
   return (
-    <View style={{ flex: 1  }}>
+    <View style={{ height: '90%'  }}>
       <Top/ >
     <View style={styles.container}>
       <Text style={styles.title}>Reset Your Password</Text>

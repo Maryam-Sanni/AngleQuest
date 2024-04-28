@@ -90,7 +90,7 @@ const ExpoDevPage = () => {
   ]));
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: '58%'}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />

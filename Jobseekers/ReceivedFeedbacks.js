@@ -5,7 +5,7 @@ import Topbar from '../components/topbar';
 
 function MyComponent() {
   return (
-     <View style={{ flex: 1  }}>
+     <View style={{ height: '90%' }}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />

@@ -5,7 +5,7 @@ import Topbar from '../components/expertstopbar';
 
 export default function Profile() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: '30%' }}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />
