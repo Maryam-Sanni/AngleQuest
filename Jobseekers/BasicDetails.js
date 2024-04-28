@@ -36,7 +36,7 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ height: '90%' }}>
+    <View style={{ flex: 1}}>
     <Top/ >
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' }}>

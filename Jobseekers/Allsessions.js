@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 
 function MyComponent() {
   return (
-    <View style={{ height: '80%'}}>
+    <View style={{  flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />

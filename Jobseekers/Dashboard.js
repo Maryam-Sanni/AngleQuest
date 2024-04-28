@@ -22,7 +22,7 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ height: '70%' }}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
@@ -33,8 +33,8 @@ function MyComponent() {
               style={styles.image}
             />
             <View style={styles.textContainer}>
-              <Text style={{ fontSize: 25, color: 'black', fontWeight: 'bold', marginLeft: 100 }}>Manage your activities</Text>
-              <Text style={{ fontSize: 14, marginTop: 8, color: 'black', marginLeft: 100 }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
+              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold', marginLeft: 100 }}>Manage your activities</Text>
+              <Text style={{ fontSize: 14, marginTop: 8, color: '#206C00', marginLeft: 100 }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
             </View>
           </View>
           <View style={styles.parentcontainer}>
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   jobsprogress: {
     marginTop: 8,
     fontSize: 12,
-    color: '#34D399',
+    color: 'green',
   },
   jobsterminated: {
     marginTop: 4,

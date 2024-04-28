@@ -48,7 +48,7 @@ const MyComponent = () => {
   };
 
   return (
-    <View style={{ height: '90%' }}>
+    <View style={{ flex: 1  }}>
       <Top/ >
     <View style={[styles.container, styles.shadow]}>
       <Text style={styles.header}>Join as a Job Seeker, Expert or Recruiter</Text>

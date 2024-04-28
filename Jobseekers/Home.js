@@ -165,19 +165,19 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ height: '40%' }}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.container}>
             <Image
-              source={require('../assets/Frame 3654.png')}
+              source={require('../assets/home.png')}
               style={styles.image}
             />
             <View style={styles.textContainer}>
-              <Text style={{ fontSize: 28, color: '#0A190A', fontWeight: 'bold' }}>Everyone thinks they are the ideal candidate.</Text>
-              <Text style={{ marginLeft: 110, fontSize: 14, color: '#0A190A' }}>Lets make you the authentic one from the bunch out there!</Text>
+              <Text style={{ fontSize: 28, color: '#206C00', fontWeight: 'bold' }}>Everyone thinks they are the ideal candidate.</Text>
+              <Text style={{ marginLeft: 110, fontSize: 14, color: '#206C00' }}>Lets make you the authentic one from the bunch out there!</Text>
             </View>
             <TouchableOpacity style={styles.oneononetouchableOpacity} onPress={handleGetStartedPress}>
               <Text style={styles.HoverlayText}>Get Started</Text>
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '30%',
     left: '50%',
-    borderColor: '#0F0F0F',
+    borderColor: 'coral',
     borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '30%',
     left: '50%',
-    borderColor: '#0F0F0F',
+    borderColor: 'coral',
     borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '30%',
     left: '50%',
-    borderColor: '#0F0F0F',
+    borderColor: 'coral',
     borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
@@ -357,21 +357,21 @@ const styles = StyleSheet.create({
     transform: [{ translateY: 50 }],
   },
   BoverlayText: {
-    color: 'black',
+    color: 'coral',
     fontSize: 10,
     textAlign: 'center',
     marginLeft: -260,
     textDecoration: 'underline'
   },
   overlayText: {
-    color: 'black',
+    color: 'coral',
     fontSize: 10,
     textAlign: 'center',
     marginLeft: -260,
     textDecoration: 'underline'
   },
   HoverlayText: {
-    color: '#0F0F0F',
+    color: 'coral',
     fontSize: 10,
     textAlign: 'center',
   },

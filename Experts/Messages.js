@@ -8,7 +8,7 @@ import JobseekerProfile from '../components/JProfile';
 
 function MainScreen() {
   return (
-    <View style={{height: '80%'}}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={styles.container}>
         <Sidebar />

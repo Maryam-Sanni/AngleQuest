@@ -5,7 +5,7 @@ import Topbar from '../components/topbar';
 
 export default function Profile() {
   return (
-    <View style={{ height: '33%' }}>
+    <View style={{ flex: 1  }}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />

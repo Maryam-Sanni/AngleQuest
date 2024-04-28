@@ -7,7 +7,7 @@ import Topbar from '../components/topbar';
 
 function MainScreen() {
   return (
-    <View style={{ height: '80%' }}>
+    <View style={{ flex: 1  }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />

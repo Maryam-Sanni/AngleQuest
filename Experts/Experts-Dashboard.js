@@ -38,19 +38,19 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ height: '70%' }}>
+    <View style={{flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', height: '100%' }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.container}>
             <Image
               source={require('../assets/Dashboard.png')}
               style={styles.image}
             />
             <View style={styles.textContainer}>
-              <Text style={{ fontSize: 25, color: '#0A190A', fontWeight: 'bold' }}>Manage your activities</Text>
-              <Text style={{ fontSize: 16, marginTop: 8, color: '#0A190A' }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
+              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold' }}>Manage your activities</Text>
+              <Text style={{ fontSize: 16, marginTop: 8, color: '#206C00' }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
             </View>
           </View>
           <View style={styles.parentcontainer}>
@@ -135,6 +135,14 @@ const styles = StyleSheet.create({
     marginTop: 0,
     width: '100%',
     aspectRatio: 3.7,
+  },
+  scrollViewContainer: {
+    flex: 1,
+    marginTop: 60, // Adjust the marginTop to accommodate the top bar's height
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    // Other styles for the ScrollView content as needed
   },
   image: {
     width: '100%',
@@ -229,12 +237,12 @@ const styles = StyleSheet.create({
   },
   jobsprogress: {
     fontSize: 12,
-    color: '#34D399',
+    color: 'green',
   },
    feedbacktext: {
     marginTop: 8,
     fontSize: 12,
-    color: '#34D399',
+    color: 'green',
    },
   jobsterminated: {
     marginTop: 8,

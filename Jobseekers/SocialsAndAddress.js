@@ -46,7 +46,7 @@ function MyComponent() {
   };
 
   return (
-<View style={{ height: '90%' }}>
+<View style={{ flex: 1 }}>
       <Top/ >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={styles.pageContainer}> 

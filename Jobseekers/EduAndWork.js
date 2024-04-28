@@ -40,7 +40,7 @@ function MyComponent() {
   };
 
   return (
-    <View style={{ height: '68%' }}>
+    <View style={{ flex: 1  }}>
     <Top/ >
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginLeft: 400, marginRight: 400 }}>
