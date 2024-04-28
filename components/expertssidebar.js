@@ -93,7 +93,6 @@ function MyComponent() {
             />
             <View style={{ marginLeft: 5 }}>
               <Text style={{ fontSize: 14, color: 'black' }}>Jeremiah H.</Text>
-              <Text style={{ fontSize: 12, color: '#666' }}>Microsoft Azure</Text>
             </View>
           </View>
           </TouchableOpacity>

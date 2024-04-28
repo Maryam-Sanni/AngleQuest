@@ -28,7 +28,7 @@ function MyComponent() {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ca5a7febc964f7c0b83704af79ecc3672f36012e048830bcf05e2a3d4c39b03d?' }}
-                style={{ width: 35, height: 35, marginRight: 70, marginTop: -20 }}
+                style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
               />
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Local Bank</Text>
@@ -47,7 +47,7 @@ function MyComponent() {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/bd6743481c726e33bcb35466888d1e3911e6448a2e87aa46de6fd902c814c762?' }}
-              style={{ width: 80, height: 20, marginRight: 20, marginTop: -40 }}
+              style={{ width: 80, height: 20, marginRight: 50, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10 }}>Paypal</Text>
@@ -62,8 +62,8 @@ function MyComponent() {
              <View style={{ marginTop: 20 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image
-              source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/bd6743481c726e33bcb35466888d1e3911e6448a2e87aa46de6fd902c814c762?" }}
-              style={{ width: 80, height: 20, marginRight: 25, marginTop: -40 }}
+               source={require('../assets/payoneerlogo.png')}
+              style={{ width: 110, height: 21, marginRight: 25, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 15, fontWeight: '600' }}>Payoneer</Text>
@@ -79,7 +79,7 @@ function MyComponent() {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/f8fcfecb3d17bd589f01cbad97bd1c71693401d4530ffd86ee9536cd1effb618?' }}
-              style={{ width: 35, height: 35, marginRight: 65, marginTop: -20 }}
+              style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
             />
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Wire Transfer</Text>

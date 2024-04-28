@@ -134,7 +134,7 @@ How adept are you in your field?</Text>
               <Text style={styles.HoverlayText}>Manage Coaching hubs</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.vettedtouchableOpacity} onPress={handleBalancePress}>
-              <Text style={styles.HoverlayText}>Income Overview</Text>
+              <Text style={styles.HoverlayText}>Request Payout</Text>
             </TouchableOpacity>
           </View>
 

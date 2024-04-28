@@ -62,7 +62,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="JoinAs" screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
-        <Stack.Screen name="Welcome" component={JoinAs} />
+        <Stack.Screen name="Join Recruitangle" component={JoinAs} />
         <Stack.Screen name="Sign Up" component={SignUp} />
         <Stack.Screen name="Verify Email" component={VerifyEmail} />
         <Stack.Screen name="Choose Plan" component={ChoosePlan} />

@@ -6,7 +6,7 @@ const MyComponent = () => {
   const navigation = useNavigation();
 
   const handleXPress = () => {
-    navigation.navigate('Welcome'); // Navigate to 'JoinAs' page
+    navigation.navigate('Join Recruitangle'); // Navigate to 'JoinAs' page
   };
 
   return (
