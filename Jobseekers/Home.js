@@ -1,508 +1,423 @@
 import React, { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import { FontAwesome5 } from '@expo/vector-icons';
-
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import SuggestionModal from '../components/Suggestion';
 
-const shadesOfGreen = ['#E6FFF4', '#EBEBEB', '#FFF9D9', '#DCFFD7'];
+const HomePage = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
-const data = [
-  { title: 'Architectural Engineer', companies: 11, openings: 15 },
-  { title: 'Civil Engineer', companies: 11, openings: 15 },
-  { title: 'Construction Planner', companies: 11, openings: 15 },
-  { title: 'Quantity Surveyor', companies: 11, openings: 15 }
-];
-
-const Card = ({ name, title }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const navigation = useNavigation(); // Get navigation object
-  
-    const handleBookSessionPress = () => {
-      navigation.navigate('BookaSession'); // Navigate to 'BookSession' page
-    };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
+  const goToMessages = () => {
+    navigation.navigate('Messages');
   };
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  
-  return (
-    <View
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{ marginRight: 10, flex: 1, width: "20%", marginLeft: 10 }}
-    >
-      <View style={{ flex: 1, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 , }}>
-        <View style={{ overflow: "hidden", flex: 1 }}>
-          <Image
-            source={require("../assets/card.png")}
-            style={{ flex: 1, resizeMode: "cover", position: "absolute", width: "100%" }}
-          />
-          <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 14, paddingVertical: 10  }}>
-            <Image
-              source={require("../assets/User.png")}
-              style={{ alignSelf: "center", width: 100, height: 100, borderRadius: 50 }}
-            />
-            <View style={{ paddingHorizontal: 14, marginTop: 10, alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: "black" }}>{name}</Text>
-              <Text style={{ fontSize: 12, color: "#206c00" }}>{title}</Text>
-            </View>
-            <TouchableOpacity onPress={handleBookSessionPress} 
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 10,
-                backgroundColor: isHovered ? "#206C00" : "coral",
-                borderRadius: 3
-              }}
-            >
-              <Text style={{ fontSize: 12, fontWeight: "bold", color: "white", paddingHorizontal: 10, paddingVertical: 8 }}>Book a Session</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const cardData = [
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Mr John Smith",
-    title: "Architectural Engineer",
-  },
-];
-
-const Leaderboard = () => {
-  const profileData = [
-    { id: 1, name: "Sam Walsh", role: "Solutions Architect", score: 30, isLeader: true, comment: "He was exceptional!" },
-    { id: 2, name: "Jane Winsky", role: "Civil Engineer", score: 29, isLeader: true, comment: "Well done!" },
-    { id: 3, name: "Tope Alice", role: "Backend Developer", score: 27, isLeader: false, comment: "Great Job!" },
-    { id: 4, name: "David Black", role: "Software Engineer", score: 27, isLeader: false, comment: "Good attitude to work" },
-    { id: 5, name: "Gerald Wilson", role: "DevOps", score: 25, isLeader: false, comment: "Highly Recommended" }
-  ];
-
-  return (
-    <View style={styles.Profilecontainer}>
-      <Text style={styles.heading}>Top Pre-Vetted Candidates</Text>
-      <FlatList
-        data={profileData}
-        renderItem={({ item }) => <ProfileRow data={item} />}
-        keyExtractor={item => item.id.toString()}
-        style={styles.table}
-      />
-    </View>
-  );
-};
-
-const ProfileRow = ({ data }) => {
-  const [clicked, setClicked] = useState(false);
-
-  const handlePress = () => {
-    setClicked(!clicked);
+  const goToHubs = () => {
+    navigation.navigate('Coaching Hubs');
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <View style={styles.profileRow}>
-        <View style={styles.profileColumn}>
-          <Text style={[styles.name, { color: clicked ? 'coral' : '#0F9D58' }]}>{data.name}</Text>
-          <Text style={styles.role}>{data.role}</Text>
-        </View>
-        <View style={styles.profileColumn}>
-          <Text style={styles.score}>{data.score}</Text>
-        </View>
-        <View style={styles.profileColumn}>
-          <Image source={data.isLeader ? require('../assets/leader.png') : require('../assets/leader2.png')} style={styles.leaderImage} />
-        </View>
-        <View style={styles.profileColumn}>
-          <Text style={styles.comment}>{data.comment}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-function MyComponent() {
-  const navigation = useNavigation(); // Get navigation object
-
-  const handleTellAFriendPress = () => {
-    navigation.navigate('Refer'); // Navigate to 'TellAFriend' page
-  };
-  
-  const handleGetStartedPress = () => {
-    navigation.navigate('GetStarted'); // Navigate to 'GetStarted' page
-  };
-
-  const handlecareercoachPress = () => {
-    navigation.navigate('Coaching Hubs'); // Navigate to 'CoachingHubs' page
-  };
-
-  return (
-    <View style={{ height: '40%' }}>
+    <View style={{height: '90%'}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
-            <Image
-              source={require('../assets/home.png')}
-              style={styles.image}
-            />
-            <View style={styles.textContainer}>
-              <Text style={{ fontSize: 28, color: '#206C00', fontWeight: 'bold' }}>Everyone thinks they are the ideal candidate.</Text>
-              <Text style={{ marginLeft: 110, fontSize: 14, color: '#206C00' }}>Lets make you the authentic one from the bunch out there!</Text>
-            </View>
-            <TouchableOpacity style={styles.oneononetouchableOpacity} onPress={handleGetStartedPress}>
-              <Text style={styles.HoverlayText}>Get Started</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.careercoachtouchableOpacity} onPress={handlecareercoachPress}>
-              <Text style={styles.HoverlayText}>Join a career coach group</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.vettedtouchableOpacity} onPress={handleTellAFriendPress}>
-              <Text style={styles.HoverlayText}>Tell a Friend</Text>
-            </TouchableOpacity>
-           
-</View>
-          <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginLeft: 340, marginTop: -160 }}>Featured Experts</Text>
-          <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 320, marginRight: 100, alignItems: 'center' }}>
-            <Image source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/65477bf068a20246e3a4a487aaa4f217113e3e240ed082361e1a4dac2eb2f8c7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }} style={{ width: 0, height: 0 }} />
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                {cardData.map((card, index) => (
-                  <Card key={index} {...card} />
-                ))}
-              </View>
-              <TouchableOpacity style={styles.MoreButton}>
-              <Text style={{ color: '#206C00' }}> View More </Text>
-            </TouchableOpacity>
-            </View>
-            <Image source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5ace6ebcb4b409b16c6e25febe82298cdc6f90ccd2549e55ac52e3d62d059c6?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }} style={{ width: 0, height: 0 }} />
+           <View style={styles.container}>
+           <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/sun.png')}
+        style={styles.sunicon}
+      />
+      <Text style={styles.greeting}>Good Day, Maryam</Text>
+      </View>
+      <View style={styles.mainContent}>
+        <View style={styles.sideColumn}>
+          <View style={styles.greenBorderedBox}>
+          <View style={{flexDirection: 'row'}}>
+          <Text style={{fontSize: 16, color: 'coral', fontWeight: 'bold', marginTop: 12, marginLeft: 30 }}>On the journey of growth with you</Text>
+          <TouchableOpacity style={styles.touchable} onPress={() => setModalVisible(true)}>
+          <Text style={styles.touchableText}>Drop Suggestion</Text>
+          </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/circle.png')}
+        style={styles.icon}
+      />
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Let our expert prepare you for your next interview</Text>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/circle.png')}
+        style={styles.icon}
+      />
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Create a career growth plan with a coach</Text>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/circle.png')}
+        style={styles.icon}
+      />
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Join coaching hubs for hands on learning with an expert</Text>
+          </View>
+          <Text style={{fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
           </View>
 
-           <View style={styles.cardContainer}>
-  <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginBottom: -5 }}>Talent Hunts</Text>
-  <View style={{ marginTop: 20 }}>
-    <View style={styles.categoryContainer}>
-      {data.map((item, index) => (
-        <View key={index} style={[styles.categoryCard, {backgroundColor: shadesOfGreen[index % shadesOfGreen.length]}]}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: 'black', marginTop: 5 }}>{item.title}</Text>
-          <Text style={{ marginTop: 8, fontSize: 12 }}>{item.companies} Companies</Text>
-          <Text style={{ marginTop: 3, fontSize: 12 }}>{item.openings} Openings</Text>
-          <TouchableOpacity style={styles.categoryButton}>
-            <Text style={styles.categoryButtonText}>Interview Now</Text>
+          <View style={styles.greenBox}>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/star.png')}
+        style={styles.staricon}
+      />
+          <Text style={{fontSize: 14, color: 'black', marginTop: 15, marginLeft: 10, fontWeight: 'bold' }}>Your Journey</Text>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <View style={styles.verticalLine}></View>
+          <View style={{flexDirection: 'column' }}>
+           <View style={{flexDirection: 'row' }}>
+          <Text style={{fontSize: 14, color: 'black', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge sharing session</Text>
+          <View style={{flexDirection: 'column' }}>
+          <Text style={{fontSize: 13, color: 'black', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Confirm attendance | compulsory</Text>
+          <Text style={{fontSize: 12, color: '#206C00', marginTop: 3, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+          
+          </View>
+           </View>
+          <View style={{flexDirection: 'row', marginBottom: 15 }}>
+           <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+              style={{ width: 30, aspectRatio: 1, marginLeft: 30, marginTop: 7,}}
+            />
+              <Text style={{fontSize: 12, color: 'grey', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
+              <View style={{flexDirection: 'row' }}>
+<TouchableOpacity style={styles.touchablesession}>
+          <Text style={styles.touchableTextsession}>SAP Configuration</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.touchablejoinsession}>
+          <Text style={styles.touchableTextjoinsession}>Join</Text>
+          </TouchableOpacity>
+          </View>
+              </View>
+            </View>
+          </View>
+
+<View style={{flexDirection: 'row' }}>
+          <View style={styles.verticalLine}></View>
+<View style={styles.greenwhitebox}> 
+<Text style={{fontSize: 13, color: '#206C00', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Create a career growth plan with a coach</Text>
+<Text style={{fontSize: 13, color: 'grey', marginTop: 0, marginLeft: 40  }}>Define the next stage of your career and review it with our expert</Text>
+</View>
+</View>
+<View style={{flexDirection: 'row' }}>
+          <View style={styles.verticalLine}></View>
+<View style={styles.greenwhitebox}> 
+<Text style={{fontSize: 13, color: '#206C00', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Explore available coaching hubs</Text>
+<Text style={{fontSize: 13, color: 'grey', marginTop: 0, marginLeft: 40  }}>Join Knowledge sharing hubs that align with your plan</Text>
+</View>
+</View>
+<View style={{flexDirection: 'row' }}>
+          <View style={styles.verticalLine}></View>
+<View style={styles.greenwhitebox}>
+<View style={{flexDirection: 'row'}}>
+<Text style={{fontSize: 13, color: '#black', marginTop: 15, marginLeft: 40, fontWeight: 'bold' }}>Upcoming growth plan review session</Text>
+<Text style={{fontSize: 12, color: '#206C00', marginTop: 10, marginLeft: 40, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+</View>
+<View style={{flexDirection: 'row', marginBottom: 10 }}>
+              <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 40, fontWeight: '600' }}>Review with Joop Melcher</Text>
+<TouchableOpacity style={styles.touchablejoinreview}>
+          <Text style={styles.touchableTextjoinreview}>Join</Text>
+          </TouchableOpacity>
+          </View>
+ </View>
+ </View>
         </View>
-      ))}
-    </View>
-  </View>
-  <TouchableOpacity style={styles.categoryViewAllButton}>
-    <Text style={{ color: '#206C00' }}> View all </Text>
-  </TouchableOpacity>
-</View>
+        </View>
+        <View style={styles.whiteBoxesContainer}>
+          {/* White boxes will go here */}
+          <View style={styles.whiteBox}>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/question.png')}
+        style={styles.boxicon}
+      />
+          <Text style={{fontSize: 14, color: '#206C00', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
+          </View>
+          <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 35,marginRight: 20  }}>Send your question and get response on XYZ (data) from coach Joop Melcher</Text>
+          <TouchableOpacity onPress={goToMessages} style={styles.touchablecoach}>
+          <Text style={styles.touchableTextcoach}>Interact with your coach</Text>
+          </TouchableOpacity>
+          </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#79A36B",
-              paddingHorizontal: 8,
-              marginTop: 60,
-              marginLeft: 340,
-              marginRight: 110,
-              position: "relative",
-              height: 170
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 26, fontWeight: "bold", color: "white", marginLeft: 20, marginTop: 10 }}>
-                Get Pre-Vetted
-              </Text>
-              <Text style={{ fontSize: 14, color: "white", marginLeft: 20, marginTop: 5, textDecoration: 'underline' }}>
-                Book experts in your field to get interviewed and scored
-              </Text>
+          <View style={styles.whiteBox}>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/communicate.png')}
+        style={styles.boxicon}
+      />
+           <Text style={{fontSize: 13, color: '#206C00', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next knowledge sharing session</Text>
+           </View>
+           <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 25,marginRight: 20  }}>Setting up master data on SAP on XYZ (date) with coach Joop Melcher</Text>
+           <View style={{flexDirection: 'row', marginTop: 8 }}>
+<TouchableOpacity onPress={goToHubs}  style={styles.touchableall}>
+          <Text style={styles.touchableTextall}>See all</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToHubs}  style={styles.touchablehub}>
+          <Text style={styles.touchableTexthub}>Join new hub</Text>
+          </TouchableOpacity>
+          </View>
+          </View>
 
-        {/* Pointers with icons */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20, marginTop: 50 }}>
-  <FontAwesome5 name="book" size={30} color="white" style={{ marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Research & Prepare</Text>
-
-  <FontAwesome5 name="handshake" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Be Professional</Text>
-
-  <FontAwesome5 name="gem" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Showcase your Value</Text>
-
-  <FontAwesome5 name="thumbs-up" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Stay Confident</Text>
-</View>
-
+          <View style={styles.whiteBox}>
+          <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/talk.png')}
+        style={styles.boxicon}
+      />
+          <Text style={{fontSize: 14, color: '#206C00', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 20, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Interview Feedback</Text>
+          <Text style={{fontSize: 18, color: 'coral', marginTop: 18, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
+          </View>
+          <View style={{flexDirection: 'row' }}>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 10, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Growth Plan Review</Text>
+          <Text style={{fontSize: 18, color: 'coral', marginTop: 8, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
+          </View>
+          </View>
+        </View>
       </View>
-      <View style={{ position: "absolute", top: -80, right: 50 }}>
-        <Image
-          source={require('../assets/success.png')}
-          style={{ width: 250, height: 250 }}
-        />
-      </View>
     </View>
-    
-          {/* Leaderboard Component */}
-          <Leaderboard />
           
         </ScrollView>
       </View>
+      
+    
+    <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    marginLeft: 200,
-    backgroundColor: 'white',
-    resizeMode: 'cover',
-    marginRight: 0,
-    marginTop: 0,
-    width: '100%',
-    height: 400,
-    aspectRatio: 3.7,
-  },
-  image: {
-    width: '100%',
-    height: '50%',
-  },
-  textContainer: {
-    position: 'absolute',
-    top: '50%',
-    left: '40%',
-    transform: [{ translateX: -240 }, { translateY: -160 }],
-    textAlign: 'center',
-  },
-  oneononetouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: -260 }],
-  },
-  careercoachtouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: -150 }],
-  },
-  vettedtouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: 20 }],
-  },
-  GetstartedtouchableOpacity: {
-    position: 'absolute',
-    top: '28%',
-    left: '50%',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginLeft: 70,
-    transform: [{ translateY: 50 }],
-  },
-  TellaFriendtouchableOpacity: {
-    position: 'absolute',
-    top: '28%',
-    left: '50%',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginRight: 50,
-    transform: [{ translateY: 50 }],
-  },
-  BoverlayText: {
-    color: 'coral',
-    fontSize: 10,
-    textAlign: 'center',
-    marginLeft: -260,
-    textDecoration: 'underline'
-  },
-  overlayText: {
-    color: 'coral',
-    fontSize: 10,
-    textAlign: 'center',
-    marginLeft: -260,
-    textDecoration: 'underline'
-  },
-  HoverlayText: {
-    color: 'coral',
-    fontSize: 10,
-    textAlign: 'center',
-  },
-  cardContainer: {
     flex: 1,
-    paddingHorizontal: 8,
-    marginTop: 20,
-    maxWidth: '100%',
-    paddingLeft: 5,
-    paddingTop: 10,
-    marginLeft: 340,
-    marginRight: 110
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  categoryCard: {
-    width: '24%',
     justifyContent: 'center',
-    height: 200,
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    marginLeft: 50
+  },
+  greeting: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    marginTop: 20,
+    color: 'black',
+  },
+  icon: {
+    width: 10,
+    height: 10,
+    marginLeft: 30,
+    marginTop: 10
+  },
+  sunicon: {
+    width: 28,
+    height: 28,
+    marginRight: 10,
+    marginTop: 20,
+    marginLeft: -450
+  },
+  boxicon: {
+    width: 25,
+    height: 25,
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  staricon: {
+    width: 20,
+    height: 20,
+    marginLeft: 50,
+    marginTop: 15
+  },
+  mainContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+  },
+  sideColumn: {
+    marginRight: 40,
+  },
+  greenBorderedBox: {
+    width: 580,
+    height: 150,
+    borderWidth: 2,
+    borderColor: '#206C00',
+    marginBottom: 20,
+    borderRadius: 15, 
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  greenBox: {
+    width: 580,
+    height: 400,
+    backgroundColor: '#E1FFD4',
+  },
+  whiteBoxesContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  whiteBox: {
+    width: 280,
+    height: 150,
+    backgroundColor: '#ffffff',
+    borderWidth: 2,
+    borderColor: '#CCC',
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 2.84,
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
     elevation: 5,
-    justifyContent: 'center',
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    backgroundColor: '#F7FFF4',
-    borderRadius: 5
   },
-  categoryButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 50,
-    borderWidth: 1,
-    borderColor: 'grey',
-    borderRadius: 3
+  touchable: {
+    backgroundColor: 'white',
+    padding: 3,
+    paddingHorizontal: 15, 
+    marginTop: 12,
+    marginLeft: 120,
+    borderColor: '#CCC',
+    borderWidth: 1
   },
-  categoryButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
+  touchableText: {
     color: 'black',
-    textAlign: 'center'
-  },
-  categoryViewAllButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingVertical: 4,
-    marginTop: 30,
-    fontSize: 10,
-    color: 'coral',
-    textAlign: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#206C00',
-    paddingHorizontal: 15
-  },
-  MoreButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingVertical: 5,
-    marginTop: 30,
-    marginBottom: 10,
-    fontSize: 10,
-    textAlign: 'center',
-    backgroundColor: '#EEFFF8',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#EEFFF8',
-    paddingHorizontal: 25
-  },
-  Profilecontainer: {
-    position: 'relative',
-    marginLeft: 340,
-    marginTop: 50,
-    marginBottom: 50,
-    marginRight: 110,
-  },
-  heading: {
-    fontSize: 18,
     fontWeight: 'bold',
-    color: '#0F9D58',
-    textAlign: 'left',
-    marginTop: -5,
-    marginBottom: 10
+    textAlign: 'center',
+    fontSize: 12
   },
-  profileRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+   touchablecoach: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 5, 
+    marginTop: 15,
+    marginLeft: 50,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextcoach: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+   touchableall: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15, 
+    marginTop: 15,
+    marginLeft: 50,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextall: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+   touchablehub: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 12, 
+    marginTop: 15,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTexthub: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+  touchablejoinsession: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15, 
     marginTop: 10,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingBottom: 8,
+    marginRight: 15,
+    borderColor: '#CCC',
+    borderWidth: 1
   },
-  profileColumn: {
-    flex: 1,
-  },
-  name: {
-    color: '#0F9D58',
+  touchableTextjoinsession: {
+    color: 'grey',
     fontWeight: 'bold',
-  },
-  role: {
-    color: '#999',
-  },
-  score: {
     textAlign: 'center',
+    fontSize: 12
+  },
+  touchablesession: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 12, 
+    marginTop: 10,
+    marginRight: 20,
+    marginLeft: 160,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextsession: {
+    color: 'black',
     fontWeight: 'bold',
-    color: 'coral'
-  },
-  comment: {
     textAlign: 'center',
-    color: '#0F9D58',
+    fontSize: 12
   },
-  leaderImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-    resizeMode: 'cover',
+   greenwhitebox: {
+    width: 480,
+    height: 70,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    marginLeft: 35, 
+    marginTop: 10, 
+    borderRadius: 10, 
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
+    elevation: 5,
+    },
+     touchablejoinreview: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15, 
+    marginTop: 5,
+    marginLeft: 200,
+    borderColor: '#CCC',
+    borderWidth: 1
   },
-  table: {
-    flex: 1,
+  touchableTextjoinreview: {
+    color: 'grey',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+    verticalLine: {
+    height: 60,
+    width: 2,
+    backgroundColor: '#CCC',
+    marginLeft: 30,
+    marginTop: 15
   },
 });
 
-export default MyComponent;
+export default HomePage;

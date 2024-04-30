@@ -86,10 +86,10 @@ function MyComponent() {
               </Text>
             </View>
           </View>
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: 10 }}>
             <Text style={{ fontSize: 12, color: "#888" }}>About Hub</Text>
             <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
-              Expert guidance and mentorship on the practice of DevOps.
+              The practice of DevOps...<Text style={{ fontSize: 12, color: "#888", marginTop: 5, textDecoration: 'underline' }}>see more </Text>
             </Text>
             <Text style={{ fontSize: 12, color: "#888", marginTop: 10 }}>
               Meeting Time
@@ -97,14 +97,18 @@ function MyComponent() {
             <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
               09:30pm - 11:30pm, Weds & Thurs.
             </Text>
+            <Text style={{ fontSize: 12, color: "#888", marginTop: 5 }}>Hub Fee</Text>
+            <Text style={{ fontSize: 16, color: "green", marginTop: 5, fontWeight: 'bold' }}>
+              $50.00
+            </Text>
           </View>
           <TouchableOpacity
             style={{
               backgroundColor: "coral",
               borderRadius: 3,
-              paddingHorizontal: 20,
+              paddingHorizontal: 50,
               paddingVertical: 4,
-              marginTop: 35,
+              marginTop: 20,
               alignSelf: "center",
               justifyContent: 'center'
             }}

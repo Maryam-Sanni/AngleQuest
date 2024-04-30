@@ -27,11 +27,11 @@ const MyComponent = () => {
   };
 
   return (
-    <View style={{  height: '80%'}}>
+    <View style={{ height: '90%' }}>
       <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
+      <View style={{ flexDirection: 'row' }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView >
           <View style={{ flex: 1, alignItems: "center", paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 230, marginTop: 30 }}>
             <View style={{ alignSelf: "stretch", paddingRight: 5, maxWidth: "100%" }}>
               <Text style={{ fontSize: 18, color: "green", marginBottom: 20, fontWeight: 'bold', }}>Book session with Expert</Text>

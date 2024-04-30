@@ -1,17 +1,53 @@
 import React, { useState } from "react";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import Sidebar from "./sidebar"; // Assuming sidebar.js contains the components you want to show when the first icon is clicked
 
 function MyComponent() {
+  const navigation = useNavigation(); // Initialize navigation
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const handleItemHover = (item) => {
     setHoveredItem(item);
   };
+  
 
   const handleItemClick = (item) => {
     setClickedItem(clickedItem === item ? null : item);
+  
+    switch (item) {
+      case menuItems[1]:
+        // Navigate to HomePage
+        navigation.navigate('Home');
+        break;
+      case menuItems[2]:
+        // Navigate to Dashboard
+        navigation.navigate('Jobs');
+        break;
+      case menuItems[3]:
+        // Navigate to Experts
+        navigation.navigate('Experts');
+        break;
+        case menuItems[4]:
+          // Navigate to Sessions
+          navigation.navigate('Sessions');
+          break;
+          case menuItems[5]:
+          // Navigate to Feedbacks
+          navigation.navigate('Feedbacks');
+          break;
+          case menuItems[6]:
+          // Navigate to Messages
+          navigation.navigate('Coaching Hubs');
+          break;
+          case menuItems[7]:
+            // Navigate to Messages
+            navigation.navigate('Messages');
+            break;
+      default:
+        break;
+    }
   };
 
   const handleLogout = () => {
@@ -24,7 +60,9 @@ function MyComponent() {
   if (clickedItem === menuItems[0]) {
     return <Sidebar />;
   }
+    
 
+  
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -78,7 +116,6 @@ function MyComponent() {
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3d2a32621725b1be8d561425b060ac8d3f6a0c725f7db063d42a61f9f014cb81?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
