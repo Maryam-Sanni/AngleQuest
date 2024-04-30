@@ -32,7 +32,7 @@ function MyComponent() {
     console.log('Profile Picture:', profileImage);
 
     // Navigate to the next screen
-    navigation.navigate('Experience'); // Navigating to the "EduAndWork" page
+    navigation.navigate('Home'); // Navigating to the "EduAndWork" page
   };
 
   return (

@@ -100,7 +100,7 @@ const MyComponent = () => {
               {selectedDateTime && (
         <Text style={{ marginLeft: 15, fontSize: 14, color: "black", flexShrink: 1}}>Payment for an interview session with Mr John Smith scheduled for: {selectedDateTime}</Text>
       )}
-              <Text style={{ fontSize: 15, color: "#20C600", fontWeight: 'bold', marginRight: 50, alignSelf: "flex-start" }}>$15.00</Text>
+              <Text style={{ fontSize: 15, color: "#20C600", fontWeight: 'bold', marginRight: 50, alignSelf: "flex-start" }}>$25.00</Text>
             </View>
             <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", paddingVertical: 10, marginTop: 25, backgroundColor: "coral", borderRadius: 5, width: "100%", maxWidth: 250 }}>
               <Text style={{ fontSize: 14, color: "white" }}>Pay with Billing Info</Text>

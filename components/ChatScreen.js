@@ -86,15 +86,35 @@ function ChatScreen() {
           <Text style={{ fontStyle: 'normal', fontSize: 12 }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Expert</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
-          <Ionicons name="document-outline" size={24} color="#206C00" />
+        <Image
+       source={require('../assets/add file.png')}
+       style={{
+        width: 25,
+        height: 25,
+        marginTop: 10,}}
+    />
         </TouchableOpacity>
         {isRecording ? (
           <TouchableOpacity onPress={stopRecording}>
-            <Ionicons name="mic-off-outline" size={24} color="red" />
+            <Image
+       source={require('../assets/microphonestop.png')}
+       style={{
+        width: 25,
+        height: 25,
+        marginLeft: 10,
+        marginTop: 10,}}
+    />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={startRecording}>
-            <Ionicons name="mic-outline" size={24} color="#206C00" />
+            <Image
+       source={require('../assets/microphonestart.png')}
+        style={{
+          width: 25,
+          height: 25,
+          marginLeft: 10,
+          marginTop: 10,}}
+      />
           </TouchableOpacity>
         )}
       </View>

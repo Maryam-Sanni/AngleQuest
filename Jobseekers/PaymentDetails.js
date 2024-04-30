@@ -5,7 +5,7 @@ import Top from '../components/top';
 
 function MyComponent() {
   return (
-    <View style={{ flex: 1  }}>
+    <View style={{ height: '65%' }}>
     <Top/ >
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>

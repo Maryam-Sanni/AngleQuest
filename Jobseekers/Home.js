@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import React, { useState,  useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Alert  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
@@ -9,6 +9,31 @@ const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    // This function will be called when the component mounts
+    // You can customize the alert message and buttons according to your requirement
+    Alert.alert(
+      'Complete Your Profile',
+      'Please complete your profile to unlock all features.',
+      [
+        {
+          text: 'Complete Profile',
+          onPress: () => {
+            // Handle navigation to profile completion screen
+            navigation.navigate('Basic Details');
+          },
+        },
+        {
+          text: 'Later',
+          onPress: () => {
+            // Handle what to do if user chooses to complete profile later
+            // Maybe dismiss the alert or do nothing
+          },
+        },
+      ]
+    );
+  }, []); // Empty dependency array ensures that this effect runs only once when component mounts
+
   const goToMessages = () => {
     navigation.navigate('Messages');
   };
@@ -16,13 +41,18 @@ const HomePage = () => {
   const goToHubs = () => {
     navigation.navigate('Coaching Hubs');
   };
+ 
 
   return (
-    <View style={{height: '90%'}}>
-      <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ImageBackground
+    source={require ('../assets/Home Background.png') }
+  style={{ height: '120%', width: '100%' }}
+>
+  <View style={{ height: '70%'}}>
+    <Topbar />
+    <View style={{ flexDirection: 'row', height: '100%',  }}>
+      <Sidebar />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
           <Image
@@ -194,16 +224,15 @@ const HomePage = () => {
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    marginLeft: 50
+    marginLeft: 100,
   },
   greeting: {
     fontSize: 18,
@@ -281,7 +310,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.20,
     shadowRadius: 3.84,
     elevation: 5,
   },
@@ -291,7 +320,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15, 
     marginTop: 12,
     marginLeft: 120,
-    borderColor: '#CCC',
+    borderColor: 'coral',
     borderWidth: 1
   },
   touchableText: {

@@ -1,564 +1,432 @@
-import React, { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Sidebar from '../components/sidebar';
+import Topbar from '../components/topbar';
+import SuggestionModal from '../components/Suggestion';
+import CustomModal from '../components/CustomModal'; 
 
-import { FontAwesome5 } from '@expo/vector-icons';
-
-import Sidebar from '../components/expertssidebar';
-import Topbar from '../components/expertstopbar';
-import TopExperts from '../components/TopExperts';
-
-
-const Card = ({ name, time }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const navigation = useNavigation(); // Get navigation object
-  
-  const handleViewProfile = () => {
-    navigation.navigate('Jobseekers Profile'); // Navigate to jobeseekers Profile screen
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  
-
-  return (
-    <View
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{ marginRight: 10, flex: 1, width: "20%", marginLeft: 10 }}
-    >
-      <View style={{ flex: 1, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 , }}>
-        <View style={{ overflow: "hidden", flex: 1 }}>
-          <Image
-            source={require("../assets/card.png")}
-            style={{ flex: 1, resizeMode: "cover", position: "absolute", width: "100%" }}
-          />
-          <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 14, paddingVertical: 10  }}>
-            <Image
-              source={require("../assets/User.png")}
-              style={{ alignSelf: "center", width: 100, height: 100, borderRadius: 50 }}
-            />
-            <View style={{ paddingHorizontal: 14, marginTop: 10, alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: "black" }}>{name}</Text>
-              <Text style={{ fontSize: 12, color: "#206c00" }}>{time}</Text>
-            </View>
-            <TouchableOpacity onPress={handleViewProfile}
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 10,
-                backgroundColor: isHovered ? "#206C00" : "coral",
-                borderRadius: 3
-              }}
-              > 
-              <Text style={{ fontSize: 12, fontWeight: "bold", color: "white", paddingHorizontal: 10, paddingVertical: 8 }}>View Profile</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const cardData = [
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/useravatar4.png",
-    name: "Aliyah Rahman",
-    time: "Apr. 30, 2024, 10:00 AM",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Ogoh Tochukwu",
-    time: "Jun. 15, 2024, 3:30 PM",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Sophie Dubois",
-    time: "Sept. 22, 2024, 12:15 PM",
-  },
-  {
-    backgroundImage: "../assets/card.png",
-    profileImage: "../assets/User.png",
-    name: "Adedare Adeyemi",
-    time: "Dec. 10, 2024, 8:45 AM",
-  },
-];
-
-
-
-function MyComponent() { 
+const HomePage = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const handleBalancePress = () => {
-    navigation.navigate('RequestPayout'); // Navigate to Requestpayout screen
+
+  useEffect(() => {
+    // Show the CustomModal when the component mounts
+    setModalVisible(true);
+  }, []);
+
+  const goToMessages = () => {
+    navigation.navigate('Messages');
   };
 
-  const handleSessionsPress = () => {
-    navigation.navigate('All Sessions'); // Navigate to Sessions screen
+  const goToHubs = () => {
+    navigation.navigate('Coaching Hubs');
   };
-
-  const handleHubPress = () => {
-    navigation.navigate('Manage Hubs'); // Navigate to Hubs screen
-  };
-
- 
 
   return (
-    <View style={{ height: '40%'  }}>
-      <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
-            <Image
-              source={require('../assets/Frame home.png')}
-              style={styles.image}
-            />
-            <View style={styles.textContainer}>
-              <Text style={{ fontSize: 28, color: '#206C00', fontWeight: 'bold' }}>
-How adept are you in your field?</Text>
-              <Text style={{ marginLeft: 20, fontSize: 14, color: '#206C00' }}> Get Paid assisting individuals become the ideal candidate!</Text>
-            </View>
-            <TouchableOpacity style={styles.oneononetouchableOpacity} onPress={handleSessionsPress}>
-              <Text style={styles.HoverlayText}>One-on-one sessions with Jobseekers</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.careercoachtouchableOpacity} onPress={handleHubPress}>
-              <Text style={styles.HoverlayText}>Manage Coaching hubs</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.vettedtouchableOpacity} onPress={handleBalancePress}>
-              <Text style={styles.HoverlayText}>Request Payout</Text>
-            </TouchableOpacity>
-          </View>
-
-          <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginLeft: 340, marginTop: -160 }}>Upcoming Sessions</Text>
-          <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 320, marginRight: 100, alignItems: 'center' }}>
-            <Image source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/65477bf068a20246e3a4a487aaa4f217113e3e240ed082361e1a4dac2eb2f8c7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }} style={{ width: 0, height: 0 }} />
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                {cardData.map((card, index) => (
-                  <Card key={index} {...card} />
-                ))}
+    <ImageBackground
+      source={require('../assets/Home Background.png')}
+      style={{ height: '120%', width: '100%' }}
+    >
+      <View style={{ height: '70%' }}>
+        <Topbar />
+        <View style={{ flexDirection: 'row', height: '100%' }}>
+          <Sidebar />
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={styles.container}>
+              <View style={{ flexDirection: 'row' }}>
+                <Image
+                  source={require('../assets/sun.png')}
+                  style={styles.sunicon}
+                />
+                <Text style={styles.greeting}>Good Day, Maryam</Text>
               </View>
-              <TouchableOpacity style={styles.MoreButton}>
-              <Text style={{ color: '#206C00' }}> View More </Text>
-            </TouchableOpacity>
-            </View>
-            <Image source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5ace6ebcb4b409b16c6e25febe82298cdc6f90ccd2549e55ac52e3d62d059c6?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }} style={{ width: 0, height: 0 }} />
-          </View>
+              <View style={styles.mainContent}>
+                <View style={styles.sideColumn}>
+                  <View style={styles.greenBorderedBox}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text style={{ fontSize: 16, color: 'coral', fontWeight: 'bold', marginTop: 12, marginLeft: 30 }}>On the journey of growth with you</Text>
+                      <TouchableOpacity style={styles.touchable} onPress={() => setModalVisible(true)}>
+                        <Text style={styles.touchableText}>Drop Suggestion</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image
+                        source={require('../assets/circle.png')}
+                        style={styles.icon}
+                      />
+                      <Text style={{ fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Let our expert prepare you for your next interview</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image
+                        source={require('../assets/circle.png')}
+                        style={styles.icon}
+                      />
+                      <Text style={{ fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Create a career growth plan with a coach</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image
+                        source={require('../assets/circle.png')}
+                        style={styles.icon}
+                      />
+                      <Text style={{ fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Join coaching hubs for hands-on learning with an expert</Text>
+                    </View>
+                    <Text style={{ fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>Let's work together to unleash your best professional self</Text>
+                  </View>
 
-      <View style={{ flex: 1, paddingHorizontal: 8, marginTop: 14, marginLeft: 340, marginRight: 20 }}>
-      <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#206C00', marginBottom: 7 }}>
-        Sponsored Sessions
-      </Text>
-      {/* First sponsored session */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 7 }}>
-        <View style={{ flex: 1, paddingRight: 3 }}>
-          <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>
-            Chang Xi Architectural Design Firm - Architectural Engineer
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 1 }}>
-            <Text style={{ fontSize: 14, color: 'green', fontWeight: '500' }}>
-              <Text style={{ color: 'black' }}>Minimum Score:</Text> 18
-            </Text>
-            
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e866d6f9c3208cdef33ed641ea97e7a4dbfdd87e209ddce1a999319b5b8ed400?' }}
-                style={{ width: 15, height: 15, marginLeft: 30, marginRight: 5 }}
-              />
-              <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>United Kingdom</Text>
+                  <View style={styles.greenBox}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image
+                        source={require('../assets/star.png')}
+                        style={styles.staricon}
+                      />
+                      <Text style={{ fontSize: 14, color: 'black', marginTop: 15, marginLeft: 10, fontWeight: 'bold' }}>Your Journey</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={styles.verticalLine}></View>
+                      <View style={{ flexDirection: 'column' }}>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 14, color: 'black', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge-sharing session</Text>
+                          <View style={{ flexDirection: 'column' }}>
+                            <Text style={{ fontSize: 13, color: 'black', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Confirm attendance | compulsory</Text>
+                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 3, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+
+                          </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+                          <Image
+                            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+                            style={{ width: 30, aspectRatio: 1, marginLeft: 30, marginTop: 7, }}
+                          />
+                          <Text style={{ fontSize: 12, color: 'grey', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity style={styles.touchablesession}>
+                              <Text style={styles.touchableTextsession}>SAP Configuration</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.touchablejoinsession}>
+                              <Text style={styles.touchableTextjoinsession}>Join</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={styles.verticalLine}></View>
+                      <View style={styles.greenwhitebox}>
+                        <Text style={{ fontSize: 13, color: '#206C00', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Create a career growth plan with a coach</Text>
+                        <Text style={{ fontSize: 13, color: 'grey', marginTop: 0, marginLeft: 40 }}>Define the next stage of your career and review it with our expert</Text>
+                      </View>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={styles.verticalLine}></View>
+                      <View style={styles.greenwhitebox}>
+                        <Text style={{ fontSize: 13, color: '#206C00', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Explore available coaching hubs</Text>
+                        <Text style={{ fontSize: 13, color: 'grey', marginTop: 0, marginLeft: 40 }}>Join Knowledge sharing hubs that align with your plan</Text>
+                      </View>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View style={styles.verticalLine}></View>
+                      <View style={styles.greenwhitebox}>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={{ fontSize: 13, color: 'black', marginTop: 15, marginLeft: 40, fontWeight: 'bold' }}>Upcoming growth plan review session</Text>
+                          <Text style={{ fontSize: 12, color: '#206C00', marginTop: 10, marginLeft: 40, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                          <Text style={{ fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 40, fontWeight: '600' }}>Review with Joop Melcher</Text>
+                          <TouchableOpacity style={styles.touchablejoinreview}>
+                            <Text style={styles.touchableTextjoinreview}>Join</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.whiteBoxesContainer}>
+                {/* White boxes will go here */}
+                <View style={styles.whiteBox}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={require('../assets/question.png')}
+                      style={styles.boxicon}
+                    />
+                    <Text style={{ fontSize: 14, color: '#206C00', marginTop: 25, marginLeft: 10, fontWeight: 'bold' }}>Have a question?</Text>
+                  </View>
+                  <Text style={{ fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 35, marginRight: 20 }}>Send your question and get a response on XYZ (data) from coach Joop Melcher</Text>
+                  <TouchableOpacity onPress={goToMessages} style={styles.touchablecoach}>
+                    <Text style={styles.touchableTextcoach}>Interact with your coach</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.whiteBox}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={require('../assets/communicate.png')}
+                      style={styles.boxicon}
+                    />
+                    <Text style={{ fontSize: 13, color: '#206C00', marginTop: 25, marginLeft: 10, fontWeight: 'bold' }}>Next knowledge sharing session</Text>
+                  </View>
+                  <Text style={{ fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 25, marginRight: 20 }}>Setting up master data on SAP on XYZ (date) with coach Joop Melcher</Text>
+                  <View style={{ flexDirection: 'row', marginTop: 8 }}>
+                    <TouchableOpacity onPress={goToHubs} style={styles.touchableall}>
+                      <Text style={styles.touchableTextall}>See all</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={goToHubs} style={styles.touchablehub}>
+                      <Text style={styles.touchableTexthub}>Join new hub</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.whiteBox}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={require('../assets/talk.png')}
+                      style={styles.boxicon}
+                    />
+                    <Text style={{ fontSize: 14, color: '#206C00', marginTop: 25, marginLeft: 10, fontWeight: 'bold' }}>Feedbacks</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 13, color: '#206C00', marginTop: 20, marginLeft: 40, fontWeight: '630', textDecoration: 'underline' }}> Interview Feedback</Text>
+                    <Text style={{ fontSize: 18, color: 'coral', marginTop: 18, marginLeft: 10, fontWeight: 'bold' }}>0</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 13, color: '#206C00', marginTop: 10, marginLeft: 40, fontWeight: '630', textDecoration: 'underline' }}> Growth Plan Review</Text>
+                    <Text style={{ fontSize: 18, color: 'coral', marginTop: 8, marginLeft: 10, fontWeight: 'bold' }}>0</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
-        <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7d77ac7c3d6604817a3bcbdd7644f3a61ed64c90a78516b20070223b319300c3?' }}
-          style={{ width: 30, height: 30}}
-        />
       </View>
-      <Text style={{ marginTop: 15, fontSize: 14, color: '#777' }}>
-        We are seeking a highly skilled and motivated architecture engineer to
-        join our dynamic team. The successful candidate will collaborate with
-        architects, engineers, and clients to develop architectural designs that
-        are both functional and aesthetically pleasing. This is an exciting
-        opportunity to contribute...
-      </Text>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
-     <View style={{ flex: 1, paddingRight: 3 }}>
-          <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>
-            Chang Xi Architectural Design Firm - Architectural Engineer
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 1 }}>
-            <Text style={{ fontSize: 14, color: 'green', fontWeight: '500' }}>
-              <Text style={{ color: 'black' }}>Minimum Score:</Text> 18
-            </Text>
-            
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e866d6f9c3208cdef33ed641ea97e7a4dbfdd87e209ddce1a999319b5b8ed400?' }}
-                style={{ width: 15, height: 15, marginLeft: 30, marginRight: 5 }}
-              />
-              <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>United Kingdom</Text>
-            </View>
-          </View>
-        </View>
-        <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7d77ac7c3d6604817a3bcbdd7644f3a61ed64c90a78516b20070223b319300c3?' }}
-          style={{ width: 30, height: 30}}
-        />
-      </View>
-      <Text style={{ marginTop: 15, fontSize: 14, color: '#777' }}>
-        We are seeking a highly skilled and motivated architecture engineer to
-        join our dynamic team. The successful candidate will collaborate with
-        architects, engineers, and clients to develop architectural designs that
-        are both functional and aesthetically pleasing. This is an exciting
-        opportunity to contribute...
-      </Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
-     <View style={{ flex: 1, paddingRight: 3 }}>
-          <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>
-            Chang Xi Architectural Design Firm - Architectural Engineer
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 1 }}>
-            <Text style={{ fontSize: 14, color: 'green', fontWeight: '500' }}>
-              <Text style={{ color: 'black' }}>Minimum Score:</Text> 18
-            </Text>
-            
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e866d6f9c3208cdef33ed641ea97e7a4dbfdd87e209ddce1a999319b5b8ed400?' }}
-                style={{ width: 15, height: 15, marginLeft: 30, marginRight: 5 }}
-              />
-              <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>United Kingdom</Text>
-            </View>
-          </View>
-        </View>
-        <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7d77ac7c3d6604817a3bcbdd7644f3a61ed64c90a78516b20070223b319300c3?' }}
-          style={{ width: 30, height: 30}}
-        />
-      </View>
-      <Text style={{ marginTop: 15, fontSize: 14, color: '#777' }}>
-        We are seeking a highly skilled and motivated architecture engineer to
-        join our dynamic team. The successful candidate will collaborate with
-        architects, engineers, and clients to develop architectural designs that
-        are both functional and aesthetically pleasing. This is an exciting
-        opportunity to contribute...
-      </Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
-     <View style={{ flex: 1, paddingRight: 3 }}>
-          <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>
-            Chang Xi Architectural Design Firm - Architectural Engineer
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 1 }}>
-            <Text style={{ fontSize: 14, color: 'green', fontWeight: '500' }}>
-              <Text style={{ color: 'black' }}>Minimum Score:</Text> 18
-            </Text>
-            
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e866d6f9c3208cdef33ed641ea97e7a4dbfdd87e209ddce1a999319b5b8ed400?' }}
-                style={{ width: 15, height: 15, marginLeft: 30, marginRight: 5 }}
-              />
-              <Text style={{ fontSize: 14, color: 'black', fontWeight: '500' }}>United Kingdom</Text>
-            </View>
-          </View>
-        </View>
-        <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7d77ac7c3d6604817a3bcbdd7644f3a61ed64c90a78516b20070223b319300c3?' }}
-          style={{ width: 30, height: 30}}
-        />
-      </View>
-      <Text style={{ marginTop: 15, fontSize: 14, color: '#777' }}>
-        We are seeking a highly skilled and motivated architecture engineer to
-        join our dynamic team. The successful candidate will collaborate with
-        architects, engineers, and clients to develop architectural designs that
-        are both functional and aesthetically pleasing. This is an exciting
-        opportunity to contribute...
-      </Text>
-      {/* View all button */}
-     <TouchableOpacity style={styles.categoryViewAllButton}>
-    <Text style={{ color: '#206C00' }}> View all </Text>
-  </TouchableOpacity>
-    </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#79A36B",
-              paddingHorizontal: 8,
-              marginTop: 60,
-              marginBottom: 20,
-              marginLeft: 340,
-              marginRight: 110,
-              position: "relative",
-              height: 170
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 26, fontWeight: "bold", color: "white", marginLeft: 20, marginTop: 10 }}>
-                Get Paid to Vet Jobseekers
-              </Text>
-              <Text style={{ fontSize: 14, color: "white", marginLeft: 20, marginTop: 5, textDecoration: 'underline' }}>
-                Maximize earnings evaluating Jobseekers in your niche.
-              </Text>
-
-        {/* Pointers with icons */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20, marginTop: 50 }}>
-  <FontAwesome5 name="book" size={30} color="white" style={{ marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Research & Prepare</Text>
-
-  <FontAwesome5 name="balance-scale" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Be Objective</Text>
-
-  <FontAwesome5 name="headset" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Listen Actively</Text>
-
-  <FontAwesome5 name="handshake" size={30} color="white" style={{ marginLeft: 20, marginRight: 10 }} />
-  <Text style={{ fontSize: 12, color: "white" }}>Maintain Ethical Boundaries</Text>
-</View>
-
-      </View>
-      <View style={{ position: "absolute", top: -80, right: 20 }}>
-        <Image
-          source={require('../assets/success.png')}
-          style={{ width: 250, height: 250 }}
-        />
-      </View>
-    </View>
-    
-          < TopExperts/>
-          
-        </ScrollView>
-      </View>
-    </View>
+      <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+      <CustomModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    marginLeft: 200,
-    resizeMode: 'cover',
-    marginRight: 0,
-    marginTop: 0,
-    width: '100%',
-    height: 400,
-    aspectRatio: 3.7,
-  },
-  image: {
-    width: '100%',
-    height: '50%',
-    marginLeft:-40
-  },
-  textContainer: {
-    position: 'absolute',
-    top: '50%',
-    left: '40%',
-    transform: [{ translateX: -200 }, { translateY: -160 }],
-    textAlign: 'center',
-  },
-  oneononetouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: -350 }],
-  },
-  careercoachtouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: -140 }],
-  },
-  vettedtouchableOpacity: {
-    position: 'absolute',
-    top: '30%',
-    left: '50%',
-    borderColor: 'coral',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 3,
-    transform: [{ translateX: 5 }],
-  },
-  TellaFriendtouchableOpacity: {
-    position: 'absolute',
-    top: '28%',
-    left: '50%',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginRight: 50,
-    transform: [{ translateY: 50 }],
-  },
-   GetstartedtouchableOpacity: {
-    position: 'absolute',
-    top: '28%',
-    left: '50%',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginLeft: 70,
-    transform: [{ translateY: 50 }],
-  },
-  BoverlayText: {
-    color: 'coral',
-    fontSize: 10,
-    textAlign: 'center',
-    marginLeft: -260,
-    textDecoration: 'underline'
-  },
-  HoverlayText: {
-    color: 'coral',
-    fontSize: 10,
-    textAlign: 'center',
-  },
-  cardContainer: {
     flex: 1,
-    paddingHorizontal: 8,
+    alignItems: 'center',
+    marginLeft: 100,
+  },
+  greeting: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
     marginTop: 20,
-    maxWidth: '100%',
-    paddingLeft: 5,
-    paddingTop: 10,
-    marginLeft: 340,
-    marginRight: 110
+    color: 'black',
   },
-  categoryContainer: {
+  icon: {
+    width: 10,
+    height: 10,
+    marginLeft: 30,
+    marginTop: 10
+  },
+  sunicon: {
+    width: 28,
+    height: 28,
+    marginRight: 10,
+    marginTop: 20,
+    marginLeft: -450
+  },
+  boxicon: {
+    width: 25,
+    height: 25,
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  staricon: {
+    width: 20,
+    height: 20,
+    marginLeft: 50,
+    marginTop: 15
+  },
+  mainContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 20,
   },
-  categoryCard: {
-    width: '24%',
-    justifyContent: 'center',
-    height: 200,
+  sideColumn: {
+    marginRight: 40,
+  },
+  greenBorderedBox: {
+    width: 580,
+    height: 150,
+    borderWidth: 2,
+    borderColor: '#206C00',
+    marginBottom: 20,
+    borderRadius: 15,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  greenBox: {
+    width: 580,
+    height: 400,
+    backgroundColor: '#E1FFD4',
+  },
+  whiteBoxesContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  whiteBox: {
+    width: 280,
+    height: 150,
+    backgroundColor: '#ffffff',
+    borderWidth: 2,
+    borderColor: '#CCC',
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 2.84,
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
     elevation: 5,
-    justifyContent: 'center',
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    backgroundColor: '#F7FFF4',
-    borderRadius: 5
   },
-  categoryButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 50,
-    borderWidth: 1,
-    borderColor: 'grey',
-    borderRadius: 3
+  touchable: {
+    backgroundColor: 'white',
+    padding: 3,
+    paddingHorizontal: 15,
+    marginTop: 12,
+    marginLeft: 120,
+    borderColor: 'coral',
+    borderWidth: 1
   },
-  categoryButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
+  touchableText: {
     color: 'black',
-    textAlign: 'center'
-  },
-  categoryViewAllButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingVertical: 4,
-    marginTop: 30,
-    fontSize: 10,
-    color: 'coral',
-    textAlign: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#206C00',
-    paddingHorizontal: 15
-  },
-  MoreButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingVertical: 5,
-    marginTop: 30,
-    marginBottom: 10,
-    fontSize: 10,
-    textAlign: 'center',
-    backgroundColor: '#EEFFF8',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#EEFFF8',
-    paddingHorizontal: 25
-  },
-  Profilecontainer: {
-    position: 'relative',
-    marginLeft: 340,
-    marginTop: 50,
-    marginBottom: 50,
-    marginRight: 110,
-  },
-  heading: {
-    fontSize: 18,
     fontWeight: 'bold',
-    color: '#0F9D58',
-    textAlign: 'left',
-    marginTop: -5,
-    marginBottom: 10
+    textAlign: 'center',
+    fontSize: 12
   },
-  profileRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  touchablecoach: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    marginTop: 15,
+    marginLeft: 50,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextcoach: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+  touchableall: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15,
+    marginTop: 15,
+    marginLeft: 50,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextall: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+  touchablehub: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 12,
+    marginTop: 15,
+    marginRight: 20,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTexthub: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+  touchablejoinsession: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15,
     marginTop: 10,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingBottom: 8,
+    marginRight: 15,
+    borderColor: '#CCC',
+    borderWidth: 1
   },
-  profileColumn: {
-    flex: 1,
-  },
-  name: {
-    color: '#0F9D58',
+  touchableTextjoinsession: {
+    color: 'grey',
     fontWeight: 'bold',
-  },
-  role: {
-    color: '#999',
-  },
-  score: {
     textAlign: 'center',
+    fontSize: 12
+  },
+  touchablesession: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 12,
+    marginTop: 10,
+    marginRight: 20,
+    marginLeft: 160,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextsession: {
+    color: 'black',
     fontWeight: 'bold',
-    color: 'coral'
-  },
-  comment: {
     textAlign: 'center',
-    color: '#0F9D58',
+    fontSize: 12
   },
-  leaderImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-    resizeMode: 'cover',
+  greenwhitebox: {
+    width: 480,
+    height: 70,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    marginLeft: 35,
+    marginTop: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  table: {
-    flex: 1,
+  touchablejoinreview: {
+    backgroundColor: 'white',
+    paddingVertical: 3,
+    paddingHorizontal: 15,
+    marginTop: 5,
+    marginLeft: 200,
+    borderColor: '#CCC',
+    borderWidth: 1
+  },
+  touchableTextjoinreview: {
+    color: 'grey',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12
+  },
+  verticalLine: {
+    height: 60,
+    width: 2,
+    backgroundColor: '#CCC',
+    marginLeft: 30,
+    marginTop: 15
   },
 });
 
-export default MyComponent;
+export default HomePage;

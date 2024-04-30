@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import { useNavigation } from '@react-navigation/native';
 
 function DateTimeRange({ days, timeRange }) {
   return (
@@ -13,6 +14,11 @@ function DateTimeRange({ days, timeRange }) {
 }
 
 export default function Profile() {
+  const navigation = useNavigation();
+  const BookSession = () => {
+    navigation.navigate('BookaSession');
+  };
+
   return (
     <View style={{ flex: 1  }}>
       <Topbar />
@@ -63,8 +69,8 @@ export default function Profile() {
                     <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 8, paddingVertical: 5, borderColor: "green", borderWidth: 1, borderRadius: 5, marginLeft: 280 }}>
                       <Text style={{ color: "green" }}>Career Advice</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 8, paddingVertical: 5, backgroundColor: "coral", borderRadius: 5, marginLeft: 10 }}>
-                      <Text style={{ color: "white" }}>Book Interview</Text>
+                    <TouchableOpacity onPress={BookSession}  style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 8, paddingVertical: 5, backgroundColor: "coral", borderRadius: 5, marginLeft: 10 }}>
+                      <Text style={{ color: "white" }}>Book Session</Text>
                     </TouchableOpacity>
                   </View>
                 </View>

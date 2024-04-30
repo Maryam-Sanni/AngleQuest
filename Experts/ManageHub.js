@@ -100,13 +100,34 @@ const ExpoDevPage = () => {
         <Text style={styles.heading}>Expert Hub Management</Text>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => console.log('Voice call pressed')}>
-            <Icon name="phone" size={20} style={styles.icon} />
+          <Image
+       source={require('../assets/phone.png')}
+        style={{
+          width: 23,
+          height: 23,
+          marginLeft: 20
+      }}
+      />   
           </TouchableOpacity>
           <TouchableOpacity onPress={() => console.log('Video call pressed')}>
-            <Icon name="video-camera" size={20} style={styles.icon} />
+            <Image
+       source={require('../assets/videocall.png')}
+        style={{
+          width: 23,
+          height: 23,
+          marginLeft: 20
+      }}
+      />  
           </TouchableOpacity>
           <TouchableOpacity onPress={() => console.log('Chat pressed')}>
-            <Icon name="comment" size={20} style={styles.icon} />
+          <Image
+       source={require('../assets/chatroom.png')}
+        style={{
+          width: 23,
+          height: 23,
+          marginLeft: 20
+      }}
+      />  
           </TouchableOpacity>
         </View>
       </View>
@@ -173,10 +194,6 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-  },
-  icon: {
-    marginLeft: 20,
-    color: '#206C00',
   },
   subHeading: {
     fontSize: 14,

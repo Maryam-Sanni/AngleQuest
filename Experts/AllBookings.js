@@ -49,7 +49,13 @@ const [showConfirmation, setShowConfirmation] = useState(false);
 
        {/* Ellipsis Icon */}
        <TouchableOpacity onPress={() => setShowConfirmation(true)}>
-        <FontAwesome name="ellipsis-v" size={15} color="grey" />
+       <Image
+       source={require('../assets/ellipsis.png')}
+        style={{
+          width: 15,
+          height: 15,
+      }}
+      />
       </TouchableOpacity>
 
       {/* Confirmation Popup */}

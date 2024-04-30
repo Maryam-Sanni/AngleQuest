@@ -18,7 +18,7 @@ function MyComponent() {
       navigation.navigate('Payment Details');
     } else {
       // Navigate to BasicDetails page for other sections
-      navigation.navigate('Basic Details');
+      navigation.navigate('Home');
     }
   };
 
