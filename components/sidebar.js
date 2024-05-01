@@ -27,7 +27,7 @@ function MyComponent() {
           navigation.navigate('Dashboard');
           break;
         case "Growth Plan":
-          navigation.navigate('Jobs');
+          navigation.navigate('Personal Development');
           break;
         case "Experts":
           navigation.navigate('Experts');

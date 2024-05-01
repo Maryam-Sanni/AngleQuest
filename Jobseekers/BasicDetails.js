@@ -43,52 +43,9 @@ function MyComponent() {
           <View style={{ marginLeft: 10 }}>
             <View style={{ marginTop: 20 }}>
               <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 10, alignItems: 'center', justifyContent: 'center', }}>
-                <View style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 40,
-                  backgroundColor: 'coral',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>1</Text>
-                </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
-                <View style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 40,
-                  backgroundColor: '#FFEBCC',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 5,
-                }}>
-                  <Text style={{ color: 'white', fontSize: 16 }}>2</Text>
-                </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
-                <View style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 40,
-                  backgroundColor: '#FFEBCC',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 5,
-                }}>
-                  <Text style={{ color: 'white', fontSize: 16 }}>3</Text>
-                </View>
-                <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
-                <View style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 40,
-                  backgroundColor: '#FFEBCC',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 5,
-                }}>
-                  <Text style={{ color: 'white', fontSize: 18 }}>4</Text>
-                </View>
+               
+                
+               
               </View>
               <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, color: 'coral' }}>Basic Details</Text>
             </View>

@@ -55,6 +55,10 @@ import ManageHubs from './Experts/ManageHub';
 import Profile from './Experts/MyProfile';
 import RejectSession from './Experts/RejectSession';
 import JobseekersProfile from './Experts/JobseekerProfile';
+import PersonalDev from './Jobseekers/PersonalDev';
+import TeamDev from './Jobseekers/TeamDev';
+import OrgDev from './Jobseekers/OrgDev';
+import CoachReview from './Jobseekers/CoachReview';
 
 const Stack = createStackNavigator();
 
@@ -136,6 +140,10 @@ const App = () => {
         <Stack.Screen name="Reject Session" component={RejectSession} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
+        <Stack.Screen name="Personal Development" component={PersonalDev} />
+        <Stack.Screen name="Team Development" component={TeamDev} />
+        <Stack.Screen name="Organization Development" component={OrgDev} />
+        <Stack.Screen name="Coach Assessment" component={CoachReview} />
       </Stack.Navigator>
     </NavigationContainer>
   );

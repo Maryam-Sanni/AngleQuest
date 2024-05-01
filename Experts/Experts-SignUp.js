@@ -45,9 +45,9 @@ const MyComponent = () => {
     console.log("Email:", email);
     console.log("Password:", password);
     // Perform sign up logic here
-
+ 
     // Navigate to VerifyEmail screen
-    navigation.navigate('Basic Details-Experts');
+    navigation.navigate('Verify mail');
   };
 
   const navigateToTerms = () => {

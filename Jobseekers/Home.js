@@ -4,35 +4,17 @@ import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
+import CustomModal from '../components/CustomModal'; 
 
 const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    // This function will be called when the component mounts
-    // You can customize the alert message and buttons according to your requirement
-    Alert.alert(
-      'Complete Your Profile',
-      'Please complete your profile to unlock all features.',
-      [
-        {
-          text: 'Complete Profile',
-          onPress: () => {
-            // Handle navigation to profile completion screen
-            navigation.navigate('Basic Details');
-          },
-        },
-        {
-          text: 'Later',
-          onPress: () => {
-            // Handle what to do if user chooses to complete profile later
-            // Maybe dismiss the alert or do nothing
-          },
-        },
-      ]
-    );
-  }, []); // Empty dependency array ensures that this effect runs only once when component mounts
+ useEffect(() => {
+    // Show the CustomModal when the component mounts
+    setCustomModalVisible(true);
+  }, []);
 
   const goToMessages = () => {
     navigation.navigate('Messages');
@@ -46,7 +28,7 @@ const HomePage = () => {
   return (
     <ImageBackground
     source={require ('../assets/Home Background.png') }
-  style={{ height: '120%', width: '100%' }}
+  style={{ height: '120%', width: '100%', flex: 1 }}
 >
   <View style={{ height: '70%'}}>
     <Topbar />
@@ -223,6 +205,7 @@ const HomePage = () => {
       
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    <CustomModal visible={custommodalVisible} onClose={() => setCustomModalVisible(false)} />
     </View>
     </ImageBackground>
   );
@@ -233,6 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginLeft: 100,
+    marginTop: 150
   },
   greeting: {
     fontSize: 18,
@@ -252,7 +236,7 @@ const styles = StyleSheet.create({
     height: 28,
     marginRight: 10,
     marginTop: 20,
-    marginLeft: -450
+    marginLeft: -300
   },
   boxicon: {
     width: 25,
