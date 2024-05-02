@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
@@ -23,11 +23,12 @@ function MyComponent() {
       };
 
   return (
-    <View style={{ height: '100%'}}>
+    <View style={{ flex: 1}}>
       <Topbar />
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-    <View style={{ flex: 1, backgroundColor: "white", marginLeft: 250, marginTop: 40  }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500   }}>
+    <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, marginTop: 40, alignContent: 'center', marginRight: 100    }}>
     <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>Growth Plan</Text>
      <Text style={{ fontSize: 14, color: 'black', marginTop: 5 }}>Set a direction by creating a plan and an expert will guide you</Text>
      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, marginBottom: 20, flexWrap: "wrap"}}>
@@ -191,6 +192,7 @@ function MyComponent() {
     </View>
 
 </View>
+</ScrollView>
 </View> </View>
 );
 }
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
   buttonNew: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 350, 
+    marginLeft: 305, 
     paddingHorizontal: 20,
     borderRadius: 3, 
     marginTop: -10

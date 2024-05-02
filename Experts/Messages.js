@@ -8,7 +8,7 @@ import JobseekerProfile from '../components/JProfile';
 
 function MainScreen() {
   return (
-    <View style={{ height: '80%'}}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={styles.container}>
         <Sidebar />
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    maxHeight: 500
   },
   chatListContainer: {
     flex: 1, 

@@ -67,6 +67,7 @@ const MyComponent = () => {
         alignItems: "center",
         backgroundColor: "#A2BE95",
         maxWidth: '100%',
+        height: 60
       }}
     >
       <Image

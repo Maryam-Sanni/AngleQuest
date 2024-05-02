@@ -90,11 +90,11 @@ const ExpoDevPage = () => {
   ]));
 
   return (
-    <View style={{ height: '58%'}}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.heading}>Expert Hub Management</Text>

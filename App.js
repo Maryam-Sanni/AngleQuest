@@ -59,6 +59,11 @@ import PersonalDev from './Jobseekers/PersonalDev';
 import TeamDev from './Jobseekers/TeamDev';
 import OrgDev from './Jobseekers/OrgDev';
 import CoachReview from './Jobseekers/CoachReview';
+import Interview from './Experts/Interview';
+import GrowthPlan from './Experts/GrowthPlan';
+import Advice from './Experts/Advice';
+import Offers from './Experts/Offers';
+import Bids from './Experts/Bids';
 
 const Stack = createStackNavigator();
 
@@ -144,6 +149,11 @@ const App = () => {
         <Stack.Screen name="Team Development" component={TeamDev} />
         <Stack.Screen name="Organization Development" component={OrgDev} />
         <Stack.Screen name="Coach Assessment" component={CoachReview} />
+        <Stack.Screen name="Interview" component={Interview} />
+        <Stack.Screen name="Growth Plan" component={GrowthPlan} />
+        <Stack.Screen name="Advice" component={Advice} />
+        <Stack.Screen name="Offers" component={Offers} />
+        <Stack.Screen name="Bids" component={Bids} />
       </Stack.Navigator>
     </NavigationContainer>
   );

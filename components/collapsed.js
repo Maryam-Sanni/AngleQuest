@@ -23,7 +23,7 @@ function MyComponent() {
         break;
       case menuItems[2]:
         // Navigate to Dashboard
-        navigation.navigate('Jobs');
+        navigation.navigate('Personal Development');
         break;
       case menuItems[3]:
         // Navigate to Experts
@@ -114,7 +114,7 @@ function MyComponent() {
 }
 
 const menuItems = [
-  { icon: "../assets/menu.png" },
+  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "../assets/sidegrowth.png" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },

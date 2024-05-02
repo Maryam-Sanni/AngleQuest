@@ -14,11 +14,11 @@ function DateTimeRange({ days, timeRange }) {
 
 export default function Profile() {
   return (
-    <View style={{ height: '35%'}}>
+    <View style={{ flex: 1}}>
       <Topbar />
-      <View style={{ flexDirection: 'row', height: '100%' }}>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ padding: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 5, marginLeft: 230 }}>
                 <View style={{ flex: 1, alignSelf: "flex-start" }}>

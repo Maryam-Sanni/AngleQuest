@@ -28,13 +28,13 @@ const HomePage = () => {
   return (
     <ImageBackground
     source={require ('../assets/Home Background.png') }
-  style={{ height: '120%', width: '100%', flex: 1 }}
+  style={{ height: '150%', width: '100%', flex: 1 }}
 >
-  <View style={{ height: '70%'}}>
+  <View style={{ flex: 1}}>
     <Topbar />
-    <View style={{ flexDirection: 'row', height: '100%',  }}>
+    <View style={{ flexDirection: 'row', flex: 1  }}>
       <Sidebar />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
           <Image
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginLeft: 100,
-    marginTop: 150
+    marginTop: 100
   },
   greeting: {
     fontSize: 18,

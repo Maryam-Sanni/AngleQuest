@@ -22,16 +22,28 @@ const HomePage = () => {
     navigation.navigate('RequestPayout');
   };
 
+  const goToInterview = () => {
+    navigation.navigate('Interview');
+  };
+
+  const goToAdvice = () => {
+    navigation.navigate('Advice');
+  };
+ 
+  const goToGrowth = () => {
+    navigation.navigate('Growth Plan');
+  };
+  
   return (
     <ImageBackground
     source={require ('../assets/Home Background.png') }
-  style={{ height: '120%', width: '100%',flex: 1}}
+  style={{ height: '150%', width: '100%',flex: 1}}
 >
-  <View style={{ height: '70%'}}>
+  <View style={{ flex: 1 }}>
     <Topbar />
-    <View style={{ flexDirection: 'row', height: '100%' }}>
+    <View style={{ flexDirection: 'row', flex: 1}}>
       <Sidebar />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500}}>
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
           <Image
@@ -127,16 +139,16 @@ const HomePage = () => {
 <View style={styles.greenwhitebox}> 
 <Text style={{fontSize: 13, color: '#206C00', marginTop: 15, marginLeft: 20, fontWeight: '600' }}>Create hubs and set your rate</Text>
 <View style={{flexDirection: 'row' }}>
-<TouchableOpacity style={styles.touchablerate}>
+<TouchableOpacity onPress={goToManageHubs} style={styles.touchablerate}>
           <Text style={styles.touchableTextrate}>Create Hub</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToGrowth} style={styles.touchablerate}>
           <Text style={styles.touchableTextrate}>Growth Plan Rate</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToInterview} style={styles.touchablerate}>
           <Text style={styles.touchableTextrate}>Interview Rate</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToAdvice} style={styles.touchablerate}>
           <Text style={styles.touchableTextrate}>Advice Rate</Text>
           </TouchableOpacity>
 </View>
@@ -166,7 +178,7 @@ const HomePage = () => {
 <View style={{flexDirection: 'row' }}>
               <Text style={{fontSize: 12, color: 'black', marginTop: 10, marginLeft: 20, fontWeight: 'bold' }}>Total: 5</Text>
               <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 20, fontWeight: 'bold' }}>Won: 5</Text>
-              <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 20, fontWeight: 'bold' }}>Loss: 5</Text>
+              <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 20, fontWeight: 'bold' }}>Lost: 5</Text>
               <Text style={{fontSize: 12, color: 'grey', marginTop: 10, marginLeft: 20, fontWeight: 'bold' }}>In Progress: 5</Text>
               </View>
  </View>
@@ -269,7 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginLeft: 100,
-    marginTop: 150
+    marginTop: 100
   },
   greeting: {
     fontSize: 18,

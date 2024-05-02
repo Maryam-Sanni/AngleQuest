@@ -7,12 +7,12 @@ import Topbar from '../components/topbar';
 
 function MainScreen() {
   return (
-    <View style={{height: '80%'}}>
+    <View style={{flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <View style={styles.container}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={styles.scrollView}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }} style={styles.scrollView}>
             <View style={styles.chatListContainer}>
               <ChatListScreen />
             </View>

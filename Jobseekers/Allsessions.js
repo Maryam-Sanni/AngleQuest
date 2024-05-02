@@ -5,11 +5,11 @@ import Topbar from '../components/topbar';
 
 function MyComponent() {
   return (
-    <View style={{height: '80%'}}>
+    <View style={{flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent} indicatorStyle="black">
     <View style={styles.container}>
     <View style={{ flexDirection: "row",  alignItems: "flex-start", paddingHorizontal: 10, marginTop: 5, marginBottom: 20 }}>
         <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Sessions</Text>
@@ -207,7 +207,7 @@ function MyComponent() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+   flex: 1, 
     padding: 20, 
     backgroundColor: 'white',
     paddingTop: 40,
@@ -319,6 +319,10 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 5,
   },
+  scrollViewContent: {
+    flexGrow: 1,
+    maxHeight: 500, // Set a maximum height for the ScrollView
+},
 });
 
 export default MyComponent;

@@ -24,7 +24,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/web.png",
+      "favicon": "./assets/Recruitangle Icon.png",
       "sourceDir": "."
     }
   }
