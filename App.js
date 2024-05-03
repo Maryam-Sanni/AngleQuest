@@ -64,6 +64,8 @@ import GrowthPlan from './Experts/GrowthPlan';
 import Advice from './Experts/Advice';
 import Offers from './Experts/Offers';
 import Bids from './Experts/Bids';
+import MyHubs from './Experts/MyHubs';
+import Createhubform from './components/Createhubform';
 
 const Stack = createStackNavigator();
 
@@ -154,6 +156,8 @@ const App = () => {
         <Stack.Screen name="Advice" component={Advice} />
         <Stack.Screen name="Offers" component={Offers} />
         <Stack.Screen name="Bids" component={Bids} />
+        <Stack.Screen name="My Hubs" component={MyHubs} />
+        <Stack.Screen name="Create Hub" component={Createhubform} />
       </Stack.Navigator>
     </NavigationContainer>
   );

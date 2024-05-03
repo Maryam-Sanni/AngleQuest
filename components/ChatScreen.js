@@ -45,9 +45,20 @@ function ChatScreen() {
       const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
       if (result.type === 'success') {
         const { uri: fileUri, name: fileName, type: fileType } = result;
-        // Here you can handle the file, like sending it through a chat message
-        // For simplicity, let's just alert the file details
-        Alert.alert('File Selected', `Name: ${fileName}\nType: ${fileType}`);
+        const message = {
+          _id: Math.random().toString(36).substring(7),
+          text: '',
+          createdAt: new Date(),
+          user: {
+            _id: 1,
+          },
+          file: {
+            uri: fileUri,
+            name: fileName,
+            type: fileType,
+          },
+        };
+        onSend([message]); // Ensure the message is sent as an array
       }
     } catch (error) {
       console.error('Error picking file:', error);
@@ -68,7 +79,17 @@ function ChatScreen() {
     try {
       await recording.stopAndUnloadAsync();
       setIsRecording(false);
-      // Here you can handle the recorded audio, like sending it through a chat message
+      const { uri } = recording.getURI();
+      const message = {
+        _id: Math.random().toString(36).substring(7),
+        text: '',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+        },
+        audio: uri,
+      };
+      onSend([message]); // Ensure the message is sent as an array
     } catch (error) {
       console.error('Failed to stop recording:', error);
     }
@@ -86,35 +107,24 @@ function ChatScreen() {
           <Text style={{ fontStyle: 'normal', fontSize: 12 }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Expert</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
-        <Image
-       source={require('../assets/add file.png')}
-       style={{
-        width: 25,
-        height: 25,
-        marginTop: 10,}}
-    />
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9afdd28554ea94baa9f576588ffd7e85d2ea305e799b46b23fc2336715ed2398?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+            style={{ width: 25, height: 25, marginTop: 10 }}
+          />
         </TouchableOpacity>
         {isRecording ? (
           <TouchableOpacity onPress={stopRecording}>
             <Image
-       source={require('../assets/microphonestop.png')}
-       style={{
-        width: 25,
-        height: 25,
-        marginLeft: 10,
-        marginTop: 10,}}
-    />
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/8b6ee6e3efc0882450b47e4387504c352faa72f342dc8adc7741cf3ed2a19f02?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={{ width: 25, height: 25, marginTop: 10, marginRight: 10 }}
+            />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={startRecording}>
             <Image
-       source={require('../assets/microphonestart.png')}
-        style={{
-          width: 25,
-          height: 25,
-          marginLeft: 10,
-          marginTop: 10,}}
-      />
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7faa777c54d32d03bd2952b24dd7b363b4e5cd731ca521b853a6b213ebf2f277?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={{ width: 25, height: 25, marginTop: 10, marginRight: 10 }}
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -136,3 +146,4 @@ function ChatScreen() {
 }
 
 export default ChatScreen;
+ 

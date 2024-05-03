@@ -8,7 +8,6 @@ function MyComponent() {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
   const navigation = useNavigation(); 
   
-  
 
   
 
@@ -131,9 +130,9 @@ function MyComponent() {
     setModalVisible(true);
   };
 
-  const handlenavigateToProfile = () => {
+  const goToBookInterview = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('ExpertProfile');
+    navigation.navigate('BookaSession');
   };
 
   const renderCards = () => {
@@ -167,7 +166,7 @@ function MyComponent() {
            
           }}
         >
-          <View style={{ justifyContent: "center", width: 180, height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 18, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+          <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
           <View style={{ flexDirection: 'column', alignItems: 'center' }}>
            <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -207,7 +206,7 @@ function MyComponent() {
          
            
             
-          <View style={{ flexDirection: 'row', marginTop: 30,}}>
+          <View style={{ flexDirection: 'row', marginTop: 30, justifyContent: 'center'}}>
                       <View style={{ flexDirection: 'column', alignItems: 'center'}}>
           <TouchableOpacity
             style={{
@@ -222,7 +221,7 @@ function MyComponent() {
               justifyContent: 'center', 
               marginLeft: 10, 
             }}
-            onPress={handleJoinHub}
+            onPress={goToBookInterview}
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
              Interview
@@ -231,7 +230,7 @@ function MyComponent() {
           <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
               {data.interviewfee}</Text>
               </View>
-              <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'column', alignItems: 'center', }}>
           <TouchableOpacity
             style={{
               borderWidth: 1, 
@@ -245,7 +244,7 @@ function MyComponent() {
               justifyContent: 'center', 
               marginLeft: 5, 
             }}
-            onPress={handleJoinHub}
+            onPress={goToBookInterview}
           >
             <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12}}>
              Growth Plan
@@ -268,7 +267,7 @@ function MyComponent() {
               justifyContent: 'center', 
               marginLeft: 5, marginRight: 10,
             }}
-            onPress={handleJoinHub}
+            onPress={goToBookInterview}
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
              Advice
@@ -289,33 +288,23 @@ function MyComponent() {
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
+          <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
+              <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
                 <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Experts</Text>
-                <Text style={{ fontSize: 14, marginLeft: 25 }}>Booked Experts</Text>
-                <Text style={{ fontSize: 14, marginLeft: 25 }}>Saved</Text>
+                </View>
+                <TouchableOpacity>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, fontColor:'#666', fontWeight: '600' }}>Booked Experts</Text>
+                </TouchableOpacity>
+                <TouchableOpacity> 
+              <Text style={{ fontSize: 14, marginLeft: 25,  marginTop: 5, fontColor:'#666', fontWeight: '600' }}>Saved</Text>
+              </TouchableOpacity>
               </View>
               
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, marginBottom: 20, flexWrap: "wrap" }}>
-              <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8" }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Civil Engineer</Text>
-              </View>
-              <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Architect</Text>
-              </View>
-              <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Surveyor</Text>
-              </View>
-              <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Constructor</Text>
-              </View>
-              <View style={{ justifyContent: "center", alignItems: "center", marginLeft: 4, paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8" }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>+</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
+            
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30 }}>
               {renderCards()}
             </View>
           </View>

@@ -37,7 +37,7 @@ function MyComponent() {
           navigation.navigate('Give feedback');
           break;
         case "Coaching Hubs":
-          navigation.navigate('Manage Hubs');
+          navigation.navigate('My Hubs');
           break;
         case "Messages":
           navigation.navigate('Messaging');
@@ -124,8 +124,8 @@ function MyComponent() {
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Offers", icon: "../assets/offers.png" },
-  { label: "Schedules", icon: "../assets/schedules.png" },
+  { label: "Offers", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3966a9aaeaf70b030c74be904efab12be04eb3b70c7baa24c8c73c041b0a1a70?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Schedules", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/af1777ff9219d90e26a5672ec04ed421d4904eb9122e2f1feb8f1b61f8b63b75?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Sessions", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Feedbacks", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Coaching Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },

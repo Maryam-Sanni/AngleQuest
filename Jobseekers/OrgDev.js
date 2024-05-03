@@ -10,7 +10,7 @@ function MyComponent() {
     const goToPersonal = () => {
         navigation.navigate('Personal Development');
       };
-
+ 
       const goToTeam = () => {
         navigation.navigate('Team Development');
       };
@@ -23,17 +23,17 @@ function MyComponent() {
       };
 
   return (
-    <View style={{ flex: 1}}>
+    <View style={{ flex: 1}}> 
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500   }}>
-    <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, marginTop: 40, alignContent: 'center', marginRight: 100    }}>
-    <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>Growth Plan</Text>
-     <Text style={{ fontSize: 14, color: 'black', marginTop: 5 }}>Set a direction by creating a plan and an expert will guide you</Text>
-     <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, marginBottom: 20, flexWrap: "wrap"}}>
+    <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, marginTop: 50, alignItems: 'center', marginRight: 100    }}>
+    <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginRight: 830 }}>Growth Plan</Text>
+     <Text style={{ fontSize: 14, color: 'black', marginTop: 5, marginRight: 540 }}>Set a direction by creating a plan and an expert will guide you</Text>
+     <View style={{ flexDirection: "row",  marginTop: 20, marginBottom: 20, flexWrap: "wrap", }}>
      <TouchableOpacity onPress={goToPersonal}  >
-<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 40, alignItems: 'center' }}>
+<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 38, marginLeft: 21, alignItems: 'center' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, aspectRatio: 1, marginBottom: 10  }}
@@ -43,7 +43,7 @@ function MyComponent() {
 </TouchableOpacity>
 
 <TouchableOpacity onPress={goToTeam} >
-<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 40,  alignItems: 'center'  }}>
+<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 38,  alignItems: 'center'  }}>
 <Image
                source={require ('../assets/team.png') }
               style={{ width: 40, height: 40, marginBottom: 10  }}
@@ -53,7 +53,7 @@ function MyComponent() {
 </TouchableOpacity>
 
 <TouchableOpacity onPress={goToOrg} >
-<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 40, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 38, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
 <Image
                source={require ('../assets/organization2.png') }
               style={{ width: 40, height: 40, marginBottom: 10  }}
@@ -63,7 +63,7 @@ function MyComponent() {
 </TouchableOpacity>
 
 <TouchableOpacity onPress={goToCoach} >
-<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 40, alignItems: 'center'  }}>
+<View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 38, alignItems: 'center'  }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, aspectRatio: 1, marginBottom: 10  }}

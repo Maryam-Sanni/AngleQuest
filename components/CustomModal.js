@@ -21,11 +21,11 @@ const CustomModal = ({ visible, onClose }) => {
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Complete Your Profile</Text>
           <Text>Please complete your profile to unlock all features.</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-            <TouchableOpacity onPress={goToProfile}  style={{ padding: 8, backgroundColor: 'coral', borderRadius: 5 }}>
-              <Text style={{ color: 'white' }}>Complete Profile</Text>
+            <TouchableOpacity onPress={goToProfile}  style={{ padding: 10, paddingHorizontal: 30, backgroundColor: 'coral', borderRadius: 5, }}>
+              <Text style={{ color: 'white' }}>Continue</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onClose(false)} style={{ padding: 8, backgroundColor: 'white', borderRadius: 5, borderColor: 'coral', borderWidth: 1 }}>
-              <Text style={{ color: 'coral' }}>Later</Text>
+              <Text style={{ color: 'coral' }}>Remind me later</Text>
             </TouchableOpacity>
           </View>
         </View>

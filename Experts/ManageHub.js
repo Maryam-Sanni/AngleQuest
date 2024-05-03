@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Image, ScrollView, Modal } from 'react-native';
 import { Table, Row } from 'react-native-table-component';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
+import { useNavigation } from '@react-navigation/native';
 
 const ExpoDevPage = () => {
   // Dummy data for trainees
+  const navigation = useNavigation();
+
   const [trainees, setTrainees] = useState([
     { id: '1', name: 'Ahmed Hassan', online: true, meetingsMissed: 0 },
     { id: '2', name: 'Maria Garcia', online: false, meetingsMissed: 2 },
@@ -31,7 +33,9 @@ const ExpoDevPage = () => {
     // Add more trainees as needed
   ]);
 
-  // Function to toggle trainee's meeting attendance
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTraineeId, setSelectedTraineeId] = useState(null);
+
   const toggleMeetingAttendance = (traineeId) => {
     setTrainees(prevTrainees =>
       prevTrainees.map(trainee =>
@@ -40,39 +44,21 @@ const ExpoDevPage = () => {
     );
   };
 
-  const removeTrainee = (traineeId, traineeName) => {
-    console.log('Removing trainee:', traineeId, traineeName); // Debugging log
-    Alert.alert(
-      'Confirm',
-      `Are you sure you want to remove ${traineeName}?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Remove',
-          onPress: () => {
-            try {
-              console.log('Removing confirmed. Trainee ID:', traineeId); // Debugging log
-              setTrainees(prevTrainees =>
-                prevTrainees.filter(trainee => trainee.id !== traineeId)
-              );
-            } catch (error) {
-              console.error('Error removing trainee:', error);
-            }
-          },
-          style: 'destructive',
-        },
-      ],
-      { cancelable: true }
+  // Function to remove trainee
+  const removeTrainee = (traineeId) => {
+    setTrainees(prevTrainees =>
+      prevTrainees.filter(trainee => trainee.id !== traineeId)
     );
+    setModalVisible(false);
   };
   
-
+  const goToAllHubs = () => {
+    // Navigate to ExpertsProfile screen when the button is clicked
+    navigation.navigate('My Hubs');
+  };
 
   // Define table header
-  const tableHead = ['    ', 'Status', 'Sessions Missed', 'Remove Trainee'];
+  const tableHead = ['    ', 'Status', 'Sessions Missed', 'Remove Participant'];
 
   // Define table data
   const tableData = trainees.map(trainee => ([
@@ -84,7 +70,10 @@ const ExpoDevPage = () => {
       {trainee.online ? 'Online' : 'Offline'}
     </Text>,
     trainee.meetingsMissed,
-    <TouchableOpacity key={trainee.id} onPress={() => removeTrainee(trainee.id, trainee.name)}>
+    <TouchableOpacity key={trainee.id} onPress={() => {
+      setSelectedTraineeId(trainee.id);
+      setModalVisible(true);
+    }}>
       <Text style={styles.removeButton}>Remove</Text>
     </TouchableOpacity>,
   ]));
@@ -101,42 +90,34 @@ const ExpoDevPage = () => {
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => console.log('Voice call pressed')}>
           <Image
-       source={require('../assets/phone.png')}
-        style={{
-          width: 23,
-          height: 23,
-          marginLeft: 20
-      }}
-      />   
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fe923b79972d80159d9e76f3125f9461c31cb052dd8304d20beee39ec1ce030c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={{ width: 20, height: 20, marginLeft: 20 }}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => console.log('Video call pressed')}>
-            <Image
-       source={require('../assets/videocall.png')}
-        style={{
-          width: 23,
-          height: 23,
-          marginLeft: 20
-      }}
-      />  
+          <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a2dbec3f3a9aca911900f391c458cd3027f682bac2911c9be95cb59b74639e5c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={{ width: 20, height: 20, marginLeft: 20 }}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => console.log('Chat pressed')}>
           <Image
-       source={require('../assets/chatroom.png')}
-        style={{
-          width: 23,
-          height: 23,
-          marginLeft: 20
-      }}
-      />  
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/3b3ed81d6719b7b18bcc3ac498fee44248d027fef236dab07161ff2b533c6d1a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={{ width: 20, height: 20, marginLeft: 20,  marginRight: 60  }}
+            />
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.subHeading}>Manage your coaching hub and trainees</Text>
-      <View style={{ flexDirection: "row",  alignItems: "flex-start", paddingHorizontal: 10, marginTop: 10, marginBottom: 20 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>Microsoft Azure Hub</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35, fontWeight: "600", }}>SAP Hub</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35, fontWeight: "600", }}>Frontend Dev. Hub</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35, color: "grey"   }}>New Hub</Text>
+      <Text style={styles.subHeading}>Manage your coaching hub and participants</Text>
+    <View style={{ flexDirection: "row",  alignItems: "flex-start", paddingHorizontal: 10, marginTop: 10, marginBottom: 20 }}>
+    <TouchableOpacity onPress={goToAllHubs} >
+    <Text style={{ fontSize: 14, fontWeight: "600", color: "#666", marginTop: 5  }}>All Hubs</Text>
+    </TouchableOpacity>
+      <View style={{ justifyContent: "flex-end", marginLeft: 30, paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
+              <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center', fontWeight: "600", }}>SAP FI</Text>
+            </View>
+        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5  }}>Dev Ops</Text>
+        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5  }}>Frontend Dev.</Text>
       </View>
       
       {/* Table */}
@@ -147,7 +128,7 @@ const ExpoDevPage = () => {
           <Row
             key={index}
             data={rowData}
-            style={[styles.row, index % 2 && { backgroundColor: 'white' }]}
+            style={[styles.row, index % 2 && { backgroundColor: '#F8F8F8' }]}
             textStyle={styles.text}
           />
         ))}
@@ -156,6 +137,30 @@ const ExpoDevPage = () => {
       <TouchableOpacity onPress={() => console.log('Delete Hub pressed')} style={styles.deleteHubButton}>
               <Text style={styles.deleteHubButtonText}>Delete Hub</Text>
             </TouchableOpacity>
+            <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>Are you sure you want to remove this participant?</Text>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.removeButton]}
+                onPress={() => removeTrainee(selectedTraineeId)}
+              >
+                <Text style={styles.modalButtonText}>Remove</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText2}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
     </View>
     </ScrollView>
     </View>
@@ -166,20 +171,13 @@ const ExpoDevPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     paddingTop: 30,
     backgroundColor: 'white',
-    marginLeft: 230,
+    marginLeft: 280,
   },
   tableContainer: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
-    elevation: 5, 
+    backgroundColor: 'white',
+    marginRight: 50
   },
   header: {
     flexDirection: 'row',
@@ -198,11 +196,11 @@ const styles = StyleSheet.create({
   subHeading: {
     fontSize: 14,
     marginBottom: 25,
-    color: '#666',
+    color: '#206C00',
   },
-  head: {
+ head: {
     height: 40,
-    backgroundColor: '#A2BE95',
+    backgroundColor: '#d3f9d8',
   },
   text: {
     margin: 6,
@@ -211,12 +209,12 @@ const styles = StyleSheet.create({
   headertext: {
     margin: 6,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold'
   },
   row: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
   },
   removeButton: {
     color: 'red',
@@ -240,10 +238,10 @@ const styles = StyleSheet.create({
   },
   onlineText: {
     color: 'green',
-    fontWeight: '500'
+    fontWeight: 'bold'
   },
   offlineText: {
-    color: 'pink',
+    color: 'grey',
   },
   deleteHubButton: {
     backgroundColor: 'red',
@@ -252,12 +250,50 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'flex-end',
     marginTop: 10,
+    marginRight: 50
   },
   deleteHubButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
   },
+  modalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    marginBottom: 20,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  modalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'red'
+  },
+  modalButtonText2: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'green'
+  },
 });
+
 
 export default ExpoDevPage;

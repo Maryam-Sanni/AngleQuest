@@ -54,24 +54,24 @@ const HomePage = () => {
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Let our expert prepare you for your next interview</Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Let our expert prepare you for your next interview</Text>
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Create a career growth plan with a coach</Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a career growth plan with a coach</Text>
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Join coaching hubs for hands on learning with an expert</Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Join coaching hubs for hands on learning with an expert</Text>
           </View>
           <Text style={{fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
           </View>

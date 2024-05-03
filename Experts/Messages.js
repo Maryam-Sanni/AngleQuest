@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import ChatListScreen from '../components/ExpertsChatListScreen';  
-import ChatScreen from '../components/ChatScreen'; 
+import ChatScreen from '../components/expertsChatScreen'; 
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
-import JobseekerProfile from '../components/JProfile';
 
 function MainScreen() {
   return (
@@ -20,9 +19,6 @@ function MainScreen() {
           </ScrollView>
           <View style={styles.chatScreenContainer}>
             <ChatScreen />
-          </View>
-          <View style={styles.profileContainer}>
-            <JobseekerProfile />
           </View>
           
         </View>

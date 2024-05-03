@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, Image, Modal, StyleSheet, TouchableWithoutFeedback  } from 'react-native';
-import CreateCoachingHubForm from './Createhubform'; 
+import React from 'react';
+import { View, FlatList, Text, TouchableOpacity, Image } from 'react-native';
 
 const data = [
   {
@@ -61,29 +60,15 @@ const data = [
   },
 ];
 
-function CustomHeader({ onPressAdd }) {
+function CustomHeader() {
   return (
     <View style={{ backgroundColor: 'white', padding: 16 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',  }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Chats</Text>
-        <TouchableOpacity onPress={onPressAdd}>
-          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#206C00', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 24, marginTop: -5 }}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={{ borderBottomWidth: 1, borderBottomColor: 'grey', marginTop: 16 }} />
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, }}>Chats</Text>
     </View>
   );
 }
 
 function ChatListScreen({ navigation }) {
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Chat', { userId: item.id })}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5' }}>
@@ -97,57 +82,16 @@ function ChatListScreen({ navigation }) {
     </TouchableOpacity>
   );
 
-    return (
+  return (
     <View>
-      <CustomHeader onPressAdd={toggleModal} />
+      <CustomHeader />
       <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={toggleModal}
-      >
-        <TouchableWithoutFeedback onPress={toggleModal}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
-                <Text style={{ fontSize: 24 }}>×</Text>
-              </TouchableOpacity>
-              <CreateCoachingHubForm />
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default ChatListScreen;

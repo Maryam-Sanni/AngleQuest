@@ -64,24 +64,24 @@ const HomePage = () => {
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Conduct thorough interview on jobseekers for preparedness </Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Conduct thorough interview on jobseekers for preparedness </Text>
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Review and provide guideance to the growth plan of protegees | Give assessment</Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Review and provide guideance to the growth plan of protegees | Give assessment</Text>
           </View>
           <View style={{flexDirection: 'row' }}>
           <Image
-       source={require('../assets/circle.png')}
+       source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10 }}>Create coaching hubs and share your knowledge with your protegees</Text>
+          <Text style={{fontSize: 13, color: '#206C00', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create coaching hubs and share your knowledge with your protegees</Text>
           </View>
           <Text style={{fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>After the good work, you also earn handsomely, lets go!</Text>
           </View>
