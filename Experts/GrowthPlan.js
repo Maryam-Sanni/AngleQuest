@@ -1,15 +1,29 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledGrowthPlan from '../components/ScheduledGrowthPlan';
 import GrowthPlansReview from '../components/GrowthPlansReview';
 import CompletedGrowthPlan from '../components/CompletedGrowthPlan';
 import { useNavigation } from '@react-navigation/native';
+import OpenModal from '../Experts/Growthplanprofile';
 
 
 function MyComponent() {
     const navigation = useNavigation();
+    const [isInterviewHovered, setIsInterviewHovered] = useState(false);
+    const [isGrowthHovered, setIsGrowthHovered] = useState(false);
+    const [isAdviceHovered, setIsAdviceHovered] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
+  
 
     const goToInterview = () => {
         navigation.navigate('Interview');
@@ -23,6 +37,10 @@ function MyComponent() {
         navigation.navigate('Advice');
       };
       
+      const goToGrowthprofile = () => {
+        navigation.navigate('Growth Plan Profile');
+    };
+
   return (
     <View style={{ flex: 1 }}>
       <Topbar />
@@ -31,30 +49,54 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={goToInterview} >
-              <View style={styles.item}>
-                <Image source={require('../assets/expertsinterview.png')} style={styles.image} />
-                <Text style={styles.headertext}>Interviews</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={goToGrowth} >
-              <View style={styles.item}>
-                <Image source={require('../assets/expertsgrowth.png')} style={styles.image} />
-                <Text style={styles.headertext}>Growth Plan</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={goToAdvice} >
-              <View style={styles.item}>
-                <Image source={require('../assets/expertsadvice.png')} style={styles.image} />
-                <Text style={styles.headertext}>Advice</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          <TouchableHighlight
+                                onPress={goToInterview} 
+                                underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
+                                onMouseEnter={() => setIsInterviewHovered(true)}
+                                onMouseLeave={() => setIsInterviewHovered(false)}>
+                                <View style={styles.item}>
+                                    <Image source={require('../assets/expertsinterview.png')} style={styles.image} />
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Interviews</Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                onPress={goToGrowth}
+                                underlayColor={isGrowthHovered ? 'transparent' : 'transparent'}
+                                onMouseEnter={() => setIsGrowthHovered(true)}
+                                onMouseLeave={() => setIsGrowthHovered(false)}>
+                                <View style={styles.item}>
+                                    <Image source={require('../assets/expertsgrowth.png')} style={styles.image} />
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Growth Plan</Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                onPress={goToAdvice}
+                                underlayColor={isAdviceHovered ? 'transparent' : 'transparent'}
+                                onMouseEnter={() => setIsAdviceHovered(true)}
+                                onMouseLeave={() => setIsAdviceHovered(false)}>
+                                <View style={styles.item}>
+                                    <Image source={require('../assets/expertsadvice.png')} style={styles.image} />
+                                    <Text style={[styles.headertext, isAdviceHovered && { color: 'coral' }]}>Advice</Text>
+                                </View>
+                            </TouchableHighlight>
+                        </View>
 
-<View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 730 }}>
+                        <TouchableOpacity onPress={handleOpenPress}>
+<View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 50 }}>
                 <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Growth Plan Profile</Text>
               </View>
- 
+ </TouchableOpacity>
+ <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
+
 <ScheduledGrowthPlan />
 <GrowthPlansReview />
 <CompletedGrowthPlan />
@@ -68,30 +110,37 @@ function MyComponent() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginLeft: -100,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  header: {
+    marginLeft: -60,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     backgroundColor: 'white',
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   headertext: {
     marginLeft: 5,
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: '500',
+    marginTop: 5
   },
   image: {
     width: 24,
     height: 24,
     marginRight: 5,
-    marginLeft: -85
+    marginLeft: 100
   },
 });
 

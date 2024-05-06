@@ -1,9 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import OpenSchedule from '../Experts/OpenScheduled';
 
 const ScheduledMeetingsTable = () => {
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <View style={{marginLeft: 50 }}>
+    <View style={{ marginLeft: 50 }}>
       <Text style={styles.title}>Scheduled Interview Meetings</Text>
       <View style={styles.tableheader}>
         <Text style={[styles.tableheaderText, { marginLeft: 25 }]}>Name</Text>
@@ -27,6 +40,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
+            <Text style={styles.cellText}>Open</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}>Start Meeting</Text>
           </TouchableOpacity>
@@ -44,16 +60,37 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
+            <Text style={styles.cellText}>Open</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}>Start Meeting</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+            <OpenSchedule onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   title: {
     marginTop: 70,
     color: "black",
@@ -85,7 +122,7 @@ const styles = StyleSheet.create({
   },
   tableheader: {
     marginRight: 200,
-    marginTop: 10, 
+    marginTop: 10,
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'coral',
@@ -99,6 +136,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 export default ScheduledMeetingsTable;
+

@@ -1,7 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import OpenModal from '../Experts/Viewwonbids';
 
 const ScheduledMeetingsTable = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
+
   return (
    <View style={{marginLeft: 50 }}>
       <Text style={styles.title}>Won Bids</Text>
@@ -20,7 +31,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>View</Text>
           </TouchableOpacity>
         </View>
@@ -37,16 +48,39 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>View</Text>
           </TouchableOpacity>
+          <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+            <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
         </View>
+
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  staricon: {
+    width: 20,
+    height: 20,
+    marginTop: -600,
+    marginLeft: -410
+  },
   title: {
     marginTop: 30,
     color: "black",

@@ -1,7 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import OpenModal from '../Experts/ViewLostbids';
 
 const ScheduledMeetingsTable = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
+
   return (
    <View style={{marginLeft: 50 }}>
       <Text style={styles.title}>Lost bids</Text>
@@ -20,7 +31,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>View</Text>
           </TouchableOpacity>
         </View>
@@ -37,9 +48,19 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>View</Text>
           </TouchableOpacity>
+          <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+            <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
         </View>
       </View>
     </View>
@@ -47,6 +68,12 @@ const ScheduledMeetingsTable = () => {
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   title: {
     marginTop: 30,
     color: "black",

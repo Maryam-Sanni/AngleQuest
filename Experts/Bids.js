@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import BidsinReview from '../components/BidsinReview';
@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
  
 function MyComponent() {
     const navigation = useNavigation();
+    const [isBidHovered, setIsBidHovered] = useState(false);
+    const [isOfferHovered, setIsOfferHovered] = useState(false);
 
     const goToOffers= () => {
         navigation.navigate('Offers');
@@ -27,16 +29,22 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={goToOffers}  >
+            <TouchableOpacity onPress={goToOffers} 
+            underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsOfferHovered(true)}
+            onMouseLeave={() => setIsOfferHovered(false)}> 
               <View style={styles.item}>
                 <Image source={require('../assets/expertsoffers.png')} style={styles.image} />
-                <Text style={styles.headertext}>Offers</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToBids} >
+            <TouchableOpacity onPress={goToBids}
+            underlayColor={isBidHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsBidHovered(true)}
+            onMouseLeave={() => setIsBidHovered(false)} >
               <View style={styles.item}>
                 <Image source={require('../assets/expertsbids.png')} style={styles.image} />
-                <Text style={styles.headertext}>Bids</Text>
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
               </View>
             </TouchableOpacity>
             
@@ -58,10 +66,10 @@ function MyComponent() {
 
 const styles = StyleSheet.create({
   header: {
-    marginLeft: -100,
+    marginLeft: -60,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     backgroundColor: 'white',
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -69,7 +77,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   headertext: {
     marginLeft: 5,
@@ -80,6 +88,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 5,
+    marginLeft: 100
   },
 });
 

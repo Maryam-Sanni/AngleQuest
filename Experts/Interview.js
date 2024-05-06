@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight } from 'react-native';
+ import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledMeetingsTable from '../components/ScheduledMeetingsTable';
 import AwaitingFeedbacks from '../components/AwaitingFeedbacks';
 import CompletedFeedbacks from '../components/CompletedFeedbacks';
+import OpenModal from '../Experts/InterviewProfile'; 
 import { useNavigation } from '@react-navigation/native';
 
-function MyComponent() {
+function MyComponent() { 
     const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(false);
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
     const [isAdviceHovered, setIsAdviceHovered] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
 
     const goToInterview = () => {
         navigation.navigate('Interview');
@@ -25,6 +35,7 @@ function MyComponent() {
         navigation.navigate('Advice');
     };
 
+
     return (
         <View style={{ flex: 1 }}>
             <Topbar />
@@ -34,8 +45,8 @@ function MyComponent() {
                     <View style={{ marginLeft: 270, backgroundColor: 'white' }}>
                         <View style={styles.header}>
                             <TouchableHighlight
-                                onPress={goToInterview}
-                                underlayColor={isInterviewHovered ? 'coral' : 'transparent'}
+                                onPress={goToInterview} 
+                                underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsInterviewHovered(true)}
                                 onMouseLeave={() => setIsInterviewHovered(false)}>
                                 <View style={styles.item}>
@@ -45,7 +56,7 @@ function MyComponent() {
                             </TouchableHighlight>
                             <TouchableHighlight
                                 onPress={goToGrowth}
-                                underlayColor={isGrowthHovered ? '#F08080' : 'transparent'}
+                                underlayColor={isGrowthHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsGrowthHovered(true)}
                                 onMouseLeave={() => setIsGrowthHovered(false)}>
                                 <View style={styles.item}>
@@ -55,7 +66,7 @@ function MyComponent() {
                             </TouchableHighlight>
                             <TouchableHighlight
                                 onPress={goToAdvice}
-                                underlayColor={isAdviceHovered ? '#F08080' : 'transparent'}
+                                underlayColor={isAdviceHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsAdviceHovered(true)}
                                 onMouseLeave={() => setIsAdviceHovered(false)}>
                                 <View style={styles.item}>
@@ -65,9 +76,22 @@ function MyComponent() {
                             </TouchableHighlight>
                         </View>
 
-                        <View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 120, alignItems: 'center', marginTop: 10, marginLeft: 750 }}>
-                            <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Interview Profile</Text>
-                        </View>
+                        <TouchableOpacity onPress={handleOpenPress}>
+                            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 120, alignItems: 'center', marginTop: 10, marginLeft: 50 }}>
+                                <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Interview Profile</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
 
                         <ScheduledMeetingsTable />
                         <AwaitingFeedbacks />
@@ -80,31 +104,39 @@ function MyComponent() {
 }
 
 const styles = StyleSheet.create({
-    header: {
-        marginLeft: -100,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+    modalContent: {
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: 10
+      },
+    header: {
+        marginLeft: -60,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
         backgroundColor: 'white',
-        paddingVertical: 10,
+        paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
     item: {
         flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 20, 
-    },
+        alignItems: 'flex-start',
+        marginRight: 10, 
+    }, 
     headertext: {
         marginLeft: 5,
         fontSize: 14,
-        fontWeight: '500'
+        fontWeight: '500',
+        marginTop: 5
     },
     image: {
         width: 24,
         height: 24,
         marginRight: 5,
-        marginLeft: -95
+        marginLeft: 100
     },
 });
 

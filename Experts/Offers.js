@@ -1,13 +1,16 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import { useNavigation } from '@react-navigation/native';
+import OpenModal from '../Experts/Viewbids';
 
- 
+  
 function MyComponent() {
     const navigation = useNavigation();
-
+    const [isBidHovered, setIsBidHovered] = useState(false);
+    const [isOfferHovered, setIsOfferHovered] = useState(false);
+    
     const goToOffers= () => {
         navigation.navigate('Offers');
       };
@@ -15,6 +18,8 @@ function MyComponent() {
       const goToBids = () => {
         navigation.navigate('Bids');
       };
+
+      
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,22 +29,24 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
             <View style={styles.header}>
-              <TouchableOpacity onPress={goToOffers} >
-                <View style={styles.item}>
-                  <Image source={require('../assets/expertsoffers.png')} style={styles.image} />
-                  <Text style={styles.headertext}>Offers</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={goToBids} >
-                <View style={styles.item}>
-                  <Image source={require('../assets/expertsbids.png')} style={styles.image} />
-                  <Text style={styles.headertext}>Bids</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 730 }}>
-              <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>My Profile</Text>
+              <TouchableOpacity onPress={goToOffers} 
+            underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsOfferHovered(true)}
+            onMouseLeave={() => setIsOfferHovered(false)}> 
+              <View style={styles.item}>
+                <Image source={require('../assets/expertsoffers.png')} style={styles.image} />
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goToBids}
+            underlayColor={isBidHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsBidHovered(true)}
+            onMouseLeave={() => setIsBidHovered(false)} >
+              <View style={styles.item}>
+                <Image source={require('../assets/expertsbids.png')} style={styles.image} />
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
+              </View>
+            </TouchableOpacity>
             </View>
 
             <ScheduledMeetingsTable />
@@ -51,6 +58,16 @@ function MyComponent() {
 }
 
 const ScheduledMeetingsTable = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
+
   return (
     <View style={{marginLeft: 50 }}>
       <Text style={styles.title}>Offers</Text>
@@ -76,7 +93,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -93,7 +110,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -110,7 +127,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -127,7 +144,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -144,7 +161,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +178,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -178,7 +195,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -195,7 +212,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -212,7 +229,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
@@ -229,23 +246,39 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Bid</Text>
           </TouchableOpacity>
         </View>
-
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
 
       </View>
+      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   header: {
     marginLeft: -60,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     backgroundColor: 'white',
     paddingVertical: 10,
     borderBottomWidth: 1,
@@ -253,7 +286,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   headertext: {
     marginLeft: 5,
@@ -264,6 +297,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 5,
+    marginLeft: 100
   },
   title: {
     marginTop: 70,

@@ -1,7 +1,19 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import OpenSchedule from '../Experts/OpenScheduledadvice';
 
 const ScheduledMeetingsTable = () => {
+  
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={{marginLeft: 50 }}>
       <Text style={styles.title}>Scheduled Advice Meetings</Text>
@@ -18,7 +30,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>Maryam Bakahli</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell}> 
             <Text style={styles.cellText}>SAP Finance Junior</Text>
           </View>
           <View style={styles.cell}>
@@ -27,7 +39,10 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
+            <Text style={styles.cellText}>Open</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Start Meeting</Text>
           </TouchableOpacity>
         </View>
@@ -44,16 +59,41 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
+            <Text style={styles.cellText}>Open</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
             <Text style={styles.cellText}>Start Meeting</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenSchedule onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  staricon: {
+    width: 20,
+    height: 20,
+    marginTop: -600,
+    marginLeft: -410
+  },
   title: {
     marginTop: 70,
     color: "black",
