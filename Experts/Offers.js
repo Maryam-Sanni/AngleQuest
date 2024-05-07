@@ -69,32 +69,42 @@ const ScheduledMeetingsTable = () => {
     };
 
   return (
-    <View style={{marginLeft: 50 }}>
-      <Text style={styles.title}>Offers</Text>
-      <View style={styles.tableheader}>
-        <Text style={[styles.tableheaderText, { marginLeft: 25 }]}>Name</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 50 }]}>Number of Candidates</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 40 }]}>Field</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 80 }]}>Start Date</Text>
-        <Text style={[styles.tableheaderText, { flex: 0.5 }]}>    </Text>
+    <View style={styles.greenBox}>
+    <Text style={styles.title}>Offers</Text>
+    
+    <View style={styles.table}>
+    <View style={styles.row}>
+        <View style={styles.cell}>
+        <Text style={{fontWeight: '500', fontSize: 14}}>Name</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{fontWeight: '500', fontSize: 14}}>Number of Candidates</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{fontWeight: '500', fontSize: 14}}>Field</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{fontWeight: '500', fontSize: 14}}>Start Date</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={{color: "white", fontSize: 14}}> </Text>
+        </View>
       </View>
-      {/* Body */}
-      <View style={styles.table}>
         <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>ASML</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -111,24 +121,24 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>RVL</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
@@ -145,24 +155,24 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>DANGOTE</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
@@ -179,24 +189,24 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
  <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>TESLA</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
 <View style={styles.row}>
@@ -213,24 +223,24 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
 <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>ASML</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -247,7 +257,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
         </View>
         <Modal
@@ -300,7 +310,8 @@ const styles = StyleSheet.create({
     marginLeft: 100
   },
   title: {
-    marginTop: 70,
+    marginTop: 20,
+    marginLeft: 50,
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
@@ -308,40 +319,44 @@ const styles = StyleSheet.create({
   },
   table: {
     marginRight: 200,
-    marginTop: -5,
-    alignContent: 'center',
-    borderTopWidth: 1,
-    borderTopColor: 'coral',
+    marginTop: 20,
     marginBottom: 20,
-    backgroundColor: '#F8F8F8',
+    alignContent: 'center',
+    justifyContent: 'space-around',
+    marginLeft: 50, marginRight: 50
   },
   row: {
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
   },
   cell: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#CCC',
+   backgroundColor: 'white',
+    padding: 10,
+    alignItems: 'center',
+  },
+  cell2: {
+    flex: 1,
+   backgroundColor: '#F2F2F2',
     padding: 10,
     alignItems: 'center',
   },
   cellText: {
     textAlign: 'center',
   },
-  tableheader: {
-    marginRight: 200,
-    marginTop: 10, 
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'coral',
-    padding: 18,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+  
+  greenBox: {
+    flex: 1,
+   width: "90%",
+    height:250,
+    paddingBottom: 10,
+    marginBottom: 20,
+    marginLeft: 50, 
+    backgroundColor: '#F2F2F2',
+    marginTop: 50, 
   },
-  tableheaderText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+  cellText: {
     textAlign: 'center',
   },
 });

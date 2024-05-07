@@ -36,7 +36,7 @@ function MyComponent() {
       description: "Create user interfaces and optimize user experiences with HTML, CSS, and JavaScript.",
       participants: 130,
       schedule: "09:00PM - 10:30PM, Fri.",
-      fee: "$50.00"
+      fee: "$25.00"
     },
   ];
 
@@ -103,11 +103,11 @@ function MyComponent() {
             backgroundColor: "#d3f9d8",
           }}
         >
-          <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 10, marginLeft: 10, alignItems: 'flex-start', alignContent: 'center', marginTop: 20 }}>
+          <View style={{ justifyContent: "center", alignSelf:'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9",  marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10,  borderWidth: 1, borderColor: '#206C00' }}>
             <View style={{ flexDirection: 'row' }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: 10, marginTop: 20 }}
+                style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20 }}
               />
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -117,42 +117,45 @@ function MyComponent() {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
                 style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20 }}
               />
-              <View style={{ flexDirection: 'column', marginLeft: 25 }}>
-                <Text style={{ fontSize: 12, color: "black", marginTop: 15 }}>Hub Fee</Text>
-                <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
-                  {data.fee}
-                </Text>
-              </View>
             </View>
-            <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginLeft: 10, marginTop: 10 }}>
-              {data.participants} Participants
+            <View style={{ flexDirection: 'row', }}>
+            <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
+              {data.participants} Participants -
             </Text>
-            <Text style={{ fontSize: 13, color: "#206C00", marginLeft: 10, marginBottom: 10 }}>
+            <Text style={{ fontSize: 12, color: "black", fontWeight: '400', fontStyle: 'italic', marginTop: 10 }}>
+                {data.visibility} </Text>
+                </View>
+            <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
               {data.schedule}
             </Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10 }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 15 }}>{data.title}</Text>
-              <Text style={{ fontSize: 12, color: "grey", fontWeight: '400', fontStyle: 'italic' }}>
-                {data.visibility}
-              </Text>
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
             </View>
           </View>
-          <Text style={{ fontSize: 12, color: "#888", marginTop: 15, marginLeft: 10 }}>{data.description}</Text>
+          <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10 }}>{data.description}</Text>
+          <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5}}>Hub Fee</Text>
+          <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
+                  {data.fee} </Text>
+                  </View>
           <TouchableHighlight
             style={{
-              backgroundColor: "coral",
+              borderWidth: 1, 
+              borderColor: '#206C00',
+              backgroundColor: "#F0FFF9",
               borderRadius: 5,
               paddingHorizontal: 40,
               paddingVertical: 5,
               marginTop: 20,
+              width: "90%",
               alignSelf: "center",
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
             onPress={handleJoinHub}
           >
-            <Text style={{ color: "#FFF", fontWeight: "bold", alignText: 'center', fontSize: 14 }}>
+            <Text style={{ color: "#206C00", fontWeight: "bold", textAlign: 'center', fontSize: 14 }}>
               Send Message
             </Text>
           </TouchableHighlight>

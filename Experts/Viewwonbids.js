@@ -64,7 +64,7 @@ function MyComponent({ onClose }) {
                 <View style={styles.row}>
         <TouchableOpacity>
         <View style={styles.cell}>
-          <Text style={{color: 'grey'}}>Attach any supporting file</Text>
+          <Text style={{color: 'grey'}}>Attached file(s)</Text>
         </View>
         </TouchableOpacity>
         </View>
@@ -72,7 +72,7 @@ function MyComponent({ onClose }) {
 
  <Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50 }}>Feedback from the company</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
-                <Text style={{ color: 'grey', marginTop: 2.5,}}>Hi XYZ, {'\n'} {'\n'}After some carefulreview of your bid and profile in comparison to others, we believe you are the best experienced for our team. {'\n'}{'\n'}Congratulations and Thank you for wanting to work with us on this journey. {'\n'}{'\n'}Thank you, ASML Management</Text>
+                <Text style={{ color: 'grey', marginTop: 2.5,}}>Hi XYZ, {'\n'} {'\n'}After some careful review of your bid and profile in comparison to others, we believe you are the best experienced for our team. {'\n'}{'\n'}Congratulations and Thank you for wanting to work with us on this journey. {'\n'}{'\n'}Thank you, ASML Management</Text>
                 </View>
 
     

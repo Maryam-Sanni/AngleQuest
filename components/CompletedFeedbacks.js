@@ -14,32 +14,42 @@ const ScheduledMeetingsTable = () => {
   };
 
   return (
-    <View style={{marginLeft: 50 }}>
-      <Text style={styles.title}>Completed Feedbacks</Text>
-      <View style={styles.tableheader}>
-        <Text style={[styles.tableheaderText, { marginLeft: 25 }]}>Name</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 100 }]}>Role</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 80 }]}>Account Type</Text>
-        <Text style={[styles.tableheaderText, { marginLeft: 60 }]}>Date</Text>
-        <Text style={[styles.tableheaderText, { flex: 0.5 }]}>    </Text>
+    <View style={styles.greenBox}>
+    <Text style={styles.title}>Completed Feedback</Text>
+    
+    <View style={styles.table}>
+    <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style={styles.cellText}>Name</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={styles.cellText}>Role</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={styles.cellText}>Account Type</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={styles.cellText}>Date</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={{color: "white", fontSize: 14}}> </Text>
+        </View>
       </View>
-      {/* Body */}
-      <View style={styles.table}>
         <View style={styles.row}>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>Maryam Bakahli</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP Finance Junior</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>Individual Account</Text>
           </View>
-          <View style={styles.cell}>
+          <View style={styles.cell2}>
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>View</Text>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -56,7 +66,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-            <Text style={styles.cellText}>View</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -83,6 +93,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
+    marginLeft: 50,
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
@@ -90,22 +101,42 @@ const styles = StyleSheet.create({
   },
   table: {
     marginRight: 200,
-    marginTop: -5,
-    alignContent: 'center',
-    borderTopWidth: 1,
-    borderTopColor: 'coral',
+    marginTop: 20,
     marginBottom: 20,
-    backgroundColor: '#F8F8F8',
+    alignContent: 'center',
+    justifyContent: 'space-around',
+    marginLeft: 50, marginRight: 50
   },
   row: {
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
   },
   cell: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#CCC',
+   backgroundColor: 'white',
     padding: 10,
     alignItems: 'center',
+  },
+  cell2: {
+    flex: 1,
+   backgroundColor: '#F2F2F2',
+    padding: 10,
+    alignItems: 'center',
+  },
+  cellText: {
+    textAlign: 'center',
+  },
+  
+  greenBox: {
+    flex: 1,
+   width: "90%",
+    height:250,
+    paddingBottom: 10,
+    marginBottom: 20,
+    marginLeft: 50, 
+    backgroundColor: '#F2F2F2',
+    marginTop: 50, 
   },
   cellText: {
     textAlign: 'center',

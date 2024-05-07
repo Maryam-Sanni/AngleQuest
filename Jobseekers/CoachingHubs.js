@@ -36,7 +36,7 @@ function MyComponent() {
      {
     title: "Frontend",
       coach: "Philip Josh",
-      description: "Create user interfaces and optimize user experiences with HTML, CSS, and JavaScript.",
+      description: "Create UI and optimize User Experiences with HTML, CSS, and JavaScript.",
       participants: 30,
       schedule: "09:00PM - 10:30PM, Fri.",
       fee: "$50.00"
@@ -121,11 +121,11 @@ const handleMyHubsPress = () => {
             backgroundColor: "#d3f9d8",
           }}
         >
-          <View style={{ justifyContent: "center", alignItems:'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9",  marginLeft: 10, alignItems: 'flex-start', marginTop: 20 }}>
+          <View style={{ justifyContent: "center", alignSelf:'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9",  marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10,  borderWidth: 1, borderColor: '#206C00'  }}>
            <View style={{ flexDirection: 'row'}}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: 10, marginTop: 20  }}
+              style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20  }}
             />
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -136,48 +136,52 @@ const handleMyHubsPress = () => {
               style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20  }}
             />
 
-            <View style={{ flexDirection: 'column', marginLeft: 25, alignContent: 'flex-end' }}>
-             <Text style={{ fontSize: 12, color: "black", marginTop: 15 }}>Hub Fee</Text>
-            <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
-              {data.fee}
-            </Text>
+           
             </View>
-            </View>
- <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginLeft: 10, marginTop: 10 }}>
+ <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
               {data.participants} Participants
             </Text>
-            <Text style={{ fontSize: 13, color: "#206C00",  marginLeft: 10, marginBottom: 10 }}>
+            <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
               {data.schedule}
             </Text>
 </View>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
             <View style={{ flex: 1 , }}>
-              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 15 }}>{data.title}</Text>
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
               <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
                 Coach: {data.coach}
               </Text>
             </View>
           </View>
          
-            <Text style={{ fontSize: 12, color: "#888", marginTop: 15, marginLeft: 10, }}>{data.description}</Text>
+            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
             
-    
+            <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5}}>Hub Fee</Text>
+          <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
+                  {data.fee} </Text>
+                  </View>
           <TouchableOpacity
             style={{
-              backgroundColor: "coral",
+              borderWidth: 1, 
+              borderColor: '#206C00',
+              backgroundColor: "#F0FFF9", 
               borderRadius: 5,
               paddingHorizontal: 50,
               paddingVertical: 5,
-              marginTop: 20,
+              marginTop: 15,
+              width: "90%",
               alignSelf: "center",
               justifyContent: 'center',
               marginLeft: 10, marginRight: 10
             }}
             onPress={handleJoinHub}
           >
-            <Text style={{ color: "#FFF", fontWeight: "bold", alignText: 'center', fontSize: 14}}>
+           
+            <Text style={{ color: "#206C00", fontWeight: "bold", textAlign: 'center', fontSize: 14}}>
               Join Hub
             </Text>
+           
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -193,11 +197,13 @@ const handleMyHubsPress = () => {
           <View style={{ flex: 1, alignItems: "center", paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
+              <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
                 <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Hubs</Text>
-                <Text style={{ fontSize: 14, marginLeft: 35 }}>Most Popular</Text>
+                </View>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, fontColor:'#666', fontWeight: '600' }}>Most Popular</Text>
               </View>
-              <TouchableOpacity style={{ marginTop: 7, marginRight: 20, justifyContent: 'center', paddingHorizontal: 15, paddingVertical: 4, fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF', backgroundColor: 'coral', borderRadius: 3 }} onPress={handleMyHubsPress} >
-                <Text style={{ fontSize: 14, color: "white",  }}>My Hubs</Text>
+              <TouchableOpacity style={{ marginTop: 5, marginRight: 20, justifyContent: 'center', paddingHorizontal: 15, paddingVertical: 5, fontSize: 14, fontWeight: 'bold', textAlign: 'center', backgroundColor: 'coral', borderRadius: 5 }} onPress={handleMyHubsPress} >
+                <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold' }}>My Hubs</Text>
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
