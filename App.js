@@ -51,7 +51,6 @@ import WithdrawalSetup from './Experts/WithdrawalSetup';
 import RequestPayout from './Experts/RequestPayout';
 import TermsofService from './components/TermsofService';
 import PrivacyPolicy from './components/Privacy Policy';
-import ManageHubs from './Experts/ManageHub';
 import Profile from './Experts/MyProfile';
 import RejectSession from './Experts/RejectSession';
 import JobseekersProfile from './Experts/JobseekerProfile';
@@ -65,6 +64,7 @@ import Advice from './Experts/Advice';
 import Offers from './Experts/Offers';
 import Bids from './Experts/Bids';
 import MyHubs from './Experts/MyHubs';
+import AllHubs from './Experts/AllHubs';
 import Createhubform from './components/Createhubform';
 
 const Stack = createStackNavigator();
@@ -143,7 +143,6 @@ const App = () => {
         <Stack.Screen name="RequestPayout" component={RequestPayout} />
         <Stack.Screen name="Terms of Service" component={TermsofService} />
         <Stack.Screen name="Privacy Policy" component={PrivacyPolicy} />
-        <Stack.Screen name="Manage Hubs" component={ManageHubs} />
         <Stack.Screen name="Reject Session" component={RejectSession} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
@@ -156,7 +155,8 @@ const App = () => {
         <Stack.Screen name="Advice" component={Advice} />
         <Stack.Screen name="Offers" component={Offers} />
         <Stack.Screen name="Bids" component={Bids} />
-        <Stack.Screen name="My Hubs" component={MyHubs} />
+        <Stack.Screen name="All Hubs" component={MyHubs} />
+        <Stack.Screen name="Manage Hubs" component={AllHubs} />
         <Stack.Screen name="Create Hub" component={Createhubform} />
       </Stack.Navigator>
     </NavigationContainer>

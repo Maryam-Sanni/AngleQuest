@@ -1,49 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, TextInput, Image, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, TextInput, Image, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
-import { useNavigation } from '@react-navigation/native';
+import OpenModal from '../components/Createhubform';
+
 
 function MyComponent() {
-  const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
-  const navigation = useNavigation();
+  const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
+  const navigation = useNavigation(); 
   const [modalVisible, setModalVisible] = useState(false);
-  const [userInput, setUserInput] = useState({
-    goals: '',
-    reasons: ''
-  });
+  const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
+    const [isSecondHubsHovered, setIsSecondHubsHovered] = useState(false);
+    const [isThirdHubsHovered, setIsThirdHubsHovered] = useState(false);
+    const [isOthersHovered, setIsOthersHovered] = useState(false);
+    const [isAllHovered, setIsAllHovered] = useState(false);
 
+
+
+  // Sample data for the cards
   const cardData = [
     {
       title: "SAP FI",
-      visibility: "Public",
+      coach: "Joop Melcher",
       description: "Customizing and configuring the SAP FICO system. Testing, support, and user training.",
       participants: 104,
       schedule: "10:30AM - 01:30PM, Thurs.",
       fee: "$50.00"
     },
     {
-      title: "Dev Ops",
-      visibility: "Private",
+    title: "Dev Ops",
+      coach: "John Smith",
       description: "The practices and tools that integrate software dev with IT operations (Ops).",
       participants: 18,
       schedule: "12:00PM - 01:30PM, Mon.",
       fee: "$30.00"
     },
-    {
-      title: "Frontend Dev.",
-      visibility: "Public",
-      description: "Create user interfaces and optimize user experiences with HTML, CSS, and JavaScript.",
-      participants: 130,
+     {
+    title: "Frontend",
+      coach: "Philip Josh",
+      description: "Create UI and optimize User Experiences with HTML, CSS, and JavaScript.",
+      participants: 30,
       schedule: "09:00PM - 10:30PM, Fri.",
-      fee: "$25.00"
+      fee: "$50.00"
     },
+    {
+    title: "Backend",
+      coach: "Olatunji Raymond",
+      description: "Build server-side systems that handle data storage and communication with frontend.",
+      participants: 90,
+      schedule: "09:00AM - 12:00PM, Tue.",
+      fee: "$50.00"
+    },
+    {
+    title: "Java Programming",
+    coach: "John Doe",
+    description: "Learn Java programming from scratch. Basic to advanced concepts covered.",
+    participants: 75,
+    schedule: "02:00PM - 04:00PM, Mon.",
+    fee: "$40.00"
+  },
   ];
 
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
       scaleAnimations[index],
-      { 
+      {
         toValue,
         duration: 200,
         useNativeDriver: true,
@@ -51,28 +73,23 @@ function MyComponent() {
     ).start();
   };
 
-  const handleJoinHub = () => {
-    setModalVisible(true);
+  const goToMyHubs = () => {
+    navigation.navigate('All Hubs');
   };
 
-  const goTomanage = () => {
+  const goToHubs = () => {
     navigation.navigate('Manage Hubs');
   };
 
-  const goTonewhub = () => {
-    navigation.navigate('Create Hub');
-  };
+const handleOpenPress = () => {
+  setModalVisible(true);
+};
 
+const handleCloseModal = () => {
+  setModalVisible(false);
+};
 
-  const handleSubmit = () => {
-    console.log("Form submitted with data:", userInput);
-    setModalVisible(false);
-    setUserInput({
-      goals: '',
-      reasons: ''
-    });
-    alert("Message Sent");
-  };
+  
 
   const renderCards = () => {
     return cardData.map((data, index) => (
@@ -87,6 +104,7 @@ function MyComponent() {
         onMouseEnter={() => handleCardAnimation(index, 1.05)}
         onMouseLeave={() => handleCardAnimation(index, 1)}
       >
+        {/* Card content */}
         <View
           style={{
             width: '95%',
@@ -103,88 +121,115 @@ function MyComponent() {
             backgroundColor: "#d3f9d8",
           }}
         >
-          <View style={{ justifyContent: "center", alignSelf:'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9",  marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10,  borderWidth: 1, borderColor: '#206C00' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20 }}
-              />
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20 }}
-              />
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20 }}
-              />
+          <View style={{ justifyContent: "center", alignSelf:'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9",  marginRight: "4%", marginLeft: 10, alignItems: 'center', marginTop: 20,  borderWidth: 1, borderColor: '#206C00'  }}>
+           <View style={{ flexDirection: 'row'}}>
+<Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+              style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20  }}
+            />
+            <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+              style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20  }}
+            />
+           <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+              style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20  }}
+            />
+
+           
             </View>
-            <View style={{ flexDirection: 'row', }}>
-            <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-              {data.participants} Participants -
+ <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
+              {data.participants} Participants
             </Text>
-            <Text style={{ fontSize: 12, color: "black", fontWeight: '400', fontStyle: 'italic', marginTop: 10 }}>
-                {data.visibility} </Text>
-                </View>
             <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
               {data.schedule}
             </Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10 }}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
+</View>
+          <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
+            <View style={{ flex: 1 , }}>
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 20 }}>{data.title}</Text>
+              <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
+                Coach: {data.coach}
+              </Text>
             </View>
           </View>
-          <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10 }}>{data.description}</Text>
-          <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+         
+            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
+            
+            <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
                 <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5}}>Hub Fee</Text>
           <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
                   {data.fee} </Text>
                   </View>
-          <TouchableHighlight
-            style={{
-              borderWidth: 1, 
-              borderColor: '#206C00',
-              backgroundColor: "#F0FFF9",
-              borderRadius: 5,
-              paddingHorizontal: 40,
-              paddingVertical: 5,
-              marginTop: 20,
-              width: "90%",
-              alignSelf: "center",
-              justifyContent: 'center',
-            }}
-            onPress={handleJoinHub}
-          >
-            <Text style={{ color: "#206C00", fontWeight: "bold", textAlign: 'center', fontSize: 14 }}>
-              Send Message
-            </Text>
-          </TouchableHighlight>
+         
+           
+            
         </View>
       </Animated.View>
     ));
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-              <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
-                <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-                  <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Hubs</Text>
-                </View>
-                <TouchableOpacity onPress={goTomanage} >
-                  <Text style={{ fontSize: 14, marginLeft: 30, fontWeight: "600", color: '#666', marginTop: 5 }}>Manage Hubs</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={goTonewhub}>
-                  <Text style={{ fontSize: 14, marginLeft: 30, fontWeight: "600", color: '#666', marginTop: 5 }}>Create New Hub</Text>
-                </TouchableOpacity>
+          <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, }}>
+          <View style={styles.header}>
+              <TouchableOpacity onPress={goToHubs}
+            underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsFirstHubsHovered(true)}
+            onMouseLeave={() => setIsFirstHubsHovered(false)}> 
+              <View style={styles.item}>
+                <Image source={require('../assets/hubs.png')} style={styles.image} />
+                <Text style={[styles.headertext, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
               </View>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            underlayColor={isSecondHubsHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsSecondHubsHovered(true)}
+            onMouseLeave={() => setIsSecondHubsHovered(false)} >
+              <View style={styles.item}>
+                <Image source={require('../assets/hubs.png')} style={styles.image} />
+                <Text style={[styles.headertext, isSecondHubsHovered && { color: 'coral' }]}>Power Point Dev.</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            underlayColor={isThirdHubsHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsThirdHubsHovered(true)}
+            onMouseLeave={() => setIsThirdHubsHovered(false)} >
+              <View style={styles.item}>
+                <Image source={require('../assets/hubs.png')} style={styles.image} />
+                <Text style={[styles.headertext, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            underlayColor={isOthersHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsOthersHovered(true)}
+            onMouseLeave={() => setIsOthersHovered(false)} >
+              <View style={styles.item}>
+                <Image source={require('../assets/list.png')} style={styles.image} />
+                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Others</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goToMyHubs}
+            underlayColor={isAllHovered ? 'transparent' : 'transparent'}
+            onMouseEnter={() => setIsAllHovered(true)}
+            onMouseLeave={() => setIsAllHovered(false)} >
+              <View style={styles.item}>
+                <Image source={require('../assets/chatroom.png')} style={styles.image} />
+                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
+              </View>
+            </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
+            <TouchableOpacity onPress={handleOpenPress}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10,  borderWidth: 1}}>
+                    <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Create New Hub</Text>
+                  </View>
+     </TouchableOpacity>
+            
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 40, marginRight: 130 }}>
               {renderCards()}
             </View>
           </View>
@@ -194,30 +239,48 @@ function MyComponent() {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
+        onRequestClose={handleCloseModal}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 5, width: '80%' }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>Send a quick message to your trainees</Text>
-            <TextInput
-              placeholder="Type here..."
-              style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 }}
-              value={userInput.goals}
-              onChangeText={text => setUserInput(prevState => ({ ...prevState, goals: text }))}
-            />
-            <TouchableOpacity
-              style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center' }}
-              onPress={handleSubmit}
-            >
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Send</Text>
-            </TouchableOpacity>
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
           </View>
-        </View>
       </Modal>
     </View>
   );
 }
 
+const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  header: {
+    marginLeft: -60,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  headertext: {
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#206C00'
+  },
+  image: {
+    width: 24,
+    height: 24,
+    marginRight: 5,
+    marginLeft: 100
+  },
+});
 export default MyComponent;

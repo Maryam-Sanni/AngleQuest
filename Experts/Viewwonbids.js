@@ -11,6 +11,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
@@ -54,8 +55,11 @@ function MyComponent({ onClose }) {
         </View>
         </View>
 
-<Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50 }}>Bid Details</Text>
+<Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50 }}>Bid Details</Text>
+<View style={{flexDirection: 'row', marginBottom: 10,}}>
 <Text style={{ marginTop: 5, fontWeight: '500', color: 'black', marginLeft: 50 }}>Write a concise message to the company stating why they should pick your bid</Text>
+<Text style={{marginLeft: 165, marginTop: 5, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
+              </View>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <Text style={{ color: 'grey', marginTop: 2.5,}}>Sent Content</Text>
                 </View>
@@ -72,7 +76,7 @@ function MyComponent({ onClose }) {
 
  <Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50 }}>Feedback from the company</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
-                <Text style={{ color: 'grey', marginTop: 2.5,}}>Hi XYZ, {'\n'} {'\n'}After some careful review of your bid and profile in comparison to others, we believe you are the best experienced for our team. {'\n'}{'\n'}Congratulations and Thank you for wanting to work with us on this journey. {'\n'}{'\n'}Thank you, ASML Management</Text>
+                <Text style={{ color: 'grey', marginTop: 2.5,}}>Hi XYZ, {'\n'} {'\n'}After some careful review of your bid and profile in comparison to others, we believe you are the best experienced for our team. {'\n'}{'\n'}Congratulations and Thank you for wanting to work with us on this journey. {'\n'}{'\n'}Thank you, TESLA Management.</Text>
                 </View>
 
     

@@ -10,6 +10,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -25, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
  <View style={styles.row}>
         <View style={styles.cell}>
@@ -42,13 +43,13 @@ function MyComponent({ onClose }) {
     </View>
      
 
-
+    <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -25, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
      <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 1</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize a model driven app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -59,7 +60,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 2</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize a model driven app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -70,7 +71,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold'}}>Topic 3</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -81,7 +82,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold'}}>Topic 4</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize a power automate to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -92,7 +93,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize AI builder bot to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -103,7 +104,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 6</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style={{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
@@ -146,6 +147,8 @@ const styles = StyleSheet.create({
   },
   input: {
     outline: 'none',
+    borderWidth: 1,
+    borderColor: 'black'
   },
   
 });

@@ -37,7 +37,7 @@ function MyComponent() {
           navigation.navigate('Advice');
           break;
         case "Coaching Hubs":
-          navigation.navigate('My Hubs');
+          navigation.navigate('Manage Hubs');
           break;
         case "Messages":
           navigation.navigate('Messaging');

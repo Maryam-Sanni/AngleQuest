@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Topbar from '../components/expertstopbar';
-import Sidebar from '../components/expertssidebar';
+
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
   const [hour, setHour] = useState(initialValue.split(':')[0]);
@@ -95,7 +94,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
   );
 };
 
-const CreateCoachingHubForm = () => {
+const CreateCoachingHubForm = ({ onClose }) => {
   const navigation = useNavigation();
   const [startTime, setStartTime] = useState('12:00');
   const [endTime, setEndTime] = useState('12:00');
@@ -136,37 +135,19 @@ const CreateCoachingHubForm = () => {
     });
   };
 
-  const goTomanage = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('Manage Hubs');
-  };
-
-  const goTohubs = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('My Hubs');
-  };
-
+ 
+ 
   return (
-    <View style={{ flex: 1 }}>
-      <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        <Sidebar />
+    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={styles.greenBox}>
+<TouchableOpacity onPress={onClose}>
+            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
+                            ✕
+                        </Text>
+                        </TouchableOpacity>
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-              <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 30 }}>
-              <TouchableOpacity onPress={goTohubs} >
-                <Text style={{ fontWeight: "600", fontSize: 14, color: "#666", marginTop: 5, }}>All Hubs</Text>
-                </TouchableOpacity >
-                <TouchableOpacity onPress={goTomanage} >
-                <Text style={{ fontSize: 14, marginLeft: 30, marginRight: 30, fontWeight: "600", color: '#666', marginTop: 5  }}>Manage Hubs</Text>
-                </TouchableOpacity>
-                <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-                <Text style={{ fontSize: 14, fontWeight: "bold", color: '#206C00', }}>Create New Hub</Text>
-                </View>
-              </View>
-            </View>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 25 }}>Visibility*</Text>
         <Picker
           selectedValue={visibility}
@@ -240,15 +221,15 @@ const CreateCoachingHubForm = () => {
           onChangeText={text => setSearchMembers(text)}
         />
         <TouchableOpacity
-          style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginLeft: 200, marginRight: 200, marginTop: 25, marginBottom: 30 }}
+          style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
           onPress={handleSave}
         >
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Create New Hub</Text>
         </TouchableOpacity>
       </View>
       </View>
-      </ScrollView>
       </View>
+      </ScrollView>
       </View>
   );
 };
@@ -257,23 +238,30 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#F8F8F8'
   },
   scrollContainer: {
     flexGrow: 1,
     maxHeight: 500
   },
   formContainer: {
-    width: '50%',
+    width: '80%',
     paddingHorizontal: 20, // Add some horizontal padding for better layout
   },
   input: {
     height: 40,
-    borderColor: '#206C00',
+    borderColor: 'grey',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
     marginTop: 5,
+  },
+  greenBox: {
+    width: 920,
+    height:850,
+    backgroundColor: '#F8F8F8',
+    marginTop: 40
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -296,7 +284,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     marginTop: 'auto',
     marginBottom: 0,
     borderTopLeftRadius: 10,

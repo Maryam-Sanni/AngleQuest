@@ -12,6 +12,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
@@ -184,7 +185,7 @@ function MyComponent({ onClose }) {
 <Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50, fontSize: 16, marginBottom: 10 }}> Overall Feedback/Remark</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <TextInput
-                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', borderWidth: 2, outline: 'none', borderColor: '#F8F8F8', borderRadius: 5,  }}
+                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'black', borderColor: 'black',  }}
                   placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
                 />
                 </View>
@@ -195,11 +196,15 @@ function MyComponent({ onClose }) {
           <Text style = {{fontWeight: 'bold'}}>Performance Rating</Text>
         </View>
         <View style={styles.cell}>
-         <TextInput
-            placeholder="RT01-Brilliant (drop down)"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker}
+>
+  <Picker.Item label="RT01-Brilliant" value="" />
+  <Picker.Item label="RT02-Good" value="RT02-Good" />
+  <Picker.Item label="RT03-Perfect" value="RT03-Perfect" />
+  <Picker.Item label="RT01-Brilliant" value="RT01-Brilliant" />
+  {/* Add more Picker.Item components for additional options */}
+</Picker>
         </View>
         </View>
         </View>
@@ -247,7 +252,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
     borderColor: '#F8F8F8',
     color:'grey',
-    fontSize: 14
+    fontSize: 14,
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   buttonAcc: {
     borderWidth: 3,
@@ -265,7 +273,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    outline: 'none',
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });
 

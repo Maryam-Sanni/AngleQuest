@@ -10,6 +10,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
@@ -53,12 +54,12 @@ function MyComponent({ onClose }) {
         </View>
         </View>
 
-<Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50 }}>Bid Details</Text>
+<Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50 }}>Bid Details</Text>
 <Text style={{ marginTop: 5, fontWeight: '500', color: 'black', marginLeft: 50 }}>Write a concise message to the company stating why they should pick your bid</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <TextInput
-                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', borderWidth: 2, outline: 'none', borderColor: '#F8F8F8', borderRadius: 5,  }}
-                  placeholder=""
+                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'black', borderColor: 'black' }}
+                  placeholder="Type here..."
                 />
                 </View>
 
@@ -66,7 +67,7 @@ function MyComponent({ onClose }) {
                 <View style={styles.row}>
         <TouchableOpacity>
         <View style={styles.cell}>
-          <Text style={{color: 'grey'}}>Attach any supporting file</Text>
+          <Text style={{color: 'black'}}>Attach any supporting file</Text>
         </View>
         </TouchableOpacity>
         </View>

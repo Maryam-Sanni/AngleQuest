@@ -11,6 +11,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
@@ -34,75 +35,75 @@ function MyComponent({ onClose }) {
       
     </View>
      
-      <Text style={{marginLeft: 800, marginTop: 10, width: 100, fontWeight: '600'}}>Rating</Text>
+    <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
    
 
 
      <View style={styles.container}>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
           <Text style = {{fontWeight: 'bold'}}>Question 1</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize a model driven app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>7/10</Text>
+        <Text style = {{color: 'grey'}}>70%</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
           <Text style = {{fontWeight: 'bold'}}>Question 2</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize custom pages to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>5/10</Text>
+        <Text style = {{color: 'grey'}}>50%</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
          <Text style = {{fontWeight: 'bold'}}>Question 3</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>5/10</Text>
+        <Text style = {{color: 'grey'}}>40%</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
          <Text style = {{fontWeight: 'bold'}}>Question 4</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize a power automate to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>5/10</Text>
+        <Text style = {{color: 'grey'}}>50%</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
           <Text style = {{fontWeight: 'bold'}}>Question 5</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize AI builder bot to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>8/10</Text>
+        <Text style = {{color: 'grey'}}>80%</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={styles.cell}>
+      <View style={[styles.cell, { flex: 2 }]}>
           <Text style = {{fontWeight: 'bold'}}>Question 6</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <Text style = {{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>8/10</Text> 
+        <Text style = {{color: 'grey'}}>70%</Text> 
         </View>
       </View>
       </View>
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
    marginTop: 40
   },
   input: {
-    outline: 'black',
+    outline: 'none',
   },
   
 });

@@ -5,15 +5,15 @@ import Topbar from '../components/expertstopbar';
 
 export default function Profile() {
   return (
-    <View style={{ height: '30%' }}>
+    <View style={{ flex: 1 }}>
       <Topbar />
-      <View style={{ flexDirection: 'row', height: '100%' }}>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ padding: 20 }}>
             <View style={{ flex: 1 }}>
               {/* Profile Card */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50, width: '100%', flexWrap: 'wrap', backgroundColor: 'white', marginLeft: 220 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50, backgroundColor: 'white', marginLeft: 220 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>My Profile</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -44,7 +44,7 @@ export default function Profile() {
                   </View>
                 </View>
                 </View>
-                <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 250 }}>
+                <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
                   <Text style={{ fontSize: 14, color: 'green', textAlign: 'right', fontWeight: '600' }}>Available Balance</Text>
                   <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5 }}>$1,234.00</Text>
                   <Text style={{ fontSize: 16, color: 'grey', marginTop: 10 }}>$25/hr</Text>
@@ -57,7 +57,7 @@ export default function Profile() {
           </View>
 
           {/* Profile Description */}
-          <View style={{ flex: 1, marginLeft: 230 }}>
+          <View style={{ marginLeft: 230 }}>
             <View style={{ marginTop: 10, paddingHorizontal: 10, marginRight: 30 }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: 'green', fontWeight: '500' }}>About</Text>
               <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10 }}>
@@ -97,7 +97,7 @@ export default function Profile() {
           </View>
 
           {/* Employment History */}
-          <View style={{ flex: 1, marginLeft: 230, marginRight: 50, marginTop: -35, marginBottom: 70 }}>
+          <View style={{ marginLeft: 230, marginRight: 30, marginTop: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Employment History</Text>
               <Image
@@ -149,7 +149,7 @@ export default function Profile() {
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
 
           {/* Skills */}
-              <View style={{ marginLeft: 230, marginTop: 20, marginRight: 50 }}>
+              <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Skills</Text>
               <Image
@@ -173,7 +173,7 @@ export default function Profile() {
     
       <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                            {/* Certifications */}
-    <View style={{ marginLeft: 230, marginTop: 20, marginRight: 50 }}>
+    <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Certifications</Text>
               <Image
@@ -202,7 +202,7 @@ export default function Profile() {
             </View>
  <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                       {/* Other Experience*/}
- <View style={{ marginLeft: 230, marginTop: 20, marginRight: 50 }}>
+ <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Other Experience</Text>
               <Image
@@ -229,7 +229,7 @@ export default function Profile() {
             </View>
 <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                      {/*Location*/}
-                     <View style={{ marginLeft: 230, marginTop: 20, marginRight: 50  }}>
+                     <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30  }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Preferred Locations</Text>
               <Image
@@ -250,7 +250,7 @@ export default function Profile() {
       </View>
     </View>
     </View>
-     <View style={{ marginLeft: 230, marginTop: 5, marginRight: 50  }}>
+     <View style={{ marginLeft: 230, marginTop: 5, marginRight: 30  }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Preferred Roles</Text>
               <Image

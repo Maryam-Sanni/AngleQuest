@@ -21,16 +21,16 @@ const ScheduledMeetingsTable = () => {
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Role</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Account Type</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Account Type</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
           </View>
           <TouchableOpacity style={styles.cell} >
             <Text style={{color: "#206C00", fontSize: 14}}> </Text>
@@ -41,7 +41,10 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
             <Text style={styles.cellText}>Maryam Bakahli</Text>
+          </View>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>SAP Finance Junior</Text>
@@ -61,7 +64,10 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/useravatar2.png')} style={styles.image} />
             <Text style={styles.cellText}>Patrick Oche</Text>
+          </View>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform Dev</Text>
@@ -126,16 +132,16 @@ const styles = StyleSheet.create({
     flex: 1,
    backgroundColor: 'white',
     padding: 10,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
    backgroundColor: '#F2F2F2',
     padding: 10, 
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   cellText: {
-    textAlign: 'center',
+    textAlign: 'flex-start',
   },
   
   greenBox: {
@@ -147,6 +153,13 @@ const styles = StyleSheet.create({
     marginLeft: 50, 
     backgroundColor: '#F2F2F2',
     marginTop: 50, 
+  },
+  image: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginTop: -5,
+    borderRadius: 25
   },
 });
 

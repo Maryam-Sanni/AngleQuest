@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
   headertext: {
     marginLeft: 5,
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: '500',
+    color: '#666'
   },
   image: {
     width: 24,

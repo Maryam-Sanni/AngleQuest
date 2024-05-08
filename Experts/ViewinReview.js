@@ -10,10 +10,11 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Company Name</Text>
+          <Text style = {{fontWeight: 'bold'}}>Company Name</Text> 
         </View>
         <View style={styles.cell}>
         <Text style={{color: 'grey'}}>ASML</Text>
@@ -53,8 +54,11 @@ function MyComponent({ onClose }) {
         </View>
         </View>
 
-<Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50 }}>Bid Details</Text>
+<Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50 }}>Bid Details</Text>
+<View style={{flexDirection: 'row', marginBottom: 10,}}>
 <Text style={{ marginTop: 5, fontWeight: '500', color: 'black', marginLeft: 50 }}>Write a concise message to the company stating why they should pick your bid</Text>
+<Text style={{marginLeft: 165, marginTop: 5, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
+              </View>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <Text style={{ color: 'grey', marginTop: 2.5,}}>Sent Content</Text>
                 </View>
@@ -63,7 +67,7 @@ function MyComponent({ onClose }) {
                 <View style={styles.row}>
         <TouchableOpacity>
         <View style={styles.cell}>
-          <Text style={{color: 'grey'}}>Attach any supporting file</Text>
+          <Text style={{color: 'grey'}}>Attached file(s)</Text>
         </View>
         </TouchableOpacity>
         </View>

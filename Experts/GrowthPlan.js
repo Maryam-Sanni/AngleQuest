@@ -82,7 +82,7 @@ function MyComponent() {
                         </View>
 
                         <TouchableOpacity onPress={handleOpenPress}>
-<View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 50 }}>
+<View style={{ justifyContent: "flex-end", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", borderWidth: 1, backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 50 }}>
                 <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Growth Plan Profile</Text>
               </View>
  </TouchableOpacity>
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    marginTop: 5
+    marginTop: 5,
+    color: '#666'
   },
   image: {
     width: 24,

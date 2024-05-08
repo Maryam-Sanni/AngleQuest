@@ -75,16 +75,16 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '500', fontSize: 14}}>Name</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '500', fontSize: 14}}>Number of Candidates</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>Number of Candidates</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '500', fontSize: 14}}>Field</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>Field</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '500', fontSize: 14}}>Start Date</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>Start Date</Text>
         </View>
         <View style={styles.cell}>
           <Text style={{color: "white", fontSize: 14}}> </Text>
@@ -92,8 +92,11 @@ const ScheduledMeetingsTable = () => {
       </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/asml.png')} style={styles.userimage} />
             <Text style={styles.cellText}>ASML</Text>
           </View>
+          </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
@@ -109,8 +112,11 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/tmc.png')} style={styles.userimage} />
             <Text style={styles.cellText}>TMC</Text>
           </View>
+          </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>3 Candidates</Text>
           </View>
@@ -126,7 +132,10 @@ const ScheduledMeetingsTable = () => {
         </View>
          <View style={styles.row}>
           <View style={styles.cell2}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/rvl.png')} style={styles.userimage} />
             <Text style={styles.cellText}>RVL</Text>
+          </View>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -143,7 +152,10 @@ const ScheduledMeetingsTable = () => {
         </View>
          <View style={styles.row}>
           <View style={styles.cell}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/mtn.png')} style={styles.userimage} />
             <Text style={styles.cellText}>MTN</Text>
+          </View>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -160,7 +172,10 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/dangote.jpeg')} style={styles.userimage} />
             <Text style={styles.cellText}>DANGOTE</Text>
+          </View>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -177,7 +192,10 @@ const ScheduledMeetingsTable = () => {
         </View>
          <View style={styles.row}>
           <View style={styles.cell}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/awl.png')} style={styles.userimage} />
             <Text style={styles.cellText}>AWL</Text>
+          </View>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -194,7 +212,10 @@ const ScheduledMeetingsTable = () => {
         </View>
  <View style={styles.row}>
           <View style={styles.cell2}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/tesla.jpeg')} style={styles.userimage} />
             <Text style={styles.cellText}>TESLA</Text>
+          </View>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -211,7 +232,10 @@ const ScheduledMeetingsTable = () => {
         </View>
 <View style={styles.row}>
           <View style={styles.cell}>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/tmc.png')} style={styles.userimage} />
             <Text style={styles.cellText}>TMC</Text>
+          </View>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -228,7 +252,10 @@ const ScheduledMeetingsTable = () => {
         </View>
 <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>ASML</Text>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/rvl.png')} style={styles.userimage} />
+            <Text style={styles.cellText}>RVL</Text>
+          </View>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -245,7 +272,10 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
 <View style={styles.cell}>
+<View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/awl.png')} style={styles.userimage} />
             <Text style={styles.cellText}>TMC</Text>
+          </View>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>3 Candidates</Text>
@@ -301,7 +331,8 @@ const styles = StyleSheet.create({
   headertext: {
     marginLeft: 5,
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: '500',
+    color: '#666'
   },
   image: {
     width: 24,
@@ -334,16 +365,16 @@ const styles = StyleSheet.create({
     flex: 1,
    backgroundColor: 'white',
     padding: 10,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
    backgroundColor: '#F2F2F2',
     padding: 10,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   cellText: {
-    textAlign: 'center',
+    textAlign: 'flex-start',
   },
   
   greenBox: {
@@ -358,6 +389,13 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'center',
+  },
+  userimage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginTop: -5,
+    borderRadius: 25
   },
 });
 

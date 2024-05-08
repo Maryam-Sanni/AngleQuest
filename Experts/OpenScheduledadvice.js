@@ -62,7 +62,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 1</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
            <TextInput
             placeholder="3 Ways to Optimize a model driven app to optimize its performance"
             placeholderTextColor="grey"
@@ -84,7 +84,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 2</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <TextInput
             placeholder="3 Ways to Optimize custom pages to optimize its performance"
             placeholderTextColor="grey"
@@ -106,7 +106,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold'}}>Topic 3</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
         <TextInput
             placeholder="3 Ways to Optimize a canvas app to optimize its performance"
             placeholderTextColor="grey"
@@ -128,7 +128,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold'}}>Topic 4</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
           <TextInput
             placeholder="3 Ways to Optimize a power automate to optimize its performance"
             placeholderTextColor="grey"
@@ -150,7 +150,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
          <TextInput
             placeholder="3 Ways to Optimize AI builder bot to optimize its performance"
             placeholderTextColor="grey"
@@ -172,7 +172,7 @@ function MyComponent({ onClose }) {
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Topic 6</Text>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
+        <View style={[styles.cell, { flex: 7 }]}>
          <TextInput
             placeholder="3 Ways to Optimize a canvas app to optimize its performance"
             placeholderTextColor="grey"
@@ -228,7 +228,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
     borderColor: '#F8F8F8',
     color:'grey',
-    fontSize: 14
+    fontSize: 14,
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black'
   },
    buttonplus: {
     backgroundColor: 'coral',
@@ -250,7 +253,9 @@ const styles = StyleSheet.create({
     marginTop: 40
   },
   input: {
-    outline: 'none',
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   
 });
