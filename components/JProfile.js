@@ -7,7 +7,7 @@ function MyComponent() {
      
       <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
         <Text style={{ fontSize: 16, fontWeight: "bold", color: "black" }}>
-          Ahmad Yusuf
+          Nathan Arthur
         </Text>
         <View
           style={{
@@ -22,7 +22,7 @@ function MyComponent() {
       <Text style={{ fontSize: 12, color: "#A0AEC0" }}>Web Developer</Text>
       <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
       <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00" }}>
-        ahmadyusu7@gmail.com
+        nathanar77@gmail.com
       </Text>
       <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
       <Text style={{ marginTop: 10, fontSize: 14, color: "black" }}>
@@ -80,7 +80,7 @@ function MyComponent() {
             style={{ width: 35, height: 35, aspectRatio: 1 }}
           />
           <View style={{ marginLeft: 5 }}>
-            <Text style={{ color: "#206C00" }}>AhmadCV.pdf</Text>
+            <Text style={{ color: "#206C00", textDecoration: 'underline' }}>NathanCV.pdf</Text>
             <Text style={{ color: "#A0AEC0", fontSize: 10 }}>293 kb</Text>
           </View>
         </View>

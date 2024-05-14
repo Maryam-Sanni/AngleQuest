@@ -4,6 +4,8 @@ import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../components/Createhubform';
+import OpenModal2 from '../components/Edithubform';
+import ConfirmationPopup from '../Experts/OtherHubs';
 
   
 function MyComponent() {
@@ -12,18 +14,24 @@ function MyComponent() {
     const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
     const [isSecondHubsHovered, setIsSecondHubsHovered] = useState(false);
     const [isThirdHubsHovered, setIsThirdHubsHovered] = useState(false);
-    const [isOthersHovered, setIsOthersHovered] = useState(false);
+    const [modalVisible2, setModalVisible2] = useState(false);
+    const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
+   
+
     
-    const goToOffers= () => {
-        navigation.navigate('Offers');
-      };
 
       const goToMyHubs = () => {
         navigation.navigate('All Hubs');
       };
 
-     
+      const handleOthersPress = () => {
+        setModalVisible2(true);
+      };
+    
+      const handleCloseModal2 = () => {
+        setModalVisible2(false);
+      };
 
     const handleOpenPress = () => {
       setModalVisible(true);
@@ -31,6 +39,14 @@ function MyComponent() {
   
     const handleCloseModal = () => {
       setModalVisible(false);
+    };
+
+    const handleOpenPress2 = () => {
+      setModalVisible3(true);
+    };
+  
+    const handleCloseModal3 = () => {
+      setModalVisible3(false);
     };
 
   return (
@@ -51,15 +67,6 @@ function MyComponent() {
               </View>
             </TouchableOpacity>
             <TouchableOpacity 
-            underlayColor={isSecondHubsHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsSecondHubsHovered(true)}
-            onMouseLeave={() => setIsSecondHubsHovered(false)} >
-              <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
-                <Text style={[styles.headertext, isSecondHubsHovered && { color: 'coral' }]}>Power Point Dev.</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
             underlayColor={isThirdHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsThirdHubsHovered(true)}
             onMouseLeave={() => setIsThirdHubsHovered(false)} >
@@ -68,30 +75,27 @@ function MyComponent() {
                 <Text style={[styles.headertext, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity 
-            underlayColor={isOthersHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsOthersHovered(true)}
-            onMouseLeave={() => setIsOthersHovered(false)} >
-              <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Others</Text>
-              </View>
+            <TouchableOpacity onPress={handleOthersPress}>
+                <Image source={require('../assets/ellipsis-down.png')} style={{width: 18, height: 18, marginRight: 5, marginLeft: 50}} />
             </TouchableOpacity>
+            </View>
             <TouchableOpacity onPress={goToMyHubs}
             underlayColor={isAllHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsAllHovered(true)}
             onMouseLeave={() => setIsAllHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/chatroom.png')} style={styles.image} />
-                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
+                <Image source={require('../assets/chatroom.png')} style={styles.eimage} />
+                <Text style={[styles.eheadertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
               </View>
             </TouchableOpacity>
-            </View>
+            
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10, marginLeft: 50, borderWidth: 1}}>
-                    <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Create New Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
+
+
      <Modal
         animationType="slide"
         transparent={true}
@@ -102,10 +106,34 @@ function MyComponent() {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal2 onClose={() => handleCloseModal3()} />
+          </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+          <View style={styles.modalContent}>
+            <ConfirmationPopup onClose={() => handleCloseModal2()} />
+          </View>
+      </Modal>
+
+
             <ScheduledMeetingsTable />
-            <TouchableOpacity onPress={() => console.log('Delete Hub pressed')} style={styles.deleteHubButton}>
-              <Text style={styles.deleteHubButtonText}>Delete Hub</Text>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={handleOpenPress2}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1, marginBottom: 50 }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Edit Hub</Text>
+                  </View>
+     </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
@@ -114,6 +142,7 @@ function MyComponent() {
 }
 
 const ScheduledMeetingsTable = () => {
+  const [messageCountText, setMessageCountText] = useState('0'); 
   const [modalVisible, setModalVisible] = useState(false);
 
     const handleOpenPress = () => {
@@ -124,8 +153,38 @@ const ScheduledMeetingsTable = () => {
       setModalVisible(false);
     };
 
-  return (
-   
+  return ( 
+    <View style={{flex: 1}}>
+    <View style={{flexDirection: 'row', flexWrap: "wrap", alignItems: 'center', alignContent: 'center' }}>
+    <View style={[styles.whiteBox, { marginLeft: 50, }]}>
+    <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold'}}>Next Meeting Schedule</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
+    <Text style={{ fontSize: 14, color: "black", marginTop: 10, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+    <TouchableOpacity style={{  backgroundColor: 'white', paddingVertical: 5, paddingHorizontal: 15, marginTop: 15, borderColor: 'green', borderWidth: 2}}>
+          <Text style={{ color: 'black', fontWeight: 'bold', textAlign: 'center', fontSize: 12}}>Start Session</Text>
+          </TouchableOpacity>
+      </View>
+
+      <View style={[styles.whiteBox, { marginLeft: 40,  }]}>
+      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Next Meeting Confirmation</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>12</Text>
+    <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>Yet to Confirm</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>2</Text>
+      </View>
+
+      <View style={[styles.whiteBox, { marginLeft: 40, }]}>
+      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Total Hub Members</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
+      </View>
+
+      <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
+      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Sessions Held</Text>
+    <Text style={{ fontSize: 24, color: "green", marginTop: 5, fontWeight: 'bold'}}>20</Text>
+    <Text style={{ fontSize: 12, color: "grey", fontWeight: '500', marginTop: 10,}}>Sessions Missed</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>4</Text>
+      </View>
+
+      </View>
     <View style={styles.greenBox}>
     <Text style={styles.title}>Manage SAP FI Hub</Text>
     
@@ -135,222 +194,267 @@ const ScheduledMeetingsTable = () => {
         <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
         </View>
         <View style={styles.cell}>
+        <Text style={{fontWeight: '600', fontSize: 14}}> </Text>
+        </View>
+        <View style={styles.cell}>
         <Text style={{fontWeight: '600', fontSize: 14}}>Status</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{fontWeight: '600', fontSize: 14}}>Sessions Attended</Text>
         </View>
         <View style={styles.cell}>
         <Text style={{fontWeight: '600', fontSize: 14}}>Sessions Missed</Text>
         </View>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Joined Hub</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: "white", fontSize: 14}}> </Text>
-        </View>
       </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Maria Garcia</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>3</Text>
+        </View>
+        </View>
+          <View style={styles.cell2}>
+          <Text style={{fontStyle: "italic", fontSize: 14,}}>Offline</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>15 Sessions</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>5 Sessions</Text>
           </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>08-05-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar.jpg')} style={styles.userimage} />
             <Text style={styles.cellText}>Ahmed Hassan</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>9</Text>
+        </View>
+        </View>
+          <View style={styles.cell}>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>20 Sessions</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>0 Sessions</Text>
           </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>02-03-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
          <View style={styles.row}>
           <View style={styles.cell2}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Isabella Ross</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>1</Text>
+        </View>
+        </View>
+          <View style={styles.cell2}>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>19 Sessions</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>1 Sessions</Text>
           </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>08-05-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
          <View style={styles.row}>
           <View style={styles.cell}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar2.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Adedare Adeyemi</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell}>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>7</Text>
+        </View>
+        </View>
+          <View style={styles.cell}>
           <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>13 Sessions</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>7 Sessions</Text>
           </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>02-03-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Sophie Dubois</Text>
           </View>
-          </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>0 Sessions</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>08-05-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
           </TouchableOpacity>
+          </View>
+          <View style={styles.cell2}>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>12</Text>
+        </View>
+        </View>
+          <View style={styles.cell2}>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>8 Sessions</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>12 Sessions</Text>
+          </View>
         </View>
          <View style={styles.row}>
           <View style={styles.cell}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Emily Johnson</Text>
           </View>
+          </TouchableOpacity>
           </View>
+          <View style={styles.cell}>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>2</Text>
+        </View>
+        </View>
           <View style={styles.cell}>
           <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>0 Sessions</Text>
+            <Text style={styles.cellText}>20 Sessions</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>02-03-2024</Text>
+            <Text style={styles.cellText}>0 Sessions</Text>
           </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
  <View style={styles.row}>
           <View style={styles.cell2}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/User.png')} style={styles.userimage} />
             <Text style={styles.cellText}>Chinwe Ekpo</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
+  {messageCountText !== '0' && (
+    <View style={styles.messageCount}>
+      <Text style={styles.messageCountText}>0</Text>
+    </View>
+  )}
+</View>
+          <View style={styles.cell2}>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>20 Sessions</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>0 Sessions</Text>
           </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>08-05-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
 <View style={styles.row}>
           <View style={styles.cell}>
+          <TouchableOpacity>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar.jpg')} style={styles.userimage} />
             <Text style={styles.cellText}>Chiara Romano</Text>
           </View>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>0 Sessions</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>02-03-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
           </TouchableOpacity>
+          </View>
+          <View style={styles.cell}>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>14</Text>
         </View>
-<View style={styles.row}>
-          <View style={styles.cell2}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar2.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Oliver Morris</Text>
-          </View>
-          </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Online</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>4 Sessions</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>08-05-2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
-          </TouchableOpacity>
         </View>
-        <View style={styles.row}>
-<View style={styles.cell}>
-<View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/User.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Ogoh Tochukwu</Text>
-          </View>
-          </View>
           <View style={styles.cell}>
           <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>1 Sessions</Text>
+            <Text style={styles.cellText}>20 Sessions</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>02-03-2024</Text>
+            <Text style={styles.cellText}>0 Sessions</Text>
           </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={{color: "darkred", fontSize: 14}}>Remove Participant</Text>
+        </View>
+<View style={styles.row}>
+          <View style={styles.cell2}>
+          <TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/useravatar2.png')} style={styles.userimage} />
+            <Text style={styles.cellText}>Oliver Morris</Text>
+          </View>
           </TouchableOpacity>
+          </View>
+          <View style={styles.cell2}>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>3</Text>
+        </View>
+        </View>
+          <View style={styles.cell2}>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>16 Sessions</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>4 Sessions</Text>
+          </View>
+        </View>
+        <View style={styles.row}>
+<View style={styles.cell}>
+<TouchableOpacity>
+<View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/User.png')} style={styles.userimage} />
+            <Text style={styles.cellText}>Ogoh Tochukwu</Text>
+          </View>
+         </TouchableOpacity>
+          </View>
+          <View style={styles.cell}>
+  {messageCountText !== '0' && (
+    <View style={styles.messageCount}>
+      <Text style={styles.messageCountText}>0</Text>
+    </View>
+  )}
+</View>
+          <View style={styles.cell}>
+          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>19 Sessions</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>1 Sessions</Text>
+          </View>
         </View>
         
 
       </View>
       
+    </View>
     </View>
   );
 }
@@ -388,6 +492,23 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 100
   },
+  eimage: {
+    position: 'absolute',
+    width: 24,
+    height: 24,
+    right: 0,
+    marginRight: 90,
+    marginTop: -30
+  },
+  eheadertext: {
+    position: 'absolute',
+    right: 30,
+    marginLeft: 5,
+    fontSize: 14,
+    marginTop: -30,
+    fontWeight: '500',
+    color: '#206C00'
+  },
   title: {
     marginTop: 20,
     marginLeft: 50,
@@ -424,7 +545,20 @@ const styles = StyleSheet.create({
   cellText: {
     textAlign: 'flex-start',
   },
-  
+  messageCount: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 70
+  },
+  messageCountText: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 11
+  },
   greenBox: {
     flex: 1,
    width: "90%",
@@ -433,7 +567,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 50, 
     backgroundColor: '#F2F2F2',
-    marginTop: 50, 
+    marginTop: 20, 
   },
   cellText: {
     textAlign: 'center',
@@ -445,19 +579,23 @@ const styles = StyleSheet.create({
     marginTop: -5,
     borderRadius: 25
   },
-  deleteHubButton: {
-    backgroundColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-    marginTop: 10,
-    marginRight: 50
-  },
-  deleteHubButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+  whiteBox: {
+    width: '20%',
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderWidth: 2, borderColor: '#f2f2f2',
+    borderRadius: 10,
+    marginTop: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

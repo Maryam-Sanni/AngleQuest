@@ -112,7 +112,7 @@ function ChatScreen() {
      
      <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
        <Text style={{ fontSize: 16, fontWeight: "bold", color: "black" }}>
-         Ahmad Yusuf
+         Nathan Arthur
        </Text>
        <View
          style={{
@@ -124,10 +124,10 @@ function ChatScreen() {
          }}
        />
      </View>
-     <Text style={{ fontSize: 12, color: "#A0AEC0" }}>Web Developer</Text>
+     <Text style={{ fontSize: 12, color: "#A0AEC0" }}>Java Programmer</Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00" }}>
-       ahmadyusu7@gmail.com
+       nathanar47@gmail.com
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 14, color: "black" }}>
@@ -185,7 +185,7 @@ function ChatScreen() {
            style={{ width: 35, height: 35, aspectRatio: 1 }}
          />
          <View style={{ marginLeft: 5 }}>
-           <Text style={{ color: "#206C00" }}>AhmadCV.pdf</Text>
+           <Text style={{ color: "#206C00" }}>NathanCV.pdf</Text>
            <Text style={{ color: "#A0AEC0", fontSize: 10 }}>293 kb</Text>
          </View>
        </View>
@@ -199,7 +199,7 @@ function ChatScreen() {
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: 'white' }}>
         <TouchableOpacity onPress={toggleProfileModal}>
           <Image
-            source={require('../assets/useravatar5.jpg')}
+            source={require('../assets/account.png')}
             style={{ width: 40, height: 40, borderRadius: 20 }}
           />
         </TouchableOpacity>

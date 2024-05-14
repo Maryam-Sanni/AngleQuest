@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 50, 
     backgroundColor: '#F2F2F2',
-    marginTop: 50, 
+    marginTop: 30, 
   },
   tableheaderText: {
     fontSize: 14,

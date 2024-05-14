@@ -262,7 +262,9 @@ const styles = StyleSheet.create({
    marginTop: 40
   },
   input: {
-    outline: 'none'
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   
 });

@@ -22,7 +22,7 @@ function MyComponent() {
   };
 
   const goToBillingsAndPayment = () => {
-    navigation.navigate('Withdrawal Setup');
+    navigation.navigate('Earnings');
   };
 
   return (

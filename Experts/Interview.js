@@ -1,4 +1,4 @@
- import React, { useState } from 'react';
+ import React, { useState, useEffect, useRef} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
@@ -14,6 +14,42 @@ function MyComponent() {
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
     const [isAdviceHovered, setIsAdviceHovered] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const calculateTimeLeft = () => {
+      const difference = +new Date(targetDate) - +new Date();
+      let timeLeft = {};
+  
+      if (difference > 0) {
+        timeLeft = {
+          hrs: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          mins: Math.floor((difference / 1000 / 60) % 60),
+        };
+      }
+  
+      return timeLeft;
+    };
+  
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const targetDate = '2024-05-25T00:00:00'; // Change this to your target date and time
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setTimeLeft(calculateTimeLeft());
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    });
+  
+    const timerComponents = Object.keys(timeLeft).map((interval) => {
+      if (!timeLeft[interval]) {
+        return null;
+      }
+  
+      return (
+        <Text key={interval}>
+          {timeLeft[interval]} {interval}{" "}
+        </Text>
+      );
+    });
 
     const handleOpenPress = () => {
       setModalVisible(true);
@@ -75,12 +111,45 @@ function MyComponent() {
                                 </View>
                             </TouchableHighlight>
                         </View>
-
                         <TouchableOpacity onPress={handleOpenPress}>
-                            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", borderWidth: 1, backgroundColor: "#d3f9d8", width: 140, alignItems: 'center', marginTop: 10, marginLeft: 50 }}>
-                                <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Interview Profile</Text>
-                            </View>
-                        </TouchableOpacity>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Interview Profile</Text>
+                  </View>
+     </TouchableOpacity>
+                        
+     <View style={styles.container}>
+      <View style={styles.box}>
+         <Text style = {{fontSize: 10, color: 'grey' }}>No of candidates interviewed</Text>
+         <View style={{flexDirection: 'row'}}>
+         <Image source={require('../assets/icons8-line-chart.gif')} style={styles.boximage}  />
+           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5 }}>500</Text>
+           </View>
+           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 2 new booked session(s) today</Text>
+      </View>
+      <View style={styles.box}>
+        <Text style = {{fontSize: 10, color: 'grey' }}>Total Earnings</Text>
+        <View style={{flexDirection: 'row'}}>
+         <Image source={require('../assets/icons8-money.gif')} style={styles.boximage}  />
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue' }}>$1,580</Text>
+     </View>
+     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You earned a total of $30 today</Text>
+      </View>
+      <View style={styles.box}>
+        <Text style = {{fontSize: 10, color: 'grey' }}>Profile Visits</Text>
+        <View style={{flexDirection: 'row'}}>
+         <Image source={require('../assets/icons8-people.gif')} style={styles.boximage}  />
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey' }}>20</Text>
+      </View>
+      <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 10 profile visit(s) this week</Text>
+      </View>
+      <View style={styles.box}>
+        <Text style = {{fontSize: 10, color: 'grey' }}>Next Session in</Text>
+        <View style={{flexDirection: 'row'}}>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen' }}>{timerComponents}</Text>
+           </View>
+           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
+      </View>
+    </View>
 
                         <Modal
         animationType="slide"
@@ -92,7 +161,6 @@ function MyComponent() {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
-
                         <ScheduledMeetingsTable />
                         <AwaitingFeedbacks />
                         <CompletedFeedbacks />
@@ -139,6 +207,37 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginLeft: 100
     },
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginLeft: 40, marginRight: 50, marginTop: 50
+      },
+      box: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        width: '22%',
+        height: 150,
+        borderWidth: 2, borderColor: '#f2f2f2',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      boximage: {
+        width: 30,
+        height: 30,
+        position: 'absolute',
+        left: 150,
+        borderRadius: 25
+      },
 });
 
 export default MyComponent;

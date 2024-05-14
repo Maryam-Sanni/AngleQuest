@@ -6,7 +6,8 @@ import CollapsedComponent from "./expertscollapsed"; // Import your collapsed co
 function MyComponent() {
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null); 
-  const [showMenu, setShowMenu] = useState(true); 
+  const [showMenu, setShowMenu] = useState(true);
+  const [messageCountText, setMessageCountText] = useState('0');  
 
   const navigation = useNavigation(); // Get navigation object
 
@@ -230,6 +231,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 7,
     marginTop: 40,
+  },
+  messageCount: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 70
+  },
+  messageCountText: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 11
   },
 });
 

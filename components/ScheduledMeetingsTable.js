@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduled';
+import OpenUser from '../Experts/OpenUserprofile';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -11,6 +13,14 @@ const ScheduledMeetingsTable = () => {
 
   const handleCloseModal = () => {
     setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
   };
 
   return (
@@ -42,10 +52,12 @@ const ScheduledMeetingsTable = () => {
       
         <View style={styles.row}>
         <View style={styles.cell2}>
+        <TouchableOpacity onPress={handleOpenPress2} >
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
             <Text style={styles.cellText}>Maryam Bakahli</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP Finance Junior</Text>
@@ -65,10 +77,12 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}> 
+          <TouchableOpacity onPress={handleOpenPress2} >
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/useravatar2.png')} style={styles.image} />
             <Text style={styles.cellText}>Patrick Oche</Text>
           </View>
+          </TouchableOpacity>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform Dev</Text>
@@ -97,6 +111,16 @@ const ScheduledMeetingsTable = () => {
       >
           <View style={styles.modalContent}>
             <OpenSchedule onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+          <View style={styles.modalContent}>
+            <OpenUser onClose={() => handleCloseModal2()} />
           </View>
       </Modal>
     </View>
@@ -156,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 50, 
     backgroundColor: '#F2F2F2',
-    marginTop: 50, 
+    marginTop: 30, 
   },
   tableheaderText: {
     fontSize: 14,

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, Picker, ScrollView } from 'react-native';
  
 
 function MyComponent({ onClose }) {
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 <View style={styles.greenBox}>
 <TouchableOpacity onPress={onClose}>
             <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
@@ -108,12 +109,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="5%"
-            placeholderTextColor="grey"
-            alignText= 'center'
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="5%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       <View style={styles.row}>
@@ -128,11 +138,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="20%"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="20%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       <View style={styles.row}>
@@ -147,11 +167,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="20%"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="20%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       <View style={styles.row}>
@@ -166,11 +196,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="10%"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="10%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       <View style={styles.row}>
@@ -185,11 +225,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="20%"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="20%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       <View style={styles.row}>
@@ -204,11 +254,21 @@ function MyComponent({ onClose }) {
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-           <TextInput
-            placeholder="25%"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="25%" value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
       </View>
       </View>
@@ -219,6 +279,7 @@ function MyComponent({ onClose }) {
 
 
     </View>
+    </ScrollView>
 </View>
 );
 }
@@ -302,7 +363,18 @@ const styles = StyleSheet.create({
     marginTop: 40
   },
   input: {
-    outline: 'none',
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: '#F8F8F8',
+    borderColor: 'black',
+    borderWidth: 1, 
+    color:'grey',
+    fontSize: 14
   },
   
 });

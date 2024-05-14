@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#CCCCCC',
   },
   chatScreenContainer: {
-    flex: 50,
+    width: '60%',
   },
   profileContainer: {
     width: 210,

@@ -66,6 +66,8 @@ import Bids from './Experts/Bids';
 import MyHubs from './Experts/MyHubs';
 import AllHubs from './Experts/AllHubs';
 import Createhubform from './components/Createhubform';
+import Earnings from './Experts/Earnings';
+import Withdrawal from './Experts/Withdrawal';
 
 const Stack = createStackNavigator();
 
@@ -158,6 +160,8 @@ const App = () => {
         <Stack.Screen name="All Hubs" component={MyHubs} />
         <Stack.Screen name="Manage Hubs" component={AllHubs} />
         <Stack.Screen name="Create Hub" component={Createhubform} />
+        <Stack.Screen name="Earnings" component={Earnings} />
+        <Stack.Screen name="Withdrawal" component={Withdrawal} />
       </Stack.Navigator>
     </NavigationContainer>
   );

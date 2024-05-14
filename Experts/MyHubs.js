@@ -177,40 +177,14 @@ const handleCloseModal = () => {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, }}>
           <View style={styles.header}>
-              <TouchableOpacity onPress={goToHubs}
-            underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsFirstHubsHovered(true)}
-            onMouseLeave={() => setIsFirstHubsHovered(false)}> 
-              <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
-                <Text style={[styles.headertext, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            underlayColor={isSecondHubsHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsSecondHubsHovered(true)}
-            onMouseLeave={() => setIsSecondHubsHovered(false)} >
-              <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
-                <Text style={[styles.headertext, isSecondHubsHovered && { color: 'coral' }]}>Power Point Dev.</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            underlayColor={isThirdHubsHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsThirdHubsHovered(true)}
-            onMouseLeave={() => setIsThirdHubsHovered(false)} >
-              <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
-                <Text style={[styles.headertext, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
+        
+            <TouchableOpacity onPress={goToHubs}
             underlayColor={isOthersHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsOthersHovered(true)}
             onMouseLeave={() => setIsOthersHovered(false)} >
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Others</Text>
+                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Manage Hubs</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToMyHubs}
@@ -224,12 +198,13 @@ const handleCloseModal = () => {
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: "#d3f9d8", width: 150, alignItems: 'center', marginTop: 10,  borderWidth: 1}}>
-                    <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center' }}>Create New Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
+
             
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 40, marginRight: 130 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 50, marginRight: 130, marginLeft: 50 }}>
               {renderCards()}
             </View>
           </View>

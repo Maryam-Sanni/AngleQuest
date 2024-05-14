@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
+import { View, Text, TouchableOpacity, Modal, Image } from 'react-native'; 
 import { useNavigation } from '@react-navigation/native';
 
 const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
