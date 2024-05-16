@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, Animated, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, Animated, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { BlurView } from 'expo-blur';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 
@@ -283,22 +284,27 @@ function MyComponent() {
   };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
+<BlurView intensity={100} style={{flex:1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
+          <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, marginLeft: 300, marginRight: 130, marginTop: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
               <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
                 <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Experts</Text>
                 </View>
                 <TouchableOpacity>
-                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, fontColor:'#666', fontWeight: '600' }}>Booked Experts</Text>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color:'#d3f9d8', fontWeight: '600' }}>Booked Experts</Text>
                 </TouchableOpacity>
                 <TouchableOpacity> 
-              <Text style={{ fontSize: 14, marginLeft: 25,  marginTop: 5, fontColor:'#666', fontWeight: '600' }}>Saved</Text>
+              <Text style={{ fontSize: 14, marginLeft: 25,  marginTop: 5, color:'#d3f9d8', fontWeight: '600' }}>Saved</Text>
               </TouchableOpacity>
               </View>
               
@@ -308,10 +314,13 @@ function MyComponent() {
               {renderCards()}
             </View>
           </View>
+          
         </ScrollView>
       </View>
-      
-    </View>
+      </View>
+      </BlurView>
+      </ImageBackground>
+
   );
 }
 

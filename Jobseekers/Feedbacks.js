@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Animated, ImageBackground } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
+import { BlurView } from 'expo-blur';
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
@@ -194,16 +195,23 @@ function MyComponent() {
   };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
+<BlurView intensity={100} style={{flex:1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
+          <View style={{ flex: 1, paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, marginLeft: 300, marginRight: 130, marginTop: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
+              <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
                 <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>Received</Text>
-                <Text style={{ fontSize: 14, marginLeft: 35 }}>Sent</Text>
+                </View>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color:'#d3f9d8', fontWeight: 'bold' }}>Sent</Text>
               </View>
               <TouchableOpacity style={{ marginTop: 7, marginRight: 20, justifyContent: 'center', paddingHorizontal: 15, paddingVertical: 4, fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF', backgroundColor: 'coral', borderRadius: 3 }}
               onPress={handleFeedbackPress } >
@@ -218,6 +226,8 @@ function MyComponent() {
       </View>
       
     </View>
+    </BlurView>
+    </ImageBackground>
   );
 }
 

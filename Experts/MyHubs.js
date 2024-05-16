@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, TextInput, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import OpenModal from '../components/Createhubform';
+import { BlurView } from 'expo-blur';
 
 
 function MyComponent() {
@@ -110,6 +111,8 @@ const handleCloseModal = () => {
             width: '95%',
             height: 300,
             borderRadius: 5,
+            marginLeft: 20,
+            marginRight: 20,
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
@@ -170,12 +173,18 @@ const handleCloseModal = () => {
   };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
+        <View style={styles.greenBox}>
+        <BlurView intensity={100} style={styles.blurBackground}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, }}>
+          <View style={{ flex: 1, marginLeft: 270, }}>
           <View style={styles.header}>
         
             <TouchableOpacity onPress={goToHubs}
@@ -198,17 +207,19 @@ const handleCloseModal = () => {
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ Create New Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
 
-            
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 50, marginRight: 130, marginLeft: 50 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginRight: 100, marginLeft: 30 }}>
               {renderCards()}
             </View>
-          </View>
+            </View>
+          
         </ScrollView>
+        </BlurView>
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -220,7 +231,10 @@ const handleCloseModal = () => {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
+      
     </View>
+    
+    </ImageBackground>
   );
 }
 
@@ -236,10 +250,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#f7fff4',
   },
   item: {
     flexDirection: 'row',
@@ -256,6 +270,14 @@ const styles = StyleSheet.create({
     height: 24,
     marginRight: 5,
     marginLeft: 100
+  },
+  greenBox: {
+   width: "100%",
+    height:"100%",
+    backgroundColor: 'rgba(225,225,212,0.3)',
+  },
+  blurBackground: {
+    flex: 1, 
   },
 });
 export default MyComponent;

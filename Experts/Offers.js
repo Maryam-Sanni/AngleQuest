@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Viewbids';
-
+import { BlurView } from 'expo-blur';
   
 function MyComponent() {
     const navigation = useNavigation();
@@ -22,12 +22,16 @@ function MyComponent() {
       
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+          <View style={{ marginLeft: 270}}>
             <View style={styles.header}>
               <TouchableOpacity onPress={goToOffers} 
             underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
@@ -54,6 +58,7 @@ function MyComponent() {
         </ScrollView>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 
@@ -70,6 +75,7 @@ const ScheduledMeetingsTable = () => {
 
   return (
     <View style={styles.greenBox}>
+      <BlurView intensity={100} style={styles.blurBackground}>
     <Text style={styles.title}>Offers</Text>
     
     <View style={styles.table}>
@@ -302,7 +308,7 @@ const ScheduledMeetingsTable = () => {
       </Modal>
 
       </View>
-      
+      </BlurView>
     </View>
   );
 }
@@ -319,7 +325,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
@@ -327,6 +333,10 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+  },
+  blurBackground: {
+    flex: 1, 
+    borderRadius: 20, 
   },
   headertext: {
     marginLeft: 5,
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
+    borderBottomColor: 'rgba(225,225,212,0.3)',
   },
   cell: {
     flex: 1,
@@ -369,7 +379,7 @@ const styles = StyleSheet.create({
   },
   cell2: {
     flex: 1,
-   backgroundColor: '#F2F2F2',
+   backgroundColor: 'none',
     padding: 10,
     alignItems: 'flex-start',
   },
@@ -381,11 +391,13 @@ const styles = StyleSheet.create({
     flex: 1,
    width: "90%",
     height:250,
-    paddingBottom: 10,
     marginBottom: 20,
     marginLeft: 50, 
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'rgba(225,225,212,0.3)',
     marginTop: 50, 
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
   },
   cellText: {
     textAlign: 'center',

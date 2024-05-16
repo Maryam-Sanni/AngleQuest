@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, Text, TouchableOpacity, Image } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 const data = [
   {
@@ -62,7 +62,7 @@ const data = [
 
 function CustomHeader() {
   return (
-    <View style={{ backgroundColor: 'white', padding: 16 }}>
+    <View style={{padding: 16, backgroundColor: 'white' }}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, }}>Chats</Text>
     </View>
   );
@@ -71,7 +71,7 @@ function CustomHeader() {
 function ChatListScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Chat', { userId: item.id })}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5', }}>
         <Image source={item.avatar} style={{ width: 48, height: 48, borderRadius: 24, marginRight: 12 }} />
         <View style={{ flex: 1 }}>
           <Text style={{ fontWeight: '500', fontSize: 15 }}>{item.name}</Text>
@@ -83,7 +83,7 @@ function ChatListScreen({ navigation }) {
   );
 
   return (
-    <View>
+    <View style={{ backgroundColor: 'white' }}>
       <CustomHeader />
       <FlatList
         data={data}

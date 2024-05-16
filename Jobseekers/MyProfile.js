@@ -1,10 +1,16 @@
 import React from 'react';
-import { View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import { BlurView } from 'expo-blur';
 
 export default function Profile() {
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
+<BlurView intensity={100} style={{flex:1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -13,9 +19,9 @@ export default function Profile() {
           <View style={{ padding: 20 }}>
             <View style={{ flex: 1 }}>
               {/* Profile Card */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50, backgroundColor: 'white', marginLeft: 220 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50, marginLeft: 220 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>My Profile</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold", color: '#63EC55' }}>My Profile</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
                     source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
@@ -23,14 +29,14 @@ export default function Profile() {
                     resizeMode="cover"
                   />
                   <View style={{ marginRight: 800 }}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold' }}>John Smith</Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', }}>John Smith</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                       <Image
                         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/00e648efb83f97ef0794d800368a6ad24636e8f2ce415b2e1c45f6156d62607e?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                         style={{ width: 20, height: 20 }}
                         resizeMode="contain"
                       />
-                      <Text style={{ marginLeft: 5, fontSize: 12 }}>Architectural Engineer</Text>
+                      <Text style={{ marginLeft: 5, fontSize: 12,}}>Architectural Engineer</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                       <Image
@@ -40,14 +46,14 @@ export default function Profile() {
                       />
                       <Text style={{ marginLeft: 5, fontSize: 12 }}>London, United Kingdom</Text>
                     </View>
-                    <Text style={{ marginTop: 5, fontSize: 12, fontStyle: 'italic', color: '#20C600' }}>Online</Text>
+                    <Text style={{ marginTop: 5, fontSize: 12, fontStyle: 'italic', color: '#63EC55' }}>Online</Text>
                   </View>
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 14, color: 'green', textAlign: 'right', fontWeight: '600' }}>Available Balance</Text>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5 }}>$22.00</Text>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#FFFFFF', borderRadius: 5, borderWidth: 1, borderColor: 'green' }}>
+                  <Text style={{ fontSize: 14, color: '#63EC55', textAlign: 'right', fontWeight: '600' }}>Available Balance</Text>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5, color: 'white' }}>$22.00</Text>
+                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#FFFFFF', borderRadius: 5, borderWidth: 1, borderColor: '#63EC55' }}>
                     <Text style={{ fontSize: 12 }}>Preview Profile</Text>
                   </TouchableOpacity>
                 </View>
@@ -58,7 +64,7 @@ export default function Profile() {
           {/* Profile Description */}
           <View style={{  marginLeft: 230 }}>
             <View style={{ marginTop: 10, paddingHorizontal: 10, marginRight: 30 }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: 'green', fontWeight: '500' }}>About</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: '#63EC55', fontWeight: '500' }}>About</Text>
               <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10 }}>
                 John Smith is a passionate architectural engineer with over 10 years of
                 experience in designing and implementing innovative building solutions.
@@ -75,7 +81,7 @@ export default function Profile() {
               </Text>
               <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10 }}>
                 John is committed to sustainability and strives to incorporate
-                energy-efficient solutions and green building practices into every project
+                energy-efficient solutions and #63EC55 building practices into every project
                 he undertakes. He is well-versed in LEED certification requirements and
                 actively seeks out opportunities to minimize environmental impact while
                 maximizing efficiency and comfort for building occupants.
@@ -98,17 +104,17 @@ export default function Profile() {
           {/* Employment History */}
           <View style={{ marginLeft: 230, marginRight: 30, marginTop: 20, marginBottom: 10 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Employment History</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Employment History</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
                 resizeMode="cover" // or any other resizeMode that suits your need
               />
             </View>
-            <Text style={{ marginTop: 10, fontSize: 14, color: 'green' }}>
+            <Text style={{ marginTop: 10, fontSize: 14, color: '#63EC55' }}>
               Senior Architectural Engineer | KIX Architecture Firm
             </Text>
-            <Text style={{ marginTop: 3, fontSize: 12, color: 'grey' }}>May 2020 - Present</Text>
+            <Text style={{ marginTop: 3, fontSize: 12, color: 'white' }}>May 2020 - Present</Text>
             <Text style={{ marginTop: 15, fontSize: 14 }}>
               - Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
               {'\n'}
@@ -118,10 +124,10 @@ export default function Profile() {
               {'\n'}
               - Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.
             </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: 'green' }}>
+            <Text style={{ marginTop: 15, fontSize: 14, color: '#63EC55' }}>
               Architectural Engineer | Phoenix Engineering Consultants
             </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'grey' }}>July 2015 - Jan 2020</Text>
+            <Text style={{ marginTop: 5, fontSize: 12, color: 'white' }}>July 2015 - Jan 2020</Text>
             <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
               - Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
               {'\n'}
@@ -131,10 +137,10 @@ export default function Profile() {
               {'\n'}
               Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.
             </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: 'green' }}>
+            <Text style={{ marginTop: 15, fontSize: 14, color: '#63EC55' }}>
               Junior Architectural Engineer | Zenith Design & Construction
             </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'grey'  }}>Sept 2012 - Feb 2015</Text>
+            <Text style={{ marginTop: 5, fontSize: 12, color: 'white'  }}>Sept 2012 - Feb 2015</Text>
             <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
               - Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
               {'\n'}
@@ -150,7 +156,7 @@ export default function Profile() {
           {/* Skills */}
               <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Skills</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Skills</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -174,7 +180,7 @@ export default function Profile() {
                            {/* Certifications */}
     <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Certifications</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Certifications</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -203,7 +209,7 @@ export default function Profile() {
                       {/* Other Experience*/}
  <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Other Experience</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Other Experience</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -230,7 +236,7 @@ export default function Profile() {
                      {/*Location*/}
                      <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30  }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: 'green' }}>Preferred Locations</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Preferred Locations</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -252,6 +258,8 @@ export default function Profile() {
         </ScrollView>
       </View>
     </View>
+    </BlurView>
+    </ImageBackground>
   );
 }
 
@@ -260,7 +268,6 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
     marginTop: 5
   },
   row: {
@@ -272,7 +279,7 @@ const styles = {
     borderRadius: 20,
     padding: 10,
     margin: 5,
-    color: 'green',
+    color: '#206C00',
     textAlign: 'center',
   },
 };

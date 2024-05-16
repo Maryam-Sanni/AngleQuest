@@ -3,6 +3,7 @@ import { View, Platform, KeyboardAvoidingView, Text, Image, TouchableOpacity, Al
 import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
 import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
+import { BlurView } from 'expo-blur';
 
 function ChatScreen() {
   const [messages, setMessages] = useState([]);
@@ -30,10 +31,10 @@ function ChatScreen() {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: '#DFF4D7',
+            backgroundColor: 'white',
           },
           right: {
-            backgroundColor: '#B9DDA9',
+            backgroundColor: '#3D5C3A',
           },
         }}
       />
@@ -196,7 +197,7 @@ function ChatScreen() {
         </TouchableWithoutFeedback>
       </Modal>
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: 'white' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: 'white', }}>
         <TouchableOpacity onPress={toggleProfileModal}>
           <Image
             source={require('../assets/account.png')}
@@ -204,8 +205,8 @@ function ChatScreen() {
           />
         </TouchableOpacity>
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Nathan Arthur</Text>
-          <Text style={{ fontStyle: 'normal', fontSize: 12 }}>Java Programming - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Jobseeker</Text></Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#3D5C3A'}}>Nathan Arthur</Text>
+          <Text style={{ fontStyle: 'normal', fontSize: 12, color: '#3D5C3A' }}>Java Programming - <Text style={{ fontWeight: '500', fontStyle: 'italic', color: '#3D5C3A' }}>Jobseeker</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
           <Image

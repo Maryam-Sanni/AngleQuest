@@ -96,7 +96,7 @@ function MyComponent() {
               style={{ width: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
-              <Text style={{ fontSize: 14, color: 'black' }}>Jeremiah H.</Text>
+              <Text style={{ fontSize: 14, color: '#666' }}>Jeremiah H.</Text>
             </View>
           </View>
           </TouchableOpacity>

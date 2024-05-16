@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { View, FlatList, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet, ImageBackground  } from 'react-native';
+import { BlurView } from 'expo-blur';
 
 const data = [
   {
@@ -131,42 +132,42 @@ const scrollLeft = () => {
   };
 
   return (
-    <View style={{ backgroundColor: 'white', padding: 16, width: '100%' }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16 }}>Chats</Text>
+    <View style={{ padding: 16, width: '100%', backgroundColor: 'white',}}>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: '#3D5C3A', padding: 16, color: '#3D5C3A' }}>Chats</Text>
        <TouchableOpacity onPress={() => scrollLeft()}>
           <Image source={require('../assets/left-arrow.png')} style={{ width: 10, height: 10, marginTop: 20, left: 10}} />
         </TouchableOpacity>
        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexDirection: 'row' }} ref={scrollViewRef}>
       <View style={{ flexDirection: 'row',}}>
         <TouchableOpacity onPress={onPressAllChats}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === null ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === null ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === null ? "#206C00" : "#777", alignText: 'center', fontWeight: '600',}}>All Chats</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, borderColor: selectedHub === null ? "#3D5C3A" : "#3D5C3A", backgroundColor: selectedHub === null ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === null ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',}}>All Chats</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub1}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === 'Hub1' ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === 'Hub1' ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub1' ? "#206C00" : "#777", alignText: 'center', fontWeight: '600' }}>SAP FI Hub</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 5, borderColor: selectedHub === 'Hub1' ? "#3D5C3A" : "#3D5C3A", backgroundColor: selectedHub === 'Hub1' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub1' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>SAP FI Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub2}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === 'Hub2' ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === 'Hub2' ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub2' ? "#206C00" : "#777", alignText: 'center', fontWeight: '600' }}>Microsoft Azure Hub</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 5, borderColor: selectedHub === 'Hub2' ? "#3D5C3A" : "#3D5C3A", backgroundColor: selectedHub === 'Hub2' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub2' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Microsoft Azure Hub</Text>
           </View>
         </TouchableOpacity>
          
         <TouchableOpacity onPress={onPressHub3}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5,  marginLeft: 10, borderRadius: 10, borderColor: selectedHub === 'Hub3' ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === 'Hub3' ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub3' ? "#206C00" : "#777", alignText: 'center', fontWeight: '600' }}>Jr. Power Point Hub</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5,  marginLeft: 10, borderRadius: 5, borderColor: selectedHub === 'Hub3' ? "#206C00" : "#3D5C3A", backgroundColor: selectedHub === 'Hub3' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub3' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Jr. Power Point Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub4}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 10, borderColor: selectedHub === 'Hub4' ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === 'Hub4' ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub4' ? "#206C00" : "#777", alignText: 'center', fontWeight: '600' }}>Snr. Power Point Hub</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 5, borderColor: selectedHub === 'Hub4' ? "#206C00" : "#3D5C3A", backgroundColor: selectedHub === 'Hub4' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub4' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Snr. Power Point Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub5}>
-          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 10, borderColor: selectedHub === 'Hub5' ? "#206C00" : "#d3f9d8", backgroundColor: selectedHub === 'Hub5' ? "#d3f9d8" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub5' ? "#206C00" : "#777", alignText: 'center', fontWeight: '600' }}>Java Programming Hub</Text>
+          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 5, borderColor: selectedHub === 'Hub5' ? "#3D5C3A" : "#3D5C3A", backgroundColor: selectedHub === 'Hub5' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub5' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Java Programming Hub</Text>
           </View>
         </TouchableOpacity>
        
@@ -175,6 +176,7 @@ const scrollLeft = () => {
       <TouchableOpacity onPress={() => scrollRight()}>
           <Image source={require('../assets/right-arrow.png')} style={{ width: 10, height: 10, marginLeft: 380, marginTop: -61, position: 'absolute', right: 10 }} />
         </TouchableOpacity>
+        
     </View>
   );
 }
@@ -211,15 +213,16 @@ const handlePressHub4 = () => {
   };
 
   const renderItem = ({ item }) => (
+    <BlurView intensity={80} style={styles.blurBackground}>
     <TouchableOpacity onPress={() => navigation.navigate('Chat', { userId: item.id })}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5', width: '100%' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)', width: '100%', backgroundColor: 'white',}}>
         <Image source={item.avatar} style={{ width: 36, height: 36, borderRadius: 18, marginRight: 12 }} />
         <View style={{ flex: 1 }}>
-          <Text style={{ fontWeight: '500', fontSize: 15 }}>{item.name}</Text>
-          <Text style={{ color: '#777', fontSize: 13 }}>{item.message}</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#3D5C3A' }}>{item.name}</Text>
+          <Text style={{ color: 'black', fontSize: 13 }}>{item.message}</Text>
         </View>
         <View style={{ flexDirection: 'column'}}>
-        <Text style={{ color: '#777', fontSize: 13, marginBottom: 5 }}>{item.time}</Text>
+        <Text style={{ color: 'black', fontSize: 13, marginBottom: 5 }}>{item.time}</Text>
         <View>
         {item.messagecount !== '0' && (
           <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#4CAF50', justifyContent: 'center', alignItems: 'center', marginLeft: 40 }}>
@@ -230,6 +233,7 @@ const handlePressHub4 = () => {
       </View>
     </View>
     </TouchableOpacity>
+    </BlurView>
   );
 
   return (
@@ -252,5 +256,15 @@ const handlePressHub4 = () => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+greenBox: {
+   backgroundColor: 'rgba(225,225,212,0.3)',
+ },
+ blurBackground: {
+   flex: 1, 
+   backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+});
 
 export default ChatListScreen;

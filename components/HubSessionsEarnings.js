@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
+    borderBottomColor: 'rgba(0,0,0,0.2)',
   },
   cell: { 
     flex: 1,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   cell2: {
     flex: 1,
-   backgroundColor: '#F2F2F2',
+   backgroundColor: 'none',
     padding: 10, 
     alignItems: 'flex-start',
   },
@@ -118,7 +118,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginBottom: 20,
     marginLeft: 50, 
-    backgroundColor: '#F2F2F2',
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
     marginTop: 50, 
   },
 });

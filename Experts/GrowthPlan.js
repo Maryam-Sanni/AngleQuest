@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledGrowthPlan from '../components/ScheduledGrowthPlan';
@@ -79,12 +79,16 @@ function MyComponent() {
     };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+        <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
           <TouchableHighlight
                                 onPress={goToInterview} 
@@ -118,8 +122,8 @@ function MyComponent() {
                             </TouchableHighlight>
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Growth Plan Profile</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Growth Plan Profile</Text>
                   </View>
      </TouchableOpacity>
 
@@ -170,6 +174,7 @@ function MyComponent() {
         </ScrollView>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 
@@ -185,7 +190,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
@@ -197,7 +202,7 @@ const styles = StyleSheet.create({
   headertext: {
     marginLeft: 5,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
     marginTop: 5,
     color: '#666'
   },
@@ -214,14 +219,14 @@ const styles = StyleSheet.create({
     marginLeft: 40, marginRight: 50, marginTop: 50
   },
   box: {
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: '22%',
     height: 150,
-    borderWidth: 2, borderColor: '#f2f2f2',
+    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -232,14 +237,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   box2: {
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: '44%',
     height: 150,
-    borderWidth: 2, borderColor: '#f2f2f2',
+    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import BidsinReview from '../components/BidsinReview';
@@ -22,12 +22,16 @@ function MyComponent() {
       };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+        <View style={{ marginLeft: 270,}}>
           <View style={styles.header}>
             <TouchableOpacity onPress={goToOffers} 
             underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
@@ -61,6 +65,7 @@ function MyComponent() {
         </ScrollView>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 

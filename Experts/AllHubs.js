@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../components/Createhubform';
 import OpenModal2 from '../components/Edithubform';
 import ConfirmationPopup from '../Experts/OtherHubs';
+import { BlurView } from 'expo-blur';
 
   
 function MyComponent() {
@@ -50,12 +51,16 @@ function MyComponent() {
     };
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+          <View style={{ marginLeft: 270 }}>
             <View style={styles.header}>
               <TouchableOpacity
             underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
@@ -90,8 +95,8 @@ function MyComponent() {
             </TouchableOpacity>
             
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ Create New Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
 
@@ -130,14 +135,15 @@ function MyComponent() {
 
             <ScheduledMeetingsTable />
             <TouchableOpacity onPress={handleOpenPress2}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1, marginBottom: 50 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Edit Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1, marginBottom: 50 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: '600' }}>Edit Hub</Text>
                   </View>
      </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 
@@ -157,35 +163,36 @@ const ScheduledMeetingsTable = () => {
     <View style={{flex: 1}}>
     <View style={{flexDirection: 'row', flexWrap: "wrap", alignItems: 'center', alignContent: 'center' }}>
     <View style={[styles.whiteBox, { marginLeft: 50, }]}>
-    <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold'}}>Next Meeting Schedule</Text>
+    <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>Next Meeting Schedule</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
-    <Text style={{ fontSize: 14, color: "black", marginTop: 10, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
-    <TouchableOpacity style={{  backgroundColor: 'white', paddingVertical: 5, paddingHorizontal: 15, marginTop: 15, borderColor: 'green', borderWidth: 2}}>
-          <Text style={{ color: 'black', fontWeight: 'bold', textAlign: 'center', fontSize: 12}}>Start Session</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>Start Session</Text>
           </TouchableOpacity>
       </View>
 
       <View style={[styles.whiteBox, { marginLeft: 40,  }]}>
-      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Next Meeting Confirmation</Text>
+      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>Next Meeting Confirmation</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>12</Text>
     <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>Yet to Confirm</Text>
     <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>2</Text>
       </View>
 
       <View style={[styles.whiteBox, { marginLeft: 40, }]}>
-      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Total Hub Members</Text>
+      <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>Total Hub Members</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
       </View>
 
       <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
-      <Text style={{ fontSize: 12, color: "grey", fontWeight: '500'}}>Sessions Held</Text>
-    <Text style={{ fontSize: 24, color: "green", marginTop: 5, fontWeight: 'bold'}}>20</Text>
-    <Text style={{ fontSize: 12, color: "grey", fontWeight: '500', marginTop: 10,}}>Sessions Missed</Text>
+      <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>Sessions Held</Text>
+    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>20</Text>
+    <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>Sessions Missed</Text>
     <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>4</Text>
       </View>
 
       </View>
     <View style={styles.greenBox}>
+    <BlurView intensity={100} style={styles.blurBackground}>
     <Text style={styles.title}>Manage SAP FI Hub</Text>
     
     <View style={styles.table}>
@@ -453,8 +460,9 @@ const ScheduledMeetingsTable = () => {
         
 
       </View>
-      
+      </BlurView>
     </View>
+    
     </View>
   );
 }
@@ -471,10 +479,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#f7fff4',
   },
   item: {
     flexDirection: 'row',
@@ -484,7 +492,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    color: '#206C00'
+    color: '#666'
   },
   image: {
     width: 24,
@@ -528,7 +536,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
+    borderBottomColor: 'rgba(225,225,212,0.3)',
   },
   cell: {
     flex: 1,
@@ -538,7 +546,7 @@ const styles = StyleSheet.create({
   },
   cell2: {
     flex: 1,
-   backgroundColor: '#F2F2F2',
+   backgroundColor: 'none',
     padding: 10,
     alignItems: 'flex-start',
   },
@@ -563,11 +571,17 @@ const styles = StyleSheet.create({
     flex: 1,
    width: "90%",
     height:250,
-    paddingBottom: 10,
     marginBottom: 20,
     marginLeft: 50, 
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'rgba(225,225,212,0.3)',
     marginTop: 20, 
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+  },
+  blurBackground: {
+    borderRadius: 20, 
+    backgroundColor: 'rgba(225,225,212,0.3)',
   },
   cellText: {
     textAlign: 'center',
@@ -584,18 +598,13 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderWidth: 2, borderColor: '#f2f2f2',
     borderRadius: 10,
-    marginTop: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: '#f7fff4',
+  borderRadius: 20,
+  marginTop: 50,
+  borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    BlurView: '100%'
   },
 });
 

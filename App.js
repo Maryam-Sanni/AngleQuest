@@ -68,6 +68,8 @@ import AllHubs from './Experts/AllHubs';
 import Createhubform from './components/Createhubform';
 import Earnings from './Experts/Earnings';
 import Withdrawal from './Experts/Withdrawal';
+import NewGrowthPlan from './Jobseekers/GrowthPlan';
+import AllGrowthPlan from './Jobseekers/AllGrowthPlans';
 
 const Stack = createStackNavigator();
 
@@ -162,6 +164,8 @@ const App = () => {
         <Stack.Screen name="Create Hub" component={Createhubform} />
         <Stack.Screen name="Earnings" component={Earnings} />
         <Stack.Screen name="Withdrawal" component={Withdrawal} />
+        <Stack.Screen name="New Growth Plan" component={NewGrowthPlan} />
+        <Stack.Screen name="My Growth Plans" component={AllGrowthPlan} />
       </Stack.Navigator>
     </NavigationContainer>
   );

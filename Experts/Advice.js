@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity,  Modal,  Animated, CheckBox,} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity,  Modal,  Animated, ImageBackground,} from 'react-native';
 import { FaStar } from 'react-icons/fa';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
@@ -100,12 +100,16 @@ function MyComponent() {
     
 
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+        <View style={{ marginLeft: 270, }}>
           <View style={styles.header}>
             <TouchableHighlight
                                 onPress={goToInterview} 
@@ -139,8 +143,8 @@ function MyComponent() {
                             </TouchableHighlight>
           </View>
           <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Advice Profile</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Advice Profile</Text>
                   </View>
      </TouchableOpacity>
 
@@ -175,7 +179,7 @@ function MyComponent() {
         <View style={{alignItems: 'center', alignContent: 'center'}}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', }}>Rating</Text>
        <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15 }}>40 candidates reviews</Text>
-    <View style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, backgroundColor: '#F2F2F2', width: 200, alignItems: 'center', marginTop: 10 }}>
+    <View style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(225,225,212,0.3)', width: 200, alignItems: 'center', marginTop: 10 }}>
     <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, color: "black", alignText: 'center', fontWeight: '600' }}><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /></Text> <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black"}}> 4.7 out of 5 </Text>
                     </View>
@@ -200,6 +204,7 @@ function MyComponent() {
         </ScrollView>
       </View>
     </View>
+    </ImageBackground>
   );
 }
 
@@ -216,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
@@ -244,32 +249,37 @@ const styles = StyleSheet.create({
     padding: 10, marginTop: 50, marginLeft: 20, marginRight: 50
   },
   box2: {
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: '44%',
     height: 200,
-    borderRadius: 10,
-    borderWidth: 2, borderColor: '#f2f2f2',
+    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
   box: {
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     width: '25%',
     height: 200,
-    borderWidth: 2, borderColor: '#f2f2f2',
+    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -287,9 +297,9 @@ const styles = StyleSheet.create({
     height: 80,
     marginTop: 60,
     marginRight: 20,
-    marginBottom: 5,
+    marginBottom: -10,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#f7fff4',
     borderRadius: 5,
     paddingTop: 20,
     paddingBottom: 10,
@@ -308,7 +318,7 @@ const styles = StyleSheet.create({
   graphBar: {
     width: 20,
     borderRadius: 2,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   graphScore: {
     fontSize: 10,
@@ -320,8 +330,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'grey',
     fontWeight: 'bold',
-    marginTop: 2
-   
+    marginTop: 2,
+   marginBottom: -10
   },
   boximage: {
         width: 50,

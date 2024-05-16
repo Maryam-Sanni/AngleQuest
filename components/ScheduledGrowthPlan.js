@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduledgrowth';
+import { BlurView } from 'expo-blur';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,6 +18,7 @@ const ScheduledMeetingsTable = () => {
  
   return ( 
     <View style={styles.greenBox}>
+         <BlurView intensity={100} style={styles.blurBackground}>
     <Text style={styles.title}>Scheduled Growth Plan Meetings</Text>
     
     <View style={styles.table}>
@@ -97,6 +99,7 @@ const ScheduledMeetingsTable = () => {
           <OpenSchedule onClose={() => handleCloseModal()} />
           </View>
       </Modal>
+      </BlurView>
     </View>
   );
 }
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
+    borderBottomColor: 'rgba(225,225,212,0.3)',
   },
   cell: {
     flex: 1,
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
   },
   cell2: {
     flex: 1,
-   backgroundColor: '#F2F2F2',
+   backgroundColor: 'none',
     padding: 10,
     alignItems: 'flex-start',
   },
@@ -149,11 +152,13 @@ const styles = StyleSheet.create({
     flex: 1,
    width: "90%",
     height:250,
-    paddingBottom: 10,
     marginBottom: 20,
     marginLeft: 50, 
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'rgba(225,225,212,0.3)',
     marginTop: 30, 
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
   },
   tableheaderText: {
     fontSize: 14,
@@ -166,6 +171,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: -5,
     borderRadius: 25
+  },
+  blurBackground: {
+    flex: 1, 
+    borderRadius: 20, 
   },
 });
 

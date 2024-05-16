@@ -72,59 +72,59 @@ const HomePage = () => {
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Chats</Text>
           </View>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 20, marginLeft: 25,  fontWeight: 'bold' }}>SAP FI Hub</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 20, marginLeft: 15,  fontWeight: 'bold' }}>SAP FI Hub</Text>
           <View style={{flexDirection: 'row', marginTop: 15 }}>
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 210}}>see more</Text>
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 25,  fontWeight: 'bold' }}>Microsoft Azure Hub</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Microsoft Azure Hub</Text>
           <View style={{flexDirection: 'row', marginTop: 15 }}>
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 210}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
+          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
           
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 25,  fontWeight: 'bold' }}>Jr. PowerPoint Hub</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Jr. PowerPoint Hub</Text>
           <View style={{flexDirection: 'row', marginTop: 15 }}>
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam..</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello John, This is Maryam, Thank...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 210}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
+          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
 
           <TouchableOpacity onPress={goToMessages} style={styles.touchablechat} >
           <Text style={styles.touchableText}>See All Chats</Text>
@@ -391,8 +391,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginLeft: 100,
-    marginTop: 100
+    marginLeft: 270,
+    marginTop: 100,
   },
   greeting: {
     fontSize: 24,
@@ -430,9 +430,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 20,
+    marginLeft: -55
   },
   sideColumn: {
-    marginRight: 40,
+    marginRight: 15,
   },
   greenBorderedBox: {
     width: 580,
@@ -444,11 +445,11 @@ const styles = StyleSheet.create({
     borderWidth: 1
 },
 messageBox: {
-  width: 290,
+  width: 220,
   height: 700,
   backgroundColor: 'rgba(125,125,125,0.3)',
     borderRadius: 20,
-  marginRight: 20, 
+  marginRight: 15, 
   borderColor: 'rgba(255,255,255,0.5)',
   borderWidth: 1
 },
@@ -744,7 +745,7 @@ whiteBox: {
     width: 35,
     height: 35,
     marginRight: 10,
-    marginLeft: 25,
+    marginLeft: 15,
     borderRadius: 25
   },
 });

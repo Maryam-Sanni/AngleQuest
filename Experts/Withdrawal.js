@@ -58,8 +58,8 @@ function MyComponent() {
             
           </View>
           <TouchableOpacity onPress={handleOpenPress} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Request Withdrawal</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'rgba(0,0,0,0.4)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50,  }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: 'bold' }}>Request Withdrawal</Text>
                   </View>
      </TouchableOpacity>
 

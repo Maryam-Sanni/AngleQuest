@@ -1,5 +1,5 @@
  import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledMeetingsTable from '../components/ScheduledMeetingsTable';
@@ -7,6 +7,7 @@ import AwaitingFeedbacks from '../components/AwaitingFeedbacks';
 import CompletedFeedbacks from '../components/CompletedFeedbacks';
 import OpenModal from '../Experts/InterviewProfile'; 
 import { useNavigation } from '@react-navigation/native';
+
 
 function MyComponent() { 
     const navigation = useNavigation();
@@ -73,12 +74,16 @@ function MyComponent() {
 
 
     return (
+      <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '150%', width: '100%',flex: 1}}
+>
         <View style={{ flex: 1 }}>
             <Topbar />
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 <Sidebar />
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-                    <View style={{ marginLeft: 270, backgroundColor: 'white' }}>
+                    <View style={{ marginLeft: 270 }}>
                         <View style={styles.header}>
                             <TouchableHighlight
                                 onPress={goToInterview} 
@@ -112,11 +117,11 @@ function MyComponent() {
                             </TouchableHighlight>
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: "coral", width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Interview Profile</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Interview Profile</Text>
                   </View>
      </TouchableOpacity>
-                        
+
      <View style={styles.container}>
       <View style={styles.box}>
          <Text style = {{fontSize: 10, color: 'grey' }}>No of candidates interviewed</Text>
@@ -125,7 +130,8 @@ function MyComponent() {
            <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5 }}>500</Text>
            </View>
            <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 2 new booked session(s) today</Text>
-      </View>
+           </View>
+
       <View style={styles.box}>
         <Text style = {{fontSize: 10, color: 'grey' }}>Total Earnings</Text>
         <View style={{flexDirection: 'row'}}>
@@ -133,8 +139,10 @@ function MyComponent() {
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue' }}>$1,580</Text>
      </View>
      <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You earned a total of $30 today</Text>
+    
       </View>
-      <View style={styles.box}>
+     
+      <View style={styles.box}> 
         <Text style = {{fontSize: 10, color: 'grey' }}>Profile Visits</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-people.gif')} style={styles.boximage}  />
@@ -143,13 +151,14 @@ function MyComponent() {
       <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 10 profile visit(s) this week</Text>
       </View>
       <View style={styles.box}>
-        <Text style = {{fontSize: 10, color: 'grey' }}>Next Session in</Text>
+        <Text style = {{fontSize: 10, color: 'black' }}>Next Session in</Text>
         <View style={{flexDirection: 'row'}}>
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen' }}>{timerComponents}</Text>
            </View>
            <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
       </View>
     </View>
+    
 
                         <Modal
         animationType="slide"
@@ -168,6 +177,7 @@ function MyComponent() {
                 </ScrollView>
             </View>
         </View>
+        </ImageBackground>
     );
 }
 
@@ -184,10 +194,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: 'white',
         paddingVertical: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: 'rgba(225,225,212,0.3)',
+        backgroundColor: '#f7fff4',
     },
     item: {
         flexDirection: 'row',
@@ -199,7 +209,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         marginTop: 5, 
-        color: '#666'
+        color: 'black'
     },
     image: {
         width: 24,
@@ -214,14 +224,14 @@ const styles = StyleSheet.create({
         marginLeft: 40, marginRight: 50, marginTop: 50
       },
       box: {
-        backgroundColor: 'white',
+        backgroundColor: '#f7fff4',
         padding: 20,
-        borderRadius: 10,
+        borderRadius: 20,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         width: '22%',
         height: 150,
-        borderWidth: 2, borderColor: '#f2f2f2',
+        borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
