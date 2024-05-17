@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomModal from '../components/CustomModal'; 
+import CustomPercentageChart from '../components/PercentageChart';
 
 const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -146,7 +147,7 @@ const HomePage = () => {
       />
           <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Join coaching hubs for hands on learning with an expert</Text>
           </View>
-          <Text style={{fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
+          <Text style={{fontSize: 13, color: '#D3D3D3', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
           </BlurView>
           </View>
 
@@ -323,8 +324,12 @@ const HomePage = () => {
 
           <View style={styles.whiteBox}>
           <Text style={{fontSize: 16, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>My Angle Badge</Text>
-      
+          <View style={{flexDirection: 'row' }}>
           <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.</Text>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
+      <CustomPercentageChart percentage={45} />
+      </View>
+    </View>
           </View>
         </View>
       </View>

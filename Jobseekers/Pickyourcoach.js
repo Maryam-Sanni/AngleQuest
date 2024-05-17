@@ -173,7 +173,7 @@ function MyComponent({ onClose }) {
               alignSelf: "center",
               justifyContent: 'center',  
             }}
-            onPress={goToBookInterview}
+           
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
             {data.interviewfee}

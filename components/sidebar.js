@@ -73,7 +73,7 @@ function MyComponent() {
               style={[
                 styles.menuItem,
                 hoveredItem === menuItem && styles.menuItemHovered,
-                clickedItem === menuItem && styles.menuItemSelected
+                clickedItem === menuItem && styles.menuItemSelected 
               ]}
               onMouseEnter={() => handleItemHover(menuItem)}
               onMouseLeave={() => handleItemHover(null)}

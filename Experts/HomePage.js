@@ -168,7 +168,7 @@ const HomePage = () => {
           <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create coaching hubs and share your knowledge with your protegees</Text>
           </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 13, color: 'grey', marginTop: 15, marginLeft: 30 }}>After the good work, you also earn handsomely, lets go!</Text>
+          <Text style={{fontSize: 13, color: '#D3D3D3', marginTop: 15, marginLeft: 30 }}>After the good work, you also earn handsomely, lets go!</Text>
           </BlurView>
           </View>
 

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
+  const [selectedType, setSelectedType] = useState('Personal');
 
   const goToPlans = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
@@ -20,7 +21,7 @@ function MyComponent({ onClose }) {
                             ✕
                         </Text>
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>Personal Development Objectives</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{selectedType} Development Objectives</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
@@ -28,13 +29,14 @@ function MyComponent({ onClose }) {
         </View>
         <View style={styles.cell}>
         <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="Pick an option" value="" />
-  <Picker.Item label="Personal" value="Personal" />
-  <Picker.Item label="Team" value="Team" />
-  <Picker.Item label="Organization" value="Organization" />
-</Picker>
+                  selectedValue={selectedType}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setSelectedType(itemValue)}
+                >
+                  <Picker.Item label="Personal" value="Personal" />
+                  <Picker.Item label="Team" value="Team" />
+                  <Picker.Item label="Organization" value="Organization" />
+                  </Picker>
         </View>
       </View>
       <View style={styles.row}>
