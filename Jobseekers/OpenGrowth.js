@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity,  ScrollView, Picker, Image} from 'react-native';
+
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
-  const [selectedType, setSelectedType] = useState('Personal');
-
-  const goToPlans = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('My Growth Plans');
-    onClose(); // Close the modal
-  };
-
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -21,7 +13,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Create New Growth Plan Objective</Text>
+          <Text style={styles.headerText}>View Growth Plan Objectives</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
@@ -29,22 +21,14 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{selectedType} Development Objectives</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>Personal Development Objectives</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
           <Text>Type</Text>
         </View>
         <View style={styles.cell}>
-        <Picker
-                  selectedValue={selectedType}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setSelectedType(itemValue)}
-                >
-                  <Picker.Item label="Personal" value="Personal" />
-                  <Picker.Item label="Team" value="Team" />
-                  <Picker.Item label="Organization" value="Organization" />
-                  </Picker>
+        <Text style={{ color: 'grey' }}>Personal</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -52,11 +36,7 @@ function MyComponent({ onClose }) {
           <Text>Title</Text>
         </View>
         <View style={styles.cell}>
-           <TextInput
-            placeholder="Become SAP FI Medior expert in 6 months"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Text style={{ color: 'grey' }}>Become SAP FI Medior expert in 6 months</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -64,11 +44,7 @@ function MyComponent({ onClose }) {
           <Text>Role</Text>
         </View>
         <View style={styles.cell}>
-           <TextInput
-            placeholder="SAP FI"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Text style={{ color: 'grey' }}>SAP FI</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -76,12 +52,7 @@ function MyComponent({ onClose }) {
           <Text>Result description</Text>
         </View>
         <View style={styles.cell}>
-        <TextInput
-            placeholder="Example: To be able to find my way around SAP fi..."
-            placeholderTextColor="grey"
-            multiline
-            style={[styles.input, { height: 50 }]}
-          />
+        <Text style={{ color: 'grey', height: 50 }}>Example: To be able to find my way around SAP FI...</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -89,12 +60,7 @@ function MyComponent({ onClose }) {
           <Text>How to achieve</Text>
         </View>
         <View style={styles.cell}>
-        <TextInput
-            placeholder="Example: To be taught how to troubleshoot, find T'codes..."
-            placeholderTextColor="grey"
-            multiline
-            style={[styles.input, { height: 50 }]}
-          />
+        <Text style={{ color: 'grey', height: 50  }}>Example: To be taught how to troubleshoot, find T'codes...</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -102,12 +68,7 @@ function MyComponent({ onClose }) {
           <Text>What do you need to achieve the objective</Text>
         </View>
         <View style={styles.cell}>
-          <TextInput
-            placeholder="Continous training, practice and support"
-            placeholderTextColor="grey"
-            multiline
-            style={[styles.input, { height: 50 }]}
-          />
+        <Text style={{ color: 'grey', height: 50 }}>Continous training, practice and support</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -115,15 +76,7 @@ function MyComponent({ onClose }) {
           <Text>Progress/Level</Text>
         </View>
         <View style={styles.cell}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="Beginner" value="" />
-  <Picker.Item label="Novice" value="Novice" />
-  <Picker.Item label="Intermediate" value="Intermediate" />
-  <Picker.Item label="Advanced" value="Advanced" />
-  <Picker.Item label="Professional" value="Professional" />
-</Picker>
+        <Text style={{ color: 'grey' }}>Intermediate</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -131,11 +84,7 @@ function MyComponent({ onClose }) {
           <Text>Start Date</Text>
         </View>
         <View style={styles.cell}>
-        <TextInput
-            placeholder="1/April/2024"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Text style={{ color: 'grey' }}>1/April/2024</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -143,11 +92,7 @@ function MyComponent({ onClose }) {
           <Text>End Date</Text>
         </View>
         <View style={styles.cell}>
-        <TextInput
-            placeholder="20/Jul/2024"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
+        <Text style={{ color: 'grey' }}>20/Jul/2024</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -155,14 +100,7 @@ function MyComponent({ onClose }) {
           <Text>Status</Text>
         </View>
         <View style={styles.cell}>
-           <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="Active" value="" />
-  <Picker.Item label="Review" value="Review" />
-  <Picker.Item label="Replan" value="Replan" />
-  <Picker.Item label="Completed" value="Completed" />
-</Picker>
+        <Text style={{ color: 'grey' }}>Completed</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -182,9 +120,7 @@ function MyComponent({ onClose }) {
       </View>
       
     </View>
-    <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Create</Text>
-    </TouchableOpacity>
+   
     </View>
     
 
@@ -230,8 +166,8 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 750, 
-    width: 100,
+    marginLeft: 700, 
+    width: 150,
     paddingHorizontal: 20,
     marginTop: 10
   },

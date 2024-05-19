@@ -8,11 +8,19 @@ function MyComponent({ onClose }) {
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 <View style={styles.greenBox}>
-<TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
+<View style={styles.header}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
+            style={styles.logo}
+          />
+          <Text style={styles.headerText}>Growth Plans in Review</Text>
+       
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{ fontSize: 18, color: 'grey', fontWeight: 'bold'}}>
+            ✕
+          </Text>
+        </TouchableOpacity>
+        </View>
                         <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
@@ -107,7 +115,7 @@ function MyComponent({ onClose }) {
 <Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50 }}> Your Feedback/Remark</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <TextInput
-                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'black', borderColor: 'black',}}
+                  style={{ padding: 6, marginTop: 2.5, fontSize: 14, fontWeight: 'normal', color: '#6B7280', }}
                   placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
                 />
                 </View>
@@ -179,6 +187,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3F5637'
+  }
 });
 
 export default MyComponent;

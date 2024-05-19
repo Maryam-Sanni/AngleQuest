@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
-import OpenSchedule from '../Experts/OpenScheduledadvice';
+import OpenSchedule from '../Jobseekers/Replan';
+import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
 
 const ScheduledMeetingsTable = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   
-  
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -54,7 +72,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>Active</Text>
           </View>
-          <TouchableOpacity style={styles.cell2}>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
           <Text style={styles.open}>Open</Text>
           </TouchableOpacity>
         </View>
@@ -77,7 +95,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>Completed</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress2}>
           <Text style={styles.open}>Open</Text>
           </TouchableOpacity>
         </View>
@@ -100,7 +118,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>Completed</Text>
           </View>
-          <TouchableOpacity style={styles.cell2}>
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
           <Text style={styles.open}>Open</Text>
           </TouchableOpacity>
         </View>
@@ -123,12 +141,31 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>Replan</Text>
           </View>
-          <TouchableOpacity style={styles.cell}>
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}> 
           <Text style={styles.replan}>Replan</Text>
           </TouchableOpacity>
         </View>
       </View>
-      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenSchedule onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+          <View style={styles.modalContent}>
+          <OpenSchedule2 onClose={() => handleCloseModal2()} />
+          </View>
+      </Modal>
       </BlurView>
     </View>
   );

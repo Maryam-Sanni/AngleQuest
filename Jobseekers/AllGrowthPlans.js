@@ -23,18 +23,6 @@ function MyComponent() {
       setModalVisible(false);
     };
 
-    const goToInterview = () => {
-        navigation.navigate('Interview');
-    };
-
-    const goToGrowth = () => {
-        navigation.navigate('Growth Plan');
-    };
-
-    const goToAdvice = () => {
-        navigation.navigate('Advice');
-    };
-
 
     return (
       <ImageBackground

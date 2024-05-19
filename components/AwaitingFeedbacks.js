@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     borderRadius: 20, 
   },
+  
 });
 
 export default ScheduledMeetingsTable;

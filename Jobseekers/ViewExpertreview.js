@@ -7,11 +7,19 @@ function MyComponent({ onClose }) {
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 
 <View style={styles.greenBox}>
-<TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
+<View style={styles.header}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
+            style={styles.logo}
+          />
+          <Text style={styles.headerText}>View Expert's Review</Text>
+       
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+            ✕
+          </Text>
+        </TouchableOpacity>
+        </View> 
                         <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
  <View style={styles.container}>
       <View style={styles.row}>
@@ -224,6 +232,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
   },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3F5637'
+  }
 });
 
 export default MyComponent;

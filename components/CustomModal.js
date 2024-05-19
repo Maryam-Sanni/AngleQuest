@@ -16,15 +16,15 @@ const CustomModal = ({ visible, onClose }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)'  }}>
-        <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.8)'  }}>
+        <View style={{ backgroundColor: '#f7fff4', padding: 20, borderRadius: 10 }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Complete Your Profile</Text>
           <Text>Please complete your profile to unlock all features.</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
             <TouchableOpacity onPress={goToProfile}  style={{ padding: 10, paddingHorizontal: 30, backgroundColor: 'coral', borderRadius: 5, }}>
               <Text style={{ color: 'white' }}>Continue</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onClose(false)} style={{ padding: 8, backgroundColor: 'white', borderRadius: 5, borderColor: 'coral', borderWidth: 1 }}>
+            <TouchableOpacity onPress={() => onClose(false)} style={{ padding: 8, backgroundColor: '#f7fff4', borderRadius: 5, borderColor: 'coral', borderWidth: 1 }}>
               <Text style={{ color: 'coral' }}>Remind me later</Text>
             </TouchableOpacity>
           </View>

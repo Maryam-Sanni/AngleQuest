@@ -21,7 +21,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Create New Growth Plan Objective</Text>
+          <Text style={styles.headerText}>Replan Growth Plan</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
@@ -29,7 +29,7 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{selectedType} Development Objectives</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{selectedType} Development Objectives Replan</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
@@ -183,7 +183,7 @@ function MyComponent({ onClose }) {
       
     </View>
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Create</Text>
+      <Text style={styles.buttonTextplus}>Save Changes</Text>
     </TouchableOpacity>
     </View>
     
@@ -230,8 +230,8 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 750, 
-    width: 100,
+    marginLeft: 700, 
+    width: 150,
     paddingHorizontal: 20,
     marginTop: 10
   },
