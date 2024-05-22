@@ -1,168 +1,124 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
- 
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Modal, ScrollView, Image, TouchableOpacity} from 'react-native';
 
- const WorkExperience = ({ onClose,
-  company,
-  setCompany,
-  positionHeld,
-  setPositionHeld,
-  companyFrom,
-  setCompanyFrom,
-  companyTo,
-  setCompanyTo,
-  handleSaveEmployment
-}) => {
+const EmploymentHistoryModal = ({ visible, onClose, employmentHistory, onSave }) => {
+  const [history, setHistory] = useState(employmentHistory);
+
+  useEffect(() => {
+    setHistory(employmentHistory);
+  }, [employmentHistory]);
+
+  const handleChange = (key, value) => {
+    setHistory({ ...history, [key]: value });
+  };
+
+  const handleSave = () => {
+    onSave(history);
+    onClose();
+  };
 
   return (
-       <View style={{ flex: 1, backgroundColor: "#F2F2F2", marginLeft: 230, marginTop: 40, alignItems: 'center'  }}>
-<View style={styles.greenBox}>
-<TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: 20}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
-    <View style={{ padding: 10 }}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Employment History</Text>
-        <TouchableOpacity>
-        <Text style={styles.addEmploymentText}>+ Add Another Employment</Text>
+    <Modal visible={visible} animationType="slide" transparent>
+       <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)',}}>
+       <ScrollView>
+       <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
+            style={styles.logo}
+          />
+          <Text style={styles.headerText}>Edit Employment History</Text>
+       
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+            ✕
+          </Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.employmentContainer}>
-        <Text style={styles.labelText}>Company Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Company Name"
-          value={company}
-          onChangeText={setCompany}
-        />
-        <Text style={[styles.labelText, styles.marginTop20]}>Position Held</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Position Held"
-          value={positionHeld}
-          onChangeText={setPositionHeld}
-        />
-        <Text style={[styles.labelText, styles.marginTop20]}>Description</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Describe your role there"
-          multiline
-          value={positionHeld}
-          onChangeText={setPositionHeld}
-        />
-        <View style={[styles.row, styles.marginTop20]}>
-          <Text style={styles.labelText}>From</Text>
-          <Text style={[styles.labelText, styles.marginRight200]}>To</Text>
         </View>
-        <View style={[styles.row, styles.marginTop5]}>
+      <View style={styles.modalContainer}>
+        
           <TextInput
-            style={[styles.input, styles.flex1, styles.marginRight5, styles.padding6]}
-            placeholder="DD/MM/YYYY"
-            value={companyFrom}
-            onChangeText={setCompanyFrom}
+            style={styles.input}
+            value={history.position}
+            onChangeText={(text) => handleChange('position', text)}
+            placeholder="Position"
           />
           <TextInput
-            style={[styles.input, styles.flex1, styles.marginLeft25]}
-            placeholder="DD/MM/YYYY"
-            value={companyTo}
-            onChangeText={setCompanyTo}
+            style={styles.input}
+            value={history.company}
+            onChangeText={(text) => handleChange('company', text)}
+            placeholder="Company"
           />
+          <TextInput
+            style={styles.input}
+            value={history.duration}
+            onChangeText={(text) => handleChange('duration', text)}
+            placeholder="Duration"
+          />
+          <TextInput
+            style={styles.inputmultiline}
+            value={history.description}
+            onChangeText={(text) => handleChange('description', text)}
+            placeholder="Description"
+            multiline
+          />
+         <View style={{ marginTop: 20, width: 220, alignSelf: 'center'}}>
+        <Button title="Save Changes" onPress={handleSave} color="coral" />
         </View>
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={handleSaveEmployment}
-        >
-          <Text style={styles.saveButtonText}>Save</Text>
-        </TouchableOpacity>
       </View>
-    </View>
-    </View>
-    </View>
+      </ScrollView>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30
-  },
-  headerText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: 10
-  },
-  addEmploymentText: {
-    fontSize: 12,
-    fontWeight: 'normal',
-    color: '#206C00',
-    marginRight: 20
-  },
-  employmentContainer: {
-    padding: 8,
-    marginTop: 15,
-    borderRadius: 5,
-    backgroundColor: 'white'
-  },
-  labelText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'black'
-  },
-  input: {
-    padding: 10,
-    marginTop: 5,
-    fontWeight: 'normal',
-    color: '#6B7280',
-    borderWidth: 1,
-    borderColor: '#206C00',
-    borderRadius: 5
-  },
-  marginTop20: {
-    marginTop: 20
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  marginRight200: {
-    marginRight: 200
-  },
-  marginTop5: {
-    marginTop: 5
-  },
-  flex1: {
-    flex: 1
-  },
-  marginRight5: {
-    marginRight: 5
-  },
-  padding6: {
-    padding: 6
-  },
-  marginLeft25: {
-    marginLeft: 25
-  },
-  saveButton: {
-    alignItems: 'center',
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: 'coral',
-    borderRadius: 5
-  },
-  saveButtonText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: 'white'
-  },
-  greenBox: {
-    width: 920,
-    height:850,
+  modalContainer: {
+    height: 850,
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
     backgroundColor: '#F8F8F8',
   },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  inputmultiline: {
+    height: 200,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  header: {
+    width: 600,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginTop: 30
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3F5637'
+  }
 });
 
-export default WorkExperience;
+export default EmploymentHistoryModal;
+

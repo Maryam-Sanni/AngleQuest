@@ -3,35 +3,124 @@ import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, Modal
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import { BlurView } from 'expo-blur';
-import OpenModal1 from '../components/EditEmplyHistory'; 
+import EmploymentHistoryModal from'../components/EditEmplyHistory'; 
+import SkillsEditModal from '../components/SkillsEditModal';
+import CertificationsEditModal from '../components/CertificationsEditModal';
 
 export default function Profile() {
-  const [modalVisible1, setModalVisible1] = useState(false);
+  const initialHistory = [
+    {
+      id: 1,
+      position: 'Senior Architectural Engineer',
+      company: 'KIX Architecture Firm',
+      duration: 'May 2020 - Present',
+      description: `- Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
+- Implemented innovative sustainable design strategies, resulting in LEED Platinum certification for several projects.
+- Collaborated closely with clients to understand their needs and objectives, delivering tailored solutions within budget and timeline constraints.
+- Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.`,
+    },
+    {
+      id: 2,
+      position: 'Architectural Engineer',
+      company: 'Phoenix Engineering Consultants',
+      duration: 'July 2015 - Jan 2020',
+      description: `- Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
+- Utilized advanced software tools such as Revit and AutoCAD to create detailed architectural drawings and 3D models.
+- Conducted site visits and inspections to monitor construction progress and address any design or engineering challenges.
+- Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.`,
+    },
+    {
+      id: 3,
+      position: 'Junior Architectural Engineer',
+      company: 'Zenith Design & Construction',
+      duration: 'Sept 2012 - Feb 2015',
+      description: `- Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
+- Conducted feasibility studies and prepared design proposals, contributing to the successful acquisition of new projects.
+- Participated in interdisciplinary project meetings, communicating effectively with architects, MEP engineers, and other stakeholders.
+- Developed proficiency in building information modeling (BIM) software and contributed to the integration of BIM workflows within the firm.`,
+    },
+  ];
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentHistory, setCurrentHistory] = useState(null);
+  const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
 
-  const handleOpenPress1 = () => {
-    setModalVisible1(true);
+  const handleOpenPress = (history) => {
+    setCurrentHistory(history);
+    setModalVisible(true);
+  };
+
+  const handleSave = (updatedHistory) => {
+    const updatedHistories = employmentHistories.map((history) =>
+      history.id === updatedHistory.id ? updatedHistory : history
+    );
+    setEmploymentHistories(updatedHistories);
+  };
+
+  const [skills, setSkills] = useState([
+    'Building Information Modeling',
+    'Structural Analysis Software',
+    'Construction Documentation',
+    'Cost Estimation',
+    'AutoCAD'
+  ]);
+
+  const [skillsmodalVisible, setskillsModalVisible] = useState(false);
+
+  const handleOpenSkills = () => {
+    setskillsModalVisible(true);
   };
 
   const handleCloseModal = () => {
-    setModalVisible1(false);
+    setskillsModalVisible(false);
+  };
+
+  const handleSaveSkills = (newSkills) => {
+    setSkills(newSkills);
+  };
+
+  const [certifications, setCertifications] = useState([
+    'Licensed Professional Engineer (PE) - [London/United Kingdom]',
+    'LEED Accredited Professional (LEED AP)',
+    'Revit Architecture Certified Professional',
+    'Autodesk Certified Professional (AutoCAD)',
+    'Certified Passive House Designer (CPHD)',
+    'Building Performance Institute (BPI) Certification',
+    'Certified Construction Specifier (CCS)',
+    'Certified Energy Manager (CEM)'
+  ]);
+
+  const [certificationsmodalVisible, setcertificationsModalVisible] = useState(false);
+
+  const handleOpenCertifications = () => {
+    setcertificationsModalVisible(true);
+  };
+
+  const handleClosecertificationsModal = () => {
+    setcertificationsModalVisible(false);
+  };
+
+  const handleSaveCertifications = (newCertifications) => {
+    setCertifications(newCertifications);
   };
 
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
+  style={{ height: '110%', width: '100%',flex: 1}}
 >
-<BlurView intensity={100} style={styles.blurBackground}>
+<BlurView intensity={70} style={styles.blurBackground}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ padding: 20 }}>
+         <View style={styles.glassBox}>
+         <View style={styles.pagecontainer}>
+         <View style={{ padding: 20 }}>
             <View style={{ flex: 1 }}>
               {/* Profile Card */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50, marginLeft: 220 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>My Profile</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -58,15 +147,15 @@ export default function Profile() {
                       />
                       <Text style={{ marginLeft: 5, fontSize: 12 }}>London, United Kingdom</Text>
                     </View>
-                    <Text style={{ marginTop: 5, fontSize: 12, fontStyle: 'italic', color: '#63EC55', fontWeight: 'bold'  }}>Online</Text>
+                    <Text style={{ marginTop: 5, fontSize: 12, fontStyle: 'italic', color: '#63EC55' }}>Online</Text>
                   </View>
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#63EC55', textAlign: 'right', fontWeight: 'bold' }}>Available Balance</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold' }}>Available Balance</Text>
                   <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5 }}>$1,234.00</Text>
-                  <Text style={{ fontSize: 16, color: 'white', marginTop: 10 }}>$25/hr</Text>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#FFFFFF', borderRadius: 5, borderWidth: 1, borderColor: '#63EC55' }}>
+                  <Text style={{ fontSize: 16, color: 'black', marginTop: 10 }}>$25/hr</Text>
+                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
                     <Text style={{ fontSize: 12 }}>Preview Profile</Text>
                   </TouchableOpacity>
                 </View>
@@ -75,9 +164,9 @@ export default function Profile() {
           </View>
 
           {/* Profile Description */}
-          <View style={{ marginLeft: 230 }}>
+          <View style={{ }}>
             <View style={{ marginTop: 10, paddingHorizontal: 10, marginRight: 30 }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: '#63EC55', fontWeight: 'bold' }}>About</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: '#206C00', fontWeight: 'bold' }}>About</Text>
               <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10 }}>
                 John Smith is a passionate architectural engineer with over 10 years of
                 experience in designing and implementing innovative building solutions.
@@ -94,7 +183,7 @@ export default function Profile() {
               </Text>
               <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10 }}>
                 John is committed to sustainability and strives to incorporate
-                energy-efficient solutions and #63EC55 building practices into every project
+                energy-efficient solutions and #206C00 building practices into every project
                 he undertakes. He is well-versed in LEED certification requirements and
                 actively seeks out opportunities to minimize environmental impact while
                 maximizing efficiency and comfort for building occupants.
@@ -110,126 +199,110 @@ export default function Profile() {
                 time to support local community initiatives focused on sustainability and
                 environmental conservation.
               </Text>
-              <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)', marginTop: 30 }} />
+              <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
             </View>
           </View>
 
           {/* Employment History */}
-          <View style={{ marginLeft: 230, marginRight: 30, marginTop: 20, marginBottom: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#63EC55' }}>Employment History</Text>
-              <TouchableOpacity onPress={handleOpenPress1}>
+          <View style={{ marginTop: 20}}>
+          {employmentHistories.map((history) => (
+        <View key={history.id} style={styles.historyItem}>
+          <View style={styles.historyheader}>
+            <Text style={styles.historyheaderText}>{history.position} | {history.company}</Text>
+            <TouchableOpacity onPress={() => handleOpenPress(history)}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                style={styles.image}
+              />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.duration}>{history.duration}</Text>
+          <Text style={styles.description}>{history.description}</Text>
+        </View>
+      ))}
+
+      {currentHistory && (
+        <EmploymentHistoryModal
+          visible={isModalVisible}
+          onClose={() => setModalVisible(false)}
+          employmentHistory={currentHistory}
+          onSave={handleSave}
+        />
+      )}
+      </View>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+
+          {/* Skills */}
+          <View style={{ marginTop: 20, marginRight: 30 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Skills</Text>
+        <TouchableOpacity onPress={handleOpenSkills}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+            style={{ width: 20, height: 20 }} // adjust width and height as needed
+            resizeMode="cover" // or any other resizeMode that suits your need
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            {skills.map((skill, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{skill}</Text>
+            ))}
+          </View>
+        </View>
+      </View>
+
+      <SkillsEditModal
+        visible={skillsmodalVisible}
+        skills={skills}
+        onClose={handleCloseModal}
+        onSave={handleSaveSkills}
+      />
+    </View>
+    
+      <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC',  marginTop: 30 }} />
+                           {/* Certifications */}
+                           <View style={{ marginTop: 20, marginRight: 30 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Certifications</Text>
+        <TouchableOpacity onPress={handleOpenCertifications}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+            style={{ width: 20, height: 20 }} // adjust width and height as needed
+            resizeMode="cover" // or any other resizeMode that suits your need
+          />
+        </TouchableOpacity>
+      </View>
+      <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
+        {certifications.map((cert, index) => (
+          <Text key={index}>
+            - {cert} {'\n'}
+          </Text>
+        ))}
+      </Text>
+
+      <CertificationsEditModal
+        visible={certificationsmodalVisible}
+        certifications={certifications}
+        onClose={handleClosecertificationsModal}
+        onSave={handleSaveCertifications}
+      />
+    </View>
+ <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+                      {/* Other Experience*/}
+ <View style={{  marginTop: 20, marginRight: 30 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Other Experience</Text>
+              <TouchableOpacity>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
                 resizeMode="cover" // or any other resizeMode that suits your need
               />
               </TouchableOpacity>
-            </View>
-            <Text style={{ marginTop: 10, fontSize: 14, color: 'white' }}>
-              Senior Architectural Engineer | KIX Architecture Firm
-            </Text>
-            <Text style={{ marginTop: 3, fontSize: 12, color: 'white' }}>May 2020 - Present</Text>
-            <Text style={{ marginTop: 15, fontSize: 14 }}>
-              - Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
-              {'\n'}
-              - Implemented innovative sustainable design strategies, resulting in LEED Platinum certification for several projects.
-              {'\n'}
-              - Collaborated closely with clients to understand their needs and objectives, delivering tailored solutions within budget and timeline constraints.
-              {'\n'}
-              - Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.
-            </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: 'white' }}>
-              Architectural Engineer | Phoenix Engineering Consultants
-            </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'white' }}>July 2015 - Jan 2020</Text>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
-              {'\n'}
-              - Utilized advanced software tools such as Revit and AutoCAD to create detailed architectural drawings and 3D models.
-              {'\n'}
-              - Conducted site visits and inspections to monitor construction progress and address any design or engineering challenges.
-              {'\n'}
-              Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.
-            </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: 'white' }}>
-              Junior Architectural Engineer | Zenith Design & Construction
-            </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'white'  }}>Sept 2012 - Feb 2015</Text>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
-              {'\n'}
-              - Conducted feasibility studies and prepared design proposals, contributing to the successful acquisition of new projects.
-              {'\n'}
-              - Participated in interdisciplinary project meetings, communicating effectively with architects, MEP engineers, and other stakeholders.
-              {'\n'}
-              Developed proficiency in building information modeling (BIM) software and contributed to the integration of BIM workflows within the firm.
-            </Text>
-          </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)', marginTop: 30 }} />
-
-          {/* Skills */}
-              <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#63EC55' }}>Skills</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-                    </View>
-                    <View style={{ marginLeft: 220, marginRight: 50 }}>
-                    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Building Information Modeling</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Structural Analysis Software</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Construction Documentation</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Cost Estimation</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>AutoCAD</Text>
-      </View>
-    </View>
-    </View>
-    
-      <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)',  marginTop: 30 }} />
-                           {/* Certifications */}
-    <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#63EC55' }}>Certifications</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Licensed Professional Engineer (PE) - [London/United Kingdom]
-              {'\n'}
-              - LEED Accredited Professional (LEED AP)
-              {'\n'}
-              - Revit Architecture Certified Professional
-              {'\n'}
-             - Autodesk Certified Professional (AutoCAD)
-             {'\n'}
-             - Certified Passive House Designer (CPHD)
-             {'\n'}
-            - Building Performance Institute (BPI) Certification
-            {'\n'}
-            - Certified Construction Specifier (CCS)
-             {'\n'}
-             - Certified Energy Manager (CEM)
-            </Text>
-            </View>
- <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)', marginTop: 30 }} />
-                      {/* Other Experience*/}
- <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#63EC55' }}>Other Experience</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
             </View>
             <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
               - Technical Writing
@@ -247,11 +320,11 @@ export default function Profile() {
             - Risk Management
             </Text>
             </View>
-<View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.5)', marginTop: 30 }} />
+<View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                      {/*Location*/}
-                     <View style={{ marginLeft: 230, marginTop: 20, marginRight: 30  }}>
+                     <View style={{ marginTop: 20, marginRight: 30  }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#63EC55' }}>Preferred Locations</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Preferred Locations</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -259,7 +332,7 @@ export default function Profile() {
               />
             </View>
                     </View>
-                    <View style={{ marginLeft: 220, marginRight: 50, marginBottom: 50 }}>
+                    <View style={{  marginRight: 50, marginBottom: 50 }}>
                     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>United States</Text>
@@ -270,9 +343,9 @@ export default function Profile() {
       </View>
     </View>
     </View>
-     <View style={{ marginLeft: 230, marginTop: 5, marginRight: 30  }}>
+     <View style={{  marginTop: 5, marginRight: 30  }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#63EC55' }}>Preferred Roles</Text>
+              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Preferred Roles</Text>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={{ width: 20, height: 20 }} // adjust width and height as needed
@@ -280,7 +353,7 @@ export default function Profile() {
               />
             </View>
                     </View>
-                    <View style={{ marginLeft: 220, marginRight: 50, marginBottom: 50 }}>
+                    <View style={{ marginRight: 50, marginBottom: 50 }}>
                     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Auto CAD</Text>
@@ -288,16 +361,8 @@ export default function Profile() {
         <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>SAP</Text>
       </View>
     </View>
-    <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible1}
-        onRequestClose={handleCloseModal}
-      >
-          <View style={styles.modalContent}>
-          <OpenModal1 onClose={() => handleCloseModal()} />
-          </View>
-      </Modal>
+    </View>
+    </View>
     </View>
         </ScrollView>
       </View>
@@ -308,12 +373,34 @@ export default function Profile() {
 }
 
 const styles = {
-  modalContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 10
+  pagecontainer: {
+    backgroundColor: '#f7fff4',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    padding: 20, 
+    marginTop: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 30,
+    borderWidth: 2, 
+    borderColor: 'rgba(225,225,212,0.3)',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+ glassBox: {
+  backgroundColor: 'rgba(225,255,212,0.3)',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    marginTop: 30,
+    marginLeft: 240,
+    marginRight: 30,
+    marginBottom: 30,
   },
   container: {
     flex: 1,
@@ -336,5 +423,32 @@ const styles = {
   blurBackground: {
     flex: 1, 
     backgroundColor: 'rgba(125,255,212,0.3)',
+  },
+  duration: {
+    marginTop: 3,
+    fontSize: 12,
+    color: 'grey',
+  },
+  description: {
+    marginTop: 15,
+    fontSize: 14,
+  },
+  historyItem: {
+    marginBottom: 20,
+  },
+  historyheader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  historyheaderText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#206C00',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    resizeMode: 'cover',
   },
 };

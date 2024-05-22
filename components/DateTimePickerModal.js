@@ -93,9 +93,11 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: "#FFFFFF",
+    alignSelf: 'center',
+    backgroundColor: "#F8F8F8",
     borderRadius: 10,
     padding: 20,
+    width: 920
   },
   headerText: {
     fontSize: 18,

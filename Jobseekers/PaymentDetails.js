@@ -1,25 +1,35 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
-import appleLogo from '../assets/apple.jpg';
-import Top from '../components/top';
 
-function MyComponent() {
+
+function MyComponent({ onClose }) {
   return (
-    <View style={{ height: '65%' }}>
-    <Top/ >
-    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={styles.greenBox}>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
+            style={styles.logo}
+          />
+          <Text style={styles.headerText}>Pay</Text>
+       
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+            ✕
+          </Text>
+        </TouchableOpacity>
+        </View> 
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.section}>
-            <Text style={styles.heading}>Payment Details</Text>
              <TouchableOpacity style={styles.saveButton}>
               <View style={styles.buttonContent}>
-                <Image source={appleLogo} style={styles.appleIcon} />
-                <Text style={styles.saveButtonText}>Pay</Text>
+                <Text style={styles.saveButtonText}>Pay with Billing Info</Text>
               </View>
             </TouchableOpacity>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 10, marginRight: 50, marginBottom: 5}} />
-           <Text style={{ fontSize: 14, fontWeight: "bold", color: "black", marginBottom: 30, marginLeft: 400 }}>Or</Text>
+           <Text style={{ fontSize: 14, fontWeight: "bold", color: "black", marginBottom: 30, alignText: 'center', alignSelf: 'center'}}>Or</Text>
              <View style={styles.inputField}>
               <Text style={styles.label}>Email</Text>
               <View style={styles.inputContainer}>
@@ -73,22 +83,49 @@ function MyComponent() {
             <Text style={styles.saveButtonText}>Pay</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </ScrollView>
+  
+    </View>
+    </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollViewContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
+  greenBox: {
+    width: 600,
+    height: 700,
+    backgroundColor: '#F8F8F8',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3F5637'
   },
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    marginLeft: 250,
-    marginRight: 250
+    marginLeft: 50,
+    marginRight: 50
   },
   content: {
     paddingHorizontal: 8,
@@ -96,12 +133,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 20,
-  },
-  heading: {
-    fontSize: 18,
-    color: 'black',
-    fontWeight: 'bold',
-    marginBottom: 25,
   },
   inputField: {
     marginBottom: 20,
@@ -113,10 +144,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-  },
-  icon: {
-    width: 24,
-    height: 24,
   },
   input: {
     flex: 1,
@@ -147,11 +174,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  appleIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 5,
   },
 });
 

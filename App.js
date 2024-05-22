@@ -70,6 +70,10 @@ import Earnings from './Experts/Earnings';
 import Withdrawal from './Experts/Withdrawal';
 import NewGrowthPlan from './Jobseekers/GrowthPlan';
 import AllGrowthPlan from './Jobseekers/AllGrowthPlans';
+import NewInterview from './Jobseekers/Interview';
+import AllInterviews from './Jobseekers/AllInterviews';
+import PaymentPage from './Jobseekers/PaymentPage';
+import growthPaymentPage from './Jobseekers/PaymentPageGrowth';
 
 const Stack = createStackNavigator();
 
@@ -166,6 +170,10 @@ const App = () => {
         <Stack.Screen name="Withdrawal" component={Withdrawal} />
         <Stack.Screen name="New Growth Plan" component={NewGrowthPlan} />
         <Stack.Screen name="My Growth Plans" component={AllGrowthPlan} />
+        <Stack.Screen name="New Interview" component={NewInterview} />
+        <Stack.Screen name="All Interviews" component={AllInterviews} />
+        <Stack.Screen name="Interview Payment" component={PaymentPage} />
+        <Stack.Screen name="Growth Plan Payment" component={growthPaymentPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

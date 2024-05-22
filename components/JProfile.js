@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F8F8F8',
     borderRadius: 10,
-    width: 320, // fixed width for consistency
     alignItems: 'center',
     padding: 20,
   },
@@ -74,6 +73,8 @@ const styles = StyleSheet.create({
   greenBox: {
     backgroundColor: '#F8F8F8',
     padding: 20,
+    width: 800,
+    borderRadius: 10,
   },
   closeButton: {
     position: 'absolute',

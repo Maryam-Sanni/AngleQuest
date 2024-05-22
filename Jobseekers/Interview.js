@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
-import OpenModal from '../Jobseekers/Pickyourcoach';
-import OpenModal2 from '../Jobseekers/Newgrowth';
+import OpenModal from '../Jobseekers/PickInterviewer';
+import OpenModal2 from '../Jobseekers/NewInterview';
 
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -42,8 +42,7 @@ function MyComponent() {
           <View style={styles.header}>
             <TouchableOpacity>
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: 'bold'}}>Growth Plan</Text>
+                <Text style={{color: 'black', fontWeight: 'bold', marginLeft: 30}}>Interview</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -53,14 +52,19 @@ function MyComponent() {
                   </View>
      </TouchableOpacity>
 
-     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 200}}>
+     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 100}}>
+      <View style={styles.bubbleContainer}>
+        <View style={styles.bubble}>
+          <Text style={styles.bubbleText}>Its often not the most qualified candidate on paper that get the job, Its who performs best at the interview.</Text>
+          <View style={styles.bubbleTail}></View>
+      </View>
+    </View>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: 'coral', width: 150, alignItems: 'center', alignContent: 'center', borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Pick an expert</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Pick an Interviewer</Text>
                   </View>
      </TouchableOpacity>
-     <Text style={{ fontSize: 14, color: "white", alignText: 'center', marginTop: 10 }}>You need to pick an expert before creating your first growth plan.</Text>
-     <Text style={{ fontSize: 14, color: "white", alignText: 'center', }}>This expert will serve as your coach, and will work with you on your plans, advisory and learning.</Text>
+     <Text style={{ fontSize: 14, color: "white", alignText: 'center', marginTop: 10 }}>Let an expert in your field interview you before your next appointment wth ratings, advice and insider tips</Text>
      </View>
 
             </View>
@@ -137,6 +141,39 @@ const styles = StyleSheet.create({
   },
   blurBackground: {
     flex: 1, 
+  },
+  bubbleContainer: {
+    position: 'relative',
+    marginBottom: 20,
+  },
+  bubble: {
+    maxWidth: 250,
+    padding: 15,
+    backgroundColor: '#f7fff4',
+    borderRadius: 20,
+    borderBottomLeftRadius: 0,
+    borderColor: '#206C00',
+    borderWidth: 1,
+    marginLeft: 150
+  },
+  bubbleText: {
+    fontSize: 14,
+    textAlign: 'left',
+  },
+  bubbleTail: {
+    position: 'absolute',
+    bottom: -15,
+    left: 20,
+    width: 0,
+    height: 0,
+    borderTopWidth: 15,
+    borderTopColor: '#f7fff4',
+    borderLeftWidth: 15,
+    borderLeftColor: 'transparent',
+    borderRightWidth: 15,
+    borderRightColor: 'transparent',
+    borderBottomWidth: 0,
+    borderBottomColor: 'transparent',
   },
 });
 export default MyComponent;

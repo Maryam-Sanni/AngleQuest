@@ -4,12 +4,11 @@ import ChatListScreen from '../components/ExpertsChatListScreen';
 import ChatScreen from '../components/expertsChatScreen'; 
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
-
+import { BlurView } from 'expo-blur';
 
 function MainScreen() {
   
   return (
-    
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={styles.container}>

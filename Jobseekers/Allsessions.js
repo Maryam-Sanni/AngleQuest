@@ -1,65 +1,74 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ImageBackground} from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import { BlurView } from 'expo-blur';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { FaStar } from 'react-icons/fa';
 
 function MyComponent() {
+
   return (
+    <ImageBackground
+    source={require ('../assets/Background.png') }
+  style={{ height: '110%', width: '100%',flex: 1}}
+>
+<BlurView intensity={70} style={{flex: 1}}>
     <View style={{flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={styles.scrollViewContent} indicatorStyle="black">
+        <View style={styles.glassBox}>
     <View style={styles.container}>
-    <View style={{ flexDirection: "row",  alignItems: "flex-start", paddingHorizontal: 10, marginTop: 5, marginBottom: 20 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Sessions</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35 }}>Upcoming Sessions</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35 }}>Past Sessions</Text>
-        <Text style={{ fontSize: 14, marginLeft: 35  }}>Saved</Text>
+    <View style={{ flexDirection: "row",  alignItems: "flex-start", marginTop: 10, marginBottom: 20, }}>
+    <TouchableOpacity>
+    <View style={styles.session}>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>All Sessions</Text>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+        <View style={styles.session2}>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}> Upcoming Sessions</Text>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+        <View style={styles.session2}>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00"}}>Past Sessions</Text>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+        <View style={styles.session2}>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Saved</Text>
       </View>
-      <View style={styles.sessionContainer}>
-        {/* Sessions */}
-        <View style={styles.session}>
-          <Text style={styles.sessionText}>Civil Engineer</Text>
-        </View>
-        <View style={styles.session}>
-          <Text style={styles.sessionText}>Architect</Text>
-        </View>
-        <View style={styles.session}>
-          <Text style={styles.sessionText}>Surveyor</Text>
-        </View>
-        <View style={styles.session}>
-          <Text style={styles.sessionText}>Constructor</Text>
-        </View>
-        <View style={styles.session}>
-          <Text style={styles.sessionText}>Construction Foreman</Text>
-        </View>
+      </TouchableOpacity>
       </View>
-      {/* Architectural Engineer */}
-      <Text style={styles.heading}>Architectural Engineer</Text>
-      {/* Other sessions */}
+      {/* Session */}
+      <View style={{ flexDirection: 'row'}}>
+      <Text style={styles.heading}>Growth Plan Session</Text> 
+      <Text style={styles.subheading}>with Joop Melcher</Text>
+      </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleDay}>Friday</Text>
+          <Text style={styles.scheduleDay}>19-09-2024</Text>
           <Text style={styles.scheduleTime}>09:00pm - 10:00pm</Text>
         </View>
       </View>
       <Text style={styles.description}>
-        John Smith is a passionate architectural engineer with over 10 years of experience in designing and implementing innovative building solutions. With a Bachelor's degree in Architectural Engineering from XYZ University and a Master's degree in Sustainable Design, John brings a unique blend of technical expertise and environmental consciousness to his projects.
+      Joop Melcher is a seasoned technology enthusiast and expert, particularly well-versed in SAP Financial Accounting (SAP FI). With a rich background in information technology and a deep understanding of enterprise resource planning systems, Joop has established himself as a go-to professional for businesses looking to optimize their financial processes using SAP solutions. 
       </Text>
       <View style={styles.infoContainer}>
         <View style={styles.info}>
           <View style={styles.infoItem}>
-            <Image
+          <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
-            />
-            <Text>Save</Text>
+            /> 
+            <Text style={{marginLeft: 5}}>Save</Text>
           </View>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9851efa0d826fe660810451d5369a608759a0cc7acc997dd6024a4423a37ac83?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-            style={styles.infoImage}
-          />
+          <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
+                    </View>
           <View style={styles.infoItem}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -76,31 +85,32 @@ function MyComponent() {
           <Text>Upcoming</Text>
         </View>
       </View>
-      {/* Construction Manager */}
-      <Text style={styles.heading}>Construction Manager</Text>
-      {/* Other sessions */}
+      {/* Session */}
+      <View style={{ flexDirection: 'row'}}>
+      <Text style={styles.heading}>Advice Session</Text> 
+      <Text style={styles.subheading}>with Jessica Martinez</Text>
+      </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleDay}>Monday</Text>
+          <Text style={styles.scheduleDay}>02-03-2024</Text>
           <Text style={styles.scheduleTime}>06:30pm - 07:30pm</Text>
         </View>
       </View>
       <Text style={styles.description}>
-        Jessica Martinez is a dedicated construction engineer with over 8 years of experience in the industry. She holds a Bachelor's degree in Civil Engineering from XYZ University and is a licensed Professional Engineer (PE). Throughout her career, Jessica has successfully managed a wide range of construction projects, including residential, commercial, and infrastructure developments.
+        Jessica Martinez is an experienced advisor known for her insightful guidance and strategic advice sessions. With a broad background in business consulting, she specializes in helping individuals and organizations achieve their goals through tailored advice and actionable strategies. Jessica’s expertise spans various industries, enabling her to offer unique perspectives and practical solutions to complex challenges.
       </Text>
       <View style={styles.infoContainer}>
         <View style={styles.info}>
           <View style={styles.infoItem}>
-            <Image
+          <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
-            />
-            <Text>Save</Text>
+            /> 
+            <Text style={{marginLeft: 5}}>Save</Text>
           </View>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9851efa0d826fe660810451d5369a608759a0cc7acc997dd6024a4423a37ac83?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-            style={styles.infoImage}
-          />
+          <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
+                    </View>
           <View style={styles.infoItem}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -117,31 +127,32 @@ function MyComponent() {
           <Text>Concluded</Text>
         </View>
       </View>
-      {/* Construction Foreman */}
-      <Text style={styles.heading}>Construction Foreman</Text>
-      {/* Other sessions */}
+     {/* Session*/}
+     <View style={{ flexDirection: 'row'}}>
+      <Text style={styles.heading}>Interview Session</Text> 
+      <Text style={styles.subheading}>with Adetola Adebayo</Text>
+      </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleDay}>Sunday</Text>
+          <Text style={styles.scheduleDay}>25-06-2024</Text>
           <Text style={styles.scheduleTime}>10:00am - 11:00am</Text>
         </View>
       </View>
       <Text style={styles.description}>
-        Michael Johnson is a seasoned construction foreman with over 15 years of experience in the industry. Beginning his career as a laborer, he quickly rose through the ranks due to his exceptional leadership skills and dedication to excellence. Michael has a deep understanding of all aspects of construction, from site preparation to project completion.
+      Adetola Adebayo is a distinguished expert specializing in interview coaching and preparation. With a strong background in human resources and career development, Adetola has become a trusted advisor for individuals seeking to excel in job interviews and advance their careers.
       </Text>
       <View style={styles.infoContainer}>
         <View style={styles.info}>
           <View style={styles.infoItem}>
-            <Image
+          <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
-            />
-            <Text>Save</Text>
+            /> 
+            <Text style={{marginLeft: 5}}>Save</Text>
           </View>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9851efa0d826fe660810451d5369a608759a0cc7acc997dd6024a4423a37ac83?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-            style={styles.infoImage}
-          />
+          <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
+                    </View>
           <View style={styles.infoItem}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -158,30 +169,74 @@ function MyComponent() {
           <Text>Upcoming</Text>
         </View>
       </View>
-      {/* Another Construction Foreman Session */}
-      <Text style={styles.heading}>Construction Foreman</Text>
+      {/* Session */}
+     <View style={{ flexDirection: 'row'}}>
+      <Text style={styles.heading}>Hub Session</Text> 
+      <Text style={styles.subheading}>with Joop Melcher</Text>
+      </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleDay}>Tuesday</Text>
+          <Text style={styles.scheduleDay}>21-05-2024</Text>
           <Text style={styles.scheduleTime}>09:00pm - 10:00pm</Text>
         </View>
       </View>
       <Text style={styles.description}>
-        Michael Johnson is a seasoned construction foreman with over 15 years of experience in the industry. Beginning his career as a laborer, he quickly rose through the ranks due to his exceptional leadership skills and dedication to excellence. Michael has a deep understanding of all aspects of construction, from site preparation to project completion.
+      Joop Melcher is a seasoned technology enthusiast and expert, particularly well-versed in SAP Financial Accounting (SAP FI). With a rich background in information technology and a deep understanding of enterprise resource planning systems, Joop has established himself as a go-to professional for businesses looking to optimize their financial processes using SAP solutions. 
       </Text>
       <View style={styles.infoContainer}>
         <View style={styles.info}>
           <View style={styles.infoItem}>
-            <Image
+          <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
-            />
-            <Text>Save</Text>
+            /> 
+            <Text style={{marginLeft: 5}}>Save</Text>
           </View>
+          <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
+                    </View>
+          <View style={styles.infoItem}>
+            <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+              style={styles.infoImage}
+            />
+            <Text>Netherlands</Text>
+          </View>
+        </View>
+        <View style={styles.status}>
           <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9851efa0d826fe660810451d5369a608759a0cc7acc997dd6024a4423a37ac83?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-            style={styles.infoImage}
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+            style={styles.statusImage}
           />
+          <Text>Upcoming</Text>
+        </View>
+      </View>
+     {/* Session*/}
+     <View style={{ flexDirection: 'row'}}>
+      <Text style={styles.heading}>Interview Session</Text> 
+      <Text style={styles.subheading}>with Andrew Hutchings</Text>
+      </View>
+      <View style={styles.scheduleContainer}>
+        <View style={styles.schedule}>
+          <Text style={styles.scheduleDay}>07-02-2024</Text>
+          <Text style={styles.scheduleTime}>09:00pm - 10:00pm</Text>
+        </View>
+      </View>
+      <Text style={styles.description}>
+      Andrew Hutchings is a renowned expert in interview coaching and preparation. With extensive experience in human resources and talent acquisition, Andrew has established himself as a leading advisor for individuals aiming to excel in job interviews and advance their careers.
+      </Text>
+      <View style={styles.infoContainer}>
+        <View style={styles.info}>
+          <View style={styles.infoItem}>
+          <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+              style={styles.infoImage}
+            /> 
+            <Text style={{marginLeft: 5}}>Save</Text>
+          </View>
+          <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /></Text>
+                    </View>
           <View style={styles.infoItem}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -199,20 +254,44 @@ function MyComponent() {
         </View>
       </View>
     </View>
+    </View>
     </ScrollView>
     </View>
     </View>
+    </BlurView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-   flex: 1, 
+    backgroundColor: '#f7fff4',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
     padding: 20, 
-    backgroundColor: 'white',
-    paddingTop: 40,
-    paddingBottom: 20,
-    marginLeft: 210,
+    marginTop: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 30,
+    borderWidth: 2, 
+    borderColor: 'rgba(225,225,212,0.3)',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+ glassBox: {
+  backgroundColor: 'rgba(225,255,212,0.3)',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    marginTop: 30,
+    marginLeft: 240,
+    marginRight: 30,
+    marginBottom: 30,
   },
   header: {
     flexDirection: 'row',
@@ -238,8 +317,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#206C00',
     borderRadius: 5,
-    backgroundColor: '#CEF1BF',
-    marginRight: 5,
+    backgroundColor: '#d3f9d8',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  session2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#206C00',
+    borderRadius: 5,
+    backgroundColor: 'none',
+    marginRight: 10,
     marginBottom: 5,
   },
   sessionText: {
@@ -252,8 +343,15 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 18,
-    color: 'black',
-    marginTop: 10,
+    color: 'Black',
+    fontWeight: '500',
+    marginTop: 15,
+  },
+  subheading: {
+    fontSize: 14,
+    color: 'Black',
+    marginLeft: 5,
+    marginTop: 18,
   },
   scheduleContainer: {
     flexDirection: 'row',
@@ -268,18 +366,18 @@ const styles = StyleSheet.create({
     color: '#206C00',
     marginRight: 5,
     borderColor: '#206C00',
-    backgroundColor: '#CEF1BF',
+    backgroundColor: '#d3f9d8',
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 3
+    borderRadius: 0,
   },
   scheduleTime: {
     color: 'black',
     marginLeft: -5,
     borderRightWidth: 1,
     borderColor: '#206C00',
-    borderRadius: 3,
+    borderRadius: 0,
     borderTopWidth: 1, 
     borderBottomWidth: 1,
     backgroundColor: 'white',
