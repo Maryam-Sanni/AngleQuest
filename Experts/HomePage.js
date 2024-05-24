@@ -1,13 +1,21 @@
 import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Alert  } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import SuggestionModal from '../components/Suggestion';
+import OpenModal2 from '../Experts/Growthplanprofile';
+import OpenModal3 from '../components/Createhubform';
+import OpenModal4 from '../Experts/AdviceProfile';
+import OpenModal5 from '../Experts/InterviewProfile';
 
 const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
+  const [modalVisible5, setModalVisible5] = useState(false);
   const navigation = useNavigation();
 
 
@@ -35,6 +43,38 @@ const HomePage = () => {
     navigation.navigate('Growth Plan');
   };
   
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+  };
+
+  const handleOpenPress4 = () => {
+    setModalVisible4(true);
+  };
+
+  const handleCloseModal4 = () => {
+    setModalVisible4(false);
+  };
+
+  const handleOpenPress5 = () => {
+    setModalVisible5(true);
+  };
+
+  const handleCloseModal5 = () => {
+    setModalVisible5(false);
+  };
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -141,34 +181,42 @@ const HomePage = () => {
           <Text style={styles.touchableText}>Drop Suggestion</Text>
           </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={goToInterview}>
+          <TouchableOpacity onPress={handleOpenPress2} >
           <View style={{flexDirection: 'row', marginTop: 10}}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Conduct thorough interview on jobseekers for preparedness </Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a growth plan profile</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToGrowth}>
+          <TouchableOpacity onPress={handleOpenPress3} >
           <View style={{flexDirection: 'row', marginTop: 5, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Review and provide guideance to the growth plan of protegees | Give assessment</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create hubs</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToManageHubs} >
+          <TouchableOpacity onPress={handleOpenPress4} >
           <View style={{flexDirection: 'row', marginTop: 5, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create coaching hubs and share your knowledge with your protegees</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create advice profiles</Text>
           </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 13, color: '#D3D3D3', marginTop: 15, marginLeft: 30 }}>After the good work, you also earn handsomely, lets go!</Text>
+          <TouchableOpacity onPress={handleOpenPress5} >
+          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <Image
+       source={require('../assets/mark.png')}
+        style={styles.icon}
+      />
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create interview profile</Text>
+          </View>
+          </TouchableOpacity>
           </BlurView>
           </View>
 
@@ -382,12 +430,59 @@ const HomePage = () => {
       
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={() => handleCloseModal2()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={() => handleCloseModal3()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={() => handleCloseModal4()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible5}
+        onRequestClose={handleCloseModal5}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal5 onClose={() => handleCloseModal5()} />
+        </View>
+      </Modal>
     </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
+  },
   container: {
     flex: 1,
     alignItems: 'center',

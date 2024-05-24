@@ -3,7 +3,6 @@ import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, 
 import OpenSchedule2 from '../components/JProfile';
 import OpenModal from '../Jobseekers/Newgrowth';
 
-
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -11,18 +10,18 @@ function MyComponent({ onClose }) {
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdown, setIsDropdown] = useState(false);
   const [mainModalVisible, setMainModalVisible] = useState(true);
-    const [formModalVisible, setformModalVisible] = useState(false);
+  const [formModalVisible, setformModalVisible] = useState(false);
+  const [isPressed, setIsPressed] = useState(false); // State for tracking whether the TouchableOpacity is pressed
 
-    const handleOpenPress = () => {
-        setMainModalVisible(false);
-        setformModalVisible(true);
-    };
+  const handleOpenPress = () => {
+    setMainModalVisible(false);
+    setformModalVisible(true);
+  };
 
-    const handleCloseformModal = () => {
-        setformModalVisible(false);
-        onClose();
-    };
-
+  const handleCloseformModal = () => {
+    setformModalVisible(false);
+    onClose();
+  };
 
   const toggleMode = () => {
     setIsDropdown(!isDropdown);
@@ -44,17 +43,17 @@ function MyComponent({ onClose }) {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
       expert: "Emily Ray",
       job: "Data Analyst",
-       country: "Switzerland",
+      country: "Switzerland",
       interviewfee: "$50",
     },
     {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
       expert: "Monica Jerry",
       job: "UI/UX Designer",
-       country: "Canada",
+      country: "Canada",
       interviewfee: "$30",
     },
-     {
+    {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
       expert: "Fisayo Fosudo",
       job: "Java Engineer",
@@ -65,7 +64,7 @@ function MyComponent({ onClose }) {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
       expert: "Will Cooper",
       job: "Backend Dev.",
-       country: "United Kingdom",
+      country: "United Kingdom",
       interviewfee: "$70",
     },
   ];
@@ -81,7 +80,11 @@ function MyComponent({ onClose }) {
     ).start();
   };
 
-const renderInput = () => {
+  const handleTogglePress = () => {
+    setIsPressed(!isPressed); // Toggle the pressed state
+  };
+
+  const renderInput = () => {
     if (isDropdown) {
       return (
         <Picker
@@ -108,13 +111,13 @@ const renderInput = () => {
             onChangeText={setSearch}
           />
           <TouchableOpacity onPress={toggleMode} style={styles.iconContainer}>
-          <Image source={require('../assets/arrow-down.png')} style={{ width: 15, height: 15, }} />
+            <Image source={require('../assets/arrow-down.png')} style={{ width: 15, height: 15, }} />
           </TouchableOpacity>
         </View>
       );
     }
   };
-  
+
   const renderCards = () => {
     return cardData.map((data, index) => (
       <Animated.View
@@ -143,77 +146,63 @@ const renderInput = () => {
             shadowRadius: 3.84,
             elevation: 5,
             backgroundColor: "#d3f9d8",
-           
           }}
         >
-            <TouchableOpacity onPress={handleOpenPress2}> 
-          <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
-          <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-           <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 50, height: 50, aspectRatio: 1,  marginTop: 10, }}
-            />
-           
- <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',  }}>
-              {data.expert} 
-            </Text>
-            <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10   }}>
-              {data.job}
-            </Text>
-            
-            
-            
-</View>
-</View>
-</TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
+            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: isPressed ? "darkgreen" : "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+              <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+                  style={{ width: 50, height: 50, aspectRatio: 1, marginTop: 10, }}
+                />
+                <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', }}>
+                  {data.expert}
+                </Text>
+                <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
+                  {data.job}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18, }}>
-            <View style={{ flex: 1 , }}>
-            <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', justifyContent: "center"  }}>
-           
-            <Image
-                          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                          style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5,  }}
-                        />
-                        <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2,  }}>{data.country}</Text>
-                        </View>
-                       
-             
-              
+            <View style={{ flex: 1, }}>
+              <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', justifyContent: "center" }}>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                  style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5, }}
+                />
+                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.country}</Text>
+              </View>
             </View>
           </View>
           <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
-           
-            
-          <View style={{ flexDirection: 'row', marginTop: 20}}>
-          <View style={{ flexDirection: 'column', alignItems: 'center'}}>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1, 
-              borderColor: '#206C00', 
-              borderRadius: 5,
-              backgroundColor: '#F0FFF9',
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginLeft: 10,
-              alignSelf: "center",
-              justifyContent: 'center',  
-            }}
-           
-          >
-            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
-            Growth Plan
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
-              {data.interviewfee}</Text>
-              </View>
-        
-                  
-                      <TouchableOpacity style={{ height: 18, width: 18, borderRadius: 15, borderWidth: 1, borderColor: "#4A5568", marginRight: 5, position: 'absolute', right: 10, marginTop: 10,   }} />
-                    
-                
-                     
-          
+          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#206C00',
+                  borderRadius: 5,
+                  backgroundColor: '#F0FFF9',
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                  marginLeft: 10,
+                  alignSelf: "center",
+                  justifyContent: 'center',
+                }}
+              >
+                <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
+                  Growth Plan
+                </Text>
+              </TouchableOpacity>
+              <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
+                {data.interviewfee}</Text>
+            </View>
+            <TouchableOpacity
+              style={{ height: 18, width: 18, borderRadius: 15, borderWidth: 1, borderColor: "#4A5568", marginRight: 10, marginLeft: 80, marginTop: 10, backgroundColor: 'none' }}
+              onPressIn={handleTogglePress}  // Triggered when pressing down
+              onPressOut={handleTogglePress} // Triggered when releasing
+            />
           </View>
         </View>
       </Animated.View>
@@ -222,57 +211,55 @@ const renderInput = () => {
 
   return (
     <>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={mainModalVisible}
-                onRequestClose={onClose}
-            >
-                <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={styles.greenBox}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
-            style={styles.logo}
-          />
-          <Text style={styles.headerText}>Choose Growth Plan Coach</Text>
-       
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
-            ✕
-          </Text>
-        </TouchableOpacity>
-        </View> 
-          
-        <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-          <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your coach</Text>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
-     <View style={styles.dropcontainer}>
-      {renderInput()}
-    </View>
-     </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
-              {renderCards()}
-            </View>
-            <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Continue</Text>
-    </TouchableOpacity>
-          </View>
-          </ScrollView>
-       
-      </View>
-      </Modal>
-          <Modal
-                animationType="slide"
-                transparent={true}
-                visible={formModalVisible}
-                onRequestClose={handleCloseformModal}
-            >
-                <View style={styles.modalContent}>
-                    <OpenModal onClose={handleCloseformModal} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={mainModalVisible}
+        onRequestClose={onClose}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+            <View style={styles.greenBox}>
+              <View style={styles.header}>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
+                  style={styles.logo}
+                />
+                <Text style={styles.headerText}>Choose Growth Plan Coach</Text>
+
+                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                  <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                    ✕
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
+                <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your coach</Text>
+                <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
+                <View style={styles.dropcontainer}>
+                  {renderInput()}
                 </View>
-            </Modal>
+              </View>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
+                {renderCards()}
+              </View>
+              <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus} >
+                <Text style={styles.buttonTextplus}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={formModalVisible}
+        onRequestClose={handleCloseformModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseformModal} />
+        </View>
+      </Modal>
 
       <Modal
         animationType="slide"
@@ -280,12 +267,11 @@ const renderInput = () => {
         visible={modalVisible2}
         onRequestClose={handleCloseModal2}
       >
-          <View style={styles.modalContent}>
+        <View style={styles.modalContent}>
           <OpenSchedule2 onClose={() => handleCloseModal2()} />
-          </View>
+        </View>
       </Modal>
-        
-      </>
+    </>
   );
 }
 
@@ -305,7 +291,7 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 820, 
+    marginLeft: 820,
     width: 150,
     paddingHorizontal: 20,
     marginTop: 10,
@@ -373,3 +359,4 @@ const styles = StyleSheet.create({
 });
 
 export default MyComponent;
+

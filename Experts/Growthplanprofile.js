@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center',  }}>
-<View style={styles.greenBox}>
-<TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
+    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={styles.greenBox}>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
+            style={styles.logo}
+          />
+          <Text style={styles.headerText}>Create Growth Plan Profile</Text>
+       
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+            ✕
+          </Text>
+        </TouchableOpacity>
+        </View> 
      <TouchableOpacity style={styles.buttonNew} >
       <Text style={styles.buttonTextNew}>New +</Text>
     </TouchableOpacity>
@@ -166,6 +175,8 @@ function MyComponent({ onClose }) {
 
 
     </View>
+
+</ScrollView>
 </View>
 );
 }
@@ -259,14 +270,36 @@ const styles = StyleSheet.create({
     width: 920,
     height:600,
     backgroundColor: '#F8F8F8',
-   marginTop: 40
   },
   input: {
     outline: 'black',
     borderWidth: 1,
     borderColor: 'black',
   },
-  
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3F5637'
+  },
 });
 
 export default MyComponent;

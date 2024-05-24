@@ -1,5 +1,5 @@
 import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Alert  } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
@@ -7,9 +7,16 @@ import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
+import OpenModal2 from '../Jobseekers/PickInterviewer';
+import OpenModal3 from '../Jobseekers/Pickyourcoach';
+import OpenModal4 from '../Jobseekers/Pickyourhub';
+
 
 const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -26,6 +33,29 @@ const HomePage = () => {
     navigation.navigate('Coaching Hubs');
   };
  
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+  };
+
+  const handleOpenPress4 = () => {
+    setModalVisible4(true);
+  };
+
+  const handleCloseModal4 = () => {
+    setModalVisible4(false);
+  };
 
   return (
     <ImageBackground
@@ -126,27 +156,33 @@ const HomePage = () => {
           <Text style={styles.touchableText}>Drop Suggestion</Text>
           </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={handleOpenPress2} >
           <View style={{flexDirection: 'row', marginTop: 10,}}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Let our expert prepare you for your next interview</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Pick an expert as your coach</Text>
           </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress3} >
           <View style={{flexDirection: 'row', marginTop: 5, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a career growth plan with a coach</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create your growth plan</Text>
           </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress4} >
           <View style={{flexDirection: 'row', marginTop: 5, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Join coaching hubs for hands on learning with an expert</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Join a hub</Text>
           </View>
+          </TouchableOpacity>
           <Text style={{fontSize: 13, color: '#D3D3D3', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
           </BlurView>
           </View>
@@ -341,12 +377,49 @@ const HomePage = () => {
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     <CustomModal visible={custommodalVisible} onClose={() => setCustomModalVisible(false)} />
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={() => handleCloseModal2()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={() => handleCloseModal3()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={() => handleCloseModal4()} />
+        </View>
+      </Modal>
     </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -450,6 +523,23 @@ blurBackground: {
     paddingHorizontal: 20,
     marginTop: 12,
     marginLeft: 100,
+    backgroundColor: 'rgba(200,200,125,0.3)',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  touchablechat: {
+    padding: 8,
+    paddingHorizontal: 20,
+    marginTop: 60,
+    marginLeft: 30,
+    marginRight: 30,
     backgroundColor: 'rgba(200,200,125,0.3)',
     borderRadius: 20,
     shadowColor: '#000',
