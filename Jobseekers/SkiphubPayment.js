@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import OpenModal from '../Jobseekers/PaymentDetailsinterview';
+import OpenModal from '../Jobseekers/PaymentDetails';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -40,11 +40,11 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View> 
       <Text style={{color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65 }}>Hello Patrick, Review your cart </Text>
-       <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65 }}>$15 for Interview  </Text>
+       <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65 }}>$50 Hub subscription  </Text>
     <View style={styles.box}>
- <Text style={{fontSize: 14, color: '#206C00', marginLeft: 10 }}>1 hour interview session with Joop Melcher for the position of "Power Platform Developer" </Text>
+ <Text style={{fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15, marginBottom: 15  }}>• Enjoy a total hands-on with Joop Melcher </Text>
  </View>
- <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 25 }}>Total: $15</Text>
+ <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 50 }}>Total: $50</Text>
 
  <View style={{ flexDirection: 'row' }}>
 <TouchableOpacity onPress={onClose} style={styles.buttonplus} >
@@ -57,7 +57,7 @@ function MyComponent({ onClose }) {
                     </View>
                 </View>
             </Modal>
-            <Modal 
+            <Modal
                 animationType="slide"
                 transparent={true}
                 visible={paymentModalVisible}
@@ -121,7 +121,7 @@ greenBox: {
          borderWidth: 1,
         borderColor: 'coral',
         padding: 5,
-        marginTop: 300,
+        marginTop: 200,
         marginLeft: 730, 
         width: 100,
         paddingHorizontal: 20,
@@ -129,7 +129,7 @@ greenBox: {
       },
       buttonskip: {
         backgroundColor: 'coral',
-         marginTop: 300,
+         marginTop: 200,
         borderWidth: 1,
         borderColor: 'coral',
         padding: 5,

@@ -99,7 +99,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>What do you need to achieve the objective</Text>
+          <Text>What do you need to achieve the objective?</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -112,16 +112,48 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Progress/Level</Text>
+          <Text>How often do you want to review with your coach?</Text>
+        </View>
+        <View style={styles.cell}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="Weekly" value="Weekly" />
+  <Picker.Item label="Monthly" value="Monthly" />
+  <Picker.Item label="Quarterly" value="Quarterly" />
+  <Picker.Item label="Biannually" value="Biannually" />
+  <Picker.Item label="Annually" value="Annually" />
+</Picker>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text>Starting Level</Text>
         </View>
         <View style={styles.cell}>
         <Picker
   style={styles.picker} 
 >
   <Picker.Item label="Beginner" value="" />
-  <Picker.Item label="Novice" value="Novice" />
-  <Picker.Item label="Intermediate" value="Intermediate" />
-  <Picker.Item label="Advanced" value="Advanced" />
+  <Picker.Item label="Junior" value="Junior" />
+  <Picker.Item label="Medior" value="Medior" />
+  <Picker.Item label="Senior" value="Senior" />
+  <Picker.Item label="Professional" value="Professional" />
+</Picker>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text>Target Level</Text>
+        </View>
+        <View style={styles.cell}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label="Beginner" value="" />
+  <Picker.Item label="Junior" value="Junior" />
+  <Picker.Item label="Medior" value="Medior" />
+  <Picker.Item label="Senior" value="Senior" />
   <Picker.Item label="Professional" value="Professional" />
 </Picker>
         </View>
@@ -207,7 +239,6 @@ const styles = StyleSheet.create({
     width: 920,
     height:550,
     backgroundColor: '#F8F8F8',
-    marginTop: 40
   },
   row: {
     flexDirection: 'row',

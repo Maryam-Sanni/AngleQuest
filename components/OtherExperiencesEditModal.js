@@ -1,19 +1,18 @@
-// SkillsEditModal.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const SkillsEditModal = ({ visible, skills, onClose, onSave }) => {
-  const [editableSkills, setEditableSkills] = useState([...skills]);
+const OtherExperiencesEditModal = ({ visible, otherExperiences, onClose, onSave }) => {
+  const [editableOtherExperiences, setEditableOtherExperiences] = useState([...otherExperiences]);
 
-  const handleSaveSkills = () => {
-    onSave(editableSkills);
+  const handleSaveOtherExperiences = () => {
+    onSave(editableOtherExperiences);
     onClose();
   };
 
-  const handleSkillChange = (text, index) => {
-    const updatedSkills = [...editableSkills];
-    updatedSkills[index] = text;
-    setEditableSkills(updatedSkills);
+  const handleOtherExperienceChange = (text, index) => {
+    const updatedOtherExperiences = [...editableOtherExperiences];
+    updatedOtherExperiences[index] = text;
+    setEditableOtherExperiences(updatedOtherExperiences);
   };
 
   return (
@@ -23,32 +22,31 @@ const SkillsEditModal = ({ visible, skills, onClose, onSave }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-       <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)',}}>
+        <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)',}}>
       <View style={styles.modalView}>
-      <View style={styles.header}>
+        <View style={styles.header}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Edit Skills</Text>
-       
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
-            ✕
-          </Text>
-        </TouchableOpacity>
+          <Text style={styles.headerText}>Edit Other Experiences</Text>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+              ✕
+            </Text>
+          </TouchableOpacity>
         </View>
-        {editableSkills.map((skill, index) => (
+        {editableOtherExperiences.map((experience, index) => (
           <TextInput
             key={index}
             style={styles.input}
-            onChangeText={(text) => handleSkillChange(text, index)}
-            value={skill}
+            onChangeText={(text) => handleOtherExperienceChange(text, index)}
+            value={experience}
           />
         ))}
         <View style={{ width: 200, marginTop: 20}}>
-        <Button title="Save" onPress={handleSaveSkills} color="coral"/>
-      </View>
+          <Button title="Save Changes" onPress={handleSaveOtherExperiences} color="coral" />
+        </View>
       </View>
       </View>
     </Modal>
@@ -59,19 +57,18 @@ const styles = StyleSheet.create({
   modalView: {
     flex: 1,
     alignItems: 'center',
-   backgroundColor: '#F8F8F8',
+    backgroundColor: '#F8F8F8',
     marginTop: 40,
     width: 600
   },
   input: {
     height: 40,
-    borderColor: 'none',
-    borderRadius: 20,
+    borderColor: '#206C00',
+    borderWidth: 1,
     marginBottom: 10,
-    width: '50%',
+    width: '70%',
     paddingHorizontal: 10,
-    backgroundColor: '#d3f9d8',
-    color: '#206C00'
+    backgroundColor: 'white',
   },
   closeButton: {
     position: 'absolute',
@@ -100,4 +97,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SkillsEditModal;
+export default OtherExperiencesEditModal;

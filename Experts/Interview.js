@@ -91,7 +91,10 @@ function MyComponent() {
                                 onMouseEnter={() => setIsInterviewHovered(true)}
                                 onMouseLeave={() => setIsInterviewHovered(false)}>
                                 <View style={styles.item}>
-                                    <Image source={require('../assets/expertsinterview.png')} style={styles.image} />
+                                <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                                     <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Interviews</Text>
                                 </View>
                             </TouchableHighlight>
@@ -101,7 +104,10 @@ function MyComponent() {
                                 onMouseEnter={() => setIsGrowthHovered(true)}
                                 onMouseLeave={() => setIsGrowthHovered(false)}>
                                 <View style={styles.item}>
-                                    <Image source={require('../assets/expertsgrowth.png')} style={styles.image} />
+                                <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                                     <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Growth Plan</Text>
                                 </View>
                             </TouchableHighlight>
@@ -111,7 +117,10 @@ function MyComponent() {
                                 onMouseEnter={() => setIsAdviceHovered(true)}
                                 onMouseLeave={() => setIsAdviceHovered(false)}>
                                 <View style={styles.item}>
-                                    <Image source={require('../assets/expertsadvice.png')} style={styles.image} />
+                                <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                                     <Text style={[styles.headertext, isAdviceHovered && { color: 'coral' }]}>Advice</Text>
                                 </View>
                             </TouchableHighlight>
@@ -205,11 +214,11 @@ const styles = StyleSheet.create({
         marginRight: 10, 
     }, 
     headertext: {
-        marginLeft: 5,
-        fontSize: 14,
-        fontWeight: '500',
-        marginTop: 5, 
-        color: 'black'
+      marginLeft: 5,
+      fontSize: 14,
+      fontWeight: '500',
+      marginTop: 5,
+      color: '#666'
     },
     image: {
         width: 24,

@@ -23,11 +23,11 @@ function MyComponent() {
         break;
       case menuItems[2]:
         // Navigate to Dashboard
-        navigation.navigate('Personal Development');
+        navigation.navigate('New Growth Plan');
         break;
       case menuItems[3]:
         // Navigate to Experts
-        navigation.navigate('Experts');
+        navigation.navigate('New Interview');
         break;
         case menuItems[4]:
           // Navigate to Sessions

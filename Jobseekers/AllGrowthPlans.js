@@ -39,7 +39,7 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: 'bold'}}>Growth Plan</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Growth Plan</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -88,7 +88,7 @@ function MyComponent() {
            <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10 }}>Completed</Text>
            <Image source={require('../assets/organization.png')} style={styles.boximage}  />
      </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>1 replan available</Text>
+     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10, color: 'coral' }}>1 replan available</Text>
     </View>
     </View>
 

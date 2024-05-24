@@ -1,10 +1,178 @@
-import React from 'react';
-import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
+import EmploymentHistoryModal from'../components/EditEmplyHistory'; 
+import SkillsEditModal from '../components/SkillsEditModal';
+import CertificationsEditModal from '../components/CertificationsEditModal';
+import OtherExperiencesEditModal from '../components/OtherExperiencesEditModal';
+import PreferredLocationsEditModal from '../components/PreferredLocationsEditModal';
+import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
+
 
 export default function Profile() {
+  const initialHistory = [
+    {
+      id: 1,
+      position: 'Senior Architectural Engineer',
+      company: 'KIX Architecture Firm',
+      duration: 'May 2020 - Present',
+      description: `- Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
+- Implemented innovative sustainable design strategies, resulting in LEED Platinum certification for several projects.
+- Collaborated closely with clients to understand their needs and objectives, delivering tailored solutions within budget and timeline constraints.
+- Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.`,
+    },
+    {
+      id: 2,
+      position: 'Architectural Engineer',
+      company: 'Phoenix Engineering Consultants',
+      duration: 'July 2015 - Jan 2020',
+      description: `- Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
+- Utilized advanced software tools such as Revit and AutoCAD to create detailed architectural drawings and 3D models.
+- Conducted site visits and inspections to monitor construction progress and address any design or engineering challenges.
+- Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.`,
+    },
+    {
+      id: 3,
+      position: 'Junior Architectural Engineer',
+      company: 'Zenith Design & Construction',
+      duration: 'Sept 2012 - Feb 2015',
+      description: `- Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
+- Conducted feasibility studies and prepared design proposals, contributing to the successful acquisition of new projects.
+- Participated in interdisciplinary project meetings, communicating effectively with architects, MEP engineers, and other stakeholders.
+- Developed proficiency in building information modeling (BIM) software and contributed to the integration of BIM workflows within the firm.`,
+    },
+  ];
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentHistory, setCurrentHistory] = useState(null);
+  const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
+
+  const handleOpenPress = (history) => {
+    setCurrentHistory(history);
+    setModalVisible(true);
+  };
+
+  const handleSave = (updatedHistory) => {
+    const updatedHistories = employmentHistories.map((history) =>
+      history.id === updatedHistory.id ? updatedHistory : history
+    );
+    setEmploymentHistories(updatedHistories);
+  };
+
+  const [skills, setSkills] = useState([
+    'Building Information Modeling',
+    'Structural Analysis Software',
+    'Construction Documentation',
+    'Cost Estimation',
+    'AutoCAD'
+  ]);
+
+  const [skillsmodalVisible, setskillsModalVisible] = useState(false);
+
+  const handleOpenSkills = () => {
+    setskillsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setskillsModalVisible(false);
+  };
+
+  const handleSaveSkills = (newSkills) => {
+    setSkills(newSkills);
+  };
+
+  const [preferredLocations, setPreferredLocations] = useState([
+    'United States',
+    'Germany',
+    'Canada',
+    'UAE',
+    'Nigeria',
+  ]);
+
+  const [preferredLocationsModalVisible, setPreferredLocationsModalVisible] = useState(false);
+
+  const handleOpenPreferredLocations = () => {
+    setPreferredLocationsModalVisible(true);
+  };
+
+  const handleClosePreferredLocationsModal = () => {
+    setPreferredLocationsModalVisible(false);
+  };
+
+  const handleSavePreferredLocations = (newPreferredLocations) => {
+    setPreferredLocations(newPreferredLocations);
+  };
+
+  const [certifications, setCertifications] = useState([
+    'Licensed Professional Engineer (PE) - [London/United Kingdom]',
+    'LEED Accredited Professional (LEED AP)',
+    'Revit Architecture Certified Professional',
+    'Autodesk Certified Professional (AutoCAD)',
+    'Certified Passive House Designer (CPHD)',
+    'Building Performance Institute (BPI) Certification',
+    'Certified Construction Specifier (CCS)',
+    'Certified Energy Manager (CEM)'
+  ]);
+
+  const [certificationsmodalVisible, setcertificationsModalVisible] = useState(false);
+
+  const handleOpenCertifications = () => {
+    setcertificationsModalVisible(true);
+  };
+
+  const handleClosecertificationsModal = () => {
+    setcertificationsModalVisible(false);
+  };
+
+  const handleSaveCertifications = (newCertifications) => {
+    setCertifications(newCertifications);
+  };
+
+  const [otherExperiences, setOtherExperiences] = useState([
+    'Technical Writing',
+    'Research and Development',
+    'Quality Assurance/Quality Control (QA/QC)',
+    'Client Relationship Management',
+    'Construction Administration',
+    'Feasibility Studies',
+    'Risk Management'
+  ]);
+  const [otherExperiencesModalVisible, setOtherExperiencesModalVisible] = useState(false);
+
+  const handleOpenOtherExperiences = () => {
+    setOtherExperiencesModalVisible(true);
+  };
+
+  const handleCloseOtherExperiencesModal = () => {
+    setOtherExperiencesModalVisible(false);
+  };
+
+  const handleSaveOtherExperiences = (newOtherExperiences) => {
+    setOtherExperiences(newOtherExperiences);
+  };
+
+  const [preferredRoles, setPreferredRoles] = useState([
+    'Java Programming',
+    'Microsoft Azure',
+    'SAP',
+  ]);
+  
+  const [preferredRolesModalVisible, setPreferredRolesModalVisible] = useState(false);
+  
+  const handleOpenPreferredRoles = () => {
+    setPreferredRolesModalVisible(true);
+  };
+  
+  const handleClosePreferredRolesModal = () => {
+    setPreferredRolesModalVisible(false);
+  };
+  
+  const handleSavePreferredRoles = (newPreferredRoles) => {
+    setPreferredRoles(newPreferredRoles);
+  };
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -104,165 +272,191 @@ export default function Profile() {
           </View>
 
           {/* Employment History */}
-          <View style={{  marginRight: 30, marginTop: 20, marginBottom: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Employment History</Text>
+          <View style={{ marginTop: 20}}>
+          {employmentHistories.map((history) => (
+        <View key={history.id} style={styles.historyItem}>
+          <View style={styles.historyheader}>
+            <Text style={styles.historyheaderText}>{history.position} | {history.company}</Text>
+            <TouchableOpacity onPress={() => handleOpenPress(history)}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
+                style={styles.image}
               />
-            </View>
-            <Text style={{ marginTop: 10, fontSize: 14, color: '#206C00' }}>
-              Senior Architectural Engineer | KIX Architecture Firm
-            </Text>
-            <Text style={{ marginTop: 3, fontSize: 12, color: 'white' }}>May 2020 - Present</Text>
-            <Text style={{ marginTop: 15, fontSize: 14 }}>
-              - Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
-              {'\n'}
-              - Implemented innovative sustainable design strategies, resulting in LEED Platinum certification for several projects.
-              {'\n'}
-              - Collaborated closely with clients to understand their needs and objectives, delivering tailored solutions within budget and timeline constraints.
-              {'\n'}
-              - Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.
-            </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: '#206C00' }}>
-              Architectural Engineer | Phoenix Engineering Consultants
-            </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'white' }}>July 2015 - Jan 2020</Text>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
-              {'\n'}
-              - Utilized advanced software tools such as Revit and AutoCAD to create detailed architectural drawings and 3D models.
-              {'\n'}
-              - Conducted site visits and inspections to monitor construction progress and address any design or engineering challenges.
-              {'\n'}
-              Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.
-            </Text>
-            <Text style={{ marginTop: 15, fontSize: 14, color: '#206C00' }}>
-              Junior Architectural Engineer | Zenith Design & Construction
-            </Text>
-            <Text style={{ marginTop: 5, fontSize: 12, color: 'white'  }}>Sept 2012 - Feb 2015</Text>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
-              {'\n'}
-              - Conducted feasibility studies and prepared design proposals, contributing to the successful acquisition of new projects.
-              {'\n'}
-              - Participated in interdisciplinary project meetings, communicating effectively with architects, MEP engineers, and other stakeholders.
-              {'\n'}
-              Developed proficiency in building information modeling (BIM) software and contributed to the integration of BIM workflows within the firm.
-            </Text>
+            </TouchableOpacity>
           </View>
+          <Text style={styles.duration}>{history.duration}</Text>
+          <Text style={styles.description}>{history.description}</Text>
+        </View>
+      ))}
+
+      {currentHistory && (
+        <EmploymentHistoryModal
+          visible={isModalVisible}
+          onClose={() => setModalVisible(false)}
+          employmentHistory={currentHistory}
+          onSave={handleSave}
+        />
+      )}
+      </View>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
 
           {/* Skills */}
-              <View style={{ marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Skills</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-                    </View>
-                    <View style={{ marginRight: 50 }}>
-                    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Building Information Modeling</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Structural Analysis Software</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Construction Documentation</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Cost Estimation</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>AutoCAD</Text>
+          <View style={{ marginTop: 20, marginRight: 30 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Skills</Text>
+        <TouchableOpacity onPress={handleOpenSkills}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+            style={{ width: 20, height: 20 }} // adjust width and height as needed
+            resizeMode="cover" // or any other resizeMode that suits your need
+          />
+        </TouchableOpacity>
       </View>
-    </View>
+
+      <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            {skills.map((skill, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{skill}</Text>
+            ))}
+          </View>
+        </View>
+      </View>
+
+      <SkillsEditModal
+        visible={skillsmodalVisible}
+        skills={skills}
+        onClose={handleCloseModal}
+        onSave={handleSaveSkills}
+      />
     </View>
     
       <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                            {/* Certifications */}
-    <View style={{ marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Certifications</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Licensed Professional Engineer (PE) - [London/United Kingdom]
-              {'\n'}
-              - LEED Accredited Professional (LEED AP)
-              {'\n'}
-              - Revit Architecture Certified Professional
-              {'\n'}
-             - Autodesk Certified Professional (AutoCAD)
-             {'\n'}
-             - Certified Passive House Designer (CPHD)
-             {'\n'}
-            - Building Performance Institute (BPI) Certification
-            {'\n'}
-            - Certified Construction Specifier (CCS)
-             {'\n'}
-             - Certified Energy Manager (CEM)
-            </Text>
-            </View>
+                           <View style={{ marginTop: 20, marginRight: 30 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Certifications</Text>
+        <TouchableOpacity onPress={handleOpenCertifications}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+            style={{ width: 20, height: 20 }} // adjust width and height as needed
+            resizeMode="cover" // or any other resizeMode that suits your need
+          />
+        </TouchableOpacity>
+      </View>
+      <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
+        {certifications.map((cert, index) => (
+          <Text key={index}>
+            - {cert} {'\n'}
+          </Text>
+        ))}
+      </Text>
+
+      <CertificationsEditModal
+        visible={certificationsmodalVisible}
+        certifications={certifications}
+        onClose={handleClosecertificationsModal}
+        onSave={handleSaveCertifications}
+      />
+    </View>
  <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                       {/* Other Experience*/}
- <View style={{ marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Other Experience</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Technical Writing
-              {'\n'}
-              -Research and Development
-              {'\n'}
-              - Quality Assurance/Quality Control (QA/QC)
-              {'\n'}
-             - Client Relationship Management
-             {'\n'}
-             - Construction Administration
-             {'\n'}
-            - Feasibility Studies
-            {'\n'}
-            - Risk Management
-            </Text>
-            </View>
+                      <View style={{ marginTop: 20, marginRight: 30 }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Other Experience</Text>
+    <TouchableOpacity onPress={handleOpenOtherExperiences}>
+      <Image
+        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+        style={{ width: 20, height: 20 }}
+        resizeMode="cover"
+      />
+    </TouchableOpacity>
+  </View>
+  <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
+    {otherExperiences.map((experience, index) => (
+      <Text key={index}>
+        - {experience} {'\n'}
+      </Text>
+    ))}
+  </Text>
+
+  <OtherExperiencesEditModal
+    visible={otherExperiencesModalVisible}
+    otherExperiences={otherExperiences}
+    onClose={handleCloseOtherExperiencesModal}
+    onSave={handleSaveOtherExperiences}
+  />
+</View>
+
 <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 30 }} />
                      {/*Location*/}
-                     <View style={{ marginTop: 20, marginRight: 30  }}>
+                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Preferred Locations</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
+                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Preferred Locations</Text>
+                      <TouchableOpacity onPress={handleOpenPreferredLocations}>
+                        <Image
+                          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                          style={{ width: 20, height: 20 }}
+                          resizeMode="cover"
+                        />
+                      </TouchableOpacity>
                     </View>
-                    <View style={{ marginRight: 50, marginBottom: 50 }}>
-                    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>United States</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Germany</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Canada</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>UAE</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Nigeria</Text>
+
+                    <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+          {preferredLocations.map((location, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{location}</Text>
+            ))}
+          </View>
+        </View>
       </View>
-    </View>
-    </View>
-    </View>
-    </View>
-        </ScrollView>
+
+                    <PreferredLocationsEditModal
+                      visible={preferredLocationsModalVisible}
+                      preferredLocations={preferredLocations}
+                      onClose={handleClosePreferredLocationsModal}
+                      onSave={handleSavePreferredLocations}
+                    />
+                  </View>
+   
+   {/*Roles*/}
+   <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+                  <View style={{ marginTop: 20, marginRight: 30 }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Preferred Roles</Text>
+    <TouchableOpacity onPress={handleOpenPreferredRoles}>
+      <Image
+        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+        style={{ width: 20, height: 20 }} // adjust width and height as needed
+        resizeMode="cover" // or any other resizeMode that suits your need
+      />
+    </TouchableOpacity>
+  </View>
+  <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+          {preferredRoles.map((role, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{role}</Text>
+            ))}
+          </View>
+        </View>
       </View>
-    </View>
-    </BlurView>
+
+
+  <PreferredRolesEditModal
+    visible={preferredRolesModalVisible}
+    preferredRoles={preferredRoles}
+    onClose={handleClosePreferredRolesModal}
+    onSave={handleSavePreferredRoles}
+  />
+</View>
+                  </View>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </BlurView>
     </ImageBackground>
   );
 }
@@ -296,7 +490,7 @@ const styles = {
     marginLeft: 240,
     marginRight: 30,
     marginBottom: 30,
-  },
+  }, 
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -314,5 +508,32 @@ const styles = {
     margin: 5,
     color: '#206C00',
     textAlign: 'center',
+  },
+  duration: {
+    marginTop: 3,
+    fontSize: 12,
+    color: 'grey',
+  },
+  description: {
+    marginTop: 15,
+    fontSize: 14,
+  },
+  historyItem: {
+    marginBottom: 20,
+  },
+  historyheader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  historyheaderText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#206C00',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    resizeMode: 'cover',
   },
 };

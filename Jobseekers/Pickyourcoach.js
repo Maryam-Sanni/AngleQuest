@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import OpenSchedule2 from '../components/JProfile';
+import OpenModal from '../Jobseekers/Newgrowth';
 
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
-  const navigation = useNavigation(); 
   const [modalVisible2, setModalVisible2] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdown, setIsDropdown] = useState(false);
+  const [mainModalVisible, setMainModalVisible] = useState(true);
+    const [formModalVisible, setformModalVisible] = useState(false);
 
-  const goToPlans = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('Growth Plan Payment');
-    onClose(); // Close the modal
-  };
+    const handleOpenPress = () => {
+        setMainModalVisible(false);
+        setformModalVisible(true);
+    };
+
+    const handleCloseformModal = () => {
+        setformModalVisible(false);
+        onClose();
+    };
+
 
   const toggleMode = () => {
     setIsDropdown(!isDropdown);
@@ -57,39 +63,11 @@ function MyComponent({ onClose }) {
     },
     {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
-    expert: "John Smith",
-    job: "Dev Ops",
-     country: "Canada",
-    interviewfee: "$50",
-  },
-   {
-    description: "Here is a description of what your coach does, kindly read the description carefully.",
-    expert: "Vee Venice",
-    job: "SAP FI",
-     country: "India",
-    interviewfee: "$20",
-  },
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
       expert: "Will Cooper",
       job: "Backend Dev.",
        country: "United Kingdom",
-      interviewfee: "$30",
+      interviewfee: "$70",
     },
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
-    expert: "John Smith",
-    job: "Frontend Dev.",
-     country: "Netherlands",
-    interviewfee: "$50",
-  },
-   {
-    description: "Here is a description of what your coach does, kindly read the description carefully.",
-    expert: "Vee Venice",
-    job: "SAP FI",
-    country: "United Kingdom",
-    interviewfee: "$50",
-  },
   ];
 
   const handleCardAnimation = (index, toValue) => {
@@ -206,8 +184,8 @@ const renderInput = () => {
           <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
            
             
-          <View style={{ flexDirection: 'row', marginTop: 30}}>
-                      
+          <View style={{ flexDirection: 'row', marginTop: 20}}>
+          <View style={{ flexDirection: 'column', alignItems: 'center'}}>
           <TouchableOpacity
             style={{
               borderWidth: 1, 
@@ -223,12 +201,15 @@ const renderInput = () => {
            
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
-            {data.interviewfee}
+            Growth Plan
             </Text>
           </TouchableOpacity>
+          <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
+              {data.interviewfee}</Text>
+              </View>
         
                   
-                      <TouchableOpacity style={{ height: 20, width: 20, borderRadius: 15, borderWidth: 1, borderColor: "#4A5568", marginRight: 5, marginLeft: 100, marginTop: 10,   }} />
+                      <TouchableOpacity style={{ height: 18, width: 18, borderRadius: 15, borderWidth: 1, borderColor: "#4A5568", marginRight: 5, position: 'absolute', right: 10, marginTop: 10,   }} />
                     
                 
                      
@@ -240,7 +221,14 @@ const renderInput = () => {
   };
 
   return (
-    <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
+    <>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={mainModalVisible}
+                onRequestClose={onClose}
+            >
+                <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
         <View style={styles.header}>
@@ -248,7 +236,7 @@ const renderInput = () => {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Experts</Text>
+          <Text style={styles.headerText}>Choose Growth Plan Coach</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
@@ -257,21 +245,35 @@ const renderInput = () => {
         </TouchableOpacity>
         </View> 
           
-          <View style={{ flex: 1, alignItems: 'flex-start', marginLeft: 40, marginBottom: 40}}>
+        <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
           <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your coach</Text>
      <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
      <View style={styles.dropcontainer}>
       {renderInput()}
     </View>
-    
      </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 100, marginLeft: 30, marginRight: 30 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
               {renderCards()}
             </View>
-            <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
+            <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>Continue</Text>
     </TouchableOpacity>
           </View>
+          </ScrollView>
+       
+      </View>
+      </Modal>
+          <Modal
+                animationType="slide"
+                transparent={true}
+                visible={formModalVisible}
+                onRequestClose={handleCloseformModal}
+            >
+                <View style={styles.modalContent}>
+                    <OpenModal onClose={handleCloseformModal} />
+                </View>
+            </Modal>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -282,11 +284,8 @@ const renderInput = () => {
           <OpenSchedule2 onClose={() => handleCloseModal2()} />
           </View>
       </Modal>
-        </ScrollView>
-       
-      </View>
-      
-
+        
+      </>
   );
 }
 
@@ -349,6 +348,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: 500,
   },
   input: {
     width: "100%",
@@ -361,6 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   picker: {
+    width: 470,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,

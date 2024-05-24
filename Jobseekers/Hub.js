@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
-import OpenModal from '../Jobseekers/PickInterviewer';
-import OpenModal2 from '../Jobseekers/NewInterview';
+import OpenModal from '../Jobseekers/Pickyourhub';
+import OpenModal2 from '../Jobseekers/Newgrowth';
 
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -42,37 +42,33 @@ function MyComponent() {
           <View style={{ flex: 1, }}>
           <View style={styles.header}>
             <TouchableOpacity>
-            <View style={styles.item}>
+              <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Interview</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Hubs</Text>
               </View>
             </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleOpenPress2} >
+            <TouchableOpacity onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 5, paddingVertical: 10, borderColor: "#206C00", backgroundColor: 'none', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                     <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600' }}>+ New</Text>
                   </View>
      </TouchableOpacity>
 
-     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 100}}>
-      <View style={styles.bubbleContainer}>
-        <View style={styles.bubble}>
-          <Text style={styles.bubbleText}>Its often not the most qualified candidate on paper that get the job, Its who performs best at the interview.</Text>
-          <View style={styles.bubbleTail}></View>
-      </View>
-    </View>
+     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 200}}>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: 'coral', width: 150, alignItems: 'center', alignContent: 'center', borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Pick an Interviewer</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Join a hub</Text>
                   </View>
      </TouchableOpacity>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'center', marginTop: 10 }}>Let an expert in your field interview you before your next appointment wth ratings, advice and insider tips</Text>
+     <Text style={{ fontSize: 14, color: "black", alignText: 'center', marginTop: 10 }}>A hub is cohort created by an expert to create hands on immersion for its members.</Text>
+     <Text style={{ fontSize: 14, color: "black", alignText: 'center', }}>The goal of the hub is to provide practical knowledge that will enable you move from one level in your career to the next.</Text>
      </View>
 
             </View>
             </View>
             </View>
         </ScrollView>
+        
         </View>
       </View>
 
@@ -105,37 +101,37 @@ function MyComponent() {
 }
 
 const styles = StyleSheet.create({
-  pagecontainer: {
-    height: 1000,
-    backgroundColor: '#f7fff4',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    padding: 20, 
-    marginTop: 30,
-    marginLeft: 30,
-    marginRight: 30,
-    marginBottom: 30,
-    borderWidth: 2, 
-    borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
- glassBox: {
-    height: 1000,
-  backgroundColor: 'rgba(225,255,212,0.3)',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    marginTop: 30,
-    marginLeft: 240,
-    marginRight: 30,
-    marginBottom: 30,
-  },
+    pagecontainer: {
+        height: 1000,
+        backgroundColor: '#f7fff4',
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        padding: 20, 
+        marginTop: 30,
+        marginLeft: 30,
+        marginRight: 30,
+        marginBottom: 30,
+        borderWidth: 2, 
+        borderColor: 'rgba(225,225,212,0.3)',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+     glassBox: {
+        height: 1000,
+      backgroundColor: 'rgba(225,255,212,0.3)',
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        marginTop: 30,
+        marginLeft: 240,
+        marginRight: 30,
+        marginBottom: 30,
+      },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
@@ -175,39 +171,6 @@ const styles = StyleSheet.create({
   },
   blurBackground: {
     flex: 1, 
-  },
-  bubbleContainer: {
-    position: 'relative',
-    marginBottom: 20,
-  },
-  bubble: {
-    maxWidth: 250,
-    padding: 15,
-    backgroundColor: 'lightgrey',
-    borderRadius: 20,
-    borderBottomLeftRadius: 0,
-    borderColor: '#206C00',
-    borderWidth: 2,
-    marginLeft: 150
-  },
-  bubbleText: {
-    fontSize: 14,
-    textAlign: 'left',
-  },
-  bubbleTail: {
-    position: 'absolute',
-    bottom: -15,
-    left: 20,
-    width: 0,
-    height: 0,
-    borderTopWidth: 15,
-    borderTopColor: 'lightgrey',
-    borderLeftWidth: 15,
-    borderLeftColor: 'transparent',
-    borderRightWidth: 15,
-    borderRightColor: 'transparent',
-    borderBottomWidth: 0,
-    borderBottomColor: 'transparent',
   },
 });
 export default MyComponent;

@@ -13,7 +13,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>View Growth Plan Objectives</Text>
+          <Text style={styles.headerText}>About Hub</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
@@ -21,107 +21,51 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>Personal Development Objectives</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>SAP FI: Junior - Medior</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Type</Text>
+          <Text>Hub Name</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Personal</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Title</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Become SAP FI Medior expert in 6 months</Text>
+        <Text style={{ color: 'grey' }}>SAP FI Super Rangers</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text>Meeting Day</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>SAP FI</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Result description</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey', height: 50 }}>Example: To be able to find my way around SAP FI...</Text>
+        <Text style={{ color: 'grey' }}>Monday</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>How to achieve</Text>
+          <Text>Frequency</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey', height: 50  }}>Example: To be taught how to troubleshoot, find T'codes...</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>What do you need to achieve the objective?</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey', height: 50 }}>Continous training, practice and support</Text>
+        <Text style={{ color: 'grey' }}>Once Monthly</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>How often do you want to review with your coach?</Text>
+          <Text>Hub Goal</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey'}}>Monthly</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Starting Level</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Beginner</Text>
+        <Text style={{ color: 'grey', height: 50 }}>You will be able to...</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Target Level</Text>
+          <Text>Description</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Senior</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Start Date</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>1/April/2024</Text>
+        <Text style={{ color: 'grey', height: 50  }}>You will be able to...</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>End Date</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>20/Jul/2024</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Status</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Completed</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Coach</Text>
+          <Text>Expert</Text>
         </View>
         <View style={styles.cell}>
         <Text style={{ color: 'grey' }}>Joop Melcher</Text>
@@ -129,11 +73,13 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Feedbacks/remarks (from Coach)</Text>
+          <Text>Participants</Text>
         </View>
-        <View style={styles.cell}><Text style={{ color: 'grey' }}>Read only field Jobseeker</Text>
+        <View style={styles.cell}>
+        <Text style={{ color: 'grey'}}>104</Text>
         </View>
       </View>
+      
       
     </View>
    

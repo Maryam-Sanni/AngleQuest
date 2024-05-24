@@ -18,7 +18,7 @@ import Jobs from './Jobseekers/JobsTopSearch';
 import Experts from './Jobseekers/AllExperts';
 import Sessions from './Jobseekers/Allsessions';
 import Feedbacks from './Jobseekers/Feedbacks';
-import CoachingHubs from './Jobseekers/CoachingHubs';
+import CoachingHubs from './Jobseekers/Hub';
 import Messages from './Jobseekers/Messages';
 import Notifications from './Jobseekers/Notifications';
 import NotificationSettings from './Jobseekers/NotificationSettings';
@@ -74,6 +74,8 @@ import NewInterview from './Jobseekers/Interview';
 import AllInterviews from './Jobseekers/AllInterviews';
 import PaymentPage from './Jobseekers/PaymentPage';
 import growthPaymentPage from './Jobseekers/PaymentPageGrowth';
+import hubPaymentPage from './Jobseekers/PaymentPageHubs';
+import AllcoachingHubs from './Jobseekers/AllHubs';
 
 const Stack = createStackNavigator();
 
@@ -174,6 +176,8 @@ const App = () => {
         <Stack.Screen name="All Interviews" component={AllInterviews} />
         <Stack.Screen name="Interview Payment" component={PaymentPage} />
         <Stack.Screen name="Growth Plan Payment" component={growthPaymentPage} />
+        <Stack.Screen name="Hubs Payment" component={hubPaymentPage} />
+        <Stack.Screen name="All Coaching Hubs" component={AllcoachingHubs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

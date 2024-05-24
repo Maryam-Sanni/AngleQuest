@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import OpenModal from '../Jobseekers/PaymentDetailsinterview';
+import OpenModal from '../Jobseekers/PaymentDetails';
 
 function MyComponent({ onClose }) {
     const [mainModalVisible, setMainModalVisible] = useState(true);

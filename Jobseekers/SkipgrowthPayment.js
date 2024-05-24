@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import OpenModal from '../Jobseekers/PaymentDetails';
+import OpenModal from '../Jobseekers/PaymentDetailsgrowth';
 
 function MyComponent({ onClose }) {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [mainModalVisible, setMainModalVisible] = useState(true);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 
-    const handleOpenPress = () => {
-        setModalVisible(true);
-      };
-    
-      const handleCloseModal = () => {
-        setModalVisible(false);
-      };
+  const handleOpenPress = () => {
+      setMainModalVisible(false);
+      setPaymentModalVisible(true);
+  };
+
+  const handleClosePaymentModal = () => {
+      setPaymentModalVisible(false);
+      onClose();
+  };
+
   return (
-    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
+      <>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={mainModalVisible}
+              onRequestClose={onClose}
+          >
+    <View style={{  flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
         <View style={styles.greenBox}>
         <View style={styles.header}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Payment</Text>
+          <Text style={styles.headerText}>Skip Subscription</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
@@ -44,19 +55,21 @@ function MyComponent({ onClose }) {
     <TouchableOpacity onPress={handleOpenPress}  style={styles.buttonskip} >
       <Text style={styles.buttonTextskip}>Pay</Text>
     </TouchableOpacity>
-</View>
-<Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleCloseModal}
-      >
-          <View style={styles.modalContent}>
-            <OpenModal onClose={() => handleCloseModal()} />
-          </View>
-      </Modal>
     </View>
-    </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={paymentModalVisible}
+                onRequestClose={handleClosePaymentModal}
+            >
+                <View style={styles.modalContent}>
+                    <OpenModal onClose={handleClosePaymentModal} />
+                </View>
+            </Modal>
+        </>
   );
 };
 

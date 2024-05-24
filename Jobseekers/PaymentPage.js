@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 import OpenSchedule from '../Jobseekers/SkipPayment';
-import OpenSchedule2 from '../Jobseekers/MonthlySub';
+import OpenSchedule2 from '../Jobseekers/MonthlyInterviewsub';
 import OpenSchedule3 from '../Jobseekers/AnnualSub'; 
 
 const App = () => {
@@ -75,46 +75,127 @@ const App = () => {
                                         <Text style={{ color: '#206C00', fontSize: 13, marginLeft: 50, marginTop: 3 }}>
                                             If Yes, do you know expert Emily Ray can become your coach and do the following with you:
                                         </Text>
+                
                                         <View style={styles.box}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <View style={styles.rhcontainer}>
-                                                    <View style={styles.rhombus}>
-                                                        <Text style={styles.insideText}>Create a personal development plan with you</Text>
-                                                    </View>
-                                                    <Text style={{ marginTop: 50, width: 220, fontSize: 13 }}>• Create the next stage plan with you </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• Periodically reviews your progress </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• Continuously rates your progress </Text>
-                                                    <Text style={{ color: '#206C00', fontSize: 14, marginTop: 20, fontWeight: "bold", marginBottom: 20 }}>Biannually</Text>
-                                                </View>
-                                                <View style={styles.rhcontainer}>
-                                                    <View style={styles.rhombus}>
-                                                        <Text style={styles.insideText}>Hands-on teaching every month</Text>
-                                                    </View>
-                                                    <Text style={{ marginTop: 50, width: 220, fontSize: 13 }}>• Monthly hands-on training </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• Shares knowledge gained with you </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• Shares tips to apply at work </Text>
-                                                    <Text style={{ color: '#206C00', fontSize: 14, marginTop: 20, fontWeight: "bold", marginBottom: 20 }}>Monthly</Text>
-                                                </View>
-                                                <View style={styles.rhcontainer}>
-                                                    <View style={styles.rhombus}>
-                                                        <Text style={styles.insideText}>Periodic advice and growth review</Text>
-                                                    </View>
-                                                    <Text style={{ marginTop: 50, width: 220, fontSize: 13 }}>• One-on-One Career advice </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• One-on-One Growth advice </Text>
-                                                    <Text style={{ marginTop: 5, width: 220 }}> </Text>
-                                                    <Text style={{ color: '#206C00', fontSize: 14, marginTop: 20, fontWeight: "bold", marginBottom: 20 }}>Quarterly</Text>
-                                                </View>
-                                                <View style={styles.rhcontainer}>
-                                                    <View style={styles.rhombus}>
-                                                        <Text style={styles.insideText}>Available to answer your questions</Text>
-                                                    </View>
-                                                    <Text style={{ marginTop: 50, width: 220, fontSize: 13 }}>• Becomes your buddy </Text>
-                                                    <Text style={{ marginTop: 5, width: 220, fontSize: 13 }}>• Available to answer questions </Text>
-                                                    <Text style={{ marginTop: 5, width: 220 }}>  </Text>
-                                                    <Text style={{ color: '#206C00', fontSize: 14, marginTop: 20, fontWeight: "bold", marginBottom: 20 }}>Weekly</Text>
-                                                </View>
+                                        <View style={styles.arrowContainer}>
+            <View style={styles.arrow} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 25, marginRight: 25 }}>
+        {/* Basic Section */}
+        <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
+          <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1.</Text>
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Create the next stage plan with you</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 3 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Periodically reviews your progress</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 3 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Continuously rates your progress</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {/* Standard Section */}
+        <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, borderRadius: 12, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1  }}>
+          <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10 }}>2.</Text>
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Monthly hands-on training</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 2 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text> Shares knowledge gained with you </Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 3 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Shares tips to apply at work</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {/* Pro Section */}
+        <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
+          <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>3.</Text>
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>One-on-One Career advice</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 2 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>One-on-One Growth advice</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+         {/* Pro Section */}
+         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
+          <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>4.</Text>
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Becomes your buddy</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 2 }}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
+                style={{ width: 24, height: 24, marginRight: 5 }}
+                resizeMode="contain"
+              />
+              <Text>Available to answer questions </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    
+      <View style={styles.arrowContainer2}>
+            <View style={styles.arrowLeft} />
+        </View>
                                             </View>
-                                        </View>
+                                             
+                                                
                                         <Text style={{ color: '#206C00', fontSize: 14, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20 }}>Curious about how much it costs? Just a token: </Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
@@ -235,31 +316,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 50,
     },
-    rhcontainer: {
-        alignItems: 'center',
-    },
-    rhombus: {
-        marginTop: 50,
-        width: 130,
-        height: 130,
-        backgroundColor: 'none',
-        borderWidth: 2,
-        borderColor: '#206C00',
-        transform: [{ rotate: '45deg' }],
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    insideText: {
-        transform: [{ rotate: '-45deg' }],
-        color: '#206C00',
-        fontSize: 14,
-        textAlign: 'center'
-    },
-    belowText: {
-        marginTop: 20,
-        textAlign: 'center',
-    },
     box: {
+        padding: 30,
         marginTop: 30,
         alignItems: 'center',
         borderWidth: 2,
@@ -305,6 +363,42 @@ const styles = StyleSheet.create({
         color: 'coral',
         fontSize: 14,
         textAlign: 'center',
+    },
+    arrowContainer: {
+        position: 'absolute',
+        top: 0,
+        left: '40%',
+        transform: [{ translateY: -10 }],
+      },
+      arrowContainer2: {
+        position: 'absolute',
+        bottom: -10,
+        left: '80%',
+        transform: [{ translateX: -10 }],
+      },
+      arrow: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 10,
+        borderBottomWidth: 10,
+        borderLeftWidth: 15,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderLeftColor: '#63EC55',
+      },
+      arrowLeft: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 10,
+        borderBottomWidth: 10,
+        borderRightWidth: 15,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderRightColor: '#63EC55',
     },
 });
 

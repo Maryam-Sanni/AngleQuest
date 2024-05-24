@@ -6,6 +6,9 @@ import { BlurView } from 'expo-blur';
 import EmploymentHistoryModal from'../components/EditEmplyHistory'; 
 import SkillsEditModal from '../components/SkillsEditModal';
 import CertificationsEditModal from '../components/CertificationsEditModal';
+import OtherExperiencesEditModal from '../components/OtherExperiencesEditModal';
+import PreferredLocationsEditModal from '../components/PreferredLocationsEditModal';
+import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
 
 export default function Profile() {
   const initialHistory = [
@@ -79,6 +82,28 @@ export default function Profile() {
     setSkills(newSkills);
   };
 
+  const [preferredLocations, setPreferredLocations] = useState([
+    'United States',
+    'Germany',
+    'Canada',
+    'UAE',
+    'Nigeria',
+  ]);
+
+  const [preferredLocationsModalVisible, setPreferredLocationsModalVisible] = useState(false);
+
+  const handleOpenPreferredLocations = () => {
+    setPreferredLocationsModalVisible(true);
+  };
+
+  const handleClosePreferredLocationsModal = () => {
+    setPreferredLocationsModalVisible(false);
+  };
+
+  const handleSavePreferredLocations = (newPreferredLocations) => {
+    setPreferredLocations(newPreferredLocations);
+  };
+
   const [certifications, setCertifications] = useState([
     'Licensed Professional Engineer (PE) - [London/United Kingdom]',
     'LEED Accredited Professional (LEED AP)',
@@ -102,6 +127,49 @@ export default function Profile() {
 
   const handleSaveCertifications = (newCertifications) => {
     setCertifications(newCertifications);
+  };
+
+  const [otherExperiences, setOtherExperiences] = useState([
+    'Technical Writing',
+    'Research and Development',
+    'Quality Assurance/Quality Control (QA/QC)',
+    'Client Relationship Management',
+    'Construction Administration',
+    'Feasibility Studies',
+    'Risk Management'
+  ]);
+  const [otherExperiencesModalVisible, setOtherExperiencesModalVisible] = useState(false);
+
+  const handleOpenOtherExperiences = () => {
+    setOtherExperiencesModalVisible(true);
+  };
+
+  const handleCloseOtherExperiencesModal = () => {
+    setOtherExperiencesModalVisible(false);
+  };
+
+  const handleSaveOtherExperiences = (newOtherExperiences) => {
+    setOtherExperiences(newOtherExperiences);
+  };
+
+  const [preferredRoles, setPreferredRoles] = useState([
+    'Java Programming',
+    'Microsoft Azure',
+    'SAP',
+  ]);
+  
+  const [preferredRolesModalVisible, setPreferredRolesModalVisible] = useState(false);
+  
+  const handleOpenPreferredRoles = () => {
+    setPreferredRolesModalVisible(true);
+  };
+  
+  const handleClosePreferredRolesModal = () => {
+    setPreferredRolesModalVisible(false);
+  };
+  
+  const handleSavePreferredRoles = (newPreferredRoles) => {
+    setPreferredRoles(newPreferredRoles);
   };
 
   return (
@@ -293,75 +361,95 @@ export default function Profile() {
     </View>
  <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                       {/* Other Experience*/}
- <View style={{  marginTop: 20, marginRight: 30 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Other Experience</Text>
-              <TouchableOpacity>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-              </TouchableOpacity>
-            </View>
-            <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
-              - Technical Writing
-              {'\n'}
-              -Research and Development
-              {'\n'}
-              - Quality Assurance/Quality Control (QA/QC)
-              {'\n'}
-             - Client Relationship Management
-             {'\n'}
-             - Construction Administration
-             {'\n'}
-            - Feasibility Studies
-            {'\n'}
-            - Risk Management
-            </Text>
-            </View>
+  <View style={{ marginTop: 20, marginRight: 30 }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Other Experience</Text>
+    <TouchableOpacity onPress={handleOpenOtherExperiences}>
+      <Image
+        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+        style={{ width: 20, height: 20 }}
+        resizeMode="cover"
+      />
+    </TouchableOpacity>
+  </View>
+  <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14 }}>
+    {otherExperiences.map((experience, index) => (
+      <Text key={index}>
+        - {experience} {'\n'}
+      </Text>
+    ))}
+  </Text>
+
+  <OtherExperiencesEditModal
+    visible={otherExperiencesModalVisible}
+    otherExperiences={otherExperiences}
+    onClose={handleCloseOtherExperiencesModal}
+    onSave={handleSaveOtherExperiences}
+  />
+</View>
+
 <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                      {/*Location*/}
-                     <View style={{ marginTop: 20, marginRight: 30  }}>
+                     <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Preferred Locations</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
+                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Preferred Locations</Text>
+                      <TouchableOpacity onPress={handleOpenPreferredLocations}>
+                        <Image
+                          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                          style={{ width: 20, height: 20 }}
+                          resizeMode="cover"
+                        />
+                      </TouchableOpacity>
                     </View>
-                    <View style={{  marginRight: 50, marginBottom: 50 }}>
-                    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>United States</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Germany</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Canada</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>UAE</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Nigeria</Text>
+                    
+                    <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+          {preferredLocations.map((location, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{location}</Text>
+            ))}
+          </View>
+        </View>
       </View>
-    </View>
-    </View>
-     <View style={{  marginTop: 5, marginRight: 30  }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00' }}>Preferred Roles</Text>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={{ width: 20, height: 20 }} // adjust width and height as needed
-                resizeMode="cover" // or any other resizeMode that suits your need
-              />
-            </View>
-                    </View>
-                    <View style={{ marginRight: 50, marginBottom: 50 }}>
-                    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Auto CAD</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>Microsoft Azure</Text>
-        <Text style={[styles.text, { backgroundColor: '#d3f9d8' }]}>SAP</Text>
+
+                    <PreferredLocationsEditModal
+                      visible={preferredLocationsModalVisible}
+                      preferredLocations={preferredLocations}
+                      onClose={handleClosePreferredLocationsModal}
+                      onSave={handleSavePreferredLocations}
+                    />
+                  </View>
+                   {/*Roles*/}
+                   <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+                  <View style={{ marginTop: 20, marginRight: 30 }}>
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' }}>Preferred Roles</Text>
+    <TouchableOpacity onPress={handleOpenPreferredRoles}>
+      <Image
+        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+        style={{ width: 20, height: 20 }} // adjust width and height as needed
+        resizeMode="cover" // or any other resizeMode that suits your need
+      />
+    </TouchableOpacity>
+  </View>
+  <View style={{ marginRight: 50 }}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+          {preferredRoles.map((role, index) => (
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8' }]}>{role}</Text>
+            ))}
+          </View>
+        </View>
       </View>
-    </View>
-    </View>
+
+
+  <PreferredRolesEditModal
+    visible={preferredRolesModalVisible}
+    preferredRoles={preferredRoles}
+    onClose={handleClosePreferredRolesModal}
+    onSave={handleSavePreferredRoles}
+  />
+</View>
     </View>
     </View>
         </ScrollView>

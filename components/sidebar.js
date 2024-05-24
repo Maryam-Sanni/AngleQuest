@@ -30,7 +30,7 @@ function MyComponent() {
           navigation.navigate('New Growth Plan');
           break;
         case "Interview":
-          navigation.navigate('New Interview');
+          navigation.navigate('New Interview'); 
           break;
         case "Sessions":
           navigation.navigate('Sessions');

@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, 
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
-import OpenSchedule from '../Jobseekers/SkipgrowthPayment';
-import OpenSchedule2 from '../Jobseekers/MonthlygrowthSub';
-import OpenSchedule3 from '../Jobseekers/AnnualgrowthSub'; 
+import OpenSchedule from '../Jobseekers/SkiphubPayment';
+import OpenSchedule2 from '../Jobseekers/MonthlySub';
+import OpenSchedule3 from '../Jobseekers/AnnualHubSub'; 
 
 const App = () => {
     const [isAnnualPressed, setIsAnnualPressed] = useState(false);
