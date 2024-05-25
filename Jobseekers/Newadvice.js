@@ -159,7 +159,7 @@ function MyComponent({ onClose }) {
         </View>
         <View style={styles.cell}>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-        <Text style={{color: 'grey'}}>Selected date and time: {selectedDateTime}</Text>
+        <Text style={{color: 'grey', borderWidth: 1, borderColor: 'black'}}>Selected date and time: {selectedDateTime}</Text>
         </TouchableOpacity>
         </View>
       </View>
