@@ -246,7 +246,7 @@ function MyComponent({ onClose }) {
           </View>
 
           <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-            <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your coach</Text>
+            <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick an hub you will like to join</Text>
             <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
             <View style={styles.dropcontainer}>
               {renderInput()}

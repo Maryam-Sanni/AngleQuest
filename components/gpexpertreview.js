@@ -39,6 +39,9 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.cell}>
+            <Text style={styles.cellText}> </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}> 
@@ -59,6 +62,9 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}> 
           <Text style={styles.open}>View</Text>
           </TouchableOpacity>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}> </Text>
+          </View>
         </View>
       </View>
       <Modal

@@ -8,9 +8,9 @@ function MyComponent({ onClose }) {
 
   const goToPlans = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('Coaching Hub Sessions');
+    navigation.navigate('Advice Sessions');
     onClose(); // Close the modal
-  };
+    };
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>

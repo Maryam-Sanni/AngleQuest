@@ -19,23 +19,26 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Hub Assignments</Text>
+      <Text style={styles.title}>Completed Advice Sessions</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Hub Member</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Topic</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Types</Text>
+          </View>
+          <View style={styles.cell}>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Starting Level</Text>
+          </View>
+          <View style={styles.cell}>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Target Level</Text>
           </View>
           <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Performance Rating</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Minute</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Expert</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
@@ -43,19 +46,22 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Simpson Jagun</Text>
+            <Text style={styles.cellText}>SAP FI</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Common T-codes for FI</Text>
+            <Text style={styles.cellText}>Career Change</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}>Beginner</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Brilliant</Text>
+            <Text style={styles.cellText}>Junior</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>10 Minutes</Text>
+            <Text style={styles.cellText}>7/May/2024</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
           </View>
           <TouchableOpacity style={styles.cell2} >
           <Text style={styles.open}>View</Text>
@@ -63,19 +69,22 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Maitaima Voin</Text>
+            <Text style={styles.cellText}>SAP FI</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Integration with Cost Accounting</Text>
+            <Text style={styles.cellText}>Career Change</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>7/Apr/2024</Text>
+            <Text style={styles.cellText}>Beginner</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Good</Text>
+            <Text style={styles.cellText}>Junior</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>10 Minutes</Text>
+            <Text style={styles.cellText}>7/Mar/2024</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Donald Roberts</Text>
           </View>
           <TouchableOpacity style={styles.cell} >
           <Text style={styles.open}>View</Text>

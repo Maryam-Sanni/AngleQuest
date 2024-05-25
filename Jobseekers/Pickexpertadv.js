@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
 import OpenSchedule2 from '../components/JProfile';
-import OpenModal from '../Jobseekers/Newgrowth';
+import OpenModal from '../Jobseekers/Newadvice';
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -192,7 +192,7 @@ function MyComponent({ onClose }) {
                 }}
               >
                 <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
-                  Growth Plan
+                  Advice
                 </Text>
               </TouchableOpacity>
               <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
@@ -225,7 +225,7 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
                   style={styles.logo}
                 />
-                <Text style={styles.headerText}>Growth Plan Experts</Text>
+                <Text style={styles.headerText}>Advice Experts</Text>
 
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                   <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
@@ -234,7 +234,7 @@ function MyComponent({ onClose }) {
                 </TouchableOpacity>
               </View>
               <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-                <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your growth plan coach</Text>
+                <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick an expert that will advice you</Text>
                 <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
                 <View style={styles.dropcontainer}>
                   {renderInput()}

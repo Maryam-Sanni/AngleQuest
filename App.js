@@ -76,6 +76,9 @@ import PaymentPage from './Jobseekers/PaymentPage';
 import growthPaymentPage from './Jobseekers/PaymentPageGrowth';
 import hubPaymentPage from './Jobseekers/PaymentPageHubs';
 import AllcoachingHubs from './Jobseekers/AllHubs';
+import NewAdvice from './Jobseekers/Advice';
+import PaymentPageadvice from './Jobseekers/PaymentPageAdvice';
+import AdviceSessions from './Jobseekers/AdviceSessions';
 
 const Stack = createStackNavigator();
 
@@ -171,13 +174,16 @@ const App = () => {
         <Stack.Screen name="Earnings" component={Earnings} />
         <Stack.Screen name="Withdrawal" component={Withdrawal} />
         <Stack.Screen name="New Growth Plan" component={NewGrowthPlan} />
-        <Stack.Screen name="My Growth Plans" component={AllGrowthPlan} />
+        <Stack.Screen name="Growth Plan Sessions" component={AllGrowthPlan} />
         <Stack.Screen name="New Interview" component={NewInterview} />
-        <Stack.Screen name="All Interviews" component={AllInterviews} />
+        <Stack.Screen name="Interview Sessions" component={AllInterviews} />
         <Stack.Screen name="Interview Payment" component={PaymentPage} />
         <Stack.Screen name="Growth Plan Payment" component={growthPaymentPage} />
         <Stack.Screen name="Hubs Payment" component={hubPaymentPage} />
-        <Stack.Screen name="All Coaching Hubs" component={AllcoachingHubs} />
+        <Stack.Screen name="Coaching Hub Sessions" component={AllcoachingHubs} />
+        <Stack.Screen name="New Advice" component={NewAdvice} />
+        <Stack.Screen name="Advice Payment" component={PaymentPageadvice} />
+        <Stack.Screen name="Advice Sessions" component={AdviceSessions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

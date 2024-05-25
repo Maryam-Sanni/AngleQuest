@@ -8,7 +8,7 @@ function MyComponent({ onClose }) {
 
   const goToPlans = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('All Interviews');
+    navigation.navigate('Interview Sessions');
     onClose(); // Close the modal
   };
 
