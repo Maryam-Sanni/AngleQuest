@@ -72,13 +72,15 @@ import NewGrowthPlan from './Jobseekers/GrowthPlan';
 import AllGrowthPlan from './Jobseekers/AllGrowthPlans';
 import NewInterview from './Jobseekers/Interview';
 import AllInterviews from './Jobseekers/AllInterviews';
-import PaymentPage from './Jobseekers/PaymentPage';
+import PaymentPage from './Jobseekers/PaymentPage'; 
 import growthPaymentPage from './Jobseekers/PaymentPageGrowth';
 import hubPaymentPage from './Jobseekers/PaymentPageHubs';
 import AllcoachingHubs from './Jobseekers/AllHubs';
 import NewAdvice from './Jobseekers/Advice';
 import PaymentPageadvice from './Jobseekers/PaymentPageAdvice';
 import AdviceSessions from './Jobseekers/AdviceSessions';
+import PaymentOffer from './Jobseekers/PaymentOffer';
+import SkipOffer from './Jobseekers/SkipOffer';
 
 const Stack = createStackNavigator();
 
@@ -184,6 +186,8 @@ const App = () => {
         <Stack.Screen name="New Advice" component={NewAdvice} />
         <Stack.Screen name="Advice Payment" component={PaymentPageadvice} />
         <Stack.Screen name="Advice Sessions" component={AdviceSessions} />
+        <Stack.Screen name="Your Offer" component={PaymentOffer} />
+        <Stack.Screen name="Skip Offer" component={SkipOffer} />
       </Stack.Navigator>
     </NavigationContainer>
   );

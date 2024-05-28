@@ -44,32 +44,29 @@ function MyComponent() {
             <TouchableOpacity>
             <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Interview</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16}}>Interview</Text>
               </View>
             </TouchableOpacity>
-            </View>
             <TouchableOpacity onPress={handleOpenPress2} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 5, paddingVertical: 10, borderColor: "#206C00", backgroundColor: 'none', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600' }}>+ New</Text>
+            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: '#206C00', height: 30, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600' }}>+ New</Text>
                   </View>
-     </TouchableOpacity>
-
-     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 100}}>
-      <View style={styles.bubbleContainer}>
-        <View style={styles.bubble}>
-          <Text style={styles.bubbleText}>Its often not the most qualified candidate on paper that get the job, Its who performs best at the interview.</Text>
-          <View style={styles.bubbleTail}></View>
-      </View>
-    </View>
-     <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: 'coral', width: 150, alignItems: 'center', alignContent: 'center', borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Pick an Interviewer</Text>
-                  </View>
-     </TouchableOpacity>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'center', marginTop: 10 }}>Let an expert in your field interview you before your next appointment wth ratings, advice and insider tips</Text>
-     </View>
-
+                  </TouchableOpacity>
             </View>
+            <View style={styles.box}>
+     <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Interview</Text>
+     <Text style={{ fontSize: 14, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>Its often not the most qualified candidate on paper that gets the job, its who performs best at the interview.</Text>
+     <Text style={{ fontSize: 14, color: "black", marginTop: 5, marginLeft: 30, marginRight: 200 }}>Let our expert to conduct a preparatory interview to help you prepare for your upcoming interview.</Text>
+     <View style={{flexDirection: 'row'}}>
+     <TouchableOpacity onPress={handleOpenPress}>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 20, marginLeft: 30, backgroundColor: '#206C00', width: 150, alignItems: 'center', alignContent: 'center',}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Get Interviewed</Text>
+                  </View>
+     </TouchableOpacity>
+     <Image source={require('../assets/22.png')} style={styles.boximage} />
+      </View>
+      </View>
+     </View>
             </View>
             </View>
         </ScrollView>
@@ -145,16 +142,17 @@ const styles = StyleSheet.create({
   header: {
     marginLeft: 0,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    alignItems: 'space-between',
     backgroundColor: 'none',
-    paddingVertical: 10,
+    paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: 'coral',
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'space-between',
+    marginTop: 5
   },
   headertext: {
     marginLeft: 5,
@@ -176,38 +174,28 @@ const styles = StyleSheet.create({
   blurBackground: {
     flex: 1, 
   },
-  bubbleContainer: {
-    position: 'relative',
-    marginBottom: 20,
-  },
-  bubble: {
-    maxWidth: 250,
-    padding: 15,
-    backgroundColor: 'lightgrey',
+  box: {
     borderRadius: 20,
-    borderBottomLeftRadius: 0,
-    borderColor: '#206C00',
-    borderWidth: 2,
-    marginLeft: 150
+    paddingHorizontal: 10,
+     backgroundColor: 'white', 
+     marginTop: 50,
+     marginLeft: 50,
+     marginRight: 50, 
+     height: 220, 
+     shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2, }, 
+      shadowOpacity: 0.25, 
+      shadowRadius: 3.84,
+       elevation: 5, 
+        borderColor: '#63EC55',
+         borderWidth: 1 
   },
-  bubbleText: {
-    fontSize: 14,
-    textAlign: 'left',
-  },
-  bubbleTail: {
-    position: 'absolute',
-    bottom: -15,
-    left: 20,
-    width: 0,
-    height: 0,
-    borderTopWidth: 15,
-    borderTopColor: 'lightgrey',
-    borderLeftWidth: 15,
-    borderLeftColor: 'transparent',
-    borderRightWidth: 15,
-    borderRightColor: 'transparent',
-    borderBottomWidth: 0,
-    borderBottomColor: 'transparent',
+  boximage: {
+    width: 150,
+    height: 150,
+   position: 'absolute',
+   right: 20,
+   marginTop: -80
   },
 });
 export default MyComponent;

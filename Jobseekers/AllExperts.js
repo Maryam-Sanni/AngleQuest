@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, Animated, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Image, ScrollView, Animated, TouchableOpacity, ImageBackground, StyleSheet, Picker, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import Sidebar from '../components/sidebar';
@@ -8,8 +8,15 @@ import Topbar from '../components/topbar';
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
   const navigation = useNavigation(); 
+  const [search, setSearch] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
+  const [isDropdown, setIsDropdown] = useState(false);
   
-
+  const toggleMode = () => {
+    setIsDropdown(!isDropdown);
+    setSelectedValue('');
+    setSearch('');
+  };
   
 
   
@@ -23,8 +30,8 @@ function MyComponent() {
       job: "Data Analyst",
        country: "Switzerland",
       interviewfee: "$50",
-      growthfee: "$12",
-      advicefee: "$7",
+      growthfee: "NIL",
+      advicefee: "$70",
     },
     {
     date: "Mon, Tue, Wed, Thur",
@@ -33,7 +40,7 @@ function MyComponent() {
       expert: "Monica Jerry",
       job: "UI/UX Designer",
        country: "Canada",
-      interviewfee: "$30",
+      interviewfee: "NIL",
       growthfee: "$18",
       advicefee: "$20",
     },
@@ -67,8 +74,8 @@ function MyComponent() {
     job: "SAP FI",
      country: "India",
     interviewfee: "$20",
-      growthfee: "$15",
-      advicefee: "$25",
+      growthfee: "NIL",
+      advicefee: "NIL",
   },
     {
     date: "Mon-Fri",
@@ -79,7 +86,7 @@ function MyComponent() {
        country: "United Kingdom",
       interviewfee: "$30",
       growthfee: "$12",
-      advicefee: "$7",
+      advicefee: "NIL",
     },
     {
     date: "Mon-Fri",
@@ -89,8 +96,8 @@ function MyComponent() {
     job: "Frontend Dev.",
      country: "Netherlands",
     interviewfee: "$50",
-      growthfee: "$42",
-      advicefee: "$17",
+      growthfee: "NIL",
+      advicefee: "$42",
   },
    {
     date: "Mon-Fri",
@@ -114,6 +121,17 @@ function MyComponent() {
       growthfee: "$50",
       advicefee: "$50",
   },
+  {
+    date: "Mon-Fri",
+    time: "09:00AM - 05:00PM",
+    
+    expert: "Michelle Raymond",
+    job: "Microsoft Azure",
+    country: "Netherlands",
+    interviewfee: "NIL",
+      growthfee: "NIL",
+      advicefee: "$50",
+  },
   ];
 
   const handleCardAnimation = (index, toValue) => {
@@ -127,13 +145,62 @@ function MyComponent() {
     ).start();
   };
 
-  const handleJoinHub = () => {
-    setModalVisible(true);
+  const handleTogglePress = () => {
+    setIsPressed(!isPressed); // Toggle the pressed state
+  };
+
+  const renderInput = () => {
+    if (isDropdown) {
+      return (
+        <Picker
+          selectedValue={selectedValue}
+          style={styles.picker}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedValue(itemValue)
+          }
+        >
+          <Picker.Item label="Pick an area of specialization" value="Pick an area of specialization" />
+          <Picker.Item label="Java Engineering" value="Java Engineering" />
+          <Picker.Item label="SAP FI" value="SAP FI" />
+          <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
+          <Picker.Item label="Dev Ops" value="Dev Ops" />
+          <Picker.Item label="Frontend Development" value="Frontend Development" />
+          <Picker.Item label="Backend Development" value="Backend Development" />
+          <Picker.Item label="Fullstack Development" value="Fullstack Development" />
+          <Picker.Item label="Data Analysis" value="Data Analysis" />
+          <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+        </Picker>
+      );
+    } else {
+      return (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Search for experts..."
+            value={search}
+            onChangeText={setSearch}
+          />
+          <TouchableOpacity onPress={toggleMode} style={styles.iconContainer}>
+            <Image source={require('../assets/arrow-down.png')} style={{ width: 15, height: 15, }} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
 
   const goToBookInterview = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('BookaSession');
+    navigation.navigate('New Interview');
+  };
+
+  const goToBookGrowth = () => {
+    // Navigate to ExpertsProfile screen when the button is clicked
+    navigation.navigate('New Growth Plan');
+  };
+
+  const goToBookAdvice = () => {
+    // Navigate to ExpertsProfile screen when the button is clicked
+    navigation.navigate('New Advice');
   };
 
   const renderCards = () => {
@@ -245,7 +312,7 @@ function MyComponent() {
               justifyContent: 'center', 
               marginLeft: 5, 
             }}
-            onPress={goToBookInterview}
+            onPress={goToBookGrowth}
           >
             <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12}}>
              Growth Plan
@@ -268,7 +335,7 @@ function MyComponent() {
               justifyContent: 'center', 
               marginLeft: 5, marginRight: 10,
             }}
-            onPress={goToBookInterview}
+            onPress={goToBookAdvice}
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
              Advice
@@ -286,35 +353,50 @@ function MyComponent() {
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
+  style={{ height: '110%', width: '100%',flex: 1}}
 >
-<BlurView intensity={100} style={{flex:1}}>
-    <View style={{ flex: 1 }}>
+<BlurView intensity={70} style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, marginLeft: 300, marginRight: 130, marginTop: 20 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
+        <View style={styles.glassBox}>
+    <View style={styles.container}>
+          <View style={{ flex: 1, padding:20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
-              <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-                <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Experts</Text>
+              <TouchableOpacity>
+              <View style={styles.session}>
+                <Text style={{  fontWeight: "600", fontSize: 14, color: "#206C00" }}>All Experts</Text>
                 </View>
-                <TouchableOpacity>
-                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color:'#d3f9d8', fontWeight: '600' }}>Booked Experts</Text>
                 </TouchableOpacity>
-                <TouchableOpacity> 
-              <Text style={{ fontSize: 14, marginLeft: 25,  marginTop: 5, color:'#d3f9d8', fontWeight: '600' }}>Saved</Text>
+                <TouchableOpacity>
+              <View style={styles.session2}>
+                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Booked Experts</Text>
+                </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+              <View style={styles.session2}>
+              <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Saved</Text>
+              </View>
               </TouchableOpacity>
               </View>
               
             </View>
-            
+            <View style={{ marginTop: 25, marginLeft: 10, marginBottom: 10 }}>
+                <Text style={{ fontSize: 14, color: "black", fontWeight: '600'}}>Use the search or the dropdown to filter</Text>
+                <View style={styles.dropcontainer}>
+                  {renderInput()}
+                </View>
+              </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30 }}>
               {renderCards()}
             </View>
           </View>
           
+          </View>
+          </View>
         </ScrollView>
       </View>
       </View>
@@ -323,5 +405,102 @@ function MyComponent() {
 
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f7fff4',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    padding: 20, 
+    marginTop: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 30,
+    borderWidth: 2, 
+    borderColor: 'rgba(225,225,212,0.3)',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+ glassBox: {
+  backgroundColor: 'rgba(225,255,212,0.3)',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    marginTop: 30,
+    marginLeft: 240,
+    marginRight: 30,
+    marginBottom: 30,
+  },
+  sessionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 10,
+  },
+  session: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#206C00',
+    borderRadius: 5,
+    backgroundColor: '#d3f9d8',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  session2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: '#206C00',
+    borderRadius: 5,
+    backgroundColor: 'none',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  sessionText: {
+    color: '#206C00',
+  },
+  dropcontainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    width: 400,
+    marginTop: 10,
+  },
+  inputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: 500,
+  },
+  input: {
+    width: "100%",
+    height: 35,
+    borderColor: 'grey',
+    borderWidth: 1,
+    paddingLeft: 8,
+    borderRadius: 5,
+    marginRight: 10,
+    backgroundColor: 'white'
+  },
+  picker: {
+    width: 470,
+    height: 35,
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: 'none'
+  },
+  iconContainer: {
+    padding: 8,
+  },
+});
 
 export default MyComponent;

@@ -44,27 +44,30 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Hubs</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16}}>Hubs</Text>
               </View>
             </TouchableOpacity>
-            </View>
             <TouchableOpacity onPress={handleOpenPress} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 5, paddingVertical: 10, borderColor: "#206C00", backgroundColor: 'none', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600' }}>+ New</Text>
+            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: '#206C00', height: 30, alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600' }}>+ New</Text>
                   </View>
-     </TouchableOpacity>
+                  </TouchableOpacity>
+            </View>
+    
 
-     <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 200}}>
+            <View style={styles.box}>
+     <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Hubs</Text>
+     <Text style={{ fontSize: 14, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.</Text>
+     <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: 'coral', width: 150, alignItems: 'center', alignContent: 'center', borderWidth: 1 }}>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: '#206C00', width: 150, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Join a hub</Text>
                   </View>
      </TouchableOpacity>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'center', marginTop: 10 }}>A hub is cohort created by an expert to create hands on immersion for its members.</Text>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'center', }}>The goal of the hub is to provide practical knowledge that will enable you move from one level in your career to the next.</Text>
+     <Image source={require('../assets/21.png')} style={styles.boximage} />
+      </View>
+      </View>
      </View>
-
-            </View>
             </View>
             </View>
         </ScrollView>
@@ -141,16 +144,17 @@ const styles = StyleSheet.create({
   header: {
     marginLeft: 0,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    alignItems: 'space-between',
     backgroundColor: 'none',
-    paddingVertical: 10,
+    paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: 'coral',
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'space-between',
+    marginTop: 5
   },
   headertext: {
     marginLeft: 5,
@@ -171,6 +175,29 @@ const styles = StyleSheet.create({
   },
   blurBackground: {
     flex: 1, 
+  },
+  box: {
+    borderRadius: 20,
+    paddingHorizontal: 10,
+     backgroundColor: 'white', 
+     marginTop: 50,
+     marginLeft: 50,
+     marginRight: 50, 
+     height: 220, 
+     shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2, }, 
+      shadowOpacity: 0.25, 
+      shadowRadius: 3.84,
+       elevation: 5, 
+        borderColor: '#63EC55',
+         borderWidth: 1 
+  },
+  boximage: {
+    width: 150,
+    height: 150,
+   position: 'absolute',
+   right: 20,
+   marginTop: -40
   },
 });
 export default MyComponent;

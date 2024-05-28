@@ -3,16 +3,18 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, 
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
-import OpenSchedule from '../Jobseekers/SkiphubPayment';
-import OpenSchedule2 from '../Jobseekers/MonthlySub';
-import OpenSchedule3 from '../Jobseekers/AnnualHubSub'; 
+import OpenSchedule from '../Jobseekers/SkipPayment';
+import OpenSchedule2 from '../Jobseekers/MonthlyadviceSub';
+import OpenSchedule3 from '../Jobseekers/AnnualadviceSub'; 
+import { useNavigation } from '@react-navigation/native';
 
 const App = () => {
+  const navigation = useNavigation();
     const [isAnnualPressed, setIsAnnualPressed] = useState(false);
     const [isMonthlyPressed, setIsMonthlyPressed] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
-    const [modalVisible3, setModalVisible3] = useState(false); 
+    const [modalVisible3, setModalVisible3] = useState(false); // State for the annual modal
 
     const handleOpenPress = () => {
         setModalVisible(true);
@@ -45,6 +47,12 @@ const App = () => {
         }
     };
 
+    const goToPlans = () => {
+      // Navigate to ExpertsProfile screen when the button is clicked
+      navigation.navigate('Skip Offer');
+      onClose(); // Close the modal
+    };
+
     const handlePress2 = () => {
         setIsMonthlyPressed(prevState => !prevState);
         if (isAnnualPressed) {
@@ -66,13 +74,13 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
+                                        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
                                             Hey Patrick, here is an offer...
                                         </Text>
                                         <Text style={{ color: '#206C00', fontSize: 13, marginLeft: 50, marginTop: 3 }}>
                                             Do you know expert Emily Ray can become your coach and do the following with you:
                                         </Text>
-
+                
                                         <View style={styles.box}>
                                         <View style={styles.arrowContainer}>
             <View style={styles.arrow} />
@@ -191,7 +199,8 @@ const App = () => {
             <View style={styles.arrowLeft} />
         </View>
                                             </View>
-
+                                             
+                                                
                                         <Text style={{ color: '#206C00', fontSize: 14, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20 }}>Curious about how much it costs? Just a token: </Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
@@ -220,15 +229,16 @@ const App = () => {
                                         <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600' }}>Its a question of how much you believe in yourself...</Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
-
+                                            
                                             <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
                                                 <Text style={styles.buttonTextplus}>Next</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
+                                            <TouchableOpacity onPress={goToPlans} style={styles.buttonskip}>
                                                 <Text style={styles.buttonTextskip}>Skip</Text>
                                             </TouchableOpacity>
                                             </View>
+
                                         </View>
                                         <Modal
                                             animationType="slide"
@@ -315,7 +325,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     box: {
-    padding: 30,
+        padding: 30,
         marginTop: 30,
         alignItems: 'center',
         borderWidth: 2,
@@ -368,41 +378,41 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     arrowContainer: {
-    position: 'absolute',
-    top: 0,
-    left: '40%',
-    transform: [{ translateY: -10 }],
-  },
-  arrowContainer2: {
-    position: 'absolute',
-    bottom: -10,
-    left: '80%',
-    transform: [{ translateX: -10 }],
-  },
-  arrow: {
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderTopWidth: 10,
-    borderBottomWidth: 10,
-    borderLeftWidth: 15,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderLeftColor: '#63EC55',
-  },
-  arrowLeft: {
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderTopWidth: 10,
-    borderBottomWidth: 10,
-    borderRightWidth: 15,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderRightColor: '#63EC55',
-},
+        position: 'absolute',
+        top: 0,
+        left: '40%',
+        transform: [{ translateY: -10 }],
+      },
+      arrowContainer2: {
+        position: 'absolute',
+        bottom: -10,
+        left: '80%',
+        transform: [{ translateX: -10 }],
+      },
+      arrow: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 10,
+        borderBottomWidth: 10,
+        borderLeftWidth: 15,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderLeftColor: '#63EC55',
+      },
+      arrowLeft: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 10,
+        borderBottomWidth: 10,
+        borderRightWidth: 15,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderRightColor: '#63EC55',
+    },
 });
 
 export default App;

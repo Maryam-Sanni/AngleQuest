@@ -7,7 +7,7 @@ import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from '../Jobseekers/PickInterviewer';
+import OpenModal2 from '../Jobseekers/Getstart';
 import OpenModal3 from '../Jobseekers/Pickyourcoach';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 
@@ -151,39 +151,47 @@ const HomePage = () => {
         <View style={styles.greenBorderedBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', marginTop: 20}}>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30  }}>On the journey of growth with you</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30  }}>Start your journey of growth</Text>
           <TouchableOpacity style={styles.touchable} onPress={() => setModalVisible(true)}>
           <Text style={styles.touchableText}>Drop Suggestion</Text>
           </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={handleOpenPress2} >
-          <View style={{flexDirection: 'row', marginTop: 10,}}>
+          <View style={{flexDirection: 'row', marginTop: 5,}}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Pick an expert as your coach</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Get Started</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} >
-          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create your growth plan</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Setup your current role and next target</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress4} >
-          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Join a hub</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Pick an expert as your coach</Text>
           </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 13, color: '#D3D3D3', marginTop: 15, marginLeft: 30 }}>Let's work together to unleach your best professional self</Text>
+          <TouchableOpacity onPress={handleOpenPress4} >
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
+          <Image
+       source={require('../assets/mark.png')}
+        style={styles.icon}
+      />
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Growth plan, join hub, advice & mentorship</Text>
+          </View>
+          </TouchableOpacity>
           </BlurView>
           </View>
 
@@ -309,7 +317,7 @@ const HomePage = () => {
        source={require('../assets/question.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
           </View>
           <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Send your question and get response as soon as possible from your coach</Text>
           <TouchableOpacity onPress={goToMessages} style={styles.touchablecoach}>
@@ -323,7 +331,7 @@ const HomePage = () => {
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 16, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next knowledge sharing session</Text>
+           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next knowledge sharing session</Text>
            </View>
            <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20  }}>Setting up master data on SAP on XYZ (date) with coach Joop Melcher</Text>
            <View style={{flexDirection: 'row', marginTop: 8 }}>
@@ -342,7 +350,7 @@ const HomePage = () => {
        source={require('../assets/feedback (2).png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
           </View>
           <View style={{flexDirection: 'row' }}>
           <Text style={{fontSize: 13, color: 'white', marginTop: 20, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Interview Feedback</Text>
@@ -359,7 +367,7 @@ const HomePage = () => {
           </View>
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>My Angle Badge</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>My Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
           <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
@@ -434,8 +442,8 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   icon: {
-    width: 10,
-    height: 10,
+    width: 15,
+    height: 15,
     marginLeft: 30,
     marginTop: 10
   },

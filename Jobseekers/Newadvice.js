@@ -152,7 +152,7 @@ function MyComponent({ onClose }) {
         </View>
         <View style={styles.cell}><Text style={{ color: 'grey' }}>09:00AM-05:00PM</Text>
         </View>
-      </View>
+      </View> 
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text>Date and Time</Text>

@@ -66,15 +66,13 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                        <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
-                                            Hello Patrick, as a Data Analyst, here is something for you
-                                        </Text>
-                                        <Text style={{ color: '#206C00', fontSize: 13, marginTop: 10, marginLeft: 50 }}>
-                                            Have you been longing to leap to the next stage in your career and it has been challenging?
+                                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
+                                            Hey Patrick, here is an offer...
                                         </Text>
                                         <Text style={{ color: '#206C00', fontSize: 13, marginLeft: 50, marginTop: 3 }}>
-                                            If Yes, do you know expert Emily Ray can become your coach and do the following with you:
+                                            Do you know expert Emily Ray can become your coach and do the following with you:
                                         </Text>
+
                                         <View style={styles.box}>
                                         <View style={styles.arrowContainer}>
             <View style={styles.arrow} />
@@ -83,7 +81,7 @@ const App = () => {
         {/* Basic Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1.</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1. Growth Plan</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -114,7 +112,7 @@ const App = () => {
         {/* Standard Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, borderRadius: 12, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1  }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10 }}>2.</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10 }}>2. Hubs</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -145,7 +143,7 @@ const App = () => {
         {/* Pro Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>3.</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>3. Advice</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -168,7 +166,7 @@ const App = () => {
          {/* Pro Section */}
          <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>4.</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>4. Mentorship & Guidance</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -223,12 +221,14 @@ const App = () => {
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
 
+                                            <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
                                                 <Text style={styles.buttonTextplus}>Next</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
                                                 <Text style={styles.buttonTextskip}>Skip</Text>
                                             </TouchableOpacity>
+                                            </View>
                                         </View>
                                         <Modal
                                             animationType="slide"
@@ -332,13 +332,19 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginLeft: 30,
     },
+    buttonContainer: {
+      position: 'absolute',
+      flexDirection: 'row',
+      right: 30,
+      marginBottom: 5,
+      bottom: -30
+  },
     buttonplus: {
         backgroundColor: 'coral',
         padding: 5,
         marginLeft: 360,
         width: 100,
         paddingHorizontal: 20,
-        marginTop: 10,
         marginBottom: 30
     },
     buttonskip: {
@@ -349,7 +355,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         width: 100,
         paddingHorizontal: 20,
-        marginTop: 10,
         marginBottom: 30
     },
     buttonTextplus: {
