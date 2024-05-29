@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
   },
   buttonplus: {
     backgroundColor: 'coral',
+    borderRadius: 5,
     padding: 5,
     position: 'absolute',
     right: 40,

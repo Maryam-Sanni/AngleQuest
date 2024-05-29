@@ -34,11 +34,12 @@ const MyComponent = () => {
   ];
 
   const handleCardPress = (title) => {
-    // Handle the press event here, you can navigate to another screen or perform any action.
     if (title === "Join as a Job Seeker") {
-      navigation.navigate('Sign Up'); 
+      navigation.navigate('Sign Up');  
     } else if (title === "Join as an Expert") {
       navigation.navigate('Create account');
+    } else if (title === "Join as a Recruiter") {
+      navigation.navigate('Sign Up - Corporate');
     }
     console.log(`Pressed ${title}`);
   };

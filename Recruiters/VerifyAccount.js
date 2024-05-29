@@ -35,11 +35,11 @@ const VerificationContent = ({ userEmail }) => {
   const handleVerify = () => {
     // Perform verification logic here
     // Navigate to ChoosePlan page
-    navigation.navigate('Home');
+    navigation.navigate('Home - Corporate');
   };
 
   const handleChangeEmail = () => {
-    navigation.navigate('Sign Up'); // Navigate to sign-up page
+    navigation.navigate('Sign Up - Corporate'); // Navigate to sign-up page
   };
 
   return (
@@ -48,10 +48,10 @@ const VerificationContent = ({ userEmail }) => {
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1df78110c7d4fdfb4f6b7d4088e1c94a707bf505e4c12deaff442397fc5c68f5?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
         style={styles.logo}
       />
-      <Text style={styles.title}>Please verify your email</Text>
+      <Text style={styles.title}>Please verify your business email</Text>
       <Text style={styles.text}>A verification code has been sent to</Text>
       <Text style={styles.email}>{userEmail}</Text>
-      <Text style={styles.text}>Please check your inbox and enter the verification code below to verify your email address.</Text>
+      <Text style={styles.text}>Please check your inbox and enter the verification code below to help us verify that this business account exists.</Text>
       <SixBoxesInput />
       <TouchableOpacity style={styles.button} onPress={handleVerify}>
         <Text style={styles.buttonText}>Verify</Text>

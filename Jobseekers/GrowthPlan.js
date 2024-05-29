@@ -44,22 +44,22 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16}}>Growth Plan</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16, }}>Growth Plan</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress2} >
-            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: '#206C00', height: 30, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600' }}>+ New</Text>
                   </View>
                   </TouchableOpacity>
             </View>
      <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Growth Plan</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,}}>About Growth Plan</Text>
      <Text style={{ fontSize: 15, color: "black", marginTop: 5, marginLeft: 30, marginRight: 200 }}>The process begins with selecting an expert to serve as your coach. Next, describe the growth objectives you wish to achieve. Your expert will then review your goals and arrange a meeting to discuss them in detail.</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: '#206C00', width: 150, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Get Started</Text>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600'}}>Get Started</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/19.png')} style={styles.boximage} />
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1, 
   },
   box: {
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 10,
      backgroundColor: 'white', 
      marginTop: 50,

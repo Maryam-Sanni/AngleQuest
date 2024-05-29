@@ -120,6 +120,7 @@ greenBox: {
   },
   buttonplus: {
         backgroundColor: 'white',
+        borderRadius: 5,
          borderWidth: 1,
         borderColor: 'coral',
         padding: 5,
@@ -131,6 +132,7 @@ greenBox: {
       },
       buttonskip: {
         backgroundColor: 'coral',
+        borderRadius: 5,
          marginTop: 200,
         borderWidth: 1,
         borderColor: 'coral',

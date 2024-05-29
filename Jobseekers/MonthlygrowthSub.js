@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     },
     buttonplus: {
         backgroundColor: 'white',
+        borderRadius: 5,
         borderWidth: 1,
         borderColor: 'coral',
         padding: 5,
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
     },
     buttonskip: {
         backgroundColor: 'coral',
+        borderRadius: 5,
         marginTop: 150,
         borderWidth: 1,
         borderColor: 'coral',

@@ -11,6 +11,21 @@ import OpenModal4 from '../Experts/AdviceProfile';
 import OpenModal5 from '../Experts/InterviewProfile';
 
 const HomePage = () => {
+  const [isHovered1, setIsHovered1] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
+  const [isHovered3, setIsHovered3] = useState(false);
+  const [isHovered4, setIsHovered4] = useState(false);
+  const [isHovered5, setIsHovered5] = useState(false);
+  const [isHovered6, setIsHovered6] = useState(false);
+  const [isHovered7, setIsHovered7] = useState(false);
+  const [isHovered8, setIsHovered8] = useState(false);
+  const [isHovered9, setIsHovered9] = useState(false);
+  const [isHovered10, setIsHovered10] = useState(false);
+  const [isHovered11, setIsHovered11] = useState(false);
+  const [isHovered12, setIsHovered12] = useState(false);
+  const [isHovered13, setIsHovered13] = useState(false);
+  const [isHovered14, setIsHovered14] = useState(false);
+  const [isHovered15, setIsHovered15] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
@@ -166,7 +181,14 @@ const HomePage = () => {
           <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
 
-          <TouchableOpacity onPress={goToMessages} style={styles.touchablechat} >
+          <TouchableOpacity onPress={goToMessages} 
+          style={[
+            styles.touchablechat,
+            isHovered1 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered1(true)}
+          onMouseLeave={() => setIsHovered1(false)}
+        >
           <Text style={styles.touchableText}>See All Chats</Text>
           </TouchableOpacity>
           </BlurView>
@@ -177,44 +199,51 @@ const HomePage = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', marginTop: 20, }}>
           <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30 }}>Passionate About Lifting Others?</Text>
-          <TouchableOpacity style={styles.touchable} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity onPress={() => setModalVisible(true)}
+          style={[
+          styles.touchable,
+          isHovered2 && styles.touchableOpacityHovered
+        ]}
+        onMouseEnter={() => setIsHovered2(true)}
+        onMouseLeave={() => setIsHovered2(false)}
+      >
           <Text style={styles.touchableText}>Drop Suggestion</Text>
           </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={handleOpenPress2} >
-          <View style={{flexDirection: 'row', marginTop: 10}}>
+          <View style={{flexDirection: 'row', marginTop: 5}}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a growth plan profile</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a growth plan profile</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} >
-          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create hubs</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create hubs</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress4} >
-          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create advice profiles</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create advice profiles</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress5} >
-          <View style={{flexDirection: 'row', marginTop: 5, }}>
+          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}
         style={styles.icon}
       />
-          <Text style={{fontSize: 13, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create interview profile</Text>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create interview profile</Text>
           </View>
           </TouchableOpacity>
           </BlurView>
@@ -252,10 +281,24 @@ const HomePage = () => {
               style={{ width: 40, height: 40, marginLeft: -2, marginTop: 7,}}
             />
               <View style={{flexDirection: 'row' }}>
-<TouchableOpacity style={styles.touchablesession}>
+<TouchableOpacity
+style={[
+  styles.touchablesession,
+  isHovered3 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered3(true)}
+onMouseLeave={() => setIsHovered3(false)}
+>
           <Text style={styles.touchableTextsession}>Setting up master data on SAP</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchablejoinsession}>
+          <TouchableOpacity 
+          style={[
+            styles.touchablejoinsession,
+            isHovered4 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered4(true)}
+          onMouseLeave={() => setIsHovered4(false)}
+          >
           <Text style={styles.touchableTextjoinsession}>Start</Text>
           </TouchableOpacity>
           </View>
@@ -267,16 +310,44 @@ const HomePage = () => {
 <View style={styles.greenwhitebox}> 
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Manage activites</Text>
 <View style={{flexDirection: 'row' }}>
-<TouchableOpacity onPress={goToManageHubs} style={styles.touchablerate}>
+<TouchableOpacity onPress={goToManageHubs} 
+style={[
+  styles.touchablerate,
+  isHovered5 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered5(true)}
+onMouseLeave={() => setIsHovered5(false)}
+>
           <Text style={styles.touchableTextrate}>Hubs</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToGrowth} style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToGrowth} 
+          style={[
+            styles.touchablerate,
+            isHovered6 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered6(true)}
+          onMouseLeave={() => setIsHovered6(false)}
+          >
           <Text style={styles.touchableTextrate}>Growth Plan</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToInterview} style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToInterview} 
+          style={[
+            styles.touchablerate,
+            isHovered7 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered7(true)}
+          onMouseLeave={() => setIsHovered7(false)}
+          >
           <Text style={styles.touchableTextrate}>Interview</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToAdvice} style={styles.touchablerate}>
+          <TouchableOpacity onPress={goToAdvice} 
+          style={[
+            styles.touchablerate,
+            isHovered8 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered8(true)}
+          onMouseLeave={() => setIsHovered8(false)}
+          >
           <Text style={styles.touchableTextrate}>Advice</Text>
           </TouchableOpacity>
 </View>
@@ -287,7 +358,14 @@ const HomePage = () => {
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 20, marginLeft: 20, fontWeight: 'bold' }}>New Offer</Text>
 <View style={{flexDirection: 'row' }}>
 <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 20, textDecoration: 'underline' }}>ASML wanta to enroll 5 SAP FI as your protegees</Text>
-<TouchableOpacity style={styles.touchablejoinrate}>
+<TouchableOpacity
+style={[
+  styles.touchablejoinrate,
+  isHovered9 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered9(true)}
+onMouseLeave={() => setIsHovered9(false)}
+>
           <Text style={styles.touchableTextjoinrate}>Send a Bid </Text>
           </TouchableOpacity>
           </View>
@@ -305,7 +383,14 @@ const HomePage = () => {
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
               <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity style={styles.touchablestart}>
+<TouchableOpacity 
+style={[
+  styles.touchablestart,
+  isHovered10 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered10(true)}
+onMouseLeave={() => setIsHovered10(false)}
+>
           <Text style={styles.touchableTextjoinreview}>Start</Text>
           </TouchableOpacity>
           </View>
@@ -323,7 +408,14 @@ const HomePage = () => {
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
               <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity style={styles.touchablestart}>
+<TouchableOpacity 
+style={[
+  styles.touchablestart,
+  isHovered11 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered11(true)}
+onMouseLeave={() => setIsHovered11(false)}
+>
           <Text style={styles.touchableTextjoinreview}>Start</Text>
           </TouchableOpacity>
           </View>
@@ -341,7 +433,14 @@ const HomePage = () => {
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
               <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity style={styles.touchablestart}>
+<TouchableOpacity
+style={[
+  styles.touchablestart,
+  isHovered12 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered12(true)}
+onMouseLeave={() => setIsHovered12(false)}
+>
           <Text style={styles.touchableTextjoinreview}>Start</Text>
           </TouchableOpacity>
           </View>
@@ -365,7 +464,14 @@ const HomePage = () => {
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Incoming question...</Text>
           </View>
           <Text style={{fontSize: 13, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20  }}>How do i find the t-code for a master data repository in ECAC? And how do I export the data once i can access it?</Text>
-          <TouchableOpacity onPress={goToMessages} style={styles.touchablecoach}>
+          <TouchableOpacity onPress={goToMessages} 
+          style={[
+            styles.touchablecoach,
+            isHovered13 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered13(true)}
+          onMouseLeave={() => setIsHovered13(false)}
+          >
           <Text style={styles.touchableTextcoach}>Respond</Text>
           </TouchableOpacity>
           </BlurView>
@@ -382,7 +488,14 @@ const HomePage = () => {
            </View>
            <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20  }}>Setting up master data on SAP on XYZ (date) with Joop Melcher</Text>
            <View style={{flexDirection: 'row', marginTop: 8 }}>
-<TouchableOpacity onPress={goToManageHubs}  style={styles.touchableall}>
+<TouchableOpacity onPress={goToManageHubs} 
+style={[
+  styles.touchableall,
+  isHovered14 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered14(true)}
+onMouseLeave={() => setIsHovered14(false)}
+>
           <Text style={styles.touchableTextall}>See all</Text>
           </TouchableOpacity>
           
@@ -416,7 +529,14 @@ const HomePage = () => {
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Income Overview</Text>
           </View>
           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20  }}>You earned $ (XYZ) from session with Joop Melcher. Your available balance is...</Text>
-          <TouchableOpacity onPress={goToWithdrawal} style={styles.touchablecoach}>
+          <TouchableOpacity onPress={goToWithdrawal} 
+          style={[
+            styles.touchablecoach,
+            isHovered15 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered15(true)}
+          onMouseLeave={() => setIsHovered15(false)}
+          >
           <Text style={styles.touchableTextcoach}>Withdraw Earnings</Text>
           </TouchableOpacity>
           </BlurView>
@@ -497,8 +617,8 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   icon: {
-    width: 10,
-    height: 10,
+    width: 15,
+    height: 15,
     marginLeft: 30,
     marginTop: 10
   },
@@ -584,7 +704,7 @@ whiteBox: {
     marginTop: 12,
     marginLeft: 120,
     backgroundColor: 'rgba(200,200,125,0.3)',
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -601,7 +721,7 @@ whiteBox: {
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: 'rgba(200,200,125,0.3)',
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -623,7 +743,7 @@ whiteBox: {
     marginTop: 25,
     marginLeft: 30,
     marginRight: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -646,7 +766,7 @@ whiteBox: {
     width: 220,
     marginLeft: 30,
     marginRight: 30,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -668,7 +788,7 @@ whiteBox: {
     marginTop: 15,
     width: 120,
     marginRight: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -689,7 +809,7 @@ whiteBox: {
     paddingHorizontal: 20, 
     marginTop: 10,
     marginRight: 15,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -734,7 +854,7 @@ whiteBox: {
     marginTop: 10,
     marginRight: 10,
     marginLeft: 50,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -763,7 +883,7 @@ whiteBox: {
     paddingHorizontal: 20, 
     marginTop: 10,
     marginLeft: 350,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -779,7 +899,7 @@ whiteBox: {
     paddingHorizontal: 20, 
     marginTop: 15,
     marginLeft: 240,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -800,7 +920,7 @@ whiteBox: {
     paddingHorizontal: 20, 
     marginTop: 10,
     marginLeft: 70,
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -814,6 +934,9 @@ whiteBox: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13
+  },
+  touchableOpacityHovered: {
+    backgroundColor: 'coral'
   },
     verticalLine: {
     height: 60,

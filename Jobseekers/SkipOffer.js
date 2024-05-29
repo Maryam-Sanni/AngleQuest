@@ -51,7 +51,7 @@ const App = () => {
                                         <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
                                             What would you like to do today?
                                         </Text>
-                                        <Text style={{ color: '#206C00', fontSize: 13, marginLeft: 50, marginTop: 3 }}>
+                                        <Text style={{ color: '#206C00', fontSize: 14, marginLeft: 50, marginTop: 3 }}>
                                             Below are the different ways we can contribute to your growth
                                         </Text>
                 
@@ -65,7 +65,7 @@ const App = () => {
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
             <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you have an upcoming interview? </Text>
             <TouchableOpacity onPress={goToInterview} style={{ justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12, color: 'white', alignText: 'center'}}>Get Interviewed</Text>
+              <Text style={{ fontSize: 12.5, color: 'white', alignText: 'center'}}>Get Interviewed</Text>
             </TouchableOpacity>
            
           </View>
@@ -75,7 +75,7 @@ const App = () => {
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
             <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you want to move to the next level in your career? </Text>
             <TouchableOpacity onPress={goToGrowth} style={{width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12, color: 'white', alignText: 'center' }}>Create Plan</Text>
+              <Text style={{ fontSize: 13, color: 'white', alignText: 'center' }}>Create Plan</Text>
             </TouchableOpacity>
            
           </View>
@@ -85,7 +85,7 @@ const App = () => {
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
             <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you want to learn directly from an expert? </Text>
             <TouchableOpacity onPress={goToHub} style={{ width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12, color: 'white' }}>Join a hub</Text>
+              <Text style={{ fontSize: 13, color: 'white' }}>Join a hub</Text>
             </TouchableOpacity>
            
           </View>
@@ -105,7 +105,7 @@ const App = () => {
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
             <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Others?</Text>
             <TouchableOpacity onPress={handleOpenPress} style={{width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12, color: 'white' }}>Tell Us</Text>
+              <Text style={{ fontSize: 13, color: 'white' }}>Tell Us</Text>
             </TouchableOpacity>
            
           </View>
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
     },
     buttonplus: {
         backgroundColor: 'coral',
+        borderRadius: 5,
         padding: 5,
         width: 100,
         paddingHorizontal: 20,

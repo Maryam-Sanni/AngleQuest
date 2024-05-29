@@ -43,7 +43,7 @@ function MyComponent() {
     };
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const targetDate = '2024-05-25T00:00:00'; // Change this to your target date and time
+    const targetDate = '2024-05-31T00:00:00'; // Change this to your target date and time
   
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -199,8 +199,8 @@ function MyComponent() {
     </View>
       </View>
       <View style={styles.box2}>
-        <Text style = {{fontSize: 10, color: 'grey', marginTop: 20, fontWeight: '600'}}>Next Session is in</Text>
-         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 10 }}>{timerComponents}</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600'}}>You have a new session in:</Text>
+         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5 }}>{timerComponents}</Text>
         <Text style = {{fontSize: 12, marginTop: 20, color: 'grey'  }}>By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress. Seeing these sessions scheduled prompts you to prepare accordingly and actively participate. </Text>
      </View>
      </View>

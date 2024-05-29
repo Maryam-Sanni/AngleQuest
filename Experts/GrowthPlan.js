@@ -31,7 +31,7 @@ function MyComponent() {
     };
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const targetDate = '2024-05-25T00:00:00'; // Change this to your target date and time
+    const targetDate = '2024-05-29T00:00:00'; // Change this to your target date and time
   
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -138,28 +138,28 @@ function MyComponent() {
 
      <View style={styles.container}>
       <View style={styles.box}>
-         <Text style = {{fontSize: 10, color: 'grey' }}>Pending Growth Plan Reviews</Text>
+         <Text style = {{fontSize: 12, color: 'grey' }}>Pending Growth Plan Reviews</Text>
          <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-choice.gif')} style={styles.boximage}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5 }}>5</Text>
            </View>
-           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>Candidates are waiting for your review</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>Candidates are waiting for your review</Text>
       </View>
       <View style={styles.box}>
-        <Text style = {{fontSize: 10, color: 'grey' }}>Plans Reveiwed</Text>
+        <Text style = {{fontSize: 12, color: 'grey' }}>Plans Reveiwed</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-done.gif')} style={styles.boximage}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50' }}>30</Text>
       </View>
-      <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have reveiwed 6 plan(s) this week</Text>
+      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have reveiwed 6 plan(s) this week</Text>
       </View>
       <View style={styles.box2}>
-        <Text style = {{fontSize: 10, color: 'grey' }}>Next growth Plan Session in</Text>
+        <Text style = {{fontSize: 12, color: 'grey' }}>Next growth Plan Session in</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-delivery-time.gif')} style={styles.boximage2}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen' }}>{timerComponents}</Text>
            </View>
-           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
       </View>
     </View>
 

@@ -111,8 +111,6 @@ const handleCloseModal = () => {
             width: '95%',
             height: 300,
             borderRadius: 5,
-            marginLeft: 20,
-            marginRight: 20,
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
@@ -175,16 +173,17 @@ const handleCloseModal = () => {
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
+  style={{ height: '110%', width: '100%',flex: 1}}
 >
-    <View style={{ flex: 1}}>
+<BlurView intensity={70} style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <View style={styles.greenBox}>
-        <BlurView intensity={100} style={styles.blurBackground}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ flex: 1, marginLeft: 270, }}>
+         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+         <View style={styles.glassBox}>
+         <View style={styles.pagecontainer}>
+          <View style={{ flex: 1 }}>
           <View style={styles.header}>
         
             <TouchableOpacity onPress={goToHubs}
@@ -201,24 +200,25 @@ const handleCloseModal = () => {
             onMouseEnter={() => setIsAllHovered(true)}
             onMouseLeave={() => setIsAllHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/chatroom.png')} style={styles.image} />
+                <Image source={require('../assets/chatroom.png')} style={styles.image2} />
                 <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
               </View>
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ Create New Hub</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: '#d3f9d8', width: 150, alignItems: 'center', marginTop: 20, marginBottom: 10, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600' }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
 
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginRight: 100, marginLeft: 30 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginRight: 50, marginLeft: 50 }}>
               {renderCards()}
             </View>
             </View>
-          
+            </View>
+            </View>
         </ScrollView>
-        </BlurView>
+        
         </View>
       </View>
       <Modal
@@ -231,9 +231,8 @@ const handleCloseModal = () => {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
-      
-    </View>
-    
+     
+    </BlurView>
     </ImageBackground>
   );
 }
@@ -244,16 +243,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  }, 
+  pagecontainer: {
+    backgroundColor: '#f7fff4',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    padding: 20, 
+    marginTop: 30,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 30,
+    borderWidth: 2, 
+    borderColor: 'rgba(225,225,212,0.3)',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+ glassBox: {
+  backgroundColor: 'rgba(225,255,212,0.3)',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    marginTop: 30,
+    marginLeft: 240,
+    marginRight: 30,
+    marginBottom: 30,
   },
   header: {
-    marginLeft: -60,
+    marginLeft: 0,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: '#f7fff4',
+    backgroundColor: 'none',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f7fff4',
+    borderBottomColor: '#CCC',
   },
   item: {
     flexDirection: 'row',
@@ -266,6 +294,12 @@ const styles = StyleSheet.create({
     color: '#206C00'
   },
   image: {
+    width: 24,
+    height: 24,
+    marginRight: 5,
+    marginLeft: 50
+  },
+  image2: {
     width: 24,
     height: 24,
     marginRight: 5,

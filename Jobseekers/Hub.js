@@ -48,7 +48,7 @@ function MyComponent() {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress} >
-            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: '#206C00', height: 30, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600' }}>+ New</Text>
                   </View>
                   </TouchableOpacity>
@@ -56,11 +56,11 @@ function MyComponent() {
     
 
             <View style={styles.box}>
-     <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Hubs</Text>
-     <Text style={{ fontSize: 14, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Hubs</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: '#206C00', width: 150, alignItems: 'center', alignContent: 'center',}}>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Join a hub</Text>
                   </View>
      </TouchableOpacity>
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1, 
   },
   box: {
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 10,
      backgroundColor: 'white', 
      marginTop: 50,

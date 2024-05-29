@@ -66,11 +66,11 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                    <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
-                                            Hey Patrick, here is an offer...
+                                    <Text style={{ color: 'black', fontSize: 23, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
+                                            An Offer For You
                                         </Text>
-                                        <Text style={{ color: '#206C00', fontSize: 13, marginLeft: 50, marginTop: 3 }}>
-                                            Do you know expert Emily Ray can become your coach and do the following with you:
+                                        <Text style={{ color: '#206C00', fontSize: 16, marginLeft: 50, marginTop: 3 }}>
+                                          Emily Ray will work with you on the journey, and do the following with you:
                                         </Text>
 
                                         <View style={styles.box}>
@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
   },
     buttonplus: {
         backgroundColor: 'coral',
+        borderRadius: 5,
         padding: 5,
         marginLeft: 360,
         width: 100,
@@ -349,6 +350,7 @@ const styles = StyleSheet.create({
     },
     buttonskip: {
         backgroundColor: 'white',
+        borderRadius: 5,
         borderWidth: 1,
         borderColor: 'coral',
         padding: 5,

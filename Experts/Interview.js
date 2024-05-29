@@ -30,7 +30,7 @@ function MyComponent() {
     };
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const targetDate = '2024-05-25T00:00:00'; // Change this to your target date and time
+    const targetDate = '2024-05-30T00:00:00'; // Change this to your target date and time
   
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -133,38 +133,38 @@ function MyComponent() {
 
      <View style={styles.container}>
       <View style={styles.box}>
-         <Text style = {{fontSize: 10, color: 'grey' }}>No of candidates interviewed</Text>
+         <Text style = {{fontSize: 12, color: 'grey' }}>No of candidates interviewed</Text>
          <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-line-chart.gif')} style={styles.boximage}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5 }}>500</Text>
            </View>
-           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 2 new booked session(s) today</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have 2 new booked session(s) today</Text>
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 10, color: 'grey' }}>Total Earnings</Text>
+        <Text style = {{fontSize: 12, color: 'grey' }}>Total Earnings</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-money.gif')} style={styles.boximage}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue' }}>$1,580</Text>
      </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You earned a total of $30 today</Text>
+     <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You earned a total of $30 today</Text>
     
       </View>
      
       <View style={styles.box}> 
-        <Text style = {{fontSize: 10, color: 'grey' }}>Profile Visits</Text>
+        <Text style = {{fontSize: 12, color: 'grey' }}>Profile Visits</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-people.gif')} style={styles.boximage}  />
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey' }}>20</Text>
       </View>
-      <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have 10 profile visit(s) this week</Text>
+      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have 10 profile visit(s) this week</Text>
       </View>
       <View style={styles.box}>
-        <Text style = {{fontSize: 10, color: 'black' }}>Next Session in</Text>
+        <Text style = {{fontSize: 12, color: 'black' }}>Next Session in</Text>
         <View style={{flexDirection: 'row'}}>
            <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen' }}>{timerComponents}</Text>
            </View>
-           <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
       </View>
     </View>
     
