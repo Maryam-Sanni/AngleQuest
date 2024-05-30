@@ -6,8 +6,8 @@ import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from '../Jobseekers/Getstart';
-import OpenModal3 from '../Jobseekers/Pickyourcoach';
+import OpenModal2 from './New Employee';
+import OpenModal3 from './New Manager';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 
 
@@ -160,7 +160,7 @@ const EmployeePerformance = () => {
           <View style={{flexDirection: 'row', marginTop: 20}}>
           <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30  }}>Orchestrate your employees' growth direction</Text>
           </View>
-          <TouchableOpacity >
+          <TouchableOpacity onPress={handleOpenPress2} >
           <View style={{flexDirection: 'row', marginTop: 5,}}>
           <Image
        source={require('../assets/mark.png')}
@@ -169,7 +169,7 @@ const EmployeePerformance = () => {
           <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Add an employee</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity >
+          <TouchableOpacity onPress={handleOpenPress3} >
           <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
        source={require('../assets/mark.png')}

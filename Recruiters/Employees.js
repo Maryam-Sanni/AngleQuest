@@ -6,6 +6,7 @@ import CustomPercentageChart from '../components/PercentageChart';
 import ManageEmployees from './AssignManagers';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Recruiters/New Employee';
+import { BlurView } from 'expo-blur';
 
 
 function MyComponent() {
@@ -44,23 +45,32 @@ function MyComponent() {
                                     <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Employees</Text>
                                 </View>
                             </TouchableHighlight>
-                    
-                        </View>
-                        <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ New</Text>
+                            <TouchableOpacity onPress={handleOpenPress}>
+    <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ New</Text>
                   </View>
      </TouchableOpacity>
+                        </View>
 
+     <View style={{flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
      <View style={styles.container}>
      <View style={styles.BoxesContainer}>
       <View style={styles.box2}>
-      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#206C00'}}>Onboard a new employee for a career hyper boost</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 5, marginLeft: 10, marginRight: 200, color: 'grey' }}>Orchestrate the growth you wish to see</Text>
+      <BlurView intensity={100} style={styles.blurBackground}>
+      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Onboard a new employee for a career hyper boost</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 150, color: 'white' }}>Assign each employee to a manager who will oversee their daily tasks and career development, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.</Text>
      <View style={{flexDirection: 'row'}}>
-    
      <Image source={require('../assets/23.png')} style={styles.boximage} />
       </View>
+      <View style={{flexDirection: 'row', marginTop: 10}}>
+        <TouchableOpacity>
+      <Image source={require('../assets/25.png')} style={styles.icon} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleOpenPress}>
+     <Image source={require('../assets/26.png')} style={styles.icon} />
+     </TouchableOpacity>
+      </View>
+      </BlurView>
       </View>
 
       <ManageEmployees />
@@ -68,16 +78,16 @@ function MyComponent() {
 
       <View style={styles.BoxesContainer}>
       <View style={styles.box}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#206C00'}}>Stats</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Stats</Text>
       <View style={{flexDirection: 'row'}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10,}}>Growth Plan</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Growth Plan</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
-<Text style={{ marginTop: 10, marginLeft: 10,}}>Hub Sessions</Text>
+<Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Hub Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
                   </View>
@@ -86,22 +96,22 @@ function MyComponent() {
      
       <View style={{flexDirection: 'row', marginTop: 10}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10,}}>Advice Sessions</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Advice Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>7</Text>
                   </View>
 </View>
-<View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
-<Text style={{ marginTop: 10, marginLeft: 10,}}>Reviews</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
+<View style={{flexDirection: 'column', position: 'absolute', right: 20}}>
+<Text style={{ marginTop: 10, color: 'white'}}>Reviews</Text>
+      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>13</Text>
                   </View>
                   </View>
       </View>
       <View style={{borderWidth: 1, borderColor: '#63EC55', marginTop: 25,}}>
-      <Text style={{fontSize: 18, color: '#206C00', marginTop: 10, marginLeft: 20,  fontWeight: 'bold' }}>Angle Badge</Text>
+      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold' }}>Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>This is the combined progress of your team</Text>
+          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white'  }}>This is the combined progress of your team</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={45} />
       </View>
@@ -111,7 +121,7 @@ function MyComponent() {
       </View>
       <View style={styles.box3}>
       <View style={{flexDirection: 'row', marginTop: 10}}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#206C00'}}>Members</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Members</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
                   </View>
@@ -135,7 +145,7 @@ function MyComponent() {
             </View>
       </View>
       </View>
-      
+      </View>
 
 
 
@@ -174,8 +184,8 @@ const styles = StyleSheet.create({
   header: {
     marginLeft: -60,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    alignItems: 'space-between',
     backgroundColor: '#f7fff4',
     paddingVertical: 15,
     borderBottomWidth: 1,
@@ -199,6 +209,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 100
   },
+  icon: {
+    width: 25,
+    height: 25,
+    marginRight: 5,
+    marginTop: 5,
+    marginLeft: 10
+  },
   container: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -209,40 +226,23 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   box: {
-    backgroundColor: '#f7fff4',
+    backgroundColor: 'rgba(125,125,125,0.3)',
     marginLeft: 20,
     padding: 10,
     borderRadius: 20,
     width: 280,
     height: 360,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderWidth: 1, borderColor: 'rgba(225,225,212,0.3)',
   },
   box2: {
-    backgroundColor: '#f7fff4',
-    padding: 10,
+    backgroundColor: 'rgba(125,125,125,0.3)',
     borderRadius: 20,
-    width: 700,
+    width: 750,
     height: 180,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.5)',
   },
   box3: {
-    backgroundColor: '#f7fff4',
+    backgroundColor: 'rgba(125,125,125,0.3)',
     marginLeft: 20,
     marginTop: 20,
     padding: 10,
@@ -250,22 +250,14 @@ const styles = StyleSheet.create({
     width: 280,
     height: 180,
     marginTop: 30,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderWidth: 1, borderColor: 'rgba(225,225,212,0.3)',
   },
   boximage: {
-    width: 130,
-    height: 130,
+    width: 120,
+    height: 120,
    position: 'absolute',
    right: 20,
-   marginTop: -40
+   marginTop: -100
   },
   boximage2: {
     width: 30,
@@ -274,6 +266,11 @@ const styles = StyleSheet.create({
     left: 350,
     marginTop:5, 
     borderRadius: 25
+  },
+  blurBackground: {
+    flex: 1, 
+    borderRadius: 20, 
+    padding: 10,
   },
 });
 

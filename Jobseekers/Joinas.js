@@ -21,7 +21,7 @@ const MyComponent = () => {
   const cardData = [
     {
       imageSrcs: ["https://cdn.builder.io/api/v1/image/assets/TEMP/257662131a5e3fbd93f0782e875f67648348be710a5e1ffe12b65018fa95fb17?apiKey=7b9918e68d9b487793009b3aea5b1a32&", "https://cdn.builder.io/api/v1/image/assets/TEMP/6e418c395062e647058c98c8eae4fe89bdc4d69defd64ac3901ddf5c21063eb5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"],
-      title: "Join as a Job Seeker",
+      title: "Join as an Individual",
     },
     {
       imageSrcs: ["https://cdn.builder.io/api/v1/image/assets/TEMP/99b3007e756695be08006873dab85669181878e7d5f03e8bfe5408316f7f39b8?apiKey=7b9918e68d9b487793009b3aea5b1a32&", "https://cdn.builder.io/api/v1/image/assets/TEMP/6e418c395062e647058c98c8eae4fe89bdc4d69defd64ac3901ddf5c21063eb5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"],
@@ -29,16 +29,16 @@ const MyComponent = () => {
     },
     {
       imageSrcs: ["https://cdn.builder.io/api/v1/image/assets/TEMP/ee8e3816fa45f767b3023c27dd0f0c4e76d9fd1ce2f8d801b9abd4e845a1a6f5?apiKey=7b9918e68d9b487793009b3aea5b1a32&", "https://cdn.builder.io/api/v1/image/assets/TEMP/6e418c395062e647058c98c8eae4fe89bdc4d69defd64ac3901ddf5c21063eb5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"],
-      title: "Join as a Recruiter",
+      title: "Join as a Business",
     },
   ];
 
   const handleCardPress = (title) => {
-    if (title === "Join as a Job Seeker") {
+    if (title === "Join as an Individual") {
       navigation.navigate('Sign Up');  
     } else if (title === "Join as an Expert") {
       navigation.navigate('Create account');
-    } else if (title === "Join as a Recruiter") {
+    } else if (title === "Join as a Business") {
       navigation.navigate('Sign Up - Corporate');
     }
     console.log(`Pressed ${title}`);
@@ -52,7 +52,7 @@ const MyComponent = () => {
     <View style={{ flex: 1  }}>
       <Top/ >
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.header}>Join as a Job Seeker, Expert or Recruiter</Text>
+      <Text style={styles.header}>Join as an Individual, Expert or Business</Text>
       <View style={styles.cardsContainer}>
         {cardData.map((card, index) => (
           <Card

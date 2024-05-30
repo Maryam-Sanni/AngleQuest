@@ -51,7 +51,7 @@ const VerificationContent = ({ userEmail }) => {
       <Text style={styles.title}>Please verify your business email</Text>
       <Text style={styles.text}>A verification code has been sent to</Text>
       <Text style={styles.email}>{userEmail}</Text>
-      <Text style={styles.text}>Please check your inbox and enter the verification code below to help us verify that this business account exists.</Text>
+      <Text style={styles.text}>Please enter the verification code sent to you to help us verify that this business account exists</Text>
       <SixBoxesInput />
       <TouchableOpacity style={styles.button} onPress={handleVerify}>
         <Text style={styles.buttonText}>Verify</Text>

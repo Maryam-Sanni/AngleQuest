@@ -9,7 +9,7 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Assign Managers</Text>
+      <Text style={styles.title}>Assign Managers To Employees</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
@@ -27,6 +27,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14}}>Manager</Text>
           </View>
+          <View style={styles.cell}>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Assign New</Text>
+          </View>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
@@ -42,9 +45,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Senior</Text>
           </View>
           <View style={styles.cell2}>
+            <Text style={styles.cellText}>Will Cooper</Text>
+          </View>
+          <View style={styles.cell2}>
           <Picker
-  style={styles.picker} 
+  style={styles.picker2} 
 >
+<Picker.Item label="Choose a manager" value="Choose a manager" />
 <Picker.Item label="Monica Jerry" value="Monica Jerry" />
           <Picker.Item label="Will Cooper" value="Will Cooper" />
           <Picker.Item label="John Othega" value="John Othega" />
@@ -66,9 +73,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Professional</Text>
           </View>
           <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
           <Picker
   style={styles.picker} 
 >
+<Picker.Item label="Choose a manager" value="Choose a manager" />
 <Picker.Item label="Monica Jerry" value="Monica Jerry" />
           <Picker.Item label="Will Cooper" value="Will Cooper" />
           <Picker.Item label="John Othega" value="John Othega" />
@@ -78,7 +89,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Anthony Purity</Text>
+            <Text style={styles.cellText}>Oluwatobi Ogunnaike</Text>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>SAP FI</Text>
@@ -90,9 +101,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Medior</Text>
           </View>
           <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell2}>
           <Picker
-  style={styles.picker} 
+  style={styles.picker2} 
 >
+<Picker.Item label="Choose a manager" value="Choose a manager" />
 <Picker.Item label="Monica Jerry" value="Monica Jerry" />
           <Picker.Item label="Will Cooper" value="Will Cooper" />
           <Picker.Item label="John Othega" value="John Othega" />
@@ -114,9 +129,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Professional</Text>
           </View>
           <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
           <Picker
   style={styles.picker} 
 >
+<Picker.Item label="Choose a manager" value="Choose a manager" />
 <Picker.Item label="Monica Jerry" value="Monica Jerry" />
           <Picker.Item label="Will Cooper" value="Will Cooper" />
           <Picker.Item label="John Othega" value="John Othega" />
@@ -124,6 +143,121 @@ const ScheduledMeetingsTable = () => {
 </Picker>
           </View>
         </View>
+        <View style={styles.row}>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Anthony Okafor</Text>
+          </View>
+          <View style={styles.cell2}> 
+            <Text style={styles.cellText}>SAP FI</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Junior Power apps developer</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Medior</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell2}>
+          <Picker
+  style={styles.picker2} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Fatimah Hussain</Text>
+          </View>
+          <View style={styles.cell}> 
+            <Text style={styles.cellText}>Power Platform</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Senior Power apps developer</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Professional</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
+          <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Ethan Phillips</Text>
+          </View>
+          <View style={styles.cell2}> 
+            <Text style={styles.cellText}>SAP FI</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Junior Power apps developer</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Medior</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell2}>
+          <Picker
+  style={styles.picker2} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Omar Abdullah</Text>
+          </View>
+          <View style={styles.cell}> 
+            <Text style={styles.cellText}>Power Platform</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Senior Power apps developer</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Professional</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
+          <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+
+
+
 
       </View>
       
@@ -142,9 +276,9 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 30,
     marginLeft: 50,
-    color: "black",
+    color: "#63EC55",
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 18,
     textAlign: 'flex-start',
   },
   table: {
@@ -177,18 +311,29 @@ const styles = StyleSheet.create({
   picker: {
     height: 30,
     width: '100%',
-    backgroundColor: 'none',
+    backgroundColor: 'white',
     borderColor: 'grey',
-    borderWidth: 1, 
+    borderWidth: 2, 
     color:'black',
+    borderRadius: 5,
+    fontSize: 14
+  },
+  picker2: {
+    height: 30,
+    width: '100%',
+    backgroundColor: 'rgba(225,225,212,0.05)',
+    borderColor: 'grey',
+    borderWidth: 2, 
+    color:'black',
+    borderRadius: 5,
     fontSize: 14
   },
   greenBox: {
     flex: 1,
-   width: 700,
+   width: 750,
     height: 550, 
     marginTop: 30,
-    backgroundColor: 'rgba(225,225,212,0.3)',
+    backgroundColor: 'rgba(125,125,125,0.3)',
     borderRadius: 20,
     borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,

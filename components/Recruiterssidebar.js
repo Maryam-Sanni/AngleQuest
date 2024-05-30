@@ -26,10 +26,10 @@ function MyComponent() {
           navigation.navigate('Home - Corporate');
           break;
         case "Offers":
-          navigation.navigate('Offers');
+          navigation.navigate('');
           break;
         case "Interview":
-          navigation.navigate('Interview');
+          navigation.navigate(' ');
           break;
           case "Employees":
           navigation.navigate('Employees');
@@ -38,10 +38,10 @@ function MyComponent() {
           navigation.navigate('Managers');
           break;
         case "Hubs":
-          navigation.navigate('Manage Hubs');
+          navigation.navigate('');
           break;
         case "Messages":
-          navigation.navigate('Messaging');
+          navigation.navigate('');
           break;
         default:
           break;
