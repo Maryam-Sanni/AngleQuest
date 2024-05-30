@@ -31,11 +31,11 @@ function MyComponent() {
         case "Interview":
           navigation.navigate('Interview');
           break;
-          case "Growth Plan":
-          navigation.navigate('Growth Plan');
+          case "Employees":
+          navigation.navigate('Employees');
           break;
-        case "Advice":
-          navigation.navigate('Advice');
+        case "Managers":
+          navigation.navigate('Managers');
           break;
         case "Hubs":
           navigation.navigate('Manage Hubs');

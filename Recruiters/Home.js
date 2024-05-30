@@ -33,14 +33,22 @@ const HomePage = () => {
   const [modalVisible4, setModalVisible4] = useState(false);
   const navigation = useNavigation();
 
-  const goToMessages = () => {
-    navigation.navigate('Messages');
+  const goToEmployees = () => {
+    navigation.navigate('Employees');
   };
 
-  const goToHubs = () => {
-    navigation.navigate('Coaching Hubs');
+  const goToManagers = () => {
+    navigation.navigate('Managers');
   };
- 
+
+  const goToInterview = () => {
+    navigation.navigate('Interview');
+  };
+
+  const goToAdvice = () => {
+    navigation.navigate('Advice');
+  };
+
   const handleOpenPress2 = () => {
     setModalVisible2(true);
   };
@@ -200,7 +208,7 @@ const EmployeePerformance = () => {
 <View style={styles.greenwhitebox}> 
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Action Items</Text>
 <View style={{flexDirection: 'row' }}>
-<TouchableOpacity
+<TouchableOpacity onPress={goToEmployees} 
  style={[
   styles.touchablerate,
   isHovered2 && styles.touchableOpacityHovered
@@ -210,7 +218,7 @@ onMouseLeave={() => setIsHovered2(false)}
 >
           <Text style={styles.touchableTextrate}>Employees</Text>
           </TouchableOpacity>
-<TouchableOpacity 
+<TouchableOpacity onPress={goToManagers} 
 style={[
   styles.touchablerate,
   isHovered3 && styles.touchableOpacityHovered

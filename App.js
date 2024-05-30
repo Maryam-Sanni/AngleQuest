@@ -84,6 +84,8 @@ import SkipOffer from './Jobseekers/SkipOffer';
 import HomeRecruit from './Recruiters/Home';
 import Begin from './Recruiters/Begin';
 import VerifyAccount from './Recruiters/VerifyAccount';
+import Employees from './Recruiters/Employees';
+import Managers from './Recruiters/Managers';
 
 const Stack = createStackNavigator();
 
@@ -194,6 +196,8 @@ const App = () => {
         <Stack.Screen name="Home - Corporate" component={HomeRecruit} />
         <Stack.Screen name="Sign Up - Corporate" component={Begin} />
         <Stack.Screen name="Verify Account" component={VerifyAccount} />
+        <Stack.Screen name="Employees" component={Employees} />
+        <Stack.Screen name="Managers" component={Managers} />
       </Stack.Navigator>
     </NavigationContainer>
   );
