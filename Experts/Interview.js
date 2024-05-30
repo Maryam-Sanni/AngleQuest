@@ -92,7 +92,7 @@ function MyComponent() {
                                 onMouseLeave={() => setIsInterviewHovered(false)}>
                                 <View style={styles.item}>
                                 <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
                                     <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Interviews</Text>
@@ -118,7 +118,7 @@ function MyComponent() {
                                 onMouseLeave={() => setIsAdviceHovered(false)}>
                                 <View style={styles.item}>
                                 <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
                                     <Text style={[styles.headertext, isAdviceHovered && { color: 'coral' }]}>Advice</Text>
@@ -221,8 +221,9 @@ const styles = StyleSheet.create({
       color: '#666'
     },
     image: {
-        width: 24,
-        height: 24,
+        width: 21,
+        height: 21,
+        marginTop: 5,
         marginRight: 5,
         marginLeft: 100
     },

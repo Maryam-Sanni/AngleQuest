@@ -67,7 +67,10 @@ function MyComponent() {
             onMouseEnter={() => setIsFirstHubsHovered(true)}
             onMouseLeave={() => setIsFirstHubsHovered(false)}> 
               <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                 <Text style={[styles.headertext, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
               </View>
             </TouchableOpacity>
@@ -76,12 +79,15 @@ function MyComponent() {
             onMouseEnter={() => setIsThirdHubsHovered(true)}
             onMouseLeave={() => setIsThirdHubsHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/hubs.png')} style={styles.image} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                 <Text style={[styles.headertext, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOthersPress}>
-                <Image source={require('../assets/ellipsis-down.png')} style={{width: 18, height: 18, marginRight: 5, marginLeft: 50}} />
+                <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginRight: 5, marginLeft: 50}} />
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={goToMyHubs}
@@ -89,7 +95,10 @@ function MyComponent() {
             onMouseEnter={() => setIsAllHovered(true)}
             onMouseLeave={() => setIsAllHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/chatroom.png')} style={styles.eimage} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.eimage}
+/>
                 <Text style={[styles.eheadertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
               </View>
             </TouchableOpacity>
@@ -515,7 +524,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: -30,
     fontWeight: '500',
-    color: '#206C00'
+    color: '#666'
   },
   title: {
     marginTop: 20,

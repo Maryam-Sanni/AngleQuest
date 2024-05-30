@@ -191,7 +191,10 @@ const handleCloseModal = () => {
             onMouseEnter={() => setIsOthersHovered(true)}
             onMouseLeave={() => setIsOthersHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                 <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Manage Hubs</Text>
               </View>
             </TouchableOpacity>
@@ -200,7 +203,10 @@ const handleCloseModal = () => {
             onMouseEnter={() => setIsAllHovered(true)}
             onMouseLeave={() => setIsAllHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/chatroom.png')} style={styles.image2} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image2}
+/>
                 <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
               </View>
             </TouchableOpacity>
@@ -291,7 +297,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    color: '#206C00'
+    color: '#666'
   },
   image: {
     width: 24,

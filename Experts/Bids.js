@@ -38,7 +38,10 @@ function MyComponent() {
             onMouseEnter={() => setIsOfferHovered(true)}
             onMouseLeave={() => setIsOfferHovered(false)}> 
               <View style={styles.item}>
-                <Image source={require('../assets/expertsoffers.png')} style={styles.image} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                 <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
               </View>
             </TouchableOpacity>
@@ -47,7 +50,10 @@ function MyComponent() {
             onMouseEnter={() => setIsBidHovered(true)}
             onMouseLeave={() => setIsBidHovered(false)} >
               <View style={styles.item}>
-                <Image source={require('../assets/expertsbids.png')} style={styles.image} />
+              <Image
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  style={styles.image}
+/>
                 <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
               </View>
             </TouchableOpacity>
@@ -87,6 +93,7 @@ const styles = StyleSheet.create({
   headertext: {
     marginLeft: 5,
     fontSize: 14,
+    marginTop: 3, 
     fontWeight: '500',
     color: '#666'
   },
