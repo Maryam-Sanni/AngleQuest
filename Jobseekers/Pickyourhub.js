@@ -102,39 +102,7 @@ function MyComponent({ onClose }) {
     ).start();
   };
 
-  const renderInput = () => {
-    if (isDropdown) {
-      return (
-        <Picker
-          selectedValue={selectedValue}
-          style={styles.picker}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedValue(itemValue)
-          }
-        >
-          <Picker.Item label="Pick an expert" value="Pick an expert" />
-          <Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-        </Picker>
-      );
-    } else {
-      return (
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Search for experts..."
-            value={search}
-            onChangeText={setSearch}
-          />
-          <TouchableOpacity onPress={toggleMode} style={styles.iconContainer}>
-            <Image source={require('../assets/arrow-down.png')} style={{ width: 15, height: 15, }} />
-          </TouchableOpacity>
-        </View>
-      );
-    }
-  };
+ 
 
   const renderCards = () => {
     return cardData.map((data, index) => (
@@ -248,9 +216,27 @@ function MyComponent({ onClose }) {
           <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
             <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick an hub you will like to join</Text>
             <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
-            <View style={styles.dropcontainer}>
-              {renderInput()}
-            </View>
+            <View style={{ flexDirection: 'row', marginTop: 10}}>
+     <Picker
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Category" value="Category" />
+                  <Picker.Item label="Java Engineering" value="Java Engineering" />
+                  <Picker.Item label="SAP FI" value="SAP FI" />
+                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
+                  <Picker.Item label="Dev Ops" value="Dev Ops" />
+                  <Picker.Item label="Frontend Development" value="Frontend Development" />
+                  <Picker.Item label="Backend Development" value="Backend Development" />
+                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
+                  <Picker.Item label="Data Analysis" value="Data Analysis" />
+                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+                </Picker>
+
+                <TextInput
+                  placeholder="Search"
+                  style={styles.input}
+                />
+     </View>
           </View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
             {renderCards()}
@@ -355,14 +341,16 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    fontSize: 16,
   },
   picker: {
-    width: 470,
+    width: 700,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
+    marginRight: 20
   },
   iconContainer: {
     padding: 8,

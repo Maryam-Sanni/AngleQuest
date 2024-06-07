@@ -152,7 +152,7 @@ function MyComponent({ onClose }) {
       </View>
     </View>
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Continue</Text>
+      <Text style={styles.buttonTextplus}>Next</Text>
     </TouchableOpacity>
     </View>
     <DateTimePickerModal
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
       },
   greenBox: {
     width: 920,
-    height:550,
+    height: '100%',
     backgroundColor: '#F8F8F8',
   },
   row: {

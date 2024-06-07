@@ -41,12 +41,20 @@ const HomePage = () => {
     navigation.navigate('Managers');
   };
 
-  const goToInterview = () => {
-    navigation.navigate('Interview');
+  const goToTeams = () => {
+    navigation.navigate('Teams');
   };
 
-  const goToAdvice = () => {
-    navigation.navigate('Advice');
+  const goToPerformance = () => {
+    navigation.navigate('Performance');
+  };
+
+  const goToCoach = () => {
+    navigation.navigate('Coach');
+  };
+
+  const goToSubscription = () => {
+    navigation.navigate('Subscription');
   };
 
   const handleOpenPress2 = () => {
@@ -142,7 +150,7 @@ const EmployeePerformance = () => {
 
           <EmployeePerformance />
 
-          <TouchableOpacity 
+          <TouchableOpacity onPress={goToPerformance} 
            style={[
             styles.touchablechat,
             isHovered1 && styles.touchableOpacityHovered
@@ -228,7 +236,27 @@ onMouseLeave={() => setIsHovered3(false)}
 >
           <Text style={styles.touchableTextrate}>Managers</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity onPress={goToCoach} 
+          style={[
+  styles.touchablerate,
+  isHovered5 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered5(true)}
+onMouseLeave={() => setIsHovered5(false)}
+>
+          <Text style={styles.touchableTextrate}>Coach</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToTeams} 
+          style={[
+            styles.touchablerate,
+            isHovered6 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered6(true)}
+          onMouseLeave={() => setIsHovered6(false)}
+          >
+          <Text style={styles.touchableTextrate}>Teams</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToPerformance} 
           style={[
             styles.touchablerate,
             isHovered4 && styles.touchableOpacityHovered
@@ -237,26 +265,6 @@ onMouseLeave={() => setIsHovered3(false)}
           onMouseLeave={() => setIsHovered4(false)}
           >
           <Text style={styles.touchableTextrate}>Performance</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-  styles.touchablerate,
-  isHovered5 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered5(true)}
-onMouseLeave={() => setIsHovered5(false)}
->
-          <Text style={styles.touchableTextrate}>Schedule</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-            styles.touchablerate,
-            isHovered6 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered6(true)}
-          onMouseLeave={() => setIsHovered6(false)}
-          >
-          <Text style={styles.touchableTextrate}>Interview</Text>
           </TouchableOpacity>
 </View>
 </View>
@@ -375,7 +383,7 @@ onMouseLeave={() => setIsHovered9(false)}
            <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Due Payment</Text>
            </View>
            <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25  }}>Wicher Jeroen payment is due 12th of June 2024</Text>
-          <TouchableOpacity 
+          <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
             isHovered11 && styles.touchableOpacityHovered
@@ -397,7 +405,7 @@ onMouseLeave={() => setIsHovered9(false)}
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Pricing Model</Text>
           </View>
           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 40 }}>Change your subscription plan</Text>
-          <TouchableOpacity
+          <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
             isHovered12 && styles.touchableOpacityHovered

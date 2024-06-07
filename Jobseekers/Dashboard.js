@@ -29,7 +29,7 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.container}>
             <Image
-              source={require('../assets/Dashboard.png')}
+              source={require('../assets/Background.png')}
               style={styles.image}
             />
             <View style={styles.textContainer}>

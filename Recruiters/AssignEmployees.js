@@ -1,9 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Picker, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Picker, TouchableOpacity, Modal } from 'react-native';
 import { BlurView } from 'expo-blur';
+import OpenModal from './ListEmployee';
+import OpenModal2 from './ViewEmployees';
+import OpenModal3 from './EditManager';
 
 const ScheduledMeetingsTable = () => {
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [ModalVisible2, setModalVisible2] = useState(false);
+  const [ModalVisible3, setModalVisible3] = useState(false);
   
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    onClose();
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+    onClose();
+  };
+
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+    onClose();
+  };
 
   return (
     <View style={styles.greenBox}>
@@ -22,267 +54,197 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontWeight: '600', fontSize: 14}}>Team</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
-          </View>
-          <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14}}>Assign Employee</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-            <Text style={{fontWeight: '600', fontSize: 14}}>Assigned Employees</Text>
+            <Text style={{fontWeight: '600', fontSize: 14}}>View Employees</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Kenyatta Ohbahi</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Kenyatta Ohbahi</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>atta@gmail.com</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>CEPPA</Text>
+          <Text style={styles.cellText}>MORR</Text>
           </View>
-          <View style={styles.cell2}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
+          <Text style={styles.add}> + Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Onana Humbrey</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Onana Humbrey</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>hubrey2@yahoo.com</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>SAP</Text>
+          <Text style={styles.cellText}>SAP</Text>
           </View>
-          <View style={styles.cell}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Anthony King</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Jefferson King</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>tony@gmail.com</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>MORR</Text>
+          <Text style={styles.cellText}>JPP</Text>
           </View>
-          <View style={styles.cell2}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress}  style={styles.cell2}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Jerry Bassey</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Chordelia Bassey</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>basswy@gmail.com</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>PRO</Text>
+          <Text style={styles.cellText}>PRO</Text>
           </View>
-          <View style={styles.cell}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Jacob Hughes</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Jacob Hughes</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>J764@gmail.com</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>MORR</Text>
+          <Text style={styles.cellText}>MORR</Text>
           </View>
-          <View style={styles.cell2}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Noah Robinson</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Noah Robinson</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>noah99@yahoo.com</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>SAP</Text>
+          <Text style={styles.cellText}>SAP</Text>
           </View>
-          <View style={styles.cell}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Aliyah Rahman</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Aliyah Rahman</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>lih@gmail.com</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>MORR</Text>
+          <Text style={styles.cellText}>CEPPA</Text>
           </View>
-          <View style={styles.cell2}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Amélie Martin</Text>
+          <TouchableOpacity onPress={handleOpenPress3} >
+            <Text style={{textDecoration: 'underline'}}>Amélie Martin</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>amiie@gmail.com</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>SAP</Text>
+          <Text style={styles.cellText}>CEPPA</Text>
           </View>
-          <View style={styles.cell}>
-          <Text style={styles.cellText}>Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Add employee" value="" />
-<Picker.Item label="Isabella Rossi" value="Isabella Rossi" />
-          <Picker.Item label="Nkechi Udom" value="Nkechi Udom" />
-          <Picker.Item label="Charlotte Taylor" value="Charlotte Taylor" />
-          <Picker.Item label="Jacob Hall" value="Jacob Hall" />
-          <Picker.Item label="Grace Sullivan" value="Grace Sullivan" />
-          <Picker.Item label="Jacques Laurent" value="Jacques Laurent" />
-          <Picker.Item label="Ibrahim Abubakar" value="Ibrahim Abubakar" />
-</Picker>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>View</Text>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
+          <Text style={styles.add}>+ Add</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
+          <Text style={styles.open}>View All</Text>
           </TouchableOpacity>
         </View>
 
 
 
-
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={handleCloseModal3} />
+        </View>
+      </Modal>
       </View>
       
       </BlurView>
@@ -382,6 +344,15 @@ const styles = StyleSheet.create({
       padding: 5, 
       paddingHorizontal: 15, 
       borderRadius: 5
+},
+add: {
+  color: "black",
+   fontSize: 14,
+    borderColor: "#206C00", 
+    borderWidth: 2, 
+    padding: 5, 
+    paddingHorizontal: 15, 
+    borderRadius: 5
 },
 });
 

@@ -192,7 +192,7 @@ function MyComponent({ onClose }) {
                 }}
               >
                 <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
-                  Growth Plan
+                  Growth
                 </Text>
               </TouchableOpacity>
               <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
@@ -217,8 +217,8 @@ function MyComponent({ onClose }) {
         visible={mainModalVisible}
         onRequestClose={onClose}
       >
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", alignItems: 'center', marginTop: 40, }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.greenBox}>
               <View style={styles.header}>
                 <Image
@@ -226,30 +226,40 @@ function MyComponent({ onClose }) {
                   style={styles.logo}
                 />
                 <Text style={styles.headerText}>Growth Plan Experts</Text>
-
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
-                    ✕
-                  </Text>
+                  <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>✕</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-                <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick your growth plan coach</Text>
-                <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
-                <View style={styles.dropcontainer}>
-                  {renderInput()}
+              <View style={{ alignItems: 'flex-start', marginLeft: 40 }}>
+                <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5 }}>Pick your growth plan coach</Text>
+                <Text style={{ fontSize: 14, color: "black", marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
+                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                  <Picker style={styles.picker}>
+                    <Picker.Item label="Category" value="Category" />
+                    <Picker.Item label="Java Engineering" value="Java Engineering" />
+                    <Picker.Item label="SAP FI" value="SAP FI" />
+                    <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
+                    <Picker.Item label="Dev Ops" value="Dev Ops" />
+                    <Picker.Item label="Frontend Development" value="Frontend Development" />
+                    <Picker.Item label="Backend Development" value="Backend Development" />
+                    <Picker.Item label="Fullstack Development" value="Fullstack Development" />
+                    <Picker.Item label="Data Analysis" value="Data Analysis" />
+                    <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+                  </Picker>
+                  <TextInput placeholder="Search" style={styles.input} />
                 </View>
               </View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
                 {renderCards()}
               </View>
-              <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus} >
+              <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
                 <Text style={styles.buttonTextplus}>Continue</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
       </Modal>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -281,22 +291,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 10
+    borderRadius: 10,
   },
   greenBox: {
-    width: 1000,
-    height: 700,
+    width: 920,
+    height: '100%',
     backgroundColor: '#F8F8F8',
   },
   buttonplus: {
     backgroundColor: 'coral',
-    padding: 5,
     borderRadius: 5,
-    marginLeft: 820,
+    padding: 5,
+    alignSelf: 'flex-end',
     width: 150,
     paddingHorizontal: 20,
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 30,
+    marginRight: 30,
   },
   buttonTextplus: {
     color: 'white',
@@ -315,17 +326,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 20
+    marginBottom: 20,
   },
   logo: {
     width: 40,
     height: 40,
-    marginRight: 10
+    marginRight: 10,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
   },
   dropcontainer: {
     justifyContent: 'center',
@@ -345,19 +356,22 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    fontSize: 16,
   },
   picker: {
-    width: 470,
+    width: 630,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
+    marginRight: 20,
   },
   iconContainer: {
     padding: 8,
   },
 });
+
 
 export default MyComponent;
 

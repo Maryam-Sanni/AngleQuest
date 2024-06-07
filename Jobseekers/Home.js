@@ -10,7 +10,7 @@ import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from '../Jobseekers/Getstart';
 import OpenModal3 from '../Jobseekers/Pickyourcoach';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
-
+ 
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);

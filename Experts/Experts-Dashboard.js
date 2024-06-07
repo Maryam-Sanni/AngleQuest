@@ -45,7 +45,7 @@ function MyComponent() {
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.container}>
             <Image
-              source={require('../assets/Dashboard.png')}
+              source={require('../assets/Background.png')}
               style={styles.image}
             />
             <View style={styles.textContainer}>

@@ -10,17 +10,22 @@ import { BlurView } from 'expo-blur';
 
 
 function MyComponent() {
-    const navigation = useNavigation();
-    const [isInterviewHovered, setIsInterviewHovered] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    
-    const handleOpenPress = () => {
-      setModalVisible(true);
-    };
+  const navigation = useNavigation();
+  const [isInterviewHovered, setIsInterviewHovered] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   
-    const handleCloseModal = () => {
-      setModalVisible(false);
-    };
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const goToTeams = () => {
+    navigation.navigate('Teams');
+  };
   
 
 
@@ -121,11 +126,30 @@ function MyComponent() {
 </View>
       </View>
       
-
       <View style={styles.box3}>
       <View style={{flexDirection: 'row', marginTop: 10}}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Teams</Text>
+      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
+                  </View>
+      </View>
+      <Text style={{fontSize: 14, marginTop: 5, marginLeft: 10, color: 'white'  }}>Create new teams and manage previously created teams.</Text>
+      <TouchableOpacity onPress={goToTeams}
+          style={[
+            styles.touchablecoach,
+            isHovered && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          >
+          <Text style={styles.touchableTextcoach}>Manage Teams</Text>
+          </TouchableOpacity>
+      </View>
+
+      <View style={styles.box3}>
+      <View style={{flexDirection: 'row', marginTop: 10}}> 
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Members</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
+      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
                   </View>
       </View>
@@ -275,6 +299,31 @@ const styles = StyleSheet.create({
     flex: 1, 
     borderRadius: 20, 
     padding: 10,
+  },
+  touchablecoach: {
+    backgroundColor: 'rgba(200,200,125,0.3)',
+    padding: 8,
+    paddingHorizontal: 5, 
+    marginTop: 25,
+    marginLeft: 30,
+    marginRight: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  touchableTextcoach: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 13
+  },
+  touchableOpacityHovered: {
+    backgroundColor: 'coral'
   },
 });
 

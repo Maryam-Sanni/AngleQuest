@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },
     greenBox: {
         width: 1000,
-        height: 700,
+        height: '100%',
         backgroundColor: '#F8F8F8',
     },
     closeButton: {

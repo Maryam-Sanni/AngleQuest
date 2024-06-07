@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import { View, Text, StyleSheet, Picker, Modal, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
+import OpenModal from './EditEmployee';
 
 const ScheduledMeetingsTable = () => {
-  
+  const [ModalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    onClose();
+  };
 
   return (
     <View style={styles.greenBox}>
@@ -33,7 +43,9 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Larrisa Omreh</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Larrisa Omreh</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>Power Platform</Text>
@@ -61,7 +73,9 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Onana Augusta</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Onana Augusta</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>SAP FI</Text>
@@ -89,7 +103,9 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Oluwatobi Ogunnaike</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Oluwatobi Ogunnaike</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>SAP FI</Text>
@@ -117,63 +133,9 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Jerry Bassey</Text>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Senior Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Professional</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Joop Melcher</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Choose a manager" value="Choose a manager" />
-<Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-</Picker>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Anthony Okafor</Text>
-          </View>
-          <View style={styles.cell2}> 
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Junior Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Medior</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Joop Melcher</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Choose a manager" value="Choose a manager" />
-<Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-</Picker>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Fatimah Hussain</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Jerry Bassey</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>Power Platform</Text>
@@ -201,7 +163,9 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Ethan Phillips</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Anthony Okafor</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
             <Text style={styles.cellText}>SAP FI</Text>
@@ -229,7 +193,69 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Omar Abdullah</Text>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Fatimah Hussain</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cell}> 
+            <Text style={styles.cellText}>Power Platform</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Senior Power apps developer</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Professional</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
+          <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell2}>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Ethan Phillips</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cell2}> 
+            <Text style={styles.cellText}>SAP FI</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Junior Power apps developer</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Medior</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell2}>
+          <Picker
+  style={styles.picker2} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell}>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline'}}>Omar Abdullah</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>Power Platform</Text>
@@ -256,7 +282,16 @@ const ScheduledMeetingsTable = () => {
           </View>
         </View>
 
-
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
 
 
       </View>

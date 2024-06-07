@@ -386,9 +386,27 @@ function MyComponent() {
             </View>
             <View style={{ marginTop: 25, marginLeft: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 14, color: "black", fontWeight: '600'}}>Use the search or the dropdown to filter</Text>
-                <View style={styles.dropcontainer}>
-                  {renderInput()}
-                </View>
+                <View style={{ flexDirection: 'row', marginTop: 10}}>
+     <Picker
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Category" value="Category" />
+                  <Picker.Item label="Java Engineering" value="Java Engineering" />
+                  <Picker.Item label="SAP FI" value="SAP FI" />
+                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
+                  <Picker.Item label="Dev Ops" value="Dev Ops" />
+                  <Picker.Item label="Frontend Development" value="Frontend Development" />
+                  <Picker.Item label="Backend Development" value="Backend Development" />
+                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
+                  <Picker.Item label="Data Analysis" value="Data Analysis" />
+                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+                </Picker>
+
+                <TextInput
+                  placeholder="Search"
+                  style={styles.input}
+                />
+     </View>
               </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30 }}>
               {renderCards()}
@@ -482,21 +500,23 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    height: 35,
+    height: 40,
     borderColor: 'grey',
     borderWidth: 1,
     paddingLeft: 8,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    fontSize: 16
   },
   picker: {
-    width: 470,
-    height: 35,
+    width: 720,
+    height: 40,
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: 'none'
+    backgroundColor: 'white',
+    marginRight: 20
   },
   iconContainer: {
     padding: 8,
