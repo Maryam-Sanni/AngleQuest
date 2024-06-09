@@ -93,6 +93,13 @@ import BookedInterview from './Recruiters/InterviewPage';
 import Coach from './Recruiters/Coach';
 import Teams from './Recruiters/Teams';
 import Subscription from './Recruiters/Subscription';
+import HomeManager from './Coach/Home';
+import EmployeeManager from './Coach/Employees';
+import EmployeePerformance from './Coach/Performance';
+import Meetings from './Coach/AllMeetings';
+import AllMessages from './Coach/Messages';
+import Targets from './Coach/Targets';
+
 
 const Stack = createStackNavigator();
 
@@ -212,6 +219,12 @@ const App = () => {
         <Stack.Screen name="Coach" component={Coach} />
         <Stack.Screen name="Teams" component={Teams} />
         <Stack.Screen name="Subscription" component={Subscription} />
+        <Stack.Screen name="Home - Manager" component={HomeManager} />
+        <Stack.Screen name="Manage Employees" component={EmployeeManager} />
+        <Stack.Screen name="Manage Performance" component={EmployeePerformance} />
+        <Stack.Screen name="Meetings" component={Meetings} />
+        <Stack.Screen name="All Messages" component={AllMessages} />
+        <Stack.Screen name="Targets" component={Targets} />
       </Stack.Navigator>
     </NavigationContainer>
   );

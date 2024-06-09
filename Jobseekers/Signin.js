@@ -20,7 +20,7 @@ const MyComponent = () => {
       // Handle response from the server
 
       // Navigate to the Home page after successful sign-in
-      navigation.navigate('Home'); // Assuming 'Home' is the name of your Home screen
+      navigation.navigate('Home - Manager'); // Assuming 'Home' is the name of your Home screen
     } catch (error) {
       console.error('Error:', error);
     }

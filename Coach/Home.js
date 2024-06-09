@@ -1,16 +1,15 @@
 import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal  } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, FlatList  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Sidebar from '../components/sidebar';
+import Sidebar from '../components/Managersidebar';
 import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
-import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from '../Jobseekers/Getstart';
-import OpenModal3 from '../Jobseekers/Pickyourcoach';
-import OpenModal4 from '../Jobseekers/Pickyourhub';
- 
+import OpenModal2 from './NewTarget';
+import OpenModal3 from './NewTarget';
+import OpenModal4 from './NewTarget';
+
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -28,27 +27,36 @@ const HomePage = () => {
   const [isHovered13, setIsHovered13] = useState(false);
   const [isHovered14, setIsHovered14] = useState(false);
   const [isHovered15, setIsHovered15] = useState(false);
-  const [isHovered16, setIsHovered16] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
-  const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
 
- useEffect(() => {
-    // Show the CustomModal when the component mounts
-    setCustomModalVisible(true);
-  }, []);
-
-  const goToMessages = () => {
-    navigation.navigate('Messages');
+  const goToEmployees = () => {
+    navigation.navigate('Manage Employees');
   };
 
-  const goToHubs = () => {
-    navigation.navigate('Coaching Hubs');
+  const goToManagers = () => {
+    navigation.navigate('Manage Employees');
   };
- 
+
+  const goToTeams = () => {
+    navigation.navigate('Meetings');
+  };
+
+  const goToPerformance = () => {
+    navigation.navigate('Manage Performance');
+  };
+
+  const goToTargets = () => {
+    navigation.navigate('Targets');
+  };
+
+  const goToSubscription = () => {
+    navigation.navigate('Meetings');
+  };
+
   const handleOpenPress2 = () => {
     setModalVisible2(true);
   };
@@ -73,6 +81,41 @@ const HomePage = () => {
     setModalVisible4(false);
   };
 
+  const ProgressBar = ({ percentage }) => {
+    return (
+      <View style={styles.progressBarContainer}>
+        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
+        <Text style={styles.progressText}>{percentage}%</Text>
+      </View>
+    );
+  };
+  
+ // EmployeePerformance Component
+const EmployeePerformance = () => {
+    const employees = [
+      { id: '1', name: 'Elvis Mordirij', performance: 78 },
+      { id: '2', name: 'Bob Annabel', performance: 67 },
+      { id: '3', name: 'Platinuni Frigos', performance: 72 },
+      { id: '4', name: 'David Wicher', performance: 85 },
+      { id: '5', name: 'Hussein Bilal', performance: 79 },
+      { id: '6', name: 'Micheal Anotie', performance: 45 },
+      { id: '7', name: 'Jessica Oturu', performance: 65 },
+    ];
+  
+    return (
+      <FlatList
+        data={employees}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.employeeContainer}>
+            <Text style={styles.employeeName}>{item.name}</Text>
+            <ProgressBar percentage={item.performance} />
+          </View>
+        )}
+      />
+    );
+  };
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -92,82 +135,30 @@ const HomePage = () => {
         }}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
-      <Text style={styles.greeting}>Good Day, Maryam</Text>
+      <Text style={styles.greeting}>Good Day, Coach Joop Melcher</Text>
       </View>
       <View style={styles.mainContent}>
       <View style={styles.messageBox}>
       <BlurView intensity={50} style={styles.blurBackground}>
-      <View style={{flexDirection: 'row' }}>
+      <View style={{flexDirection: 'row', marginBottom: 30 }}>
           <Image
-       source={require('../assets/chat.png')}
+       source={require('../assets/performance.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Chats</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Performance</Text>
           </View>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 20, marginLeft: 15,  fontWeight: 'bold' }}>SAP FI Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
-          
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Microsoft Azure Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
-          
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Jr. PowerPoint Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam..</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
 
-          <TouchableOpacity
-            onPress={goToMessages}
-            style={[
-              styles.touchablechat,
-              isHovered1 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered1(true)}
-            onMouseLeave={() => setIsHovered1(false)}
-          >
-            <Text style={styles.touchableText}>See All Chats</Text>
+          <EmployeePerformance />
+
+          <TouchableOpacity onPress={goToPerformance} 
+           style={[
+            styles.touchablechat,
+            isHovered1 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered1(true)}
+          onMouseLeave={() => setIsHovered1(false)}
+        >
+          <Text style={styles.touchableText}>See All</Text>
           </TouchableOpacity>
           </BlurView>
           </View>
@@ -175,22 +166,22 @@ const HomePage = () => {
         <View style={styles.greenBorderedBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
-          <View style={{flexDirection: 'column', marginTop: 10, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 14, color: 'darkgreen', fontWeight: 'bold', marginTop: 10, }}>What is next for you Maryam?</Text>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 5, }}>Reaching your next career milstone is important to us</Text>
+          <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
+          <Text style={{fontSize: 14, color: 'darkgreen', fontWeight: 'bold', marginTop: 10, }}>Time to accelerate</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 5, }}>Know and ccontribute to the growth and impact of your team members</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
-          isHovered2 && styles.touchableOpacityHovered
+          isHovered14 && styles.touchableOpacityHovered
         ]}
-        onMouseEnter={() => setIsHovered2(true)}
-        onMouseLeave={() => setIsHovered2(false)}
+        onMouseEnter={() => setIsHovered14(true)}
+        onMouseLeave={() => setIsHovered14(false)}
       >
           <Text style={styles.touchableText}>Get Started</Text>
           </TouchableOpacity>
          
          
-          <View style={{flexDirection: 'row', marginTop: 5}}>
+          <View style={{flexDirection: 'row', }}>
           <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
           <TouchableOpacity  onPress={() => setModalVisible(true)} >
           <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
@@ -199,21 +190,21 @@ const HomePage = () => {
           
           </View>
           <Image
-                  source={require('../assets/AddManager.png')}
+                  source={require('../assets/Homeland4.jpg')}
                   style={styles.imageback}
                 />
                 </View>
+        
+         
+       
           </BlurView>
           </View>
 
           <View style={styles.greenBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
           
-        
           <View style={{flexDirection: 'row' }}>
-          <View style={{flexDirection: 'column' }}>
-           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge sharing session</Text>
+          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge sharing meeting</Text>
           <View style={{flexDirection: 'column' }}>
           <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Confirm attendance | compulsory</Text>
           <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
@@ -223,88 +214,76 @@ const HomePage = () => {
           <View style={{flexDirection: 'row', marginBottom: 15 }}>
            <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 30, marginTop: 7,}}
+              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 30, marginTop: 5,}}
             />
               <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
               <View style={{flexDirection: 'row' }}>
 <TouchableOpacity 
 style={[
   styles.touchablesession,
-  isHovered3 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered3(true)}
-onMouseLeave={() => setIsHovered3(false)}
->
-          <Text style={styles.touchableTextsession}>SAP Configuration</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          style={[
-            styles.touchablejoinsession,
-            isHovered4 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered4(true)}
-          onMouseLeave={() => setIsHovered4(false)}
-          >
-          <Text style={styles.touchableTextjoinsession}>Join</Text>
-          </TouchableOpacity>
-          </View>
-              </View>
-            </View>
-          </View>
-<View style={{flexDirection: 'row' }}>
-<View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Things to do</Text>
-<View style={{flexDirection: 'row' }}>
-<TouchableOpacity
-style={[
-  styles.touchablerate,
   isHovered5 && styles.touchableOpacityHovered
 ]}
 onMouseEnter={() => setIsHovered5(true)}
 onMouseLeave={() => setIsHovered5(false)}
 >
-          <Text style={styles.touchableTextrate}>Target</Text>
+          <Text style={styles.touchableTextsession}>Target Assessment</Text>
           </TouchableOpacity>
-<TouchableOpacity
+          <TouchableOpacity
+          style={[
+            styles.touchablejoinsession,
+            isHovered13 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered13(true)}
+          onMouseLeave={() => setIsHovered13(false)}
+          >
+          <Text style={styles.touchableTextjoinsession}>Start</Text>
+          </TouchableOpacity>
+          </View>
+              </View>
+         
+<View style={{flexDirection: 'row' }}>
+<View style={styles.greenwhitebox}> 
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Action Items</Text>
+<View style={{flexDirection: 'row', justifyContent: 'center' }}>
+<TouchableOpacity onPress={goToEmployees} 
+ style={[
+  styles.touchablerate,
+  isHovered2 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered2(true)}
+onMouseLeave={() => setIsHovered2(false)}
+>
+          <Text style={styles.touchableTextrate}>Employees</Text>
+          </TouchableOpacity>
+<TouchableOpacity onPress={goToTargets} 
 style={[
   styles.touchablerate,
-  isHovered6 && styles.touchableOpacityHovered
+  isHovered3 && styles.touchableOpacityHovered
 ]}
-onMouseEnter={() => setIsHovered6(true)}
-onMouseLeave={() => setIsHovered6(false)}
+onMouseEnter={() => setIsHovered3(true)}
+onMouseLeave={() => setIsHovered3(false)}
 >
-          <Text style={styles.touchableTextrate}>Hubs</Text>
+          <Text style={styles.touchableTextrate}>Targets</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity 
+          <TouchableOpacity onPress={goToPerformance} 
           style={[
             styles.touchablerate,
-            isHovered7 && styles.touchableOpacityHovered
+            isHovered4 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered7(true)}
-          onMouseLeave={() => setIsHovered7(false)}
+          onMouseEnter={() => setIsHovered4(true)}
+          onMouseLeave={() => setIsHovered4(false)}
           >
-          <Text style={styles.touchableTextrate}>Growth Plan</Text>
+          <Text style={styles.touchableTextrate}>Performance</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity onPress={goToTeams} 
           style={[
             styles.touchablerate,
-            isHovered8 && styles.touchableOpacityHovered
+            isHovered6 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered8(true)}
-          onMouseLeave={() => setIsHovered8(false)}
+          onMouseEnter={() => setIsHovered6(true)}
+          onMouseLeave={() => setIsHovered6(false)}
           >
-          <Text style={styles.touchableTextrate}>Interview</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-            styles.touchablerate,
-            isHovered9 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered9(true)}
-          onMouseLeave={() => setIsHovered9(false)}
-          >
-          <Text style={styles.touchableTextrate}>Advice</Text>
+          <Text style={styles.touchableTextrate}>Meetings</Text>
           </TouchableOpacity>
 </View>
 </View>
@@ -313,7 +292,7 @@ onMouseLeave={() => setIsHovered6(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Growth Plan Review </Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Growth Plan Session </Text>
 <Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
@@ -321,17 +300,7 @@ onMouseLeave={() => setIsHovered6(false)}
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity
-style={[
-  styles.touchablestart,
-  isHovered10 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered10(true)}
-onMouseLeave={() => setIsHovered10(false)}
->
-          <Text style={styles.touchableTextjoinreview}>Join</Text>
-          </TouchableOpacity>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali with expert Joop Melcher</Text>
           </View>
           </View>
           </View>
@@ -346,17 +315,7 @@ onMouseLeave={() => setIsHovered10(false)}
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity 
-style={[
-  styles.touchablestart,
-  isHovered11 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered11(true)}
-onMouseLeave={() => setIsHovered11(false)}
->
-          <Text style={styles.touchableTextjoinreview}>Join</Text>
-          </TouchableOpacity>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Eniobanke Ademide with expert Emily Ray</Text>
           </View>
           </View>
           </View>
@@ -371,17 +330,7 @@ onMouseLeave={() => setIsHovered11(false)}
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
-<TouchableOpacity 
-style={[
-  styles.touchablestart,
-  isHovered12 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered12(true)}
-onMouseLeave={() => setIsHovered12(false)}
->
-          <Text style={styles.touchableTextjoinreview}>Join</Text>
-          </TouchableOpacity>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Patrick King with expert Wicher Jeroen</Text>
           </View>
           </View>
           
@@ -401,16 +350,16 @@ onMouseLeave={() => setIsHovered12(false)}
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
           </View>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Send your question and get response as soon as possible from your coach</Text>
-          <TouchableOpacity onPress={goToMessages} 
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an idea you will like to share with us?</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
-            isHovered13 && styles.touchableOpacityHovered
+            isHovered10 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered13(true)}
-          onMouseLeave={() => setIsHovered13(false)}
+          onMouseEnter={() => setIsHovered10(true)}
+          onMouseLeave={() => setIsHovered10(false)}
           >
-          <Text style={styles.touchableTextcoach}>Interact with your coach</Text>
+          <Text style={styles.touchableTextcoach}>Let's hear from you</Text>
           </TouchableOpacity>
           </View>
 
@@ -420,31 +369,20 @@ onMouseLeave={() => setIsHovered12(false)}
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next knowledge sharing session</Text>
+           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next Meeting</Text>
            </View>
-           <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20  }}>Setting up master data on SAP on XYZ (date) with coach Joop Melcher</Text>
-           <View style={{flexDirection: 'row', marginTop: 8 }}>
-<TouchableOpacity onPress={goToHubs} 
-style={[
-  styles.touchableall,
-  isHovered14 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered14(true)}
-onMouseLeave={() => setIsHovered14(false)}
->
-          <Text style={styles.touchableTextall}>See all</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={goToHubs}
+           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25  }}>Meeting with Jasun Joshua is scheduled for 13th of July 2024.</Text>
+          <TouchableOpacity onPress={goToSubscription}
           style={[
-            styles.touchablehub,
-            isHovered15 && styles.touchableOpacityHovered
+            styles.touchablecoach,
+            isHovered11 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered15(true)}
-          onMouseLeave={() => setIsHovered15(false)}
+          onMouseEnter={() => setIsHovered11(true)}
+          onMouseLeave={() => setIsHovered11(false)}
           >
-          <Text style={styles.touchableTexthub}>Join new hub</Text>
+          <Text style={styles.touchableTextcoach}>See All</Text>
           </TouchableOpacity>
-          </View>
+          
           </View>
 
           <View style={styles.whiteBox}>
@@ -455,33 +393,25 @@ onMouseLeave={() => setIsHovered14(false)}
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
           </View>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 20, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Interview Feedback</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 18, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
-          </View>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 10, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Growth Plan Review</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 8, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
-          
-          </View>
-          <TouchableOpacity onPress={goToMessages} 
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 40 }}>I would like to inform you that...</Text>
+          <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
-            isHovered16 && styles.touchableOpacityHovered
+            isHovered12 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered16(true)}
-          onMouseLeave={() => setIsHovered16(false)}
+          onMouseEnter={() => setIsHovered12(true)}
+          onMouseLeave={() => setIsHovered12(false)}
           >
-          <Text style={styles.touchableTextcoach}>See all</Text>
+          <Text style={styles.touchableTextcoach}>View</Text>
           </TouchableOpacity>
           </View>
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>My Angle Badge</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>This is the combined progress of your assigned employees</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
-      <CustomPercentageChart percentage={45} />
+      <CustomPercentageChart percentage={70} />
       </View>
     </View>
           </View>
@@ -494,7 +424,6 @@ onMouseLeave={() => setIsHovered14(false)}
       
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
-    <CustomModal visible={custommodalVisible} onClose={() => setCustomModalVisible(false)} />
     <Modal
         animationType="slide"
         transparent={true}
@@ -627,6 +556,13 @@ blurBackground: {
     marginTop: 10, 
     borderRadius: 20, 
     },
+    headimage: {
+        width: 510,
+        height: 100,
+        marginLeft: 35, 
+        marginTop: 10, 
+        borderRadius: 20, 
+        },
     whiteBox: {
       width: 280,
       height: 200,
@@ -640,7 +576,7 @@ blurBackground: {
     padding: 8,
     paddingHorizontal: 20,
     marginTop: 12,
-    marginLeft: 150,
+    marginLeft: 80,
     backgroundColor: 'rgba(200,200,125,0.3)',
     borderRadius: 10,
     shadowColor: '#000',
@@ -655,7 +591,8 @@ blurBackground: {
   touchablechat: {
     padding: 8,
     paddingHorizontal: 20,
-    marginTop: 60,
+    marginTop: 30,
+    marginBottom: 50,
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -673,9 +610,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13
-  },
-  touchableOpacityHovered: {
-    backgroundColor: 'coral'
   },
   touchablecoach: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -727,7 +661,7 @@ blurBackground: {
     paddingHorizontal: 20, 
     marginTop: 15,
     marginRight: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -768,8 +702,8 @@ blurBackground: {
     padding: 8,
     paddingHorizontal: 10, 
     marginTop: 15,
-    marginLeft: 10,
-    width: 90,
+    marginLeft: 15,
+    width: 100,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -812,7 +746,8 @@ blurBackground: {
       padding: 8,
       paddingHorizontal: 20, 
       marginTop: 15,
-      marginLeft: 240,
+      position: 'absolute',
+      right: 20,
       borderRadius: 10,
       shadowColor: '#000',
       shadowOffset: {
@@ -851,6 +786,38 @@ blurBackground: {
     marginLeft: 15,
     borderRadius: 25
   },
+  progressBarContainer: {
+    width: '90%',
+    height: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginBottom: 5,
+    marginLeft: 10
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#63EC55',
+  },
+  progressText: {
+    position: 'absolute',
+    right: 10,
+    color: '#000',
+  },
+  employeeContainer: {
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  employeeName: {
+    marginBottom: 5,
+    fontSize: 14,
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 10
+  },
+  touchableOpacityHovered: {
+    backgroundColor: 'coral'
+  },
   imageback: {
     width: 150,
     height: 150,
@@ -862,7 +829,7 @@ blurBackground: {
   touchablebegin: {
     padding: 8,
     paddingHorizontal: 5,
-    marginTop: 15,
+    marginTop: 20,
     marginBottom: 10,
     width: 150,
     backgroundColor: 'rgba(200,200,125,0.3)',

@@ -197,55 +197,35 @@ const HomePage = () => {
         <View style={styles.sideColumn}>
           <View style={styles.greenBorderedBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
-          <View style={{flexDirection: 'row', marginTop: 20, }}>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30 }}>Passionate About Lifting Others?</Text>
-          <TouchableOpacity onPress={() => setModalVisible(true)}
+          <View style={{flexDirection: 'row', }}>
+          <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
+          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12,  }}>Are you passionate about lifting others in your field to their next level?</Text>
+          <TouchableOpacity onPress={handleOpenPress2} 
           style={[
-          styles.touchable,
+          styles.touchablebegin,
           isHovered2 && styles.touchableOpacityHovered
         ]}
         onMouseEnter={() => setIsHovered2(true)}
         onMouseLeave={() => setIsHovered2(false)}
       >
-          <Text style={styles.touchableText}>Drop Suggestion</Text>
+          <Text style={styles.touchableText}>Get Started</Text>
           </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={handleOpenPress2} >
+         
+         
           <View style={{flexDirection: 'row', marginTop: 5}}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Create a growth plan profile</Text>
-          </View>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
+          <TouchableOpacity  onPress={() => setModalVisible(true)} >
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleOpenPress3} >
-          <View style={{flexDirection: 'row', marginTop: 3, }}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create hubs</Text>
           </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleOpenPress4} >
-          <View style={{flexDirection: 'row', marginTop: 3, }}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create advice profiles</Text>
+          
           </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleOpenPress5} >
-          <View style={{flexDirection: 'row', marginTop: 3, }}>
           <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Create interview profile</Text>
-          </View>
-          </TouchableOpacity>
+                  source={require('../assets/Homeland3.jpg')}
+                  style={styles.imageback}
+                />
+                </View>
+         
           </BlurView>
           </View>
 
@@ -965,6 +945,31 @@ whiteBox: {
     marginRight: 10,
     marginLeft: 15,
     borderRadius: 25
+  },
+  imageback: {
+    width: 150,
+    height: 150,
+    marginRight: 30,
+    marginLeft: 30,
+    marginTop: 30,
+    borderRadius: 20
+  },
+  touchablebegin: {
+    padding: 8,
+    paddingHorizontal: 5,
+    marginTop: 20,
+    marginBottom: 10,
+    width: 150,
+    backgroundColor: 'rgba(200,200,125,0.3)',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 

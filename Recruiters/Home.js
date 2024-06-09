@@ -165,42 +165,35 @@ const EmployeePerformance = () => {
         <View style={styles.sideColumn}>
         <View style={styles.greenBorderedBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
-          <View style={{flexDirection: 'row', marginTop: 20}}>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, marginLeft: 30  }}>Orchestrate your employees' growth direction</Text>
-          </View>
-          <TouchableOpacity onPress={handleOpenPress2} >
-          <View style={{flexDirection: 'row', marginTop: 5,}}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline' }}>Add an employee</Text>
-          </View>
+          <View style={{flexDirection: 'row', }}>
+          <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
+          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, }}>Orchestrate the growth of everyone in your team</Text>
+          <TouchableOpacity onPress={handleOpenPress2} 
+          style={[
+          styles.touchablebegin,
+          isHovered13 && styles.touchableOpacityHovered
+        ]}
+        onMouseEnter={() => setIsHovered13(true)}
+        onMouseLeave={() => setIsHovered13(false)}
+      >
+          <Text style={styles.touchableText}>Get Started</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleOpenPress3} >
-          <View style={{flexDirection: 'row', marginTop: 3, }}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Add managers</Text>
-          </View>
+         
+         
+          <View style={{flexDirection: 'row', marginTop: 5}}>
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
+          <TouchableOpacity  onPress={() => setModalVisible(true)} >
+          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
           </TouchableOpacity>
-          <TouchableOpacity >
-          <View style={{flexDirection: 'row', marginTop: 3, }}>
-          <Image
-       source={require('../assets/mark.png')}
-        style={styles.icon}
-      />
-          <Text style={{fontSize: 15, color: 'white', marginTop: 3, marginLeft: 10, textDecoration: 'underline' }}>Monitor performance</Text>
           </View>
-          </TouchableOpacity>
-          <TouchableOpacity >
-          <View style={{flexDirection: 'row', marginTop: 10, }}>
           
-          <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 35,}}>The team you build is the company you build</Text>
           </View>
-          </TouchableOpacity>
+          <Image
+                  source={require('../assets/Homeland2.jpg')}
+                  style={styles.imageback}
+                />
+                </View>
+               
           </BlurView>
           </View>
 
@@ -828,6 +821,31 @@ blurBackground: {
   },
   touchableOpacityHovered: {
     backgroundColor: 'coral'
+  },
+  imageback: {
+    width: 150,
+    height: 150,
+    marginRight: 30,
+    marginLeft: 30,
+    marginTop: 30,
+    borderRadius: 20
+  },
+  touchablebegin: {
+    padding: 8,
+    paddingHorizontal: 5,
+    marginTop: 20,
+    marginBottom: 10,
+    width: 150,
+    backgroundColor: 'rgba(200,200,125,0.3)',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 
