@@ -6,7 +6,7 @@ import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from './New Employee';
+import OpenModal2 from './NDASetup';
 import OpenModal3 from './New Manager';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 
@@ -117,10 +117,7 @@ const EmployeePerformance = () => {
   };
 
   return (
-    <ImageBackground
-    source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
->
+    <View style={{backgroundColor: '#3F5B39', flex: 1}}>
   <View style={{ flex: 1}}>
     <Topbar />
     <View style={{ flexDirection: 'row', flex: 1  }}>
@@ -167,7 +164,7 @@ const EmployeePerformance = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 12, }}>Orchestrate the growth of everyone in your team</Text>
+          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12, }}>Orchestrate the growth of everyone in your team</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -176,16 +173,11 @@ const EmployeePerformance = () => {
         onMouseEnter={() => setIsHovered13(true)}
         onMouseLeave={() => setIsHovered13(false)}
       >
-          <Text style={styles.touchableText}>Get Started</Text>
+          <Text style={styles.touchableTextbegin}>Get Started</Text>
           </TouchableOpacity>
          
          
-          <View style={{flexDirection: 'row', marginTop: 5}}>
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
-          <TouchableOpacity  onPress={() => setModalVisible(true)} >
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
-          </TouchableOpacity>
-          </View>
+         
           
           </View>
           <Image
@@ -207,7 +199,7 @@ const EmployeePerformance = () => {
          
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Action Items</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Activites</Text>
 <View style={{flexDirection: 'row' }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
@@ -370,6 +362,27 @@ onMouseLeave={() => setIsHovered9(false)}
           <View style={styles.whiteBox}>
           <View style={{flexDirection: 'row' }}>
           <Image
+       source={require('../assets/QandA.png')}
+        style={styles.boxicon}
+      />
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Need Help?</Text>
+          </View>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an issue you would like us to assist you with?</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)}
+          style={[
+            styles.touchablecoach,
+            isHovered12 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered12(true)}
+          onMouseLeave={() => setIsHovered12(false)}
+          >
+          <Text style={styles.touchableTextcoach}>Get Help</Text>
+          </TouchableOpacity>
+          </View>
+
+          <View style={styles.whiteBox}>
+          <View style={{flexDirection: 'row' }}>
+          <Image
         source={require('../assets/money (2).png')}
         style={styles.boxicon}
       />
@@ -389,26 +402,6 @@ onMouseLeave={() => setIsHovered9(false)}
           
           </View>
 
-          <View style={styles.whiteBox}>
-          <View style={{flexDirection: 'row' }}>
-          <Image
-       source={require('../assets/calculator.png')}
-        style={styles.boxicon}
-      />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Pricing Model</Text>
-          </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 40 }}>Change your subscription plan</Text>
-          <TouchableOpacity onPress={goToSubscription}
-          style={[
-            styles.touchablecoach,
-            isHovered12 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered12(true)}
-          onMouseLeave={() => setIsHovered12(false)}
-          >
-          <Text style={styles.touchableTextcoach}>Change</Text>
-          </TouchableOpacity>
-          </View>
 
           <View style={styles.whiteBox}>
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>Your Angle Badge</Text>
@@ -459,7 +452,7 @@ onMouseLeave={() => setIsHovered9(false)}
         </View>
       </Modal>
     </View>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -614,6 +607,12 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13
+  },
+  touchableTextbegin: {
+    color: 'darkgreen',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   touchablecoach: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -823,20 +822,20 @@ blurBackground: {
     backgroundColor: 'coral'
   },
   imageback: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     marginRight: 30,
-    marginLeft: 30,
-    marginTop: 30,
+    marginLeft: 10,
+    marginTop: 10,
     borderRadius: 20
   },
   touchablebegin: {
-    padding: 8,
+    padding: 10,
     paddingHorizontal: 5,
-    marginTop: 20,
+    marginTop: 40,
     marginBottom: 10,
     width: 150,
-    backgroundColor: 'rgba(200,200,125,0.3)',
+    backgroundColor: '#63EC55',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {

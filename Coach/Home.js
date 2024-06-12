@@ -7,8 +7,6 @@ import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from './NewTarget';
-import OpenModal3 from './NewTarget';
-import OpenModal4 from './NewTarget';
 
 
 const HomePage = () => {
@@ -117,10 +115,7 @@ const EmployeePerformance = () => {
   };
 
   return (
-    <ImageBackground
-    source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
->
+    <View style={{backgroundColor: '#3F5B39', flex: 1}}>
   <View style={{ flex: 1}}>
     <Topbar />
     <View style={{ flexDirection: 'row', flex: 1  }}>
@@ -167,26 +162,21 @@ const EmployeePerformance = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 14, color: 'darkgreen', fontWeight: 'bold', marginTop: 10, }}>Time to accelerate</Text>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 5, }}>Know and ccontribute to the growth and impact of your team members</Text>
+          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', }}>Time to accelerate</Text>
+          <Text style={{fontSize: 22, color: '#63EC55', fontWeight: 'bold', }}>Know and contribute to the growth and impact of your team members</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
-          isHovered14 && styles.touchableOpacityHovered
+          isHovered7 && styles.touchableOpacityHovered
         ]}
-        onMouseEnter={() => setIsHovered14(true)}
-        onMouseLeave={() => setIsHovered14(false)}
+        onMouseEnter={() => setIsHovered7(true)}
+        onMouseLeave={() => setIsHovered7(false)}
       >
-          <Text style={styles.touchableText}>Get Started</Text>
+          <Text style={styles.touchableTextbegin}>Get Started</Text>
           </TouchableOpacity>
          
          
-          <View style={{flexDirection: 'row', }}>
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
-          <TouchableOpacity  onPress={() => setModalVisible(true)} >
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
-          </TouchableOpacity>
-          </View>
+          
           
           </View>
           <Image
@@ -203,47 +193,9 @@ const EmployeePerformance = () => {
           <View style={styles.greenBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
           
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge sharing meeting</Text>
-          <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Confirm attendance | compulsory</Text>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
-          
-          </View>
-           </View>
-          <View style={{flexDirection: 'row', marginBottom: 15 }}>
-           <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 30, marginTop: 5,}}
-            />
-              <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
-              <View style={{flexDirection: 'row' }}>
-<TouchableOpacity 
-style={[
-  styles.touchablesession,
-  isHovered5 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered5(true)}
-onMouseLeave={() => setIsHovered5(false)}
->
-          <Text style={styles.touchableTextsession}>Target Assessment</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          style={[
-            styles.touchablejoinsession,
-            isHovered13 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered13(true)}
-          onMouseLeave={() => setIsHovered13(false)}
-          >
-          <Text style={styles.touchableTextjoinsession}>Start</Text>
-          </TouchableOpacity>
-          </View>
-              </View>
-         
-<View style={{flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row', marginTop: 20  }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Action Items</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Activites</Text>
 <View style={{flexDirection: 'row', justifyContent: 'center' }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
@@ -289,11 +241,57 @@ onMouseLeave={() => setIsHovered3(false)}
 </View>
 </View>
 
+<View style={{flexDirection: 'row', marginTop: 10 }}>
+         <View style={{flexDirection: 'row' }}>
+          <Image
+       source={require('../assets/Upcom2.png')}
+        style={{ width: 25, height: 25, marginLeft: 50, marginTop: 15,}}
+      />
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold' }}>Upcoming Sessions</Text>
+          </View>
+          <View style={{flexDirection: 'column' }}>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline' }}>5 Confirmations | 1 to go</Text>
+          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+          
+          </View>
+           </View>
+          <View style={{flexDirection: 'row', marginBottom: 15 }}>
+           <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 50, marginTop: 5,}}
+            />
+              <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
+              <View style={{flexDirection: 'row' }}>
+<TouchableOpacity 
+style={[
+  styles.touchablesession,
+  isHovered5 && styles.touchableOpacityHovered
+]}
+onMouseEnter={() => setIsHovered5(true)}
+onMouseLeave={() => setIsHovered5(false)}
+>
+          <Text style={styles.touchableTextsession}>Target Assessment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+          style={[
+            styles.touchablejoinsession,
+            isHovered13 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered13(true)}
+          onMouseLeave={() => setIsHovered13(false)}
+          >
+          <Text style={styles.touchableTextjoinsession}>Start</Text>
+          </TouchableOpacity>
+          </View>
+              </View>
+         
+
+
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Growth Plan Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Growth Plan Session </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 135, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -307,8 +305,8 @@ onMouseLeave={() => setIsHovered3(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Advice Session</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 175, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -322,8 +320,8 @@ onMouseLeave={() => setIsHovered3(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Interview Session </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 155, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
@@ -363,48 +361,28 @@ onMouseLeave={() => setIsHovered3(false)}
           </TouchableOpacity>
           </View>
 
+         
           <View style={styles.whiteBox}>
           <View style={{flexDirection: 'row' }}>
           <Image
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next Meeting</Text>
-           </View>
-           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25  }}>Meeting with Jasun Joshua is scheduled for 13th of July 2024.</Text>
-          <TouchableOpacity onPress={goToSubscription}
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Need Help?</Text>
+          </View>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an issue you would like us to assist you with?</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
-            isHovered11 && styles.touchableOpacityHovered
+            isHovered14 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered11(true)}
-          onMouseLeave={() => setIsHovered11(false)}
+          onMouseEnter={() => setIsHovered14(true)}
+          onMouseLeave={() => setIsHovered14(false)}
           >
-          <Text style={styles.touchableTextcoach}>See All</Text>
+          <Text style={styles.touchableTextcoach}>Get Help</Text>
           </TouchableOpacity>
+          </View>
           
-          </View>
-
-          <View style={styles.whiteBox}>
-          <View style={{flexDirection: 'row' }}>
-          <Image
-       source={require('../assets/feedback (2).png')}
-        style={styles.boxicon}
-      />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
-          </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 40 }}>I would like to inform you that...</Text>
-          <TouchableOpacity onPress={goToSubscription}
-          style={[
-            styles.touchablecoach,
-            isHovered12 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered12(true)}
-          onMouseLeave={() => setIsHovered12(false)}
-          >
-          <Text style={styles.touchableTextcoach}>View</Text>
-          </TouchableOpacity>
-          </View>
 
           <View style={styles.whiteBox}>
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>Angle Badge</Text>
@@ -434,28 +412,8 @@ onMouseLeave={() => setIsHovered3(false)}
           <OpenModal2 onClose={() => handleCloseModal2()} />
         </View>
       </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible3}
-        onRequestClose={handleCloseModal3}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal3 onClose={() => handleCloseModal3()} />
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible4}
-        onRequestClose={handleCloseModal4}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal4 onClose={() => handleCloseModal4()} />
-        </View>
-      </Modal>
     </View>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -611,6 +569,12 @@ blurBackground: {
     textAlign: 'center',
     fontSize: 13
   },
+  touchableTextbegin: {
+    color: 'darkgreen',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
   touchablecoach: {
     backgroundColor: 'rgba(200,200,125,0.3)',
     padding: 8,
@@ -725,7 +689,7 @@ blurBackground: {
     paddingHorizontal: 20, 
     marginTop: 10,
     marginRight: 10,
-    marginLeft: 180,
+    marginLeft: 150,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -819,20 +783,20 @@ blurBackground: {
     backgroundColor: 'coral'
   },
   imageback: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     marginRight: 30,
-    marginLeft: 30,
-    marginTop: 30,
+    marginLeft: 10,
+    marginTop: 10,
     borderRadius: 20
   },
   touchablebegin: {
-    padding: 8,
+    padding: 10,
     paddingHorizontal: 5,
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
     width: 150,
-    backgroundColor: 'rgba(200,200,125,0.3)',
+    backgroundColor: '#63EC55',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {

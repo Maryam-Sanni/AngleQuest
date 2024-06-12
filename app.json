@@ -26,6 +26,9 @@
     "web": {
       "favicon": "./assets/Recruitangle Icon.png",
       "sourceDir": "."
-    }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }

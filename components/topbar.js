@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Icon = ({ source, alt, style, onPress }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -30,6 +31,7 @@ const Icon = ({ source, alt, style, onPress }) => {
 
 const MyComponent = () => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(null);
+   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false)
   const navigation = useNavigation(); // Initialize navigation
 
   const icons = [
@@ -55,6 +57,10 @@ const MyComponent = () => {
     else if (index === 1) {
       navigation.navigate('Account Settings'); // Replace 'AccountSettings' with your actual route name
     }
+  };
+
+ const toggleLanguageSwitcher = () => {
+    setShowLanguageSwitcher(!showLanguageSwitcher);
   };
 
   return (
@@ -92,7 +98,7 @@ const MyComponent = () => {
             borderRadius: 5,
             paddingHorizontal: 10,
             paddingVertical: 5,
-            width: 250,
+            width: 400,
             outline: 'none',
             marginRight: 70,
           }}
@@ -107,9 +113,25 @@ const MyComponent = () => {
             onPress={() => handleIconPress(index)}
           />
         ))}
+      <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
+          <Text style={styles.languageButtonText}>Language</Text>
+        </TouchableOpacity>
+        {showLanguageSwitcher && <LanguageSwitcher onClose={() => setShowLanguageSwitcher(false)} />}
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  languageButton: {
+    padding: 10,
+    backgroundColor: '#EEE',
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  languageButtonText: {
+    color: '#333',
+  },
+});
 
 export default MyComponent;

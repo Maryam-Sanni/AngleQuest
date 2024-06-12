@@ -1,5 +1,5 @@
 import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal  } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, TextInput  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
@@ -41,12 +41,24 @@ const HomePage = () => {
     setCustomModalVisible(true);
   }, []);
 
-  const goToMessages = () => {
-    navigation.navigate('Messages');
+  const goToGrowth = () => {
+    navigation.navigate('Growth Plan');
   };
 
   const goToHubs = () => {
     navigation.navigate('Coaching Hubs');
+  };
+
+  const goToInterview = () => {
+    navigation.navigate('Interview');
+  };
+
+  const goToAdvice = () => {
+    navigation.navigate('Advice');
+  };
+
+  const goToTarget = () => {
+    navigation.navigate(' ');
   };
  
   const handleOpenPress2 = () => {
@@ -74,10 +86,7 @@ const HomePage = () => {
   };
 
   return (
-    <ImageBackground
-    source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
->
+    <View style={{backgroundColor: '#3F5B39', flex: 1}}>
   <View style={{ flex: 1}}>
     <Topbar />
     <View style={{ flexDirection: 'row', flex: 1  }}>
@@ -97,69 +106,20 @@ const HomePage = () => {
       <View style={styles.mainContent}>
       <View style={styles.messageBox}>
       <BlurView intensity={50} style={styles.blurBackground}>
-      <View style={{flexDirection: 'row' }}>
+          <Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>My Angle Badge</Text>
+          
+          <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10 }}>
           <Image
-       source={require('../assets/chat.png')}
-        style={styles.boxicon}
+       source={require('../assets/useravatar2.png')}
+        style={styles.profile}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Chats</Text>
-          </View>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 20, marginLeft: 15,  fontWeight: 'bold' }}>SAP FI Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
-          
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Microsoft Azure Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
-          
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold' }}>Jr. PowerPoint Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam..</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3}}>Hello, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140}}>see more</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
-
-          <TouchableOpacity
-            onPress={goToMessages}
+<View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, }}>
+      <CustomPercentageChart percentage={45} />
+      </View>
+</View>
+<Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.</Text>
+<Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Activities</Text>          
+<TouchableOpacity onPress={goToHubs}
             style={[
               styles.touchablechat,
               isHovered1 && styles.touchableOpacityHovered
@@ -167,7 +127,72 @@ const HomePage = () => {
             onMouseEnter={() => setIsHovered1(true)}
             onMouseLeave={() => setIsHovered1(false)}
           >
-            <Text style={styles.touchableText}>See All Chats</Text>
+            <View style={{flexDirection: 'row' }}>
+            <Text style={styles.touchableTextchat}>Hubs</Text>
+            <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>3</Text>
+        </View>
+        </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToGrowth}
+            style={[
+              styles.touchablechat,
+              isHovered3 && styles.touchableOpacityHovered
+            ]}
+            onMouseEnter={() => setIsHovered3(true)}
+            onMouseLeave={() => setIsHovered3(false)}
+          >
+           <View style={{flexDirection: 'row' }}>
+            <Text style={styles.touchableTextchat}>Growth Plan</Text>
+            <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>5</Text>
+        </View>
+        </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToAdvice}
+            style={[
+              styles.touchablechat,
+              isHovered4 && styles.touchableOpacityHovered
+            ]}
+            onMouseEnter={() => setIsHovered4(true)}
+            onMouseLeave={() => setIsHovered4(false)}
+          >
+            <View style={{flexDirection: 'row' }}>
+            <Text style={styles.touchableTextchat}>Advice</Text>
+            <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>2</Text>
+        </View>
+        </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToInterview}
+            style={[
+              styles.touchablechat,
+              isHovered5 && styles.touchableOpacityHovered
+            ]}
+            onMouseEnter={() => setIsHovered5(true)}
+            onMouseLeave={() => setIsHovered5(false)}
+          >
+           <View style={{flexDirection: 'row' }}>
+            <Text style={styles.touchableTextchat}>Interview</Text>
+            <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>7</Text>
+        </View>
+        </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.touchablechat,
+              isHovered6 && styles.touchableOpacityHovered
+            ]}
+            onMouseEnter={() => setIsHovered6(true)}
+            onMouseLeave={() => setIsHovered6(false)}
+          >
+            <View style={{flexDirection: 'row' }}>
+            <Text style={styles.touchableTextchat}>Targets</Text>
+            <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>1</Text>
+        </View>
+        </View>
           </TouchableOpacity>
           </BlurView>
           </View>
@@ -176,8 +201,8 @@ const HomePage = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 10, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 14, color: 'darkgreen', fontWeight: 'bold', marginTop: 10, }}>What is next for you Maryam?</Text>
-          <Text style={{fontSize: 18, color: '#63EC55', fontWeight: 'bold', marginTop: 5, }}>Reaching your next career milstone is important to us</Text>
+          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', marginTop: 10, }}>What is next for you Maryam?</Text>
+          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 5, }}>Reaching your next career milstone is important to us</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -190,12 +215,7 @@ const HomePage = () => {
           </TouchableOpacity>
          
          
-          <View style={{flexDirection: 'row', marginTop: 5}}>
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Help</Text>
-          <TouchableOpacity  onPress={() => setModalVisible(true)} >
-          <Text style={{fontSize: 15, color: 'white', marginTop: 5, marginLeft: 10, textDecoration: 'underline'}}>Suggestion</Text>
-          </TouchableOpacity>
-          </View>
+          
           
           </View>
           <Image
@@ -209,112 +229,33 @@ const HomePage = () => {
           <View style={styles.greenBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
           
+          
         
           <View style={{flexDirection: 'row' }}>
           <View style={{flexDirection: 'column' }}>
-           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', marginBottom: -5 }}>Upcoming knowledge sharing session</Text>
+          <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 10 }}>
+         <View style={{flexDirection: 'row',  }}>
+          <Image
+       source={require('../assets/Upcom2.png')}
+        style={{ width: 25, height: 25, marginLeft: 50, marginTop: 15,}}
+      />
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold' }}>Upcoming Sessions</Text>
+          </View>
           <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 40, fontWeight: '600' }}>Confirm attendance | compulsory</Text>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline' }}>5 Confirmations | 1 to go</Text>
+          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
           
           </View>
            </View>
-          <View style={{flexDirection: 'row', marginBottom: 15 }}>
-           <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 30, marginTop: 7,}}
-            />
-              <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600' }}>Joop Melcher</Text>
-              <View style={{flexDirection: 'row' }}>
-<TouchableOpacity 
-style={[
-  styles.touchablesession,
-  isHovered3 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered3(true)}
-onMouseLeave={() => setIsHovered3(false)}
->
-          <Text style={styles.touchableTextsession}>SAP Configuration</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          style={[
-            styles.touchablejoinsession,
-            isHovered4 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered4(true)}
-          onMouseLeave={() => setIsHovered4(false)}
-          >
-          <Text style={styles.touchableTextjoinsession}>Join</Text>
-          </TouchableOpacity>
           </View>
-              </View>
-            </View>
           </View>
-<View style={{flexDirection: 'row' }}>
-<View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Things to do</Text>
-<View style={{flexDirection: 'row' }}>
-<TouchableOpacity
-style={[
-  styles.touchablerate,
-  isHovered5 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered5(true)}
-onMouseLeave={() => setIsHovered5(false)}
->
-          <Text style={styles.touchableTextrate}>Target</Text>
-          </TouchableOpacity>
-<TouchableOpacity
-style={[
-  styles.touchablerate,
-  isHovered6 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered6(true)}
-onMouseLeave={() => setIsHovered6(false)}
->
-          <Text style={styles.touchableTextrate}>Hubs</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity 
-          style={[
-            styles.touchablerate,
-            isHovered7 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered7(true)}
-          onMouseLeave={() => setIsHovered7(false)}
-          >
-          <Text style={styles.touchableTextrate}>Growth Plan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-            styles.touchablerate,
-            isHovered8 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered8(true)}
-          onMouseLeave={() => setIsHovered8(false)}
-          >
-          <Text style={styles.touchableTextrate}>Interview</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-            styles.touchablerate,
-            isHovered9 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered9(true)}
-          onMouseLeave={() => setIsHovered9(false)}
-          >
-          <Text style={styles.touchableTextrate}>Advice</Text>
-          </TouchableOpacity>
-</View>
-</View>
-</View>
 
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Growth Plan Review </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Growth Plan Review </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 135, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -338,8 +279,8 @@ onMouseLeave={() => setIsHovered10(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Advice Session</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 175, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -363,8 +304,8 @@ onMouseLeave={() => setIsHovered11(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Interview Session </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 155, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
@@ -389,20 +330,71 @@ onMouseLeave={() => setIsHovered12(false)}
           </BlurView>
  </View>
 
+ <View style={styles.messagecontainer}>
+      <Image source={require('../assets/messagebox.png')} style={styles.icon} />
+      <TextInput
+        placeholder="Send Message to your Expert"
+        placeholderTextColor="#888"
+        style={styles.input}
+      />
+      <TouchableOpacity>
+      <Image source={require('../assets/Sendarrow-message.png')} style={styles.icon} />
+      </TouchableOpacity>
+    </View>
         </View>
 
         <View style={styles.whiteBoxesContainer}>
           {/* White boxes will go here */}
           <View style={styles.whiteBox}>
-          <View style={{flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row', marginBottom: 10 }}>
           <Image
-       source={require('../assets/question.png')}
+       source={require('../assets/chat.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>SAP FI</Text>
+          <Text style={{fontSize: 18, color: 'white', marginTop: 25, position: 'absolute', right: 30, fontWeight: 'bold' }}>Others</Text>
           </View>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Send your question and get response as soon as possible from your coach</Text>
-          <TouchableOpacity onPress={goToMessages} 
+          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+          <View style={{flexDirection: 'row', }}>
+          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
+          <View style={{flexDirection: 'column' }}>
+            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Aliyah Hussein</Text>
+            <Text style={{color: 'white', fontSize: 14, marginTop: 3}}>Hello, This is Coach Aliyah,...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120}}>Now</Text>
+          </View>
+          </View>
+          </View>
+          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+          <View style={{flexDirection: 'row', }}>
+          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
+          <View style={{flexDirection: 'column' }}>
+            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Imisi Akingbade</Text>
+            <Text style={{color: 'white', fontSize: 14, marginTop: 3}}>Hello, Imisi, I hope you...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120}}>12:0PM</Text>
+          </View>
+          </View>
+          </View>
+          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+          <View style={{flexDirection: 'row', }}>
+          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
+          <View style={{flexDirection: 'column' }}>
+            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Gerald Jason</Text>
+            <Text style={{color: 'white', fontSize: 14, marginTop: 3}}>Afternoon Gerald, let's...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120}}>04:00PM</Text>
+          </View>
+          </View>
+          </View>
+          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+          <View style={{flexDirection: 'row', }}>
+          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
+          <View style={{flexDirection: 'column' }}>
+            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, }}>Nathan Arthur</Text>
+            <Text style={{color: 'white', fontSize: 14, marginTop: 3}}>Perfect response Arthur...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120}}>09/06/24</Text>
+          </View>
+          </View>
+          </View>
+          <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
             isHovered13 && styles.touchableOpacityHovered
@@ -410,81 +402,23 @@ onMouseLeave={() => setIsHovered12(false)}
           onMouseEnter={() => setIsHovered13(true)}
           onMouseLeave={() => setIsHovered13(false)}
           >
-          <Text style={styles.touchableTextcoach}>Interact with your coach</Text>
+          <Text style={styles.touchableTextcoach}>Suggestion</Text>
           </TouchableOpacity>
-          </View>
-
-          <View style={styles.whiteBox}>
-          <View style={{flexDirection: 'row' }}>
-          <Image
-       source={require('../assets/QandA.png')}
-        style={styles.boxicon}
-      />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Next knowledge sharing session</Text>
-           </View>
-           <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20  }}>Setting up master data on SAP on XYZ (date) with coach Joop Melcher</Text>
-           <View style={{flexDirection: 'row', marginTop: 8 }}>
-<TouchableOpacity onPress={goToHubs} 
-style={[
-  styles.touchableall,
-  isHovered14 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered14(true)}
-onMouseLeave={() => setIsHovered14(false)}
->
-          <Text style={styles.touchableTextall}>See all</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={goToHubs}
-          style={[
-            styles.touchablehub,
-            isHovered15 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered15(true)}
-          onMouseLeave={() => setIsHovered15(false)}
-          >
-          <Text style={styles.touchableTexthub}>Join new hub</Text>
-          </TouchableOpacity>
-          </View>
-          </View>
-
-          <View style={styles.whiteBox}>
-          <View style={{flexDirection: 'row' }}>
-          <Image
-       source={require('../assets/feedback (2).png')}
-        style={styles.boxicon}
-      />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Feedbacks</Text>
-          </View>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 20, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Interview Feedback</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 18, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
-          </View>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 10, marginLeft: 40,  fontWeight: '630', textDecoration: 'underline' }}> Growth Plan Review</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 8, marginLeft: 10,  fontWeight: 'bold' }}>0</Text>
-          
-          </View>
-          <TouchableOpacity onPress={goToMessages} 
+          <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
-            isHovered16 && styles.touchableOpacityHovered
+            isHovered14 && styles.touchableOpacityHovered
           ]}
-          onMouseEnter={() => setIsHovered16(true)}
-          onMouseLeave={() => setIsHovered16(false)}
+          onMouseEnter={() => setIsHovered14(true)}
+          onMouseLeave={() => setIsHovered14(false)}
           >
-          <Text style={styles.touchableTextcoach}>See all</Text>
+          <Text style={styles.touchableTextcoach}>Get Help</Text>
           </TouchableOpacity>
           </View>
 
-          <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>My Angle Badge</Text>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
-      <CustomPercentageChart percentage={45} />
-      </View>
-    </View>
-          </View>
+         
+
+        
         </View>
       </View>
     </View>
@@ -526,7 +460,7 @@ onMouseLeave={() => setIsHovered14(false)}
         </View>
       </Modal>
     </View>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -595,7 +529,7 @@ const styles = StyleSheet.create({
 },
 messageBox: {
   width: 220,
-  height: 700,
+  height: 670,
   backgroundColor: 'rgba(125,125,125,0.3)',
     borderRadius: 20,
   marginRight: 15, 
@@ -604,7 +538,7 @@ messageBox: {
 },
 greenBox: {
   width: 580,
-  height: 600,
+  height: 450,
   backgroundColor: 'rgba(225,255,212,0.1)',
   borderRadius: 20,
   marginBottom: 20,
@@ -629,7 +563,7 @@ blurBackground: {
     },
     whiteBox: {
       width: 280,
-      height: 200,
+      height: 670,
       backgroundColor: 'rgba(125,125,125,0.3)',
       borderRadius: 20,
       marginBottom: 15,
@@ -655,11 +589,11 @@ blurBackground: {
   touchablechat: {
     padding: 8,
     paddingHorizontal: 20,
-    marginTop: 60,
-    marginLeft: 30,
-    marginRight: 30,
+    marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10,
     backgroundColor: 'rgba(200,200,125,0.3)',
-    borderRadius: 10,
+    borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -670,9 +604,15 @@ blurBackground: {
     elevation: 2,
   },
   touchableText: {
-    color: 'white',
+    color: 'darkgreen',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  touchableTextchat: {
+    color: 'white',
+    textAlign: 'flex-start',
+    fontSize: 16
   },
   touchableOpacityHovered: {
     backgroundColor: 'coral'
@@ -681,8 +621,8 @@ blurBackground: {
     backgroundColor: 'rgba(200,200,125,0.3)',
     padding: 8,
     paddingHorizontal: 5, 
-    marginTop: 25,
-    marginLeft: 30,
+    marginTop: 15,
+    marginLeft: 20,
     marginRight: 20,
     borderRadius: 10,
     shadowColor: '#000',
@@ -851,21 +791,28 @@ blurBackground: {
     marginLeft: 15,
     borderRadius: 25
   },
+  profile: {
+    width: 80,
+    height: 80,
+    marginRight: 20,
+    marginLeft: 10,
+    marginTop: 10,
+  },
   imageback: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     marginRight: 30,
-    marginLeft: 30,
-    marginTop: 30,
+    marginLeft: 10,
+    marginTop: 10,
     borderRadius: 20
   },
   touchablebegin: {
-    padding: 8,
+    padding: 10,
     paddingHorizontal: 5,
-    marginTop: 15,
+    marginTop: 20,
     marginBottom: 10,
     width: 150,
-    backgroundColor: 'rgba(200,200,125,0.3)',
+    backgroundColor: '#63EC55',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -875,6 +822,47 @@ blurBackground: {
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+  },
+  messageCount: {
+    width: 23,
+    height: 23,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 5
+  },
+  messageCountText: {
+    color: 'coral',
+    fontWeight: '500',
+    fontSize: 14
+  },
+  messagecontainer: {
+    height: 50,
+    marginBottom: 50,
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: "100%",
+    backgroundColor: 'white',
+    borderColor: '#63EC55',
+    borderRadius: 20,
+    padding: 5,
+  },
+  input: {
+    flex: 1,
+    marginHorizontal: 10,
+    padding: 5,
+    fontSize: 16,
+    borderWidth: 0,
+    color: 'black'
+  },
+  icon: {
+    width: 25,
+    height: 25,
+    marginHorizontal: 5,
   },
 });
 

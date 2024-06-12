@@ -31,7 +31,7 @@ function MyComponent() {
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-          <View style={{ marginLeft: 270}}>
+          <View style={{ marginLeft: 200}}>
             <View style={styles.header}>
               <TouchableOpacity onPress={goToOffers} 
             underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
@@ -39,7 +39,7 @@ function MyComponent() {
             onMouseLeave={() => setIsOfferHovered(false)}> 
               <View style={styles.item}>
               <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
                 <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
@@ -51,7 +51,7 @@ function MyComponent() {
             onMouseLeave={() => setIsBidHovered(false)} >
               <View style={styles.item}>
               <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
                 <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
@@ -101,6 +101,9 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.cell}>
           <Text style={{color: "white", fontSize: 14}}> </Text>
         </View>
+        <View style={styles.cell}>
+          <Text style={{color: "white", fontSize: 14}}> </Text>
+        </View>
       </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
@@ -118,6 +121,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell2}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -138,6 +144,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -158,6 +167,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell2}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -178,6 +190,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -198,6 +213,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell2}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -218,6 +236,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -238,6 +259,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell2}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -258,6 +282,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -278,6 +305,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>July 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell2}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -298,6 +328,9 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>August 2024</Text>
           </View>
+          <TouchableOpacity style={styles.cell}>
+          <Text style={styles.open}>Download NDA</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
           </TouchableOpacity>
@@ -327,7 +360,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   header: {
-    marginLeft: -60,
+    marginLeft: -40,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
@@ -396,7 +429,7 @@ const styles = StyleSheet.create({
   
   greenBox: {
     flex: 1,
-   width: "90%",
+   width: "95%",
     height:250,
     marginBottom: 20,
     marginLeft: 50, 
@@ -416,6 +449,15 @@ const styles = StyleSheet.create({
     marginTop: -5,
     borderRadius: 25
   },
+  open: {
+    color: "black",
+     fontSize: 14,
+      borderColor: "#63EC55", 
+      borderWidth: 2, 
+      padding: 5, 
+      paddingHorizontal: 15, 
+      borderRadius: 5
+},
 });
 
 export default MyComponent;

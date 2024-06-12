@@ -7,19 +7,18 @@ import OpenModal from '../components/Createhubform';
 import OpenModal2 from '../components/Edithubform';
 import ConfirmationPopup from '../Experts/OtherHubs';
 import { BlurView } from 'expo-blur';
-
+import OpenModal4 from './SetMeet';
+import OpenModal5 from './Assignment';
   
 function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
-    const [isSecondHubsHovered, setIsSecondHubsHovered] = useState(false);
+    const [modalVisible4, setModalVisible4] = useState(false);
     const [isThirdHubsHovered, setIsThirdHubsHovered] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
-   
-
     
 
       const goToMyHubs = () => {
@@ -48,6 +47,14 @@ function MyComponent() {
   
     const handleCloseModal3 = () => {
       setModalVisible3(false);
+    };
+
+    const handleOpenPress3 = () => {
+      setModalVisible4(true);
+    };
+  
+    const handleCloseModal4 = () => {
+      setModalVisible4(false);
     };
 
   return (
@@ -89,7 +96,7 @@ function MyComponent() {
             <TouchableOpacity onPress={handleOthersPress}>
                 <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginRight: 5, marginLeft: 50}} />
             </TouchableOpacity>
-            </View>
+           
             <TouchableOpacity onPress={goToMyHubs}
             underlayColor={isAllHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsAllHovered(true)}
@@ -97,19 +104,29 @@ function MyComponent() {
               <View style={styles.item}>
               <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.eimage}
+  style={styles.image}
 />
-                <Text style={[styles.eheadertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
+                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
               </View>
             </TouchableOpacity>
-            
+            </View>
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ Create New Hub</Text>
+    <View style={{ position: 'absolute', right: 70, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center', }}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+New Hub</Text>
                   </View>
      </TouchableOpacity>
-
-
+     <View style={{ flexDirection: "row"}}>
+            <TouchableOpacity onPress={handleOpenPress2}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Edit Hub</Text>
+                  </View>
+     </TouchableOpacity>
+     <TouchableOpacity onPress={handleOpenPress3}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Assignment</Text>
+                  </View>
+     </TouchableOpacity>
+     </View>
      <Modal
         animationType="slide"
         transparent={true}
@@ -133,6 +150,16 @@ function MyComponent() {
       <Modal
         animationType="slide"
         transparent={true}
+        visible={modalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal5 onClose={() => handleCloseModal4()} />
+          </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
         visible={modalVisible2}
         onRequestClose={handleCloseModal2}
       >
@@ -141,13 +168,10 @@ function MyComponent() {
           </View>
       </Modal>
 
+      
 
             <ScheduledMeetingsTable />
-            <TouchableOpacity onPress={handleOpenPress2}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1, marginBottom: 50 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: '600' }}>Edit Hub</Text>
-                  </View>
-     </TouchableOpacity>
+            
           </View>
         </ScrollView>
       </View>
@@ -158,14 +182,15 @@ function MyComponent() {
 
 const ScheduledMeetingsTable = () => {
   const [messageCountText, setMessageCountText] = useState('0'); 
-  const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible4, setModalVisible4] = useState(false);
 
-    const handleOpenPress = () => {
-      setModalVisible(true);
+    const handleOpenPress4 = () => {
+      setModalVisible4(true);
     };
   
-    const handleCloseModal = () => {
-      setModalVisible(false);
+    const handleCloseModal4 = () => {
+      setModalVisible4(false);
+      onClose();
     };
 
   return ( 
@@ -190,6 +215,9 @@ const ScheduledMeetingsTable = () => {
       <View style={[styles.whiteBox, { marginLeft: 40, }]}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>Total Hub Members</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
+    <TouchableOpacity onPress={handleOpenPress4} style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>New Meeting</Text>
+          </TouchableOpacity>
       </View>
 
       <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
@@ -466,8 +494,18 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>1 Sessions</Text>
           </View>
         </View>
-        
 
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={handleCloseModal4} />
+        </View>
+      </Modal>
+       
       </View>
       </BlurView>
     </View>
@@ -489,7 +527,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#f7fff4',
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#f7fff4',
   },

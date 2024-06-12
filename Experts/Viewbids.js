@@ -77,7 +77,7 @@ function MyComponent({ onClose }) {
                 <View style={styles.row}>
         <TouchableOpacity>
         <View style={styles.cell}>
-          <Text style={{color: 'black'}}>Attach any supporting file</Text>
+          <Text style={{color: 'black'}}>Upload signed NDA</Text>
         </View>
         </TouchableOpacity>
         </View>
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     width: 920,
     height:600,
     backgroundColor: '#F8F8F8',
-    marginTop: 40
   },
   buttonAcc: {
     backgroundColor: 'coral',

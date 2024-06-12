@@ -3,22 +3,13 @@ import { View, Text, StyleSheet, Picker, Modal, TouchableOpacity } from 'react-n
 import { BlurView } from 'expo-blur';
 import OpenModal from './EditEmployee';
 import OpenModal2 from './ProvideNote';
-import DateTimePickerModal from "../components/DateTimePickerModal";
+import OpenModal3 from './SetMeeting';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
   const [ModalVisible2, setModalVisible2] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedDateTime, setSelectedDateTime] = useState(null);
-
-    const handleConfirmDateTime = (dateTime) => {
-        setSelectedDateTime(dateTime);
-        setIsModalVisible(false);
-      };
+  const [ModalVisible3, setModalVisible3] = useState(false);
     
-      const handleCancelModal = () => {
-        setIsModalVisible(false);
-      };
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -35,6 +26,15 @@ const ScheduledMeetingsTable = () => {
 
   const handleCloseModal2 = () => {
     setModalVisible2(false);
+    onClose();
+  };
+
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
     onClose();
   };
 
@@ -82,7 +82,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
           <Text style={styles.add}>Note</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.cell2}>
+          <TouchableOpacity onPress={handleOpenPress3} style={styles.cell2}>
           <Text style={styles.open}>Meeting</Text>
           </TouchableOpacity>
         </View>
@@ -104,7 +104,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>Note</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.cell}>
+          <TouchableOpacity onPress={handleOpenPress3} style={styles.cell}>
           <Text style={styles.open}>Meeting</Text>
           </TouchableOpacity>
         </View>
@@ -126,7 +126,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
           <Text style={styles.add}>Note</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.cell2}>
+          <TouchableOpacity onPress={handleOpenPress3} style={styles.cell2}>
           <Text style={styles.open}>Meeting</Text>
           </TouchableOpacity>
         </View>
@@ -148,7 +148,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>Note</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.cell}>
+          <TouchableOpacity onPress={handleOpenPress3} style={styles.cell}>
           <Text style={styles.open}>Meeting</Text>
           </TouchableOpacity>
         </View>
@@ -175,11 +175,16 @@ const ScheduledMeetingsTable = () => {
           <OpenModal2 onClose={handleCloseModal2} />
         </View>
       </Modal>
-      <DateTimePickerModal
-        isVisible={isModalVisible}
-        onConfirm={handleConfirmDateTime}
-        onCancel={handleCancelModal}
-      />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={handleCloseModal3} />
+        </View>
+      </Modal>
       </View>
       
       </BlurView>

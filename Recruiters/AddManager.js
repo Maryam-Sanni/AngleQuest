@@ -32,7 +32,7 @@ function MyComponent({ onClose }) {
                  Invite a new Manager
                 </Text>
                 <Image
-                  source={require('../assets/AddManager.png')}
+                  source={require('../assets/mang.png')}
                   style={styles.image}
                 />
                 <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 10, fontStyle: 'italic', width: 400 }}>

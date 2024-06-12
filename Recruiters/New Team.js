@@ -33,7 +33,7 @@ function MyComponent({ onClose }) {
                   Create a New Team
                 </Text>
                 <Image
-                  source={require('../assets/AddManager.png')}
+                  source={require('../assets/mang.png')}
                   style={styles.image}
                 />
               </View>

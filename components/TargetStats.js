@@ -39,10 +39,10 @@ const ScheduledMeetingsTable = () => {
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Deadline</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Review Date</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Rating</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Rating</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Review Date</Text>
             </View>
             <View style={styles.cell}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}> </Text>
@@ -59,13 +59,13 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
             <Text style={styles.cellText}>12/Oct/2024</Text>
             </View>
-            <View style={styles.cell2}>
-            <Text style={styles.cellText}>23/Oct/2024</Text>
-            <Text style={styles.cellText}>2:00 PM</Text>
-            </View>
             <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
           <Text style={styles.add}>Rate</Text>
           </TouchableOpacity>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>23/Oct/2024</Text>
+            <Text style={styles.cellText}>2:00 PM</Text>
+            </View>
           <TouchableOpacity style={styles.cell2}>
           <Text style={styles.open}>Start Meeting</Text>
           </TouchableOpacity>
@@ -80,13 +80,13 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
             <Text style={styles.cellText}>12/Oct/2024</Text>
             </View>
-            <View style={styles.cell}>
-            <Text style={styles.cellText}>23/Oct/2024</Text>
-            <Text style={styles.cellText}>2:00 PM</Text>
-            </View>
             <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>Rate</Text>
           </TouchableOpacity>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>23/Oct/2024</Text>
+            <Text style={styles.cellText}>2:00 PM</Text>
+            </View>
           <TouchableOpacity style={styles.cell}>
           <Text style={styles.open}>Start Meeting</Text>
           </TouchableOpacity>
@@ -101,13 +101,13 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
             <Text style={styles.cellText}>12/Oct/2024</Text>
             </View>
-            <View style={styles.cell2}>
-            <Text style={styles.cellText}>23/Oct/2024</Text>
-            <Text style={styles.cellText}>2:00 PM</Text>
-            </View>
             <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
           <Text style={styles.add}>Rate</Text>
           </TouchableOpacity>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>23/Oct/2024</Text>
+            <Text style={styles.cellText}>2:00 PM</Text>
+            </View>
           <TouchableOpacity style={styles.cell2}>
           <Text style={styles.open}>Start Meeting</Text>
           </TouchableOpacity>
@@ -122,13 +122,13 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
             <Text style={styles.cellText}>12/Oct/2024</Text>
             </View>
-            <View style={styles.cell}>
-            <Text style={styles.cellText}>23/Oct/2024</Text>
-            <Text style={styles.cellText}>2:00 PM</Text>
-            </View>
             <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>Rate</Text>
           </TouchableOpacity>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>23/Oct/2024</Text>
+            <Text style={styles.cellText}>2:00 PM</Text>
+            </View>
           <TouchableOpacity style={styles.cell}>
           <Text style={styles.open}>Start Meeting</Text>
           </TouchableOpacity>

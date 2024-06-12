@@ -29,10 +29,10 @@ function MyComponent({ onClose }) {
       <Text style={styles.buttonTextDue}>Junior Power Platform Developer </Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Junior Power Platform Developer</Text>
+      <Text style={styles.buttonTextAcc}>Junior SAP FI</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Junior Power Platform Developer</Text>
+      <Text style={styles.buttonTextAcc}>Senior SAP FI</Text>
     </TouchableOpacity>
 </View>
 
@@ -281,7 +281,7 @@ function MyComponent({ onClose }) {
         </View>
       </View>
       </View>
-<TouchableOpacity style={styles.buttonplus} >
+<TouchableOpacity onPress={onClose} style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>Save</Text>
     </TouchableOpacity>
 

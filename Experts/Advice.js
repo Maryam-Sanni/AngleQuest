@@ -110,50 +110,46 @@ function MyComponent() {
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, }}>
-          <View style={styles.header}>
-            <TouchableHighlight
-                                onPress={goToInterview} 
+        <View style={styles.header}>
+          <TouchableHighlight
+                                
                                 underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsInterviewHovered(true)}
                                 onMouseLeave={() => setIsInterviewHovered(false)}>
                                 <View style={styles.item}>
                                 <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Interviews</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Junior Power Platform Developer</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight
-                                onPress={goToGrowth}
+                               
                                 underlayColor={isGrowthHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsGrowthHovered(true)}
                                 onMouseLeave={() => setIsGrowthHovered(false)}>
                                 <View style={styles.item}>
                                 <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Growth Plan</Text>
-                                </View>
-                            </TouchableHighlight>
-                            <TouchableHighlight
-                                onPress={goToAdvice}
-                                underlayColor={isAdviceHovered ? 'transparent' : 'transparent'}
-                                onMouseEnter={() => setIsAdviceHovered(true)}
-                                onMouseLeave={() => setIsAdviceHovered(false)}>
-                                <View style={styles.item}>
-                                <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isAdviceHovered && { color: 'coral' }]}>Advice</Text>
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Junior SAP FI</Text>
                                 </View>
                             </TouchableHighlight>
-          </View>
+                            <TouchableOpacity >
+                <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginLeft: 60, marginTop: 10}} />
+            </TouchableOpacity>
+                            
+                        </View>
+                        <TouchableOpacity onPress={handleOpenPress}>
+    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Create Profile</Text>
+                  </View>
+     </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Advice Profile</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Edit Profile</Text>
                   </View>
      </TouchableOpacity>
 

@@ -230,7 +230,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         />
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
-          onPress={handleSave}
+          onPress={onClose}
         >
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Create New Hub</Text>
         </TouchableOpacity>

@@ -66,10 +66,7 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                    <Text style={{ color: 'black', fontSize: 23, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
-                                            An Offer For You
-                                        </Text>
-                                        <Text style={{ color: '#206C00', fontSize: 16, marginLeft: 50, marginTop: 3 }}>
+                                    <Text style={{ color: '#206C00', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 3 }}>
                                           Emily Ray will work with you on the journey, and do the following with you:
                                         </Text>
 

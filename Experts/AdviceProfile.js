@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 
 
  
@@ -120,6 +120,23 @@ function MyComponent({ onClose }) {
             style={styles.input}
           />
         </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label=" " value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
+        </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
@@ -131,6 +148,23 @@ function MyComponent({ onClose }) {
             placeholderTextColor="grey"
             style={styles.input}
           />
+        </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label=" " value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
         </View>
          </View>
       <View style={styles.row}>
@@ -144,6 +178,23 @@ function MyComponent({ onClose }) {
             style={styles.input}
           />
         </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label=" " value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
+        </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
@@ -156,6 +207,23 @@ function MyComponent({ onClose }) {
             style={styles.input}
           />
         </View> 
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label=" " value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
+        </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
@@ -168,10 +236,27 @@ function MyComponent({ onClose }) {
             style={styles.input}
           />
         </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  style={styles.picker} 
+>
+  <Picker.Item label=" " value="" />
+  <Picker.Item label="10%" value="10%" />
+  <Picker.Item label="20%" value="20%" />
+  <Picker.Item label="30%" value="30%" />
+  <Picker.Item label="40%" value="40%" />
+  <Picker.Item label="50%" value="50%" />
+  <Picker.Item label="60%" value="60%" />
+  <Picker.Item label="70%" value="70%" />
+  <Picker.Item label="80%" value="80%" />
+  <Picker.Item label="90%" value="90%" />
+  <Picker.Item label="100%" value="100%" />
+</Picker>
+        </View>
       </View>
      
       </View>
-<TouchableOpacity style={styles.buttonsave} >
+<TouchableOpacity onPress={onClose} style={styles.buttonsave} >
       <Text style={styles.buttonTextsave}>Save</Text>
     </TouchableOpacity>
 
@@ -303,6 +388,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637'
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: '#F8F8F8',
+    borderColor: 'black',
+    borderWidth: 1, 
+    color:'grey',
+    fontSize: 14
   },
 });
 

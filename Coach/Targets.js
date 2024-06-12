@@ -46,54 +46,9 @@ function MyComponent() {
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ New</Text>
                   </View>
      </TouchableOpacity>
-            </View>
+            </View>    
 
-
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 150, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
-                    <Text style={{ fontSize: 16, color: "black", alignText: 'center', fontWeight: 'bold' }}>Overall Statistics</Text>
-                  </View>      
-
-     <View style={styles.container}>
-     <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Angle Badge</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black' }}>This is the combined progress of employees</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 20 }}>
-      <CustomPercentageChart percentage={51.3} />
-      </View>
-    </View>
-      </View>
-
-      <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Hub Attendance</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black', width: 100}}>This is the combined hubs attendane of employees</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
-      <CustomPercentageChart percentage={45} />
-      </View>
-    </View>
-      </View>
-     
-      <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Growth Plan</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black', }}>This is the combined growth plan completed</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
-      <CustomPercentageChart percentage={60} />
-      </View>
-    </View>
-      </View>
-      
-      <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Advice</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black', width: 100 }}>This is the combined advice sessions employees had</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
-      <CustomPercentageChart percentage={49} />
-      </View>
-    </View>
-      </View>
-</View>
+    
 
                        
                         <EmployeeStats />

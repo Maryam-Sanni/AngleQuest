@@ -20,6 +20,18 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View>
  <View style={styles.container}>
+ <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold'}}>Name</Text>
+        </View>
+        <View style={styles.cell}>
+           <TextInput
+            placeholder="Maryam Bakhali"
+            placeholderTextColor="grey"
+            style={styles.input}
+          />
+        </View>
+      </View>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold'}}>Role</Text>
@@ -285,7 +297,6 @@ const styles = StyleSheet.create({
     width: 920,
     height:300,
     backgroundColor: '#F8F8F8',
-   marginTop: 40
   },
   input: {
     outline: 'black',
