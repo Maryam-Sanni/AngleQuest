@@ -99,19 +99,11 @@ import EmployeePerformance from './Coach/Performance';
 import Meetings from './Coach/AllMeetings';
 import AllMessages from './Coach/Messages';
 import Targets from './Coach/Targets';
-import LanguageSwitcher from './components/LanguageSwitcher';
-import i18n from './components/i18n'; // Your i18n implementation
 
 
 const Stack = createStackNavigator();
 
 const App = () => {
-   const [language, setLanguage] = useState('en'); // Default language is English
-
-  const changeLanguage = (newLanguage) => {
-    setLanguage(newLanguage);
-    i18n.changeLanguage(newLanguage);
-  };
 
   useEffect(() => {
     // Add event listener for deep linking
@@ -235,9 +227,10 @@ const App = () => {
         <Stack.Screen name="All Messages" component={AllMessages} />
         <Stack.Screen name="Targets" component={Targets} />
       </Stack.Navigator>
-      <LanguageSwitcher language={language} onChangeLanguage={changeLanguage} />
     </NavigationContainer>
   );
 };
+
+
 
 export default App;

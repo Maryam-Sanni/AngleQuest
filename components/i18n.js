@@ -11,7 +11,6 @@ import ar from '../locales/ar.json';
 import bn from '../locales/bn.json';
 import pt from '../locales/pt.json';
 
-// Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
   en,
   nl,
@@ -22,13 +21,15 @@ i18n.translations = {
   hi,
   ar,
   bn,
-  pt
+  pt,
 };
 
-// Set the locale once at the beginning of your app.
-i18n.locale = Localization.locale;
-
-// When a value is missing from a language it'll fallback to another language with the key present.
 i18n.fallbacks = true;
+
+const fallback = { languageTag: 'en', isRTL: false };
+
+// Set the locale based on the user's device settings
+const { languageTag } = Localization.locale || fallback;
+i18n.locale = languageTag;
 
 export default i18n;

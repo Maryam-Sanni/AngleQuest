@@ -87,12 +87,20 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
                   Upload employees List
                 </Text> 
+                <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
                 <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
               />
+              </View>
+              <TouchableOpacity>
+    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                  </View>
+     </TouchableOpacity>
+              
               </View>
  <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
                   <Text style={styles.buttonTextplus}>Create Employees Individually</Text>
@@ -101,12 +109,19 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
                   Upload Managers List
                 </Text> 
+                <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
                 <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
               />
+              </View>
+              <TouchableOpacity>
+    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                  </View>
+     </TouchableOpacity>
               </View>
  <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonind}>
                   <Text style={styles.buttonTextplus}>Create Managers Individually</Text>
@@ -115,12 +130,19 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
                   Upload Coaches List
                 </Text> 
+                <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
                 <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
               />
+              </View>
+              <TouchableOpacity>
+    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                  </View>
+     </TouchableOpacity>
               </View>
  <TouchableOpacity onPress={handleOpenPress3} style={styles.buttonind}>
                   <Text style={styles.buttonTextplus}>Create Coaches Individually</Text>
@@ -228,7 +250,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 45,
-    width: 450,
+    width: 310,
     backgroundColor: 'white',
     borderColor: '#206C00',
     borderWidth: 1,

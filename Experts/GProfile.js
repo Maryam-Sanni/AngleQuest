@@ -6,61 +6,45 @@ import OpenModal3 from './AdviceProfile';
 import OpenModal4 from '../components/Createhubform';
 
 function MyComponent({ onClose }) {
-  const [mainModalVisible, setMainModalVisible] = useState(true);
   const [ModalVisible, setModalVisible] = useState(false);
   const [ModalVisible2, setModalVisible2] = useState(false);
   const [ModalVisible3, setModalVisible3] = useState(false);
   const [ModalVisible4, setModalVisible4] = useState(false);
 
   const handleOpenPress = () => {
-    setMainModalVisible(false);
     setModalVisible(true);
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    onClose();
   };
 
   const handleOpenPress2 = () => {
-    setMainModalVisible(false);
     setModalVisible2(true);
   };
 
   const handleCloseModal2 = () => {
     setModalVisible2(false);
-    onClose();
   };
 
   const handleOpenPress3 = () => {
-    setMainModalVisible(false);
     setModalVisible3(true);
   };
 
   const handleCloseModal3 = () => {
     setModalVisible3(false);
-    onClose();
   };
 
   const handleOpenPress4 = () => {
-    setMainModalVisible(false);
     setModalVisible4(true);
   };
 
   const handleCloseModal4 = () => {
     setModalVisible4(false);
-    onClose();
   };
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
+        <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
           <View style={styles.greenBox}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
             <View style={styles.header}>
@@ -136,8 +120,8 @@ function MyComponent({ onClose }) {
             </View>
             </ScrollView>
           </View>
-        </View>
-      </Modal>
+       
+     
 
       <Modal
         animationType="slide"
@@ -179,7 +163,7 @@ function MyComponent({ onClose }) {
           <OpenModal4 onClose={handleCloseModal4} />
         </View>
       </Modal>
-    </>
+      </View>
   );
 }
 

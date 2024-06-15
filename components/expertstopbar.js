@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Icon = ({ source, alt, style, onPress }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -30,6 +31,7 @@ const Icon = ({ source, alt, style, onPress }) => {
 
 const MyComponent = () => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(null);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const navigation = useNavigation(); // Initialize navigation
 
   const icons = [
@@ -53,8 +55,12 @@ const MyComponent = () => {
     }
     // Navigate to account settings page if icon 2 is pressed
     else if (index === 1) {
-      navigation.navigate('Account Setup'); 
+      navigation.navigate('Account Setup'); // Replace 'AccountSettings' with your actual route name
     }
+  };
+
+  const toggleLanguageSwitcher = () => {
+    setShowLanguageSwitcher(!showLanguageSwitcher);
   };
 
   return (
@@ -63,10 +69,11 @@ const MyComponent = () => {
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 10,
-        paddingRight: 40, 
+        paddingRight: 40,
         alignItems: "center",
         backgroundColor: "#A2BE95",
         maxWidth: '100%',
+        height: 60
       }}
     >
       <Image
@@ -91,7 +98,7 @@ const MyComponent = () => {
             borderRadius: 5,
             paddingHorizontal: 10,
             paddingVertical: 5,
-            width: 250,
+            width: 500,
             outline: 'none',
             marginRight: 70,
           }}
@@ -102,13 +109,66 @@ const MyComponent = () => {
             key={index}
             source={icon.src}
             alt={icon.alt}
-            style={{ width: 24, height: 24, }}
+            style={{ width: 24, height: 24 }}
             onPress={() => handleIconPress(index)}
           />
         ))}
+         <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
+          <Image
+            source={require('../assets/english.png')}
+            style={styles.languageIcon}
+          />
+          <Text style={styles.languageButtonText}>EN</Text>
+        </TouchableOpacity>
+        <Modal
+          visible={showLanguageSwitcher}
+          animationType="fade"
+          transparent={true}
+          onRequestClose={() => setShowLanguageSwitcher(false)}
+        >
+          <TouchableWithoutFeedback onPress={() => setShowLanguageSwitcher(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <View style={styles.modalContent}>
+            <LanguageSwitcher onClose={() => setShowLanguageSwitcher(false)} />
+          </View>
+        </Modal>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  languageButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  languageIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 5,
+  },
+  languageButtonText: {
+    color: '#333',
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    position: 'absolute',
+    width: '20%',
+    right: 30, // Positioning the modal content to the top right corner
+    top: 60,
+    backgroundColor: '#FFF',
+   borderRadius: 5,
+    padding: 20,
+  },
+});
 
 export default MyComponent;

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import i18n from './i18n';
 
 const languages = [
   { code: 'en', label: 'English', icon: require('../assets/english.png') },
@@ -16,15 +15,24 @@ const languages = [
 ];
 
 const LanguageSwitcher = ({ onClose }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState('en'); // Default language
+
   const changeLanguage = (lang) => {
-    i18n.locale = lang;
-    onClose();
+    setSelectedLanguage(lang);
+    onClose(); // Close the language switcher (if applicable in your app flow)
   };
 
   return (
     <View style={styles.container}>
       {languages.map((language) => (
-        <TouchableOpacity key={language.code} onPress={() => changeLanguage(language.code)} style={styles.languageButton}>
+        <TouchableOpacity
+          key={language.code}
+          onPress={() => changeLanguage(language.code)}
+          style={[
+            styles.languageButton,
+            language.code === selectedLanguage ? { backgroundColor: '#e0e0e0' } : null,
+          ]}
+        >
           <Image source={language.icon} style={styles.icon} />
           <Text style={styles.language}>{language.label}</Text>
         </TouchableOpacity>
@@ -35,20 +43,19 @@ const LanguageSwitcher = ({ onClose }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 50,
-    right: 10,
     backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 5,
+    padding: 20,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ddd',
-    zIndex: 1000,
   },
   languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   icon: {
     width: 24,
@@ -56,7 +63,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   language: {
-    fontSize: 16,
+    fontSize: 18,
   },
 });
 
