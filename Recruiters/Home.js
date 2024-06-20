@@ -10,6 +10,9 @@ import OpenModal2 from './NDASetup';
 import OpenModal3 from './New Manager';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 
+import {useFonts} from "expo-font"
+
+
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -116,6 +119,16 @@ const EmployeePerformance = () => {
     );
   };
 
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
+
   return (
     <View style={{backgroundColor: '#3F5B39', flex: 1}}>
   <View style={{ flex: 1}}>
@@ -142,7 +155,7 @@ const EmployeePerformance = () => {
        source={require('../assets/performance.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Performance</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Performance</Text>
           </View>
 
           <EmployeePerformance />
@@ -164,7 +177,7 @@ const EmployeePerformance = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12, }}>Orchestrate the growth of everyone in your team</Text>
+          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12,fontFamily:"Varta-Light" }}>Orchestrate the growth of everyone in your team</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -199,7 +212,7 @@ const EmployeePerformance = () => {
          
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold' }}>Activites</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Varta-Light"}}>Activites</Text>
 <View style={{flexDirection: 'row' }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
@@ -258,15 +271,15 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Growth Plan Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Upcoming Growth Plan Session </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali with expert Joop Melcher</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Maryam Bakahali with expert Joop Melcher</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -283,15 +296,15 @@ onMouseLeave={() => setIsHovered7(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Upcoming Advice Session</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Eniobanke Ademide with expert Emily Ray</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Eniobanke Ademide with expert Emily Ray</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -308,15 +321,15 @@ onMouseLeave={() => setIsHovered8(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>Upcoming Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Upcoming Interview Session </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Patrick King with expert Wicher Jeroen</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Patrick King with expert Wicher Jeroen</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -344,9 +357,9 @@ onMouseLeave={() => setIsHovered9(false)}
        source={require('../assets/question.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Have a question?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Have a question?</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an idea you will like to share with us?</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Varta-Light" }}>Do you have an idea you will like to share with us?</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -365,9 +378,9 @@ onMouseLeave={() => setIsHovered9(false)}
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Need Help?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Need Help?</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an issue you would like us to assist you with?</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Varta-Light"  }}>Do you have an issue you would like us to assist you with?</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -386,9 +399,9 @@ onMouseLeave={() => setIsHovered9(false)}
         source={require('../assets/money (2).png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Due Payment</Text>
+           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Due Payment</Text>
            </View>
-           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25  }}>Wicher Jeroen payment is due 12th of June 2024</Text>
+           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25,fontFamily:"Varta-Light"  }}>Wicher Jeroen payment is due 12th of June 2024</Text>
           <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
@@ -404,9 +417,9 @@ onMouseLeave={() => setIsHovered9(false)}
 
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold' }}>Your Angle Badge</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Your Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20  }}>This is the combined progress of your team</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Varta-Light"  }}>This is the combined progress of your team</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={70} />
       </View>
@@ -475,7 +488,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     color: 'white',
-    marginLeft: 3
+    marginLeft: 3,
+    fontFamily:"Varta-Light"
   },
   icon: {
     width: 15,
@@ -606,13 +620,15 @@ blurBackground: {
   touchableText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
   touchableTextbegin: {
     color: 'darkgreen',
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontFamily:"Varta-Light"
   },
   touchablecoach: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -634,7 +650,8 @@ blurBackground: {
   touchableTextcoach: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
    touchableall: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -656,7 +673,8 @@ blurBackground: {
   touchableTextall: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
    touchablehub: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -677,7 +695,8 @@ blurBackground: {
   touchableTexthub: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
   touchablejoinsession: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -698,7 +717,8 @@ blurBackground: {
   touchableTextjoinsession: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
   touchablerate: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -720,7 +740,8 @@ blurBackground: {
   touchableTextrate: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily:"Varta-Light"
   },
   touchablesession: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -742,7 +763,8 @@ blurBackground: {
   touchableTextsession: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
     touchablestart: {
       backgroundColor: 'rgba(200,200,125,0.3)',
@@ -773,7 +795,8 @@ blurBackground: {
   touchableTextjoinreview: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
     verticalLine: {
     height: 60,

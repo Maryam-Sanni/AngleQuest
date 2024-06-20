@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
-
-
+import {useFonts} from "expo-font"
  
 function MyComponent({ onClose }) {
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+  })
+
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -16,7 +23,7 @@ function MyComponent({ onClose }) {
           <Text style={styles.headerText}>Create Advice Profile</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Varta-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -42,7 +49,7 @@ function MyComponent({ onClose }) {
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Role</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Role</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -54,7 +61,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Level</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Level</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -66,7 +73,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold'}}>Rate</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Rate</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -78,7 +85,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold'}}>Available Days</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Available Days</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -90,7 +97,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Available Times</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Available Times</Text>
         </View>
         <View style={styles.cell}>
          <TextInput
@@ -102,7 +109,7 @@ function MyComponent({ onClose }) {
       </View>
     </View>
     <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20}}>Topics or Questions</Text>
+    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Varta-Light"}}>Topics or Questions</Text>
      <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>+</Text>
     </TouchableOpacity>
@@ -111,7 +118,7 @@ function MyComponent({ onClose }) {
      <View style={styles.container}>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Topic 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 1</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
            <TextInput
@@ -140,7 +147,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Topic 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 2</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
@@ -169,7 +176,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold'}}>Topic 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 3</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
@@ -198,7 +205,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold'}}>Topic 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 4</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
@@ -300,6 +307,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Varta-Light"
   },
   buttonAcc: {
     borderWidth: 2,
@@ -313,6 +321,7 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Varta-Light"
   },
   buttonNew: {
     backgroundColor: 'transparent',
@@ -328,6 +337,7 @@ const styles = StyleSheet.create({
     color: 'coral',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Varta-Light"
   },
    buttonplus: {
     backgroundColor: 'coral',
@@ -341,6 +351,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Varta-Light"
   },
    buttonsave: {
     backgroundColor: 'coral',
@@ -364,6 +375,7 @@ const styles = StyleSheet.create({
     outline: 'black',
     borderWidth: 1,
     borderColor: 'black',
+    fontFamily:"Varta-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -387,7 +399,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Varta-Light"
   },
   picker: {
     height: 20,

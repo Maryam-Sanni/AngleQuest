@@ -3,6 +3,7 @@ import { View, Text, Image } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 
+import {useFonts} from "expo-font"
 export default function MyComponent() {
   return (
     <View style={{ flex: 1 }}>

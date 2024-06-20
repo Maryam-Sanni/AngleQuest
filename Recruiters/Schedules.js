@@ -6,7 +6,19 @@ import { BlurView } from 'expo-blur';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FaStar } from 'react-icons/fa';
 
+import {useFonts} from "expo-font"
+
 function MyComponent() {
+
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
 
   return (
     <ImageBackground
@@ -24,27 +36,27 @@ function MyComponent() {
     <View style={{ flexDirection: "row",  alignItems: "flex-start", marginTop: 10, marginBottom: 20, }}>
     <TouchableOpacity>
     <View style={styles.session}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>All upcoming Sessions</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>All upcoming Sessions</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Upcoming hub session</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Upcoming hub session</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Upcoming growth plan</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Upcoming growth plan</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00"}}>Upcoming reviews</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light"}}>Upcoming reviews</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Upcoming advice</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Upcoming advice</Text>
       </View>
       </TouchableOpacity>
       </View>
@@ -69,7 +81,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>Save</Text>
+            <Text style={{marginLeft: 5,fontFamily:"Varta-Light"}}>Save</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
@@ -351,12 +363,14 @@ const styles = StyleSheet.create({
     color: 'Black',
     fontWeight: '500',
     marginTop: 15,
+    fontFamily:"Varta-Light"
   },
   subheading: {
     fontSize: 14,
     color: 'Black',
     marginLeft: 5,
     marginTop: 18,
+    fontFamily:"Varta-Light"
   },
   scheduleContainer: {
     flexDirection: 'row',
@@ -376,6 +390,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 0,
+    fontFamily:"Varta-Light"
   },
   scheduleTime: {
     color: 'black',
@@ -388,11 +403,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 5,
+    fontFamily:"Varta-Light"
   },
   description: {
     fontSize: 14,
     color: 'black',
     marginBottom: 10,
+    fontFamily:"Varta-Light"
   },
   infoContainer: {
     flexDirection: 'row',

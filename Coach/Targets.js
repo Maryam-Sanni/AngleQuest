@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal from './NewTarget';
 
+import {useFonts} from "expo-font"
+
 
 function MyComponent() { 
     const navigation = useNavigation();
@@ -19,6 +21,16 @@ function MyComponent() {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
+
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
 
     return (
       <ImageBackground
@@ -97,7 +109,8 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: '500',
       marginTop: 5,
-      color: '#666'
+      color: '#666',
+      fontFamily:"Varta-Light"
     },
     image: {
       width: 21,

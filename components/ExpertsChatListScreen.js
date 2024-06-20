@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet, ImageBackground  } from 'react-native';
-import { BlurView } from 'expo-blur';
+import {useFonts} from "expo-font"
 
 const data = [
   {
@@ -131,9 +131,17 @@ const scrollLeft = () => {
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+  })
+
   return (
     <View style={{ padding: 16, width: '100%', backgroundColor: 'white'}}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, }}>Chats</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16,fontFamily:"Varta-Light" }}>Chats</Text>
        <TouchableOpacity onPress={() => scrollLeft()}>
           <Image source={require('../assets/left-arrow.png')} style={{ width: 10, height: 10, marginTop: 20, left: 10}} />
         </TouchableOpacity>
@@ -141,33 +149,33 @@ const scrollLeft = () => {
       <View style={{ flexDirection: 'row',}}>
         <TouchableOpacity onPress={onPressAllChats}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === null ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === null ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === null ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',}}>All Chats</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === null ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light"}}>All Chats</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub1}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === 'Hub1' ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === 'Hub1' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub1' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>SAP FI Hub</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub1' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>SAP FI Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub2}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, marginLeft: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === 'Hub2' ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === 'Hub2' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub2' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Microsoft Azure Hub</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub2' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Microsoft Azure Hub</Text>
           </View>
         </TouchableOpacity>
          
         <TouchableOpacity onPress={onPressHub3}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5,  marginLeft: 10, borderRadius: 10, borderColor: selectedHub === 'Hub3' ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === 'Hub3' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub3' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Jr. Power Point Hub</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub3' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Jr. Power Point Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub4}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 5, borderColor: selectedHub === 'Hub4' ? "#206C00" : "#63EC55", backgroundColor: selectedHub === 'Hub4' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub4' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Snr. Power Point Hub</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub4' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Snr. Power Point Hub</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub5}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginLeft: 5, borderColor: selectedHub === 'Hub5' ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === 'Hub5' ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === 'Hub5' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600' }}>Java Programming Hub</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === 'Hub5' ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Java Programming Hub</Text>
           </View>
         </TouchableOpacity>
        

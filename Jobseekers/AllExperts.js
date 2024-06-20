@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import {useFonts} from "expo-font"
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -350,6 +351,16 @@ function MyComponent() {
     ));
   };
 
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -368,24 +379,24 @@ function MyComponent() {
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
               <TouchableOpacity>
               <View style={styles.session}>
-                <Text style={{  fontWeight: "600", fontSize: 14, color: "#206C00" }}>All Experts</Text>
+                <Text style={{  fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>All Experts</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
               <View style={styles.session2}>
-                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Booked Experts</Text>
+                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Booked Experts</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
               <View style={styles.session2}>
-              <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Saved</Text>
+              <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Saved</Text>
               </View>
               </TouchableOpacity>
               </View>
               
             </View>
             <View style={{ marginTop: 25, marginLeft: 10, marginBottom: 10 }}>
-                <Text style={{ fontSize: 14, color: "black", fontWeight: '600'}}>Use the search or the dropdown to filter</Text>
+                <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Varta-Light"}}>Use the search or the dropdown to filter</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10}}>
      <Picker
                   style={styles.picker}
