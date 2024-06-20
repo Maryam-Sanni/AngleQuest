@@ -5,6 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
 
+
+import {useFonts} from "expo-font"
+
+
 function ChatScreen() {
   const [messages, setMessages] = useState([]);
   const [recording, setRecording] = useState(null);
@@ -95,6 +99,16 @@ function ChatScreen() {
     }
   };
 
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: 'white' }}>
@@ -103,8 +117,8 @@ function ChatScreen() {
           style={{ width: 40, height: 40, borderRadius: 20 }}
         />
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Nathan Arthur</Text>
-          <Text style={{ fontStyle: 'normal', fontSize: 12 }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Expert</Text></Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Nathan Arthur</Text>
+          <Text style={{ fontStyle: 'normal', fontSize: 12,fontFamily:"Varta-Light" }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Expert</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
           <Image

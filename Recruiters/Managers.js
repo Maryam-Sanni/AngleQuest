@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Recruiters/New Manager';
 import { BlurView } from 'expo-blur';
 
+import {useFonts} from "expo-font"
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -27,6 +28,16 @@ function MyComponent() {
     navigation.navigate('Teams');
   };
   
+
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
 
 
   return (
@@ -63,8 +74,8 @@ function MyComponent() {
      <View style={styles.BoxesContainer}>
       <View style={styles.box2}>
       <BlurView intensity={100} style={styles.blurBackground}>
-      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Onboard your managers to be a part of subordinate's journey</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 200, color: 'white' }}>Assign managers to oversee the daily tasks and career development of their team members, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.</Text>
+      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Onboard your managers to be a part of subordinate's journey</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 200, color: 'white',fontFamily:"Varta-Light" }}>Assign managers to oversee the daily tasks and career development of their team members, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.</Text>
      <View style={{flexDirection: 'row'}}>
      <Image source={require('../assets/24.png')} style={styles.boximage} />
       </View>
@@ -85,16 +96,16 @@ function MyComponent() {
       <View style={styles.BoxesContainer}>
       
       <View style={styles.box}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Stats</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Stats</Text>
       <View style={{flexDirection: 'row'}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Growth Plan</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Growth Plan</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
-<Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Hub Sessions</Text>
+<Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Hub Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
                   </View>
@@ -103,22 +114,22 @@ function MyComponent() {
      
       <View style={{flexDirection: 'row', marginTop: 10}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white'}}>Advice Sessions</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Advice Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>7</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 20}}>
-<Text style={{ marginTop: 10, color: 'white'}}>Reviews</Text>
+<Text style={{ marginTop: 10, color: 'white',fontFamily:"Varta-Light"}}>Reviews</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>13</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light"}}>13</Text>
                   </View>
                   </View>
       </View>
       <View style={{borderWidth: 1, borderColor: '#63EC55', marginTop: 25,}}>
-      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold' }}>Angle Badge</Text>
+      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white'  }}>This is the combined progress of your team</Text>
+          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white',fontFamily:"Varta-Light"  }}>This is the combined progress of your team</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={45} />
       </View>
@@ -128,12 +139,12 @@ function MyComponent() {
       
       <View style={styles.box3}>
       <View style={{flexDirection: 'row', marginTop: 10}}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Teams</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Teams</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
                   </View>
       </View>
-      <Text style={{fontSize: 14, marginTop: 5, marginLeft: 10, color: 'white'  }}>Create new teams and manage previously created teams.</Text>
+      <Text style={{fontSize: 14, marginTop: 5, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"  }}>Create new teams and manage previously created teams.</Text>
       <TouchableOpacity onPress={goToTeams}
           style={[
             styles.touchablecoach,
@@ -148,9 +159,9 @@ function MyComponent() {
 
       <View style={styles.box3}>
       <View style={{flexDirection: 'row', marginTop: 10}}> 
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55'}}>Members</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Members</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light"}}>20</Text>
                   </View>
       </View>
       <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10 }}>
@@ -227,7 +238,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginTop: 5,
-    color: '#666'
+    color: '#666',
+    fontFamily:"Varta-Light"
   },
   image: {
     width: 21,
@@ -320,7 +332,8 @@ const styles = StyleSheet.create({
   touchableTextcoach: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 13
+    fontSize: 13,
+    fontFamily:"Varta-Light"
   },
   touchableOpacityHovered: {
     backgroundColor: 'coral'

@@ -6,6 +6,8 @@ import { BlurView } from 'expo-blur';
 import OpenModal from '../Recruiters/ChooseInterviewer';
 import { useNavigation } from '@react-navigation/native';
 
+import {useFonts} from "expo-font"
+
 function MyComponent() {
   const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
@@ -24,6 +26,16 @@ function MyComponent() {
         navigation.navigate('Booked Interviews');
       };
  
+      const [fontsLoaded]=useFonts({
+        'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+        "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+        "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+        "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+        "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    
+    
+      })
+    
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -50,17 +62,17 @@ function MyComponent() {
             </TouchableOpacity>
             <TouchableOpacity onPress={goToSchedules}>
             <View style={{ position: 'absolute', right: 20, width: 200, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 15, color: "white", alignText: 'center', fontWeight:'600' }}>Scheduled Interviews</Text>
+                    <Text style={{ fontSize: 15, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Varta-Light" }}>Scheduled Interviews</Text>
                   </View>
                   </TouchableOpacity>
             </View>
             <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,}}>About Interview</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>Are you hiring and you need a domain specialist to vet a candidate for you?</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Varta-Light"}}>About Interview</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Varta-Light" }}>Are you hiring and you need a domain specialist to vet a candidate for you?</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 30, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Hire an Interviewer</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Hire an Interviewer</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/22.png')} style={styles.boximage} />
@@ -150,7 +162,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
     marginTop: 5,
-    color: '#666'
+    color: '#666',
+    fontFamily:"Varta-Light"
   },
   image: {
     width: 21,

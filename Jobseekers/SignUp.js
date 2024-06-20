@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
+import {useFonts} from "expo-font"
 
 
 // SignUpButton component
@@ -49,6 +50,15 @@ const MyComponent = () => {
   const navigateToTerms = () => {
     navigation.navigate('Terms of Service');
   };
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
 
   return (
     <View style={styles.outerContainer}>
@@ -79,7 +89,7 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}>
-                <Text style={{ color: 'black', fontSize: 14, }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Varta-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
@@ -133,6 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily:"Varta-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -179,6 +190,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily:"Varta-Light"
   },
   image: {
     resizeMode: 'contain',

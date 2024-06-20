@@ -7,7 +7,7 @@ import GrowthPlansReview from '../components/GrowthPlansReview';
 import CompletedGrowthPlan from '../components/CompletedGrowthPlan';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Growthplanprofile';
-
+import {useFonts} from "expo-font"
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -77,6 +77,13 @@ function MyComponent() {
       const goToGrowthprofile = () => {
         navigation.navigate('Growth Plan Profile');
     };
+    const [fontsLoaded]=useFonts({
+      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+      "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+      "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+      "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+      "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    })
 
   return (
     <ImageBackground
@@ -123,39 +130,39 @@ function MyComponent() {
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Create Profile</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Create Profile</Text>
                   </View>
      </TouchableOpacity>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Edit Profile</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Edit Profile</Text>
                   </View>
      </TouchableOpacity>
 
      <View style={styles.container}>
       <View style={styles.box}>
-         <Text style = {{fontSize: 12, color: 'grey' }}>Pending Growth Plan Reviews</Text>
+         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Varta-Light" }}>Pending Growth Plan Reviews</Text>
          <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-choice.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5 }}>5</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5,fontFamily:"Varta-Light" }}>5</Text>
            </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>Candidates are waiting for your review</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>Candidates are waiting for your review</Text>
       </View>
       <View style={styles.box}>
-        <Text style = {{fontSize: 12, color: 'grey' }}>Plans Reveiwed</Text>
+        <Text style = {{fontSize: 12, color: 'grey' ,fontFamily:"Varta-Light"}}>Plans Reveiwed</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-done.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50' }}>30</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50',fontFamily:"Varta-Light"}}>30</Text>
       </View>
-      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have reveiwed 6 plan(s) this week</Text>
+      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You have reveiwed 6 plan(s) this week</Text>
       </View>
       <View style={styles.box2}>
-        <Text style = {{fontSize: 12, color: 'grey' }}>Next growth Plan Session in</Text>
+        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Varta-Light" }}>Next growth Plan Session in</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-delivery-time.gif')} style={styles.boximage2}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen' }}>{timerComponents}</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen',fontFamily:"Varta-Light" }}>{timerComponents}</Text>
            </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10 }}>You have a new session in {timerComponents}!</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You have a new session in {timerComponents}!</Text>
       </View>
     </View>
 

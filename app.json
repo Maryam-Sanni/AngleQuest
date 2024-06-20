@@ -28,7 +28,16 @@
       "sourceDir": "."
     },
     "plugins": [
-      "expo-localization"
+      [
+        "expo-font",
+        {
+          "fonts": {
+            "Varta-Light": "./assets/fonts/Varta-Light.ttf",
+            "Varta-Bold":"./assets/fonts/Varta-Bold.ttf",
+            "Varta-Medium":"./assets/fonts/Varta-Medium.ttf"
+          }
+        }
+      ]
     ]
   }
 }

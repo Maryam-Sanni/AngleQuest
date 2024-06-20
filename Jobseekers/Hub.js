@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import OpenModal from '../Jobseekers/Pickyourhub';
 import OpenModal2 from '../Jobseekers/Newgrowth';
 
+import {useFonts} from "expo-font"
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
@@ -26,6 +27,16 @@ function MyComponent() {
         setModalVisible2(false);
       };
  
+      const [fontsLoaded]=useFonts({
+        'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+        "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+        "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+        "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+        "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    
+    
+      })
+    
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -44,24 +55,24 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16}}>Hubs</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Varta-Light"}}>Hubs</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress} >
             <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Varta-Light" }}>+ New</Text>
                   </View>
                   </TouchableOpacity>
             </View>
     
 
             <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30}}>About Hubs</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200 }}>The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Varta-Light"}}>About Hubs</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Varta-Light" }}>The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>Join a hub</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Join a hub</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/21.png')} style={styles.boximage} />

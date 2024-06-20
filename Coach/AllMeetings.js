@@ -4,7 +4,19 @@ import Sidebar from '../components/Managersidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 
+import {useFonts} from "expo-font"
+
 function MyComponent() {
+
+  const [fontsLoaded]=useFonts({
+    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
+    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
+    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
+    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+
+
+  })
 
   return (
     <ImageBackground
@@ -22,17 +34,17 @@ function MyComponent() {
     <View style={{ flexDirection: "row",  alignItems: "flex-start", marginTop: 10, marginBottom: 20, }}>
     <TouchableOpacity>
     <View style={styles.session}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>All Meetings</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>All Meetings</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Upcoming</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Upcoming</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00" }}>Concluded</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Concluded</Text>
         </View>
         </TouchableOpacity>
       </View>
@@ -55,7 +67,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>United Kingdom</Text>
+            <Text style={{  fontFamily:"Varta-Light" }}>United Kingdom</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -63,7 +75,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Upcoming</Text>
+          <Text style={{  fontFamily:"Varta-Light" }}>Upcoming</Text>
         </View>
       </View>
       {/* Session */}
@@ -85,7 +97,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Switzerland</Text>
+            <Text style={{fontFamily:"Varta-Light" }}>Switzerland</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -115,7 +127,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Canada</Text>
+            <Text style={{  fontFamily:"Varta-Light" }}>Canada</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -123,7 +135,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Upcoming</Text>
+          <Text style={{  fontFamily:"Varta-Light" }}>Upcoming</Text>
         </View>
       </View>
       {/* Session */}
@@ -145,7 +157,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Netherlands</Text>
+            <Text style={{ fontFamily:"Varta-Light" }}>Netherlands</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -153,7 +165,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Upcoming</Text>
+          <Text style={{ fontFamily:"Varta-Light" }}>Upcoming</Text>
         </View>
       </View>
      {/* Session*/}
@@ -175,7 +187,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Germany</Text>
+            <Text style={{ fontFamily:"Varta-Light" }}>Germany</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -183,7 +195,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Concluded</Text>
+          <Text style={{ fontFamily:"Varta-Light" }}>Concluded</Text>
         </View>
       </View>
     </View>
@@ -279,12 +291,14 @@ const styles = StyleSheet.create({
     color: 'Black',
     fontWeight: '500',
     marginTop: 15,
+    fontFamily:"Varta-Light"
   },
   subheading: {
     fontSize: 14,
     color: 'Black',
     marginLeft: 5,
     marginTop: 18,
+    fontFamily:"Varta-Light"
   },
   scheduleContainer: {
     flexDirection: 'row',
@@ -304,6 +318,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 0,
+    fontFamily:"Varta-Light"
   },
   scheduleTime: {
     color: 'black',
@@ -316,6 +331,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 5,
+    fontFamily:"Varta-Light"
   },
   description: {
     fontSize: 14,
