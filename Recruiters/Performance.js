@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground, Picker } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/Recruiterssidebar';
 import EmployeeStats from '../components/PerformaceStats';
@@ -44,9 +44,61 @@ function MyComponent() {
               </View>
             </TouchableOpacity>
             </View>
+            <View style={{ flexDirection: 'row'}}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 150, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
                     <Text style={{ fontSize: 16, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Overall Statistics</Text>
-                  </View>      
+                  </View>  
+
+                  <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="All" value="All" />
+<Picker.Item label="Employee" value="Employee" />
+          <Picker.Item label="Manager" value="Manager" />
+          <Picker.Item label="Coach" value="Coach" />
+          <Picker.Item label="Team" value="Team" />
+        </Picker>
+
+        <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Team" value="Team" />
+<Picker.Item label="Employee" value="Employee" />
+          <Picker.Item label="Manager" value="Manager" />
+          <Picker.Item label="Coach" value="Coach" />
+          <Picker.Item label="Team" value="Team" />
+        </Picker>
+
+        <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Coppa" value="Coppa" />
+<Picker.Item label="Employee" value="Employee" />
+          <Picker.Item label="Manager" value="Manager" />
+          <Picker.Item label="Coach" value="Coach" />
+          <Picker.Item label="Team" value="Team" />
+        </Picker>
+
+        <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Employee" value="Employee" />
+<Picker.Item label="Employee" value="Employee" />
+          <Picker.Item label="Manager" value="Manager" />
+          <Picker.Item label="Coach" value="Coach" />
+          <Picker.Item label="Team" value="Team" />
+        </Picker>
+
+        <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Maryam Bakahali" value="Maryam Bakahali" />
+<Picker.Item label="Employee" value="Employee" />
+          <Picker.Item label="Manager" value="Manager" />
+          <Picker.Item label="Coach" value="Coach" />
+          <Picker.Item label="Team" value="Team" />
+        </Picker>
+</View>
 
      <View style={styles.container}>
      <View style={styles.box}>
@@ -168,6 +220,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 130,
         borderRadius: 25
+      },
+      picker: {
+        height: 40,
+        width: 150,
+        backgroundColor: '#63EC55',
+        borderColor: '#206C00',
+        borderWidth: 1, 
+        color:'black',
+        fontSize: 14,
+        marginLeft: 50,
+        borderRadius: 5, marginLeft: 10, marginTop: 50
       },
 });
 

@@ -45,7 +45,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Mentor</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
             </View>
           </View>
 
@@ -68,7 +68,7 @@ const ScheduledMeetingsTable = () => {
               <ProgressBar percentage={45} />
             </View>
             <View style={styles.cell2}>
-            <Text style={styles.cellText}>Emily Ray</Text>
+            <ProgressBar percentage={55} />
             </View>
             </View>
             <View style={styles.row}>
@@ -90,7 +90,7 @@ const ScheduledMeetingsTable = () => {
               <ProgressBar percentage={45} />
             </View>
             <View style={styles.cell}>
-            <Text style={styles.cellText}>Adewale Oni</Text>
+            <ProgressBar percentage={40} />
             </View>
             </View>
             <View style={styles.row}>
@@ -112,7 +112,7 @@ const ScheduledMeetingsTable = () => {
               <ProgressBar percentage={85} />
             </View>
             <View style={styles.cell2}>
-            <Text style={styles.cellText}>Emily Ray</Text>
+            <ProgressBar percentage={80} />
             </View>
             </View>
             <View style={styles.row}>
@@ -134,7 +134,7 @@ const ScheduledMeetingsTable = () => {
               <ProgressBar percentage={40} />
             </View>
             <View style={styles.cell}>
-            <Text style={styles.cellText}>Adewale Oni</Text>
+            <ProgressBar percentage={60} />
             </View>
             </View>
           

@@ -9,6 +9,7 @@ import ConfirmationPopup from '../Experts/OtherHubs';
 import { BlurView } from 'expo-blur';
 import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
+import OpenModal6 from './Hubmeeting';
   
 function MyComponent() {
     const navigation = useNavigation();
@@ -19,7 +20,7 @@ function MyComponent() {
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
-    
+    const [modalVisible6, setModalVisible6] = useState(false);
 
       const goToMyHubs = () => {
         navigation.navigate('All Hubs');
@@ -55,6 +56,14 @@ function MyComponent() {
   
     const handleCloseModal4 = () => {
       setModalVisible4(false);
+    };
+
+    const handleOpenPress6 = () => {
+      setModalVisible6(true);
+    };
+  
+    const handleCloseModal6 = () => {
+      setModalVisible6(false);
     };
 
   return (
@@ -126,6 +135,11 @@ function MyComponent() {
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Assignment</Text>
                   </View>
      </TouchableOpacity>
+     <TouchableOpacity onPress={handleOpenPress6}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Schedule hub meeting</Text>
+                  </View>
+     </TouchableOpacity>
      </View>
      <Modal
         animationType="slide"
@@ -155,6 +169,16 @@ function MyComponent() {
       >
           <View style={styles.modalContent}>
           <OpenModal5 onClose={() => handleCloseModal4()} />
+          </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible6}
+        onRequestClose={handleCloseModal6}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal6 onClose={() => handleCloseModal6()} />
           </View>
       </Modal>
       <Modal

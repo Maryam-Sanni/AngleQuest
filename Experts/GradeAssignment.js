@@ -44,14 +44,14 @@ function MyComponent({ onClose }) {
            
             <View style={styles.container}>
             <View style={{ flexDirection: "row", marginBottom: 20}}>
-            <TouchableOpacity onPress={handleOpenPress} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
+            <TouchableOpacity>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold' }}>Grade Assignment</Text>
                   </View>
      </TouchableOpacity>
-     <TouchableOpacity >
+     <TouchableOpacity  onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Grade Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
                   </View>
      </TouchableOpacity>
      </View>
@@ -60,16 +60,16 @@ function MyComponent({ onClose }) {
                   Hub Members
                 </Text> 
                 
-                <Text style={{ fontWeight: '500', fontSize: 14, marginLeft: 50, marginTop: 10,}}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 10,}}>
                 1. Jacob Ncube
                 </Text> 
-                <Text style={{ fontWeight: '500', fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
                 2. Sander Josef
                 </Text> 
-                <Text style={{ fontWeight: '500', fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
                 3. Joe Jason
                 </Text> 
-                <Text style={{ fontWeight: '500', fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
                 4. Hussein Aliyu
                 </Text> 
 
@@ -100,7 +100,6 @@ function MyComponent({ onClose }) {
 <Picker
   style={styles.picker} 
 >
-  <Picker.Item label="20%" value="" />
   <Picker.Item label="10%" value="10%" />
   <Picker.Item label="20%" value="20%" />
   <Picker.Item label="30%" value="30%" />
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'column',
-    marginLeft: 100,
+    marginLeft: 50,
   },
   greenBox: {
     width: 1000,

@@ -107,10 +107,7 @@ const HomePage = () => {
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
            <Image
-        source={{
-          uri:
-            "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-        }}
+       source={require('../assets/33.png')}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
       <Text style={styles.greeting}>Good Day, Maryam</Text>

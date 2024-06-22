@@ -84,10 +84,7 @@ const HomePage = () => {
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
            <Image
-        source={{
-          uri:
-            "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-        }}
+       source={require('../assets/33.png')}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
       <Text style={styles.greeting}>Good Day, Joop Melcher</Text>
@@ -180,7 +177,7 @@ const HomePage = () => {
           <BlurView intensity={50} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12,fontFamily:"Varta-Light"  }}>Are you passionate about lifting others in your field to their next level?</Text>
+          <Text style={{fontSize: 23, color: '#63EC55', fontWeight: 'bold', marginTop: 12,fontFamily:"Varta-Light"  }}>Are you passionate about lifting others in your field to their next level?</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -266,8 +263,8 @@ onMouseLeave={() => setIsHovered5(false)}
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Upcoming Sessions</Text>
           </View>
           <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline',fontFamily:"Varta-Light" }}>5 Confirmations | 1 to go</Text>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 150, fontWeight: 'bold', textDecoration: 'underline',fontFamily:"Varta-Light" }}>5 Confirmations | 1 to go</Text>
+          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 145, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
           
           </View>
            </View>
@@ -337,7 +334,7 @@ onMouseLeave={() => setIsHovered9(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' ,fontFamily:"Varta-Light"}}>Growth Plan Review </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolue', right: 20, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 175, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -362,7 +359,7 @@ onMouseLeave={() => setIsHovered10(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', fontFamily:"Varta-Light"}}>Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 205, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -387,7 +384,7 @@ onMouseLeave={() => setIsHovered11(false)}
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 195, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
@@ -634,7 +631,7 @@ whiteBox: {
   touchablechat: {
     padding: 8,
     paddingHorizontal: 20,
-    marginTop: 60,
+    marginTop: 40,
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -885,7 +882,8 @@ whiteBox: {
   },
   circleText: {
     color: 'white',
-    fontWeight: '500',
+    marginTop: 5,
+    fontWeight: 'bold',
     fontSize: 16,
     fontFamily:"Varta-Light"
   },
@@ -907,7 +905,7 @@ whiteBox: {
   touchablebegin: {
     padding: 10,
     paddingHorizontal: 5,
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
     width: 150,
     backgroundColor: '#63EC55',

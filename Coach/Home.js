@@ -136,10 +136,7 @@ const EmployeePerformance = () => {
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
            <Image
-        source={{
-          uri:
-            "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-        }}
+       source={require('../assets/33.png')}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
       <Text style={styles.greeting}>Good Day, Coach Joop Melcher</Text>
@@ -303,7 +300,7 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Growth Plan Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 135, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 185, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -318,7 +315,7 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 175, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 225, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -333,7 +330,7 @@ onMouseLeave={() => setIsHovered5(false)}
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 155, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 205, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
