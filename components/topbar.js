@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import LanguageSwitcher from './LanguageSwitcher';
+import SettingsModal from './Settings';
 
 const Icon = ({ source, alt, style, onPress }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -32,7 +33,8 @@ const Icon = ({ source, alt, style, onPress }) => {
 const MyComponent = () => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(null);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
-  const navigation = useNavigation(); // Initialize navigation
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const navigation = useNavigation();
 
   const icons = [
     {
@@ -49,13 +51,10 @@ const MyComponent = () => {
 
   const handleIconPress = (index) => {
     setSelectedIconIndex(index);
-    // Navigate to notifications page if icon 1 is pressed
     if (index === 0) {
-      navigation.navigate('Notifications'); // Replace 'Notifications' with your actual route name
-    }
-    // Navigate to account settings page if icon 2 is pressed
-    else if (index === 1) {
-      navigation.navigate('Account Settings'); // Replace 'AccountSettings' with your actual route name
+      navigation.navigate('Notifications');
+    } else if (index === 1) {
+      setShowSettingsModal(true);
     }
   };
 
@@ -110,7 +109,7 @@ const MyComponent = () => {
             onPress={() => handleIconPress(index)}
           />
         ))}
-         <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
+        <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
           <Image
             source={require('../assets/english.png')}
             style={styles.languageIcon}
@@ -131,6 +130,19 @@ const MyComponent = () => {
           </View>
         </Modal>
       </View>
+      <Modal
+        visible={showSettingsModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowSettingsModal(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowSettingsModal(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContent}>
+          <SettingsModal onClose={() => setShowSettingsModal(false)} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -160,11 +172,30 @@ const styles = StyleSheet.create({
   modalContent: {
     position: 'absolute',
     width: '20%',
-    right: 30, // Positioning the modal content to the top right corner
+    right: 30,
     top: 60,
     backgroundColor: '#FFF',
-   borderRadius: 5,
+    borderRadius: 5,
     padding: 20,
+  },
+  settingsModalContent: {
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  settingsModalTitle: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#2196F3',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Sidebar from '../components/expertssidebar';
-import Topbar from '../components/expertstopbar';
+import Sidebar from '../components/Recruiterssidebar';
+import Topbar from '../components/Recruiterstopbar';
 
 function MyComponent() {
   const navigation = useNavigation();

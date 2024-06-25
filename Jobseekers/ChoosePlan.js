@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Top from '../components/top';
+import Top from '../components/topbar';
 
 function MyComponent() {
   const navigation = useNavigation(); // Get navigation object

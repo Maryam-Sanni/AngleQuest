@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     marginRight: 30,
     width: 210,
-    backgroundColor: "white",
+    backgroundColor: "#f7fff4",
     zIndex: 999,
     display: 'flex',
     flexDirection: 'column',

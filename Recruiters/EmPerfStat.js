@@ -4,9 +4,18 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView,
 function MyComponent({ onClose }) {
 
   const ProgressBar = ({ percentage }) => {
+    let progressBarColor;
+    if (percentage <= 50) {
+      progressBarColor = 'coral'; 
+    } else if (percentage <= 80) {
+      progressBarColor = '#63EC55'; 
+    } else {
+      progressBarColor = '#206C00'; 
+    }
+
     return (
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
+        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
     );
@@ -440,7 +449,6 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#63EC55',
   },
   progressText: {
     position: 'absolute',

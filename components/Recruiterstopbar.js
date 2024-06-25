@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import LanguageSwitcher from './LanguageSwitcher';
-import SettingsModal from './SettingsExpert';
+import SettingsModal from './SettingsRecruiters';
 
 const Icon = ({ source, alt, style, onPress }) => {
   const [isHovered, setIsHovered] = useState(false);

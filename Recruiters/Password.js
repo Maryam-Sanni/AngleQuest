@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Switch } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import Sidebar from "../components/sidebar";
-import Topbar from "../components/topbar";
+import Sidebar from '../components/Recruiterssidebar';
+import Topbar from '../components/Recruiterstopbar';
 
 function MyComponent() {
   const navigation = useNavigation();

@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import OpenSchedule from '../Recruiters/EmPerfStat';
 import { BlurView } from 'expo-blur';
+import { useNavigation } from '@react-navigation/native';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
+
+    const goToAnalytics = () => {
+        navigation.navigate('Analytics');
+      };
 
   const ProgressBar = ({ percentage }) => {
+    let progressBarColor;
+    if (percentage <= 50) {
+      progressBarColor = 'coral'; 
+    } else if (percentage <= 80) {
+      progressBarColor = '#63EC55'; 
+    } else {
+      progressBarColor = '#206C00'; 
+    }
+
     return (
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
+        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
     );
@@ -44,9 +59,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
             </View>
-            <View style={styles.cell}>
+            <TouchableOpacity style={styles.cell} >
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
-            </View>
+           </TouchableOpacity>
           </View>
 
           <View style={styles.row}>
@@ -67,11 +82,12 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={45} />
             </View>
-            <View style={styles.cell2}>
-            <ProgressBar percentage={55} />
-            </View>
-            </View>
-            <View style={styles.row}>
+            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell2} >
+              <ProgressBar percentage={80} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Sander Josef</Text>
@@ -89,11 +105,12 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={45} />
             </View>
-            <View style={styles.cell}>
-            <ProgressBar percentage={40} />
-            </View>
-            </View>
-            <View style={styles.row}>
+            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell} >
+              <ProgressBar percentage={70} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
             <View style={styles.cell2}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Joe Jason</Text>
@@ -111,11 +128,12 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={85} />
             </View>
-            <View style={styles.cell2}>
-            <ProgressBar percentage={80} />
-            </View>
-            </View>
-            <View style={styles.row}>
+            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell2} >
+              <ProgressBar percentage={80} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Hussein Aliyu</Text>
@@ -133,13 +151,12 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={40} />
             </View>
-            <View style={styles.cell}>
-            <ProgressBar percentage={60} />
-            </View>
-            </View>
-          
-
+            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell} >
+              <ProgressBar percentage={90} />
+            </TouchableOpacity>
+          </View>
         </View>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -223,7 +240,6 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#63EC55',
   },
   progressText: {
     position: 'absolute',

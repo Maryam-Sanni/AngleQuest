@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackg
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/Recruiterssidebar';
 import { BlurView } from 'expo-blur';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from './NDASetup';
@@ -85,9 +85,18 @@ const HomePage = () => {
   };
 
   const ProgressBar = ({ percentage }) => {
+    let progressBarColor;
+    if (percentage <= 50) {
+      progressBarColor = 'coral'; 
+    } else if (percentage <= 80) {
+      progressBarColor = '#63EC55'; 
+    } else {
+      progressBarColor = '#206C00'; 
+    }
+
     return (
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
+        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
     );
@@ -820,7 +829,6 @@ blurBackground: {
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#63EC55',
   },
   progressText: {
     position: 'absolute',

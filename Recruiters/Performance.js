@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground, Picker } from 'react-native';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import EmployeeStats from '../components/PerformaceStats';
 import { useNavigation } from '@react-navigation/native';
@@ -62,7 +62,6 @@ function MyComponent() {
         <Picker
   style={styles.picker} 
 >
-<Picker.Item label="Team" value="Team" />
 <Picker.Item label="Employee" value="Employee" />
           <Picker.Item label="Manager" value="Manager" />
           <Picker.Item label="Coach" value="Coach" />
@@ -72,32 +71,44 @@ function MyComponent() {
         <Picker
   style={styles.picker} 
 >
-<Picker.Item label="Coppa" value="Coppa" />
-<Picker.Item label="Employee" value="Employee" />
-          <Picker.Item label="Manager" value="Manager" />
-          <Picker.Item label="Coach" value="Coach" />
-          <Picker.Item label="Team" value="Team" />
+<Picker.Item label="From" value=" " />
+<Picker.Item label="Jan" value="Jan" />
+          <Picker.Item label="Feb" value="Feb" />
+          <Picker.Item label="Mar" value="Mar" />
+          <Picker.Item label="Apr" value="Apr" />
+          <Picker.Item label="May" value="May" />
+          <Picker.Item label="Jun" value="Jun" />
+          <Picker.Item label="Jul" value="Jul" />
+          <Picker.Item label="Aug" value="Aug" />
+          <Picker.Item label="Sep" value="Sep" />
+          <Picker.Item label="Oct" value="Oct" />
+          <Picker.Item label="Nov" value="Nov" />
+          <Picker.Item label="Dec" value="Dec" />
         </Picker>
 
         <Picker
   style={styles.picker} 
 >
-<Picker.Item label="Employee" value="Employee" />
-<Picker.Item label="Employee" value="Employee" />
-          <Picker.Item label="Manager" value="Manager" />
-          <Picker.Item label="Coach" value="Coach" />
-          <Picker.Item label="Team" value="Team" />
+<Picker.Item label="To" value=" " />
+<Picker.Item label="Jan" value="Jan" />
+          <Picker.Item label="Feb" value="Feb" />
+          <Picker.Item label="Mar" value="Mar" />
+          <Picker.Item label="Apr" value="Apr" />
+          <Picker.Item label="May" value="May" />
+          <Picker.Item label="Jun" value="Jun" />
+          <Picker.Item label="Jul" value="Jul" />
+          <Picker.Item label="Aug" value="Aug" />
+          <Picker.Item label="Sep" value="Sep" />
+          <Picker.Item label="Oct" value="Oct" />
+          <Picker.Item label="Nov" value="Nov" />
+          <Picker.Item label="Dec" value="Dec" />
         </Picker>
 
-        <Picker
-  style={styles.picker} 
+        <View
+  style={styles.PDF} 
 >
-<Picker.Item label="Maryam Bakahali" value="Maryam Bakahali" />
-<Picker.Item label="Employee" value="Employee" />
-          <Picker.Item label="Manager" value="Manager" />
-          <Picker.Item label="Coach" value="Coach" />
-          <Picker.Item label="Team" value="Team" />
-        </Picker>
+<Text style = {{fontSize: 15, color: 'white',}}>Download PDF</Text>
+        </View>
 </View>
 
      <View style={styles.container}>
@@ -224,11 +235,24 @@ const styles = StyleSheet.create({
       picker: {
         height: 40,
         width: 150,
-        backgroundColor: '#63EC55',
+        backgroundColor: 'lightgreen',
         borderColor: '#206C00',
         borderWidth: 1, 
         color:'black',
         fontSize: 14,
+        marginLeft: 50,
+        borderRadius: 5, marginLeft: 10, marginTop: 50
+      },
+      PDF: {
+        height: 40,
+        width: 150,
+        backgroundColor: 'coral',
+        borderColor: 'coral',
+        borderWidth: 1, 
+        color:'black',
+        fontSize: 14,
+        alignItems: 'center',
+        justifyContent: 'center',
         marginLeft: 50,
         borderRadius: 5, marginLeft: 10, marginTop: 50
       },
