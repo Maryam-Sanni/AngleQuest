@@ -66,120 +66,7 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                    <Text style={{ color: '#206C00', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 3 }}>
-                                          Emily Ray will work with you on the journey, and do the following with you:
-                                        </Text>
-                                        
-                                        <View style={styles.box}>
-                                        <View style={styles.arrowContainer}>
-            <View style={styles.arrow} />
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-       
-        <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1. Growth Plan</Text>
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 10 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Create the next stage plan with you</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Periodically reviews your progress</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Continuously rates your progress</Text>
-            </View>
-    </View>
-    <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>2. Hubs</Text>
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 10 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Monthly hands-on training</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Shares knowledge gained with you</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Shares tips to apply at works</Text>
-            </View>
-            </View> 
-</View>
-<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10, marginRight: 10 }}>
-<View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>3. Advice</Text>
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 10 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>One-on-One Career advice</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>One-on-One Growth advice</Text>
-            </View>
-            </View> 
-            <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>4. Mentorship & Guidance</Text>
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 10 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Becomes your buddy</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-                style={{ width: 24, height: 24, marginRight: 5 }}
-                resizeMode="contain"
-              />
-              <Text style={{ fontSize: 16 }}>Available to answer questions</Text>
-            </View>
-           
-            </View> 
-         
-        
-      </View>
-    
-      <View style={styles.arrowContainer2}>
-            <View style={styles.arrowLeft} />
-        </View>
-                                            </View>
-
+                                    
                                         <Text style={{ color: '#206C00', fontSize: 18, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20 }}>Curious about how much it costs? Just a token: </Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
@@ -190,7 +77,7 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress}
                                             />
-                                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Annually $840  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Annually $840  </Text>
                                         </View>
                                         <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40 }}> Saves you 15% ($120)  </Text>
 
@@ -203,11 +90,11 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress2}
                                             />
-                                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Monthly $80  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Monthly $80  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600' }}>Its a question of how much you believe in yourself...</Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600' }}>Its a question of how much you believe in yourself...</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontSize: 16, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
+                                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
 
                                             <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
@@ -303,7 +190,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     box: {
-    padding: 20,
+    padding: 30,
         marginTop: 30,
         alignItems: 'center',
         borderWidth: 2,

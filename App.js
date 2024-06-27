@@ -103,6 +103,12 @@ import Targets from './Coach/Targets';
 import AccountSet from './Recruiters/AccountSetup';
 import NotificationsSet from './Recruiters/NotificationSetup';
 import PasswordSet from './Recruiters/Password';
+import BusinessProfile from './Recruiters/MyProfile';
+import MyPerformance from './Jobseekers/Performance';
+import AdviceOffer from './Jobseekers/OfferAdvice';
+import GrowthOffer from './Jobseekers/OfferGrowth';
+import InterviewOffer from './Jobseekers/OfferInterview';
+import HubOffer from './Jobseekers/OfferHub';
 
 const Stack = createStackNavigator();
 
@@ -233,6 +239,12 @@ const App = () => {
         <Stack.Screen name="Account Set" component={AccountSet} />
         <Stack.Screen name="Notifications Set" component={NotificationsSet} />
         <Stack.Screen name="Password Set" component={PasswordSet} />
+        <Stack.Screen name="Business Profile" component={BusinessProfile} />
+        <Stack.Screen name="My Performance" component={MyPerformance} />
+        <Stack.Screen name="Advice Offer" component={AdviceOffer} />
+        <Stack.Screen name="Growth Offer" component={GrowthOffer} />
+        <Stack.Screen name="Interview Offer" component={InterviewOffer} />
+        <Stack.Screen name="Hub Offer" component={HubOffer} />
       </Stack.Navigator>
     </NavigationContainer>
   );

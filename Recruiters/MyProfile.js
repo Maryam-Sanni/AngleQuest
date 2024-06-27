@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, TextInput, Picker } from 'react-native';
-import Sidebar from '../components/sidebar';
-import Topbar from '../components/topbar';
+import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, Modal, TextInput, Picker } from 'react-native';
+import Sidebar from '../components/Recruiterssidebar';
+import Topbar from '../components/Recruiterstopbar';
 import { BlurView } from 'expo-blur';
 import AboutEditModal from '../components/AboutEditModal';
 
 
 export default function Profile() {
-  const [about, setAbout] = useState(`Jordan Taylor is an aspiring and beginner frontend developer with a growing passion for creating user-friendly and visually appealing web applications. Currently pursuing a Bachelor's degree in Computer Science from XYZ University, Jordan is continuously enhancing their skills in HTML, CSS, JavaScript, and React.
+  const [about, setAbout] = useState(`Pretzel Ent. is a dynamic business specializing in connecting companies with top-tier technology talent. With over 10 years of experience in the industry, Pretzel Ent. has built a reputation for providing expert staffing services for a wide range of tech roles, including software developers, cloud architects, data scientists, and cybersecurity specialists.
 
-    Outside of academics, Jordan enjoys exploring new web development technologies, participating in hackathons, and contributing to community coding projects. Jordan is also enthusiastic about design and spends time learning about UI/UX principles to better integrate them into their projects.`);
+    Our team is dedicated to understanding the unique needs of each client, ensuring the perfect match between employers and tech professionals. Outside of our core services, Pretzel Ent. is committed to fostering a vibrant tech community through hosting industry events, workshops, and networking opportunities. We also support local tech initiatives and educational programs to inspire the next generation of technology leaders.`);
       const [aboutModalVisible, setAboutModalVisible] = useState(false);
 
       const handleSaveAbout = (newAbout) => {
         setAbout(newAbout);
       };
-      
+ 
+  const handleChooseImage = (event) => {
+    const selectedImage = event.target.files[0];
+    const imageUrl = URL.createObjectURL(selectedImage);
+    setProfileImage(imageUrl);
+  };
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -34,22 +40,15 @@ export default function Profile() {
               {/* Profile Card */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
-        <Text style={{ fontSize: 18, fontWeight: "600", color: 'black', marginBottom: 10 }}>My Profile</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold", color: '#206C00', marginBottom: 10 }}>Business Profile</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Image
-                    source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
+                <Image source={require('../assets/tmc.png')}
                     style={{ width: 79, height: 79, borderRadius: 79, marginRight: 20 }}
                     resizeMode="cover"
                   />
                   </View>
                   </View>
-                <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: '600' }}>Available Balance</Text>
-                  <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5, color: 'black' }}>$22.00</Text>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
-                    <Text style={{ fontSize: 12 }}>Preview Profile</Text>
-                  </TouchableOpacity>
-                </View>
+                
               </View>
             </View>
           </View>
@@ -74,15 +73,21 @@ export default function Profile() {
 
          
           <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>First Name</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Business Name</Text>
               <TextInput style={styles.text}
-               placeholder="Jordan"/>
+               placeholder="Pretzel Enterrprise"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Last Name</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Business Email</Text>
               <TextInput style={styles.text}
-               placeholder="Taylor"/>
+               placeholder="pretzel@hotmail.com"/>
+              </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
+              <View style={{ marginLeft: 10, marginTop: 20 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Address</Text>
+              <TextInput style={styles.text}
+               placeholder="2576 Elmore Rd Wetumpka"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
@@ -98,28 +103,41 @@ export default function Profile() {
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Birthday</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Phone No</Text>
               <TextInput style={styles.text}
-               placeholder="05/09/1994"/>
+               placeholder="334-xxx-xxxx"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Gender</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Company Type</Text>
               <Picker
                   style={styles.text}
                 >
-                  <Picker.Item label="Male" value="Male" />
-                  <Picker.Item label="Female" value="Female" />
-                  <Picker.Item label="Others" value="Others" />
+                  <Picker.Item label="Enterprise" value="Enterprise" />
+                  <Picker.Item label="Startup" value="Startup" />
+                  <Picker.Item label="Recruitment" value="Recruitment" />
+                  <Picker.Item label="Consulting" value="Consulting" />
+                  <Picker.Item label="SME" value="SME" />
                 </Picker>
+                </View>
+              <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
+              <View style={{ marginLeft: 10, marginTop: 20 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Upload NDA</Text>
+              <View style={styles.text}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleChooseImage}
+              />
+              </View>
               </View>
 
 <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
                     
-   
 <TouchableOpacity style={{ justifyContent: 'center', marginLeft: 10, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginBottom: 50, backgroundColor: 'coral', borderRadius: 5, }}>
             <Text style={{ fontSize: 14, color: 'white', textAlign: 'center' }}>Save Changes</Text>
           </TouchableOpacity>
+  
                
           <AboutEditModal
             visible={aboutModalVisible}

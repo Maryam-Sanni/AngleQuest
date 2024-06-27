@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 
@@ -41,6 +41,9 @@ function MyComponent() {
         case "Hubs":
           navigation.navigate('Coaching Hubs');
           break;
+          case "Performance":
+          navigation.navigate('My Performance');
+          break;
         case "Messages":
           navigation.navigate('Messages');
           break;
@@ -64,6 +67,7 @@ function MyComponent() {
 
   return (
     <View style={[styles.container, !showMenu && { width: 80 }]}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       {showMenu ?  ( // Render menu if showMenu is true
         <View style={styles.contentContainer}>
           {/* Menu Items */}
@@ -119,6 +123,7 @@ function MyComponent() {
       ) : (
         <CollapsedComponent /> // Render collapsed component if showMenu is false
       )}
+      </ScrollView>
     </View>
   );
 }
@@ -132,6 +137,7 @@ const menuItems = [
   { label: "Advice", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Sessions", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 

@@ -30,7 +30,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Jacob Ncube's Performance</Text>
+          <Text style={styles.headerText}>Career Advice Performances</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: 'grey', fontWeight: 'bold'}}>
@@ -39,56 +39,51 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View>
         <View style={styles.container}>
-        <View style={{flexDirection: 'row'}} >
-        <Text style={styles.heading2}>Performance Statistics</Text>
-        <TouchableOpacity style={styles.PDF} >
-<Text style = {{fontSize: 15, color: 'white',}}>Download PDF</Text>
-        </TouchableOpacity>
+        
+    
+       <Text style={styles.heading2}>Career Advice Jan-Jun 2023</Text>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
         </View>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Name</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Angle Badge</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Hub's Attendance</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Growth Plan</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
-            </View>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell2}>
-                <Text style={styles.cellText}>Jacob Ncube</Text>
-            </View>
-            <View style={styles.cell2}>
-              <ProgressBar percentage={67} />
-            </View>
-            <View style={styles.cell2}>
-              <ProgressBar percentage={78} />
-            </View>
-            <View style={styles.cell2}>
-              <ProgressBar percentage={30} />
-            </View>
-            <View style={styles.cell2}>
-              <ProgressBar percentage={45} />
-            </View>
-            <View style={styles.cell2}>
-            <ProgressBar percentage={55} />
-            </View>
-            </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={70} />
+        </View>
       </View>
-       <Text style={styles.heading}>Target</Text>
-      
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={50} />
+        </View>
+         </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={60} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={80} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={70} />
+        </View>
+      </View>
+   
+      <Text style={styles.heading2}>Career Advice Jul-Dec 2023</Text>
       <View style={styles.row}>
      <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
@@ -118,7 +113,7 @@ function MyComponent({ onClose }) {
          <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={80} />
+        <ProgressBar percentage={50} />
         </View>
       </View>
       <View style={styles.row}>
@@ -129,31 +124,31 @@ function MyComponent({ onClose }) {
         <ProgressBar percentage={70} />
         </View>
       </View>
-   
-      <Text style={styles.heading2}>Growth Plan Performance</Text>
 
+
+      <Text style={styles.heading2}>Career Advice Jan-Jun 2024</Text>
       <View style={styles.row}>
-      <View style={styles.cell}>
+     <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={75} />
+        <ProgressBar percentage={80} />
         </View>
       </View>
       <View style={styles.row}>
-      <View style={styles.cell}>
+     <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={31} />
+        <ProgressBar percentage={70} />
         </View>
          </View>
       <View style={styles.row}>
-      <View style={styles.cell}>
+     <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={63} />
+        <ProgressBar percentage={60} />
         </View>
       </View>
       <View style={styles.row}>
@@ -161,7 +156,7 @@ function MyComponent({ onClose }) {
          <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={40} />
+        <ProgressBar percentage={50} />
         </View>
       </View>
       <View style={styles.row}>
@@ -169,96 +164,51 @@ function MyComponent({ onClose }) {
           <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={90} />
+        <ProgressBar percentage={70} />
         </View>
       </View>
 
-        <Text style={styles.heading2}>Career Advice Performance</Text>
-
-        <View style={styles.row}>
+      <Text style={styles.heading2}>Career Advice Jul-Dec 2024</Text>
+      <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
+          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={30} />
+        <ProgressBar percentage={40} />
         </View>
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
+          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={70} />
+        <ProgressBar percentage={60} />
         </View>
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
+         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={100} />
+        <ProgressBar percentage={60} />
         </View>
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
+         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={50} />
+        <ProgressBar percentage={60} />
         </View>
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
-        <ProgressBar percentage={90} />
+        <ProgressBar percentage={70} />
         </View>
       </View>
-
-      <Text style={styles.heading3}>Hub Performance</Text>
-
-<View style={styles.row}>
-<View style={styles.cell}>
-  <Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
-</View>
-<View style={[styles.cell, { flex: 8 }]}>
-<ProgressBar percentage={50} />
-</View>
-</View>
-<View style={styles.row}>
-<View style={styles.cell}>
-  <Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
-</View>
-<View style={[styles.cell, { flex: 8 }]}>
-<ProgressBar percentage={50} />
-</View>
- </View>
-<View style={styles.row}>
-<View style={styles.cell}>
- <Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
-</View>
-<View style={[styles.cell, { flex: 8 }]}>
-<ProgressBar percentage={50} />
-</View>
-</View>
-<View style={styles.row}>
-<View style={styles.cell}>
- <Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
-</View>
-<View style={[styles.cell, { flex: 8 }]}>
-<ProgressBar percentage={50} />
-</View>
-</View>
-<View style={styles.row}>
-<View style={styles.cell}>
-  <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
-</View>
-<View style={[styles.cell, { flex: 8 }]}>
-<ProgressBar percentage={50} />
-</View>
-</View>
-
 
 </View>
     </View>

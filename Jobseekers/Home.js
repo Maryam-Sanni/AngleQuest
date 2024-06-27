@@ -250,11 +250,6 @@ const HomePage = () => {
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light"}}>Upcoming Sessions</Text>
           </View>
-          <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline',fontFamily:"Varta-Light" }}>5 Confirmations | 1 to go</Text>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
-          
-          </View>
            </View>
           </View>
           </View>

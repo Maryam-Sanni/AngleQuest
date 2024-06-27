@@ -23,12 +23,12 @@ function MyComponent() {
           <View style={{ flexDirection: 'row', paddingHorizontal: 8, paddingTop: 8 }}>
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', marginRight: 77, fontWeight: 'bold' }}>Full Name</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold' }}>Business Name</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
                   borderColor: '#206C00',
-                 marginLeft: 5,
+                 marginLeft: 20,
                   borderRadius: 5,
                  flex: 1,
                   padding: 10,
@@ -40,12 +40,12 @@ function MyComponent() {
               />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', marginRight: 105, fontWeight: 'bold' }}>Email</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold' }}>Business Email</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
                   borderColor: 'black',
-                 marginLeft: 5,
+                 marginLeft: 30,
                   borderRadius: 5,
                  flex: 1,
                   padding: 10,
@@ -57,12 +57,12 @@ function MyComponent() {
               />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', marginRight: 42, fontWeight: 'bold'}}>Mobile Number</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold'}}>Country</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
                   borderColor: 'black',
-                 marginLeft: 5,
+                 marginLeft: 70,
                   borderRadius: 5,
                  flex: 1,
                   padding: 10,
@@ -84,31 +84,6 @@ function MyComponent() {
 
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 20, marginRight: 280 }} />
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-  <Text style={{ color: '#206C00', marginTop: 10, fontWeight: 'bold', fontSize: 18, marginLeft: 10 }}>Permissions</Text>
-  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'space-between', marginLeft: 130, marginTop: 30 }}>
-    <View>
-      <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>Share CV with Interviewer</Text>
-      <Text style={{ fontSize: 14, color: '#777' }}>Automatically share your CV with interviewer after booking a session</Text>
-      <CheckBox
-        style={{ marginLeft: 450, marginTop: -15 }}
-        value={isCVChecked}
-        onValueChange={setIsCVChecked}
-      />
-    </View>
-  </View>
-</View>
-<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15, marginLeft: 240 }}>
-  <View>
-    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Share interview results with Recruiter</Text>
-    <Text style={{ fontSize: 12, color: '#777' }}>Grant interviewers permission to share your interview results with recruiters</Text>
-    <CheckBox
-      style={{ marginLeft: 450, marginTop: -15 }}
-      value={isInterviewResultsChecked}
-      onValueChange={setIsInterviewResultsChecked}
-    />
-  </View>
-</View>
 
 
 
@@ -116,15 +91,15 @@ function MyComponent() {
             <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#206C00', marginTop: 40 }}>Account Deactivation</Text>
             <View style={{ flexDirection: 'row', marginTop: - 20 }}>
               <View style={{ width: '100%' }}>
-                <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginLeft: 230 }}>This is what happens when you deactivate your account</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 4, marginLeft: 240 }}>• Your profile will be permanently deleted from our server</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• Booked sessions will be cancelled</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• Forwarded feedback to Recruiters will be retracted</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• You won’t be able to reactivate booked sessions</Text>
+              <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginLeft: 230 }}>This is what happens when you deactivate your account</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 4, marginLeft: 240 }}>• Your business profile will be permanently deleted from our server</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• All coaches & managers profile will be deleted</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• All Booked sessions will be cancelled</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• You won’t be able to reactivate your sessions</Text>
               </View>
             </View>
           </View>
-          <View style={{ justifyContent: 'center', marginLeft: 250, width: 150, paddingHorizontal: 8, paddingVertical: 8, marginTop: 40, marginBottom: 50, backgroundColor: 'red', borderRadius: 5, }}>
+          <View style={{ justifyContent: 'center', marginLeft: 250, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginBottom: 50, backgroundColor: 'red', borderRadius: 5, }}>
             <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Deactivate account</Text>
           </View>
         </View>

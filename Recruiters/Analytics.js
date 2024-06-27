@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ImageBackground, Picker, Animated, Dimensions } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ImageBackground, Modal, Picker, Animated, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Svg, { Line, Text as SvgText, Circle } from 'react-native-svg';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import { useFonts } from 'expo-font';
+import OpenModal from './TargetPerformaces';
+import OpenModal2 from './GrowthPlanPerformance';
+import OpenModal3 from './AdvicePerformance';
+import OpenModal4 from './HubsPerformance';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -55,18 +60,40 @@ const groupmaxValue = Math.max(
 const groupchartWidth = 300; // Width of the chart area
 
 
- const linedata = [
-    { period: 'Jan-Jun 2023', value: 55 },
-    { period: 'Jul-Dec 2023', value: 75 },
-    { period: 'Jan-Jun 2024', value: 60 },
-    { period: 'Jul-Dec 2024', value: 65 },
-  ];
+const { width } = Dimensions.get('window');
+const graphWidth = 350;
+const height = 200;
+const padding = 20;
+const linedata = [
+  { period: 'Jan-Jun 2023', value: 55 },
+  { period: 'Jul-Dec 2023', value: 75 },
+  { period: 'Jan-Jun 2024', value: 60 },
+  { period: 'Jul-Dec 2024', value: 65 },
+];
 
-  // Calculate maximum value for scaling
-  const linemaxValue = Math.max(...linedata.map(item => item.value));
+const LmaxValue = Math.max(...linedata.map(d => d.value));
+const minValue = Math.min(...linedata.map(d => d.value));
+const valueRange = LmaxValue - minValue;
+
+const points = linedata.map((d, index) => {
+  const x = (index / (linedata.length - 1)) * (graphWidth - 2 * padding) + padding;
+  const y = height - ((d.value - minValue) / valueRange) * (height - 2 * padding) - padding;
+  return { x, y, period: d.period, value: d.value };
+});
+
+// Create Y-axis labels
+const yAxisLabels = Array.from({ length: 5 }, (_, index) => {
+  const value = minValue + (index * valueRange) / 4;
+  const y = height - ((value - minValue) / valueRange) * (height - 2 * padding) - padding;
+  return { value: Math.round(value), y };
+});
 
 const MyComponent = () => {
   const navigation = useNavigation();
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [ModalVisible2, setModalVisible2] = useState(false);
+  const [ModalVisible3, setModalVisible3] = useState(false);
+  const [ModalVisible4, setModalVisible4] = useState(false);
 
   const [fontsLoaded] = useFonts({
     'Varta-Light': require('../assets/fonts/Varta-Light.ttf'),
@@ -75,6 +102,43 @@ const MyComponent = () => {
     'Varta-Regular': require('../assets/fonts/Varta-Regular.ttf'),
     'Varta-SemiBold': require('../assets/fonts/Varta-SemiBold.ttf')
   });
+
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    onClose();
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+    onClose();
+  };
+
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+    onClose();
+  };
+
+  const handleOpenPress4 = () => {
+    setModalVisible4(true);
+  };
+
+  const handleCloseModal4 = () => {
+    setModalVisible4(false);
+    onClose();
+  };
 
   return (
 <View style={{backgroundColor: '#3F5B39', flex: 1}}>
@@ -161,13 +225,13 @@ const MyComponent = () => {
                   <Picker.Item label="Dec" value="Dec" />
                 </Picker>
 
-                <View style={styles.PDF}>
+                <TouchableOpacity style={styles.PDF} >
                   <Text style={{ fontSize: 15, color: 'white' }}>Download PDF</Text>
-                </View>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.container}>
-              <View style={styles.box}>
+              <TouchableOpacity onPress={handleOpenPress} style={styles.box}>
               <Text style={styles.title}>Target</Text>
       <View style={styles.GchartContainer}>
         <View style={styles.GchartArea}>
@@ -201,71 +265,84 @@ const MyComponent = () => {
           ))}
         </View>
       </View>
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.box}>
+            <TouchableOpacity onPress={handleOpenPress2} style={styles.box}>
             <Text style={styles.title3}>Growth Plan Performance</Text>
-            <View style={styles.Lchart}>
-          {/* Y-axis */}
-          <View style={styles.LyAxis}>
-            {[...Array(5)].map((_, index) => (
-              <Text key={index} style={styles.LyAxisLabel}>
-                {Math.round(linemaxValue * (1 - index / 4))}
-              </Text>
-            ))}
-          </View>
-          {/* Chart area */}
-          <View style={styles.LchartArea}>
-            {/* Data points and connecting lines */}
-            <View style={styles.dataContainer}>
-              {/* Line */}
-              <View style={styles.line}>
-                {linedata.map((item, index) => (
-                  <View
-                    key={index}
-                    style={[
-                      styles.dataPoint,
-                      {
-                        bottom: `${(item.value / linemaxValue) * 100}%`,
-                        left: `${(index / (linedata.length - 1)) * 100}%`, // Adjust spacing here
-                      },
-                    ]}
-                  />
-                ))}
-                {/* Connecting lines */}
-                {linedata.map((item, index) => (
-                  index < linedata.length - 1 && (
-                    <View
-                      key={index}
-                      style={[
-                        styles.connector,
-                        {
-                          left: `${(index / (linedata.length - 1)) * 100}%`, // Adjust spacing here
-                          width: `${(1 / (linedata.length - 1)) * 100}%`, // Adjust spacing here
-                          top: `${(1 - (linedata[index].value / linemaxValue)) * 100}%`,
-                          bottom: `${(1 - (linedata[index + 1].value / linemaxValue)) * 100}%`,
-                        },
-                      ]}
-                    />
-                  )
-                ))}
-              </View>
-              {/* X-axis labels */}
-              <View style={styles.labelsContainer}>
-                {linedata.map((item, index) => (
-                  <Text key={index} style={styles.Llabel}>
-                    {item.period}
-                  </Text>
-                ))}
-              </View>
-            </View>
-          </View>
-      </View>
-      </View>
+<View style={{ alignItems: 'center', marginTop: 10 }}>
+<Svg width={graphWidth} height={height}>
+        {/* Draw lines */}
+        {points.map((point, index) => {
+          if (index === 0) return null;
+          const previousPoint = points[index - 1];
+          return (
+            <Line
+              key={index}
+              x1={previousPoint.x}
+              y1={previousPoint.y}
+              x2={point.x}
+              y2={point.y}
+              stroke="lightgreen"
+              strokeWidth="2"
+            />
+          );
+        })}
+        {/* Draw points */}
+        {points.map((point, index) => (
+          <Circle
+            key={index}
+            cx={point.x}
+            cy={point.y}
+            r="4"
+            fill="green"
+          />
+        ))}
+        {/* Draw period labels */}
+        {points.map((point, index) => (
+          <SvgText
+            key={index}
+            x={point.x}
+            y={height - padding + 15}
+            fontSize="14"
+            fill="black"
+            textAnchor="middle"
+          >
+            {point.period}
+          </SvgText>
+        ))}
+        {/* Draw value labels */}
+        {points.map((point, index) => (
+          <SvgText
+            key={index}
+            x={point.x}
+            y={point.y - 10}
+            fontSize="14"
+            fill="black"
+            textAnchor="middle"
+          >
+            {point.value}
+          </SvgText>
+        ))}
+        {/* Draw Y-axis labels */}
+        {yAxisLabels.map((label, index) => (
+          <SvgText
+            key={index}
+            x={padding - 10}
+            y={label.y}
+            fontSize="12"
+            fill="black"
+            textAnchor="end"
+          >
+            {label.value}
+          </SvgText>
+        ))}
+      </Svg>
+    </View>
+      </TouchableOpacity>
 </View>
 
               <View style={styles.container}>
-              <View style={styles.box}>
+              <TouchableOpacity onPress={handleOpenPress3} style={styles.box}>
       <Text style={styles.title2}> Career Advice Performance</Text>
       <View style={styles.chartContainer}>
         {/* Y-axis labels */}
@@ -292,9 +369,9 @@ const MyComponent = () => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
 
-<View style={styles.box}>
+    <TouchableOpacity onPress={handleOpenPress4} style={styles.box}>
       <Text style={styles.title2}>Hub Performance</Text>
       <View style={styles.chartContainer}>
         {/* Y-axis labels */}
@@ -321,15 +398,55 @@ const MyComponent = () => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
     </View>
 
-    
-              
 
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
             
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={handleCloseModal3} />
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={handleCloseModal4} />
+        </View>
+      </Modal>
+
               </View>
-            
           </ScrollView>
         </View>
       </View>
@@ -338,6 +455,12 @@ const MyComponent = () => {
 };
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
     header: {
         marginLeft: -60,
         flexDirection: 'row',

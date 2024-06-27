@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground, Picker } from 'react-native';
-import Topbar from '../components/Recruiterstopbar';
-import Sidebar from '../components/Recruiterssidebar';
-import EmployeeStats from '../components/PerformaceStats';
+import Topbar from '../components/topbar';
+import Sidebar from '../components/sidebar';
+import EmployeeStats from '../components/IndividualPerf';
 import { useNavigation } from '@react-navigation/native';
 import CustomPercentageChart from '../components/PercentageChart';
 
@@ -40,69 +40,15 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={styles.headertext}>Employee Performance</Text>
+                <Text style={styles.headertext}>My Performance</Text>
               </View>
             </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row'}}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 150, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
-                    <Text style={{ fontSize: 16, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Overall Statistics</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 200, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
+                    <Text style={{ fontSize: 16, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Performance Statistics</Text>
                   </View>  
 
-                  <Picker
-  style={styles.picker} 
->
-<Picker.Item label="All" value="All" />
-<Picker.Item label="Employee" value="Employee" />
-          <Picker.Item label="Manager" value="Manager" />
-          <Picker.Item label="Coach" value="Coach" />
-          <Picker.Item label="Team" value="Team" />
-        </Picker>
-
-        <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Employee" value="Employee" />
-          <Picker.Item label="Manager" value="Manager" />
-          <Picker.Item label="Coach" value="Coach" />
-          <Picker.Item label="Team" value="Team" />
-        </Picker>
-
-        <Picker
-  style={styles.picker} 
->
-<Picker.Item label="From" value=" " />
-<Picker.Item label="Jan" value="Jan" />
-          <Picker.Item label="Feb" value="Feb" />
-          <Picker.Item label="Mar" value="Mar" />
-          <Picker.Item label="Apr" value="Apr" />
-          <Picker.Item label="May" value="May" />
-          <Picker.Item label="Jun" value="Jun" />
-          <Picker.Item label="Jul" value="Jul" />
-          <Picker.Item label="Aug" value="Aug" />
-          <Picker.Item label="Sep" value="Sep" />
-          <Picker.Item label="Oct" value="Oct" />
-          <Picker.Item label="Nov" value="Nov" />
-          <Picker.Item label="Dec" value="Dec" />
-        </Picker>
-
-        <Picker
-  style={styles.picker} 
->
-<Picker.Item label="To" value=" " />
-<Picker.Item label="Jan" value="Jan" />
-          <Picker.Item label="Feb" value="Feb" />
-          <Picker.Item label="Mar" value="Mar" />
-          <Picker.Item label="Apr" value="Apr" />
-          <Picker.Item label="May" value="May" />
-          <Picker.Item label="Jun" value="Jun" />
-          <Picker.Item label="Jul" value="Jul" />
-          <Picker.Item label="Aug" value="Aug" />
-          <Picker.Item label="Sep" value="Sep" />
-          <Picker.Item label="Oct" value="Oct" />
-          <Picker.Item label="Nov" value="Nov" />
-          <Picker.Item label="Dec" value="Dec" />
-        </Picker>
 
         <TouchableOpacity style={styles.PDF} >
 <Text style = {{fontSize: 15, color: 'white',}}>Download PDF</Text>
@@ -113,7 +59,7 @@ function MyComponent() {
      <View style={styles.box}>
         <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Varta-Light" }}>Angle Badge</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black',fontFamily:"Varta-Light" }}>This is the combined progress of your team</Text>
+          <Text style={{fontSize: 14, color: 'black',fontFamily:"Varta-Light" }}>This is your overall average progress</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 20 }}>
       <CustomPercentageChart percentage={51.3} />
       </View>
@@ -123,7 +69,7 @@ function MyComponent() {
       <View style={styles.box}>
         <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Varta-Light" }}>Hub Attendance</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black', width: 100,fontFamily:"Varta-Light"}}>This is the combined hubs attendane of your team</Text>
+          <Text style={{fontSize: 14, color: 'black', width: 100,fontFamily:"Varta-Light"}}>This is your hub attendance</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
       <CustomPercentageChart percentage={45} />
       </View>
@@ -133,7 +79,7 @@ function MyComponent() {
       <View style={styles.box}>
         <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Varta-Light" }}>Growth Plan</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black',fontFamily:"Varta-Light" }}>This is the combined growth plan completed</Text>
+          <Text style={{fontSize: 14, color: 'black',fontFamily:"Varta-Light" }}>This is the growth plan you have completed</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
       <CustomPercentageChart percentage={60} />
       </View>
@@ -143,7 +89,7 @@ function MyComponent() {
       <View style={styles.box}>
         <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Varta-Light" }}>Advice</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: 'black', width: 100,fontFamily:"Varta-Light" }}>This is the combined advice sessions your team had</Text>
+          <Text style={{fontSize: 14, color: 'black', width: 100,fontFamily:"Varta-Light" }}>This is the advice sessions you have had</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
       <CustomPercentageChart percentage={49} />
       </View>
@@ -251,8 +197,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 50,
-        borderRadius: 5, marginLeft: 10, marginTop: 50
+       position: 'absolute',
+       right: 60,
+        borderRadius: 5, marginTop: 50
       },
 });
 

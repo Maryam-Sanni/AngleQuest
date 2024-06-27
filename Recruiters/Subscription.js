@@ -205,18 +205,21 @@ function MyComponent() {
       <BlurView intensity={100} style={styles.blurBackground}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10, marginBottom: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Current Plan Details</Text>
       <View style={styles.cell}>
-     <Text style={{ fontSize: 16, marginLeft: 10, marginRight: 200, color: 'black',fontFamily:"Varta-Light" }}>Current Number of Employees     8 x $80 = $640</Text>
+     <Text style={{ fontSize: 16, marginLeft: 10, marginRight: 200, color: 'black',fontFamily:"Varta-Light" }}>Current Number of Employees: 8</Text>
      </View>
      <View style={styles.cell2}>
      <Text style={{ fontSize: 16, marginLeft: 10, marginRight: 200, color: 'black',fontFamily:"Varta-Light"}}>Current Plan: Basic Plan</Text>
      </View>
      <View style={styles.cell}>
-     <Text style={{ fontSize: 16, color: "black", marginLeft: 10, marginRight: 200, fontFamily:"Varta-Light"}}>Amount due on next payment: $640</Text>
+     <Text style={{ fontSize: 16, marginLeft: 10, marginRight: 200, color: 'black',fontFamily:"Varta-Light"}}>Amount Charged: $960 yearly</Text>
+     </View>
+     <View style={styles.cell2}>
+     <Text style={{ fontSize: 16, color: "black", marginLeft: 10, marginRight: 200, fontFamily:"Varta-Light"}}>Amount due on next payment: 8 x $960 = $7680</Text>
      </View>
       </BlurView>
       </View>
 
-      <View style={styles.box2}>
+      <View style={styles.box3}>
       <BlurView intensity={100} style={styles.blurBackground}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Renewal Decision</Text>
      <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 200, color: 'black', fontWeight: '500',fontFamily:"Varta-Light" }}>Your employees were signed up at different times, should we auto renew when due?</Text>
@@ -367,6 +370,15 @@ box2: {
   backgroundColor: 'rgba(125,125,125,0.3)',
   borderRadius: 20,
   width: "85%",
+  height: 250,
+  marginTop: 30,
+  marginLeft: 50,
+  borderWidth: 1, borderColor: 'rgba(255,255,255,0.5)',
+},
+box3: {
+  backgroundColor: 'rgba(125,125,125,0.3)',
+  borderRadius: 20,
+  width: "85%",
   height: 180,
   marginTop: 30,
   marginLeft: 50,
@@ -384,13 +396,13 @@ blurBackground: {
   cell: {
     flex: 1,
    backgroundColor: '#f7fff4',
-    padding: 10,
+    padding: 20,
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
    backgroundColor: 'none',
-    padding: 10, 
+    padding: 20, 
     alignItems: 'flex-start',
   },
 });

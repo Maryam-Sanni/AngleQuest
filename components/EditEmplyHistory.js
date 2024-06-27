@@ -81,10 +81,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    width: '90%',
+    width: 600,
     backgroundColor: '#FFF',
     borderRadius: 10,
-    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',

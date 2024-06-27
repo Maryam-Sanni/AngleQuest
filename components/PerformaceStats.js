@@ -59,9 +59,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
             </View>
-            <TouchableOpacity style={styles.cell} >
+            <View style={styles.cell} >
               <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
-           </TouchableOpacity>
+           </View>
           </View>
 
           <View style={styles.row}>
@@ -82,9 +82,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={45} />
             </View>
-            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell2} >
+            <View style={styles.cell2} >
               <ProgressBar percentage={80} />
-            </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.row}>
@@ -105,9 +105,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={45} />
             </View>
-            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell} >
+            <View style={styles.cell} >
               <ProgressBar percentage={70} />
-            </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.row}>
@@ -128,9 +128,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={85} />
             </View>
-            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell2} >
+            <View style={styles.cell2} >
               <ProgressBar percentage={80} />
-            </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.row}>
@@ -151,9 +151,9 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={40} />
             </View>
-            <TouchableOpacity  onPress={goToAnalytics} style={styles.cell} >
+            <View style={styles.cell} >
               <ProgressBar percentage={90} />
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
 
