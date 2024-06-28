@@ -24,12 +24,7 @@ function MyComponent() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
 
     return (
@@ -110,7 +105,7 @@ const styles = StyleSheet.create({
       fontWeight: '500',
       marginTop: 5,
       color: '#666',
-      fontFamily:"Varta-Light"
+      fontFamily:"Roboto-Light"
     },
     image: {
       width: 21,

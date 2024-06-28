@@ -20,12 +20,7 @@ function MyComponent() {
 
     const [fontsLoaded]=useFonts({
       'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-      "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-      "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-      "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-      "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-  
-  
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
   
   return (
@@ -56,8 +51,8 @@ function MyComponent() {
      <View style={styles.BoxesContainer}>
       <View style={styles.box2}>
       <BlurView intensity={100} style={styles.blurBackground}>
-      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Supervise assigned employees for a career hyper boost</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 150, color: 'white',fontFamily:"Varta-Light"}}>Oversee the daily tasks and career development of assigned employees, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.</Text>
+      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>Supervise assigned employees for a career hyper boost</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 150, color: 'white',fontFamily:"Roboto-Light"}}>Oversee the daily tasks and career development of assigned employees, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.</Text>
      <View style={{flexDirection: 'row'}}>
      <Image source={require('../assets/23.png')} style={styles.boximage} />
       </View>
@@ -77,40 +72,40 @@ function MyComponent() {
 
       <View style={styles.BoxesContainer}>
       <View style={styles.box}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Stats</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>Stats</Text>
       <View style={{flexDirection: 'row'}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Growth Plan</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>Growth Plan</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light"}}>5</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>5</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
-<Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Hub Sessions</Text>
+<Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>Hub Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light"}}>20</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>20</Text>
                   </View>
                   </View>
       </View>
      
       <View style={{flexDirection: 'row', marginTop: 10}}>
       <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Varta-Light"}}>Advice Sessions</Text>
+      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>Advice Sessions</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light"}}>7</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>7</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 20}}>
-<Text style={{ marginTop: 10, color: 'white',fontFamily:"Varta-Light"}}>Reviews</Text>
+<Text style={{ marginTop: 10, color: 'white',fontFamily:"Roboto-Light"}}>Reviews</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>13</Text>
                   </View>
                   </View>
       </View>
       <View style={{borderWidth: 1, borderColor: '#63EC55', marginTop: 25,}}>
-      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Angle Badge</Text>
+      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white',fontFamily:"Varta-Light"  }}>This is the combined progress of your assigned employees</Text>
+          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white',fontFamily:"Roboto-Light"  }}>This is the combined progress of your assigned employees</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={45} />
       </View>
@@ -121,9 +116,9 @@ function MyComponent() {
       
       <View style={styles.box3}>
       <View style={{flexDirection: 'row', marginTop: 10}}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Varta-Light"}}>Members</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>Members</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Varta-Light",}}>20</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light",}}>20</Text>
                   </View>
       </View>
       <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10 }}>
@@ -192,7 +187,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 5,
     color: '#666',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 21,

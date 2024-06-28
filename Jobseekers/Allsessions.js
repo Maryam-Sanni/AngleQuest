@@ -5,20 +5,15 @@ import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FaStar } from 'react-icons/fa';
-
+import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 function MyComponent() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
-
+const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -35,29 +30,29 @@ function MyComponent() {
     <View style={{ flexDirection: "row",  alignItems: "flex-start", marginTop: 10, marginBottom: 20, }}>
     <TouchableOpacity>
     <View style={styles.session}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>All Sessions</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("All Sessions")}</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}> Upcoming Sessions</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}> {t("Upcoming Sessions")}</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light"}}>Past Sessions</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light"}}>{t("Past Sessions")}</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Saved</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Saved")}</Text>
       </View>
       </TouchableOpacity>
       </View>
       {/* Session */}
       <View style={{ flexDirection: 'row'}}>
-      <Text style={styles.heading}>Growth Plan Session</Text> 
-      <Text style={styles.subheading}>with Joop Melcher</Text>
+      <Text style={styles.heading}>{t("Growth Plan Session")}</Text> 
+      <Text style={styles.subheading}>{t("with")} Joop Melcher</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -75,10 +70,10 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5,fontFamily:"Varta-Light"}}>Save</Text>
+            <Text style={{marginLeft: 5,fontFamily:"Roboto-Light"}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
-                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10,fontFamily:"Varta-Light"}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
+                    <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10,fontFamily:"Roboto-Light"}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
                     </View>
           <View style={styles.infoItem}>
             <Image
@@ -93,13 +88,13 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Upcoming</Text>
+          <Text>{t("Upcoming")}</Text>
         </View>
       </View>
       {/* Session */}
       <View style={{ flexDirection: 'row'}}>
-      <Text style={styles.heading}>Advice Session</Text> 
-      <Text style={styles.subheading}>with Jessica Martinez</Text>
+      <Text style={styles.heading}>{t("Advice Session")}</Text> 
+      <Text style={styles.subheading}>{t("with")} Jessica Martinez</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -117,7 +112,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>Save</Text>
+            <Text style={{marginLeft: 5}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
@@ -135,13 +130,13 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Concluded</Text>
+          <Text>{t("Concluded")}</Text>
         </View>
       </View>
      {/* Session*/}
      <View style={{ flexDirection: 'row'}}>
-      <Text style={styles.heading}>Interview Session</Text> 
-      <Text style={styles.subheading}>with Adetola Adebayo</Text>
+      <Text style={styles.heading}>{t("Interview Session")}</Text> 
+      <Text style={styles.subheading}>{t("with")} Adetola Adebayo</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -159,7 +154,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>Save</Text>
+            <Text style={{marginLeft: 5}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
@@ -177,13 +172,13 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Upcoming</Text>
+          <Text>{t("Upcoming")}</Text>
         </View>
       </View>
       {/* Session */}
      <View style={{ flexDirection: 'row'}}>
-      <Text style={styles.heading}>Hub Session</Text> 
-      <Text style={styles.subheading}>with Joop Melcher</Text>
+      <Text style={styles.heading}>{t("Hub Session")}</Text> 
+      <Text style={styles.subheading}>{t("with")} Joop Melcher</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -201,7 +196,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>Save</Text>
+            <Text style={{marginLeft: 5}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /><FaStar color="#F69200" /></Text>
@@ -219,13 +214,13 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{fontFamily:"Varta-Light"}}>Upcoming</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Upcoming")}</Text>
         </View>
       </View>
      {/* Session*/}
      <View style={{ flexDirection: 'row'}}>
-      <Text style={styles.heading}>Interview Session</Text> 
-      <Text style={styles.subheading}>with Andrew Hutchings</Text>
+      <Text style={styles.heading}>{t("Interview Session")}</Text> 
+      <Text style={styles.subheading}>{t("with")} Andrew Hutchings</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -243,7 +238,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>Save</Text>
+            <Text style={{marginLeft: 5}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /></Text>
@@ -261,7 +256,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{fontFamily:"Varta-Light"}}>Concluded</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Concluded")}</Text>
         </View>
       </View>
     </View>
@@ -357,14 +352,14 @@ const styles = StyleSheet.create({
     color: 'Black',
     fontWeight: '500',
     marginTop: 15,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   subheading: {
     fontSize: 14,
     color: 'Black',
     marginLeft: 5,
     marginTop: 18,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   scheduleContainer: {
     flexDirection: 'row',
@@ -384,7 +379,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 0,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   scheduleTime: {
     color: 'black',
@@ -397,13 +392,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   description: {
     fontSize: 14,
     color: 'black',
     marginBottom: 10,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   infoContainer: {
     flexDirection: 'row',

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Viewbids';
 import { BlurView } from 'expo-blur';
 import {useFonts} from "expo-font"
-
+import { useTranslation } from 'react-i18next';
   
 function MyComponent() {
     const navigation = useNavigation();
@@ -22,7 +22,7 @@ function MyComponent() {
       };
 
       
-
+const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -44,7 +44,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Offers")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToBids}
@@ -82,12 +82,9 @@ const ScheduledMeetingsTable = () => {
     };
     const [fontsLoaded]=useFonts({
       'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-      "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-      "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-      "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-      "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
-  
+  const {t}=useTranslation()
   return (
 
     
@@ -98,22 +95,22 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Varta-Light"}}>Name</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Varta-Light"}}>Number of Candidates</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Number of Candidates")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Varta-Light"}}>Field</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Field")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Varta-Light"}}>Start Date</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={{color: "white", fontSize: 14,fontFamily:"Varta-Light"}}> </Text>
+          <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
         </View>
         <View style={styles.cell}>
-          <Text style={{color: "white", fontSize: 14,fontFamily:"Varta-Light"}}> </Text>
+          <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
         </View>
       </View>
         <View style={styles.row}>
@@ -133,10 +130,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Varta-Light"}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -159,7 +156,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
@@ -182,7 +179,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
@@ -205,7 +202,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Varta-Light"}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -228,7 +225,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Varta-Light"}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
          <View style={styles.row}>
@@ -251,7 +248,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Varta-Light"}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
  <View style={styles.row}>
@@ -274,7 +271,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Varta-Light"}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
 <View style={styles.row}>
@@ -297,7 +294,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
 <View style={styles.row}>
@@ -320,7 +317,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -343,7 +340,7 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.open}>Download NDA</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Bid</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
         <Modal
@@ -408,7 +405,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,
@@ -453,7 +450,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   userimage: {
     width: 30,
@@ -469,7 +466,7 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5,fontFamily:"Varta-Light"
+      borderRadius: 5,fontFamily:"Roboto-Light"
 },
 });
 

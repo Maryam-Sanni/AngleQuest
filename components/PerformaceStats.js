@@ -1,30 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
 import OpenSchedule from '../Recruiters/EmPerfStat';
 import { BlurView } from 'expo-blur';
-import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation();
-
-    const goToAnalytics = () => {
-        navigation.navigate('Analytics');
-      };
 
   const ProgressBar = ({ percentage }) => {
-    let progressBarColor;
-    if (percentage <= 50) {
-      progressBarColor = 'coral'; 
-    } else if (percentage <= 80) {
-      progressBarColor = '#63EC55'; 
-    } else {
-      progressBarColor = '#206C00'; 
-    }
-
     return (
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
+        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
     );
@@ -37,31 +23,31 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>Performance Statistics</Text>
+        <Text style={styles.title}>{t("Performance Statistics")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Name</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Name")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Angle Badge</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Angle Badge")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Hub's Attendance</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Hub's Attendance")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Growth Plan</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Growth Plan")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Advice")}</Text>
             </View>
-            <View style={styles.cell} >
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
-           </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Mentor")}</Text>
+            </View>
           </View>
 
           <View style={styles.row}>
@@ -82,12 +68,11 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={45} />
             </View>
-            <View style={styles.cell2} >
-              <ProgressBar percentage={80} />
+            <View style={styles.cell2}>
+            <Text style={styles.cellText}>Emily Ray</Text>
             </View>
-          </View>
-
-          <View style={styles.row}>
+            </View>
+            <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Sander Josef</Text>
@@ -105,12 +90,11 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={45} />
             </View>
-            <View style={styles.cell} >
-              <ProgressBar percentage={70} />
+            <View style={styles.cell}>
+            <Text style={styles.cellText}>Adewale Oni</Text>
             </View>
-          </View>
-
-          <View style={styles.row}>
+            </View>
+            <View style={styles.row}>
             <View style={styles.cell2}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Joe Jason</Text>
@@ -128,12 +112,11 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <ProgressBar percentage={85} />
             </View>
-            <View style={styles.cell2} >
-              <ProgressBar percentage={80} />
+            <View style={styles.cell2}>
+            <Text style={styles.cellText}>Emily Ray</Text>
             </View>
-          </View>
-
-          <View style={styles.row}>
+            </View>
+            <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
                 <Text style={{ textDecoration: 'underline' }}>Hussein Aliyu</Text>
@@ -151,12 +134,13 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell}>
               <ProgressBar percentage={40} />
             </View>
-            <View style={styles.cell} >
-              <ProgressBar percentage={90} />
+            <View style={styles.cell}>
+            <Text style={styles.cellText}>Adewale Oni</Text>
             </View>
-          </View>
-        </View>
+            </View>
+          
 
+        </View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -240,6 +224,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: '100%',
+    backgroundColor: '#63EC55',
   },
   progressText: {
     position: 'absolute',

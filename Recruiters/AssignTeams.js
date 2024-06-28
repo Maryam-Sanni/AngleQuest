@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Picker, TouchableOpacity, Modal } from 'react-native';
 import { BlurView } from 'expo-blur';
 import OpenModal from './EditTeams';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -14,28 +15,28 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
     onClose();
   };
-
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Manage Your Teams</Text>
+      <Text style={styles.title}>{t("Manage Your Teams")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Team Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Team Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Specialization</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Specialization")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Date Created</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Date Created")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Target Level</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Target Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Team Lead</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Team Lead")}</Text>
           </View>
         </View>
         <View style={styles.row}>

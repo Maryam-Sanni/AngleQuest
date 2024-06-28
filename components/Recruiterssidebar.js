@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CollapsedComponent from "./Recruiterscollapsed"; 
 
 function MyComponent() {
@@ -49,9 +49,6 @@ function MyComponent() {
           case "Teams":
           navigation.navigate('Teams');
           break;
-          case "Analytics":
-          navigation.navigate('Analytics');
-          break;
         case "Subscription":
           navigation.navigate('Subscription');
           break;
@@ -70,12 +67,11 @@ function MyComponent() {
 
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
-    navigation.navigate('Business Profile');
+    navigation.navigate('Profile');
   };
   
   return (
     <View style={[styles.container, !showMenu && { width: 80 }]}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       {showMenu ?  (
         <View style={styles.contentContainer}>
           {/* Menu Items */}
@@ -134,9 +130,7 @@ function MyComponent() {
       ) : (
         <CollapsedComponent /> 
       )}
-      </ScrollView>
     </View>
-    
   );
 }
 
@@ -148,7 +142,6 @@ const menuItems = [
   { label: "Coach", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/813d5a4a25e7ea2bc6111724f9da82bc8321c028e79ecedafab3cf526363dfe1?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Teams", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Analytics", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Schedules", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/af1777ff9219d90e26a5672ec04ed421d4904eb9122e2f1feb8f1b61f8b63b75?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Interviews", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Subscription", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },

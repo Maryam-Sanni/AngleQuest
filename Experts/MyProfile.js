@@ -9,7 +9,6 @@ import CertificationsEditModal from '../components/CertificationsEditModal';
 import OtherExperiencesEditModal from '../components/OtherExperiencesEditModal';
 import PreferredLocationsEditModal from '../components/PreferredLocationsEditModal';
 import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
-import AboutEditModal from '../components/AboutEditModal';
 
 import {useFonts} from "expo-font"
 
@@ -50,10 +49,6 @@ export default function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentHistory, setCurrentHistory] = useState(null);
   const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
-  const [about, setAbout] = useState(`Alex Johnson is a dedicated Microsoft Azure expert with over 10 years of experience in cloud computing and IT infrastructure. With a Bachelor's degree in Computer Science from XYZ University and a Master's degree in Information Technology, Alex combines in-depth technical knowledge with a passion for innovative cloud solutions.
-
-    Outside of work, Alex enjoys coding, playing chess, and contributing to open-source projects. Alex also volunteers to mentor aspiring IT professionals and participates in community initiatives aimed at promoting digital literacy.`);
-      const [aboutModalVisible, setAboutModalVisible] = useState(false);
 
   const handleOpenPress = (history) => {
     setCurrentHistory(history);
@@ -65,10 +60,6 @@ export default function Profile() {
       history.id === updatedHistory.id ? updatedHistory : history
     );
     setEmploymentHistories(updatedHistories);
-  };
-
-  const handleSaveAbout = (newAbout) => {
-    setAbout(newAbout);
   };
 
   const [skills, setSkills] = useState([
@@ -185,12 +176,7 @@ export default function Profile() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
   return (
     <ImageBackground
@@ -210,22 +196,41 @@ export default function Profile() {
               {/* Profile Card */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
-        <Text style={{ fontSize: 18, fontWeight: "bold",fontFamily:"Varta-Light", marginBottom: 20 }}>My Profile</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold",fontFamily:"Roboto-Light" }}>My Profile</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
                     source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
                     style={{ width: 79, height: 79, borderRadius: 79, marginRight: 20 }}
                     resizeMode="cover"
                   />
-                  
+                  <View style={{ marginRight: 800 }}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>John Smith</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                      <Image
+                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/00e648efb83f97ef0794d800368a6ad24636e8f2ce415b2e1c45f6156d62607e?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                        style={{ width: 20, height: 20 }}
+                        resizeMode="contain"
+                      />
+                      <Text style={{ marginLeft: 5, fontSize: 12,fontFamily:"Roboto-Light" }}>Architectural Engineer</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                      <Image
+                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/850489e67e110e1e378aa7319abe9ae108ac518609ed527f0cc3ad25b9c266cf?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                        style={{ width: 20, height: 20 }}
+                        resizeMode="contain"
+                      />
+                      <Text style={{ marginLeft: 5, fontSize: 12,fontFamily:"Roboto-Light" }}>London, United Kingdom</Text>
+                    </View>
+                    <Text style={{ marginTop: 5, fontSize: 12, fontStyle: 'italic', color: '#63EC55',fontFamily:"Roboto-Light" }}>Online</Text>
+                  </View>
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Available Balance</Text>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5,fontFamily:"Varta-Light" }}>$1,234.00</Text>
-                  <Text style={{ fontSize: 16, color: 'black', marginTop: 10,fontFamily:"Varta-Light" }}>$25/hr</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Available Balance</Text>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>$1,234.00</Text>
+                  <Text style={{ fontSize: 16, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>$25/hr</Text>
                   <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
-                    <Text style={{ fontSize: 12,fontFamily:"Varta-Light" }}>Preview Profile</Text>
+                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light" }}>Preview Profile</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -233,23 +238,48 @@ export default function Profile() {
           </View>
 
           {/* Profile Description */}
-          <View style={{ marginTop: 20, marginRight: 30 }}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Varta-Bold" }}>
-                        About </Text> 
-                        <TouchableOpacity onPress={() => setAboutModalVisible(true)} style={{ marginLeft: 10 }}>
-                        <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-            style={{ width: 20, height: 20 }} // adjust width and height as needed
-            resizeMode="cover" // or any other resizeMode that suits your need
-          />
-                        </TouchableOpacity> 
-                       </View>
-                      <Text style={{ fontSize: 14, textAlign: 'justify', fontFamily: "Varta-Light" }}>{about}</Text>
-                
+          <View style={{ }}>
+            <View style={{ marginTop: 10, paddingHorizontal: 10, marginRight: 30 }}>
+              <Text style={{ fontSize: 16, textAlign: 'justify', marginTop: 10, color: '#206C00', fontWeight: 'bold',    fontFamily:"Roboto-Light"
+ }}>About</Text>
+              <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10,    fontFamily:"Roboto-Light"
+ }}>
+                John Smith is a passionate architectural engineer with over 10 years of
+                experience in designing and implementing innovative building solutions.
+                With a Bachelor's degree in Architectural Engineering from XYZ University
+                and a Master's degree in Sustainable Design, John brings a unique blend of
+                technical expertise and environmental consciousness to his projects.
+              </Text>
+              <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10,    fontFamily:"Roboto-Light" }}>
+                Throughout his career, John has worked on a diverse range of projects,
+                including residential, commercial, and institutional buildings. His
+                portfolio showcases his ability to seamlessly integrate cutting-edge
+                technology with elegant design principles, resulting in spaces that are
+                both functional and aesthetically pleasing.
+              </Text>
+              <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10,    fontFamily:"Roboto-Light" }}>
+                John is committed to sustainability and strives to incorporate
+                energy-efficient solutions and #206C00 building practices into every project
+                he undertakes. He is well-versed in LEED certification requirements and
+                actively seeks out opportunities to minimize environmental impact while
+                maximizing efficiency and comfort for building occupants.
+              </Text>
+              <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10,    fontFamily:"Roboto-Light"
+ }}>
+                In addition to his technical skills, John is a collaborative team player
+                who excels at communication and project management. He thrives in dynamic
+                environments and is adept at coordinating with architects, contractors,
+                and other stakeholders to ensure successful project delivery.
+              </Text>
+              <Text style={{ fontSize: 14, textAlign: 'justify', marginTop: 10,    fontFamily:"Roboto-Light"
+ }}>
+                Outside of work, John enjoys hiking, photography, and volunteering his
+                time to support local community initiatives focused on sustainability and
+                environmental conservation.
+              </Text>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
             </View>
-         
+          </View>
 
           {/* Employment History */}
           <View style={{ marginTop: 20}}>
@@ -283,7 +313,7 @@ export default function Profile() {
           {/* Skills */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Varta-Light"
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Roboto-Light"
  }}>Skills</Text>
         <TouchableOpacity onPress={handleOpenSkills}>
           <Image
@@ -316,7 +346,7 @@ export default function Profile() {
                            {/* Certifications */}
                            <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Varta-Light"
+        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
 }}>Certifications</Text>
         <TouchableOpacity onPress={handleOpenCertifications}>
           <Image
@@ -326,7 +356,7 @@ export default function Profile() {
           />
         </TouchableOpacity>
       </View>
-      <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14,    fontFamily:"Varta-Light"
+      <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14,    fontFamily:"Roboto-Light"
  }}>
         {certifications.map((cert, index) => (
           <Text key={index}>
@@ -346,7 +376,7 @@ export default function Profile() {
                       {/* Other Experience*/}
   <View style={{ marginTop: 20, marginRight: 30 }}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Varta-Light"
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
  }}>Other Experience</Text>
     <TouchableOpacity onPress={handleOpenOtherExperiences}>
       <Image
@@ -356,7 +386,7 @@ export default function Profile() {
       />
     </TouchableOpacity>
   </View>
-  <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14,    fontFamily:"Varta-Light"
+  <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14,    fontFamily:"Roboto-Light"
  }}>
     {otherExperiences.map((experience, index) => (
       <Text key={index}>
@@ -377,7 +407,7 @@ export default function Profile() {
                      {/*Location*/}
                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Varta-Light"
+                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
  }}>Preferred Locations</Text>
                       <TouchableOpacity onPress={handleOpenPreferredLocations}>
                         <Image
@@ -392,7 +422,7 @@ export default function Profile() {
         <View style={styles.container}>
           <View style={styles.row}>
           {preferredLocations.map((location, index) => (
-              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Varta-Light"
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Roboto-Light"
               }]}>{location}</Text>
             ))}
           </View>
@@ -410,7 +440,7 @@ export default function Profile() {
                    <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                   <View style={{ marginTop: 20, marginRight: 30 }}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Varta-Light"
+    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
 }}>Preferred Roles</Text>
     <TouchableOpacity onPress={handleOpenPreferredRoles}>
       <Image
@@ -424,7 +454,7 @@ export default function Profile() {
         <View style={styles.container}>
           <View style={styles.row}>
           {preferredRoles.map((role, index) => (
-              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Varta-Light"
+              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Roboto-Light"
               }]}>{role}</Text>
             ))}
           </View>
@@ -439,12 +469,6 @@ export default function Profile() {
     onSave={handleSavePreferredRoles}
   />
 </View>
-<AboutEditModal
-            visible={aboutModalVisible}
-            about={about}
-            onClose={() => setAboutModalVisible(false)}
-            onSave={handleSaveAbout}
-          />
     </View>
     </View>
         </ScrollView>
@@ -511,13 +535,13 @@ const styles = {
     marginTop: 3,
     fontSize: 12,
     color: 'grey',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
 
   },
   description: {
     marginTop: 15,
     fontSize: 14,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
 
   },
   historyItem: {
@@ -532,19 +556,12 @@ const styles = {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#206C00',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
+
   },
   image: {
     width: 20,
     height: 20,
     resizeMode: 'cover',
-  },
-  imageabout: {
-    width: 20,
-    height: 20,
-    marginTop: 10,
-    resizeMode: 'cover',
-    position: 'absolute',
-    right: 50
   },
 };

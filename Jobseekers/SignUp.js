@@ -51,13 +51,7 @@ const MyComponent = () => {
     navigation.navigate('Terms of Service');
   };
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 
   return (
@@ -89,7 +83,7 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}>
-                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Varta-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
@@ -143,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -190,7 +184,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   image: {
     resizeMode: 'contain',

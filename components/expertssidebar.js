@@ -63,10 +63,8 @@ function MyComponent() {
   };
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+
   })
 
   return (
@@ -104,7 +102,7 @@ function MyComponent() {
               style={{ width: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
-              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Varta-Light"  }}>Jeremiah H.</Text>
+              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Roboto-Light"  }}>Jeremiah H.</Text>
             </View>
           </View>
           </TouchableOpacity>
@@ -119,7 +117,7 @@ function MyComponent() {
                 source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/8619284eda5dda6f5d7db1f24b673d86816adddc50319ac5f1954048b0054972?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }}
                 style={{ width: 20, height: 20, marginRight: 6, marginTop: 5, marginBottom: 5}}
               />
-              <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666',fontFamily:"Varta-Light"  }}>Logout</Text>
+              <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666',fontFamily:"Roboto-Light"  }}>Logout</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -251,7 +249,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
     fontSize: 11,
-    fontFamily:"Varta-Light" 
+    fontFamily:"Roboto-Light" 
   },
 });
 

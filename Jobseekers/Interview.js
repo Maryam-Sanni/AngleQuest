@@ -5,11 +5,13 @@ import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Jobseekers/PickInterviewer';
 import OpenModal2 from '../Jobseekers/NewInterview';
+import { useTranslation } from 'react-i18next';
 
 import {useFonts} from "expo-font"
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
+    const { t } = useTranslation()
 
     const handleOpenPress = () => {
         setModalVisible(true);
@@ -29,12 +31,7 @@ function MyComponent() {
       
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
  
   return (
@@ -55,22 +52,22 @@ function MyComponent() {
             <TouchableOpacity>
             <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Varta-Light"}}>Interview</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Interview")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress2} >
             <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Varta-Light" }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
                   </TouchableOpacity>
             </View>
             <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Varta-Light"}}>About Interview</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Varta-Light" }}>Its often not the most qualified candidate on paper that gets the job, its who performs best at the interview. Let our expert to conduct a preparatory interview to help you prepare for your upcoming interview.</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Interview")}</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("Its often not the most qualified candidate on paper that gets the job, its who performs best at the interview. Let our expert to conduct a preparatory interview to help you prepare for your upcoming interview.")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 30, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Get Interviewed</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Get Interviewed")}</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/22.png')} style={styles.boximage} />

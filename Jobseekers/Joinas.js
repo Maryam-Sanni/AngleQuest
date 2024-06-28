@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/top';
+import {useFonts} from "expo-font" 
+
 
 const Card = ({ imageSrcs, title, onPress }) => {
   return (
@@ -47,6 +49,9 @@ const MyComponent = () => {
   const handleSignInPress = () => {
     navigation.navigate('Signin');
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
 
   return (
     <View style={{ flex: 1  }}>
@@ -87,6 +92,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   cardsContainer: {
     flexDirection: 'row',
@@ -133,10 +139,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   signInTextGray: {
     marginTop:10,
     color: 'gray',
+    fontFamily:"Roboto-Light"
   },
   shadow: {
     shadowColor: '#0000',

@@ -5,12 +5,13 @@ import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Jobseekers/Pickexpertadv';
 import OpenModal2 from '../Jobseekers/Newadvice';
-
+import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
+    const { t } = useTranslation()
 
     const handleOpenPress = () => {
         setModalVisible(true);
@@ -30,10 +31,7 @@ function MyComponent() {
       
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 
  
@@ -55,22 +53,22 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Varta-Light" }}>Advice</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Advice")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress2} >
             <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Varta-Light" }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
                   </TouchableOpacity>
             </View>
      <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Varta-Light"}}>About Advice</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Varta-Light" }}>Are you in a place where you need some straightening, fresh insights, leverage new perspective and some realignment?</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Advice")}</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("Are you in a place where you need some straightening, fresh insights, leverage new perspective and some realignment?")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Meet an expert</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Meet an expert")}</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/20.png')} style={styles.boximage} />

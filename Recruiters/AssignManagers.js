@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Picker, Modal, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
 import OpenModal from './EditEmployee';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -14,31 +15,32 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
     onClose();
   };
+  const {t}=useTranslation()
 
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Assign Managers To Employees</Text>
+      <Text style={styles.title}>{t("Assign Managers To Employees")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Specialization</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Specialization")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Current Role</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Current Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Target Level</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Target Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Manager</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Manager")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Assign New</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Assign New")}</Text>
           </View>
         </View>
         <View style={styles.row}>

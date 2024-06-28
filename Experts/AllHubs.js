@@ -9,8 +9,8 @@ import ConfirmationPopup from '../Experts/OtherHubs';
 import { BlurView } from 'expo-blur';
 import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
-import OpenModal6 from './Hubmeeting';
-  
+import { useTranslation } from 'react-i18next';
+
 function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
@@ -20,7 +20,7 @@ function MyComponent() {
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
-    const [modalVisible6, setModalVisible6] = useState(false);
+    
 
       const goToMyHubs = () => {
         navigation.navigate('All Hubs');
@@ -57,15 +57,7 @@ function MyComponent() {
     const handleCloseModal4 = () => {
       setModalVisible4(false);
     };
-
-    const handleOpenPress6 = () => {
-      setModalVisible6(true);
-    };
-  
-    const handleCloseModal6 = () => {
-      setModalVisible6(false);
-    };
-
+const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -135,11 +127,6 @@ function MyComponent() {
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Assignment</Text>
                   </View>
      </TouchableOpacity>
-     <TouchableOpacity onPress={handleOpenPress6}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Schedule hub meeting</Text>
-                  </View>
-     </TouchableOpacity>
      </View>
      <Modal
         animationType="slide"
@@ -169,16 +156,6 @@ function MyComponent() {
       >
           <View style={styles.modalContent}>
           <OpenModal5 onClose={() => handleCloseModal4()} />
-          </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible6}
-        onRequestClose={handleCloseModal6}
-      >
-          <View style={styles.modalContent}>
-          <OpenModal6 onClose={() => handleCloseModal6()} />
           </View>
       </Modal>
       <Modal
@@ -216,38 +193,39 @@ const ScheduledMeetingsTable = () => {
       setModalVisible4(false);
       onClose();
     };
+    const {t}=useTranslation()
 
   return ( 
     <View style={{flex: 1}}>
     <View style={{flexDirection: 'row', flexWrap: "wrap", alignItems: 'center', alignContent: 'center' }}>
     <View style={[styles.whiteBox, { marginLeft: 50, }]}>
-    <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>Next Meeting Schedule</Text>
+    <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>{t("Next Meeting Schedule")}</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
     <Text style={{ fontSize: 14, color: "grey", marginTop: 10, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>Start Session</Text>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("Start Session")}</Text>
           </TouchableOpacity>
       </View>
 
       <View style={[styles.whiteBox, { marginLeft: 40,  }]}>
-      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>Next Meeting Confirmation</Text>
+      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("Next Meeting Confirmation")}</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>12</Text>
-    <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>Yet to Confirm</Text>
+    <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>{t("Yet to Confirm")}</Text>
     <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>2</Text>
       </View>
 
       <View style={[styles.whiteBox, { marginLeft: 40, }]}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>Total Hub Members</Text>
+      <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
     <TouchableOpacity onPress={handleOpenPress4} style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>New Meeting</Text>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("New Meeting")}</Text>
           </TouchableOpacity>
       </View>
 
       <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
-      <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>Sessions Held</Text>
+      <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>{t("Sessions Held")}</Text>
     <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>20</Text>
-    <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>Sessions Missed</Text>
+    <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>{t("Sessions Missed")}</Text>
     <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>4</Text>
       </View>
 
@@ -259,19 +237,19 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
         </View>
         <View style={styles.cell}>
         <Text style={{fontWeight: '600', fontSize: 14}}> </Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Status</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Status")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Sessions Attended</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Sessions Attended")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Sessions Missed</Text>
+        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Sessions Missed")}</Text>
         </View>
       </View>
         <View style={styles.row}>
@@ -289,13 +267,13 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14,}}>Offline</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14,}}>{t("Offline")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>15 Sessions</Text>
+            <Text style={styles.cellText}>15 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>5 Sessions</Text>
+            <Text style={styles.cellText}>5 {t("Sessions")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -316,10 +294,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>20 Sessions</Text>
+            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>0 Sessions</Text>
+            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
           </View>
         </View>
          <View style={styles.row}>
@@ -340,10 +318,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>19 Sessions</Text>
+            <Text style={styles.cellText}>19 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>1 Sessions</Text>
+            <Text style={styles.cellText}>1 {t("Sessions")}</Text>
           </View>
         </View>
          <View style={styles.row}>
@@ -361,13 +339,13 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>13 Sessions</Text>
+            <Text style={styles.cellText}>13 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>7 Sessions</Text>
+            <Text style={styles.cellText}>7 {t("Sessions")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -388,10 +366,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>8 Sessions</Text>
+            <Text style={styles.cellText}>8 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>12 Sessions</Text>
+            <Text style={styles.cellText}>12 {t("Sessions")}</Text>
           </View>
         </View>
          <View style={styles.row}>
@@ -409,13 +387,13 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>20 Sessions</Text>
+            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>0 Sessions</Text>
+            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
           </View>
         </View>
  <View style={styles.row}>
@@ -438,10 +416,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>20 Sessions</Text>
+            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>0 Sessions</Text>
+            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
           </View>
         </View>
 <View style={styles.row}>
@@ -459,13 +437,13 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>20 Sessions</Text>
+            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>0 Sessions</Text>
+            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
           </View>
         </View>
 <View style={styles.row}>
@@ -486,10 +464,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>16 Sessions</Text>
+            <Text style={styles.cellText}>16 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>4 Sessions</Text>
+            <Text style={styles.cellText}>4 {t("Sessions")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -509,13 +487,13 @@ const ScheduledMeetingsTable = () => {
   )}
 </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>Offline</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>19 Sessions</Text>
+            <Text style={styles.cellText}>19 {t("Sessions")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>1 Sessions</Text>
+            <Text style={styles.cellText}>1 {t("Sessions")}</Text>
           </View>
         </View>
 

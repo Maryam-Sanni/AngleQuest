@@ -5,10 +5,7 @@ import {useFonts} from "expo-font"
 function MyComponent({ onClose }) {
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
 
   return (
@@ -23,7 +20,7 @@ function MyComponent({ onClose }) {
           <Text style={styles.headerText}>Create Advice Profile</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Varta-Light"}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -49,7 +46,7 @@ function MyComponent({ onClose }) {
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Role</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Role</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -61,7 +58,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Level</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Level</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -73,7 +70,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Rate</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Rate</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -85,7 +82,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Available Days</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Available Days</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -97,7 +94,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Available Times</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Available Times</Text>
         </View>
         <View style={styles.cell}>
          <TextInput
@@ -109,7 +106,7 @@ function MyComponent({ onClose }) {
       </View>
     </View>
     <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Varta-Light"}}>Topics or Questions</Text>
+    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Roboto-Light"}}>Topics or Questions</Text>
      <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>+</Text>
     </TouchableOpacity>
@@ -118,7 +115,7 @@ function MyComponent({ onClose }) {
      <View style={styles.container}>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 1</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
            <TextInput
@@ -147,7 +144,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 2</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
@@ -176,7 +173,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 3</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
@@ -205,7 +202,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Varta-Light"}}>Topic 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 4</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
@@ -307,7 +304,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   buttonAcc: {
     borderWidth: 2,
@@ -321,7 +318,7 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   buttonNew: {
     backgroundColor: 'transparent',
@@ -337,7 +334,7 @@ const styles = StyleSheet.create({
     color: 'coral',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
    buttonplus: {
     backgroundColor: 'coral',
@@ -351,7 +348,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
    buttonsave: {
     backgroundColor: 'coral',
@@ -375,7 +372,7 @@ const styles = StyleSheet.create({
     outline: 'black',
     borderWidth: 1,
     borderColor: 'black',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -400,7 +397,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   picker: {
     height: 20,

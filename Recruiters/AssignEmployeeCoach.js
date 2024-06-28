@@ -4,6 +4,7 @@ import { BlurView } from 'expo-blur';
 import OpenModal from './ListEmployee';
 import OpenModal2 from './ViewEmployees';
 import OpenModal3 from './EditCoach';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -36,28 +37,28 @@ const ScheduledMeetingsTable = () => {
     setModalVisible3(false);
     onClose();
   };
-
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Assign Employees To Coaches</Text>
+      <Text style={styles.title}>{t("Assign Employees To Coaches")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Email</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Email")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Team</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Team")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Assign Employee</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Assign Employee")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-            <Text style={{fontWeight: '600', fontSize: 14}}>View Employees</Text>
+            <Text style={{fontWeight: '600', fontSize: 14}}>{t("View Employee")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -73,10 +74,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={styles.cellText}>MORR</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}> + Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
