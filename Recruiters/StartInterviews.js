@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Recruiters/ChooseInterviewer';

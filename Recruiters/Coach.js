@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, ImageBackground } from 'react-native';
-import Topbar from '../components/expertstopbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import CustomPercentageChart from '../components/PercentageChart';
 import ManageEmployees from './AssignEmployeeCoach';

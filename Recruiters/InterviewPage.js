@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, ImageBackground } from 'react-native';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import InterviewSchedule from '../components/InterviewSchJob';
 import InterviewFeedback from '../components/InterviewFdbackRct';

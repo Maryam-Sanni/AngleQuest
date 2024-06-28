@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, ImageBackground} from 'react-native';
 import Sidebar from '../components/Recruiterssidebar';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import { BlurView } from 'expo-blur';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FaStar } from 'react-icons/fa';

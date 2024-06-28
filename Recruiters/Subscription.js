@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, ImageBackground, Modal } from 'react-native';
-import Topbar from '../components/expertstopbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
