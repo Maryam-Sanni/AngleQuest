@@ -27,8 +27,7 @@ const FormInput = ({ placeholder, onChangeText }) => (
 // MyComponent
 const MyComponent = () => {
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(false); // State for the checkbox
@@ -64,6 +63,7 @@ const MyComponent = () => {
         <View style={styles.contentContainer}>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Create a new account</Text>
+            {/* <Text style={{ fontFamily: 'Varta-Light', fontSize: 24 }}>Hello, World!</Text> */}
             <SignUpButton
               icon="https://cdn.builder.io/api/v1/image/assets/TEMP/dc5261e33bdee74cda06397e01a2033a956e661a701aab68af14e75f301b54a5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with Google"

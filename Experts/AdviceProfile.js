@@ -4,8 +4,7 @@ import {useFonts} from "expo-font"
  
 function MyComponent({ onClose }) {
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 
   return (

@@ -7,7 +7,7 @@ import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from './NewTarget';
-
+import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 
@@ -82,9 +82,18 @@ const HomePage = () => {
   };
 
   const ProgressBar = ({ percentage }) => {
+    let progressBarColor;
+    if (percentage <= 50) {
+      progressBarColor = 'coral'; 
+    } else if (percentage <= 80) {
+      progressBarColor = '#63EC55'; 
+    } else {
+      progressBarColor = '#206C00'; 
+    }
+
     return (
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${percentage}%` }]} />
+        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
         <Text style={styles.progressText}>{percentage}%</Text>
       </View>
     );
@@ -117,9 +126,9 @@ const EmployeePerformance = () => {
   };
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const { t } = useTranslation()
 
   return (
     <View style={{backgroundColor: '#3F5B39', flex: 1}}>
@@ -131,13 +140,10 @@ const EmployeePerformance = () => {
            <View style={styles.container}>
            <View style={{flexDirection: 'row' }}>
            <Image
-        source={{
-          uri:
-            "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-        }}
+       source={require('../assets/33.png')}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
-      <Text style={styles.greeting}>Good Day, Coach Joop Melcher</Text>
+      <Text style={styles.greeting}>{t("Good Day")}, Coach Joop Melcher</Text>
       </View>
       <View style={styles.mainContent}>
       <View style={styles.messageBox}>
@@ -147,7 +153,7 @@ const EmployeePerformance = () => {
        source={require('../assets/performance.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Performance</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Performance")}</Text>
           </View>
 
           <EmployeePerformance />
@@ -160,7 +166,7 @@ const EmployeePerformance = () => {
           onMouseEnter={() => setIsHovered1(true)}
           onMouseLeave={() => setIsHovered1(false)}
         >
-          <Text style={styles.touchableText}>See All</Text>
+          <Text style={styles.touchableText}>{t("See All")}</Text>
           </TouchableOpacity>
           </BlurView>
           </View>
@@ -169,8 +175,8 @@ const EmployeePerformance = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Time to accelerate</Text>
-          <Text style={{fontSize: 22, color: '#63EC55', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Know and contribute to the growth and impact of your team members</Text>
+          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Time to accelerate")}</Text>
+          <Text style={{fontSize: 22, color: '#63EC55', fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Know and contribute to the growth and impact of your team members")}</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -179,7 +185,7 @@ const EmployeePerformance = () => {
         onMouseEnter={() => setIsHovered7(true)}
         onMouseLeave={() => setIsHovered7(false)}
       >
-          <Text style={styles.touchableTextbegin}>Get Started</Text>
+          <Text style={styles.touchableTextbegin}>{t("Get Started")}</Text>
           </TouchableOpacity>
          
          
@@ -202,7 +208,7 @@ const EmployeePerformance = () => {
           
           <View style={{flexDirection: 'row', marginTop: 20  }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Activites</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Activities")}</Text>
 <View style={{flexDirection: 'row', justifyContent: 'center' }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
@@ -212,7 +218,7 @@ const EmployeePerformance = () => {
 onMouseEnter={() => setIsHovered2(true)}
 onMouseLeave={() => setIsHovered2(false)}
 >
-          <Text style={styles.touchableTextrate}>Employees</Text>
+          <Text style={styles.touchableTextrate}>{t("Employees")}</Text>
           </TouchableOpacity>
 <TouchableOpacity onPress={goToTargets} 
 style={[
@@ -222,7 +228,7 @@ style={[
 onMouseEnter={() => setIsHovered3(true)}
 onMouseLeave={() => setIsHovered3(false)}
 >
-          <Text style={styles.touchableTextrate}>Targets</Text>
+          <Text style={styles.touchableTextrate}>{t("Targets")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToPerformance} 
           style={[
@@ -232,7 +238,7 @@ onMouseLeave={() => setIsHovered3(false)}
           onMouseEnter={() => setIsHovered4(true)}
           onMouseLeave={() => setIsHovered4(false)}
           >
-          <Text style={styles.touchableTextrate}>Performance</Text>
+          <Text style={styles.touchableTextrate}>{t("Performance")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToTeams} 
           style={[
@@ -242,7 +248,7 @@ onMouseLeave={() => setIsHovered3(false)}
           onMouseEnter={() => setIsHovered6(true)}
           onMouseLeave={() => setIsHovered6(false)}
           >
-          <Text style={styles.touchableTextrate}>Meetings</Text>
+          <Text style={styles.touchableTextrate}>{t("Meetings")}</Text>
           </TouchableOpacity>
 </View>
 </View>
@@ -254,10 +260,10 @@ onMouseLeave={() => setIsHovered3(false)}
        source={require('../assets/Upcom2.png')}
         style={{ width: 25, height: 25, marginLeft: 50, marginTop: 15,}}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Upcoming Sessions</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Upcoming Sessions")}</Text>
           </View>
           <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline' ,fontFamily:"Roboto-Light"}}>5 Confirmations | 1 to go</Text>
+          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline' ,fontFamily:"Varta-Light"}}>5 Confirmations | 1 to go</Text>
           <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600' }}>9:30 AM to 10:30 AM | Jun 25</Text>
           
           </View>
@@ -267,7 +273,7 @@ onMouseLeave={() => setIsHovered3(false)}
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 50, marginTop: 5,}}
             />
-              <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Joop Melcher</Text>
+              <Text style={{fontSize: 12, color: 'white', marginTop: 12, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Joop Melcher</Text>
               <View style={{flexDirection: 'row' }}>
 <TouchableOpacity 
 style={[
@@ -277,7 +283,7 @@ style={[
 onMouseEnter={() => setIsHovered5(true)}
 onMouseLeave={() => setIsHovered5(false)}
 >
-          <Text style={styles.touchableTextsession}>Target Assessment</Text>
+          <Text style={styles.touchableTextsession}>{t("Target Assessment")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
           style={[
@@ -297,45 +303,45 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Growth Plan Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 135, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Growth Plan Session")} </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 185, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Maryam Bakahali with expert Joop Melcher</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Maryam Bakahali with expert Joop Melcher</Text>
           </View>
           </View>
           </View>
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Advice Session</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 175, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Advice Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 225, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Eniobanke Ademide with expert Emily Ray</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Eniobanke Ademide with expert Emily Ray</Text>
           </View>
           </View>
           </View>
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Interview Session </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 155, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Interview Session")} </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 205, fontWeight: '600',fontFamily:"Varta-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Patrick King with expert Wicher Jeroen</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Varta-Light" }}>Patrick King with expert Wicher Jeroen</Text>
           </View>
           </View>
           
@@ -353,9 +359,9 @@ onMouseLeave={() => setIsHovered5(false)}
        source={require('../assets/question.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Have a question?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>{t("Have a question?")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>Do you have an idea you will like to share with us?</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Varta-Light"  }}>{t("Do you have an idea you will like to share with us?")}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -364,7 +370,7 @@ onMouseLeave={() => setIsHovered5(false)}
           onMouseEnter={() => setIsHovered10(true)}
           onMouseLeave={() => setIsHovered10(false)}
           >
-          <Text style={styles.touchableTextcoach}>Let's hear from you</Text>
+          <Text style={styles.touchableTextcoach}>{t("Let's hear from you")}</Text>
           </TouchableOpacity>
           </View>
 
@@ -375,9 +381,9 @@ onMouseLeave={() => setIsHovered5(false)}
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>Need Help?</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>{t("Need Help?")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>Do you have an issue you would like us to assist you with?</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20  }}>{t("Do you have an issue you would like us to assist you with?")}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -386,15 +392,15 @@ onMouseLeave={() => setIsHovered5(false)}
           onMouseEnter={() => setIsHovered14(true)}
           onMouseLeave={() => setIsHovered14(false)}
           >
-          <Text style={styles.touchableTextcoach}>Get Help</Text>
+          <Text style={styles.touchableTextcoach}>{t("Get Help")}</Text>
           </TouchableOpacity>
           </View>
           
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Angle Badge</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Varta-Light" }}>Angle Badge</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20 ,fontFamily:"Roboto-Light" }}>This is the combined progress of your assigned employees</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20 ,fontFamily:"Varta-Light" }}>{t("This is the combined progress of your assigned employees")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={70} />
       </View>
@@ -444,7 +450,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: 'white',
     marginLeft: 3,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Varta-Light"
   },
   icon: {
     width: 15,
@@ -604,7 +610,7 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Varta-Light"
   },
    touchableall: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -669,7 +675,7 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Varta-Light"
   },
   touchablerate: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -691,7 +697,7 @@ blurBackground: {
   touchableTextrate: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 12,fontFamily:"Roboto-Light"
+    fontSize: 12,fontFamily:"Varta-Light"
   },
   touchablesession: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -714,7 +720,7 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Varta-Light"
   },
     touchablestart: {
       backgroundColor: 'rgba(200,200,125,0.3)',
@@ -746,7 +752,7 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Varta-Light"
   },
     verticalLine: {
     height: 60,
@@ -773,7 +779,6 @@ blurBackground: {
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#63EC55',
   },
   progressText: {
     position: 'absolute',

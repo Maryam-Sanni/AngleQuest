@@ -93,10 +93,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>SAP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -112,10 +112,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>JPP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress}  style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -131,10 +131,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>PRO</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -150,10 +150,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>MORR</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -169,10 +169,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>SAP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -188,10 +188,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>CEPPA</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -207,10 +207,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>CEPPA</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}> + {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
 

@@ -93,16 +93,26 @@ import BookedInterview from './Recruiters/InterviewPage';
 import Coach from './Recruiters/Coach';
 import Teams from './Recruiters/Teams';
 import Subscription from './Recruiters/Subscription';
+import Analytics from './Recruiters/Analytics';
 import HomeManager from './Coach/Home';
 import EmployeeManager from './Coach/Employees';
 import EmployeePerformance from './Coach/Performance';
 import Meetings from './Coach/AllMeetings';
 import AllMessages from './Coach/Messages';
 import Targets from './Coach/Targets';
+import AccountSet from './Recruiters/AccountSetup';
+import NotificationsSet from './Recruiters/NotificationSetup';
+import PasswordSet from './Recruiters/Password';
+import BusinessProfile from './Recruiters/MyProfile';
+import MyPerformance from './Jobseekers/Performance';
+import AdviceOffer from './Jobseekers/OfferAdvice';
+import GrowthOffer from './Jobseekers/OfferGrowth';
+import InterviewOffer from './Jobseekers/OfferInterview';
+import HubOffer from './Jobseekers/OfferHub';
 
 const Stack = createStackNavigator();
 
-const Main = () => {
+const App = () => {
 
   useEffect(() => {
     // Add event listener for deep linking
@@ -225,11 +235,21 @@ const Main = () => {
         <Stack.Screen name="Meetings" component={Meetings} />
         <Stack.Screen name="All Messages" component={AllMessages} />
         <Stack.Screen name="Targets" component={Targets} />
+        <Stack.Screen name="Analytics" component={Analytics} />
+        <Stack.Screen name="Account Set" component={AccountSet} />
+        <Stack.Screen name="Notifications Set" component={NotificationsSet} />
+        <Stack.Screen name="Password Set" component={PasswordSet} />
+        <Stack.Screen name="Business Profile" component={BusinessProfile} />
+        <Stack.Screen name="My Performance" component={MyPerformance} />
+        <Stack.Screen name="Advice Offer" component={AdviceOffer} />
+        <Stack.Screen name="Growth Offer" component={GrowthOffer} />
+        <Stack.Screen name="Interview Offer" component={InterviewOffer} />
+        <Stack.Screen name="Hub Offer" component={HubOffer} />
       </Stack.Navigator>
-                      </NavigationContainer>
+    </NavigationContainer>
   );
+};
 
-}
-;
-export default Main;
 
+
+export default App;

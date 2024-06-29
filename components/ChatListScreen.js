@@ -65,9 +65,8 @@ const data = [
 function CustomHeader() {
   
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
-  })
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    })
 
   return (
     <View style={{padding: 16, backgroundColor: 'white' }}>

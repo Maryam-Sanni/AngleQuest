@@ -21,10 +21,9 @@ export default function MyComponent() {
 
   
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
-    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")       
+
+
   })
 
   return (
@@ -34,7 +33,7 @@ export default function MyComponent() {
       <Sidebar setShowMenu={handleMenuToggle} /> 
         <View style={{ flex: 1, padding: 20, backgroundColor: "white",  marginLeft}}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black',fontFamily:"Roboto-Light"  }}>Notifications</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black',fontFamily:"Roboto-Bold"  }}>Notifications</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1185e61deafb3a111149fd6729b0779a7b7fdc599bfe5f2c70c672d29671efa3?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}

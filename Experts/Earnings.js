@@ -23,12 +23,13 @@ function MyComponent() {
       };
 
   return (
+    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
+        <View style={{ marginLeft: 270, backgroundColor: '#f7fff4'}}>
           <View style={styles.header}>
             <TouchableOpacity onPress={goToOffers} 
             underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
@@ -62,6 +63,7 @@ function MyComponent() {
           
         </ScrollView>
       </View>
+    </View>
     </View>
   );
 }
