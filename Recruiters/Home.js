@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackg
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/Recruiterssidebar';
 import { BlurView } from 'expo-blur';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from './NDASetup';

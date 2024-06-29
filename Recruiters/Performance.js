@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useTransition} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
-import Topbar from '../components/topbar';
+import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import EmployeeStats from '../components/PerformaceStats';
 import { useNavigation } from '@react-navigation/native';
