@@ -102,10 +102,8 @@ function ChatScreen() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+
   })
 
   return (
@@ -120,7 +118,7 @@ function ChatScreen() {
           <View style={{ flex: 1, marginTop: 50, marginLeft: 20, marginRight: 20}}>
      
      <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
-       <Text style={{ fontSize: 16, fontWeight: "bold", color: "black",fontFamily:"Varta-Light" }}>
+       <Text style={{ fontSize: 16, fontWeight: "bold", color: "black",fontFamily:"Roboto-Light" }}>
          Nathan Arthur
        </Text>
        <View
@@ -133,55 +131,55 @@ function ChatScreen() {
          }}
        />
      </View>
-     <Text style={{ fontSize: 12, color: "#A0AEC0",fontFamily:"Varta-Light" }}>Java Programmer</Text>
+     <Text style={{ fontSize: 12, color: "#A0AEC0",fontFamily:"Roboto-Light" }}>Java Programmer</Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00",fontFamily:"Roboto-Light" }}>
        nathanar47@gmail.com
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 14, color: "black",fontFamily:"Roboto-Light" }}>
        15 year(s) experience
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Varta-Light"}}>
+     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light"}}>
        Hard Skills
      </Text>
-     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Responsive Design
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
       • HTML, CSS, JavaScript
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • React & Angular
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Python & Node.js
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Web security
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light" }}>
        Soft Skills
      </Text>
-     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Communication
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Problem-solving & Critical thinking
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Time Management
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Client Management
      </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
        • Continuous Learning Mindset
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#A0AEC0",fontFamily:"Varta-Light" }}>
+     <Text style={{ marginTop: 10, fontSize: 14, color: "#A0AEC0",fontFamily:"Roboto-Light" }}>
        Received files
      </Text>
      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 1, marginTop: 10 }}>
@@ -194,8 +192,8 @@ function ChatScreen() {
            style={{ width: 35, height: 35, aspectRatio: 1 }}
          />
          <View style={{ marginLeft: 5 }}>
-           <Text style={{ color: "#206C00",fontFamily:"Varta-Light" }}>NathanCV.pdf</Text>
-           <Text style={{ color: "#A0AEC0", fontSize: 10,fontFamily:"Varta-Light" }}>293 kb</Text>
+           <Text style={{ color: "#206C00",fontFamily:"Roboto-Light" }}>NathanCV.pdf</Text>
+           <Text style={{ color: "#A0AEC0", fontSize: 10,fontFamily:"Roboto-Light" }}>293 kb</Text>
          </View>
        </View>
      </View>
@@ -213,8 +211,8 @@ function ChatScreen() {
           />
         </TouchableOpacity>
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#3D5C3A',fontFamily:"Varta-Light"}}>Nathan Arthur</Text>
-          <Text style={{ fontStyle: 'normal', fontSize: 12, color: '#3D5C3A',fontFamily:"Varta-Light" }}>Java Programming - <Text style={{ fontWeight: '500', fontStyle: 'italic', color: '#3D5C3A' }}>Jobseeker</Text></Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#3D5C3A',fontFamily:"Roboto-Light"}}>Nathan Arthur</Text>
+          <Text style={{ fontStyle: 'normal', fontSize: 12, color: '#3D5C3A',fontFamily:"Roboto-Light" }}>Java Programming - <Text style={{ fontWeight: '500', fontStyle: 'italic', color: '#3D5C3A' }}>Jobseeker</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
           <Image

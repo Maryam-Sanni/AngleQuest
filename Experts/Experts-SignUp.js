@@ -28,12 +28,7 @@ const FormInput = ({ placeholder, onChangeText }) => (
 const MyComponent = () => {
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(false); // State for the checkbox
@@ -69,7 +64,6 @@ const MyComponent = () => {
         <View style={styles.contentContainer}>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Create a new account</Text>
-            {/* <Text style={{ fontFamily: 'Varta-Light', fontSize: 24 }}>Hello, World!</Text> */}
             <SignUpButton
               icon="https://cdn.builder.io/api/v1/image/assets/TEMP/dc5261e33bdee74cda06397e01a2033a956e661a701aab68af14e75f301b54a5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with Google"
@@ -79,7 +73,7 @@ const MyComponent = () => {
               text="Sign up with LinkedIn"
             />
             <View style={styles.divider}>
-              <Text style={{ color: 'black', fontSize: 14,fontFamily:"Varta-Light" }}>or</Text>
+              <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>or</Text>
             </View>
             <FormInput placeholder="First name" onChangeText={setFirstName} />
             <FormInput placeholder="Last name" onChangeText={setLastName} />
@@ -93,7 +87,7 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}> {/* Navigate to Terms page */}
-                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Varta-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
               </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
@@ -148,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -201,7 +195,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   image: {
     resizeMode: 'contain',

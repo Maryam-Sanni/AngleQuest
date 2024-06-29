@@ -7,20 +7,30 @@ import Sidebar from '../components/sidebar';
 const BillingSettingsPage = () => {
   const navigation = useNavigation(); // Moved inside the component
 
+  const goToAccountSettings = () => {
+    navigation.navigate('Account Settings');
+  };
+
+  const goToResetPassword = () => {
+    navigation.navigate('Reset Password');
+  };
+
+  const goToNotificationSettings = () => {
+    navigation.navigate('Notification Settings');
+  };
+
+  const goToBillingsAndPayment = () => {
+    navigation.navigate('Billings and Payment');
+  };
 
   const [currentPlan] = useState('Standard');
-  const [amount] = useState('$80.00');
-  const [renewalDateG] = useState('April 30, 2024');
-  const [renewalDateA] = useState('July 26, 2025');
-  const [renewalDateH] = useState('December 17, 2024');
-  const [renewalDateI] = useState('August 01, 2025');
+  const [amount] = useState('$29.00');
+  const [renewalDate] = useState('April 30, 2024');
   const [paymentMethod] = useState('•••• 1234');
   const [expiryDate] = useState('Expires 06/2024');
   const [billingHistory] = useState([
-    { date: 'April 1, 2024', amount: '$80.00' },
-    { date: 'March 1, 2024', amount: '$800.00' },
-    { date: 'March 1, 2024', amount: '$95.00' },
-    { date: 'March 1, 2024', amount: '$80.00' },
+    { date: 'April 1, 2024', amount: '$29.00' },
+    { date: 'March 1, 2024', amount: '$29.00' },
     // Add more billing history entries as needed
   ]);
 
@@ -37,31 +47,26 @@ const BillingSettingsPage = () => {
   };
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
     <View style={{ flex: 1 }}>
       <TopBar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        
-   
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.container}>
-              <Text style={styles.sectionTitle}>CURRENT PLANS</Text>
+              <Text style={styles.sectionTitlefirst}>CURRENT PLAN</Text>
               <View style={styles.divider} />
-              <Text style={styles.planText}>Growth Plan</Text>
+              <Text style={styles.planText}>{currentPlan} PLAN</Text>
               <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateG}</Text>
-              <Text style={styles.planText}>Advice Sessions</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateA}</Text>
-              <Text style={styles.planText}>Hubs</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateH}</Text>
-              <Text style={styles.planText}>Interview Session</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateI}</Text>
-              
+              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDate}</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleCancelPlan}>
+                  <Text style={styles.buttonText}>Cancel Plan</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#206c00' }]} onPress={handleUpgradePlan}>
+                  <Text style={styles.buttonText}>Upgrade Plan</Text>
+                </TouchableOpacity>
+              </View>
 
               <Text style={styles.sectionTitle}>PAYMENT METHOD</Text>
               <View style={styles.divider} />
@@ -70,14 +75,10 @@ const BillingSettingsPage = () => {
                 <Text style={styles.paymentMethodText}>{paymentMethod}</Text>
                 <Text style={styles.expiryDateText}>{expiryDate}</Text>
               </View>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonadd} onPress={handleCancelPlan}>
-                  <Text style={styles.buttonText}>+ Add Payment Method</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'darkred' }]} onPress={handleUpgradePlan}>
-                  <Text style={styles.buttonText}>Delete Card</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity onPress={handleAddPaymentMethod}>
+                <Text style={styles.addPaymentMethodText}>+ Add Payment Method</Text>
+              </TouchableOpacity>
+
               <Text style={styles.sectionTitle}>BILLING HISTORY</Text>
               <View style={styles.divider} />
               {billingHistory.map((entry, index) => (
@@ -87,12 +88,37 @@ const BillingSettingsPage = () => {
                 </View>
               ))}
             </View>
-           
-              
+            <View style={styles.cardContainer}>
+              <View style={styles.cardContent}>
+                <TouchableOpacity onPress={goToAccountSettings}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9b7a3a6d0178d9e4654db03454de5de060a67e4b91a6fe4d31a059874d384eb2?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5 }} />
+                    <Text style={{ fontSize: 12, color: 'black' }}>Account Settings</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToResetPassword}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d2d638a18c02206d9cb09092e754e29b9e7fcec759c21615164f9508890194ba?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Password</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToNotificationSettings}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/17d8150403f80380e2928ef1b9db06fb8c60a50c487a2172f5699a0eb5f88b6d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Notification Settings</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToBillingsAndPayment}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'coral', marginTop: 15, fontWeight: 'bold' }}>Billings & Payment </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </ScrollView>
       </View>
-    </View>
     </View>
   );
 };
@@ -104,11 +130,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 13,
+    fontWeight: '600',
     marginTop: 50,
     marginBottom: 5,
-    color: '#206C00',
+    color: 'black',
   },
   sectionTitlefirst: {
     fontSize: 13,
@@ -124,7 +150,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   planText: {
-    fontSize: 16,
+    fontSize: 17,
     color: 'black',
     fontWeight: 'bold',
     marginTop: 10,
@@ -143,33 +169,27 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: 40,
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
   button: {
+    flex: 1,
     backgroundColor: 'coral',
     borderRadius: 5,
     paddingVertical: 10,
     marginHorizontal: 5,
-    width: 150
-  },
-  buttonadd: {
-    backgroundColor: 'green',
-    borderRadius: 5,
-    paddingVertical: 10,
-    marginHorizontal: 5,
-    width: 250,
   },
   buttonText: {
     textAlign: 'center',
     color: 'white',
+    fontWeight: 'bold',
   },
   paymentMethodContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   paymentMethodType: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'white',
     marginTop: 15,
     backgroundColor: 'blue',
@@ -187,7 +207,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   addPaymentMethodText: {
-    fontSize: 16,
+    fontSize: 12,
     color: 'black',
     fontWeight: '500',
     marginTop: 25,

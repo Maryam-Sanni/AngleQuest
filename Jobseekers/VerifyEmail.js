@@ -45,13 +45,7 @@ const VerificationContent = ({ userEmail }) => {
   };
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 
   return (
@@ -70,10 +64,10 @@ const VerificationContent = ({ userEmail }) => {
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10,fontFamily:"Varta-Light" }}>Resend code</Text>
+          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10,fontFamily:"Roboto-Light" }}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600',fontFamily:"Varta-Light" }}>Change email</Text>
+          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600',fontFamily:"Roboto-Light" }}>Change email</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -125,18 +119,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: -10,
-    marginBottom: 20,fontFamily:"Varta-Light"
+    marginBottom: 20,fontFamily:"Roboto-Light"
   },
   text: {
     marginVertical: 5,
     fontSize: 12,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -168,7 +162,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center',fontFamily:"Varta-Light"
+    textAlign: 'center',fontFamily:"Roboto-Light"
   },
 });
 

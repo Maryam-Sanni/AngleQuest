@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { View, Text, StyleSheet, Picker, TouchableOpacity, Modal } from 'react-native';
 import { BlurView } from 'expo-blur';
 import OpenModal from './EmployeeStatus';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
     const [ModalVisible, setModalVisible] = useState(false);
@@ -14,28 +15,28 @@ const ScheduledMeetingsTable = () => {
         setModalVisible(false);
         onClose();
       };
-
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>All Employees</Text>
+      <Text style={styles.title}>{t("All Employees")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Created On</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Created On")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Renewal Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Renewal Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Status</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Status")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Update</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Update")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -49,10 +50,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>22-02-24</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Active</Text>
+            <Text style={styles.cellText}>{t("Active")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.open}>Update</Text>
+          <Text style={styles.open}>{t("Update")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -66,10 +67,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>07-05-24</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Active</Text>
+            <Text style={styles.cellText}>{t("Active")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.open}>Update</Text>
+          <Text style={styles.open}>{t("Update")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -83,10 +84,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>19-04-24</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Active</Text>
+            <Text style={styles.cellText}>{t("Active")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.open}>Update</Text>
+          <Text style={styles.open}>{t("Update")}</Text>
           </TouchableOpacity>
         </View>
         

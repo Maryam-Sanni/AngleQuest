@@ -8,6 +8,7 @@ import CompletedFeedbacks from '../components/CompletedFeedbacks';
 import OpenModal from '../Experts/InterviewProfile'; 
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() { 
     const navigation = useNavigation();
@@ -74,12 +75,9 @@ function MyComponent() {
 
     const [fontsLoaded]=useFonts({
       'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-      "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-      "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-      "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-      "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
-
+const {t}=useTranslation()
     return (
       <ImageBackground
     source={require ('../assets/Background.png') }
@@ -125,49 +123,49 @@ function MyComponent() {
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Create Profile</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>Create Profile</Text>
                   </View>
      </TouchableOpacity>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Edit Profile</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Edit Profile</Text>
                   </View>
      </TouchableOpacity>
 
      <View style={styles.container}>
       <View style={styles.box}>
-         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Varta-Light"}}>No of candidates interviewed</Text>
+         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light"}}>{t("No of candidates interviewed")}</Text>
          <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-line-chart.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5,fontFamily:"Varta-Light" }}>500</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5,fontFamily:"Roboto-Light" }}>500</Text>
            </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You have 2 new booked session(s) today</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have 2 new booked session(s) today")}</Text>
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Varta-Light" }}>Total Earnings</Text>
+        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Total Earnings")}</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-money.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue',fontFamily:"Varta-Light" }}>$1,580</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue',fontFamily:"Roboto-Light" }}>$1,580</Text>
      </View>
-     <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You earned a total of $30 today</Text>
+     <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You earned a total of $30 today")}</Text>
     
       </View>
      
       <View style={styles.box}> 
-        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Varta-Light" }}>Profile Visits</Text>
+        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Profile Visits")}</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-people.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey',fontFamily:"Varta-Light" }}>20</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey',fontFamily:"Roboto-Light" }}>20</Text>
       </View>
-      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You have 10 profile visit(s) this week</Text>
+      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have 10 profile visit(s) this week")}</Text>
       </View>
       <View style={styles.box}>
-        <Text style = {{fontSize: 12, color: 'black',fontFamily:"Varta-Light" }}>Next Session in</Text>
+        <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("Next Session in")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen',fontFamily:"Varta-Light" }}>{timerComponents}</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen',fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
            </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Varta-Light" }}>You have a new session in {timerComponents}!</Text>
+           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have a new session in")} {timerComponents}!</Text>
       </View>
     </View>
     
@@ -222,7 +220,7 @@ const styles = StyleSheet.create({
       fontWeight: '500',
       marginTop: 5,
       color: '#666',
-      fontFamily:"Varta-Light"
+      fontFamily:"Roboto-Light"
     },
     image: {
         width: 21,

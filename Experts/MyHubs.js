@@ -171,10 +171,7 @@ const handleCloseModal = () => {
   };
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
 
 
@@ -221,7 +218,7 @@ const handleCloseModal = () => {
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: '#d3f9d8', width: 150, alignItems: 'center', marginTop: 20, marginBottom: 10, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>+ Create New Hub</Text>
+                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ Create New Hub</Text>
                   </View>
      </TouchableOpacity>
 
@@ -305,7 +302,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    color: '#666',fontFamily:"Varta-Light"
+    color: '#666',fontFamily:"Roboto-Light"
   },
   image: {
     width: 24,

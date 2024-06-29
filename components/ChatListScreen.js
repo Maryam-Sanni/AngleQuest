@@ -66,15 +66,12 @@ function CustomHeader() {
   
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
 
   return (
     <View style={{padding: 16, backgroundColor: 'white' }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, fontFamily:"Varta-Light"}}>Chats</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, fontFamily:"Roboto-Light"}}>Chats</Text>
     </View>
   );
 }
@@ -85,10 +82,10 @@ function ChatListScreen({ navigation }) {
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5', }}>
         <Image source={item.avatar} style={{ width: 48, height: 48, borderRadius: 24, marginRight: 12 }} />
         <View style={{ flex: 1 }}>
-          <Text style={{ fontWeight: '500', fontSize: 15,fontFamily:"Varta-Light" }}>{item.name}</Text>
-          <Text style={{ color: '#777', fontSize: 13,fontFamily:"Varta-Light" }}>{item.message}</Text>
+          <Text style={{ fontWeight: '500', fontSize: 15,fontFamily:"Roboto-Light" }}>{item.name}</Text>
+          <Text style={{ color: '#777', fontSize: 13,fontFamily:"Roboto-Light" }}>{item.message}</Text>
         </View>
-        <Text style={{ color: '#777', fontSize: 13,fontFamily:"Varta-Light" }}>{item.time}</Text>
+        <Text style={{ color: '#777', fontSize: 13,fontFamily:"Roboto-Light" }}>{item.time}</Text>
       </View>
     </TouchableOpacity>
   );

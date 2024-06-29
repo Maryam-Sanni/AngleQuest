@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-na
 import OpenSchedule from '../Experts/OpenScheduled';
 import OpenUser from '../Experts/OpenUserprofile';
 import { BlurView } from 'expo-blur';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,26 +24,26 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
-
+const {t}=useTranslation()
   return (
     
     <View style={styles.greenBox}>
      <BlurView intensity={100} style={styles.blurBackground}>
-      <Text style={styles.title}>Scheduled Interview Meetings</Text>
+      <Text style={styles.title}>{t("Scheduled Interview Meetings")}</Text>
       
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Account Type</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Account Type")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Date")}</Text>
           </View>
           <TouchableOpacity style={styles.cell} >
             <Text style={{color: "#206C00", fontSize: 14}}> </Text>
@@ -65,16 +66,16 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP Finance Junior</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Individual Account</Text>
+            <Text style={styles.cellText}>{t("Individual Account")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Open</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Open")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Start Meeting</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -90,16 +91,16 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Power Platform Dev</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Corporate Account</Text>
+            <Text style={styles.cellText}>{t("Corporate Account")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Open</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Open")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell}>
-          <Text style={{color: "#206C00", fontSize: 14}}>Start Meeting</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>
       </View>

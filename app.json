@@ -34,7 +34,17 @@
           "fonts": {
             "Varta-Light": "./assets/fonts/Varta-Light.ttf",
             "Varta-Bold":"./assets/fonts/Varta-Bold.ttf",
-            "Varta-Medium":"./assets/fonts/Varta-Medium.ttf"
+            "Varta-Medium":"./assets/fonts/Varta-Medium.ttf",
+            "Ubuntu-Light":"./assets/fonts/Ubuntu-Light.ttf",
+            "Ubuntu-Bold":"./assets/fonts/Ubuntu-Bold.ttf",
+            "Ubuntu-Medium":"./assets/fonts/Ubuntu-Medium.ttf",
+            "Ubuntu-Regular":"./assets/fonts/Ubuntu-Regular.ttf",
+"Roboto-Bold":"./assets/fonts/Roboto-Bold.ttf",
+"Roboto-Light":"./assets/fonts/Roboto-Light.ttf",
+"Roboto-Regular":"./assets/fonts/Roboto-Regular.ttf",
+"Sora-Bold":"./assets/fonts/Sora-Bold.ttf",
+"Sora-Regular":"./assets/fonts/Sora-Regular.ttf",
+"Sora-Light":"./assets/fonts/Sora-Light.ttf"
           }
         }
       ]

@@ -8,7 +8,7 @@ import CompletedAdvice from '../components/CompletedAdvice';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/AdviceProfile';
 import {useFonts} from "expo-font"
-
+import { useTranslation } from 'react-i18next';
 
 const data = [
   { date: 'M', score: 10 },
@@ -100,13 +100,10 @@ function MyComponent() {
 
       const [fontsLoaded]=useFonts({
         'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-        "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-        "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-        "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-        "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
       })
   
-    
+    const {t}=useTranslation()
 
   return (
     <ImageBackground
@@ -153,12 +150,12 @@ function MyComponent() {
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}>Create Profile</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>Create Profile</Text>
                   </View>
      </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Varta-Light" }}>Edit Profile</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Edit Profile</Text>
                   </View>
      </TouchableOpacity>
 
@@ -190,23 +187,23 @@ function MyComponent() {
         
       </View>
        <View style={styles.box}>
-        <View style={{alignItems: 'center', alignContent: 'center',fontFamily:"Varta-Light"}}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold',fontFamily:"Varta-Light" }}>Rating</Text>
-       <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15,fontFamily:"Varta-Light" }}>40 candidates reviews</Text>
+        <View style={{alignItems: 'center', alignContent: 'center',fontFamily:"Roboto-Light"}}>
+      <Text style={{ fontSize: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Rating")}</Text>
+       <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15,fontFamily:"Roboto-Light" }}>{t("40 candidates reviews")}</Text>
     <View style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(225,225,212,0.3)', width: 200, alignItems: 'center', marginTop: 10 }}>
     <View style={{ flexDirection: 'row'}}>
-                    <Text style={{ fontSize: 18, color: "black", alignText: 'center', fontWeight: '600',fontFamily:"Varta-Light" }}><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /></Text> <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black"}}> 4.7 out of 5 </Text>
+                    <Text style={{ fontSize: 18, color: "black", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /></Text> <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black"}}> 4.7 out of 5 </Text>
                     </View>
                   </View>
       <TouchableOpacity>
-     <Text style={{ fontSize: 12, color: 'darkgrey', marginTop: 30,fontFamily:"Varta-Light" }}>How do we calculate ratings?</Text>
+     <Text style={{ fontSize: 12, color: 'darkgrey', marginTop: 30,fontFamily:"Roboto-Light" }}>{t("How do we calculate ratings?")}</Text>
      </TouchableOpacity>
     </View>
       </View>
       <View style={styles.box2}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600',fontFamily:"Varta-Light"}}>You have a new session in:</Text>
-         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Varta-Light" }}>{timerComponents}</Text>
-        <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Varta-Light" }}>By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress. Seeing these sessions scheduled prompts you to prepare accordingly and actively participate. </Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("You have a new session in:")}</Text>
+         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
+        <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress. Seeing these sessions scheduled prompts you to prepare accordingly and actively participate.")} </Text>
      </View>
      </View>
 
@@ -250,7 +247,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 5,
     color: '#666',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 21,
@@ -341,7 +338,7 @@ const styles = StyleSheet.create({
     color: 'lightgrey',
     fontWeight: '600',
      marginTop: 10,
-     fontFamily:"Varta-Light"
+     fontFamily:"Roboto-Light"
   },
   graphDate: {
     fontSize: 12,
@@ -349,7 +346,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 2,
    marginBottom: -10,
-   fontFamily:"Varta-Light"
+   fontFamily:"Roboto-Light"
   },
   boximage: {
         width: 50,

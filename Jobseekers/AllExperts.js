@@ -5,6 +5,8 @@ import { BlurView } from 'expo-blur';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -19,6 +21,7 @@ function MyComponent() {
     setSearch('');
   };
   
+  const { t } = useTranslation()
 
   
   // Sample data for the cards
@@ -256,7 +259,7 @@ function MyComponent() {
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18, }}>
             <View style={{ flex: 1 , }}>
             <View style={{ flexDirection: 'row', marginTop: 15,  }}>
-            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold' }}> Available Days</Text>
+            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold' }}> {t("Available Days")}</Text>
             <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                           style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5,  marginLeft: 15 }}
@@ -293,7 +296,7 @@ function MyComponent() {
             onPress={goToBookInterview}
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
-             Interview
+             {t("Interview")}
             </Text>
           </TouchableOpacity>
           <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
@@ -316,7 +319,7 @@ function MyComponent() {
             onPress={goToBookGrowth}
           >
             <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12}}>
-             Growth Plan
+             {t("Growth Plan")}
             </Text>
           </TouchableOpacity>
           <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
@@ -339,7 +342,7 @@ function MyComponent() {
             onPress={goToBookAdvice}
           >
             <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
-             Advice
+             {t("Advice")}
             </Text>
           </TouchableOpacity>
           <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
@@ -353,10 +356,9 @@ function MyComponent() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
+    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")
 
 
   })
@@ -379,24 +381,24 @@ function MyComponent() {
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
               <TouchableOpacity>
               <View style={styles.session}>
-                <Text style={{  fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>All Experts</Text>
+                <Text style={{  fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("All Experts")}</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
               <View style={styles.session2}>
-                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Booked Experts</Text>
+                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Booked Experts")}</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
               <View style={styles.session2}>
-              <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Varta-Light" }}>Saved</Text>
+              <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Saved")}</Text>
               </View>
               </TouchableOpacity>
               </View>
               
             </View>
             <View style={{ marginTop: 25, marginLeft: 10, marginBottom: 10 }}>
-                <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Varta-Light"}}>Use the search or the dropdown to filter</Text>
+                <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10}}>
      <Picker
                   style={styles.picker}
@@ -414,7 +416,7 @@ function MyComponent() {
                 </Picker>
 
                 <TextInput
-                  placeholder="Search"
+                  placeholder={t("Search")}
                   style={styles.input}
                 />
      </View>

@@ -15,7 +15,7 @@ function MyComponent({ onClose }) {
   const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
 
   const goToPlans = () => {
-    navigation.navigate('Hub Offer');
+    navigation.navigate('Hubs Payment');
     onClose(); // Close the modal
   };
 

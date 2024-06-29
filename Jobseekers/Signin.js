@@ -29,12 +29,7 @@ const MyComponent = () => {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-    "Varta-Bold":"../assets/fonts/Varta-Bold.ttf",
-    "Varta-Medium":"../assets/fonts/Varta-Medium.ttf",
-    "Varta-Regular":"./assets/fonts/Varta-Regular.ttf",
-    "Varta-SemiBold":"./assets/fonts/Varta-SemiBold.ttf"
-
-
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
 
   return (
@@ -68,7 +63,7 @@ const MyComponent = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Forgot Password')}
           >
-            <Text style={{fontSize: 12, marginTop: 8, color: 'coral',fontFamily:"Varta-Light" }}>Forgot Password?</Text>
+            <Text style={{fontSize: 12, marginTop: 8, color: 'coral',fontFamily:"Roboto-Light" }}>Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signInButton}
@@ -121,7 +116,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
 
   },
   buttonContainer: {
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     color: '#646464',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   signInButton: {
     justifyContent: 'center',
@@ -175,19 +170,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   signUpText: {
     fontSize: 12,
     color: '#000000',
     textAlign: 'center',
     marginTop: 20,
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   signUpLink: {
     color: '#B2BEB5',
     textDecorationLine: 'underline',
-    fontFamily:"Varta-Light"
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 350,

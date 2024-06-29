@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
@@ -14,29 +14,42 @@ function MyComponent() {
   const [isPushFeedbacksChecked, setIsPushFeedbacksChecked] = useState(false);
   const [isPushRemindersChecked, setIsPushRemindersChecked] = useState(false);
 
+  const goToAccountSettings = () => {
+    navigation.navigate('Account Settings');
+  };
+
+  const goToResetPassword = () => {
+    navigation.navigate('Reset Password');
+  };
+
+  const goToNotificationSettings = () => {
+    navigation.navigate('Notification Settings');
+  };
+
+  const goToBillingsAndPayment = () => {
+    navigation.navigate('Billings and Payment');
+  };
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
-        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 20, backgroundColor: '#f7fff4', marginLeft: 230 }}>
+        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 20, backgroundColor: 'white', marginLeft: 230 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <View style={{ flex: 1, marginRight: 5, maxWidth: '70%' }}>
               <View>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#206C00', marginBottom: 20 }}>Notification Settings</Text>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00', marginBottom: 20 }}>Notification Settings</Text>
               </View>
               <View style={{ flexDirection: 'column', marginBottom: 20 }}>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold' }}>Email notifications</Text>
-                  <Text style={{ fontSize: 14, color: 'black', marginBottom: 20 }}>Get emails to find out what’s going on when you’re not online. You can turn these off.</Text>
+                  <Text style={{ fontSize: 15, color: '#206C00', fontWeight: '500' }}>Email notifications</Text>
+                  <Text style={{ fontSize: 12, color: 'black', marginBottom: 20 }}>Get emails to find out what’s going on when you’re not online. You can turn these off.</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>News and updates</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Receive the latest news about products and feature updates.</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>Receive the latest news about products and feature updates.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isNewsChecked}
@@ -47,7 +60,7 @@ function MyComponent() {
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Tips and tutorials</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Tips on getting more out of our services.</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>Tips on getting more out of our services.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isTipsChecked}
@@ -58,7 +71,7 @@ function MyComponent() {
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Messages</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Message notifications relating to career advice sent to email.</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>Message notifications relating to career advice sent to email.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isMessagesChecked}
@@ -69,7 +82,7 @@ function MyComponent() {
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isFeedbacksChecked}
@@ -80,7 +93,7 @@ function MyComponent() {
                 <View>
                   <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
+                    <Text style={{ fontSize: 12, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isRemindersChecked}
@@ -94,14 +107,14 @@ function MyComponent() {
 
               <View style={{ flexDirection: 'column', marginBottom: 20 }}>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold', marginTop: 30 }}>Push notifications</Text>
-                  <Text style={{ fontSize: 14, color: 'black' }}>Get push notifications to find out what’s going on when you’re online. </Text>
+                  <Text style={{ fontSize: 15, color: '#206C00', fontWeight: '500', marginTop: 30 }}>Push notifications</Text>
+                  <Text style={{ fontSize: 12, color: 'black' }}>Get push notifications to find out what’s going on when you’re online. </Text>
                 </View>
               </View>
               <View>
                 <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
+                  <Text style={{ fontSize: 12, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
                   <CheckBox
         style={{ marginRight: 10}}
         value={isPushFeedbacksChecked}
@@ -112,7 +125,7 @@ function MyComponent() {
               <View>
                 <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
+                  <Text style={{ fontSize: 12, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
                   <CheckBox
         style={{ marginRight: 10}}
         value={isPushRemindersChecked}
@@ -122,11 +135,38 @@ function MyComponent() {
               </View>
             </View>
 
+            {/* Card on the right */}
+            <View style={styles.cardContainer}>
+              <View style={styles.cardContent}>
+                <TouchableOpacity onPress={goToAccountSettings}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9b7a3a6d0178d9e4654db03454de5de060a67e4b91a6fe4d31a059874d384eb2?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5 }} />
+                    <Text style={{ fontSize: 12, color: 'black' }}>Account Settings</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToResetPassword}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d2d638a18c02206d9cb09092e754e29b9e7fcec759c21615164f9508890194ba?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Password</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToNotificationSettings}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/17d8150403f80380e2928ef1b9db06fb8c60a50c487a2172f5699a0eb5f88b6d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'coral', marginTop: 15, fontWeight: '500' }}>Notification Settings</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={goToBillingsAndPayment}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
+                    <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Billings & Payment</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-            </View>
-            </ScrollView>
+          </View>
+        </View>
       </View>
-    </View>
     </View>
   );
 }
