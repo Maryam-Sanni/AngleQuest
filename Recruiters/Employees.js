@@ -59,7 +59,7 @@ function MyComponent() {
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
                         </View>

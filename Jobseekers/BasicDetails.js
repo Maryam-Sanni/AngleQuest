@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Top from '../components/top';
+import Sidebar from '../components/sidebar';
+import Topbar from '../components/topbar';
 
 function MyComponent() {
   const navigation = useNavigation(); // Accessing navigation object using useNavigation hook
@@ -36,8 +37,10 @@ function MyComponent() {
   };
 
   return (
-    <View style={{  height: '90%' }}>
-    <Top/ >
+    <View style={{ flex: 1}}>
+    <Topbar />
+    <View style={{ flexDirection: 'row', flex: 1  }}>
+      <Sidebar />
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' }}>
           <View style={{ marginLeft: 10 }}>
@@ -123,7 +126,7 @@ function MyComponent() {
               </View>
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
-              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black' }}>Date of Birth</Text>
+              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black' }}>Birthday</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -194,6 +197,7 @@ function MyComponent() {
           </TouchableOpacity>
         </View>
       </View>
+    </View>
     </View>
   );
 }

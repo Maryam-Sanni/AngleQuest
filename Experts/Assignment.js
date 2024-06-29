@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
-import OpenModal from './GradeAssignment';
+import OpenModal from './GradeAssignmentList';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 
 function MyComponent({ onClose }) {
@@ -55,8 +55,8 @@ function MyComponent({ onClose }) {
             <View style={styles.container}>
             <View style={{ flexDirection: "row", marginBottom: 20}}>
             <TouchableOpacity>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity onPress={handleOpenPress} >

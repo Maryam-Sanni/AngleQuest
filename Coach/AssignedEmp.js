@@ -4,6 +4,8 @@ import { BlurView } from 'expo-blur';
 import OpenModal from './EditEmployee';
 import OpenModal2 from './ProvideNote';
 import OpenModal3 from './SetMeeting';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -37,25 +39,30 @@ const ScheduledMeetingsTable = () => {
     setModalVisible3(false);
     onClose();
   };
+const {t}=useTranslation()
+const [fontsLoaded]=useFonts({
+  'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
+  'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+})
 
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Manage Assigned Employees</Text>
+      <Text style={styles.title}>{t("Manage Assigned Employees")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Specialization</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Specialization")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Rating</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Rating")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Target Level</Text>
+          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Target Level")}</Text>
           </View>
           <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14}}> </Text>
@@ -80,10 +87,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Senior</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.add}>Note</Text>
+          <Text style={styles.add}>{t("Note")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} style={styles.cell2}>
-          <Text style={styles.open}>Meeting</Text>
+          <Text style={styles.open}>{t("Meeting")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -102,10 +109,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Professional</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>Note</Text>
+          <Text style={styles.add}>{t("Note")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} style={styles.cell}>
-          <Text style={styles.open}>Meeting</Text>
+          <Text style={styles.open}>{t("Meeting")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -124,10 +131,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Medior</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}>Note</Text>
+          <Text style={styles.add}>{t("Note")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} style={styles.cell2}>
-          <Text style={styles.open}>Meeting</Text>
+          <Text style={styles.open}>{t("Meeting")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -146,10 +153,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Professional</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>Note</Text>
+          <Text style={styles.add}>{t("Note")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress3} style={styles.cell}>
-          <Text style={styles.open}>Meeting</Text>
+          <Text style={styles.open}>{t("Meeting")}</Text>
           </TouchableOpacity>
         </View>
        
@@ -206,6 +213,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginTop: 20,

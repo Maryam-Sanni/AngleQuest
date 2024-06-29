@@ -21,7 +21,7 @@ function MyComponent({ onClose }) {
 
   const goToPlans = () => {
     // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('Advice Payment');
+    navigation.navigate('Advice Offer');
     onClose(); // Close the modal
   };
 

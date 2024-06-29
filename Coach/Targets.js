@@ -8,6 +8,7 @@ import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal from './NewTarget';
 
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 
 function MyComponent() { 
@@ -24,9 +25,11 @@ function MyComponent() {
 
   const [fontsLoaded]=useFonts({
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
+    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")
   })
-
+const {t}=useTranslation()
     return (
       <ImageBackground
     source={require ('../assets/Background.png') }
@@ -45,12 +48,12 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={styles.headertext}>Employee Targets</Text>
+                <Text style={styles.headertext}>{t("Employee Targets")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
             </View>    

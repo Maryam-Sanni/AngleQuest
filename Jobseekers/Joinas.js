@@ -139,12 +139,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
   },
   signInTextGray: {
     marginTop:10,
     color: 'gray',
-    fontFamily:"Roboto-Light"
   },
   shadow: {
     shadowColor: '#0000',

@@ -1,11 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
-import CustomPercentageChart from '../components/PercentageChart';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 
 function MyComponent({ onClose }) {
 
+  const ProgressBar = ({ percentage }) => {
+    let progressBarColor;
+    if (percentage <= 50) {
+      progressBarColor = 'coral'; 
+    } else if (percentage <= 80) {
+      progressBarColor = '#63EC55'; 
+    } else {
+      progressBarColor = '#206C00'; 
+    }
+
+    return (
+      <View style={styles.progressBarContainer}>
+        <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
+        <Text style={styles.progressText}>{percentage}%</Text>
+      </View>
+    );
+  };
+
   return (
-     
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 <View style={styles.greenBox}>
@@ -23,87 +39,228 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View>
         <View style={styles.container}>
-     <View style={styles.box}>
-     <Text style = {{fontSize: 15, color: "#206C00", fontWeight: 'bold', marginBottom: 10 }}>Hub Attendance</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: '#333333', width: 100}}>This is Jacob Ncube's hub attendance</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
-      <CustomPercentageChart percentage={45} />
+        <View style={{flexDirection: 'row'}} >
+        <Text style={styles.heading2}>Performance Statistics</Text>
+        <TouchableOpacity style={styles.PDF} >
+<Text style = {{fontSize: 15, color: 'white',}}>Download PDF</Text>
+        </TouchableOpacity>
+        </View>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Name</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Angle Badge</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Hub's Attendance</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Growth Plan</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Advice</Text>
+            </View>
+            <View style={styles.cell}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>Overall Performance</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.cell2}>
+                <Text style={styles.cellText}>Jacob Ncube</Text>
+            </View>
+            <View style={styles.cell2}>
+              <ProgressBar percentage={67} />
+            </View>
+            <View style={styles.cell2}>
+              <ProgressBar percentage={78} />
+            </View>
+            <View style={styles.cell2}>
+              <ProgressBar percentage={30} />
+            </View>
+            <View style={styles.cell2}>
+              <ProgressBar percentage={45} />
+            </View>
+            <View style={styles.cell2}>
+            <ProgressBar percentage={55} />
+            </View>
+            </View>
       </View>
-    </View>
-      </View>
-
-      <View style={styles.box}>
-      <Text style = {{fontSize: 15, color: "#206C00", fontWeight: 'bold', marginBottom: 10 }}>Growth Plan</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: '#333333', }}>This is Jacob Ncube's completed growth plan</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 10 }}>
-      <CustomPercentageChart percentage={60} />
-      </View>
-    </View>
-      </View>
-     
-      <View style={styles.box}>
-      <Text style = {{fontSize: 15, color: "#206C00", fontWeight: 'bold', marginBottom: 10 }}>Advice</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, color: '#333333', width: 100 }}>This is the advice sessions Jacob Ncube has had</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
-      <CustomPercentageChart percentage={49} />
-      </View>
-    </View>
-      </View>
+       <Text style={styles.heading}>Target</Text>
       
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={70} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={90} />
+        </View>
+         </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={60} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={80} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={70} />
+        </View>
+      </View>
    
+      <Text style={styles.heading2}>Growth Plan Performance</Text>
+
+      <View style={styles.row}>
+      <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={75} />
+        </View>
+      </View>
+      <View style={styles.row}>
+      <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={31} />
+        </View>
+         </View>
+      <View style={styles.row}>
+      <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={63} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={40} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={90} />
+        </View>
+      </View>
+
+        <Text style={styles.heading2}>Career Advice Performance</Text>
+
+        <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={30} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={70} />
+        </View>
+         </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={100} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={50} />
+        </View>
+      </View>
+      <View style={styles.row}>
+     <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+        </View>
+        <View style={[styles.cell, { flex: 8 }]}>
+        <ProgressBar percentage={90} />
+        </View>
+      </View>
+
+      <Text style={styles.heading3}>Hub Performance</Text>
+
+<View style={styles.row}>
+<View style={styles.cell}>
+  <Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
 </View>
- 
-<View style={styles.container}>
-     <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Total Hub Meetings</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>8</Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Growth review Score</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>45</Text>
-    <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500', marginTop: 10}}>By Joop Melchel</Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Advice Score</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>45</Text>
-    <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500', marginTop: 10}}>By Joop Melchel</Text>
-      </View>
+<View style={[styles.cell, { flex: 8 }]}>
+<ProgressBar percentage={50} />
+</View>
+</View>
+<View style={styles.row}>
+<View style={styles.cell}>
+  <Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
+</View>
+<View style={[styles.cell, { flex: 8 }]}>
+<ProgressBar percentage={50} />
+</View>
+ </View>
+<View style={styles.row}>
+<View style={styles.cell}>
+ <Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
+</View>
+<View style={[styles.cell, { flex: 8 }]}>
+<ProgressBar percentage={50} />
+</View>
+</View>
+<View style={styles.row}>
+<View style={styles.cell}>
+ <Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
+</View>
+<View style={[styles.cell, { flex: 8 }]}>
+<ProgressBar percentage={50} />
+</View>
+</View>
+<View style={styles.row}>
+<View style={styles.cell}>
+  <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+</View>
+<View style={[styles.cell, { flex: 8 }]}>
+<ProgressBar percentage={50} />
+</View>
 </View>
 
-<View style={styles.container}>
-     <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Sessions Attended</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>8</Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Growth plan Clarity</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>0</Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Coming Soon</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}> </Text>
-      </View>
+
 </View>
-
-<View style={styles.container}>
-     <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Sessions Missed</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}>3</Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Coming Soon</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}> </Text>
-      </View>
-      <View style={styles.box2}>
-      <Text style={{ fontSize: 16, color: "#206C00", fontWeight: '500'}}>Coming Soon</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 10, fontWeight: 'bold'}}> </Text>
-      </View>
-</View>
-
-
     </View>
     </ScrollView>
 </View>
@@ -115,50 +272,39 @@ function MyComponent({ onClose }) {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-around',
-        alignItems: 'center',
-        marginLeft: 100, marginRight: 100, marginTop: 20
+        marginLeft: 20, marginRight: 20,
       },
-  row: {
-    flexDirection: 'row',
-  },
-  cell: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    padding: 5,
-  },
+      table: {
+        marginBottom: 20,
+        alignContent: 'center',
+        justifyContent: 'space-around',
+      },
+      row: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(225,225,212,0.3)',
+      },
+      cell: {
+        flex: 1,
+        backgroundColor: 'white',
+        padding: 10,
+        alignItems: 'flex-start',
+      },
+      cell2: {
+        flex: 1,
+        backgroundColor: 'none',
+        padding: 10,
+        alignItems: 'flex-start',
+      },
+      cellText: {
+        textAlign: 'flex-start',
+      },
   greenBox: {
     width: 920,
     height:620,
     backgroundColor: '#F5F5F5',
-  },
-  buttonAcc: {
-    borderWidth: 2,
-    borderColor: '#CCC',
-    padding: 10,
-    marginTop: 30,
-    marginLeft: 500, 
-    paddingHorizontal: 20,
-  },
-  buttonTextAcc: {
-    color: 'black',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  buttonAcc2: {
-    borderWidth: 2,
-    borderColor: '#CCC',
-    padding: 10,
-    marginTop: 30,
-    marginLeft: 30, 
-    paddingHorizontal: 20,
-  },
-  buttonTextAcc2: {
-    color: 'black',
-    fontSize: 14,
-    textAlign: 'center',
   },
   closeButton: {
     position: 'absolute',
@@ -184,23 +330,71 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637'
   },
-  box: {
-    backgroundColor: 'white',
-    padding: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '28%',
-    height: 150,
+  progressBarContainer: {
+    width: '100%',
+    height: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+    overflow: 'hidden',
+    position: 'relative',
   },
-  box2: {
-    backgroundColor: 'white',
-    padding: 20,
+  progressBar: {
+    height: '100%',
+  },
+  progressText: {
+    position: 'absolute',
+    right: 10,
+    color: '#000',
+  },
+  heading: {
+    fontWeight: '500', 
+    width: 100, 
+    fontSize: 16,
+      marginTop: 20, 
+      marginBottom: 20, 
+      backgroundColor: '#F0FFF0',
+       padding: 5,
+       textAlign: 'center'
+  },
+  heading2: {
+    fontWeight: '500', 
+    width: 240, 
+    fontSize: 16,
+      marginTop: 20, 
+      marginBottom: 20, 
+      backgroundColor: '#F0FFF0',
+       padding: 5,
+       textAlign: 'center'
+  },
+  heading3: {
+    fontWeight: '500', 
+    width: 180, 
+    fontSize: 16,
+      marginTop: 20, 
+      marginBottom: 20, 
+      backgroundColor: '#F0FFF0',
+       padding: 5,
+       textAlign: 'center'
+  },
+  input: {
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black',
+    width: 400
+  },
+  PDF: {
+    height: 40,
+    width: 150,
+    backgroundColor: 'coral',
+    borderColor: 'coral',
+    borderWidth: 1, 
+    color:'black',
+    fontSize: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '28%',
-    height: 150,
-    borderWidth: 1,
-    borderColor: '#206c00'
+   position: 'absolute',
+   right: 5,
+    borderRadius: 5, marginLeft: 10, marginTop: 10
   },
 });
 

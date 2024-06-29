@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, ScrollView } from 'react-native';
+import OpenModal from './AttachExpert';
 
 function MyComponent({ onClose }) {
+  const [ModalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    onClose();
+  };
 
 
   return (
@@ -22,7 +33,7 @@ function MyComponent({ onClose }) {
               </TouchableOpacity>
             </View>
 
-              <View style={styles.container}>
+            <View style={styles.container}>
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
                   Full Name
                 </Text> 
@@ -111,11 +122,26 @@ function MyComponent({ onClose }) {
           <Picker.Item label="Joop Melcher" value="Joop Melcher" />
         </Picker>
 
+        <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
                   <Text style={styles.buttonTextplus}>Save Changes</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={handleOpenPress} style={styles.buttonnext}>
+                  <Text style={styles.buttonTextplus}>Next</Text>
+                </TouchableOpacity>
+                </View>
               </View>
             </View>
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
           </ScrollView>
         </View>
   );
@@ -153,9 +179,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     padding: 10,
     marginTop: 30,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    width: "20%",
+    marginLeft: 50,
+    width: 150,
     paddingHorizontal: 20,
     borderRadius: 5,
 marginBottom: 50
@@ -164,6 +189,16 @@ marginBottom: 50
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+  },
+  buttonnext: {
+    backgroundColor: 'coral',
+    padding: 10,
+    marginTop: 30,
+    marginLeft: 420,
+    width: 150,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+marginBottom: 50
   },
   input: {
     height: 40,

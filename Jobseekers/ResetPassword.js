@@ -12,26 +12,11 @@ function MyComponent() {
     setTwoFactorAuthEnabled(!twoFactorAuthEnabled);
   };
 
-  const goToAccountSettings = () => {
-    navigation.navigate('Account Settings');
-  };
-
-  const goToResetPassword = () => {
-    navigation.navigate('Reset Password');
-  };
-
-  const goToNotificationSettings = () => {
-    navigation.navigate('Notification Settings');
-  };
-
-  const goToBillingsAndPayment = () => {
-    navigation.navigate('Billings and Payment');
-  };
-
   return (
+    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
+      <View style={{ flexDirection: 'row', flex: 1}}>
         <Sidebar />
         <View style={styles.leftContainer}>
           <View style={styles.sectionContainer}>
@@ -140,34 +125,7 @@ function MyComponent() {
           </View>
         </View>
 
-        <View style={styles.cardContainer}>
-          <View style={styles.cardContent}>
-          <TouchableOpacity onPress={goToAccountSettings}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-              <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9b7a3a6d0178d9e4654db03454de5de060a67e4b91a6fe4d31a059874d384eb2?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5 }} />
-              <Text style={{ fontSize: 12, color: 'black' }}>Account Settings</Text>
-            </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={goToResetPassword}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-                <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d2d638a18c02206d9cb09092e754e29b9e7fcec759c21615164f9508890194ba?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'coral', fontWeight: 'bold', marginTop: 15 }}>Password</Text>
-              </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={goToNotificationSettings}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
-                <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/17d8150403f80380e2928ef1b9db06fb8c60a50c487a2172f5699a0eb5f88b6d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Notification Settings</Text>
-              </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={goToBillingsAndPayment}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Billings & Payment </Text>
-              </View>
-              </TouchableOpacity>
-            </View>
-          </View>
+        </View>
         </View>
       </View>
   );
@@ -178,7 +136,8 @@ const styles = StyleSheet.create({
   leftContainer: {
     flex: 1,
     marginRight: 20,
-    marginLeft: 230
+    marginLeft: 230,
+    backgroundColor: '#f7fff4'
   },
   sectionContainer: {
     marginBottom: 20,
@@ -198,7 +157,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#000",
+    color: "#206C00",
+    fontWeight: '600',
     marginRight: 10,
   },
   input: {
@@ -229,7 +189,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    color: "#333",
+    color: "#206C00",
+    fontWeight: '600',
     marginBottom: 5,
     marginTop: 5,
     marginLeft: 10

@@ -5,6 +5,7 @@ import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
 
@@ -12,7 +13,7 @@ function MyComponent() {
     'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
   })
-
+const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -29,17 +30,17 @@ function MyComponent() {
     <View style={{ flexDirection: "row",  alignItems: "flex-start", marginTop: 10, marginBottom: 20, }}>
     <TouchableOpacity>
     <View style={styles.session}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>All Meetings</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("All Meetings")}</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>Upcoming</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Upcoming")}</Text>
         </View>
         </TouchableOpacity>
         <TouchableOpacity>
         <View style={styles.session2}>
-        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>Concluded</Text>
+        <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Concluded")}</Text>
         </View>
         </TouchableOpacity>
       </View>
@@ -70,7 +71,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{  fontFamily:"Roboto-Light" }}>Upcoming</Text>
+          <Text style={{  fontFamily:"Roboto-Light" }}>{t("Upcoming")}</Text>
         </View>
       </View>
       {/* Session */}
@@ -100,7 +101,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>Concluded</Text>
+          <Text>{t("Concluded")}</Text>
         </View>
       </View>
      {/* Session*/}
@@ -130,7 +131,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{  fontFamily:"Roboto-Light" }}>Upcoming</Text>
+          <Text style={{  fontFamily:"Roboto-Light" }}>{t("Upcoming")}</Text>
         </View>
       </View>
       {/* Session */}
@@ -160,7 +161,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{ fontFamily:"Roboto-Light" }}>Upcoming</Text>
+          <Text style={{ fontFamily:"Roboto-Light" }}>{t("Upcoming")}</Text>
         </View>
       </View>
      {/* Session*/}
@@ -190,7 +191,7 @@ function MyComponent() {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text style={{ fontFamily:"Roboto-Light" }}>Concluded</Text>
+          <Text style={{ fontFamily:"Roboto-Light" }}>{t("Concluded")}</Text>
         </View>
       </View>
     </View>
