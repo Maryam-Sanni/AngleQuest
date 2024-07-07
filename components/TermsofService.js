@@ -16,23 +16,28 @@ export default function App() {
   })
 const {t}=useTranslation()
   return (
-    <View style={{ height: '46%' }}>
+    <View style={{ flex: 1 }}>
       <Top />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
         <View style={styles.container}>
           <Text style={styles.title}>{t("TERMS OF SERVICE")}</Text>
           <Text style={styles.content}>
             {t("Welcome to Recruitangle. These Terms of Service outline the rules and regulations for the use of our website and services.")}
             {'\n\n'}
             {t("By clicking ACCEPT THE TERMS, we assume you accept these terms and conditions. Do not continue to use Recruitangle if you do not agree to all of the terms and conditions stated on this page.")}
+            Welcome to AngleQuest. These Terms of Service outline the rules and regulations for the use of our website and services.
+            {'\n\n'}
+            By clicking "ACCEPT THE TERMS" , we assume you accept these terms and conditions. Do not continue to use AngleQuest if you do not agree to all of the terms and conditions stated on this page.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("1. Intellectual Property Rights")} </Text>
             {'\n'}
             {t("Unless otherwise stated, Recruitangle and/or its licensors own the intellectual property rights for all material on our website. All intellectual property rights are reserved.")}
+            Unless otherwise stated, AngleQuest and/or its licensors own the intellectual property rights for all material on our website. All intellectual property rights are reserved.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("2. Description of Service")} </Text>
             {'\n'}
             {t("Recruitangle is a platform that connects job seekers with experts and recruiters to streamline the hiring process. We assess skills and qualifications to provide a more objective evaluation of candidates.")}
+            AngleQuest is a platform that connects job seekers with experts and recruiters to streamline the hiring process. We assess skills and qualifications to provide a more objective evaluation of candidates.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("3. User Accounts")} </Text>
             {'\n'}
@@ -41,6 +46,7 @@ const {t}=useTranslation()
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("4. User Responsibilities")} </Text>
             {'\n'}
             {t("You agree to use Recruitangle only for lawful purposes and in accordance with these Terms. You are solely responsible for your interactions with other users and for any content you post or upload to the website.")}
+            You agree to use AngleQuest only for lawful purposes and in accordance with these Terms. You are solely responsible for your interactions with other users and for any content you post or upload to the website.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("5. User License")} </Text>
             {'\n'}
@@ -62,16 +68,19 @@ const {t}=useTranslation()
             {t("Your privacy is important to us. Please review our")} 
             <TouchableOpacity onPress={navigateToPrivacyPolicy}> {/* Navigate to PrivacyPolicy page */}
               <Text style={{fontWeight: '600', color: 'black', textDecoration: 'underline',fontFamily:"Roboto-Light"}}> {t("Privacy Policy")} </Text>
+              <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> Privacy Policy </Text>
             </TouchableOpacity>
             {t("to understand how we collect, use, and disclose information about you when you use Recruitangle.")}
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("8. Disclaimer of Warranties")} </Text>
             {'\n'}
             {t("Recruitangle is provided on an as is and as available basis, without any warranties of any kind, either express or implied. We do not warrant that our website will be uninterrupted or error-free.")}
+            AngleQuest is provided on an "as is" and "as available" basis, without any warranties of any kind, either express or implied. We do not warrant that our website will be uninterrupted or error-free.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("9. Limitation of Liability")} </Text>
             {'\n'}
             {t("In no event shall Recruitangle, nor any of its officers, directors, and employees, be liable to you for anything arising out of or in any way connected with your use of our website, whether such liability is under contract, tort, or otherwise.")}
+            In no event shall AngleQuest, nor any of its officers, directors, and employees, be liable to you for anything arising out of or in any way connected with your use of our website, whether such liability is under contract, tort, or otherwise.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("10. Governing Law")} </Text>
             {'\n'}
@@ -80,6 +89,7 @@ const {t}=useTranslation()
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("11. Indemnification")} </Text>
             {'\n'}
             {t("You agree to indemnify and hold harmless Recruitangle and its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in connection with your use of Recruitangle.")}
+            You agree to indemnify and hold harmless AngleQuest and its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in connection with your use of Recruitangle.
             {'\n\n'}
             <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("12. Changes to Terms")} </Text> 
             {'\n'}
@@ -91,6 +101,10 @@ const {t}=useTranslation()
             <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline',fontFamily:"Roboto-Light"}}> recruitangle@gmail.com </Text>
             {t("or by filling out the contact form on our website")} 
             <Text style={{fontWeight: '600', color: 'green', textDecoration: 'underline',fontFamily:"Roboto-Light"}}> {t("here.")}</Text>
+            If you have any questions or concerns about these Terms, please contact us via email at 
+            <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> anglequest@gmail.com </Text>
+            or by filling out the contact form on our website 
+            <Text style={{fontWeight: '600', color: 'green', textDecoration: 'underline'}}> here.</Text>
             {'\n\n'}
             {t("By using our website, you agree to abide by these Terms of Service.")}
           </Text>
@@ -115,14 +129,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
+    color: '#206C00'
   },
   content: {
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 24,
     fontFamily:"Roboto-Light"
   },
@@ -130,7 +145,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
+    marginBottom: 50,
   },
   button: {
     backgroundColor: 'coral',

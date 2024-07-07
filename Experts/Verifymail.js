@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import {useFonts} from "expo-font"
+import { useFonts } from "expo-font"
 
 const ProgressBar = () => {
   return null; // Progress bar removed
@@ -44,8 +44,8 @@ const VerificationContent = ({ userEmail }) => {
     navigation.navigate('SignUp'); // Navigate to sign-up page
   };
 
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   })
   return (
     <View style={styles.verificationContent}>
@@ -53,27 +53,30 @@ const VerificationContent = ({ userEmail }) => {
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1df78110c7d4fdfb4f6b7d4088e1c94a707bf505e4c12deaff442397fc5c68f5?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
         style={styles.logo}
       />
-      <Text style={styles.title}>Please verify your email</Text>
-      <Text style={styles.text}>A verification code has been sent to</Text>
-      <Text style={styles.email}>{userEmail}</Text>
-      <Text style={styles.text}>Please check your inbox and enter the verification code below to verify your email address.</Text>
-      <SixBoxesInput />
+      <Text style={styles.title}>Welcome Aboard 🚀</Text>
+      <Text style={styles.text}>A verification code has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
+      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, we need you to verify your email. It's quick and easy.</Text>
+      <Text style={styles.text}>Check your mailbox for verification instructions.</Text>
       <TouchableOpacity style={styles.button} onPress={handleVerify}>
-        <Text style={styles.buttonText}>Verify</Text>
+        <Text style={styles.buttonText}>Verify your email</Text>
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10,fontFamily:"Roboto-Light"  }}>Resend code</Text>
+          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10, fontFamily: "Roboto-Light" }}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600',fontFamily:"Roboto-Light"  }}>Change email</Text>
+          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600', fontFamily: "Roboto-Light" }}>Change email</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const SignUpPage = ({ userEmail }) => {
+const SignUpPage = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { userEmail } = route.params;
+
   return (
     <View style={styles.container}>
       <View style={styles.whiteBox}>
@@ -81,7 +84,6 @@ const SignUpPage = ({ userEmail }) => {
         <VerificationContent userEmail={userEmail} />
       </View>
     </View>
-   
   );
 };
 
@@ -120,18 +122,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: -10,
     marginBottom: 20,
-    fontFamily:"Roboto-Light" 
+    fontFamily: "Roboto-Light"
   },
   text: {
+    width: 500,
     marginVertical: 5,
     fontSize: 12,
-    fontFamily:"Roboto-Light" 
+    fontFamily: "Roboto-Light",
+    marginLeft: 50,
+    marginRight: 50
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
-    fontFamily:"Roboto-Light" 
+    fontFamily: "Roboto-Light"
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     padding: 12,
     width: 290,
-    marginTop: 15,
+    marginTop: 30,
     borderRadius: 3,
   },
   verifycontainer: {
@@ -164,7 +169,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily:"Roboto-Light" 
+    fontFamily: "Roboto-Light"
   },
 });
 

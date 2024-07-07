@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {useFonts} from "expo-font"
+import axios from 'axios';
+import Config from 'react-native-config';
+
+const API_URL = Config.REACT_APP_API_URL;
 
 const Button = ({ icon, text }) => (
   <View style={styles.buttonContainer}>
@@ -11,25 +14,33 @@ const Button = ({ icon, text }) => (
 );
 
 const MyComponent = () => {
-  const navigation = useNavigation(); // Hook to access navigation
-  const [username, setUsername] = useState('');
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = async () => {
-    try {
-      // Send request to the server for authentication
-      // Handle response from the server
+    if (!email || !password) {
+      alert('Please fill in both email and password');
+      return;
+    }
 
-      // Navigate to the Home page after successful sign-in
-      navigation.navigate('Home - Manager'); // Assuming 'Home' is the name of your Home screen
+    try {
+      const response = await axios.post(`https://recruitangle.com/api/expert/signin`, {
+        email,
+        password,
+      });
+      console.log('Sign In Response:', response.data);
+
+      if (response.data.success) {
+        navigation.navigate('Home - Manager');
+      } else {
+        alert(response.data.message || 'Sign in failed');
+      }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Sign In Error:', error);
+      alert('An error occurred during sign in. Please check the console for more details.');
     }
   };
-
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
 
   return (
     <View style={styles.container}>
@@ -40,17 +51,16 @@ const MyComponent = () => {
           </Text>
           <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9b121841ef69a10b1af6ac5e748b328c728e89a39c6315e2c11281511ec4c518?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with Google" />
           <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with LinkedIn" />
-          <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9ecd922eae17c3c396c1cf547b89d2fe741644963272e5f9bc212ada28b8aff6?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with email" />
           <View style={styles.divider}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerText}>or</Text>
             <View style={styles.dividerLine} />
           </View>
           <TextInput
-            placeholder="Username"
+            placeholder="Email"
             style={styles.input}
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
           />
           <TextInput
             placeholder="Password"
@@ -62,7 +72,7 @@ const MyComponent = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Forgot Password')}
           >
-            <Text style={{fontSize: 12, marginTop: 8, color: 'coral',fontFamily:"Roboto-Light" }}>Forgot Password?</Text>
+            <Text style={{ fontSize: 12, marginTop: 8, color: 'coral' }}>Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signInButton}
@@ -83,6 +93,7 @@ const MyComponent = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -115,8 +126,6 @@ const styles = StyleSheet.create({
     marginTop: -20,
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
-
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -150,12 +159,11 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
     marginTop: 20,
-    fontSize: 12,
+    fontSize: 14,
     borderColor: '#C8C8C8',
     borderWidth: 1,
     borderRadius: 8,
     color: '#646464',
-    fontFamily:"Roboto-Light"
   },
   signInButton: {
     justifyContent: 'center',
@@ -169,19 +177,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
-    fontFamily:"Roboto-Light"
   },
   signUpText: {
     fontSize: 12,
     color: '#000000',
     textAlign: 'center',
-    marginTop: 20,
-    fontFamily:"Roboto-Light"
+    marginTop: 30,
   },
   signUpLink: {
     color: '#B2BEB5',
     textDecorationLine: 'underline',
-    fontFamily:"Roboto-Light"
   },
   image: {
     width: 350,

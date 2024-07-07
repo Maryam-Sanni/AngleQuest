@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
-import {useFonts} from "expo-font"
+import axios from 'axios';
+
+// Environment variable for API URL
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
 
 // SignUpButton component
 const SignUpButton = ({ icon, text }) => (
@@ -19,18 +22,15 @@ const FormInput = ({ placeholder, onChangeText }) => (
       style={styles.input}
       placeholder={placeholder}
       placeholderTextColor="#999"
-      onChangeText={onChangeText} // Pass onChangeText prop to handle text changes
+      onChangeText={onChangeText}
     />
   </View>
 );
 
 // MyComponent
 const MyComponent = () => {
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
   const navigation = useNavigation();
-  const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const [isChecked, setIsChecked] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -40,21 +40,34 @@ const MyComponent = () => {
     setIsChecked(!isChecked);
   };
 
-  // Function to handle sign up button press
-  const handleSignUp = () => {
-    // You can access collected data in firstName, lastName, email, and password variables
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    // Perform sign up logic here
- 
-    // Navigate to VerifyEmail screen
-    navigation.navigate('Verify mail');
+  const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      alert('Please fill all fields');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password
+      });
+  
+      console.log('Signup success:', response.data);
+      navigation.navigate('Verify mail', { userEmail: email }); // Navigate and pass email as parameter
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert('Signup failed. Please try again.');
+    }
   };
 
   const navigateToTerms = () => {
-    navigation.navigate('Terms of Service'); // Navigate to the 'Terms' page
+    navigation.navigate('Terms of Service');
+  };
+
+  const handleSignInPress = () => {
+    navigation.navigate('Sign in');
   };
 
   return (
@@ -63,17 +76,16 @@ const MyComponent = () => {
         <View style={styles.contentContainer}>
           <View style={styles.formContainer}>
             <Text style={styles.title}>Create a new account</Text>
-            {/* <Text style={{ fontFamily: 'Varta-Light', fontSize: 24 }}>Hello, World!</Text> */}
             <SignUpButton
-              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/dc5261e33bdee74cda06397e01a2033a956e661a701aab68af14e75f301b54a5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
+              icon="https://example.com/google-icon.png"
               text="Sign up with Google"
             />
             <SignUpButton
-              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
+              icon="https://example.com/linkedin-icon.png"
               text="Sign up with LinkedIn"
             />
             <View style={styles.divider}>
-              <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>or</Text>
+              <Text style={{ color: 'black', fontSize: 14 }}>or</Text>
             </View>
             <FormInput placeholder="First name" onChangeText={setFirstName} />
             <FormInput placeholder="Last name" onChangeText={setLastName} />
@@ -86,13 +98,18 @@ const MyComponent = () => {
                 style={styles.checkbox}
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
-              <TouchableOpacity onPress={navigateToTerms}> {/* Navigate to Terms page */}
-                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
+              <TouchableOpacity onPress={navigateToTerms}>
+                <Text style={{ color: 'black', fontSize: 14 }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
-              </View>
+            </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
               <Text style={styles.submitButtonText}>Sign up</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignInPress}>
+        <Text style={styles.signInText}>
+          <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
+        </Text>
+      </TouchableOpacity>
           </View>
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>
@@ -105,24 +122,24 @@ const MyComponent = () => {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: 'white', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   container: {
-    flexDirection: 'row', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   contentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 1, 
+    flex: 1,
   },
   formContainer: {
-    backgroundColor: '#fffff',
+    backgroundColor: '#ffffff',
     height: 580,
     borderRadius: 0,
     padding: 20,
@@ -141,13 +158,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    fontFamily:"Roboto-Light"
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   buttonIcon: {
     width: 24,
@@ -164,45 +180,47 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 12,
+    borderRadius: 8,
+    padding: 10,
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 30,
+    marginBottom: 15,
+    marginTop: 20,
   },
   checkbox: {
     width: 18,
     height: 18,
     marginRight: 10,
   },
-  checkedIcon: {
-    width: 100,
-    height: 100,
-    marginTop: -38,
-    marginLeft: -20
-  },
   submitButton: {
     backgroundColor: 'coral',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   submitButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily:"Roboto-Light"
   },
   image: {
     resizeMode: 'contain',
     width: 350,
-    height: 580, 
+    height: 580,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
+  },
+  signInText: {
+    marginTop: 10,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  signInTextGray: {
+    marginTop:10,
+    color: 'gray',
   },
 });
 

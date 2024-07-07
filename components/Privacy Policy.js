@@ -10,13 +10,14 @@ export default function App() {
   })
 const {t}=useTranslation()
   return (
-    <View style={{ height: '53%'}}>
-      <Top />
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <View style={{ flex: 1 }}>
+    <Top />
+    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
     <View style={styles.container}>
       <Text style={styles.title}>{t("PRIVACY POLICY")}</Text>
       <Text style={styles.content}>
         {t("At Recruitangle, we are committed to protecting the privacy of our users. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you visit our website or use our services.")}
+        At AngleQuest, we are committed to protecting the privacy of our users. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you visit our website or use our services.
         {'\n\n'}
         <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("1. Information We Collect")}</Text>
         {'\n'}
@@ -75,6 +76,7 @@ const {t}=useTranslation()
         <Text style={{fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("9. Contact Us")}</Text>
         {'\n'}
         {t("If you have any questions, concerns, or feedback regarding our Privacy Policy or our services, please don’t hesitate to reach out to us. You can contact us via email at <Text style={{textDecoration: 'underline', color: 'coral', fontWeight: '600'}}>recruitangle@gmail.com </Text> or by filling out the contact form on our website <Text style={{fontWeight: '600', color: 'green', textDecoration: 'underline'}}>here.</Text> We aim to respond to all inquiries promptly and strive to address any issues you may have effectively. Thank you for your trust in Recruitangle.")}
+        If you have any questions, concerns, or feedback regarding our Privacy Policy or our services, please don’t hesitate to reach out to us. You can contact us via email at <Text style={{textDecoration: 'underline', color: 'coral', fontWeight: '600'}}>AngleQuest@gmail.com </Text> or by filling out the contact form on our website <Text style={{fontWeight: '600', color: 'green', textDecoration: 'underline'}}>here.</Text> We aim to respond to all inquiries promptly and strive to address any issues you may have effectively. Thank you for your trust in AngleQuest.
         {'\n\n'}
         {t("By using our website or services, you agree to the terms of this Privacy Policy.")}
       </Text>
@@ -99,22 +101,24 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
     color: 'black',
     fontFamily:"Roboto-Light"
+    color: '#206C00'
   },
   content: {
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 24,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
+    marginBottom: 50,
   },
   button: {
     backgroundColor: 'coral',
