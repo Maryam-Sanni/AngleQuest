@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList, Image  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
@@ -47,6 +49,11 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
     onPress: () => handleMinuteChange(minute.toString().padStart(2, '0')),
   }));
 
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
   return (
     <View>
       <TouchableOpacity style={styles.input} onPress={showTimePicker}>
@@ -79,14 +86,14 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
           </View>
            <View style={styles.ampmContainer}>
             <TouchableOpacity style={[styles.ampmButton, isPM ? styles.selected : null]} onPress={handleToggleAMPM}>
-              <Text>PM</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>PM</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.ampmButton, !isPM ? styles.selected : null]} onPress={handleToggleAMPM}>
-              <Text>AM</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>AM</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.selectButton} onPress={selectTime}>
-            <Text>Select</Text>
+            <Text style={{fontFamily:"Roboto-Light"}}>{t("Select")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -173,8 +180,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
       alert('An error occurred while creating the hub.');
     }
   };
-  
- 
+
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
  
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -185,42 +196,44 @@ const CreateCoachingHubForm = ({ onClose }) => {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Create New Hub</Text>
+          <Text style={styles.headerText}>{t("Create New Hub")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 25 }}>Visibility*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 25,fontFamily:"Roboto-Light" }}>{t("Visibility")}*</Text>
         <Picker
           selectedValue={visibility}
           style={styles.input}
           onValueChange={(itemValue, itemIndex) =>
             setVisibility(itemValue)
           }> 
-          <Picker.Item label="Public" value="public" />
-          <Picker.Item label="Private" value="private" />
+          <Picker.Item label={t("Public")} value="public" />
+          <Picker.Item label={t("Private")} value="private" />
         </Picker>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Name*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Name")}*</Text>
         <TextInput
           style={styles.input}
+          placeholder={t("Enter hub name")}
+          value={groupName}
           placeholder="Enter hub name"
           value={name}
           onChangeText={text => setGroupName(text)}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Description* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Description")}* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
-          placeholder= "Type here..."
+          placeholder= {t("Type here...")}
           multiline
           value={description}
           onChangeText={handleDescriptionChange}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Meeting Day*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Day")}*</Text>
         <Picker
           selectedValue={meeting_day}
           style={styles.input}
@@ -235,31 +248,35 @@ const CreateCoachingHubForm = ({ onClose }) => {
           <Picker.Item label="Saturday" value="Saturday" />
           <Picker.Item label="Sunday" value="Sunday" />
         </Picker>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Meeting Time*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Time")}*</Text>
         <View style={styles.timecontainer}>
       <View style={styles.timeformContainer}>
+        <Text style={styles.timelabel}>{t("From")}</Text>
+        <CustomTimePicker initialValue={startTime} onChange={handleStartTimeChange} />
+        <Text style={styles.timelabel}>{t("To")}</Text>
+        <CustomTimePicker initialValue={endTime} onChange={handleEndTimeChange} />
         <Text style={styles.timelabel}>From</Text>
         <CustomTimePicker initialValue={meeting_start} onChange={handleStartTimeChange} />
         <Text style={styles.timelabel}>To</Text>
         <CustomTimePicker initialValue={meeting_end} onChange={handleEndTimeChange} />
       </View>
     </View>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Fee*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Fee")}*</Text>
         <TextInput
           style={styles.input}
           placeholder="$25"
           value={fee}
           onChangeText={text => setHubFee(text)}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Goals (Optional) </Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Goals (Optional)")} </Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
-          placeholder= "Type here..."
+          placeholder=  {t("Type here...")}
           multiline
           value={goals}
           onChangeText={text => setHubGoals(text)}
         />
-       <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Limit (Optional) </Text>
+       <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Limit (Optional)")} </Text>
         <TextInput
           style={styles.input}
           placeholder="50 Participants"
@@ -271,7 +288,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
           onPress={handleSave}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Create New Hub</Text>
+          <Text style={{ color: 'white', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Create New Hub")}</Text>
         </TouchableOpacity>
       </View>
       </View>
@@ -327,7 +344,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     marginTop: 10,
     fontSize: 14,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    fontFamily:"Roboto-Light"
   },
   modalContainer: {
     backgroundColor: '#F8F8F8',
@@ -393,7 +411,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
 });
 

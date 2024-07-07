@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Jobseekers/PickanExpert';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 
 function MyComponent({ onClose }) {
@@ -25,6 +27,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('Home');
     onClose(); // Close the modal
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -35,17 +41,17 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Get Started</Text>
+          <Text style={styles.headerText}>{t("Get Started")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
 
-        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 10 }}>
-                                            Subject
+        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                                            {t("Subject")}
                                         </Text>
                                         <TextInput
           style={styles.input}
@@ -54,8 +60,8 @@ function MyComponent({ onClose }) {
 
       
      
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 10 }}>
-                                            Detailed Description
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                                            {t("Detailed Description")}
                                         </Text>
                                         <TextInput
           style={[styles.input, { height: 150 }]}
@@ -65,7 +71,7 @@ function MyComponent({ onClose }) {
 
     
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Send</Text>
+      <Text style={styles.buttonTextplus}>{t("Send")}</Text>
     </TouchableOpacity>
     </View>
     
@@ -124,6 +130,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -147,7 +154,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

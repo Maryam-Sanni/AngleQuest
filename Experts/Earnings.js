@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import HubsEarnings from '../components/HubSessionsEarnings';
@@ -7,6 +7,9 @@ import InterviewEarnings from '../components/InterviewEarnings';
 import GrowthPlanEarnings from '../components/GrowthPlanEarnings';
 import AdviceEarnings from '../components/AdviceEarnings';
 import { useNavigation } from '@react-navigation/native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
  
 function MyComponent() {
@@ -21,6 +24,10 @@ function MyComponent() {
       const goToBids = () => {
         navigation.navigate('Withdrawal');
       };
+      const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
@@ -37,7 +44,7 @@ function MyComponent() {
             onMouseLeave={() => setIsOfferHovered(false)}> 
               <View style={styles.item}>
                 <Image source={require('../assets/earnings.png')} style={styles.image} />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Earnings</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Earnings")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToBids}
@@ -46,14 +53,14 @@ function MyComponent() {
             onMouseLeave={() => setIsBidHovered(false)} >
               <View style={styles.item}>
                 <Image source={require('../assets/withdrawal.png')} style={styles.image} />
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Withdrawal</Text>
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Withdrawal")}</Text>
               </View>
             </TouchableOpacity>
             
           </View>
 
 
-          <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral' }}>Total Earnings: $450</Text>
+          <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral',fontFamily:"Roboto-Light" }}>{t("Total Earnings")}: $450</Text>
 <HubsEarnings />
 <InterviewEarnings />
 <GrowthPlanEarnings />
@@ -87,7 +94,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    color: '#666'
+    color: '#666',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 24,

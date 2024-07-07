@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 import Top from '../components/top';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const navigation = useNavigation(); // Get the navigation object
@@ -72,6 +75,10 @@ function MyComponent() {
     // Navigate to the "SocialsAndAddress" page
     navigation.navigate('Socials and address');
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1 }}>
@@ -88,7 +95,7 @@ function MyComponent() {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <Text style={{ color: 'white', fontSize: 16 }}>1</Text>
+              <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>1</Text>
             </View>
             <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
@@ -100,7 +107,7 @@ function MyComponent() {
               justifyContent: 'center',
               marginLeft: 5,
             }}>
-              <Text style={{ color: 'white', fontSize: 16 }}>2</Text>
+              <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>2</Text>
             </View>
             <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
@@ -112,7 +119,7 @@ function MyComponent() {
               justifyContent: 'center',
               marginLeft: 5,
             }}>
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>3</Text>
+              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>3</Text>
             </View>
             <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
@@ -124,14 +131,14 @@ function MyComponent() {
               justifyContent: 'center',
               marginLeft: 5,
             }}>
-              <Text style={{ color: 'white', fontSize: 18 }}>4</Text>
+              <Text style={{ color: 'white', fontSize: 18,fontFamily:"Roboto-Light" }}>4</Text>
             </View>
           </View>
-          <Text style={[styles.heading, styles.coral]}>Roles & Countries</Text>
+          <Text style={[styles.heading, styles.coral]}>{t("Roles & Countries")}</Text>
         </View>
         <View style={styles.section}>
-          <Text style={styles.subheading}>Add Preferred Roles</Text>
-          <Text>Add a maximum of 5 job roles you are available for</Text>
+          <Text style={styles.subheading}>{t("Add Preferred Roles")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Add a maximum of 5 job roles you are available for")}</Text>
           <View style={styles.rolesContainer}>
             {roles.map((role, index) => (
               <TouchableOpacity
@@ -154,12 +161,12 @@ function MyComponent() {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoIcon}>?</Text>
-            <Text style={styles.infoText}>Get recommended to Recruiters searching for your role and get notified when jobs are posted</Text>
+            <Text style={styles.infoText}>{t("Get recommended to Recruiters searching for your role and get notified when jobs are posted")}</Text>
           </View>
         </View>
         <View style={styles.section}>
           <Text style={styles.subheading}>Add Preferred Countries</Text>
-          <Text>Add a maximum of 5 countries you are available to work</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Add a maximum of 5 countries you are available to work")}</Text>
           <View style={styles.countriesContainer}>
             {countries.map((country, index) => (
               <TouchableOpacity
@@ -182,7 +189,7 @@ function MyComponent() {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoIcon}>?</Text>
-            <Text style={styles.infoText}>See jobs posted from these countries that match your preferred job roles</Text>
+            <Text style={styles.infoText}>{t("See jobs posted from these countries that match your preferred job roles")}</Text>
           </View>
         </View>
       </View>
@@ -196,7 +203,7 @@ function MyComponent() {
             onChangeText={(text) => setRoleInputValue(text)}
           />
           <TouchableOpacity style={styles.addButton} onPress={handleSaveRole}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>{t("Add")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -210,13 +217,13 @@ function MyComponent() {
             onChangeText={(text) => setCountryInputValue(text)}
           />
           <TouchableOpacity style={styles.addButton} onPress={handleSaveCountry}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>{t("Add")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
       <TouchableOpacity style={styles.saveAndContinueButton} onPress={handleSaveAndContinue}>
-        <Text style={styles.saveAndContinueButtonText}>Save & Continue</Text>
+        <Text style={styles.saveAndContinueButtonText}>{t("Save & Continue")}</Text>
       </TouchableOpacity>
     </View>
     </View>
@@ -244,13 +251,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'coral',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   subheading: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily:"Roboto-Light"
   },
   coral: {
     color: 'coral',
@@ -271,7 +280,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#d3f9d8',
     color: '#206C00',
-    borderRadius: 50
+    borderRadius: 50,
+    fontFamily:"Roboto-Light"
   },
   selected: {
     borderWidth: 1,
@@ -294,6 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#d3f9d8',
     color: '#206C00',
     borderRadius: 50,
+    fontFamily:"Roboto-Light"
   },
   newCountry: {
     paddingHorizontal: 15,
@@ -302,6 +313,7 @@ const styles = StyleSheet.create({
     color: '#206C00',
     borderRadius: 50,
     marginRight: 10,
+    fontFamily:"Roboto-Light"
   },
   removeButton: {
     paddingHorizontal: 15,
@@ -324,10 +336,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: '#d3f9d8',
     borderRadius: 30,
+    fontFamily:"Roboto-Light"
   },
   infoText: {
     flex: 1,
     marginLeft: 10,
+    fontFamily:"Roboto-Light"
   },
   modalContainer: {
     flex: 1,
@@ -350,6 +364,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
   saveAndContinueButton: {
     backgroundColor: 'coral',
@@ -368,6 +383,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
 });
 

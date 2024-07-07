@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput } from 'react-native';
 import DateTimePickerModal from "../components/DateTimeCoach";
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 
 function MyComponent({ onClose }) {
@@ -17,7 +19,11 @@ function MyComponent({ onClose }) {
   const handleCancelDateTimeModal = () => {
     setIsDateTimeModalVisible(false);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
 
+        const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -27,9 +33,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>New Hub Meeting</Text>
+              <Text style={styles.headerText}>{t("New Hub Meeting")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -38,16 +44,16 @@ function MyComponent({ onClose }) {
             <View style={styles.container}>
             
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Meeting Topic
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Meeting Topic")}
             </Text>
             <TextInput
               placeholder=" "
               style={styles.input}
             />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Meeting Description (Optional)
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Meeting Description (Optional)")}
             </Text>
             <TextInput
               placeholder=" "
@@ -55,19 +61,19 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                Date
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                {t("Date")}
               </Text>
               <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
-                <Text style={styles.input}><Text style={{fontWeight: '500'}}>Date: </Text>{selectedDateTime}</Text>
+                <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Date: </Text>{selectedDateTime}</Text>
               </TouchableOpacity>
-              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10 }}>
-                Time
+              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                {t("Time")}
               </Text>
-              <Text style={styles.input}><Text style={{fontWeight: '500'}}>Time: </Text> {selectedTime}</Text>
+              <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Time: </Text> {selectedTime}</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>Create Meeting</Text>
+              <Text style={styles.buttonTextplus}>{t("Create Meeting")}</Text>
             </TouchableOpacity>
           </View>
        
@@ -114,6 +120,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -126,6 +133,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',

@@ -29,10 +29,7 @@ function MyComponent() {
       };
  
       const [fontsLoaded]=useFonts({
-        'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
         'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-        'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
-        'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")       
       })
     
   return (

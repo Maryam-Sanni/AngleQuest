@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import { useFonts } from 'expo-font';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    const {t}=useTranslation()
+    
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -13,33 +19,33 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Edit Employee's Details</Text>
+              <Text style={styles.headerText}>{t("Edit Employee's Details")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
               <View style={styles.container}>
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5 }}>
-                  Full Name
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Full Name")}
                 </Text> 
                 <TextInput
                   placeholder="Larrisa Omreh"
                   style={styles.input}
                 />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Email Address
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Email Address")}
                 </Text>
                 <TextInput
                   placeholder="larrisa051@gmail.com"
                   style={styles.input}
                 />
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Specialization
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Specialization")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -56,8 +62,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="UI/UX Design" value="UI/UX Design" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Set Target
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Set Target")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -71,8 +77,8 @@ function MyComponent({ onClose }) {
                 </Picker>
 
 
-        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                                         Rating
+        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                                         {t("Rating")}
                                         </Text>
 <Picker
   style={styles.picker} 
@@ -85,7 +91,7 @@ function MyComponent({ onClose }) {
         </Picker>
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save Changes</Text>
+                  <Text style={styles.buttonTextplus}>{t("Save Changes")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -136,6 +142,7 @@ marginBottom: 100
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -182,6 +189,7 @@ marginBottom: 100
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/top';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -38,6 +41,10 @@ function MyComponent() {
   const handlePreviousPage = () => {
     navigation.navigate('Basic Details'); // Navigating to the "Basic Details" page
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{ height: '68%' }}>
@@ -53,7 +60,7 @@ function MyComponent() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <Text style={{ color: 'white', fontSize: 16  }}>1</Text>
+                  <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light"  }}>1</Text>
                 </View>
                 <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
@@ -65,7 +72,7 @@ function MyComponent() {
                   justifyContent: 'center',
                   marginLeft: 5,
                 }}>
-                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>2</Text>
+                  <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light"   }}>2</Text>
                 </View>
                 <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
@@ -77,7 +84,7 @@ function MyComponent() {
                   justifyContent: 'center',
                   marginLeft: 5,
                 }}>
-                  <Text style={{ color: 'white', fontSize: 16 }}>3</Text>
+                  <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light"   }}>3</Text>
                 </View>
                 <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
                 <View style={{
@@ -89,15 +96,15 @@ function MyComponent() {
                   justifyContent: 'center',
                   marginLeft: 5,
                 }}>
-                  <Text style={{ color: 'white', fontSize: 18 }}>4</Text>
+                  <Text style={{ color: 'white', fontSize: 18,fontFamily:"Roboto-Light"   }}>4</Text>
                 </View>
               </View>
-        <Text style={{ marginLeft: -300, marginTop: 20, marginBottom: 10, fontSize: 18, fontWeight: 'bold', color: 'coral' }}>Education & Work Experience</Text>
+        <Text style={{ marginLeft: -300, marginTop: 20, marginBottom: 10, fontSize: 18, fontWeight: 'bold', color: 'coral',fontFamily:"Roboto-Light"   }}>{t("Education & Work Experience")}</Text>
         <View style={{ width: '100%', maxWidth: 1000 }}>
-          <Text style={{ marginTop: 10, fontSize: 14, fontWeight: '600', color: 'black' }}>About</Text>
+          <Text style={{ marginTop: 10, fontSize: 14, fontWeight: '600', color: 'black',fontFamily:"Roboto-Light"   }}>{t("About")}</Text>
           <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 60, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
             <TextInput
-              style={{ padding: 6, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'none', borderColor: '#F4F4F4', borderRadius: 5 }}
+              style={{ padding: 6, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'none', borderColor: '#F4F4F4', borderRadius: 5,fontFamily:"Roboto-Light"   }}
               placeholder="Type here"
               value={about}
               onChangeText={setAbout}
@@ -106,37 +113,37 @@ function MyComponent() {
 
           {/* Education */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black' }}>Education</Text>
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00' }}>+ Add Another Education</Text>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black',fontFamily:"Roboto-Light"   }}>{t("Education")}</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00',fontFamily:"Roboto-Light"   }}>+ {t("Add Another Education")}</Text>
           </View>
           <View style={{ padding: 10, marginTop: 3.5, borderRadius: 5, backgroundColor: 'white' }}>
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black' }}>Degree</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black',fontFamily:"Roboto-Light"   }}>{t("Degree")}</Text>
             <TextInput
-              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
               placeholder="Enter Degree"
               value={degree}
               onChangeText={setDegree}
             />
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black', marginTop: 10 }}>University</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black', marginTop: 10,fontFamily:"Roboto-Light"   }}>{t("University")}</Text>
             <TextInput
-              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: 'grey', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: 'grey', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
               placeholder="Enter University"
               value={university}
               onChangeText={setUniversity}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black' }}>From</Text>
-              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black', marginRight: 275 }}>To</Text>
+              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black',fontFamily:"Roboto-Light"   }}>{t("From")}</Text>
+              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black', marginRight: 275,fontFamily:"Roboto-Light"   }}>{t("To")}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
               <TextInput
-                style={{ padding: 10, flex: 1, marginRight: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+                style={{ padding: 10, flex: 1, marginRight: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
                 placeholder="DD/MM/YYYY"
                 value={degreeFrom}
                 onChangeText={setDegreeFrom}
               />
               <TextInput
-                style={{ padding: 10, flex: 1, marginLeft: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+                style={{ padding: 10, flex: 1, marginLeft: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
                 placeholder="DD/MM/YYYY"
                 value={degreeTo}
                 onChangeText={setDegreeTo}
@@ -146,43 +153,43 @@ function MyComponent() {
               style={{ marginRight: 400, alignItems: 'center', marginTop: 20, padding: 10, backgroundColor: 'coral', borderRadius: 5 }}
               onPress={handleSaveEducation}
             >
-              <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white' }}>Save</Text>
+              <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light"   }}>{t("Save")}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Employment */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black' }}>Work Experience</Text>
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00' }}>+ Add Another Employment</Text>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: 'black',fontFamily:"Roboto-Light"   }}>{t("Work Experience")}</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00',fontFamily:"Roboto-Light"   }}>+ {t("Add Another Employment")}</Text>
           </View>
           <View style={{ padding: 8, marginTop: 3.5, borderRadius: 5, backgroundColor: 'white' }}>
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black' }}>Company Name</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black',fontFamily:"Roboto-Light"   }}>{("Company Name")}</Text>
             <TextInput
-              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
               placeholder="Enter Company Name"
               value={company}
               onChangeText={setCompany}
             />
-            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black', marginTop: 10 }}>Position Held</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'normal', color: 'black', marginTop: 10,fontFamily:"Roboto-Light"   }}>{t("Position Held")}</Text>
             <TextInput
-              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+              style={{ padding: 10, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light"   }}
               placeholder="Enter Position Held"
               value={positionHeld}
               onChangeText={setPositionHeld}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black' }}>From</Text>
-              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black', marginRight: 265 }}>To</Text>
+              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black',fontFamily:"Roboto-Light"   }}>{t("From")}</Text>
+              <Text style={{ fontSize: 10, fontWeight: 'normal', color: 'black', marginRight: 265,fontFamily:"Roboto-Light"   }}>{t("To")}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
               <TextInput
-                style={{ padding: 6, flex: 1, marginRight: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+                style={{ padding: 6, flex: 1, marginRight: 5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light" }}
                 placeholder="DD/MM/YYYY"
                 value={companyFrom}
                 onChangeText={setCompanyFrom}
               />
               <TextInput
-                style={{ padding: 10, flex: 1, marginLeft: 25, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5 }}
+                style={{ padding: 10, flex: 1, marginLeft: 25, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: 'black', borderRadius: 5,fontFamily:"Roboto-Light" }}
                 placeholder="DD/MM/YYYY"
                 value={companyTo}
                 onChangeText={setCompanyTo}
@@ -192,7 +199,7 @@ function MyComponent() {
               style={{ alignItems: 'center', marginTop: 20, padding: 10, marginRight: 400, backgroundColor: 'coral', borderRadius: 5 }}
               onPress={handleSaveEmployment}
             >
-              <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white' }}>Save</Text>
+              <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light" }}>{t("Save")}</Text>
             </TouchableOpacity>
           </View>
 
@@ -213,7 +220,7 @@ function MyComponent() {
               }}
              onPress={handlePreviousPage}
             >
-              <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00' }}>Previous Page</Text>
+              <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Previous Page")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -231,7 +238,7 @@ function MyComponent() {
               }}
               onPress={handleSaveAndContinue}
             >
-              <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white' }}>Save & Continue</Text>
+              <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light" }}>{t("Save & Continue")}</Text>
             </TouchableOpacity>
           </View>
         </View>

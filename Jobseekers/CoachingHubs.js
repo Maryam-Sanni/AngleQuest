@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
@@ -139,27 +141,27 @@ const handleMyHubsPress = () => {
 
            
             </View>
- <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
+ <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10,fontFamily:"Roboto-Light"  }}>
               {data.participants} Participants
             </Text>
-            <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
+            <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10,fontFamily:"Roboto-Light"  }}>
               {data.schedule}
             </Text>
 </View>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
             <View style={{ flex: 1 , }}>
-              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
-              <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
+              <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10,fontFamily:"Roboto-Light"  }}>{data.title}</Text>
+              <Text style={{ fontSize: 12, color: "black", fontWeight: '400',fontFamily:"Roboto-Light"  }}>
                 Coach: {data.coach}
               </Text>
             </View>
           </View>
          
-            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
+            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>{data.description}</Text>
             
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
-                <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5}}>Hub Fee</Text>
-          <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5,fontFamily:"Roboto-Light" }}>Hub Fee</Text>
+          <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>
                   {data.fee} </Text>
                   </View>
           <TouchableOpacity
@@ -179,7 +181,7 @@ const handleMyHubsPress = () => {
             onPress={handleJoinHub}
           >
            
-            <Text style={{ color: "#206C00", fontWeight: "bold", textAlign: 'center', fontSize: 14}}>
+            <Text style={{ color: "#206C00", fontWeight: "bold", textAlign: 'center', fontSize: 14,fontFamily:"Roboto-Light" }}>
               Join Hub
             </Text>
            
@@ -189,6 +191,10 @@ const handleMyHubsPress = () => {
     ));
   };
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
   return (
 <ImageBackground
     source={require ('../assets/Background.png') }
@@ -204,12 +210,12 @@ const handleMyHubsPress = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
               <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-                <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Hubs</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("All Hubs")}</Text>
                 </View>
-                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color: '#d3f9d8', fontWeight: '600' }}>Most Popular</Text>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color: '#d3f9d8', fontWeight: '600',fontFamily:"Roboto-Light"  }}>{t("Most Popular")}</Text>
               </View>
               <TouchableOpacity style={{ marginTop: 5, marginRight: 20, justifyContent: 'center', paddingHorizontal: 15, paddingVertical: 5, fontSize: 14, fontWeight: 'bold', textAlign: 'center', backgroundColor: 'coral', borderRadius: 5 }} onPress={handleMyHubsPress} >
-                <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold' }}>My Hubs</Text>
+                <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>{t("My Hubs")}</Text>
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
@@ -229,16 +235,16 @@ const handleMyHubsPress = () => {
       >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 5, width: '40%' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Tell us why you want to join this Hub? </Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light"  }}>{t("Tell us why you want to join this Hub?")} </Text>
             <TextInput
               placeholder="Specific goals"
-              style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 }}
+              style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10,fontFamily:"Roboto-Light"  }}
               value={userInput.goals}
               onChangeText={text => setUserInput(prevState => ({ ...prevState, goals: text }))}
             />
             <TextInput
               placeholder="Reasons"
-              style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 }}
+              style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10,fontFamily:"Roboto-Light"  }}
               value={userInput.reasons}
               onChangeText={text => setUserInput(prevState => ({ ...prevState, reasons: text }))}
             />
@@ -246,7 +252,7 @@ const handleMyHubsPress = () => {
               style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center' }}
               onPress={handleSubmit}
             >
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Submit</Text>
+              <Text style={{ color: 'white', fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>{t("Submit")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -256,5 +262,4 @@ const handleMyHubsPress = () => {
     </ImageBackground>
   );
 }
-
 export default MyComponent;

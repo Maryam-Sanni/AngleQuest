@@ -6,14 +6,13 @@ import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
 import OpenModal from '../Jobseekers/Newadvice';
 import { useNavigation } from '@react-navigation/native';
-
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() { 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-
-  
-   
+ 
 
     const handleOpenPress = () => {
       setModalVisible(true);
@@ -22,8 +21,10 @@ function MyComponent() {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
-
-
+    const [fontsLoaded]=useFonts({
+      "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })      
+        const {t}=useTranslation()
     return (
       <ImageBackground
     source={require ('../assets/Background.png') }
@@ -39,39 +40,39 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5}}>Advice</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5,fontFamily:"Roboto-Light"}}>{t("Advice")}</Text>
                 </View>
             </TouchableOpacity>
             </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
 
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold'}}>Next Advice Meeting</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+      <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Advice Meeting")}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>Join Now</Text>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
           </View>
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5 }}>SAP FI </Text>
+        <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>SAP FI </Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 14, color: 'black' }}>Career Change</Text>
+           <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Career Change")}</Text>
            <Image source={require('../assets/traffic-sign.png')} style={styles.boximage}  />
       </View>
      </View>
 
       <View style={styles.box}> 
-      <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5 }}>Description</Text>
-      <Text style = {{fontSize: 12, color: 'black' }}>I want to change from a data analyst to an SAP FI consultant</Text>
+      <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
+      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("I want to change from a data analyst to an SAP FI consultant")}</Text>
       </View>
       
       <View style={styles.box}>
@@ -80,7 +81,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 10,}}
             />
-            <Text style = {{fontSize: 12, color: 'black', fontWeight: '500', marginLeft: 5, marginTop: 10 }}>Coach Joop Melcher</Text>
+            <Text style = {{fontSize: 12, color: 'black', fontWeight: '500', marginLeft: 5, marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coach")} Joop Melcher</Text>
             </View>
     </View>
     </View>

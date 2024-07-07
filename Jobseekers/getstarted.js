@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Top from '../components/top';
+import { useTranslation } from 'react-i18next';
 
 const TextBlock = ({ text }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -51,6 +52,7 @@ function MyComponent() {
     "Do you have an upcoming Interview and would like an expert to prepare you by conducting a thorough interview on you?",
     "Do you want to get Interviewed by an expert to enter the list of pre-vetted candidates for recruiters?",
   ];
+  const {t}=useTranslation()
 
   return (
     <div>
@@ -66,7 +68,7 @@ function MyComponent() {
           flexDirection: 'column',
         }}
       >
-        <div style={{ fontWeight: "bold", fontSize: 24, color: "#206C00", marginBottom: '15px' }}>Get Started</div>
+        <div style={{ fontWeight: "bold", fontSize: 24, color: "#206C00", marginBottom: '15px' }}>{t("Get Started")}</div>
         <div
           style={{
             display: 'flex',

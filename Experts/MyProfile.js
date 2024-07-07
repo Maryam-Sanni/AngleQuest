@@ -12,6 +12,7 @@ import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
 import AboutEditModal from '../components/AboutEditModal';
 
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
   const initialHistory = [
@@ -186,6 +187,8 @@ export default function Profile() {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const {t}=useTranslation()
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -204,7 +207,7 @@ export default function Profile() {
               {/* Profile Card */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
-        <Text style={{ fontSize: 18, fontWeight: "bold",fontFamily:"Roboto-Light", marginBottom: 20 }}>My Profile</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold",fontFamily:"Roboto-Light", marginBottom: 20 }}>{t("My Profile")}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
                     source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
@@ -215,11 +218,11 @@ export default function Profile() {
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Available Balance</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Available Balance")}</Text>
                   <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>$1,234.00</Text>
                   <Text style={{ fontSize: 16, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>$25/hr</Text>
                   <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
-                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light" }}>Preview Profile</Text>
+                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light" }}>{t("Preview Profile")}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -229,8 +232,8 @@ export default function Profile() {
           {/* Profile Description */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Roboto-Bold" }}>
-                        About </Text> 
+                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Roboto-Light" }}>
+                        {t("About")} </Text> 
                         <TouchableOpacity onPress={() => setAboutModalVisible(true)} style={{ marginLeft: 10 }}>
                         <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -278,7 +281,7 @@ export default function Profile() {
           <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>Skills</Text>
+ }}>{t("Skills")}</Text>
         <TouchableOpacity onPress={handleOpenSkills}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -311,7 +314,7 @@ export default function Profile() {
                            <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
-}}>Certifications</Text>
+}}>{t("Certifications")}</Text>
         <TouchableOpacity onPress={handleOpenCertifications}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -341,7 +344,7 @@ export default function Profile() {
   <View style={{ marginTop: 20, marginRight: 30 }}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
     <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>Other Experience</Text>
+ }}>{t("Other Experience")}</Text>
     <TouchableOpacity onPress={handleOpenOtherExperiences}>
       <Image
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -372,7 +375,7 @@ export default function Profile() {
                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>Preferred Locations</Text>
+ }}>{t("Preferred Locations")}</Text>
                       <TouchableOpacity onPress={handleOpenPreferredLocations}>
                         <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -405,7 +408,7 @@ export default function Profile() {
                   <View style={{ marginTop: 20, marginRight: 30 }}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
     <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
-}}>Preferred Roles</Text>
+}}>{t("Preferred Roles")}</Text>
     <TouchableOpacity onPress={handleOpenPreferredRoles}>
       <Image
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}

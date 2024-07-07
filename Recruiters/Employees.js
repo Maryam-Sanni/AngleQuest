@@ -31,7 +31,6 @@ function MyComponent() {
 
     
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
   const {t}=useTranslation()
@@ -54,7 +53,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Employees</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Employees")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress}>
@@ -95,13 +94,13 @@ function MyComponent() {
       <View style={{flexDirection: 'column'}}>
       <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Growth Plan")}</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>5</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
 <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Hub Sessions")}</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>20</Text>
                   </View>
                   </View>
       </View>
@@ -110,13 +109,13 @@ function MyComponent() {
       <View style={{flexDirection: 'column'}}>
       <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Advice Sessions")}</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>7</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>7</Text>
                   </View>
 </View>
 <View style={{flexDirection: 'column', position: 'absolute', right: 20}}>
 <Text style={{ marginTop: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Reviews")}</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>13</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>13</Text>
                   </View>
                   </View>
       </View>
@@ -154,7 +153,7 @@ function MyComponent() {
       <View style={{flexDirection: 'row', marginTop: 10,}}>
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>{t("Members")}</Text>
       <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>20</Text>
+                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>20</Text>
                   </View>
       </View>
       <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10 }}>

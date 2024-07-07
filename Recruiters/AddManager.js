@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -9,6 +11,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('Managers');
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -18,9 +24,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Add Manager</Text>
+              <Text style={styles.headerText}>{t("Add Manager")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -28,26 +34,26 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10, marginBottom: 30 }}>
-                 Invite a new Manager
+                <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10, marginBottom: 30,fontFamily:"Roboto-Light" }}>
+                 {t("Invite a new Manager")}
                 </Text>
                 <Image
                   source={require('../assets/mang.png')}
                   style={styles.image}
                 />
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 10, fontStyle: 'italic', width: 400 }}>
-                  The manager will be able to access team members schedules, hubs activities and ratings.
+                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 10, fontStyle: 'italic', width: 400,fontFamily:"Roboto-Light" }}>
+                  {t("The manager will be able to access team members schedules, hubs activities and ratings.")}
                 </Text>
               </View>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: 500 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginLeft: 80, marginTop: 10, }}>
-                  Attach "Manager's Name" to Employees
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginLeft: 80, marginTop: 10,fontFamily:"Roboto-Light" }}>
+                  {t("Attach Managers Name to Employees")}
                 </Text> 
               
 
 
                 <TouchableOpacity onPress={goToEmployees} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Get Started</Text>
+                  <Text style={styles.buttonTextplus}>{t("Get Started")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -101,6 +107,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -137,6 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Platform, KeyboardAvoidingView, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, Text, Image, TouchableOpacity } from 'react-native';
 import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
-import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
-
-
+import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 
@@ -19,10 +17,11 @@ function ChatScreen() {
   };
 
   const renderSend = (props) => {
+    const {t}=useTranslation()
     return (
       <Send {...props}>
         <View style={{ marginRight: 10, marginBottom: 10 }}>
-          <Text style={{ color: '#206C00', fontWeight: 'bold', fontSize: 16 }}>Send</Text>
+          <Text style={{ color: '#206C00', fontWeight: 'bold', fontSize: 16 }}>{t("Send")}</Text>
         </View>
       </Send>
     );
@@ -101,9 +100,8 @@ function ChatScreen() {
 
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-
-
   })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1 }}>
@@ -114,7 +112,7 @@ function ChatScreen() {
         />
         <View style={{ marginLeft: 10 }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Nathan Arthur</Text>
-          <Text style={{ fontStyle: 'normal', fontSize: 12,fontFamily:"Roboto-Light" }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>Expert</Text></Text>
+          <Text style={{ fontStyle: 'normal', fontSize: 12,fontFamily:"Roboto-Light" }}>Microsoft Azure - <Text style={{ fontWeight: '500', fontStyle: 'italic' }}>{t("Expert")}</Text></Text>
         </View>
         <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
           <Image

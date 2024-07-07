@@ -31,7 +31,6 @@ function MyComponent() {
   
 
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
       'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
 
     })
@@ -55,12 +54,12 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Teams</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Teams")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
                         </View>

@@ -1,13 +1,20 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { useFonts } from 'expo-font';
+import { useTranslation } from "react-i18next";
 
 function MyComponent() {
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Questions to Ask</Text>
+      <Text style={styles.title}>{t("Questions to Ask")}</Text>
       {[1, 2, 3, 4, 5].map((index) => (
         <View key={index}>
-          <Text style={styles.question}>Question {index}</Text>
+          <Text style={styles.question}>{t("Question")} {index}</Text>
           
              <TextInput
               style={styles.inputContainer}
@@ -18,7 +25,7 @@ function MyComponent() {
         </View>
       ))}
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Save & Continue</Text>
+        <Text style={styles.buttonText}>{t("Save & Continue")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,12 +49,14 @@ const styles = StyleSheet.create({
     color: "#000000",
     marginBottom: 16,
     marginRight: 380,
+    fontFamily:"Roboto-Light"
   },
   question: {
     fontSize: 14,
     fontWeight: "bold",
     color: "black",
     marginTop: 15,
+    fontFamily:"Roboto-Light"
   },
   inputContainer: {
     justifyContent: "center",
@@ -74,6 +83,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 14,
+    fontFamily:"Roboto-Light"
   },
 });
 

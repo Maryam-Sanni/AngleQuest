@@ -1,4 +1,6 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
@@ -22,12 +24,17 @@ function MyComponent({ onClose }) {
       <View key={index} style={styles.selectedEmployeeItem}>
         <Text style={styles.employeeText}>{employee}</Text>
         <TouchableOpacity onPress={() => handleRemove(employee)} style={styles.removeButton}>
-          <Text style={styles.removeButtonText}>Remove</Text>
+          <Text style={styles.removeButtonText}>{t("Remove")}</Text>
         </TouchableOpacity>
       </View>
     ));
   };
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    
+    const {t}=useTranslation()
+    
   return (
     <Modal
       animationType="slide"
@@ -38,7 +45,7 @@ function MyComponent({ onClose }) {
       <View style={styles.modalContainer}>
         <View style={styles.greenBox}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Your Employees</Text>
+            <Text style={styles.headerText}>{t("Your Employees")}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
@@ -50,7 +57,7 @@ function MyComponent({ onClose }) {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-              <Text style={styles.saveButtonText}>Update</Text>
+              <Text style={styles.saveButtonText}>{t("Update")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -83,6 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     padding: 10,
@@ -90,6 +98,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 18,
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   scrollView: {
     flex: 1,

@@ -5,6 +5,7 @@ import OpenModal from './ListEmployee';
 import OpenModal2 from './ViewEmployees';
 import OpenModal3 from './EditManager';
 import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -38,6 +39,10 @@ const ScheduledMeetingsTable = () => {
     onClose();
   };
 const {t}=useTranslation()
+const [fontsLoaded]=useFonts({
+  "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+    })
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -46,25 +51,25 @@ const {t}=useTranslation()
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Email")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Email")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Team")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Team")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Assign Employee")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Assign Employee")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-            <Text style={{fontWeight: '600', fontSize: 14}}>{t("View Employee")}</Text>
+            <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("View Employee")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Kenyatta Ohbahi</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Kenyatta Ohbahi</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -83,7 +88,7 @@ const {t}=useTranslation()
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Onana Humbrey</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Onana Humbrey</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -93,16 +98,16 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>SAP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Jefferson King</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Jefferson King</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -112,10 +117,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>JPP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress}  style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -131,16 +136,16 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>PRO</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Jacob Hughes</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Jacob Hughes</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -150,16 +155,16 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>MORR</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Noah Robinson</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Noah Robinson</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -169,16 +174,16 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>SAP</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Aliyah Rahman</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Aliyah Rahman</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -188,16 +193,16 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>CEPPA</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress3} >
-            <Text style={{textDecoration: 'underline'}}>Amélie Martin</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Amélie Martin</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -207,10 +212,10 @@ const {t}=useTranslation()
           <Text style={styles.cellText}>CEPPA</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
-          <Text style={styles.add}>+ Add</Text>
+          <Text style={styles.add}>+ {t("Add")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell}>
-          <Text style={styles.open}>View All</Text>
+          <Text style={styles.open}>{t("View All")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -267,6 +272,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginTop: 20,
@@ -294,6 +300,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily: 'Roboto-Light'
   },
   picker: {
     height: 30,
@@ -344,7 +351,9 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
+
 },
 add: {
   color: "black",
@@ -353,7 +362,8 @@ add: {
     borderWidth: 2, 
     padding: 5, 
     paddingHorizontal: 15, 
-    borderRadius: 5
+    borderRadius: 5,
+    fontFamily:"Roboto-Light"
 },
 });
 

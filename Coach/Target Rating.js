@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import OpenModal from './TargetMeet';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -27,6 +29,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+const {t}=useTranslation()
 
   return (
     <>
@@ -43,9 +49,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Jacob Ncube's Target Rating</Text>
+              <Text style={styles.headerText}>{t("Jacob Ncube's Target Rating")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -53,27 +59,27 @@ function MyComponent({ onClose }) {
 
            
             
-            <Text style={{  fontSize: 16, marginLeft: 100,}}>
-                  Obtain Certificate
+            <Text style={{  fontSize: 16, marginLeft: 100,fontFamily:"Roboto-Light" }}>
+                  {t("Obtain Certificate")}
                 </Text>
                 <View style={{ padding: 5, marginTop: 20, marginLeft: 100, marginRight: 100, borderWidth: 1, borderColor: 'black'}}>
-                <Text style={{  fontSize: 16,}}>
-                  To execute the assigned project to the desired expectation of the client and to earn a support renewal for at least 3 months. To obtain PL-200 certification.
+                <Text style={{  fontSize: 16,fontFamily:"Roboto-Light" }}>
+                  {t("To execute the assigned project to the desired expectation of the client and to earn a support renewal for at least 3 months. To obtain PL-200 certification.")}
                 </Text>
                 </View>
                 
                 <View style={styles.container}>
                 <View style={{flexDirection: 'row', marginTop: 10,}}>
-                <Text style={{marginLeft: 585, marginBottom: -5, fontWeight: '500'}}>
-                  Set Score
+                <Text style={{marginLeft: 585, marginBottom: -5, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+                  {t("Set Score")}
                 </Text> 
-                <Text style={{marginLeft: 35, marginBottom: -5, fontWeight: '500'}}>
-                  Rate
+                <Text style={{marginLeft: 35, marginBottom: -5, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+                  {t("Rate")}
                 </Text> 
                 </View>
                 <View style={{flexDirection: 'row', marginLeft: 50, marginTop: 10, marginBottom: 5}}>
               <Text style={styles.text}>
-                  Criteria 01
+              {t("Criteria")} 01
                 </Text> 
                 <TextInput
                  style={styles.input}
@@ -104,7 +110,7 @@ function MyComponent({ onClose }) {
 </View>
 <View style={{flexDirection: 'row', marginLeft: 50, marginTop: 20, marginBottom: 5}}>
               <Text style={styles.text}>
-                  Criteria 02
+              {t("Criteria")} 02
                 </Text> 
                 <TextInput
               placeholder="Execute project on time"
@@ -134,7 +140,7 @@ function MyComponent({ onClose }) {
 
 <View style={{flexDirection: 'row', marginLeft: 50, marginTop: 20, marginBottom: 5}}>
               <Text style={styles.text}>
-                  Criteria 03
+              {t("Criteria")} 03
                 </Text> 
                 <TextInput
               placeholder="How satisfied was the client"
@@ -164,7 +170,7 @@ function MyComponent({ onClose }) {
 
 <View style={{flexDirection: 'row', marginLeft: 50, marginTop: 20, marginBottom: 5}}>
               <Text style={styles.text}>
-                  Criteria 04
+              {t("Criteria")} 04
                 </Text> 
                 <TextInput
               placeholder="Execute project within budget"
@@ -193,7 +199,7 @@ function MyComponent({ onClose }) {
 </View>
 <View style={{flexDirection: 'row', marginLeft: 50, marginTop: 20, marginBottom: 5}}>
               <Text style={styles.text}>
-                  Criteria 05
+                  {t("Criteria")} 05
                 </Text> 
                 <TextInput
               placeholder="Supoort contract earned"
@@ -223,7 +229,7 @@ function MyComponent({ onClose }) {
                 </View>
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Submit</Text>
+                  <Text style={styles.buttonTextplus}>{t("Submit")}</Text>
                 </TouchableOpacity>
               </View>
               </View>
@@ -297,7 +303,8 @@ const styles = StyleSheet.create({
   },
   scoretext: {
 fontWeight: '500',
-textAlign: 'center'
+textAlign: 'center',
+fontFamily:"Roboto-Light" 
   },
   buttonplus: {
     backgroundColor: 'coral',
@@ -313,6 +320,7 @@ textAlign: 'center'
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light" 
   },
   input: {
     height: 40,
@@ -324,13 +332,15 @@ textAlign: 'center'
     fontSize: 14,
     borderRadius: 5,
     padding: 10,
-    marginRight: 10
+    marginRight: 10,
+    fontFamily:"Roboto-Light" 
   },
   text: {
     fontWeight: '500', 
     fontSize: 16,
    marginRight: 10,
-   marginTop: 10
+   marginTop: 10,
+   fontFamily:"Roboto-Light" 
   },
   closeButton: {
     position: 'absolute',
@@ -355,6 +365,7 @@ textAlign: 'center'
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light" 
   },
   image: {
     width: 400,

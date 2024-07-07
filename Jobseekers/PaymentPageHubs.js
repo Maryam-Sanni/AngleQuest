@@ -6,6 +6,9 @@ import { BlurView } from 'expo-blur';
 import OpenSchedule from '../Jobseekers/SkiphubPayment';
 import OpenSchedule2 from '../Jobseekers/MonthlySub';
 import OpenSchedule3 from '../Jobseekers/AnnualHubSub'; 
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const App = () => {
     const [isAnnualPressed, setIsAnnualPressed] = useState(false);
@@ -51,6 +54,10 @@ const App = () => {
             setIsAnnualPressed(false);
         }
     };
+    const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
     return (
         <ImageBackground
@@ -67,7 +74,7 @@ const App = () => {
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
                                     
-                                        <Text style={{ color: '#206C00', fontSize: 18, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20 }}>Curious about how much it costs? Just a token: </Text>
+                                        <Text style={{ color: '#206C00', fontSize: 18, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20,fontFamily:"Roboto-Light" }}>{t("Curious about how much it costs? Just a token")}: </Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
                                                 style={[
@@ -77,9 +84,9 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Annually $840  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Annually $840")}  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40 }}> Saves you 15% ($120)  </Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40 }}> {t("Saves you 15% ($120)")}  </Text>
 
                                         <View style={{ flexDirection: 'row', marginTop: 20 }}>
                                             <TouchableOpacity
@@ -90,18 +97,18 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress2}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Monthly $80  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Monthly $80")}  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600' }}>Its a question of how much you believe in yourself...</Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600',fontFamily:"Roboto-Light"  }}>{t("Its a question of how much you believe in yourself...")}</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
+                                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600',fontFamily:"Roboto-Light"  }}>{t("Imagine how this could transform your career in 6 months!")}</Text>
 
                                             <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
-                                                <Text style={styles.buttonTextplus}>Next</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
-                                                <Text style={styles.buttonTextskip}>Skip</Text>
+                                                <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
                                             </TouchableOpacity>
                                             </View>
                                         </View>
@@ -238,11 +245,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
     },
     buttonTextskip: {
         color: 'coral',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light" 
     },
     arrowContainer: {
     position: 'absolute',

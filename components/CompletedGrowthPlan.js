@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-na
 import OpenSchedule from '../Experts/ViewCompletedgrowth';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
+import {useFonts} from "expo-font"
+
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -14,6 +16,10 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
   };
 const {t}=useTranslation()
+const [fontsLoaded]=useFonts({
+  'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+})
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -22,19 +28,19 @@ const {t}=useTranslation()
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Role")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Account Type")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Account Type")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Date")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={{color: "white", fontSize: 14}}> </Text>
+          <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
         </View>
       </View>
         <View style={styles.row}>
@@ -54,7 +60,7 @@ const {t}=useTranslation()
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("View")}</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -74,7 +80,7 @@ const {t}=useTranslation()
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("View")}</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -107,6 +113,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
+    fontFamily: 'Roboto-Light',
   },
   table: {
     marginRight: 200,
@@ -151,6 +158,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   tableheaderText: {
     fontSize: 16,

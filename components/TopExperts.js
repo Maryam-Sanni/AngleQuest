@@ -1,7 +1,13 @@
+import { useFonts } from 'expo-font';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const TopExpertCard = ({ name, expertise, rating }) => {
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
@@ -10,11 +16,11 @@ const TopExpertCard = ({ name, expertise, rating }) => {
     </View>
   );
 };
-
+const {t}=useTranslation()
 const TopExperts = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Top Rated Experts</Text>
+      <Text style={styles.title}>{t("Top Rated Experts")}</Text>
       <View style={styles.cardsContainer}>
         <TopExpertCard name="John Doe" expertise="Machine Learning" rating={4.5} />
         <TopExpertCard name="Jane Smith" expertise="Data Science" rating={4.8} />
@@ -37,7 +43,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#206C00'
+    color: '#206C00',
+    fontFamily:"Roboto-Light"
   },
   cardsContainer: {
     flexDirection: 'row',
@@ -64,15 +71,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#206C00'
+    color: '#206C00',
+    fontFamily:"Roboto-Light"
   },
   expertise: {
     fontSize: 14,
     color: '#555',
+    fontFamily:"Roboto-Light"
+
   },
   rating: {
     fontSize: 12,
     color: '#555',
+    fontFamily:"Roboto-Light"
+
   },
 });
 

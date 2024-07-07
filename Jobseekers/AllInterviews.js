@@ -7,7 +7,8 @@ import InterviewFeedback from '../components/InterviewFdbackJob';
 import OpenModal from '../Jobseekers/NewInterview';
 import { useNavigation } from '@react-navigation/native';
 import CustomPercentageChart from '../components/PercentageChart';
-
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() { 
     const navigation = useNavigation();
@@ -23,7 +24,10 @@ function MyComponent() {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
-
+    const [fontsLoaded]=useFonts({
+      "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+      const {t}=useTranslation()
 
     return (
       <ImageBackground
@@ -40,62 +44,62 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Interview</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Interview")}</Text>
               </View>
             </TouchableOpacity>
             </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
 
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>Next Interview session</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+      <Text style={{ fontSize: 16, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next Interview session")}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>Join Now</Text>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
           </View>
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Badge Angle Rating</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Badge Angle Rating")}</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'black' }}>My Junior Data Analyst rating by expert</Text>
+          <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("My Junior Data Analyst rating by expert")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
       <CustomPercentageChart percentage={81} />
       </View>
     </View>
-    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5 }}>Emily Ray</Text>
-    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00' }}>Excellent</Text>
+    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>Emily Ray</Text>
+    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Excellent")}</Text>
       </View>
      
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Badge Angle Rating</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>Badge Angle Rating</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'black' }}>My Medior Data Analyst rating by expert</Text>
+          <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("My Medior Data Analyst rating by expert")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
       <CustomPercentageChart percentage={50} />
       </View>
     </View>
-    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5 }}>Emily Ray</Text>
-    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00' }}>Good</Text>
+    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>Emily Ray</Text>
+    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Good")}</Text>
       </View>
       
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10 }}>Badge Angle Rating</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>Badge Angle Rating</Text>
         <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'black' }}>No rating available yet</Text>
+          <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("No rating available yet")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
       <CustomPercentageChart percentage={0} />
       </View>
     </View>
-    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5 }}>---</Text>
-    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00' }}>---</Text>
+    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>---</Text>
+    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>---</Text>
       </View>
     </View>
 

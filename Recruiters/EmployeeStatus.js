@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -28,6 +30,10 @@ function MyComponent({ onClose }) {
     }
    
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+  })
+  const {t}=useTranslation()
 
   return (
     <>
@@ -44,20 +50,20 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Employee Account Status</Text>
+              <Text style={styles.headerText}>{t("Employee Account Status")}</Text>
 
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 50, marginTop: 20, }}>
-              Update Maryam's account status
+            <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 50, marginTop: 20,fontFamily:"Roboto-Light" }}>
+              {t("Update")} Maryam's {t("account status")}
             </Text>
-            <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 5, marginBottom: 20}}>
-              Discontinue or restore employee account status
+            <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 5, marginBottom: 20,fontFamily:"Roboto-Light"}}>
+              {t("Discontinue or restore employee account status")}
             </Text>
 
             <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 5 }}>
@@ -69,7 +75,7 @@ function MyComponent({ onClose }) {
                 activeOpacity={1}
                 onPress={handlePress}
               />
-              <Text style={{ fontSize: 15 }}>Active</Text>
+              <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}>{t("Active")}</Text>
             </View>
 
             <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 30 }}>
@@ -81,12 +87,12 @@ function MyComponent({ onClose }) {
                 activeOpacity={1}
                 onPress={handlePress2}
               />
-              <Text style={{ fontSize: 15 }}>Discontinue</Text>
+              <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}>{t("Discontinue")}</Text>
             </View>
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={goToSubscription} style={styles.buttonplus}>
-                <Text style={styles.buttonTextplus}>Submit</Text>
+                <Text style={styles.buttonTextplus}>{t("Submit")}</Text>
               </TouchableOpacity>
             </View>
 
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',

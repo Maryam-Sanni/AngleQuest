@@ -21,7 +21,6 @@ function MyComponent() {
     setSearch('');
   };
   
-  const { t } = useTranslation()
 
   
   // Sample data for the cards
@@ -245,10 +244,10 @@ function MyComponent() {
               style={{ width: 50, height: 50, aspectRatio: 1,  marginTop: 10, }}
             />
            
- <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',  }}>
+ <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>
               {data.expert} 
             </Text>
-            <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10   }}>
+            <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10,fontFamily:"Roboto-Light"   }}>
               {data.job}
             </Text>
             
@@ -259,17 +258,17 @@ function MyComponent() {
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18, }}>
             <View style={{ flex: 1 , }}>
             <View style={{ flexDirection: 'row', marginTop: 15,  }}>
-            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold' }}> {t("Available Days")}</Text>
+            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Available Days")}</Text>
             <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                           style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5,  marginLeft: 15 }}
                         />
-                        <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2,  }}>{data.country}</Text>
+                        <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2,fontFamily:"Roboto-Light"  }}>{data.country}</Text>
                         </View>
                        
-              <Text style={{ fontSize: 12, color: "black", marginLeft: 5, marginTop: 5  }}>{data.date}</Text>
+              <Text style={{ fontSize: 12, color: "black", marginLeft: 5, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.date}</Text>
              
-              <Text style={{ fontSize: 12, color: "black", marginLeft: 5 }}>
+              <Text style={{ fontSize: 12, color: "black", marginLeft: 5,fontFamily:"Roboto-Light" }}>
                  Time: {data.time}
               </Text>
               
@@ -288,18 +287,18 @@ function MyComponent() {
               backgroundColor: '#F0FFF9',
               paddingHorizontal: 5,
               paddingVertical: 10,
-              
+              fontFamily:"Roboto-Light",
               alignSelf: "center",
               justifyContent: 'center', 
               marginLeft: 10, 
             }}
             onPress={goToBookInterview}
           >
-            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
+            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light"}}>
              {t("Interview")}
             </Text>
           </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
+          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
               {data.interviewfee}</Text>
               </View>
               <View style={{ flexDirection: 'column', alignItems: 'center', }}>
@@ -318,11 +317,11 @@ function MyComponent() {
             }}
             onPress={goToBookGrowth}
           >
-            <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12}}>
+            <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light",}}>
              {t("Growth Plan")}
             </Text>
           </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
+          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
               {data.growthfee}</Text>
               </View>
           <View style={{ flexDirection: 'column', alignItems: 'center'}}>
@@ -341,11 +340,11 @@ function MyComponent() {
             }}
             onPress={goToBookAdvice}
           >
-            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12}}>
+            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light"}}>
              {t("Advice")}
             </Text>
           </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5 }}>
+          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
               {data.advicefee}</Text>
               </View>
           </View>
@@ -355,13 +354,9 @@ function MyComponent() {
   };
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
-    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")
-
-
-  })
+    })
+    const {t}=useTranslation()
 
   return (
     <ImageBackground
@@ -403,7 +398,7 @@ function MyComponent() {
      <Picker
                   style={styles.picker}
                 >
-                  <Picker.Item label="Category" value="Category" />
+                  <Picker.Item label={t("Category")} value="Category" />
                   <Picker.Item label="Java Engineering" value="Java Engineering" />
                   <Picker.Item label="SAP FI" value="SAP FI" />
                   <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />

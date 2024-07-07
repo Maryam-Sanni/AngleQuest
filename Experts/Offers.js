@@ -56,7 +56,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Bids")}</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -81,7 +81,6 @@ const ScheduledMeetingsTable = () => {
       setModalVisible(false);
     };
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
   const {t}=useTranslation()
@@ -90,7 +89,7 @@ const ScheduledMeetingsTable = () => {
     
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-    <Text style={styles.title}>Offers</Text>
+    <Text style={styles.title}>{t("Offers")}</Text>
     
     <View style={styles.table}>
     <View style={styles.row}>
@@ -121,7 +120,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -144,7 +143,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -153,7 +152,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
@@ -167,7 +166,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -176,7 +175,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
@@ -190,7 +189,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -199,7 +198,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
@@ -213,7 +212,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -222,7 +221,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
@@ -236,7 +235,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -245,7 +244,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
@@ -259,7 +258,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -268,7 +267,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
@@ -282,7 +281,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -291,7 +290,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
@@ -305,7 +304,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -314,7 +313,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
@@ -328,7 +327,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -337,7 +336,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>Download NDA</Text>
+          <Text style={styles.open}>{t("Download NDA")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>

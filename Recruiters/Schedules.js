@@ -11,7 +11,6 @@ import {useFonts} from "expo-font"
 function MyComponent() {
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
 const {t}=useTranslation()
@@ -94,7 +93,7 @@ const {t}=useTranslation()
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>{t("Upcoming")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Upcoming")}</Text>
         </View>
       </View>
       {/* Session */}
@@ -128,7 +127,7 @@ const {t}=useTranslation()
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Switzerland</Text>
+            <Text style={{fontFamily:"Roboto-Light"}}>Switzerland</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -136,7 +135,7 @@ const {t}=useTranslation()
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>{t("Concluded")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Concluded")}</Text>
         </View>
       </View>
      {/* Session*/}
@@ -212,7 +211,7 @@ const {t}=useTranslation()
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Netherlands</Text>
+            <Text style={{fontFamily:"Roboto-Light"}}>Netherlands</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -220,7 +219,7 @@ const {t}=useTranslation()
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4f02cf88e6c8c6e2f839328a10a318d235a95ae6cb6e81a2776238987fe9f024?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>{t("Upcoming")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Upcoming")}</Text>
         </View>
       </View>
      {/* Session*/}
@@ -244,7 +243,7 @@ const {t}=useTranslation()
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/b39a40d38d973a4aa17a201de5e8c8b473621b426f7e2cc5d09c9c3c61ac66f1?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             /> 
-            <Text style={{marginLeft: 5}}>{t("Save")}</Text>
+            <Text style={{marginLeft: 5,fontFamily:"Roboto-Light"}}>{t("Save")}</Text>
           </View>
           <View style={{ flexDirection: 'row'}}>
                     <Text style={{ fontSize: 18, alignText: 'center', marginRight: 10}}><FaStar color="#F69200" /></Text>
@@ -254,7 +253,7 @@ const {t}=useTranslation()
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/c74e4db33c970e305c09ab3f86a2b48290c7cd4267b79768f3a013431d9d263c?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
               style={styles.infoImage}
             />
-            <Text>Germany</Text>
+            <Text style={{fontFamily:"Roboto-Light"}}>Germany</Text>
           </View>
         </View>
         <View style={styles.status}>
@@ -262,7 +261,7 @@ const {t}=useTranslation()
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2f5081b8ae506f05b44dfd97e5ce54536bbe736169816a24201e57e7cd655856?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
             style={styles.statusImage}
           />
-          <Text>{t("Concluded")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Concluded")}</Text>
         </View>
       </View>
     </View>

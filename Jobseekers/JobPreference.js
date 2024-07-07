@@ -1,15 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={[styles.heading, styles.coral]}>Job Preferences</Text>
+        <Text style={[styles.heading, styles.coral]}>{t("Job Preferences")}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.subheading}>Add Preferred Roles</Text>
-        <Text>Add a maximum of 5 job roles you are available for</Text>
+        <Text style={{fontFamily:"Roboto-Light"}}>{t("Add a maximum of 5 job roles you are available for")}</Text>
         <View style={styles.rolesContainer}>
           <Text style={styles.role}>Microsoft Azure</Text>
           <Text style={styles.role}>+</Text>
@@ -17,12 +25,12 @@ function MyComponent() {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoIcon}>?</Text>
-          <Text style={styles.infoText}>Get recommended to Recruiters searching for your role and get notified when jobs are posted</Text>
+          <Text style={styles.infoText}>{t("Get recommended to Recruiters searching for your role and get notified when jobs are posted")}</Text>
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.subheading}>Add Preferred Countries</Text>
-        <Text>Add a maximum of 5 countries you are available to work</Text>
+        <Text style={styles.subheading}>{t("Add Preferred Countries")}</Text>
+        <Text>{t("Add a maximum of 5 countries you are available to work")}</Text>
         <View style={styles.countriesContainer}>
           <Text style={styles.country}>United Kingdom</Text>
           <Text style={styles.country}>Netherlands</Text>
@@ -31,11 +39,11 @@ function MyComponent() {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoIcon}>?</Text>
-          <Text style={styles.infoText}>See jobs posted from these countries that match your preferred job roles</Text>
+          <Text style={styles.infoText}>{t("See jobs posted from these countries that match your preferred job roles")}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Save & Continue</Text>
+        <Text style={styles.buttonText}>{t("Save & Continue")}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -57,6 +65,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
   section: {
     marginBottom: 20,
@@ -65,6 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily:"Roboto-Light"
   },
   coral: {
     color: 'coral',
@@ -72,7 +82,8 @@ const styles = StyleSheet.create({
   rolesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 15
+    marginTop: 15,
+    fontFamily:"Roboto-Light"
   },
   role: {
     paddingHorizontal: 15,
@@ -82,6 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
     marginBottom: 10,
+    fontFamily:"Roboto-Light"
   },
   countriesContainer: {
     flexDirection: 'row',
@@ -96,6 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
     marginBottom: 10,
+    fontFamily:"Roboto-Light"
   },
   infoContainer: {
     flexDirection: 'row',
@@ -109,10 +122,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: '#d3f9d8',
     borderRadius: 50,
+    fontFamily:"Roboto-Light"
   },
   infoText: {
     flex: 1,
     marginLeft: 10,
+    fontFamily:"Roboto-Light"
   },
   button: {
     backgroundColor: 'coral',
@@ -124,7 +139,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
 });
 

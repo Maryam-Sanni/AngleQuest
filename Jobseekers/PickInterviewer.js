@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
 import OpenSchedule from '../components/JProfile';
 import OpenModal from '../Jobseekers/NewInterview';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -145,7 +148,7 @@ function MyComponent({ onClose }) {
                 }}
               >
                 <Text style={{ color: "#206C00", textAlign: 'center', fontSize: 12 }}>
-                  Interview
+                  {t("Interview")}
                 </Text>
               </TouchableOpacity>
               <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
@@ -157,6 +160,10 @@ function MyComponent({ onClose }) {
       </Animated.View>
     ));
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <>
@@ -174,21 +181,21 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                   style={styles.logo}
                 />
-                <Text style={styles.headerText}>Interview Experts</Text>
+                <Text style={styles.headerText}>{t("Interview Experts")}</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                  <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                     ✕
                   </Text>
                 </TouchableOpacity>
               </View>
               <View style={{ alignItems: 'flex-start', marginLeft: 40 }}>
-                <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5 }}>Pick an Expert to Interview you</Text>
-                <Text style={{ fontSize: 14, color: "black", marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
+                <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an Expert to Interview you")}</Text>
+                <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <Picker
                     style={styles.picker}
                   >
-                    <Picker.Item label="Category" value="Category" />
+                    <Picker.Item label={t("Category")} value="Category" />
                     <Picker.Item label="Java Engineering" value="Java Engineering" />
                     <Picker.Item label="SAP FI" value="SAP FI" />
                     <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
@@ -200,7 +207,7 @@ function MyComponent({ onClose }) {
                     <Picker.Item label="UI/UX Design" value="UI/UX Design" />
                   </Picker>
                   <TextInput
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     style={styles.input}
                   />
                 </View>
@@ -209,7 +216,7 @@ function MyComponent({ onClose }) {
                 {renderCards()}
               </View>
               <TouchableOpacity onPress={handleOpenPress} style={styles.buttonPlus}>
-                <Text style={styles.buttonTextPlus}>Continue</Text>
+                <Text style={styles.buttonTextPlus}>{t("Continue")}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -264,6 +271,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -287,7 +295,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   dropcontainer: {
     justifyContent: 'center',

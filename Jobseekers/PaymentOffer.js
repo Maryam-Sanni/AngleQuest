@@ -7,6 +7,9 @@ import OpenSchedule from '../Jobseekers/SkipPayment';
 import OpenSchedule2 from '../Jobseekers/MonthlygrowthSub';
 import OpenSchedule3 from '../Jobseekers/AnnualgrowthSub';
 import { useNavigation } from '@react-navigation/native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const App = () => {
   const navigation = useNavigation();
@@ -59,6 +62,10 @@ const App = () => {
             setIsAnnualPressed(false);
         }
     };
+    const [fontsLoaded]=useFonts({
+      'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    })
+    const {t}=useTranslation()
 
     return (
         <ImageBackground
@@ -74,8 +81,8 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                    <Text style={{ color: '#206C00', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 3 }}>
-                                          Emily Ray will work with you on the journey, and do the following with you:
+                                    <Text style={{ color: '#206C00', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 3,fontFamily:"Roboto-Light" }}>
+                                    Emily Ray {t("will work with you on the journey, and do the following with you")}:
                                         </Text>
                 
                                         <View style={styles.box}>
@@ -86,14 +93,14 @@ const App = () => {
         {/* Basic Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1. Growth Plan</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>1. {t("Growth Plans")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Create the next stage plan with you</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Create the next stage plan with you")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 3 }}>
               <Image
@@ -101,7 +108,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Periodically reviews your progress</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Periodically reviews your progress")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 3 }}>
               <Image
@@ -109,7 +116,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Continuously rates your progress</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Continuously rates your progress")}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -117,14 +124,14 @@ const App = () => {
         {/* Standard Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, marginRight: 10, borderRadius: 12, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1  }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10 }}>2. Hubs</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>2. {t("Hubs")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Monthly hands-on training</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Monthly hands-on training")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 2 }}>
               <Image
@@ -132,7 +139,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text> Shares knowledge gained with you </Text>
+              <Text style={{fontFamily:"Roboto-Light"}}> {t("Shares knowledge gained with you")} </Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 3 }}>
               <Image
@@ -140,7 +147,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Shares tips to apply at work</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Shares tips to apply at work")}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -148,14 +155,14 @@ const App = () => {
         {/* Pro Section */}
         <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>3. Advice</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>3. {t("Advice")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>One-on-One Career advice</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("One-on-One Career advice")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 2 }}>
               <Image
@@ -163,7 +170,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>One-on-One Growth advice</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("One-on-One Growth advice")}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -171,14 +178,14 @@ const App = () => {
          {/* Pro Section */}
          <TouchableOpacity style={{ flex: 1, marginHorizontal: 5, marginVertical: 10, backgroundColor: 'transparent', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10  }}>4. Mentorship & Guidance</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>4. {t("Mentorship & Guidance")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Becomes your buddy</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Becomes your buddy")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 2 }}>
               <Image
@@ -186,7 +193,7 @@ const App = () => {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text>Available to answer questions </Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>{t("Available to answer questions")} </Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -198,7 +205,7 @@ const App = () => {
                                             </View>
                                              
                                                 
-                                        <Text style={{ color: '#206C00', fontSize: 14, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20 }}>Curious about how much it costs? Just a token: </Text>
+                                        <Text style={{ color: '#206C00', fontSize: 14, marginTop: 30, fontWeight: '500', marginLeft: 30, marginBottom: 20,fontFamily:"Roboto-Light" }}>{t("Curious about how much it costs? Just a token")}: </Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity
                                                 style={[
@@ -208,9 +215,9 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Annually $840  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Annually $840")}  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40 }}> Saves you 15% ($120)  </Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40,fontFamily:"Roboto-Light" }}> {t("Saves you 15% ($120)")}  </Text>
 
                                         <View style={{ flexDirection: 'row', marginTop: 20 }}>
                                             <TouchableOpacity
@@ -221,18 +228,18 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress2}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold' }}> Monthly $80  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Monthly $80")}  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600' }}>Its a question of how much you believe in yourself...</Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Its a question of how much you believe in yourself...")}</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600' }}>Imagine how this could transform your career in 6 months!</Text>
+                                            <Text style={{ fontSize: 12, color: '#206C00', marginTop: 5, marginLeft: 30, fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Imagine how this could transform your career in 6 months!")}</Text>
                                             
                                             <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
-                                                <Text style={styles.buttonTextplus}>Next</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={goToPlans} style={styles.buttonskip}>
-                                                <Text style={styles.buttonTextskip}>Skip</Text>
+                                                <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
                                             </TouchableOpacity>
                                             </View>
 
@@ -370,11 +377,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
     },
     buttonTextskip: {
         color: 'coral',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
     },
     arrowContainer: {
         position: 'absolute',

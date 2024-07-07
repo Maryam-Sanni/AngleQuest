@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -11,6 +13,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('My Growth Plans');
     onClose(); // Close the modal
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -21,19 +27,19 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Replan Growth Plan</Text>
+          <Text style={styles.headerText}>{t("Replan Growth Plan")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{selectedType} Development Objectives Replan</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("{selectedType} Development Objectives Replan")}</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Type</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Type")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
@@ -49,7 +55,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Title</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Title")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -61,7 +67,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -73,7 +79,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Result description</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Result description")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -86,7 +92,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>How to achieve</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("How to achieve")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -99,7 +105,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>What do you need to achieve the objective?</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("What do you need to achieve the objective?")}</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -112,7 +118,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>How often do you want to review with your coach?</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("How often do you want to review with your coach?")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
@@ -128,7 +134,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Starting Level</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Starting Level")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
@@ -144,7 +150,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Target Level</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Target Level")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
@@ -160,7 +166,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Start Date</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -172,7 +178,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>End Date</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("End Date")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -184,7 +190,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Status</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
         </View>
         <View style={styles.cell}>
            <Picker
@@ -199,23 +205,23 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Coach</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Coach")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Joop Melcher</Text>
+        <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>Joop Melcher</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Feedbacks/remarks (from Coach)</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Feedbacks/remarks (from Coach)")}</Text>
         </View>
-        <View style={styles.cell}><Text style={{ color: 'grey' }}>Read only field Jobseeker</Text>
+        <View style={styles.cell}><Text style={{ color: 'grey' }}>{t("Read only field Jobseeker")}</Text>
         </View>
       </View>
       
     </View>
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Save Changes</Text>
+      <Text style={styles.buttonTextplus}>{t("Save Changes")}</Text>
     </TouchableOpacity>
     </View>
     
@@ -270,6 +276,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',
@@ -298,7 +305,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

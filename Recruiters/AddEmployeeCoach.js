@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal} from 'react-native';
 import OpenModal from './NoteonEmployee';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,6 +17,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <>
@@ -31,10 +37,10 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Employee's Manager</Text>
+          <Text style={styles.headerText}>{t("Employee's Manager")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -42,22 +48,22 @@ function MyComponent({ onClose }) {
 
         <View style={{flexDirection: 'row'}}>
         <View style={{flexDirection: 'column', marginLeft: 20}}>
-        <Text style={{ fontWeight: '500', fontSize: 16, marginTop: 10, marginBottom: 30 }}>
-                                            Attach "Employee's Name" Coach
+        <Text style={{ fontWeight: '500', fontSize: 16, marginTop: 10, marginBottom: 30,fontFamily:"Roboto-Light" }}>
+                                            {t("Attach Employee's Name Coach")}
                                         </Text>
         <Image
        source={require('../assets/EmployeeName.png')}
         style={styles.image}
       />
-      <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 10, fontStyle: 'italic', width: 400 }}>
-                                            The coach will be part of "Employee's Name" growth journey.
+      <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 10, fontStyle: 'italic', width: 400,fontFamily:"Roboto-Light" }}>
+                                            {t("The coach will be part of Employee's Name growth journey.")}
                                         </Text>
       </View>
       <View style={{flexDirection: 'column', marginTop: 100}}>
        
 
-        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                                         Select Coach
+        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                                         {t("Select Coach")}
                                         </Text>
 <Picker
   style={styles.picker} 
@@ -74,10 +80,10 @@ function MyComponent({ onClose }) {
     
         <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                                                <Text style={styles.buttonTextplus}>Next</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
-                                                <Text style={styles.buttonTextskip}>Skip</Text>
+                                                <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
                                             </TouchableOpacity>
                                             </View>
     </View>
@@ -162,11 +168,13 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 14,
       textAlign: 'center',
+      fontFamily:"Roboto-Light"
   },
   buttonTextskip: {
       color: 'coral',
       fontSize: 14,
       textAlign: 'center',
+      fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -202,7 +210,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

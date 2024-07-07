@@ -5,6 +5,9 @@ import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import OpenSchedule from '../Jobseekers/Others';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const App = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -33,7 +36,12 @@ const App = () => {
     const handleCloseModal = () => {
         setModalVisible(false);
     };
+    const [fontsLoaded]=useFonts({
+      'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    })
+    const {t}=useTranslation()
 
+  
     return (
         <ImageBackground
             source={require('../assets/Background.png')}
@@ -48,11 +56,11 @@ const App = () => {
                             <View style={styles.glassBox}>
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
-                                        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20 }}>
-                                            What would you like to do today?
+                                        <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 20,fontFamily:"Roboto-Light" }}>
+                                            {t("What would you like to do today?")}
                                         </Text>
-                                        <Text style={{ color: '#206C00', fontSize: 14, marginLeft: 50, marginTop: 3 }}>
-                                            Below are the different ways we can contribute to your growth
+                                        <Text style={{ color: '#206C00', fontSize: 14, marginLeft: 50, marginTop: 3,fontFamily:"Roboto-Light" }}>
+                                            {t("Below are the different ways we can contribute to your growth")}
                                         </Text>
                 
                                         <View style={styles.box}>
@@ -63,9 +71,9 @@ const App = () => {
        
         <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center', marginRight: 10, backgroundColor: 'white', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you have an upcoming interview? </Text>
+            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120, fontFamily:"Roboto-Light" }}>{t("Do you have an upcoming interview?")} </Text>
             <TouchableOpacity onPress={goToInterview} style={{ justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12.5, color: 'white', alignText: 'center'}}>Get Interviewed</Text>
+              <Text style={{ fontSize: 12.5, color: 'white', alignText: 'center',fontFamily:"Roboto-Light"}}>{t("Get Interviewed")}</Text>
             </TouchableOpacity>
            
           </View>
@@ -73,9 +81,9 @@ const App = () => {
 
         <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center', marginRight: 10, backgroundColor: 'white', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you want to move to the next level in your career? </Text>
+            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,fontFamily:"Roboto-Light"  }}>{t("Do you want to move to the next level in your career?")} </Text>
             <TouchableOpacity onPress={goToGrowth} style={{width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 13, color: 'white', alignText: 'center' }}>Create Plan</Text>
+              <Text style={{ fontSize: 13, color: 'white', alignText: 'center',fontFamily:"Roboto-Light" }}>{t("Create Plan")}</Text>
             </TouchableOpacity>
            
           </View>
@@ -83,9 +91,9 @@ const App = () => {
 
         <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center', marginHorizontal: 5, marginVertical: 10, backgroundColor: 'white', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Do you want to learn directly from an expert? </Text>
+            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,fontFamily:"Roboto-Light"  }}>{t("Do you want to learn directly from an expert?")} </Text>
             <TouchableOpacity onPress={goToHub} style={{ width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 13, color: 'white' }}>Join a hub</Text>
+              <Text style={{ fontSize: 13, color: 'white',fontFamily:"Roboto-Light" }}>{t("Join a hub")}</Text>
             </TouchableOpacity>
            
           </View>
@@ -93,9 +101,9 @@ const App = () => {
 
         <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center', marginHorizontal: 5, marginVertical: 10, marginRight: 10, backgroundColor: 'white', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Are you stuck and need some direction in your career? </Text>
+            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,fontFamily:"Roboto-Light"  }}>{t("Are you stuck and need some direction in your career?")} </Text>
             <TouchableOpacity onPress={goToAdvice} style={{width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 12, color: 'white' }}>Advice Session</Text>
+              <Text style={{ fontSize: 12, color: 'white',fontFamily:"Roboto-Light" }}>{t("Advice Session")}</Text>
             </TouchableOpacity>
            
           </View>
@@ -103,9 +111,9 @@ const App = () => {
 
         <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center', marginHorizontal: 5, marginVertical: 10, marginRight: 10, backgroundColor: 'white', shadowColor: '#000', shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderRadius: 12, borderColor: '#63EC55', borderWidth: 1 }}>
           <View style={{ paddingHorizontal: 6, justifyContent: 'center', alignItems: 'center', paddingVertical: 7, backgroundColor: 'white', borderRadius: 12, height: 200, }}>
-            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,  }}>Others?</Text>
+            <Text style={{ fontSize: 18,  marginTop: 10, marginLeft: 10, height: 120,fontFamily:"Roboto-Light"  }}>{t("Others?")}</Text>
             <TouchableOpacity onPress={handleOpenPress} style={{width: 100, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10, padding: 5, marginTop: 50, marginBottom: 10, backgroundColor: 'coral', borderRadius: 5, marginRight: 15, marginLeft: 15 }}>
-              <Text style={{ fontSize: 13, color: 'white' }}>Tell Us</Text>
+              <Text style={{ fontSize: 13, color: 'white',fontFamily:"Roboto-Light" }}>{t("Tell Us")}</Text>
             </TouchableOpacity>
            
           </View>
@@ -123,7 +131,7 @@ const App = () => {
                                                 style={styles.buttonplus}
                                                 onPress={() => navigation.goBack()}
                                             >
-                                                <Text style={styles.buttonTextplus}>Back</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Back")}</Text>
                                             </TouchableOpacity>
                                         </View>
                                         

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal} from 'react-native';
 import OpenModal from './BookQuestions';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -21,6 +23,10 @@ function MyComponent({ onClose }) {
     const imageUrl = URL.createObjectURL(selectedImage);
     setProfileImage(imageUrl);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <>
@@ -37,20 +43,20 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Interview Booking</Text>
+          <Text style={styles.headerText}>{t("Interview Booking")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
 
-        <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 20, marginLeft: 50 }}>Candidate's Information</Text>
+        <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 20, marginLeft: 50, fontFamily:"Roboto-Light"}}>{t("Candidate's Information")}</Text>
         <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Full Name</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Full Name")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -62,7 +68,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Candidate's CV</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Candidate's CV")}</Text>
         </View>
         <View style={styles.cell}>
         <input
@@ -75,7 +81,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Other Information</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Other Information")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -93,7 +99,7 @@ function MyComponent({ onClose }) {
     
         <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                                                <Text style={styles.buttonTextplus}>Next</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                                             </TouchableOpacity>
                                             
                                             </View>
@@ -186,6 +192,7 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 14,
       textAlign: 'center',
+      fontFamily:"Roboto-Light"
   },
   buttonTextskip: {
       color: 'coral',
@@ -219,7 +226,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

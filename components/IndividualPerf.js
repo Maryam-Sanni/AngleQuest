@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
 
@@ -14,7 +15,7 @@ const ScheduledMeetingsTable = () => {
     } else {
       progressBarColor = '#206C00'; 
     }
-
+  
     return (
       <View style={styles.progressBarContainer}>
         <View style={[styles.progressBar, { width: `${percentage}%`, backgroundColor: progressBarColor }]} />
@@ -23,6 +24,10 @@ const ScheduledMeetingsTable = () => {
     );
   };
 
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const { t } = useTranslation()
 
   return (
     <View style={styles.greenBox}>
@@ -30,19 +35,19 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Angle Badge</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Angle Badge")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Target</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Target")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Growth Plan</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Growth Plan")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Career Advice</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Career Advice")}</Text>
             </View>
             <TouchableOpacity style={styles.cell} >
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>Hub's Attendance</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Hub's Attendance")}</Text>
            </TouchableOpacity>
           </View>
 
@@ -64,11 +69,11 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.heading}>Target</Text>
+          <Text style={styles.heading}>{t("Target")}</Text>
       
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1 </Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -76,7 +81,7 @@ const ScheduledMeetingsTable = () => {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2 </Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={90} />
@@ -84,7 +89,7 @@ const ScheduledMeetingsTable = () => {
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3 </Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -92,7 +97,7 @@ const ScheduledMeetingsTable = () => {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4 </Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={80} />
@@ -100,17 +105,17 @@ const ScheduledMeetingsTable = () => {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5 </Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
         </View>
       </View>     
-      <Text style={styles.heading2}>Growth Plan Performance</Text>
+      <Text style={styles.heading2}>{t("Growth Plan Performance")}</Text>
 
 <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={75} />
@@ -118,7 +123,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2 </Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={31} />
@@ -126,7 +131,7 @@ const ScheduledMeetingsTable = () => {
    </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-   <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+   <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={63} />
@@ -134,7 +139,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-   <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+   <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={40} />
@@ -142,18 +147,18 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={90} />
   </View>
 </View>
 
-  <Text style={styles.heading2}>Career Advice Performance</Text>
+  <Text style={styles.heading2}>{t("Career Advice Performance")}</Text>
 
   <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 1</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={30} />
@@ -161,7 +166,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 2</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={70} />
@@ -169,7 +174,7 @@ const ScheduledMeetingsTable = () => {
    </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-   <Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
+   <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 3</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={100} />
@@ -177,7 +182,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-   <Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
+   <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 4</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={50} />
@@ -185,18 +190,18 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-    <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+    <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
   </View>
   <View style={[styles.cell, { flex: 8 }]}>
   <ProgressBar percentage={90} />
   </View>
 </View>
 
-<Text style={styles.heading3}>Hub Performance</Text>
+<Text style={styles.heading3}>{t("Hub Performance")}</Text>
 
 <View style={styles.row}>
 <View style={styles.cell}>
-<Text style = {{fontWeight: 'bold' }}>Topic 1</Text>
+<Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 1</Text>
 </View>
 <View style={[styles.cell, { flex: 8 }]}>
 <ProgressBar percentage={50} />
@@ -204,7 +209,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-<Text style = {{fontWeight: 'bold' }}>Topic 2</Text>
+<Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 2</Text>
 </View>
 <View style={[styles.cell, { flex: 8 }]}>
 <ProgressBar percentage={50} />
@@ -212,7 +217,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-<Text style = {{fontWeight: 'bold' }}>Topic 3</Text>
+<Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 3</Text>
 </View>
 <View style={[styles.cell, { flex: 8 }]}>
 <ProgressBar percentage={50} />
@@ -220,7 +225,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-<Text style = {{fontWeight: 'bold' }}>Topic 4</Text>
+<Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Topic")} 4</Text>
 </View>
 <View style={[styles.cell, { flex: 8 }]}>
 <ProgressBar percentage={50} />
@@ -228,7 +233,7 @@ const ScheduledMeetingsTable = () => {
 </View>
 <View style={styles.row}>
 <View style={styles.cell}>
-<Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+<Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
 </View>
 <View style={[styles.cell, { flex: 8 }]}>
 <ProgressBar percentage={50} />
@@ -325,7 +330,8 @@ const styles = StyleSheet.create({
       marginBottom: 20, 
       backgroundColor: '#F0FFF0',
        padding: 5,
-       textAlign: 'center'
+       textAlign: 'center',
+       fontFamily:"Roboto-Light"
   },
   heading2: {
     fontWeight: '500', 
@@ -335,7 +341,8 @@ const styles = StyleSheet.create({
       marginBottom: 20, 
       backgroundColor: '#F0FFF0',
        padding: 5,
-       textAlign: 'center'
+       textAlign: 'center',
+       fontFamily:"Roboto-Light"
   },
   heading3: {
     fontWeight: '500', 
@@ -345,7 +352,8 @@ const styles = StyleSheet.create({
       marginBottom: 20, 
       backgroundColor: '#F0FFF0',
        padding: 5,
-       textAlign: 'center'
+       textAlign: 'center',
+       fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',

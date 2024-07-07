@@ -1,9 +1,16 @@
 import React from 'react';
-import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
+
   return (
     <View style={{ flex: 1 }}>
       <Topbar />
@@ -14,16 +21,16 @@ function MyComponent() {
             <View style={{ flex: 1, marginRight: 5, maxWidth: '70%' }}>
                <View style={{ flexDirection: 'row' }}>
                <View style={{ flexDirection: 'column' }}>
-                <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00',  marginTop: 10 }}>Request Payout</Text>
-                <Text style={{ fontSize: 10, fontWeight: '500', color: 'grey', marginBottom: 20, marginTop: 5 }}>Payout possible after a minum accumulation of $100</Text>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00',  marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Request Payout")}</Text>
+                <Text style={{ fontSize: 10, fontWeight: '500', color: 'grey', marginBottom: 20, marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Payout possible after a minum accumulation of $100")}</Text>
                 </View>
                 <View style={{ alignItems: 'flex-end', marginLeft: 720 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600',  }}>Available balance</Text>
-              <Text style={{ fontSize: 17, color: '#206C00', fontWeight: '600', marginTop: 5,  }}>$1,234.00</Text>
+              <Text style={{ fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"  }}>{t("Available balance")}</Text>
+              <Text style={{ fontSize: 17, color: '#206C00', fontWeight: '600', marginTop: 5,fontFamily:"Roboto-Light"  }}>$1,234.00</Text>
             </View>
               </View>
               <View style={{ marginBottom: 10, marginTop: 30 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Recommended method for you</Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Recommended method for you")}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
               <Image
@@ -31,13 +38,13 @@ function MyComponent() {
                 style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
               />
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Local Bank</Text>
-                <Text style={{ fontSize: 13, marginBottom: 5 }}>• $0.99 USD per withdrawal</Text>
-                <Text style={{ fontSize: 13, marginBottom: 5 }}>• Withdraw funds directly into your local bank</Text>
+                <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Local Bank")}</Text>
+                <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>• {t("$0.99 USD per withdrawal")}</Text>
+                <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>• {t("Withdraw funds directly into your local bank")}</Text>
               </View>
             
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8, backgroundColor: 'coral', borderRadius: 5 }}>
-              <Text style={{ color: 'white', fontSize: 14 }}>Withdraw</Text>
+              <Text style={{ color: 'white', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Withdraw")}</Text>
             </TouchableOpacity>
           </View>
               
@@ -50,12 +57,12 @@ function MyComponent() {
               style={{ width: 80, height: 20, marginRight: 50, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10 }}>Paypal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>Paypal may charge additional fee per transaction (sending and withdrawing)</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10,fontFamily:"Roboto-Light" }}>Paypal</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("$2.00 USD per withdrawal")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Paypal may charge additional fee per transaction (sending and withdrawing)")}</Text>
             </View>
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14 }}>Withdraw</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Withdraw")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -66,12 +73,12 @@ function MyComponent() {
               style={{ width: 110, height: 21, marginRight: 25, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600' }}>Payoneer</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>Payoneer charges additional fees to withdraw funds. Create a Payoneer account <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
+              <Text style={{ fontSize: 15, fontWeight: '600',fontFamily:"Roboto-Light" }}>Payoneer</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("$2.00 USD per withdrawal")}</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Payoneer charges additional fees to withdraw funds. Create a Payoneer account")} <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
             </View>
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -5 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Withdraw</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Withdraw")}</Text>
             </TouchableOpacity>
           </View>
         </View>   
@@ -82,12 +89,12 @@ function MyComponent() {
               style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Wire Transfer</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$25.00 USD per wire to any bank</Text>
-             <Text style={{ fontSize: 13, marginBottom: 5 }}>Up to 7 business days to receive funds</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Wire Transfer")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("$25.00 USD per wire to any bank")}</Text>
+             <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Up to 7 business days to receive funds")}</Text>
             </View>
             <TouchableOpacity style={{  alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Withdraw</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Withdraw")}</Text>
             </TouchableOpacity>
           </View>
         </View>       

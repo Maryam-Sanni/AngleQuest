@@ -72,9 +72,8 @@ const HomePage = () => {
     setModalVisible2(false);
   };
 
-  const [fontsLoaded] = useFonts({
-    'Varta-Light': require('../assets/fonts/Varta-Light.ttf'),
-    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  const [fontsLoaded]=useFonts({
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   });
 
 const {t}=useTranslation()
@@ -118,17 +117,17 @@ const {t}=useTranslation()
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>see more</Text>
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
           <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Microsoft Azure Hub</Text>
@@ -136,17 +135,17 @@ const {t}=useTranslation()
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>see more</Text>
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
           
           <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Jr. PowerPoint Hub</Text>
@@ -154,17 +153,17 @@ const {t}=useTranslation()
           <Image source={require('../assets/useravatar4.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15, fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam..</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")}, This is Maryam..</Text>
           </View>
           </View>
           <View style={{flexDirection: 'row', marginTop: 10 }}>
           <Image source={require('../assets/useravatar1.png')} style={styles.image} />
           <View style={{flexDirection: 'column' }}>
             <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Maryam...</Text>
+            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
           </View>
           </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>see more</Text>
+          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
  
           <TouchableOpacity onPress={goToMessages} 
@@ -268,7 +267,7 @@ onMouseLeave={() => setIsHovered5(false)}
        source={require('../assets/Upcom2.png')}
         style={{ width: 25, height: 25, marginLeft: 50, marginTop: 15,}}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Upcoming Sessions</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Sessions")}</Text>
           </View>
           <View style={{flexDirection: 'column' }}>
           <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline',fontFamily:"Roboto-Light" }}>5 Confirmations | 1 to go</Text>
@@ -312,7 +311,7 @@ onMouseLeave={() => setIsHovered3(false)}
           onMouseEnter={() => setIsHovered4(true)}
           onMouseLeave={() => setIsHovered4(false)}
           >
-          <Text style={styles.touchableTextjoinsession}>Start</Text>
+          <Text style={styles.touchableTextjoinsession}>{t("Start")}</Text>
           </TouchableOpacity>
           </View>
               </View>
@@ -322,7 +321,7 @@ onMouseLeave={() => setIsHovered3(false)}
 
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 20, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>New Offer</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 20, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Offer")}</Text>
 <View style={{flexDirection: 'row' }}>
 <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 20, textDecoration: 'underline',fontFamily:"Roboto-Light" }}>ASML wanta to enroll 5 SAP FI as your protegees</Text>
 <TouchableOpacity
@@ -333,7 +332,7 @@ style={[
 onMouseEnter={() => setIsHovered9(true)}
 onMouseLeave={() => setIsHovered9(false)}
 >
-          <Text style={styles.touchableTextjoinrate}>Send a Bid </Text>
+          <Text style={styles.touchableTextjoinrate}>{t("Send a Bid")} </Text>
           </TouchableOpacity>
           </View>
 </View>
@@ -358,7 +357,7 @@ style={[
 onMouseEnter={() => setIsHovered10(true)}
 onMouseLeave={() => setIsHovered10(false)}
 >
-          <Text style={styles.touchableTextjoinreview}>Start</Text>
+          <Text style={styles.touchableTextjoinreview}>{t("Start")}</Text>
           </TouchableOpacity>
           </View>
           </View>
@@ -383,7 +382,7 @@ style={[
 onMouseEnter={() => setIsHovered11(true)}
 onMouseLeave={() => setIsHovered11(false)}
 >
-          <Text style={styles.touchableTextjoinreview}>Start</Text>
+          <Text style={styles.touchableTextjoinreview}>{t("Start")}</Text>
           </TouchableOpacity>
           </View>
           </View>
@@ -408,7 +407,7 @@ style={[
 onMouseEnter={() => setIsHovered12(true)}
 onMouseLeave={() => setIsHovered12(false)}
 >
-          <Text style={styles.touchableTextjoinreview}>Start</Text>
+          <Text style={styles.touchableTextjoinreview}>{t("Start")}</Text>
           </TouchableOpacity>
           </View>
           </View>

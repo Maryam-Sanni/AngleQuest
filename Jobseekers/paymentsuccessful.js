@@ -1,20 +1,28 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const PaymentSuccessful = ({ imageSrc, altText }) => {
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.logoContainer}>
           <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dd026d3725b6e9ec09e0b599e114c5fb55e59aaa4b25030829b6d46dfdb80e4d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={styles.logo} />
         </View>
-        <Text style={styles.title}>Payment Successful</Text>
+        <Text style={styles.title}>{t("Payment Successful")}</Text>
         <View style={styles.imageContainer}>
           <Image source={{ uri: imageSrc }} style={styles.image} />
         </View>
         <Text style={styles.text}>{altText}</Text>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>DONE</Text>
+          <Text style={styles.buttonText}>{t("DONE")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -62,6 +70,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   imageContainer: {
     justifyContent: 'center',
@@ -79,6 +88,7 @@ const styles = StyleSheet.create({
     color: '#000',
     maxWidth: 250,
     marginBottom: 20,
+    fontFamily:"Roboto-Light",
   },
   button: {
     justifyContent: 'center',
@@ -93,6 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: 'white',
+fontFamily:"Roboto-Light"
   },
 });
 

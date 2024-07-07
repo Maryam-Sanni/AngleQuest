@@ -65,8 +65,7 @@ function MyComponent() {
     return <Sidebar />;
   }
     
-
-  
+ 
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>

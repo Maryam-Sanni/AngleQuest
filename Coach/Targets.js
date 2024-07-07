@@ -4,9 +4,7 @@ import Topbar from '../components/topbar';
 import Sidebar from '../components/Managersidebar';
 import EmployeeStats from '../components/TargetStats';
 import { useNavigation } from '@react-navigation/native';
-import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal from './NewTarget';
-
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 
@@ -24,10 +22,7 @@ function MyComponent() {
   };
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
-    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")
   })
 const {t}=useTranslation()
     return (
@@ -53,7 +48,7 @@ const {t}=useTranslation()
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ {t("New")}</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
             </View>    

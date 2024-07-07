@@ -4,13 +4,19 @@ import { View, Text, TextInput, Image, StyleSheet, CheckBox, TouchableOpacity, S
 import { useNavigation } from '@react-navigation/native';
 import TopBar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const navigation = useNavigation();
   const [isCVChecked, setIsCVChecked] = useState(false);
   const [isInterviewResultsChecked, setIsInterviewResultsChecked] = useState(false);
 
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+const {t}=useTranslation()
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
     <View style={{ flex: 1 }}>
@@ -19,11 +25,11 @@ function MyComponent() {
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
         <View style={{ backgroundColor: '#f7fff4', marginLeft: 230 }}>
-          <Text style={{ fontSize: 18, color: '#206C00', fontWeight: 'bold', marginTop: 30, marginBottom: 10, marginLeft: 10 }}>Contact Information</Text>
+          <Text style={{ fontSize: 18, color: '#206C00', fontWeight: 'bold', marginTop: 30, marginBottom: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Contact Information")}</Text>
           <View style={{ flexDirection: 'row', paddingHorizontal: 8, paddingTop: 8 }}>
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', fontWeight: 'bold' }}>Full Name</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Full Name")}</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
@@ -40,7 +46,7 @@ function MyComponent() {
               />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', fontWeight: 'bold' }}>Email</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Email")}</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
@@ -57,7 +63,7 @@ function MyComponent() {
               />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6 }}>
-                <Text style={{ color: '#206C00', fontWeight: 'bold'}}>Country</Text>
+                <Text style={{ color: '#206C00', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Country")}</Text>
                 <TextInput
                 style={{
                   borderWidth: 1,
@@ -75,7 +81,7 @@ function MyComponent() {
               </View>
                 
               <View style={{ justifyContent: 'center', alignSelf: 'flex-end', paddingHorizontal: 10, paddingVertical: 8, marginTop: 20, backgroundColor: 'coral', borderRadius: 5 }}>
-                <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Save Changes</Text>
+                <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Save Changes")}</Text>
               </View>
             </View>
 
@@ -88,19 +94,19 @@ function MyComponent() {
 
 
           <View style={{ paddingHorizontal: 8, marginTop: 10  }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#206C00', marginTop: 40 }}>Account Deactivation</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#206C00', marginTop: 40,fontFamily:"Roboto-Light" }}>{t("Account Deactivation")}</Text>
             <View style={{ flexDirection: 'row', marginTop: - 20 }}>
               <View style={{ width: '100%' }}>
-              <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginLeft: 230 }}>This is what happens when you deactivate your account</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 4, marginLeft: 240 }}>• Your profile will be permanently deleted from our server</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• All Booked sessions will be cancelled</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• Forwarded feedbacks retracted</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240 }}>• You won’t be able to reactivate your sessions</Text>
+              <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginLeft: 230,fontFamily:"Roboto-Light" }}>{t("This is what happens when you deactivate your account")}</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 4, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Your profile will be permanently deleted from our server")}</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("All Booked sessions will be cancelled")}</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Forwarded feedbacks retracted")}</Text>
+                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("You won’t be able to reactivate your sessions")}</Text>
               </View>
             </View>
           </View>
           <View style={{ justifyContent: 'center', marginLeft: 250, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginBottom: 50, backgroundColor: 'red', borderRadius: 5, }}>
-            <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Deactivate account</Text>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Deactivate account")}</Text>
           </View>
         </View>
         </ScrollView>

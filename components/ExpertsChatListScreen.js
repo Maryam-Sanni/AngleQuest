@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet, ImageBackground  } from 'react-native';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const data = [
   {
@@ -134,10 +136,12 @@ const scrollLeft = () => {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const {t}=useTranslation()
+
 
   return (
     <View style={{ padding: 16, width: '100%', backgroundColor: 'white'}}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16,fontFamily:"Roboto-Light" }}>Chats</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16,fontFamily:"Roboto-Light" }}>{t("Chats")}</Text>
        <TouchableOpacity onPress={() => scrollLeft()}>
           <Image source={require('../assets/left-arrow.png')} style={{ width: 10, height: 10, marginTop: 20, left: 10}} />
         </TouchableOpacity>
@@ -145,7 +149,7 @@ const scrollLeft = () => {
       <View style={{ flexDirection: 'row',}}>
         <TouchableOpacity onPress={onPressAllChats}>
           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderColor: selectedHub === null ? "#3D5C3A" : "#63EC55", backgroundColor: selectedHub === null ? "#3D5C3A" : null, alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, marginBottom: 5 }}>
-            <Text style={{ fontSize: 13, color: selectedHub === null ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light"}}>All Chats</Text>
+            <Text style={{ fontSize: 13, color: selectedHub === null ? "white" : "#3D5C3A", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("All Chats")}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressHub1}>
@@ -215,21 +219,24 @@ const handlePressHub4 = () => {
   const handlePressHub5 = () => {
     setSelectedHub('Hub5');
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Chat', { userId: item.id })}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5', width: '100%', backgroundColor: 'white', }}>
         <Image source={item.avatar} style={{ width: 36, height: 36, borderRadius: 18, marginRight: 12 }} />
         <View style={{ flex: 1 }}>
-          <Text style={{ fontWeight: '500', fontSize: 15,}}>{item.name}</Text>
-          <Text style={{ color: '#777', fontSize: 13,}}>{item.message}</Text>
+          <Text style={{ fontWeight: '500', fontSize: 15,fontFamily:"Roboto-Light"}}>{item.name}</Text>
+          <Text style={{ color: '#777', fontSize: 13,fontFamily:"Roboto-Light"}}>{item.message}</Text>
         </View>
         <View style={{ flexDirection: 'column'}}>
-        <Text style={{ color: '#777', fontSize: 13, marginBottom: 5 }}>{item.time}</Text>
+        <Text style={{ color: '#777', fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{item.time}</Text>
         <View>
         {item.messagecount !== '0' && (
           <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#4CAF50', justifyContent: 'center', alignItems: 'center', marginLeft: 40 }}>
-            <Text style={{ color: 'white', fontWeight: '500', fontSize: 10 }}>{item.messagecount}</Text>
+            <Text style={{ color: 'white', fontWeight: '500', fontSize: 10,fontFamily:"Roboto-Light" }}>{item.messagecount}</Text>
           </View>
         )}
       </View>

@@ -3,6 +3,8 @@ import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity } from 'react
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -25,6 +27,10 @@ function MyComponent() {
   const goToBillingsAndPayment = () => {
     navigation.navigate('Withdrawal Setup');
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,9 +41,9 @@ function MyComponent() {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <View style={{ flex: 1, marginRight: 5, maxWidth: '70%' }}>
                <View style={{ flexDirection: 'row' }}>
-                <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00', marginBottom: 20, marginTop: 10 }}>Add a withdrawal method</Text>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: '#206C00', marginBottom: 20, marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Add a withdrawal method")}</Text>
                 <View style={{ alignItems: 'flex-end', marginLeft: 450 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600',  }}>Available balance</Text>
+              <Text style={{ fontSize: 14, fontWeight: '600', fontFamily:"Roboto-Light" }}>{t("Available balance")}</Text>
 
               <TouchableOpacity style={styles.button} onPress={handleBalancePress}>
       <Text style={styles.text}>$1,234.00</Text>
@@ -45,7 +51,7 @@ function MyComponent() {
             </View>
               </View>
               <View style={{ marginBottom: 10, marginTop: 30 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Recommended method for you</Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>{t("Recommended method for you")}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
               <Image
@@ -53,13 +59,13 @@ function MyComponent() {
                 style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
               />
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Local Bank</Text>
-                <Text style={{ fontSize: 13, marginBottom: 5 }}>• $0.99 USD per withdrawal</Text>
-                <Text style={{ fontSize: 13, marginBottom: 5 }}>• Withdraw funds directly into your local bank</Text>
+                <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("Local Bank")}</Text>
+                <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>• {t("$0.99 USD per withdrawal")}</Text>
+                <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>• {t("Withdraw funds directly into your local bank")}</Text>
               </View>
             
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8, backgroundColor: 'coral', borderRadius: 5 }}>
-              <Text style={{ color: 'white', fontSize: 14 }}>Set up</Text>
+              <Text style={{ color: 'white', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
               
@@ -72,12 +78,12 @@ function MyComponent() {
               style={{ width: 80, height: 20, marginRight: 50, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10 }}>Paypal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>Paypal may charge additional fee per transaction (sending and withdrawing)</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10,fontFamily:"Roboto-Light"  }}>Paypal</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("$2.00 USD per withdrawal")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("Paypal may charge additional fee per transaction (sending and withdrawing)")}</Text>
             </View>
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14 }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -88,12 +94,12 @@ function MyComponent() {
               style={{ width: 110, height: 21, marginRight: 25, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600' }}>Payoneer</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>Payoneer charges additional fees to withdraw funds. Create a Payoneer account <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
+              <Text style={{ fontSize: 15, fontWeight: '600',fontFamily:"Roboto-Light"  }}>Payoneer</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("$2.00 USD per withdrawal")}</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("Payoneer charges additional fees to withdraw funds. Create a Payoneer account")} <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
             </View>
             <TouchableOpacity style={{ alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -5 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"   }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>   
@@ -104,12 +110,12 @@ function MyComponent() {
               style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Wire Transfer</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$25.00 USD per wire to any bank</Text>
-             <Text style={{ fontSize: 13, marginBottom: 5 }}>Up to 7 business days to receive funds</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("Wire Transfer")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("$25.00 USD per wire to any bank")}</Text>
+             <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light"  }}>{t("Up to 7 business days to receive funds")}</Text>
             </View>
             <TouchableOpacity style={{  alignSelf: 'flex-start', paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"   }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>       
@@ -121,25 +127,25 @@ function MyComponent() {
               <TouchableOpacity onPress={goToAccountSettings}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
               <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9b7a3a6d0178d9e4654db03454de5de060a67e4b91a6fe4d31a059874d384eb2?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5 }} />
-              <Text style={{ fontSize: 12, color: 'black' }}>Account Settings</Text>
+              <Text style={{ fontSize: 12, color: 'black',fontFamily:"Roboto-Light"  }}>{t("Account Settings")}</Text>
             </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToResetPassword}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
                 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d2d638a18c02206d9cb09092e754e29b9e7fcec759c21615164f9508890194ba?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Password</Text>
+                <Text style={{ fontSize: 12, color: 'black', marginTop: 15,fontFamily:"Roboto-Light"  }}>{t("Password")}</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={goToNotificationSettings}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
                 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/17d8150403f80380e2928ef1b9db06fb8c60a50c487a2172f5699a0eb5f88b6d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'black', marginTop: 15 }}>Notification Settings</Text>
+                <Text style={{ fontSize: 12, color: 'black', marginTop: 15,fontFamily:"Roboto-Light"  }}>{t("Notification Settings")}</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={goToBillingsAndPayment}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} style={{ width: 15, height: 15, marginRight: 5, marginTop: 15 }} />
-                <Text style={{ fontSize: 12, color: 'coral', fontWeight: 'bold', marginTop: 15 }}>Payment</Text>
+                <Text style={{ fontSize: 12, color: 'coral', fontWeight: 'bold', marginTop: 15,fontFamily:"Roboto-Light"  }}>{t("Payment")}</Text>
               </View>
               </TouchableOpacity>
             </View>
@@ -194,5 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#206C00',
     fontWeight: '600',
+    fontFamily:"Roboto-Light" 
   },
 });

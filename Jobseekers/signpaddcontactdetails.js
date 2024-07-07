@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native'; 
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Top from '../components/top';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function InputField({ label, placeholder, onChange }) { 
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+
   return ( 
     <View style={styles.inputContainer}> 
       <Text style={styles.label}>{label}</Text> 
@@ -44,6 +51,10 @@ function MyComponent() {
     // Navigate to HomePage 
     navigation.navigate('Home'); 
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
 <View style={{ height: '90%' }}>
@@ -53,18 +64,18 @@ function MyComponent() {
       <View style={styles.innerContainer}> 
         <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, alignItems: 'center', justifyContent: 'center'}}> 
           <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', }}> 
-            <Text style={{ color: 'white', fontSize: 16 }}>1</Text> 
+            <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>1</Text> 
           </View> 
           <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} /> 
           <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', marginLeft: 5, }}> 
-            <Text style={{ color: 'white', fontSize: 16 }}>2</Text> 
+            <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>2</Text> 
           </View> 
           <View style={{ width: 60, height: 2, backgroundColor: '#F5F5F5', marginTop: 4, marginLeft: 5 }} /> 
           <View style={{ width: 30, height: 30, borderRadius: 40, backgroundColor: 'coral', alignItems: 'center', justifyContent: 'center', marginLeft: 5, }}> 
-            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>3</Text> 
+            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>3</Text> 
           </View> 
         </View> 
-        <Text style={styles.sectionTitle}>Contact Details</Text> 
+        <Text style={styles.sectionTitle}>{t("Contact Details")}</Text> 
         <View style={styles.inputGroup}> 
           <InputField label="Email Address" placeholder="Enter Email Address" onChange={setEmail} /> 
           <InputField label="Mobile Number" placeholder="(xxx) xxx-xxxx" onChange={setMobileNumber} /> 
@@ -73,7 +84,7 @@ function MyComponent() {
           <InputField label="LinkedIn Username" placeholder="Enter LinkedIn Username" onChange={setLinkedinUsername} /> 
           <InputField label="X Username" placeholder=" Enter X Username" onChange={setXUsername} /> 
         </View> 
-        <Text style={styles.sectionTitle}>Address</Text> 
+        <Text style={styles.sectionTitle}>{t("Address")}</Text> 
         <TextInput placeholder="Street Address" placeholderTextColor="grey" style={styles.input} onChangeText={setStreetAddress} /> 
         <TextInput placeholder="Street Address Line 2" placeholderTextColor="grey" style={styles.input} onChangeText={setStreetAddressLine2} /> 
         <View style={styles.inputGroup}> 
@@ -85,7 +96,7 @@ function MyComponent() {
           <TextInput placeholder="Country" placeholderTextColor="grey" style={styles.halfInput} onChangeText={setCountry} /> 
         </View> 
         <TouchableOpacity style={styles.saveButtonContainer} onPress={handleSave}> 
-          <Text style={styles.saveButton}>Save & Continue</Text> 
+          <Text style={styles.saveButton}>{t("Save & Continue")}</Text> 
         </TouchableOpacity> 
       </View> 
     </View> 
@@ -113,6 +124,7 @@ const styles = StyleSheet.create({
     marginTop: 20, 
     marginBottom: 10, 
     color: 'black', 
+    fontFamily:"Roboto-Light"
   }, 
   inputGroup: { 
     flexDirection: 'row', 
@@ -127,6 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 14, 
     fontWeight: '600', 
     marginBottom: 5, 
+    fontFamily:"Roboto-Light"
   }, 
   input: { 
     borderWidth: 1, 

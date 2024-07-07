@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import OpenModal from './TargetCriteria';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -27,6 +29,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const { t } = useTranslation()
 
   return (
     <>
@@ -43,9 +49,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Set Target</Text>
+              <Text style={styles.headerText}>{t("Set Target")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -53,11 +59,11 @@ function MyComponent({ onClose }) {
 
            
             <View style={styles.container}>
-            <Text style={{  fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10}}>
-                  This target represents the impact that is expected to be contributed by the employee within a period
+            <Text style={{  fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light"}}>
+                  {t("This target represents the impact that is expected to be contributed by the employee within a period")}
                 </Text>
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5 }}>
-                  Employee
+                  {t("Employee")}
                 </Text> 
                 <Picker
                   style={styles.picker}
@@ -69,8 +75,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="Hussein Aliyu" value="Hussein Aliyu" />
                 </Picker>
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Target Type
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Target Type")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -83,8 +89,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="Professional" value="Professional" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Target Summary
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Target Summary")}
             </Text>
             <TextInput
               placeholder=" "
@@ -92,16 +98,16 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Target Deadline
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Target Deadline")}
                 </Text>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                <Text style={styles.input}>Selected date and time: {selectedDateTime}</Text>
+                <Text style={styles.input}>{t("Selected date and time:")} {selectedDateTime}</Text>
                 </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Next</Text>
+                  <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                 </TouchableOpacity>
               </View>
               </View>
@@ -173,6 +179,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -185,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
-  },
+    fontFamily:"Roboto-Light"  },
   uneditable: {
     height: 40,
     width: '80%',

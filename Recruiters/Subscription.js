@@ -43,7 +43,6 @@ function MyComponent() {
 
       
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
   const {t}=useTranslation()
@@ -66,7 +65,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Subscription Settings</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Subscription Settings")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress} style={{ position: 'absolute', right: 5, flexDirection: 'row'}}>
@@ -74,7 +73,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                            <Text style={{fontSize: 14, fontWeight: '500', marginTop: 5, color: '#666', width: 200,fontFamily:"Roboto-Light" }}>Payment Details</Text>
+                            <Text style={{fontSize: 14, fontWeight: '500', marginTop: 5, color: '#666', width: 200,fontFamily:"Roboto-Light" }}>{t("Payment Details")}</Text>
      </TouchableOpacity>
                         </View>
                         {/* Sections */}

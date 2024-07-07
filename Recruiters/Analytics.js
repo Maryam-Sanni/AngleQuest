@@ -9,6 +9,7 @@ import OpenModal from './TargetPerformaces';
 import OpenModal2 from './GrowthPlanPerformance';
 import OpenModal3 from './AdvicePerformance';
 import OpenModal4 from './HubsPerformance';
+import { useTranslation } from 'react-i18next';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -135,6 +136,7 @@ const MyComponent = () => {
     setModalVisible4(false);
     onClose();
   };
+  const {t}=useTranslation()
 
   return (
 <View style={{backgroundColor: '#3F5B39', flex: 1}}>
@@ -153,7 +155,7 @@ const MyComponent = () => {
                       }}
                       style={styles.image}
                     />
-                    <Text style={styles.headertext}>Analytics</Text>
+                    <Text style={styles.headertext}>{t("Analytics")}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -171,22 +173,22 @@ const MyComponent = () => {
                     marginLeft: 50
                   }}
                 >
-                  <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', fontFamily: 'Roboto-Light' }}>Analytics</Text>
+                  <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', fontFamily: 'Roboto-Light' }}>{t("Analytics")}</Text>
                 </View>
 
                 <Picker style={styles.picker}>
-                  <Picker.Item label="All" value="All" />
-                  <Picker.Item label="Employee" value="Employee" />
-                  <Picker.Item label="Manager" value="Manager" />
-                  <Picker.Item label="Coach" value="Coach" />
-                  <Picker.Item label="Team" value="Team" />
+                  <Picker.Item label={t("All")} value="All" />
+                  <Picker.Item label={t("Employee")} value="Employee" />
+                  <Picker.Item label={t("Manager")} value="Manager" />
+                  <Picker.Item label={t("Coach")} value="Coach" />
+                  <Picker.Item label={t("Team")} value="Team" />
                 </Picker>
 
                 <Picker style={styles.picker}>
-                  <Picker.Item label="Teams" value="Teams" />
-                  <Picker.Item label="Employees" value="Employees" />
-                  <Picker.Item label="Managers" value="Managers" />
-                  <Picker.Item label="Coaches" value="Coaches" />
+                  <Picker.Item label={t("Teams")} value="Teams" />
+                  <Picker.Item label={t("Employees")} value="Employees" />
+                  <Picker.Item label={t("Managers")} value="Managers" />
+                  <Picker.Item label={t("Coaches")} value="Coaches" />
                 </Picker>
 
                 <Picker style={styles.picker}>
@@ -206,7 +208,7 @@ const MyComponent = () => {
                 </Picker>
 
                 <Picker style={styles.picker}>
-                  <Picker.Item label="To" value=" " />
+                  <Picker.Item label={t("To")} value=" " />
                   <Picker.Item label="Jan" value="Jan" />
                   <Picker.Item label="Feb" value="Feb" />
                   <Picker.Item label="Mar" value="Mar" />
@@ -222,13 +224,13 @@ const MyComponent = () => {
                 </Picker>
 
                 <TouchableOpacity style={styles.PDF} >
-                  <Text style={{ fontSize: 15, color: 'white' }}>Download PDF</Text>
+                  <Text style={{ fontSize: 15, color: 'white' }}>{t("Download PDF")}</Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.container}>
               <TouchableOpacity onPress={handleOpenPress} style={styles.box}>
-              <Text style={styles.title}>Target</Text>
+              <Text style={styles.title}>{t("Target")}</Text>
       <View style={styles.GchartContainer}>
         <View style={styles.GchartArea}>
           {groupdata.map((group, groupIndex) => (
@@ -264,7 +266,7 @@ const MyComponent = () => {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleOpenPress2} style={styles.box}>
-            <Text style={styles.title3}>Growth Plan Performance</Text>
+            <Text style={styles.title3}>{t("Growth Plan Performance")}</Text>
 <View style={{ alignItems: 'center', marginTop: 10 }}>
 <Svg width={graphWidth} height={height}>
         {/* Draw lines */}
@@ -339,7 +341,7 @@ const MyComponent = () => {
 
               <View style={styles.container}>
               <TouchableOpacity onPress={handleOpenPress3} style={styles.box}>
-      <Text style={styles.title2}> Career Advice Performance</Text>
+      <Text style={styles.title2}> {t("Career Advice Performance")}</Text>
       <View style={styles.chartContainer}>
         {/* Y-axis labels */}
         <View style={styles.yAxis}>
@@ -368,7 +370,7 @@ const MyComponent = () => {
     </TouchableOpacity>
 
     <TouchableOpacity onPress={handleOpenPress4} style={styles.box}>
-      <Text style={styles.title2}>Hub Performance</Text>
+      <Text style={styles.title2}>{t("Hub Performance")}</Text>
       <View style={styles.chartContainer}>
         {/* Y-axis labels */}
         <View style={styles.yAxis}>

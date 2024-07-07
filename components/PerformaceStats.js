@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react
 import OpenSchedule from '../Recruiters/EmPerfStat';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const ProgressBar = ({ percentage }) => {
+  
     return (
       <View style={styles.progressBarContainer}>
         <View style={[styles.progressBar, { width: `${percentage}%` }]} />
@@ -24,6 +26,10 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
   };
 const {t}=useTranslation()
+const [fontsLoaded]=useFonts({
+  'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+})
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -31,29 +37,29 @@ const {t}=useTranslation()
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Name")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Name")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Angle Badge")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Angle Badge")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Hub's Attendance")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Hub's Attendance")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Growth Plan")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Growth Plan")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Advice")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Advice")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Mentor")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Mentor")}</Text>
             </View>
           </View>
 
           <View style={styles.row}>
             <View style={styles.cell2}>
               <TouchableOpacity onPress={handleOpenPress}>
-                <Text style={{ textDecoration: 'underline' }}>Jacob Ncube</Text>
+                <Text style={{ textDecoration: 'underline',fontFamily:"Roboto-Light" }}>Jacob Ncube</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.cell2}>
@@ -75,7 +81,7 @@ const {t}=useTranslation()
             <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
-                <Text style={{ textDecoration: 'underline' }}>Sander Josef</Text>
+                <Text style={{ textDecoration: 'underline',fontFamily:"Roboto-Light" }}>Sander Josef</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.cell}>
@@ -97,7 +103,7 @@ const {t}=useTranslation()
             <View style={styles.row}>
             <View style={styles.cell2}>
               <TouchableOpacity onPress={handleOpenPress}>
-                <Text style={{ textDecoration: 'underline' }}>Joe Jason</Text>
+                <Text style={{ textDecoration: 'underline',fontFamily:"Roboto-Light" }}>Joe Jason</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.cell2}>
@@ -119,7 +125,7 @@ const {t}=useTranslation()
             <View style={styles.row}>
             <View style={styles.cell}>
               <TouchableOpacity onPress={handleOpenPress}>
-                <Text style={{ textDecoration: 'underline' }}>Hussein Aliyu</Text>
+                <Text style={{ textDecoration: 'underline',fontFamily:"Roboto-Light" }}>Hussein Aliyu</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.cell}>
@@ -198,6 +204,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Robto-Light"
   },
   greenBox: {
     flex: 2,

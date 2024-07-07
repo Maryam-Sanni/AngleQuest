@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView,
 import OpenModal from './AllSet';
 import OpenSchedule2 from './Provideadditional';
 import OpenSchedule3 from './AllSet';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -51,6 +53,11 @@ const handlePress2 = () => {
         setIsAnnualPressed(false);
     }
 };
+const [fontsLoaded]=useFonts({
+  "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+    })
+  const {t}=useTranslation()
+
 
   return (
     <>
@@ -67,26 +74,26 @@ const handlePress2 = () => {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Note on Employee to the expert</Text>
+          <Text style={styles.headerText}>{t("Note on Employee to the expert")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
 
         
-      <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 5, marginLeft: 50, fontStyle: 'italic', fontWeight: '500'}}>
-                                            It will be helpful to provide the expert with some detail about " Employee Name",
+      <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 5, marginLeft: 50, fontStyle: 'italic', fontWeight: '500',fontFamily:"Roboto-Light"}}>
+                                            {t("It will be helpful to provide the expert with some detail about Employee Name")}
                                         </Text>
-                                        <Text style={{ fontSize: 16, marginLeft: 50, marginBottom: 10, fontStyle: 'italic', fontWeight: '500' }}>
-                                            The will guide the expert's guidance and focus.
+                                        <Text style={{ fontSize: 16, marginLeft: 50, marginBottom: 10, fontStyle: 'italic', fontWeight: '500',fontFamily:"Roboto-Light" }}>
+                                            {t("The will guide the expert's guidance and focus.")}
                                         </Text>
        
 
-        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontStyle: 'italic', }}>
-                                        Who will provide the additional details?
+        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontStyle: 'italic', fontFamily:"Roboto-Light"}}>
+                                        {t("Who will provide the additional details?")}
                                         </Text>
 
                                         <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 5 }}>
@@ -98,7 +105,7 @@ const handlePress2 = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress}
                                             />
-                                            <Text style={{ fontSize: 15, }}> "Employee Name" coach or manager  </Text>
+                                            <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}> {t("Employee Name, coach or manager")}  </Text>
                                         </View>
 
                                         <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 30, }}>
@@ -110,16 +117,16 @@ const handlePress2 = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress2}
                                             />
-                                            <Text style={{ fontSize: 15, }}> I'll provide it  </Text>
+                                            <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}> {t("I'll provide it")}  </Text>
                                         </View>
 
         
                                         <View style={styles.buttonContainer}>
                                             <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonplus}>
-                                                <Text style={styles.buttonTextplus}>Next</Text>
+                                                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
-                                                <Text style={styles.buttonTextskip}>Skip</Text>
+                                                <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
                                             </TouchableOpacity>
                                             </View>
     
@@ -230,12 +237,14 @@ const styles = StyleSheet.create({
       marginLeft: 20,
       width: 100,
       paddingHorizontal: 20,
-      marginBottom: 30
+      marginBottom: 30,
+      fontFamily:"Roboto-Light"
   },
   buttonTextplus: {
       color: 'white',
       fontSize: 14,
       textAlign: 'center',
+      fontFamily:"Roboto-Light"
   },
   buttonTextskip: {
       color: 'coral',
@@ -276,7 +285,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

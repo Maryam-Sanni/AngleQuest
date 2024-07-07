@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, TextInput, Image } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
@@ -144,6 +146,11 @@ function MyComponent() {
     ));
   };
 
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
   return (
     <View style={{ flex: 1 }}>
       <Topbar />
@@ -152,13 +159,13 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ flex: 1, paddingHorizontal: 8, paddingTop: 8, paddingBottom: 20, backgroundColor: "white", marginLeft: 300, marginRight: 130, marginTop: 20 }}>
 
-                <Text style={{ fontSize: 14, color: "#888", fontWeight: "600"   }}>Recent</Text>
+                <Text style={{ fontSize: 14, color: "#888", fontWeight: "600",fontFamily:"Roboto-Light" }}>{t("Recent")}</Text>
               
               
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
               {renderCards()}
             </View>
-            <Text style={{ fontSize: 14, color: "#888", fontWeight: "600"   }}>Older</Text>
+            <Text style={{ fontSize: 14, color: "#888", fontWeight: "600",fontFamily:"Roboto-Light" }}>{t("Older")}</Text>
 
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
               {renderCards()}

@@ -3,6 +3,9 @@ import { View, Text, Image, CheckBox, StyleSheet, TouchableOpacity, ScrollView }
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -13,7 +16,11 @@ function MyComponent() {
   const [isRemindersChecked, setIsRemindersChecked] = useState(false);
   const [isPushFeedbacksChecked, setIsPushFeedbacksChecked] = useState(false);
   const [isPushRemindersChecked, setIsPushRemindersChecked] = useState(false);
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
 
+  const {t}=useTranslation()
 
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
@@ -26,17 +33,17 @@ function MyComponent() {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <View style={{ flex: 1, marginRight: 5, maxWidth: '70%' }}>
               <View>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#206C00', marginBottom: 20 }}>Notification Settings</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#206C00', marginBottom: 20,fontFamily:"Roboto-Light" }}>{t("Notification Settings")}</Text>
               </View>
               <View style={{ flexDirection: 'column', marginBottom: 20 }}>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold' }}>Email notifications</Text>
-                  <Text style={{ fontSize: 14, color: 'black', marginBottom: 20 }}>Get emails to find out what’s going on when you’re not online. You can turn these off.</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Email notifications")}</Text>
+                  <Text style={{ fontSize: 14, color: 'black', marginBottom: 20,fontFamily:"Roboto-Light" }}>{t("Get emails to find out what’s going on when you’re not online. You can turn these off")}.</Text>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>News and updates</Text>
+                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("News and updates")}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Receive the latest news about products and feature updates.</Text>
+                    <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Receive the latest news about products and feature updates")}.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isNewsChecked}
@@ -45,9 +52,9 @@ function MyComponent() {
                   </View>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Tips and tutorials</Text>
+                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Tips and tutorials")}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Tips on getting more out of our services.</Text>
+                    <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Tips on getting more out of our services")}.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isTipsChecked}
@@ -56,9 +63,9 @@ function MyComponent() {
                   </View>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Messages</Text>
+                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Messages")}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Message notifications relating to career advice sent to email.</Text>
+                    <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Message notifications relating to career advice sent to email")}.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isMessagesChecked}
@@ -67,9 +74,9 @@ function MyComponent() {
                   </View>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
+                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Feedbacks")}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
+                    <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Feedbacks on interview sessions and career advices")}.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isFeedbacksChecked}
@@ -78,9 +85,9 @@ function MyComponent() {
                   </View>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
+                  <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Reminders")}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
+                    <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("These are notifications to remind you of updates you might have missed")}.</Text>
                     <CheckBox
         style={{ marginRight: 10}}
         value={isRemindersChecked}
@@ -94,14 +101,14 @@ function MyComponent() {
 
               <View style={{ flexDirection: 'column', marginBottom: 20 }}>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold', marginTop: 30 }}>Push notifications</Text>
-                  <Text style={{ fontSize: 14, color: 'black' }}>Get push notifications to find out what’s going on when you’re online. </Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', fontWeight: 'bold', marginTop: 30,fontFamily:"Roboto-Light" }}>{t("Push notifications")}</Text>
+                  <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Get push notifications to find out what’s going on when you’re online")}. </Text>
                 </View>
               </View>
               <View>
-                <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Reminders</Text>
+                <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Reminders")}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, color: 'black' }}>These are notifications to remind you of updates you might have missed.</Text>
+                  <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("These are notifications to remind you of updates you might have missed")}.</Text>
                   <CheckBox
         style={{ marginRight: 10}}
         value={isPushFeedbacksChecked}
@@ -110,9 +117,9 @@ function MyComponent() {
                 </View>
               </View>
               <View>
-                <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>Feedbacks</Text>
+                <Text style={{ fontSize: 14, color: 'black', fontWeight: '500', marginTop: 10 }}>{t("Feedbacks")}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, color: 'black' }}>Feedbacks on interview sessions and career advoces.</Text>
+                  <Text style={{ fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Feedbacks on interview sessions and career advices")}.</Text>
                   <CheckBox
         style={{ marginRight: 10}}
         value={isPushRemindersChecked}

@@ -3,6 +3,9 @@ import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, Animated }
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 const data = [
     { date: 'Jul', score: 28 },
@@ -36,6 +39,10 @@ function MyComponent() {
   const goToMessages = () => {
     navigation.navigate('Messaging'); 
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{height: '70%'}}>
@@ -49,30 +56,30 @@ function MyComponent() {
               style={styles.image}
             />
             <View style={styles.textContainer}>
-              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold' }}>Manage your activities</Text>
-              <Text style={{ fontSize: 16, marginTop: 8, color: '#206C00' }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
+              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Manage your activities")}</Text>
+              <Text style={{ fontSize: 16, marginTop: 8, color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Find ease in managing your activities, Get insights on all your actvities in one place")}.</Text>
             </View>
           </View>
           <View style={styles.parentcontainer}>
             <View style={styles.upcomingcontainer}>
-              <Text style={styles.upcomingtitle}>Upcoming Interview</Text>
+              <Text style={styles.upcomingtitle}>{t("Upcoming Interview")}</Text>
               <Text style={styles.upcomingtimer}>15m:22s</Text>
-              <Text style={styles.upcomingdate}>Today</Text>
+              <Text style={styles.upcomingdate}>{t("Today")}</Text>
               <Text style={styles.upcomingtime}>09:30pm - 10:30pm</Text>
             </View>
             <View style={styles.empprogresscontainer}>
-              <Text style={styles.progresstitle}>Feedback</Text>
+              <Text style={styles.progresstitle}>{t("Feedback")}</Text>
               <Text style={styles.upcomingtimer}>21m:04s</Text>
-              <Text style={styles.feedbacktext}>You are yet to give Paul Smith a feedback. You have limited time to do that!</Text>
+              <Text style={styles.feedbacktext}>{t("You are yet to give Paul Smith a feedback. You have limited time to do that!")}</Text>
             </View>
             <View style={styles.jobscontainer}>
-              <Text style={styles.jobstitle}>Booked Interviews</Text>
+              <Text style={styles.jobstitle}>{t("Booked Interviews")}</Text>
               <Text style={styles.jobscount}>08</Text>
               <Text style={styles.jobsterminated}>Concluded - 06</Text>
               <Text style={styles.jobsprogress}>Upcoming - 02</Text>
             </View>
             <View style={styles.scorecontainer}>
-  <Text style={styles.scoretitle}>Available Balance</Text>
+  <Text style={styles.scoretitle}>{t("Available Balance")}</Text>
   
     <Text style={styles.scoreaverage}>$1,234.00</Text>
     
@@ -82,7 +89,7 @@ function MyComponent() {
 </View>
           <View style={styles.parentcontainer}>
             <View style={styles.graphcontainer}>
-              <Text style={styles.graphtitle}>Profile Visits</Text>
+              <Text style={styles.graphtitle}>{t("Profile Visits")}</Text>
               <View style={styles.barGraphContainer}>
                 {data.map((item, index) => (
                       <View key={index} style={styles.barContainer}>
@@ -97,7 +104,7 @@ function MyComponent() {
             </View>
             <View style={{ marginRight: 10, flex: 1, paddingTop: 6, paddingRight: 20, paddingBottom: 12, paddingLeft: 6, width: '100%', borderRadius: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, backgroundColor: 'white', paddingHorizontal: 5, marginTop: 190, maxWidth: '100%', height: 350, marginBottom: 30 }}>
               <Text style={{ fontSize: 16, fontWeight: '700', color: '#206C00', maxWidth: '100%', marginTop: 10, marginLeft: 10 }}>
-                Career Advice
+                {t("Career Advice")}
               </Text>
               <View style={{ flexDirection: 'row', marginTop: 10 }}>
                 <Image
@@ -106,16 +113,16 @@ function MyComponent() {
                 />
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                   <Text style={{ fontSize: 16, color: 'black' }}>Mr John Smith</Text>
-                  <Text style={{ fontSize: 12, color: '#A9A9A9' }}>Architectural Engineer</Text>
+                  <Text style={{ fontSize: 12, color: '#A9A9A9' }}>{t("Architectural Engineer")}</Text>
                 </View>
               </View>
               <View style={{ backgroundColor: '#d3f9d8', marginTop: 20, height: 210, marginLeft: 30, marginRight: 30 }}>
-                <Text style={{ fontSize: 12, color: 'grey', textAlign: 'center', marginTop: 50 }}>Earn more by giving career advice to Jobseekers</Text>
+                <Text style={{ fontSize: 12, color: 'grey', textAlign: 'center', marginTop: 50 }}>{t("Earn more by giving career advice to Jobseekers")}</Text>
                 <TouchableOpacity
                   style={styles.startMessagingButton}
                   onPress={goToMessages}
                 >
-                  <Text style={styles.startMessagingText}>Start Messaging</Text>
+                  <Text style={styles.startMessagingText}>{t("Start Messaging")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -179,6 +186,7 @@ const styles = StyleSheet.create({
     marginLeft: 0, 
     fontWeight: '700',
     color: '#206C00', 
+    fontFamily:"Roboto-Light"
   },
   upcomingtimer: {
     marginTop: 8,
@@ -186,16 +194,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     color: 'coral',
+    fontFamily:"Roboto-Light"
+
   },
   upcomingdate: {
     marginTop: 15,
     fontSize: 10, 
     color: 'grey', 
+    fontFamily:"Roboto-Light"
+
   },
   upcomingtime: {
     marginTop: 4,
     fontSize: 10, 
     color: 'grey',
+    fontFamily:"Roboto-Light"
+
   },
   empprogresscontainer: {
     marginRight: 15,
@@ -212,6 +226,8 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: '#206C00',
     maxWidth: '100%',
+    fontFamily:"Roboto-Light"
+
   },
   jobscontainer: {
     alignItems: 'flex-start',
@@ -227,6 +243,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#206C00',
+    fontFamily:"Roboto-Light"
+
   },
   jobscount: {
     marginTop: 8,
@@ -234,20 +252,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'right',
     color: 'coral',
+    fontFamily:"Roboto-Light"
+
   },
   jobsprogress: {
     fontSize: 12,
     color: 'green',
+    fontFamily:"Roboto-Light"
+
   },
    feedbacktext: {
     marginTop: 8,
     fontSize: 12,
     color: 'green',
+    fontFamily:"Roboto-Light"
+
    },
   jobsterminated: {
     marginTop: 8,
     fontSize: 12,
     color: '#EF4444',
+    fontFamily:"Roboto-Light"
+
   },
   scorecontainer: {
     flex: 1, 
@@ -274,6 +300,8 @@ const styles = StyleSheet.create({
     color: '#206C00',
     textAlign: 'center',
     marginBottom: 8,
+    fontFamily:"Roboto-Light"
+
   },
   scoreaverage: {
     fontSize: 24,
@@ -281,6 +309,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'coral',
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   requestPayoutButton: {
     backgroundColor: '#56866F',
@@ -310,6 +339,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#206C00',
     marginBottom: 4,
+    fontFamily:"Roboto-Light"
+
   },
   barGraphContainer: {
     flexDirection: 'row',
@@ -352,6 +383,8 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     marginTop: 2,
+    fontFamily:"Roboto-Light"
+
   },
   startMessagingButton: {
     backgroundColor: '#56866F',
@@ -371,7 +404,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily:"Roboto-Light"
+
   },
   tcontainer: {
     alignItems: 'center',

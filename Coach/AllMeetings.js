@@ -10,8 +10,7 @@ import { useTranslation } from 'react-i18next';
 function MyComponent() {
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
 const {t}=useTranslation()
   return (
@@ -47,7 +46,7 @@ const {t}=useTranslation()
       {/* Session */}
       <View style={{ flexDirection: 'row'}}>
       <Text style={styles.heading}>Jessica Jason</Text> 
-      <Text style={styles.subheading}>(Meeting 1)</Text>
+      <Text style={styles.subheading}>{t("Meeting")} 1</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -77,7 +76,7 @@ const {t}=useTranslation()
       {/* Session */}
       <View style={{ flexDirection: 'row'}}>
       <Text style={styles.heading}>Martinez Kelly</Text> 
-      <Text style={styles.subheading}>(Meeting 2)</Text>
+      <Text style={styles.subheading}>{t("Meeting")} 2</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -107,7 +106,7 @@ const {t}=useTranslation()
      {/* Session*/}
      <View style={{ flexDirection: 'row'}}>
       <Text style={styles.heading}>Adetola Adebayo</Text> 
-      <Text style={styles.subheading}>(Meeting 1)</Text>
+      <Text style={styles.subheading}>{t("Meeting")} 1</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -137,7 +136,7 @@ const {t}=useTranslation()
       {/* Session */}
      <View style={{ flexDirection: 'row'}}>
       <Text style={styles.heading}>Houston Taiwo</Text> 
-      <Text style={styles.subheading}>(Meeting 1)</Text>
+      <Text style={styles.subheading}>{t("Meeting")} 3</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>
@@ -167,7 +166,7 @@ const {t}=useTranslation()
      {/* Session*/}
      <View style={{ flexDirection: 'row'}}>
       <Text style={styles.heading}>Adrew Serrena</Text> 
-      <Text style={styles.subheading}>(Meeting 2)</Text>
+      <Text style={styles.subheading}>{t("Meeting")} 5</Text>
       </View>
       <View style={styles.scheduleContainer}>
         <View style={styles.schedule}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
@@ -30,7 +30,6 @@ function MyComponent() {
   
 
   const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
   })
 
@@ -53,12 +52,12 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Managers</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Managers")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
                         </View>
@@ -195,11 +194,7 @@ const {t}=useTranslation()
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
-
-
-</View>
-          
-          
+</View>  
         </ScrollView>
       </View>
     </View>
@@ -334,5 +329,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral'
   },
 });
-
 export default MyComponent;

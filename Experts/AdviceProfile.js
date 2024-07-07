@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
  
 function MyComponent({ onClose }) {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const {t}=useTranslation()
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -16,7 +18,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Create Advice Profile</Text>
+          <Text style={styles.headerText}>{t("Create Advice Profile")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -26,17 +28,17 @@ function MyComponent({ onClose }) {
         </View> 
                
      <TouchableOpacity style={styles.buttonNew} >
-      <Text style={styles.buttonTextNew}>New +</Text>
+      <Text style={styles.buttonTextNew}>{t("New")} +</Text>
     </TouchableOpacity>
 <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>Junior Power Platform Developer </Text>
+      <Text style={styles.buttonTextDue}>{t("Junior Power Platform Developer")} </Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Junior Power Platform Developer</Text>
+      <Text style={styles.buttonTextAcc}>{t("Junior Power Platform Developer")}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Junior Power Platform Developer</Text>
+      <Text style={styles.buttonTextAcc}>{t("Junior Power Platform Developer")}</Text>
     </TouchableOpacity>
 </View>
 
@@ -45,7 +47,7 @@ function MyComponent({ onClose }) {
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Role</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -57,7 +59,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Level</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -69,7 +71,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Rate</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Rate")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -81,7 +83,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Available Days</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Available Days")}</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -93,7 +95,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Available Times</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Available Times")}</Text>
         </View>
         <View style={styles.cell}>
          <TextInput
@@ -105,7 +107,7 @@ function MyComponent({ onClose }) {
       </View>
     </View>
     <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Roboto-Light"}}>Topics or Questions</Text>
+    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("Topics or Questions")}</Text>
      <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>+</Text>
     </TouchableOpacity>
@@ -114,7 +116,7 @@ function MyComponent({ onClose }) {
      <View style={styles.container}>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
            <TextInput
@@ -143,11 +145,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
-            placeholder="App performance optimization"
+            placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -172,11 +174,11 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
-            placeholder="Being proactivee"
+            placeholder={t("Being proactive")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -201,11 +203,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>Topic 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
-            placeholder="App performance optimization"
+            placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -230,11 +232,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Topic 5</Text>
+          <Text style = {{fontWeight: 'bold'}}>{t("Topic")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
          <TextInput
-            placeholder="App performance optimization"
+            placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -260,7 +262,7 @@ function MyComponent({ onClose }) {
      
       </View>
 <TouchableOpacity onPress={onClose} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>Save</Text>
+      <Text style={styles.buttonTextsave}>{t("Save")}</Text>
     </TouchableOpacity>
 
 

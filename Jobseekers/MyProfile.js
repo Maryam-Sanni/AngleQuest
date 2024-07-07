@@ -4,6 +4,9 @@ import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
 import AboutEditModal from '../components/AboutEditModal';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 
 export default function Profile() {
@@ -15,7 +18,11 @@ export default function Profile() {
       const handleSaveAbout = (newAbout) => {
         setAbout(newAbout);
       };
-      
+      const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -34,7 +41,7 @@ export default function Profile() {
               {/* Profile Card */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 50 }}>
               <View style={{ flex: 1, alignSelf: "flex-start" }}>
-        <Text style={{ fontSize: 18, fontWeight: "600", color: 'black', marginBottom: 10 }}>My Profile</Text>
+        <Text style={{ fontSize: 18, fontWeight: "600", color: 'black', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("My Profile")}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
                     source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
@@ -44,10 +51,10 @@ export default function Profile() {
                   </View>
                   </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: '600' }}>Available Balance</Text>
-                  <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5, color: 'black' }}>$22.00</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Available Balance")}</Text>
+                  <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5, color: 'black',fontFamily:"Roboto-Light" }}>$22.00</Text>
                   <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
-                    <Text style={{ fontSize: 12 }}>Preview Profile</Text>
+                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light" }}>{t("Preview Profile")}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -57,8 +64,8 @@ export default function Profile() {
           {/* Profile Description */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Varta-Bold" }}>
-                        About </Text> 
+                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Roboto-Light" }}>
+                        {t("About")} </Text> 
                         <TouchableOpacity onPress={() => setAboutModalVisible(true)} style={{ marginLeft: 10 }}>
                         <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -67,50 +74,50 @@ export default function Profile() {
           />
                         </TouchableOpacity> 
                        </View>
-                      <Text style={{ fontSize: 14, textAlign: 'justify', fontFamily: "Varta-Light" }}>{about}</Text>
+                      <Text style={{ fontSize: 14, textAlign: 'justify', fontFamily:"Roboto-Light" }}>{about}</Text>
                 
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
             </View>
 
          
           <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>First Name</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light"}}>{t("First Name")}</Text>
               <TextInput style={styles.text}
                placeholder="Jordan"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Last Name</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light"}}>{t("Last Name")}</Text>
               <TextInput style={styles.text}
                placeholder="Taylor"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Country</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>{t("Country")}</Text>
               <TextInput style={styles.text}
                placeholder="United States"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>State or Province</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light"}}>{t("State or Province")}</Text>
               <TextInput style={styles.text}
                placeholder="Alabama"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Birthday</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light"}}>{t("Birthday")}</Text>
               <TextInput style={styles.text}
                placeholder="05/09/1994"/>
               </View>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20 }} />
               <View style={{ marginLeft: 10, marginTop: 20 }}>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10}}>Gender</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light"}}>{t("Gender")}</Text>
               <Picker
                   style={styles.text}
                 >
-                  <Picker.Item label="Male" value="Male" />
-                  <Picker.Item label="Female" value="Female" />
-                  <Picker.Item label="Others" value="Others" />
+                  <Picker.Item label={t("Male")} value="Male" />
+                  <Picker.Item label={t("Female")} value="Female" />
+                  <Picker.Item label={t("Others")} value="Others" />
                 </Picker>
               </View>
 
@@ -118,7 +125,7 @@ export default function Profile() {
                     
    
 <TouchableOpacity style={{ justifyContent: 'center', marginLeft: 10, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginBottom: 50, backgroundColor: 'coral', borderRadius: 5, }}>
-            <Text style={{ fontSize: 14, color: 'white', textAlign: 'center' }}>Save Changes</Text>
+            <Text style={{ fontSize: 14, color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Save Changes")}</Text>
           </TouchableOpacity>
                
           <AboutEditModal

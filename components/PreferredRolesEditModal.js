@@ -1,5 +1,7 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const PreferredRolesEditModal = ({ visible, preferredRoles, onClose, onSave }) => {
   const [editablePreferredRoles, setEditablePreferredRoles] = useState([...preferredRoles]);
@@ -14,7 +16,10 @@ const PreferredRolesEditModal = ({ visible, preferredRoles, onClose, onSave }) =
     updatedPreferredRoles[index] = text;
     setEditablePreferredRoles(updatedPreferredRoles);
   };
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+const {t}=useTranslation()
   return (
     <Modal
       animationType="slide"
@@ -29,10 +34,10 @@ const PreferredRolesEditModal = ({ visible, preferredRoles, onClose, onSave }) =
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>Edit Preferred Roles</Text>
+            <Text style={styles.headerText}>{t("Edit Preferred Roles")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>✕</Text>
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>✕</Text>
             </TouchableOpacity>
           </View>
 
@@ -95,7 +100,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

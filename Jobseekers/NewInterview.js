@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Modal} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -28,6 +31,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('Interview Offer');
     onClose(); // Close the modal
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -38,19 +45,19 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Interview Booking</Text>
+          <Text style={styles.headerText}>{t("Interview Booking")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>Job Information</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Job Information")}</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Company</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Company")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -62,11 +69,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
-            placeholder="Data Analyst"
+            placeholder={t("Data Analyst")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -74,7 +81,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Your CV</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Your CV")}</Text>
         </View>
         <View style={styles.cell}>
         <input
@@ -87,7 +94,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Job Description</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Job Description")}</Text>
         </View>
         <View style={styles.cell}>
         <input
@@ -101,11 +108,11 @@ function MyComponent({ onClose }) {
       
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Job Description text (optional)</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Job Description text (optional)")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
-            placeholder="This is my job description"
+            placeholder={t("This is my job description")}
             placeholderTextColor="grey"
             multiline
             style={[styles.input, { height: 100 }]}
@@ -114,45 +121,45 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Date and Time</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Date and Time")}</Text>
         </View>
         <View style={styles.cell}>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-        <Text style={{color: 'grey', borderWidth: 1, borderColor: 'black' }}>Selected date and time: {selectedDateTime}</Text>
+        <Text style={{color: 'grey', borderWidth: 1, borderColor: 'black',fontFamily:"Roboto-Light" }}>{t("Selected date and time: {selectedDateTime}")}</Text>
         </TouchableOpacity>
         </View>
       </View>
       </View>
      
       
-      <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50 }}>Expert's available days and time</Text>
+      <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Expert's available days and time")}</Text>
 <View style={styles.container}>
       
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Days</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Days")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Mon, Tue, Wed and Thurs</Text>
+        <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>Mon, Tue, Wed and Thurs</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Time</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>Time</Text>
         </View>
         <View style={styles.cell}><Text style={{ color: 'grey' }}>09:00AM-05:00PM</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Time Zone</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Time Zone")}</Text>
         </View>
         <View style={styles.cell}><Text style={{ color: 'grey' }}>CET</Text>
         </View>
       </View>
     </View>
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Next</Text>
+      <Text style={styles.buttonTextplus}>{t("Next")}</Text>
     </TouchableOpacity>
     </View>
     <DateTimePickerModal
@@ -212,6 +219,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',
@@ -240,7 +248,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

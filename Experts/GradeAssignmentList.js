@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Picker, Modal } from 'react-native';
 import OpenModal from './Assignment';
 import OpenModal2 from './GradeAssignment';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -27,6 +30,10 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <>
@@ -47,7 +54,7 @@ function MyComponent({ onClose }) {
               />
               <Text style={styles.headerText}>Grade Assignment</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -58,12 +65,12 @@ function MyComponent({ onClose }) {
             <View style={{ flexDirection: "row", marginBottom: 20}}>
             <TouchableOpacity>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold' }}>Grade Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Grade Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity  onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      </View>
@@ -72,19 +79,19 @@ function MyComponent({ onClose }) {
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Hub Member(s)</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Hub Member(s)")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Topic</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Topic")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Description</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Description")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Given Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Given Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Due Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Due Date")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
@@ -95,10 +102,10 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>8</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Assignment 001</Text>
+            <Text style={styles.cellText}>{t("Assignment 001")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Assignment 001 description will be written here</Text>
+            <Text style={styles.cellText}>{t("Assignment 001 description will be written here")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>2024-06-25 11:00AM (GMT+1:0)</Text>
@@ -107,7 +114,7 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>2024-07-25 11:00AM (GMT+1:0)</Text>
           </View>
           <TouchableOpacity  onPress={handleOpenPress2} style={styles.cell2} >
-          <Text style={styles.open}>Grade</Text>
+          <Text style={styles.open}>{t("Grade")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -115,10 +122,10 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>20</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Assignment 002</Text>
+            <Text style={styles.cellText}>{t("Assignment 002")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Assignment 002 description will be written here</Text>
+            <Text style={styles.cellText}>{t("Assignment 002 description will be written here")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>2024-06-25 11:00AM (GMT+1:0)</Text>
@@ -127,7 +134,7 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>2024-07-25 11:00AM (GMT+1:0)</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress2}style={styles.cell} >
-          <Text style={styles.open}>Grade</Text>
+          <Text style={styles.open}>{t("Grade")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -135,10 +142,10 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>4</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Assignment 003</Text>
+            <Text style={styles.cellText}>{t("Assignment 003")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Assignment 003 description will be written here</Text>
+            <Text style={styles.cellText}>{t("Assignment 003 description will be written here")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>2024-06-25 11:00AM (GMT+1:0)</Text>
@@ -147,7 +154,7 @@ function MyComponent({ onClose }) {
             <Text style={styles.cellText}>2024-07-25 11:00AM (GMT+1:0)</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2} >
-          <Text style={styles.open}>Grade</Text>
+          <Text style={styles.open}>{t("Grade")}</Text>
           </TouchableOpacity>
         </View>
 </View>
@@ -231,7 +238,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
   closeButton: {
     position: 'absolute',
@@ -256,6 +264,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,
@@ -281,6 +290,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
 });
 

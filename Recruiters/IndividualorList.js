@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Picker, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
 import OpenModal from './New Employee';
 import OpenModal2 from './New Manager';
 import OpenModal3 from './New Coach';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -45,7 +47,10 @@ function MyComponent({ onClose }) {
     const imageUrl = URL.createObjectURL(selectedImage);
     setProfileImage(imageUrl);
   };
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+  })
+const {t}=useTranslation()
   return (
     <>
       <Modal
@@ -62,9 +67,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Add members</Text>
+              <Text style={styles.headerText}>{t("Add members")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -72,11 +77,11 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,}}>
-                  Onboard your members
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
+                  {t("Onboard your members")}
                 </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500', }}>
-               Create your members individually or simply upload an excel document to add all members at once.
+                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+               {t("Create your members individually or simply upload an excel document to add all members at once.")}
                 </Text>
                 <Image
                   source={require('../assets/EmployeeName.png')}
@@ -84,8 +89,8 @@ function MyComponent({ onClose }) {
                 />
               </View>
               <View style={{ flexDirection: 'column' }}>
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Upload employees List
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Upload employees List")}
                 </Text> 
                 <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
@@ -97,17 +102,17 @@ function MyComponent({ onClose }) {
               </View>
               <TouchableOpacity>
     <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
                   </View>
      </TouchableOpacity>
               
               </View>
  <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Employees Individually</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create Employees Individually")}</Text>
                 </TouchableOpacity>
                 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Upload Managers List
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Upload Managers List")}
                 </Text> 
                 <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
@@ -119,16 +124,16 @@ function MyComponent({ onClose }) {
               </View>
               <TouchableOpacity>
     <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
                   </View>
      </TouchableOpacity>
               </View>
  <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Managers Individually</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create Managers Individually")}</Text>
                 </TouchableOpacity>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Upload Coaches List
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Upload Coaches List")}
                 </Text> 
                 <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
@@ -140,7 +145,7 @@ function MyComponent({ onClose }) {
               </View>
               <TouchableOpacity>
     <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500' }}>Download Format</Text>
+                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
                   </View>
      </TouchableOpacity>
               </View>
@@ -151,7 +156,7 @@ function MyComponent({ onClose }) {
                
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save & Continue Later</Text>
+                  <Text style={styles.buttonTextplus}>{t("Save & Continue Later")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -238,6 +243,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   buttonind: {
     backgroundColor: 'grey',

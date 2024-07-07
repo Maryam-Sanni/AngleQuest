@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 
 function MyComponent({ onClose }) {
@@ -24,6 +26,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('Advice Offer');
     onClose(); // Close the modal
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -34,10 +40,10 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Create New Advice Objective</Text>
+          <Text style={styles.headerText}>{t("Create New Advice Objective")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -46,25 +52,25 @@ function MyComponent({ onClose }) {
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Type</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Type")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
   style={styles.picker} 
 >
-  <Picker.Item label="Career Change" value="Career Change" />
-  <Picker.Item label="Getting a raise" value="Getting a raise" />
-  <Picker.Item label="Visibility at work" value="Visibility at work" />
+  <Picker.Item label={t("Career Change")} value="Career Change" />
+  <Picker.Item label={t("Getting a raise")} value="Getting a raise" />
+  <Picker.Item label={t("Visibility at work")} value="Visibility at work" />
 </Picker>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
-            placeholder="SAP FI"
+            placeholder={t("SAP FI")}
             placeholderTextColor="grey"
             style={styles.input}
           />
@@ -72,11 +78,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Describe the challenge you are seeking advice for in few words</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Describe the challenge you are seeking advice for in few words")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
-            placeholder="I want to change from a data analyst to a SAP FI consultant"
+            placeholder={t("I want to change from a data analyst to a SAP FI consultant")}
             placeholderTextColor="grey"
             multiline
             style={[styles.input, { height: 100 }]}
@@ -85,88 +91,88 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Starting Level</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Starting Level")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
   style={styles.picker} 
 >
-  <Picker.Item label="Beginner" value="" />
-  <Picker.Item label="Junior" value="Junior" />
-  <Picker.Item label="Medior" value="Medior" />
-  <Picker.Item label="Senior" value="Senior" />
-  <Picker.Item label="Professional" value="Professional" />
+  <Picker.Item label={t("Beginner")} value="" />
+  <Picker.Item label={t("Junior" )} value="Junior" />
+  <Picker.Item label={t("Medior")} value="Medior" />
+  <Picker.Item label={t("Senior")} value="Senior" />
+  <Picker.Item label={t("Professional")} value="Professional" />
 </Picker>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Target Level</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Target Level")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
   style={styles.picker} 
 >
-  <Picker.Item label="Beginner" value="" />
-  <Picker.Item label="Junior" value="Junior" />
-  <Picker.Item label="Medior" value="Medior" />
-  <Picker.Item label="Senior" value="Senior" />
-  <Picker.Item label="Professional" value="Professional" />
+  <Picker.Item label={t("Beginner")} value="" />
+  <Picker.Item label={t("Junior" )} value="Junior" />
+  <Picker.Item label={t("Medior")} value="Medior" />
+  <Picker.Item label={t("Senior")} value="Senior" />
+  <Picker.Item label={t("Professional")} value="Professional" />
 </Picker>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Status</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
         </View>
         <View style={styles.cell}>
            <Picker
   style={styles.picker} 
 >
-  <Picker.Item label="Active" value="" />
-  <Picker.Item label="Review" value="Review" />
-  <Picker.Item label="Replan" value="Replan" />
-  <Picker.Item label="Completed" value="Completed" />
+  <Picker.Item label={t("Active")} value="" />
+  <Picker.Item label={t("Review")} value="Review" />
+  <Picker.Item label={t("Replan")} value="Replan" />
+  <Picker.Item label={t("Completed")} value="Completed" />
 </Picker>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Expert</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Expert")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Joop Melcher</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Expert available days</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Mon, Tue, Wed and Thurs</Text>
+        <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>Joop Melcher</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Expert available time</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Expert available days")}</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>Mon, Tue, Wed and Thurs</Text>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Expert available time")}</Text>
         </View>
         <View style={styles.cell}><Text style={{ color: 'grey' }}>09:00AM-05:00PM</Text>
         </View>
       </View> 
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Date and Time</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Date and Time")}</Text>
         </View>
         <View style={styles.cell}>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-        <Text style={{color: 'grey', borderWidth: 1, borderColor: 'black'}}>Selected date and time: {selectedDateTime}</Text>
+        <Text style={{color: 'grey', borderWidth: 1, borderColor: 'black',fontFamily:"Roboto-Light"}}>{t("Selected date and time: {selectedDateTime}")}</Text>
         </TouchableOpacity>
         </View>
       </View>
 
     </View>
     <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Next</Text>
+      <Text style={styles.buttonTextplus}>{t("Next")}</Text>
     </TouchableOpacity>
     </View>
     
@@ -226,6 +232,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',
@@ -254,7 +261,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import OpenModal from './GetStartedTeam';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -21,6 +23,10 @@ function MyComponent({ onClose }) {
     const imageUrl = URL.createObjectURL(selectedImage);
     setProfileImage(imageUrl);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    const {t}=useTranslation()
 
   return (
     <>
@@ -37,9 +43,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Non Disclosure Agreement</Text>
+              <Text style={styles.headerText}>{t("Non Disclosure Agreement")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -47,11 +53,11 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,}}>
-                  Protect your employees
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
+                  {t("Protect your employees")}
                 </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500', }}>
-                Upload your company's NDA to guide all your employees conversation on this platform.
+                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+                {t("Upload your company's NDA to guide all your employees conversation on this platform.")}
                 </Text>
 
                 
@@ -69,7 +75,7 @@ function MyComponent({ onClose }) {
               />
 </View>
                 <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Next</Text>
+                  <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -135,6 +141,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 45,

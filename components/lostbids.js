@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenModal from '../Experts/ViewLostbids';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 
 const ScheduledMeetingsTable = () => {
@@ -14,11 +16,15 @@ const ScheduledMeetingsTable = () => {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
-
+    const [fontsLoaded]=useFonts({
+      'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    })
+  
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
        <BlurView intensity={100} style={styles.blurBackground}>
-    <Text style={styles.title}>Lost Bids</Text>
+    <Text style={styles.title}>{t("Lost Bids")}</Text>
     
     <View style={styles.table}>
         <View style={styles.row}>
@@ -29,7 +35,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>SAP FI</Text>
@@ -38,7 +44,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>July 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Robto-Light"}}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -49,7 +55,7 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 Candidates</Text>
+            <Text style={styles.cellText}>{t("3 Candidates")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>Power Platform</Text>
@@ -58,7 +64,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>August 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Robto-Light"}}>{t("View")}</Text>
           </TouchableOpacity>
           <Modal
         animationType="slide"
@@ -91,6 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,
@@ -119,6 +126,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

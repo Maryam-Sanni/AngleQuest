@@ -4,6 +4,9 @@ import OpenModal from './Growthplanprofile';
 import OpenModal2 from './InterviewProfile';
 import OpenModal3 from './AdviceProfile';
 import OpenModal4 from '../components/Createhubform';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -42,6 +45,10 @@ function MyComponent({ onClose }) {
   const handleCloseModal4 = () => {
     setModalVisible4(false);
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -52,9 +59,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Create Profiles</Text>
+              <Text style={styles.headerText}>{t("Create Profiles")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -62,11 +69,11 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,}}>
-                 To Get Started...
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
+                 {t("To Get Started...")}
                 </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500', }}>
-              You will need to create your profiles to unlock all features
+                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+              {t("You will need to create your profiles to unlock all features")}
                 </Text>
                 <Image
                   source={require('../assets/createPfp.png')}
@@ -75,46 +82,46 @@ function MyComponent({ onClose }) {
               </View>
               <View style={{ flexDirection: 'column' }}>
               <View style={styles.input}>
-                <Text style={{ fontWeight: '500', fontSize: 16, }}>
-                  Growth Plan <Text style={{ fontWeight: '500', fontSize: 14, color: 'green', marginLeft: 5 }}>Done</Text>
+                <Text style={{ fontWeight: '500', fontSize: 16,fontFamily:"Roboto-Light" }}>
+                  {t("Growth Plan")} <Text style={{ fontWeight: '500', fontSize: 14, color: 'green', marginLeft: 5,fontFamily:"Roboto-Light" }}>{t("Done")}</Text>
                 </Text> 
                 </View>
  <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Growth Plan Profile</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create Growth Plan Profile")}</Text>
                 </TouchableOpacity>
                 
                 <View style={styles.input}>
-                <Text style={{ fontWeight: '500', fontSize: 16, }}>
-                  Interview <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5 }}>Pending</Text>
+                <Text style={{ fontWeight: '500', fontSize: 16,fontFamily:"Roboto-Light" }}>
+                  {t("Interview")} <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5,fontFamily:"Roboto-Light" }}>{t("Pending")}</Text>
                 </Text> 
                 </View>
  <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Interview Profile</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create Interview Profile")}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.input}>
-                <Text style={{ fontWeight: '500', fontSize: 16, }}>
-                  Advice <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5 }}>Pending</Text>
+                <Text style={{ fontWeight: '500', fontSize: 16, fontFamily:"Roboto-Light"}}>
+                  Advice <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5 }}>{t("Pending")}</Text>
                 </Text> 
                 </View>
                 
  <TouchableOpacity onPress={handleOpenPress3} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Advice Profile</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create Advice Profile")}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.input}>
-                <Text style={{ fontWeight: '500', fontSize: 16, }}>
-                  Hubs <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5 }}>Pending</Text>
+                <Text style={{ fontWeight: '500', fontSize: 16,fontFamily:"Roboto-Light" }}>
+                  {t("Hubs")} <Text style={{ fontWeight: '500', fontSize: 14, color: 'darkred', marginLeft: 5 }}>{t("Pending")}</Text>
                 </Text> 
                 </View>
  <TouchableOpacity onPress={handleOpenPress4} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create New Hub</Text>
+                  <Text style={styles.buttonTextplus}>{t("Create New Hub")}</Text>
                 </TouchableOpacity>
 
                
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save & Continue Later</Text>
+                  <Text style={styles.buttonTextplus}>{t("Save & Continue Later")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -211,6 +218,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   buttonind: {
     backgroundColor: 'grey',
@@ -257,6 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

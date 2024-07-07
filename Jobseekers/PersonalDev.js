@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView 
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -21,6 +24,10 @@ function MyComponent() {
       const goToCoach = () => {
         navigation.navigate('Coach Assessment');
       };
+      const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{flex: 1 }}>
@@ -29,8 +36,8 @@ function MyComponent() {
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
     <View style={{ flex: 1, backgroundColor: "white", marginLeft: 270, marginTop: 50, alignItems: 'center', marginRight: 100  }}>
-    <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginRight: 830 }}>Growth Plan</Text>
-     <Text style={{ fontSize: 14, color: 'black', marginTop: 5, marginRight: 540 }}>Set a direction by creating a plan and an expert will guide you</Text>
+    <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginRight: 830,fontFamily:"Roboto-Light" }}>{t("Growth Plan")}</Text>
+     <Text style={{ fontSize: 14, color: 'black', marginTop: 5, marginRight: 540,fontFamily:"Roboto-Light" }}>{t("Set a direction by creating a plan and an expert will guide you")}</Text>
      <View style={{ flexDirection: "row", marginTop: 20, marginBottom: 20, flexWrap: "wrap"}}>
      <TouchableOpacity onPress={goToPersonal} >
 <View style={{ justifyContent: "center", width: 200, height: 100, borderRadius: 5, backgroundColor: "#d3f9d8", marginRight: 38, marginLeft: 20.5, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
@@ -38,7 +45,7 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, aspectRatio: 1, marginBottom: 10  }}
             />
- <Text style={{ fontSize: 14, color: "black", }}>Personal Development</Text>
+ <Text style={{ fontSize: 14, color: "black",fontFamily:"Roboto-Light" }}>{t("Personal Development")}</Text>
 </View>
 </TouchableOpacity>
 
@@ -48,7 +55,7 @@ function MyComponent() {
                source={require ('../assets/team.png') }
               style={{ width: 40, height: 40, marginBottom: 10  }}
             />
-<Text style={{ fontSize: 14, color: "black", }}>Team Development</Text>
+<Text style={{ fontSize: 14, color: "black", fontFamily:"Roboto-Light"}}>{t("Team Development")}</Text>
 </View>
 </TouchableOpacity>
 
@@ -58,7 +65,7 @@ function MyComponent() {
                source={require ('../assets/organization2.png') }
               style={{ width: 40, height: 40, marginBottom: 10  }}
             />
-<Text style={{ fontSize: 14, color: "black", }}>Organization Development</Text>
+<Text style={{ fontSize: 14, color: "black",fontFamily:"Roboto-Light" }}>{t("Organization Development")}</Text>
 </View>
 </TouchableOpacity>
 
@@ -68,30 +75,30 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, aspectRatio: 1, marginBottom: 10  }}
             />
-<Text style={{ fontSize: 12, color: "black", }}>Coach Joop Melcher's Assessment</Text>
+<Text style={{ fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>{t("Coach Joop Melcher's Assessment")}</Text>
 </View>
 </TouchableOpacity>
 </View>
 
  <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>Due by: 20/Jul/2024</Text>
+      <Text style={styles.buttonTextDue}>{t("Due by")}: 20/Jul/2024</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Done 1/Jan/2024 | Status: Accomplished</Text>
+      <Text style={styles.buttonTextAcc}>{t("Done")} 1/Jan/2024 | {t("Status: Accomplished")}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Done 31/Mar/2024 | Status: Unccomplished</Text>
+      <Text style={styles.buttonTextAcc}>{t("Done")} 31/Mar/2024 | {t("Status: Unccomplished")}</Text>
     </TouchableOpacity>
 </View>
 
 <View style={styles.greenBox}> 
-<Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 20, marginLeft: 50 }}>Personal Development Objectives</Text>
+<Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 20, marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Personal Development Objectives")}</Text>
 
 <View style={{ flexDirection: "row", marginBottom: 10}}>
-     <Text style={{ fontSize: 14, color: 'black', marginTop: 3, marginLeft: 50   }}>Capture what you would like to improve on within a period.</Text>
+     <Text style={{ fontSize: 14, color: 'black', marginTop: 3, marginLeft: 50,fontFamily:"Roboto-Light"   }}>{t("Capture what you would like to improve on within a period")}.</Text>
      <TouchableOpacity style={styles.buttonNew} >
-      <Text style={styles.buttonTextNew}>New +</Text>
+      <Text style={styles.buttonTextNew}>{t("New")} +</Text>
     </TouchableOpacity>
 </View>
 
@@ -99,7 +106,7 @@ function MyComponent() {
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
            <TextInput
@@ -111,7 +118,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Result description</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Result description")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -123,7 +130,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>How to achieve</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("How to achieve")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -135,7 +142,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>What do you need to achieve the objective</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("What do you need to achieve the objective")}</Text>
         </View>
         <View style={styles.cell}>
           <TextInput
@@ -147,7 +154,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Progress/Level</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Progress/Level")}</Text>
         </View>
         <View style={styles.cell}>
          <TextInput
@@ -159,7 +166,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Start Date</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -171,7 +178,7 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>End Date</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("End Date")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -183,9 +190,9 @@ function MyComponent() {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Feedbacks/remarks (from Coach)</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Feedbacks/remarks (from Coach)")}</Text>
         </View>
-        <View style={styles.cell}><Text style={{ color: 'grey' }}>Read only field Jobseeker</Text>
+        <View style={styles.cell}><Text style={{ color: 'grey' }}>{t("Read only field Jobseeker")}</Text>
         </View>
       </View>
     </View>
@@ -228,6 +235,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   buttonAcc: {
     borderWidth: 2,
@@ -241,6 +249,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   buttonNew: {
     backgroundColor: 'coral',
@@ -254,6 +263,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   greenBox: {
     width: 920,

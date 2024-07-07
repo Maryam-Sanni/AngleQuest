@@ -1,6 +1,9 @@
 // CertificationsEditModal.js
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, Button, Modal, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+
 
 const CertificationsEditModal = ({ visible, certifications, onClose, onSave }) => {
   const [editableCertifications, setEditableCertifications] = useState([...certifications]);
@@ -15,6 +18,10 @@ const CertificationsEditModal = ({ visible, certifications, onClose, onSave }) =
     updatedCertifications[index] = text;
     setEditableCertifications(updatedCertifications);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <Modal
@@ -30,10 +37,10 @@ const CertificationsEditModal = ({ visible, certifications, onClose, onSave }) =
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Edit Certifications</Text>
+          <Text style={styles.headerText}>{t("Edit Certifications")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -96,7 +103,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

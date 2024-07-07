@@ -5,6 +5,8 @@ import Sidebar from '../components/expertssidebar';
 import Transactions from '../components/Transactions';
 import OpenModal from '../Experts/OpenWithdraw';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
  
 function MyComponent() {
@@ -28,6 +30,10 @@ function MyComponent() {
       const goToBids = () => {
         navigation.navigate('Withdrawal');
       };
+      const [fontsLoaded]=useFonts({
+        "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+            })
+            const {t}=useTranslation()
 
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
@@ -44,7 +50,7 @@ function MyComponent() {
             onMouseLeave={() => setIsOfferHovered(false)}> 
               <View style={styles.item}>
                 <Image source={require('../assets/earnings.png')} style={styles.image} />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Earnings</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Earnings")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToBids}
@@ -53,19 +59,19 @@ function MyComponent() {
             onMouseLeave={() => setIsBidHovered(false)} >
               <View style={styles.item}>
                 <Image source={require('../assets/withdrawal.png')} style={styles.image} />
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Withdrawal</Text>
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Withdrawal")}</Text>
               </View>
             </TouchableOpacity>
             
           </View>
           <TouchableOpacity onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'rgba(0,0,0,0.4)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50,  }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: 'bold' }}>Request Withdrawal</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Request Withdrawal")}</Text>
                   </View>
      </TouchableOpacity>
 
           
-        <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral' }}>Total Balance: $1180</Text>
+        <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral',fontFamily:"Roboto-Light" }}>{t("Total Balance")}: $1180</Text>
  
         <Modal
         animationType="slide"
@@ -86,12 +92,12 @@ function MyComponent() {
               style={{ width: 80, height: 20, marginRight: 50, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10 }}>Paypal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>Paypal may charge additional fee per transaction (sending and withdrawing)</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 10,fontFamily:"Roboto-Light" }}>Paypal</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>$2.00 {t("USD per withdrawal")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Paypal may charge additional fee per transaction (sending and withdrawing)")}</Text>
             </View>
             <TouchableOpacity style={{ position: 'absolute', right: 80, paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14 }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -102,12 +108,12 @@ function MyComponent() {
               style={{ width: 110, height: 21, marginRight: 25, marginTop: -40 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600' }}>Payoneer</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>$2.00 USD per withdrawal</Text>
-              <Text style={{ fontSize: 13, marginBottom: 5 }}>Payoneer charges additional fees to withdraw funds. Create a Payoneer account <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
+              <Text style={{ fontSize: 15, fontWeight: '600',fontFamily:"Roboto-Light" }}>Payoneer</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("$2.00 USD per withdrawal")}</Text>
+              <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Payoneer charges additional fees to withdraw funds. Create a Payoneer account")} <TouchableOpacity style={{ color: '#32CD32' }}>here</TouchableOpacity></Text>
             </View>
             <TouchableOpacity style={{ position: 'absolute', right: 80, paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -5 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>   
@@ -118,12 +124,12 @@ function MyComponent() {
               style={{ width: 35, height: 35, marginRight: 95, marginTop: -20 }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5 }}>Wire Transfer</Text>
-               <Text style={{ fontSize: 13, marginBottom: 5 }}>$25.00 USD per wire to any bank</Text>
-             <Text style={{ fontSize: 13, marginBottom: 5 }}>Up to 7 business days to receive funds</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Wire Transfer")}</Text>
+               <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>$25.00 {t("USD per wire to any bank")}</Text>
+             <Text style={{ fontSize: 13, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Up to 7 business days to receive funds")}</Text>
             </View>
             <TouchableOpacity style={{  position: 'absolute', right: 80, paddingHorizontal: 15, paddingVertical: 8,  borderRadius: 5, borderWidth: 1, borderColor: "coral", marginRight: -10 }}>
-              <Text style={{ color: 'coral', fontSize: 14  }}>Set up</Text>
+              <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light"  }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
         </View>       
@@ -164,7 +170,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    color: '#666'
+    color: '#666',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 24,
