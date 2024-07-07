@@ -68,11 +68,6 @@ const MyComponent = () => {
           />
         ))}
       </View>
-      <TouchableOpacity onPress={handleSignInPress}>
-        <Text style={styles.signInText}>
-          <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
-        </Text>
-      </TouchableOpacity>
     </View>
     </View>
   );
@@ -84,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     borderRadius: 10,
   },
   header: {
@@ -97,7 +92,7 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 50,
   },
   card: {
     width: '30%',

@@ -8,6 +8,7 @@ import SuggestionModal from '../components/Suggestion';
 import OpenModal2 from '../Experts/GProfile';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import CustomModal from './TourGuide';
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -27,11 +28,17 @@ const HomePage = () => {
   const [isHovered15, setIsHovered15] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [modalVisible3, setModalVisible3] = useState(false);
-  const [modalVisible4, setModalVisible4] = useState(false);
-  const [modalVisible5, setModalVisible5] = useState(false);
+  const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    // Show the CustomModal when the component mounts
+    setCustomModalVisible(true);
+  }, []);
+
+  const handleCloseModal = () => {
+    setCustomModalVisible(false);
+  };
 
   const goToMessages = () => {
     navigation.navigate('Messaging');
@@ -65,12 +72,13 @@ const HomePage = () => {
     setModalVisible2(false);
   };
 
-  const [fontsLoaded]=useFonts({
-    'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
-"Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+  const [fontsLoaded] = useFonts({
+    'Varta-Light': require('../assets/fonts/Varta-Light.ttf'),
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  });
 
-  })
 const {t}=useTranslation()
+
   return (
     <View style={{backgroundColor: '#3F5B39', flex: 1}}>
   <View style={{ flex: 1 }}>
@@ -485,12 +493,13 @@ onMouseLeave={() => setIsHovered12(false)}
           </View>
         </View> 
       </View>
+ 
     </View>
-          
+    <CustomModal visible={custommodalVisible} onClose={() => handleCloseModal()} />
         </ScrollView>
       </View>
       
-    
+     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     <Modal
         animationType="slide"

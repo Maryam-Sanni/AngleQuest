@@ -30,6 +30,7 @@ import MyProfile from './Jobseekers/MyProfile';
 import PaymentDetails from './Jobseekers/PaymentDetails';
 import Refer from './Jobseekers/tellafriend';
 import GetStarted from './Jobseekers/getstarted';
+import ExpertSignin from './Experts/Signin';
 import ExpertProfile from './Jobseekers/Expertsprofile';
 import BookaSession from './Jobseekers/BookaSession';
 import SendFeedback from './Jobseekers/SendFeedback';
@@ -109,6 +110,8 @@ import AdviceOffer from './Jobseekers/OfferAdvice';
 import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
+import Welcome from './LandingPage/Beta';
+import OurStory from './LandingPage/OurUnique';
 
 const Stack = createStackNavigator();
 
@@ -138,7 +141,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="JoinAs" screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
+      <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
         <Stack.Screen name="Join Recruitangle" component={JoinAs} />
         <Stack.Screen name="Sign Up" component={SignUp} />
         <Stack.Screen name="Verify Email" component={VerifyEmail} />
@@ -166,6 +169,7 @@ const App = () => {
         <Stack.Screen name="Forgot Password" component={ForgotPassword} />
         <Stack.Screen name="Refer" component={Refer} />
         <Stack.Screen name="GetStarted" component={GetStarted} />
+        <Stack.Screen name="Sign in" component={ExpertSignin} />
         <Stack.Screen name="ExpertProfile" component={ExpertProfile} />
         <Stack.Screen name="BookaSession" component={BookaSession} />
         <Stack.Screen name="SendFeedback" component={SendFeedback} />
@@ -245,6 +249,8 @@ const App = () => {
         <Stack.Screen name="Growth Offer" component={GrowthOffer} />
         <Stack.Screen name="Interview Offer" component={InterviewOffer} />
         <Stack.Screen name="Hub Offer" component={HubOffer} />
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Our Story" component={OurStory} />
       </Stack.Navigator>
     </NavigationContainer>
   );

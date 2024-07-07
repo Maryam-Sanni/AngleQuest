@@ -11,23 +11,23 @@ export default function App() {
   };
 
   return (
-    <View style={{ height: '46%' }}>
+    <View style={{ flex: 1 }}>
       <Top />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
         <View style={styles.container}>
           <Text style={styles.title}>TERMS OF SERVICE</Text>
           <Text style={styles.content}>
-            Welcome to Recruitangle. These Terms of Service outline the rules and regulations for the use of our website and services.
+            Welcome to AngleQuest. These Terms of Service outline the rules and regulations for the use of our website and services.
             {'\n\n'}
-            By clicking "ACCEPT THE TERMS" , we assume you accept these terms and conditions. Do not continue to use Recruitangle if you do not agree to all of the terms and conditions stated on this page.
+            By clicking "ACCEPT THE TERMS" , we assume you accept these terms and conditions. Do not continue to use AngleQuest if you do not agree to all of the terms and conditions stated on this page.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>1. Intellectual Property Rights </Text>
             {'\n'}
-            Unless otherwise stated, Recruitangle and/or its licensors own the intellectual property rights for all material on our website. All intellectual property rights are reserved.
+            Unless otherwise stated, AngleQuest and/or its licensors own the intellectual property rights for all material on our website. All intellectual property rights are reserved.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>2. Description of Service </Text>
             {'\n'}
-            Recruitangle is a platform that connects job seekers with experts and recruiters to streamline the hiring process. We assess skills and qualifications to provide a more objective evaluation of candidates.
+            AngleQuest is a platform that connects job seekers with experts and recruiters to streamline the hiring process. We assess skills and qualifications to provide a more objective evaluation of candidates.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>3. User Accounts </Text>
             {'\n'}
@@ -35,7 +35,7 @@ export default function App() {
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>4. User Responsibilities </Text>
             {'\n'}
-            You agree to use Recruitangle only for lawful purposes and in accordance with these Terms. You are solely responsible for your interactions with other users and for any content you post or upload to the website.
+            You agree to use AngleQuest only for lawful purposes and in accordance with these Terms. You are solely responsible for your interactions with other users and for any content you post or upload to the website.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>5. User License </Text>
             {'\n'}
@@ -56,17 +56,17 @@ export default function App() {
             {'\n'}
             Your privacy is important to us. Please review our 
             <TouchableOpacity onPress={navigateToPrivacyPolicy}> {/* Navigate to PrivacyPolicy page */}
-              <Text style={{fontWeight: '600', color: 'black', textDecoration: 'underline'}}> Privacy Policy </Text>
+              <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> Privacy Policy </Text>
             </TouchableOpacity>
             to understand how we collect, use, and disclose information about you when you use Recruitangle.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>8. Disclaimer of Warranties </Text>
             {'\n'}
-            Recruitangle is provided on an "as is" and "as available" basis, without any warranties of any kind, either express or implied. We do not warrant that our website will be uninterrupted or error-free.
+            AngleQuest is provided on an "as is" and "as available" basis, without any warranties of any kind, either express or implied. We do not warrant that our website will be uninterrupted or error-free.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>9. Limitation of Liability </Text>
             {'\n'}
-            In no event shall Recruitangle, nor any of its officers, directors, and employees, be liable to you for anything arising out of or in any way connected with your use of our website, whether such liability is under contract, tort, or otherwise.
+            In no event shall AngleQuest, nor any of its officers, directors, and employees, be liable to you for anything arising out of or in any way connected with your use of our website, whether such liability is under contract, tort, or otherwise.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>10. Governing Law </Text>
             {'\n'}
@@ -74,7 +74,7 @@ export default function App() {
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>11. Indemnification </Text>
             {'\n'}
-            You agree to indemnify and hold harmless Recruitangle and its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in connection with your use of Recruitangle.
+            You agree to indemnify and hold harmless AngleQuest and its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in connection with your use of Recruitangle.
             {'\n\n'}
             <Text style={{fontWeight: '600'}}>12. Changes to Terms </Text> 
             {'\n'}
@@ -83,7 +83,7 @@ export default function App() {
             <Text style={{fontWeight: '600'}}>13. Contact Us </Text>
             {'\n'}
             If you have any questions or concerns about these Terms, please contact us via email at 
-            <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> recruitangle@gmail.com </Text>
+            <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> anglequest@gmail.com </Text>
             or by filling out the contact form on our website 
             <Text style={{fontWeight: '600', color: 'green', textDecoration: 'underline'}}> here.</Text>
             {'\n\n'}
@@ -110,19 +110,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
+    color: '#206C00'
   },
   content: {
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 24,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
+    marginBottom: 50,
   },
   button: {
     backgroundColor: 'coral',

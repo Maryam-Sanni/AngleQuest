@@ -17,12 +17,10 @@ const MyComponent = () => {
             style={styles.logo}
           />
           <Text style={styles.headerText}>AngleQuest</Text>
-       
-        <TouchableOpacity onPress={handleXPress} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
-            ✕
-          </Text>
+          <TouchableOpacity style={styles.joinButton} onPress={handleXPress}>
+          <Text style={styles.joinButtonText}>See Progress</Text>
         </TouchableOpacity>
+       
         </View>
     </View>
   );
@@ -43,13 +41,26 @@ header: {
 logo: {
   width: 40,
   height: 40,
-  marginRight: 5
+  marginRight: 5,
+  marginLeft: 50,
 },
 headerText: {
   fontSize: 22,
   fontWeight: 'bold',
   color: '#206C00'
-}
+},
+joinButton: {
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderColor: 'coral',
+ padding: 10,
+  position: 'absolute',
+  right: 20
+},
+joinButtonText: {
+  color: 'coral',
+  fontWeight: 'bold',
+},
 });
 
 export default MyComponent;

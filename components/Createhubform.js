@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList, Image  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
   const [hour, setHour] = useState(initialValue.split(':')[0]);
@@ -96,8 +96,8 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigation = useNavigation();
-  const [startTime, setStartTime] = useState('12:00');
-  const [endTime, setEndTime] = useState('12:00');
+  const [meeting_start, setStartTime] = useState('12:00');
+  const [meeting_end, setEndTime] = useState('12:00');
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -109,10 +109,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
  
   const [visibility, setVisibility] = useState('public');
-  const [groupName, setGroupName] = useState('');
-  const [addLeaders, setAddLeaders] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
-  const [searchMembers, setSearchMembers] = useState('');
+  const [name, setGroupName] = useState('');
+  const [fee, setHubFee] = useState('');
+  const [description, setGroupDescription] = useState('');
+  const [goals, setHubGoals] = useState('');
+  const [limit, setHubLimit] = useState('');
+  const [meeting_day, setMeetingDay] = useState('');
   const [descriptionLength, setDescriptionLength] = useState(0);
   const maxDescriptionLength = 85; // Max character limit for description
 
@@ -124,17 +126,54 @@ const CreateCoachingHubForm = ({ onClose }) => {
     }
   };
 
-  const handleSave = () => {
-    // Handle saving the form data
-    console.log("Form data:", {
-      visibility,
-      groupName,
-      addLeaders,
-      groupDescription,
-      searchMembers
-    });
+  const handleSave = async () => {
+    try {
+      // Retrieve token
+      const token = await getToken();
+  
+      // Make sure token exists
+      if (!token) {
+        alert('User not authenticated');
+        return;
+      }
+  
+      // Include token in the Authorization header
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      // Make API request with token
+      const response = await axios.post(
+        `https://recruitangle.com/api/expert/hub/create`,
+        {
+          visibility,
+          name,
+          description,
+          fee,
+          meeting_day,
+          meeting_start,
+          meeting_end,
+          goals,
+          limit,
+        },
+        config // Pass the config with headers
+      );
+  
+      console.log('Create Hub Response:', response.data);
+      if (response.data.success) {
+        alert('Hub created successfully!');
+        onClose();
+      } else {
+        alert(response.data.message || 'Hub creation failed');
+      }
+    } catch (error) {
+      console.error('Create Hub Error:', error);
+      alert('An error occurred while creating the hub.');
+    }
   };
-
+  
  
  
   return (
@@ -170,7 +209,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter hub name"
-          value={groupName}
+          value={name}
           onChangeText={text => setGroupName(text)}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Description* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
@@ -178,15 +217,15 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={[styles.input, { height: 100 }]}
           placeholder= "Type here..."
           multiline
-          value={groupDescription}
+          value={description}
           onChangeText={handleDescriptionChange}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Meeting Day*</Text>
         <Picker
-          selectedValue={visibility}
+          selectedValue={meeting_day}
           style={styles.input}
           onValueChange={(itemValue, itemIndex) =>
-            setVisibility(itemValue)
+            setMeetingDay(itemValue)
           }> 
           <Picker.Item label="Monday" value="Monday" />
           <Picker.Item label="Tuesday" value="Tuesday" />
@@ -200,37 +239,37 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <View style={styles.timecontainer}>
       <View style={styles.timeformContainer}>
         <Text style={styles.timelabel}>From</Text>
-        <CustomTimePicker initialValue={startTime} onChange={handleStartTimeChange} />
+        <CustomTimePicker initialValue={meeting_start} onChange={handleStartTimeChange} />
         <Text style={styles.timelabel}>To</Text>
-        <CustomTimePicker initialValue={endTime} onChange={handleEndTimeChange} />
+        <CustomTimePicker initialValue={meeting_end} onChange={handleEndTimeChange} />
       </View>
     </View>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Fee*</Text>
         <TextInput
           style={styles.input}
           placeholder="$25"
-          value={groupName}
-          onChangeText={text => setGroupName(text)}
+          value={fee}
+          onChangeText={text => setHubFee(text)}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Goals (Optional) </Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
           placeholder= "Type here..."
           multiline
-          value={addLeaders}
-          onChangeText={text => setAddLeaders(text)}
+          value={goals}
+          onChangeText={text => setHubGoals(text)}
         />
        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>Coaching Hub Limit (Optional) </Text>
         <TextInput
           style={styles.input}
           placeholder="50 Participants"
           keyboardType="numeric" // Set keyboardType to 'numeric' for number input
-          value={searchMembers}
-          onChangeText={text => setSearchMembers(text)}
+          value={limit}
+          onChangeText={text => setHubLimit(text)}
         />
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
-          onPress={onClose}
+          onPress={handleSave}
         >
           <Text style={{ color: 'white', fontWeight: 'bold' }}>Create New Hub</Text>
         </TouchableOpacity>
