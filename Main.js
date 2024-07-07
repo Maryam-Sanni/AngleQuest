@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import 'react-native-gesture-handler'
-import { Linking } from 'react-native';
+import { Dimensions, Linking } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import JoinAs from './Jobseekers/Joinas';
@@ -116,28 +116,6 @@ import OurStory from './LandingPage/OurUnique';
 const Stack = createStackNavigator();
 
 const App = () => {
-
-  useEffect(() => {
-    // Add event listener for deep linking
-    const handleDeepLink = async (event) => {
-      const { url } = event; // Get the deep link URL
-      // Parse the URL and extract the path
-      const { pathname } = new URL(url);
-      // Check if the path corresponds to the Signin page
-      if (pathname === '/signin') {
-        // Navigate to the Signin screen
-        navigation.navigate('Signin');
-      }
-    };
-
-    // Add event listener for deep linking
-    Linking.addEventListener('url', handleDeepLink);
-
-    // Clean up event listener on component unmount
-    return () => {
-      Linking.removeEventListener('url', handleDeepLink);
-    };
-  }, []);
 
   return (
     <NavigationContainer>
