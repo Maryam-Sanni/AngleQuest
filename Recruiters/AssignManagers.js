@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Picker, Modal, TouchableOpacity } from 'react-n
 import { BlurView } from 'expo-blur';
 import OpenModal from './EditEmployee';
 import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 const ScheduledMeetingsTable = () => {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -16,7 +17,10 @@ const ScheduledMeetingsTable = () => {
     onClose();
   };
   const {t}=useTranslation()
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -25,28 +29,28 @@ const ScheduledMeetingsTable = () => {
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Specialization")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Specialization")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Current Role")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Current Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Target Level")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Target Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Manager")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Manager")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Assign New")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Assign New")}</Text>
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Larrisa Omreh</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Larrisa Omreh</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -56,7 +60,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Junior power apps developer</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Senior</Text>
+            <Text style={styles.cellText}>{t("Senior")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>Will Cooper</Text>
@@ -76,7 +80,7 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Onana Augusta</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Onana Augusta</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -86,7 +90,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Junior Power apps developer</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Professional</Text>
+            <Text style={styles.cellText}>{t("Professional")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>Joop Melcher</Text>
@@ -106,7 +110,7 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Oluwatobi Ogunnaike</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Oluwatobi Ogunnaike</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -136,7 +140,67 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Jerry Bassey</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Jerry Bassey</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cell}> 
+            <Text style={styles.cellText}>Power Platform</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Senior Power apps developer</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>{t("Professional")}</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell}>
+          <Picker
+  style={styles.picker} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell2}>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Anthony Okafor</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cell2}> 
+            <Text style={styles.cellText}>SAP FI</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Junior Power apps developer</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Medior</Text>
+          </View>
+          <View style={styles.cell2}>
+            <Text style={styles.cellText}>Joop Melcher</Text>
+          </View>
+          <View style={styles.cell2}>
+          <Picker
+  style={styles.picker2} 
+>
+<Picker.Item label="Choose a manager" value="Choose a manager" />
+<Picker.Item label="Monica Jerry" value="Monica Jerry" />
+          <Picker.Item label="Will Cooper" value="Will Cooper" />
+          <Picker.Item label="John Othega" value="John Othega" />
+          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
+</Picker>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.cell}>
+          <TouchableOpacity onPress={handleOpenPress} >
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Fatimah Hussain</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -166,7 +230,7 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.row}>
           <View style={styles.cell2}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Anthony Okafor</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Ethan Phillips</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell2}> 
@@ -196,67 +260,7 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.row}>
           <View style={styles.cell}>
           <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Fatimah Hussain</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Senior Power apps developer</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Professional</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Joop Melcher</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-  style={styles.picker} 
->
-<Picker.Item label="Choose a manager" value="Choose a manager" />
-<Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-</Picker>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Ethan Phillips</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}> 
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Junior Power apps developer</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Medior</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>Joop Melcher</Text>
-          </View>
-          <View style={styles.cell2}>
-          <Picker
-  style={styles.picker2} 
->
-<Picker.Item label="Choose a manager" value="Choose a manager" />
-<Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-</Picker>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-          <TouchableOpacity onPress={handleOpenPress} >
-            <Text style={{textDecoration: 'underline'}}>Omar Abdullah</Text>
+            <Text style={{textDecoration: 'underline',fontFamily:"Roboto-Light"}}>Omar Abdullah</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.cell}> 
@@ -317,6 +321,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginTop: 20,
@@ -344,6 +349,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   picker: {
     height: 30,

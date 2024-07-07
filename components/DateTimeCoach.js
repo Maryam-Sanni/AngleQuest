@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
+import { useFonts } from "expo-font";
+import { useTranslation } from "react-i18next";
 
 const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -21,11 +23,15 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     // Call handleConfirmDateTime with date and time
     onConfirm(selectedDateTime, selectedTime);
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onCancel}>
       <View style={styles.modalContainer}>
-        <Text style={styles.headerText}>Select a Date and Time</Text>
+        <Text style={styles.headerText}>{t("Select a Date and Time")}</Text>
         <Calendar
           onDayPress={handleDayPress}
           markedDates={{ [selectedDate]: { selected: true } }}
@@ -68,10 +74,10 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={onCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={styles.buttonText}>{t("Cancel")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, { backgroundColor: 'coral' }]} onPress={handleConfirm}>
-            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Confirm</Text>
+            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{t("Confirm")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -91,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
+    fontFamily:"Robto-Light"
   },
   calendar: {
     marginBottom: 10,
@@ -111,6 +118,7 @@ const styles = StyleSheet.create({
   },
   timeSeparator: {
     fontSize: 18,
+    fontFamily:"Roboto-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -127,6 +135,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
+    fontFamily:"Roboto-Light"
   },
 });
 

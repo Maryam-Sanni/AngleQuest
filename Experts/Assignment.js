@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import OpenModal from './GradeAssignmentList';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -27,6 +30,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <>
@@ -43,9 +50,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>New Assignment</Text>
+              <Text style={styles.headerText}>{t("New Assignment")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -56,18 +63,18 @@ function MyComponent({ onClose }) {
             <View style={{ flexDirection: "row", marginBottom: 20}}>
             <TouchableOpacity>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Grade Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Grade Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      </View>
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5 }}>
-                  Hub Member
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Hub Member")}
                 </Text> 
                 <Picker
                   style={styles.picker}
@@ -79,16 +86,16 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="Hussein Aliyu" value="Hussein Aliyu" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Topic
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Topic")}
             </Text>
             <TextInput
               placeholder=" "
               style={styles.input}
             />
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Description
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Description")}
             </Text>
             <TextInput
               placeholder=" "
@@ -96,16 +103,16 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Assignment Due
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Assignment Due")}
                 </Text>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                <Text style={styles.input}>Selected date and time: {selectedDateTime}</Text>
+                <Text style={styles.input}>{t("Selected date and time:")} {selectedDateTime}</Text>
                 </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Send</Text>
+                  <Text style={styles.buttonTextplus}>{t("Send")}</Text>
                 </TouchableOpacity>
               </View>
               </View>
@@ -176,6 +183,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -188,6 +196,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
+    fontFamily:"Roboto-Light"
   },
   uneditable: {
     height: 40,
@@ -222,6 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

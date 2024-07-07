@@ -92,6 +92,7 @@ function MyComponent() {
                   style={{ width: 20, height: 20, marginRight: 6 }}
                 />
                 <Text style={[styles.text, clickedItem === menuItem && styles.textActive]}>{menuItem.label}</Text>
+
               </View>
             </TouchableOpacity>
           ))}
@@ -130,7 +131,7 @@ function MyComponent() {
     </View>
   );
 }
-
+// const H = t("Home");
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },

@@ -6,14 +6,12 @@ import GrowthPlantype from '../components/growthplantype';
 import GrowthPlanreview from '../components/gpexpertreview';
 import OpenModal from '../Jobseekers/Newgrowth';
 import { useNavigation } from '@react-navigation/native';
-
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() { 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-
-  
-   
 
     const handleOpenPress = () => {
       setModalVisible(true);
@@ -22,8 +20,11 @@ function MyComponent() {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
-
-
+    const [fontsLoaded]=useFonts({
+      "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+      
+        const { t } = useTranslation()
     return (
       <ImageBackground
     source={require ('../assets/Background.png') }
@@ -39,56 +40,56 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16}}>Growth Plan</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Growth Plan")}</Text>
               </View>
             </TouchableOpacity>
             </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>+ New</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
 
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 14, color: "black", fontWeight: '600'}}>Next growth plan session</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+      <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next growth plan session")}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>Join Now</Text>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
           </View>
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10 }}>Personal Development</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Persoal Development")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00' }}>1</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10 }}>Active</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
+           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Active")}</Text>
            <Image source={require('../assets/person.png')} style={styles.boximage}  />
      </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10 }}>0 completed in the past</Text>
+     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("0 completed in the past")}</Text>
     
       </View>
      
       <View style={styles.box}> 
-      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10 }}>Team Development</Text>
+      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Team Development")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00' }}>1</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10 }}>Completed</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
+           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Completed")}</Text>
            <Image source={require('../assets/teamicon.jpg')} style={styles.boximage}  />
      </View>
       </View>
       
       <View style={styles.box}>
-      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10 }}>Organizational Development</Text>
+      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Organizational Development")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00' }}>1</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10 }}>Completed</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
+           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>Completed</Text>
            <Image source={require('../assets/organization.png')} style={styles.boximage}  />
      </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10, color: 'coral' }}>1 replan available</Text>
+     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10, color: 'coral',fontFamily:"Roboto-Light" }}>{t("1 replan available")}</Text>
     </View>
     </View>
 

@@ -1,4 +1,6 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, TextInput, TouchableOpacity, Text, Modal, StyleSheet, Image } from 'react-native';
 
 export default function AboutEditModal({ visible, about, onClose, onSave }) {
@@ -8,6 +10,10 @@ export default function AboutEditModal({ visible, about, onClose, onSave }) {
     onSave(editedAbout);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
@@ -18,7 +24,7 @@ export default function AboutEditModal({ visible, about, onClose, onSave }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Edit About</Text>
+              <Text style={styles.headerText}>{t("Edit About")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>✕</Text>
               </TouchableOpacity>
@@ -31,7 +37,7 @@ export default function AboutEditModal({ visible, about, onClose, onSave }) {
             style={styles.textInput}
           />
           <TouchableOpacity onPress={handleSave} style={[styles.button, styles.saveButton]}>
-            <Text style={styles.buttonText}>Save</Text>
+            <Text style={styles.buttonText}>{t("Save")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -73,6 +79,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
   header: {
     flexDirection: 'row',
@@ -91,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -101,5 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#3F5637',
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
 });

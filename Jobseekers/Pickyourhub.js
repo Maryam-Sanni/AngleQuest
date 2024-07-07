@@ -3,6 +3,9 @@ import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, 
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Jobseekers/Moreabouthub';
 import OpenSchedule2 from '../components/JProfile';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -102,7 +105,8 @@ function MyComponent({ onClose }) {
     ).start();
   };
 
- 
+  const {t}=useTranslation()
+
 
   const renderCards = () => {
     return cardData.map((data, index) => (
@@ -150,7 +154,7 @@ function MyComponent({ onClose }) {
                 />
               </View>
               <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-                {data.participants} Participants
+                {data.participants} {t("Participants")}
               </Text>
               <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
                 {data.schedule}
@@ -162,7 +166,7 @@ function MyComponent({ onClose }) {
               <View style={{ flex: 1, }}>
                 <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
                 <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
-                  Coach: {data.coach}
+                  {t("Coach")}: {data.coach}
                 </Text>
               </View>
             </View>
@@ -170,7 +174,7 @@ function MyComponent({ onClose }) {
             <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
 
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
-              <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>Hub Fee</Text>
+              <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>{t("Hub Fee")}</Text>
               <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
                 {data.fee} </Text>
             </View>
@@ -187,13 +191,18 @@ function MyComponent({ onClose }) {
             styles.joinButtonText,
             isPressed[index] && styles.joinButtonTextPressed,
           ]}>
-            Join Hub
+            {t("Join Hub")}
           </Text>
         </TouchableOpacity>
         </View>
       </Animated.View>
     ));
   };
+
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -204,23 +213,23 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
               style={styles.logo}
             />
-            <Text style={styles.headerText}>Hubs</Text>
+            <Text style={styles.headerText}>{t("Hubs")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                 ✕
               </Text>
             </TouchableOpacity>
           </View>
 
           <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-            <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5 }}>Pick an hub you will like to join</Text>
-            <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10 }}>Use the search or the dropdown to filter</Text>
+            <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an hub you will like to join")}</Text>
+            <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10}}>
      <Picker
                   style={styles.picker}
                 >
-                  <Picker.Item label="Category" value="Category" />
+                  <Picker.Item label={t("Category")} value="Category" />
                   <Picker.Item label="Java Engineering" value="Java Engineering" />
                   <Picker.Item label="SAP FI" value="SAP FI" />
                   <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
@@ -233,7 +242,7 @@ function MyComponent({ onClose }) {
                 </Picker>
 
                 <TextInput
-                  placeholder="Search"
+                  placeholder={t("Search")}
                   style={styles.input}
                 />
      </View>
@@ -242,7 +251,7 @@ function MyComponent({ onClose }) {
             {renderCards()}
           </View>
           <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
-            <Text style={styles.buttonTextplus}>Continue</Text>
+            <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -298,6 +307,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -321,7 +331,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   dropcontainer: {
     justifyContent: 'center',

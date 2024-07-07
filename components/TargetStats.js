@@ -26,8 +26,6 @@ const ScheduledMeetingsTable = () => {
   };
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-    'Roboto-Bold':require("../assets/fonts/Roboto-Bold.ttf"),
-    'Roboto-Regular':require("../assets/fonts/Roboto-Regular.ttf")
   })
 const {t}=useTranslation()
 
@@ -38,22 +36,23 @@ const {t}=useTranslation()
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Name")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,    fontFamily:"Roboto-Light"
+ }}>{t("Name")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Performance")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Performance")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Deadline")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Deadline")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Rating")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Rating")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Review Date")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Review Date")}</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}> </Text>
+              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily:"Roboto-Light"}}> </Text>
             </View>
           </View>
 
@@ -175,6 +174,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 50,
@@ -203,6 +203,8 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
+
   },
   greenBox: {
     flex: 2,
@@ -243,7 +245,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 add: {
   color: "black",
@@ -252,7 +255,8 @@ add: {
     borderWidth: 2, 
     padding: 5, 
     paddingHorizontal: 15, 
-    borderRadius: 5
+    borderRadius: 5,
+    fontFamily:"Roboto-Light"
 },
 });
 

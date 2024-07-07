@@ -3,7 +3,8 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import ConfirmationPopup from '../components/confirmationPopup';
-import { FontAwesome } from '@expo/vector-icons'; 
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 const UserImage = require('../assets/User.png');
 
@@ -21,15 +22,18 @@ const [showConfirmation, setShowConfirmation] = useState(false);
     // You can perform necessary actions here
     setShowConfirmation(false); // Close the popup
   };
-  
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+
    return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#CCC', paddingVertical: 8 }}>
       {/* Name with Image */}
       <View style={{ flexDirection: 'row', alignItems: 'center', width: 180 }}>
         <Image style={{ width: 35, height: 35, borderRadius: 16 }} source={UserImage} />
         <View style={{ marginLeft: 10 }}>
-          <Text>{name}</Text>
-          <Text>{email}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{name}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{email}</Text>
         </View>
       </View>
 
@@ -199,7 +203,10 @@ const renderBookings = () => {
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
   return (
     <View style={{ flex: 1 }}>
       <Topbar />
@@ -207,26 +214,26 @@ const renderBookings = () => {
         <Sidebar />
     <View style={{flex: 1, flexDirection: 'column', marginLeft: 300, marginTop: 5 }}>
     <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 15 }}>
-              <TouchableOpacity onPress={() => handleFilterChange('All')}><Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>All Bookings</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFilterChange('Upcoming')}><Text style={{ fontSize: 14, marginLeft: 35 }}>Upcoming</Text></TouchableOpacity>
-               <TouchableOpacity onPress={() => handleFilterChange('Declined')}><Text style={{ fontSize: 14, marginLeft: 35 }}>Declined</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => handleFilterChange('All')}><Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>{t("All Bookings")}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFilterChange('Upcoming')}><Text style={{ fontSize: 14, marginLeft: 35,fontFamily:"Roboto-Light" }}>{t("Upcoming")}</Text></TouchableOpacity>
+               <TouchableOpacity onPress={() => handleFilterChange('Declined')}><Text style={{ fontSize: 14, marginLeft: 35,fontFamily:"Roboto-Light" }}>{t("Declined")}</Text></TouchableOpacity>
             </View>
 
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, marginBottom: 20, flexWrap: "wrap" }}>
               <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 5, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8" }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Civil Engineer</Text>
+                <Text style={{ fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Civil Engineer")}</Text>
               </View>
               <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 5, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Architect</Text>
+                <Text style={{ fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Architect")}</Text>
               </View>
               <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 5, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Surveyor</Text>
+                <Text style={{ fontSize: 14, color: "#206C00" }}>{t("Surveyor")}</Text>
               </View>
               <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 5, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8", marginLeft: 4, marginRight: 4 }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>Constructor</Text>
+                <Text style={{ fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Constructor")}</Text>
               </View>
               <View style={{ justifyContent: "center", alignItems: "center", marginLeft: 4, paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: "#206C00", backgroundColor: "#d3f9d8" }}>
-                <Text style={{ fontSize: 14, color: "#206C00" }}>+</Text>
+                <Text style={{ fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>+</Text>
               </View>
             </View>
 
@@ -234,11 +241,11 @@ const renderBookings = () => {
 <View style={{ flex: 1, width: 1000, marginTop: 15 }}>
   {/* Table Header */}
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#CCC', paddingBottom: 8 }}>
-    <Text style={{ fontWeight: 'bold', flex: 2 }}>Name</Text>
-    <Text style={{ fontWeight: 'bold', flex: 1 }}>Date</Text>
-    <Text style={{ fontWeight: 'bold', flex: 1 }}>From</Text>
-    <Text style={{ fontWeight: 'bold', flex: 1 }}>To</Text>
-    <Text style={{ fontWeight: 'bold', flex: 1, marginRight: 25 }}>Status</Text>
+    <Text style={{ fontWeight: 'bold', flex: 2,fontFamily:"Roboto-Light" }}>{t("Name")}</Text>
+    <Text style={{ fontWeight: 'bold', flex: 1,fontFamily:"Roboto-Light" }}>{t("Date")}</Text>
+    <Text style={{ fontWeight: 'bold', flex: 1,fontFamily:"Roboto-Light" }}>{t("From")}</Text>
+    <Text style={{ fontWeight: 'bold', flex: 1,fontFamily:"Roboto-Light" }}>{t("To")}</Text>
+    <Text style={{ fontWeight: 'bold', flex: 1, marginRight: 25,fontFamily:"Roboto-Light" }}>{t("Status")}</Text>
   </View>
 
   {/* Displayed Bookings */}
@@ -262,7 +269,7 @@ const renderBookings = () => {
         borderColor: pageNumber === currentPage ? '#206C00' : '#CCC', 
         backgroundColor: pageNumber === currentPage ? '#d3f9d8' : '#FFF',
       }}>
-      <Text style={{ color: pageNumber === currentPage ? '#206C00' : '#CCC' }}>{pageNumber}</Text>
+      <Text style={{ color: pageNumber === currentPage ? '#206C00' : '#CCC',fontFamily:"Roboto-Light" }}>{pageNumber}</Text>
     </TouchableOpacity>
   ))}
 </View>

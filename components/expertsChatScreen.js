@@ -4,6 +4,8 @@ import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
 import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function ChatScreen() {
   const [messages, setMessages] = useState([]);
@@ -103,6 +105,7 @@ function ChatScreen() {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1 }}>
@@ -136,14 +139,14 @@ function ChatScreen() {
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 14, color: "black",fontFamily:"Roboto-Light" }}>
-       15 year(s) experience
+       {t("15 year(s) experience")}
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light"}}>
-       Hard Skills
+       {t("Hard Skills")}
      </Text>
      <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Responsive Design
+       • {t("Responsive Design")}
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
       • HTML, CSS, JavaScript
@@ -155,30 +158,30 @@ function ChatScreen() {
        • Python & Node.js
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Web security
+       • {t("Web security")}
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light" }}>
-       Soft Skills
+       {t("Soft Skills")}
      </Text>
      <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Communication
+       • {t("Communication")}
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Problem-solving & Critical thinking
+       • {t("Problem-solving & Critical thinking")}
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Time Management
+       • {t("Time Management")}
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Client Management
+       • {t("Client Management")}
      </Text>
      <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Continuous Learning Mindset
+       • {t("Continuous Learning Mindset")}
      </Text>
      <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
      <Text style={{ marginTop: 10, fontSize: 14, color: "#A0AEC0",fontFamily:"Roboto-Light" }}>
-       Received files
+       {t("Received files")}
      </Text>
      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 1, marginTop: 10 }}>
        <View style={{ flexDirection: "row", alignItems: "center" }}>

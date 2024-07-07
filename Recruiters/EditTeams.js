@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, ScrollView } from 'react-native';
+import { useFonts } from 'expo-font';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
 
+      const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -14,25 +20,25 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Edit Team's Details</Text>
+              <Text style={styles.headerText}>{t("Edit Team's Details")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
               <View style={styles.container}>
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Team Name
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Team Name")}
                 </Text> 
                 <TextInput
                   placeholder="MORR"
                   style={styles.input}
                 />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Team Goals
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Team Goals")}
                 </Text>
                 <TextInput
                   placeholder="Our Microsoft Azure team's goal is to innovate and enhance cloud services, ensure top-notch security and compliance, optimize performance and scalability, and provide excellent customer support. We focus on driving adoption, cost efficiency, integration, and sustainability while staying ahead with cutting-edge research and development"
@@ -40,8 +46,8 @@ function MyComponent({ onClose }) {
                   style={[styles.input, { height: 100 }]}
                 />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Specialization
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Specialization")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -58,8 +64,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="UI/UX Design" value="UI/UX Design" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Team Lead
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Team Lead")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -72,8 +78,8 @@ function MyComponent({ onClose }) {
           <Picker.Item label="Yesuf Gabar" value="Yesuf Gabar" />
 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5 }}>
-                  Team Target
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Team Target")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -89,7 +95,7 @@ function MyComponent({ onClose }) {
                 
 
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save Changes</Text>
+                  <Text style={styles.buttonTextplus}>{t("Save Changes")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -141,6 +147,7 @@ marginBottom: 50
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -187,6 +194,7 @@ marginBottom: 50
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

@@ -1,4 +1,6 @@
+import { useFonts } from "expo-font";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 
@@ -34,11 +36,15 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     const displayHour = hour % 12 || 12; // Convert 0 to 12 for 12-hour format
     return `${displayHour}:${minute === 0 ? "00" : minute} ${period}`;
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onCancel}>
       <View style={styles.modalContainer}>
-        <Text style={styles.headerText}>Select Available Days and Time</Text>
+        <Text style={styles.headerText}>{t("Select Available Days and Time")}</Text>
         <View style={styles.calendar}>
           <View style={styles.daysContainer}>
             {daysOfWeek.map(day => (
@@ -48,7 +54,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
             ))}
           </View>
           <View style={styles.timeRangeContainer}>
-            <Text style={styles.timeRangeLabel}>From:</Text>
+            <Text style={styles.timeRangeLabel}>{t("From")}:</Text>
             <Picker
               style={styles.picker}
               selectedValue={selectedStartTime}
@@ -61,7 +67,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
                 return <Picker.Item key={time} label={time} value={time} />;
               })}
             </Picker>
-            <Text style={styles.timeSeparator}>To:</Text>
+            <Text style={styles.timeSeparator}>{t("To")}:</Text>
             <Picker
               style={styles.picker}
               selectedValue={selectedEndTime}
@@ -78,10 +84,10 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={onCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={styles.buttonText}>{t("Cancel")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, { backgroundColor: 'coral' }]} onPress={handleConfirm}>
-            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Confirm</Text>
+            <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{t("Confirm")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -99,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   calendar: {
     marginBottom: 20,
@@ -115,10 +122,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#DDDDDD',
     borderRadius: 5,
+    fontFamily:"Roboto-Light"
+
   },
   selectedDay: {
     backgroundColor: 'coral',
     color: '#FFFFFF',
+    fontFamily:"Roboto-Light"
+
   },
   timeRangeContainer: {
     flexDirection: 'row',
@@ -127,6 +138,8 @@ const styles = StyleSheet.create({
   timeRangeLabel: {
     fontSize: 16,
     marginRight: 10,
+    fontFamily:"Roboto-Light"
+
   },
   picker: {
     flex: 1,
@@ -154,7 +167,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
+    fontFamily:"Roboto-Light"
+
   },
 });
-
 export default DateTimePickerModal;

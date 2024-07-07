@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, ScrollView } from 'react-native';
+import { useFonts } from 'expo-font';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -14,9 +20,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Attach Expert to Employee</Text>
+              <Text style={styles.headerText}>{t("Attach Expert to Employee")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -30,7 +36,7 @@ function MyComponent({ onClose }) {
        source={require('../assets/useravatar1.png')}
         style={{width: 100, height: 100, marginTop: 20, borderWidth: 2, borderColor: "#206C00" }}
       />
-      <Text style={{ fontSize: 16, marginTop: 5 }}>
+      <Text style={{ fontSize: 16, marginTop: 5,fontFamily:"Roboto-Light" }}>
               Larissa Omreh
             </Text>
             </View>
@@ -39,36 +45,36 @@ function MyComponent({ onClose }) {
        source={require('../assets/useravatar2.png')}
        style={{width: 100, height: 100, marginTop: 20, borderWidth: 2, borderColor: "#206C00" }}
       />
-       <Text style={{ fontSize: 16, marginTop: 5 }}>
+       <Text style={{ fontSize: 16, marginTop: 5,fontFamily:"Roboto-Light" }}>
               Joop Melcher
             </Text>
-            <Text style={{ fontSize: 13, fontWeight: "400", color: 'grey' }}>
-              Attached Expert
+            <Text style={{ fontSize: 13, fontWeight: "400", color: 'grey',fontFamily:"Roboto-Light" }}>
+              {t("Attached Expert")}
             </Text>
             </View>
       </View>
 
-      <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 10  }}> Authorize AngleQuest:  </Text>
+      <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 10,fontFamily:"Roboto-Light"  }}> {t("Authorize AngleQuest")}:  </Text>
       <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 10, }}>
       <TouchableOpacity style={styles.touchableOpacity}/>
-        <Text style={{ fontSize: 15, }}> Find matching expert for Larissa </Text>
+        <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}> {t("Find matching expert for")} Larissa </Text>
                                         </View>
 
                                         <View style={{ flexDirection: 'row', marginTop: 20, marginLeft: 30, marginBottom: 20 }}>
                                             <TouchableOpacity style={styles.touchableOpacity2}/>
-                         <Text style={{ fontSize: 15, }}> Wait for note from manager or coach  </Text>
+                         <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}> {t("Wait for note from manager or coach")}  </Text>
                                         </View>
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              What key areas would you like the expert to focus on with "Employee Name"?
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("What key areas would you like the expert to focus on with Employee Name?")}
             </Text>
             <TextInput
               placeholder=" "
               style={styles.input}
             />
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Detailed Description
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Detailed Description")}
             </Text>
             <TextInput
               placeholder=" "
@@ -76,8 +82,8 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Expert country (Optional): Select the preferred country you would like the expert to be from
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Expert country (Optional): Select the preferred country you would like the expert to be from")}
             </Text>
             <Picker
               style={styles.picker}
@@ -97,13 +103,8 @@ function MyComponent({ onClose }) {
               <Picker.Item label="Brazil" value="Brazil" />
               <Picker.Item label="South Africa" value="South Africa" />
             </Picker>
-
-                
-
-            
-
-                <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save</Text>
+                                <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+                  <Text style={styles.buttonTextplus}>{t("Save")}</Text>
                 </TouchableOpacity>
                 
               </View>
@@ -155,6 +156,7 @@ marginBottom: 50
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,

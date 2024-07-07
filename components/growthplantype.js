@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import OpenSchedule from '../Jobseekers/Replan';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,7 +26,11 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -32,22 +39,22 @@ const ScheduledMeetingsTable = () => {
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Type</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Type")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Title</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Title")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Start Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>End Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("End Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Status</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
@@ -55,10 +62,10 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Team Development</Text>
+            <Text style={styles.cellText}>{t("Team Development")}</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Become SAP FI Mentor to another team member</Text>
+          <Text style={styles.cellText}>{t("Become SAP FI Mentor to another team member")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI Medior</Text>
@@ -70,18 +77,18 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>7/Nov/2024</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Active</Text>
+            <Text style={styles.cellText}>{t("Active")}</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
-          <Text style={styles.open}>Open</Text>
+          <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Personal Development</Text>
+            <Text style={styles.cellText}>{t("Personal Development")}</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Become SAP FI Mentor to another team member</Text>
+            <Text style={styles.cellText}>{t("Become SAP FI Mentor to another team member")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>SAP FI Medior</Text>
@@ -93,18 +100,18 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>6/May/2025</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Completed</Text>
+          <Text style={styles.cellText}>{t("Completed")}</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress2}>
-          <Text style={styles.open}>Open</Text>
+          <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Organization Development</Text>
+          <Text style={styles.cellText}>{t("Organization Development")}</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Integrate into the company</Text>
+          <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>SAP FI Medior</Text>
@@ -116,18 +123,18 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>6/May/2025</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Completed</Text>
+            <Text style={styles.cellText}>{t("Completed")}</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
-          <Text style={styles.open}>Open</Text>
+          <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Organization Development</Text>
+            <Text style={styles.cellText}>{t("Organization Development")}</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Integrate into the company</Text>
+            <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>SAP FI Medior</Text>
@@ -139,10 +146,10 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>6/May/2025</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Replan</Text>
+            <Text style={styles.cellText}>{t("Replan")}</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}> 
-          <Text style={styles.replan}>Replan</Text>
+          <Text style={styles.replan}>{t("Replan")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -201,7 +208,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 replan: {
     color: "coral",
@@ -210,7 +218,8 @@ replan: {
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
   row: {
     flexDirection: 'row',
@@ -231,6 +240,7 @@ replan: {
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

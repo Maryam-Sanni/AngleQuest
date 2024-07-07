@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Picker, Modal } from 'react-native';
 import OpenModal from './NDASetup';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,6 +17,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    const {t}=useTranslation()
 
   return (
     <>
@@ -32,28 +38,28 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Welcome to AngleQuest</Text>
+              <Text style={styles.headerText}>{t("Welcome to")} AngleQuest</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={{ color: '#206C00', fontSize: 18, fontWeight: 'bold', marginLeft: 50, marginTop: 3 }}>
-                                          Experts will work with your employees on their journey and provide:
+            <Text style={{ color: '#206C00', fontSize: 18, fontWeight: 'bold', marginLeft: 50, marginTop: 3,fontFamily:"Roboto-Light" }}>
+                                          {t("Experts will work with your employees on their journey and provide")}:
                                         </Text>
 
                                         <View style={{ flexDirection: 'row' }}>
                                         <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1. Growth Plan</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>1. {t("Growth Plan")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 10 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Create the next stage plan with you</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Create the next stage plan with you")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -61,7 +67,7 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Periodically reviews your progress</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Periodically reviews your progress")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -69,19 +75,19 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Continuously rates your progress</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>(t{"Continuously rates your progress"})</Text>
             </View>
     </View>
 
     <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>2. Hubs</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>2. (t{"Hubs"})</Text>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 10 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Monthly hands-on training</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Monthly hands-on training")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -89,7 +95,7 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Shares knowledge gained with you</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Shares knowledge gained with you")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -97,7 +103,7 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Shares tips to apply at works</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Shares tips to apply at works")}</Text>
             </View>
             </View> 
 </View>
@@ -105,14 +111,14 @@ function MyComponent({ onClose }) {
 
 <View style={{ flexDirection: 'row' }}>
 <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>3. Advice</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>3. {t("Advice")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 10 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>One-on-One Career advice</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("One-on-One Career advice")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -120,18 +126,18 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>One-on-One Growth advice</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("One-on-One Growth advice")}</Text>
             </View>
             </View> 
             <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>4. Mentorship & Guidance</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>4. {t("Mentorship & Guidance")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
                 style={{ width: 24, height: 24, marginRight: 10 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Becomes your buddy</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Becomes your buddy")}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <Image
@@ -139,15 +145,13 @@ function MyComponent({ onClose }) {
                 style={{ width: 24, height: 24, marginRight: 5 }}
                 resizeMode="contain"
               />
-              <Text style={{ fontSize: 16 }}>Available to answer questions</Text>
+              <Text style={{ fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Available to answer questions")}</Text>
             </View>
            </View>
             </View> 
 
-
-
                 <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Proceed</Text>
+                  <Text style={styles.buttonTextplus}>{t("Proceed")}</Text>
                 </TouchableOpacity>
                 </ScrollView>
               </View>
@@ -212,6 +216,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 45,

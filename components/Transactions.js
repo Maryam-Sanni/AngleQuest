@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
-import { BlurView } from 'expo-blur';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
-  
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
-    <Text style={styles.title}>Transactions</Text>
+    <Text style={styles.title}>{t("Transactions")}</Text>
     
     <View style={styles.table}>
         <View style={styles.row}>
           <View style={styles.cell}>
-           <Text style={{fontSize: 14, fontWeight: '600'}}>Date</Text>
+           <Text style={{fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
           </View>
           <View style={styles.cell}>
-           <Text style={{fontSize: 14, fontWeight: '600'}}>Amount ($)</Text>
+           <Text style={{fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Amount")} ($)</Text>
           </View>
           <View style={styles.cell}>
-           <Text style={{fontSize: 14, fontWeight: '600'}}>Receiver</Text>
+           <Text style={{fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Receiver")}</Text>
           </View>
           <View style={styles.cell}>
-           <Text style={{fontSize: 14, fontWeight: '600'}}>Account Number</Text>
+           <Text style={{fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Account Number")}</Text>
           </View>
           <View style={styles.cell}>
-           <Text style={{fontSize: 14, fontWeight: '600'}}>Status</Text>
+           <Text style={{fontSize: 14, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -40,7 +44,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>00-00-56</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Pending</Text>
+            <Text style={styles.cellText}>{t("Pending")}</Text>
           </View>
           </View>
           <View style={styles.row}>
@@ -51,13 +55,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>100</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Stripe</Text>
+            <Text style={styles.cellText}>{t("Stripe")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>11-11-334</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Completed</Text>
+            <Text style={styles.cellText}>{t("Completed")}</Text>
           </View>
           </View>
           <View style={styles.row}>
@@ -68,13 +72,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>100</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Stripe</Text>
+            <Text style={styles.cellText}>{t("Stripe")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>01-09-444</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Completed</Text>
+            <Text style={styles.cellText}>{t("Completed")}</Text>
           </View>
           </View>
         </View>
@@ -119,6 +123,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

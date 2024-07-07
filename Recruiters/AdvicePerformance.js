@@ -1,4 +1,6 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 
 function MyComponent({ onClose }) {
@@ -20,6 +22,10 @@ function MyComponent({ onClose }) {
       </View>
     );
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
@@ -30,10 +36,10 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Career Advice Performances</Text>
+          <Text style={styles.headerText}>{t("Career Advice Performances")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: 'grey', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: 'grey', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
@@ -41,10 +47,10 @@ function MyComponent({ onClose }) {
         <View style={styles.container}>
         
     
-       <Text style={styles.heading2}>Career Advice Jan-Jun 2023</Text>
+       <Text style={styles.heading2}>{t("Career Advice")} Jan-Jun 2023</Text>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -52,7 +58,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={50} />
@@ -60,7 +66,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -68,7 +74,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={80} />
@@ -76,17 +82,17 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
         </View>
       </View>
    
-      <Text style={styles.heading2}>Career Advice Jul-Dec 2023</Text>
+      <Text style={styles.heading2}>{t("Career Advice")} Jul-Dec 2023</Text>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -94,7 +100,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={90} />
@@ -102,7 +108,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -110,7 +116,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={50} />
@@ -118,7 +124,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -126,10 +132,10 @@ function MyComponent({ onClose }) {
       </View>
 
 
-      <Text style={styles.heading2}>Career Advice Jan-Jun 2024</Text>
+      <Text style={styles.heading2}>{t("Career Advice")} Jan-Jun 2024</Text>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={80} />
@@ -137,7 +143,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -145,7 +151,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -153,7 +159,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={50} />
@@ -161,17 +167,17 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
         </View>
       </View>
 
-      <Text style={styles.heading2}>Career Advice Jul-Dec 2024</Text>
+      <Text style={styles.heading2}>{t("Career Advice")} Jul-Dec 2024</Text>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={40} />
@@ -179,7 +185,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -187,7 +193,7 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -195,7 +201,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold' }}>Guide 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={60} />
@@ -203,7 +209,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
      <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold' }}>Guide 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Guide")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 8 }]}>
         <ProgressBar percentage={70} />
@@ -278,7 +284,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   progressBarContainer: {
     width: '100%',
@@ -314,8 +321,8 @@ const styles = StyleSheet.create({
       marginBottom: 20, 
       backgroundColor: '#F0FFF0',
        padding: 5,
-       textAlign: 'center'
-  },
+       textAlign: 'center',
+       fontFamily:"Roboto-Light"  },
   heading3: {
     fontWeight: '500', 
     width: 180, 

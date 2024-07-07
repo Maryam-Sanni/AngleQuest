@@ -41,7 +41,6 @@ const ScheduledMeetingsTable = () => {
   };
 const {t}=useTranslation()
 const [fontsLoaded]=useFonts({
-  'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
   'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
 })
 
@@ -81,10 +80,10 @@ const [fontsLoaded]=useFonts({
             <Text style={styles.cellText}>Power Platform</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Excellent</Text>
+            <Text style={styles.cellText}>{t("Excellent")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Senior</Text>
+            <Text style={styles.cellText}>{t("Senior")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress2} style={styles.cell2}>
           <Text style={styles.add}>{t("Note")}</Text>
@@ -103,10 +102,10 @@ const [fontsLoaded]=useFonts({
             <Text style={styles.cellText}>Power Platform</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Satisfactory</Text>
+            <Text style={styles.cellText}>{t("Satisfactory")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Professional</Text>
+            <Text style={styles.cellText}>{t("Professional")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>{t("Note")}</Text>
@@ -125,10 +124,10 @@ const [fontsLoaded]=useFonts({
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Outstanding</Text>
+            <Text style={styles.cellText}>{t("Outstanding")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Medior</Text>
+            <Text style={styles.cellText}>{t("Medior")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell2}>
           <Text style={styles.add}>{t("Note")}</Text>
@@ -147,10 +146,10 @@ const [fontsLoaded]=useFonts({
             <Text style={styles.cellText}>Power Platform</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Excellent</Text>
+            <Text style={styles.cellText}>{t("Excellent")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Professional</Text>
+            <Text style={styles.cellText}>{t("Professional")}</Text>
           </View>
           <TouchableOpacity onPress={handleOpenPress} style={styles.cell}>
           <Text style={styles.add}>{t("Note")}</Text>
@@ -241,6 +240,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   greenBox: {
     flex: 1,
@@ -263,7 +263,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 add: {
   color: "black",
@@ -272,7 +273,9 @@ add: {
     borderWidth: 2, 
     padding: 5, 
     paddingHorizontal: 15, 
-    borderRadius: 5
+    borderRadius: 5,
+
+    fontFamily:"Roboto-light"
 },
 });
 

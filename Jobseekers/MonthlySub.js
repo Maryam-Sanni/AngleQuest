@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import OpenModal from '../Jobseekers/PaymentDetails';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
     const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,6 +18,10 @@ function MyComponent({ onClose }) {
         setPaymentModalVisible(false);
         onClose();
     };
+    const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
     return (
         <>
@@ -33,32 +40,32 @@ function MyComponent({ onClose }) {
                             />
                             <Text style={styles.headerText}>Monthly Subscription</Text>
                             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',    fontFamily:"Roboto-Light" }}>
                                     ✕
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65 }}>Hi Patrick, Congratulations for taking the plunge </Text>
-                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65 }}>$15 for Interview</Text>
+                        <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65,fontFamily:"Roboto-Light" }}>{t("Hi")} Patrick, {t("Congratulations for taking the plunge")} </Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65,fontFamily:"Roboto-Light" }}>{t("$15 for Interview")}</Text>
                         <View style={styles.box}>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10 }}>1 hour interview session with Joop Melcher for the position of "Power Platform Developer" </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("1 hour interview session with Joop Melcher for the position of Power Platform Developer")} </Text>
                         </View>
-                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 35 }}>$80 for Monthly Subscription</Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 35,fontFamily:"Roboto-Light" }}>{t("$80 for Monthly Subscription")}</Text>
                         <View style={styles.box}>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15 }}>All packages inclusive for the next one month </Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15 }}>• Joop Melcher is now your coach, mentor, teacher, adviser towards attaining the next level in your career </Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3 }}>• Personal Development Plans with your coach and reviews </Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3 }}>• Hubs: Hands-on training to achieve your goal with expert Joop Melcher </Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3 }}>• Advisory sessions</Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3, marginBottom: 15 }}>• Progress reviews and ratings</Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15,fontFamily:"Roboto-Light" }}>{t("All packages inclusive for the next one month")} </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15,fontFamily:"Roboto-Light" }}>• {t("Joop Melcher is now your coach, mentor, teacher, adviser towards attaining the next level in your career")} </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Personal Development Plans with your coach and reviews")} </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Hubs: Hands-on training to achieve your goal with expert Joop Melcher")} </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Advisory sessions")}</Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3, marginBottom: 15,fontFamily:"Roboto-Light" }}>• {t("Progress reviews and ratings")}</Text>
                         </View>
-                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 50 }}>Total: $95</Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 50,fontFamily:"Roboto-Light" }}>{t("Total")}: $95</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                                <Text style={styles.buttonTextplus}>Back</Text>
+                                <Text style={styles.buttonTextplus}>{t("Back")}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
-                                <Text style={styles.buttonTextskip}>Pay</Text>
+                                <Text style={styles.buttonTextskip}>{t("Pay")}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -112,7 +119,8 @@ greenBox: {
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   box: {
     marginTop: 10,
@@ -151,11 +159,13 @@ greenBox: {
         color: 'coral',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
       },
       buttonTextskip: {
         color: 'white',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
       },
 });
 

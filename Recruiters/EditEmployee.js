@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, ScrollView } from 'react-native';
 import OpenModal from './AttachExpert';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -14,6 +16,10 @@ function MyComponent({ onClose }) {
     onClose();
   };
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -25,33 +31,33 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Edit Employee's Details</Text>
+              <Text style={styles.headerText}>{t("Edit Employee's Details")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.container}>
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Full Name
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Full Name")}
                 </Text> 
                 <TextInput
                   placeholder="Larrisa Omreh"
                   style={styles.input}
                 />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Email Address
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Email Address")}
                 </Text>
                 <TextInput
                   placeholder="larrisa051@gmail.com"
                   style={styles.input}
                 />
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Specialization
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Specialization")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -68,8 +74,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="UI/UX Design" value="UI/UX Design" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Current role
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Current role")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -82,8 +88,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="Professional" value="Professional" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5 }}>
-                  Target role
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Target role")}
                 </Text>
                 <Picker
                   style={styles.picker}
@@ -96,8 +102,8 @@ function MyComponent({ onClose }) {
                   <Picker.Item label="Professional" value="Professional" />
                 </Picker>
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                                         Change Manager
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                                         {t("Change Manager")}
                                         </Text>
 <Picker
   style={styles.picker} 
@@ -109,8 +115,8 @@ function MyComponent({ onClose }) {
           <Picker.Item label="Joop Melcher" value="Joop Melcher" />
         </Picker>
 
-        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                                         Change Coach
+        <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                                         {t("Change Coach")}
                                         </Text>
 <Picker
   style={styles.picker} 
@@ -124,10 +130,10 @@ function MyComponent({ onClose }) {
 
         <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Save Changes</Text>
+                  <Text style={styles.buttonTextplus}>{t("Save Changes")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleOpenPress} style={styles.buttonnext}>
-                  <Text style={styles.buttonTextplus}>Next</Text>
+                  <Text style={styles.buttonTextplus}>{t("Next")}</Text>
                 </TouchableOpacity>
                 </View>
               </View>
@@ -189,6 +195,7 @@ marginBottom: 50
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   buttonnext: {
     backgroundColor: 'coral',
@@ -245,6 +252,7 @@ marginBottom: 50
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import DateTimePickerModal from "../components/DateTimeCoach";
 import OpenModal from './ExpertAccess';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -29,6 +31,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+const {t}=useTranslation()
 
   return (
     <>
@@ -45,32 +51,32 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Target Review Meeting</Text>
+              <Text style={styles.headerText}>{t("Target Review Meeting")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.container}>
-              <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10 }}>
-                Set up review date and time for this target with "Employee Name"
+              <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                {t("Set up review date and time for this target with Employee Name")}
               </Text>
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                Date
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                {t("Date")}
               </Text>
               <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
-                <Text style={styles.input}><Text style={{fontWeight: '500'}}>Date: </Text>{selectedDateTime}</Text>
+                <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>{t("Date")}: </Text>{selectedDateTime}</Text>
               </TouchableOpacity>
-              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10 }}>
-                Time
+              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                {t("Time")}
               </Text>
-              <Text style={styles.input}><Text style={{fontWeight: '500'}}>Time: </Text> {selectedTime}</Text>
+              <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>{t("Time")}: </Text> {selectedTime}</Text>
             </View>
             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>Next</Text>
+              <Text style={styles.buttonTextplus}>{t("Next")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -127,6 +133,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -139,6 +146,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -158,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   logo: {
     width: 40,

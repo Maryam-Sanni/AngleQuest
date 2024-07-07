@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenInterviewbook';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,31 +16,34 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
   };
   
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Scheduled Advice Sessions</Text>
+      <Text style={styles.title}>{t("Scheduled Advice Sessions")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Types</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Types")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Starting Level</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Starting Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Target Level</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Target Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Time</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Time")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
@@ -49,13 +54,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Career Change</Text>
+            <Text style={styles.cellText}>{t("Career Change")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Beginner</Text>
+            <Text style={styles.cellText}>{t("Beginner")}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Junior</Text>
+            <Text style={styles.cellText}>{t("Junior")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>7/May/2024</Text>
@@ -64,7 +69,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>3:00PM</Text>
           </View>
           <TouchableOpacity style={styles.cell2} >
-          <Text style={styles.open}>Open</Text>
+          <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -72,13 +77,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP FI</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Career Change</Text>
+            <Text style={styles.cellText}>{t("Career Change")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Beginner</Text>
+            <Text style={styles.cellText}>{t("Beginner")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Junior</Text>
+            <Text style={styles.cellText}>{t("Junior")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>7/Mar/2024</Text>
@@ -87,7 +92,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>3:00PM</Text>
           </View>
           <TouchableOpacity style={styles.cell} >
-          <Text style={styles.open}>Open</Text>
+          <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
         
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,
@@ -137,7 +143,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 replan: {
     color: "coral",
@@ -167,6 +174,7 @@ replan: {
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

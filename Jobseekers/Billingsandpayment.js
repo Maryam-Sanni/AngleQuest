@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'rea
 import { useNavigation } from '@react-navigation/native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 const BillingSettingsPage = () => {
   const navigation = useNavigation(); // Moved inside the component
@@ -35,6 +38,10 @@ const BillingSettingsPage = () => {
   const handleAddPaymentMethod = () => {
     // Implement add payment method functionality here
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
@@ -47,23 +54,23 @@ const BillingSettingsPage = () => {
    
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.container}>
-              <Text style={styles.sectionTitle}>CURRENT PLANS</Text>
+              <Text style={styles.sectionTitle}>{t("CURRENT PLANS")}</Text>
               <View style={styles.divider} />
-              <Text style={styles.planText}>Growth Plan</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateG}</Text>
-              <Text style={styles.planText}>Advice Sessions</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateA}</Text>
-              <Text style={styles.planText}>Hubs</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateH}</Text>
-              <Text style={styles.planText}>Interview Session</Text>
-              <Text style={styles.amountText}>{amount} per month</Text>
-              <Text style={styles.renewalDateText}>Your plan renews on: {renewalDateI}</Text>
+              <Text style={styles.planText}>{t("Growth Plan")}</Text>
+              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateG}</Text>
+              <Text style={styles.planText}>{t("Advice Sessions")}</Text>
+              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateA}</Text>
+              <Text style={styles.planText}>{t("Hubs")}</Text>
+              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateH}</Text>
+              <Text style={styles.planText}>{t("Interview Session")}</Text>
+              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateI}</Text>
               
 
-              <Text style={styles.sectionTitle}>PAYMENT METHOD</Text>
+              <Text style={styles.sectionTitle}>{t("PAYMENT METHOD")}</Text>
               <View style={styles.divider} />
               <View style={styles.paymentMethodContainer}>
                 <Text style={styles.paymentMethodType}>VISA</Text>
@@ -72,18 +79,18 @@ const BillingSettingsPage = () => {
               </View>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.buttonadd} onPress={handleCancelPlan}>
-                  <Text style={styles.buttonText}>+ Add Payment Method</Text>
+                  <Text style={styles.buttonText}>+ {t("Add Payment Method")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: 'darkred' }]} onPress={handleUpgradePlan}>
-                  <Text style={styles.buttonText}>Delete Card</Text>
+                  <Text style={styles.buttonText}>{t("Delete Card")}</Text>
                 </TouchableOpacity>
               </View>
-              <Text style={styles.sectionTitle}>BILLING HISTORY</Text>
+              <Text style={styles.sectionTitle}>{t("BILLING HISTORY")}</Text>
               <View style={styles.divider} />
               {billingHistory.map((entry, index) => (
                 <View key={index} style={styles.historyEntry}>
-                  <Text>Date: {entry.date}</Text>
-                  <Text>Amount: {entry.amount}</Text>
+                  <Text style={{fontFamily:"Roboto-Light"}}>{t("Date")}: {entry.date}</Text>
+                  <Text style={{fontFamily:"Roboto-Light"}}>{t("Amount")}: {entry.amount}</Text>
                 </View>
               ))}
             </View>
@@ -109,6 +116,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 5,
     color: '#206C00',
+    fontFamily:"Roboto-Light"
   },
   sectionTitlefirst: {
     fontSize: 13,
@@ -129,17 +137,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 3,
+    fontFamily:"Roboto-Light"
   },
   amountText: {
     fontSize: 14,
     color: 'black',
     fontWeight: '400',
+    fontFamily:"Roboto-Light"
   },
   renewalDateText: {
     fontSize: 12,
     color: 'black',
     marginTop: 10,
     marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -163,6 +174,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     color: 'white',
+    fontFamily:"Roboto-Light"
   },
   paymentMethodContainer: {
     flexDirection: 'row',
@@ -173,6 +185,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 15,
     backgroundColor: 'blue',
+    fontFamily:"Roboto-Light"
   },
   paymentMethodText: {
     fontSize: 14,
@@ -185,6 +198,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 15,
     marginLeft: 10,
+    fontFamily:"Roboto-Light"
   },
   addPaymentMethodText: {
     fontSize: 16,

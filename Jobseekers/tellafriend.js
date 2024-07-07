@@ -1,16 +1,24 @@
 import React from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 // Define ReferralLink component
 const ReferralLink = ({ link }) => {
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
+
   return (
     <View style={{ flexGrow: 1, flexShrink: 0, fontSize: 14, fontWeight: '500', maxWidth: '100%', alignItems: 'center' }}>
-      <Text style={{ color: 'black', maxWidth: '100%' }}>
-        You can also share your personal referral link by copying and sending it or sharing it on your social media
+      <Text style={{ color: 'black', maxWidth: '100%',fontFamily:"Roboto-Light" }}>
+        {t("You can also share your personal referral link by copying and sending it or sharing it on your social media")}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 3 }}>
         <View style={{ padding: 10, backgroundColor: 'white', borderRadius: 5, borderWidth: 1, borderColor: '#C8C8C8', maxWidth: '80%' }}>
-          <Text>{link}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{link}</Text>
         </View>
       </View>
     </View>
@@ -42,6 +50,12 @@ const socialMediaIcons = [
 ];
 
 const MyComponent = () => {
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  }) 
+   const {t}=useTranslation()
+
+
   return (
     <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
       <View style={{ paddingTop: 40, paddingRight: 20, paddingBottom: 200, paddingLeft: 40, borderRadius: 30, backgroundColor: '#FFFFFF' }}>
@@ -50,21 +64,21 @@ const MyComponent = () => {
             {/* No reference to close icon */}
           </TouchableOpacity>
         </View>
-        <Text style={{ marginTop: 66, fontSize: 24, fontWeight: 'bold', color: 'black', textAlign: 'center' }}>Refer a Friend to Recruitangle</Text>
+        <Text style={{ marginTop: 66, fontSize: 24, fontWeight: 'bold', color: 'black', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Refer a Friend to Recruitangle")}</Text>
         <Image source={require('../assets/friends.png')} style={{ marginTop: 10, alignSelf: 'center', width: 200, height: 200 }} />
         <View style={{ marginTop: 20, maxWidth: 1010}}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>Invite your friends</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black',fontFamily:"Roboto-Light" }}>{t("Invite your friends")}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
            <View style={{ flexGrow: 1, flexShrink: 0, fontSize: 14, fontWeight: '500', maxWidth: '80%' }}>
-              <Text style={{ color: 'black', maxWidth: '100%' }}>Enter your friends' e-mail addresses and send them invitations to join Recruitangle</Text>
+              <Text style={{ color: 'black', maxWidth: '100%',fontFamily:"Roboto-Light" }}>{t("Enter your friends' e-mail addresses and send them invitations to join Recruitangle")}</Text>
               <TextInput placeholder="Enter e-mail address(es)" style={{ padding: 10, marginTop: 5, fontSize: 14, borderWidth: 1, borderRadius: 5, borderColor: '#C8C8C8', maxwidth: '80%', marginRight: 20 }} />
             </View>
             <TouchableOpacity style={{ padding: 10, marginTop: 24, backgroundColor: '#FF7F50', borderRadius: 5, marginRight: 20 }}>
-              <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>Send Invitations</Text>
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>{t("Send Invitations")}</Text>
             </TouchableOpacity>
           </View>
-          <Text style={{ marginTop:           30, fontSize: 16, fontWeight: 'bold', color: 'black' }}>Share the referral link</Text>
-          <Text style={{ color: 'black', maxWidth: '100%', marginTop: 15 }}> You can also share your personal referral link by copying and sending it or sharing it on your social media </Text>
+          <Text style={{ marginTop:           30, fontSize: 16, fontWeight: 'bold', color: 'black',fontFamily:"Roboto-Light"  }}>{t("Share the referral link")}</Text>
+          <Text style={{ color: 'black', maxWidth: '100%', marginTop: 15,fontFamily:"Roboto-Light"  }}> {t("You can also share your personal referral link by copying and sending it or sharing it on your social media")} </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               <TextInput
@@ -74,7 +88,7 @@ const MyComponent = () => {
               />
             </View>
             <TouchableOpacity style={{ padding: 10, backgroundColor: '#FF7F50', borderRadius: 5, marginLeft: 20 }}>
-              <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', width: 120, textAlign: 'center', }}>Copy Link</Text>
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', width: 120, textAlign: 'center',fontFamily:"Roboto-Light"  }}>{t("Copy Link")}</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', maxWidth: '1%', marginLeft: 10 }}>
               {socialMediaIcons.map((icon, index) => (

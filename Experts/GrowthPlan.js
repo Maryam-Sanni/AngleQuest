@@ -79,7 +79,6 @@ function MyComponent() {
         navigation.navigate('Growth Plan Profile');
     };
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
 const {t}=useTranslation()
@@ -105,7 +104,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Junior Power Platform Developer</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Junior Power Platform Developer")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -118,7 +117,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Junior SAP FI</Text>
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>{t("Junior SAP FI")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity >
@@ -128,12 +127,12 @@ const {t}=useTranslation()
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>Create Profile</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Edit Profile</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
                   </View>
      </TouchableOpacity>
 

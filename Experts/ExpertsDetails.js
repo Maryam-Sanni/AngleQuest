@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet,
 import DateTimePickerModal from "../components/DateTimePickerExpertsModal";
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/top';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -147,6 +149,10 @@ const handleSaveEmployment = () => {
     // Navigate to the VerifyEmail page
     navigation.navigate('Verify mail');
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{height: '28%' }}>
@@ -163,7 +169,7 @@ const handleSaveEmployment = () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>1</Text>
+              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>1</Text>
             </View>
             <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
@@ -175,7 +181,7 @@ const handleSaveEmployment = () => {
               justifyContent: 'center',
               marginLeft: 5,
             }}>
-              <Text style={{ color: 'white', fontSize: 16 }}>2</Text>
+              <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>2</Text>
             </View>
             <View style={{ width: 60, height: 2, backgroundColor: '#FFEBCC', marginTop: 4, marginLeft: 5 }} />
             <View style={{
@@ -187,13 +193,13 @@ const handleSaveEmployment = () => {
               justifyContent: 'center',
               marginLeft: 5,
             }}>
-              <Text style={{ color: 'white', fontSize: 16 }}>3</Text>    
+              <Text style={{ color: 'white', fontSize: 16,fontFamily:"Roboto-Light" }}>3</Text>    
            </View>
            </View>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 2, marginTop: 10, color: 'black' }}>Basic Details</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 2, marginTop: 10, color: 'black',fontFamily:"Roboto-Light" }}>{t("Basic Details")}</Text>
         
 
-        <Text style={{ color: 'black', fontWeight: '500', marginTop: 15 }}>First Name</Text>
+        <Text style={{ color: 'black', fontWeight: '500', marginTop: 15,fontFamily:"Roboto-Light" }}>{t("First Name")}</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -208,7 +214,7 @@ const handleSaveEmployment = () => {
           value={firstName}
           onChangeText={setFirstName}
         />
-        <Text style={{ fontWeight: '500', color: 'black', marginTop: 15 }}>Last Name</Text>
+        <Text style={{ fontWeight: '500', color: 'black', marginTop: 15,fontFamily:"Roboto-Light" }}>{t("Last Name")}</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -223,7 +229,7 @@ const handleSaveEmployment = () => {
           value={lastName}
           onChangeText={setLastName}
         />
-        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black' }}>State or Province</Text>
+        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("State or Province")}</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -238,7 +244,7 @@ const handleSaveEmployment = () => {
           value={state}
           onChangeText={setState}
         />
-        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black' }}>Country</Text>
+        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("Country")}</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -253,7 +259,7 @@ const handleSaveEmployment = () => {
           value={country}
           onChangeText={setCountry}
         />
-        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black' }}>Date of Birth</Text>
+        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("Date of Birth")}</Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -268,18 +274,18 @@ const handleSaveEmployment = () => {
           value={dob}
           onChangeText={setDob}
         />
-        <Text style={{ marginTop: 15, color: 'black', fontWeight: '500' }}>Gender</Text>
+        <Text style={{ marginTop: 15, color: 'black', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Gender")}</Text>
         <select
           value={gender}
           onChange={(e) => setGender(e.target.value)}
           style={{ height: 40, width: '100%', borderColor: '#206C00', borderRadius: 5, marginTop: 5 }}
         >
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
+          <option value="Male">{t("Male")}</option>
+          <option value="Female">{t("Female")}</option>
+          <option value="Other">{t("Other")}</option>
         </select>
         {/* Upload Profile Picture */}
-        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black' }}>Upload Profile Picture</Text>
+        <Text style={{ fontWeight: '500', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("Upload Profile Picture")}</Text>
         <input
           type="file"
           accept="image/*"
@@ -291,31 +297,31 @@ const handleSaveEmployment = () => {
         )}
           <View style={{  marginTop: 20 }}>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                    <View style={{ justifyContent: "center", alignItems: "flex-start", padding: 5, borderRadius: 5, backgroundColor: "#A2BE95", marginBottom: 10, marginRight: -70 }}>
-                      <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold', marginBottom: 10, marginLeft: 5, marginTop: 10 }}>Pick a schedule</Text>
+                    <View style={{ justifyContent: "center", alignItems: "flex-start", padding: 5, borderRadius: 5, backgroundColor: "#A2BE95", marginBottom: 10, marginRight: -70, }}>
+                      <Text style={{ fontSize: 14, color: "white", fontWeight: 'bold', marginBottom: 10, marginLeft: 5, marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Pick a schedule")}</Text>
                       <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5 }}>
                         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
                           <View key={index} style={{ justifyContent: "center", alignItems: "center", padding: 5, borderRadius: 5, borderColor: "white", borderWidth: 1, marginRight: 5, marginBottom: 5 }}>
-                            <Text style={{ color: "white" }}>{day}</Text>
+                            <Text style={{ color: "white",fontFamily:"Roboto-Light" }}>{day}</Text>
                           </View>
                         ))}
                       </View>
                       <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "space-between" }}>
                         <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 5}}>
-                          <Text style={{ fontSize: 12, color: "white", marginRight: 5 }}>From:</Text>
-                          <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>07:30</Text>
+                          <Text style={{ fontSize: 12, color: "white", marginRight: 5,fontFamily:"Roboto-Light" }}>{t("From")}:</Text>
+                          <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light" }}>07:30</Text>
                         </View>
-                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>am</Text>
-                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
-                        <Text style={{ fontSize: 12, color: "white", marginLeft: 25, marginRight: 5, marginTop: 5 }}>To:</Text>
-                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>07:30</Text>
-                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5 }}>am</Text>
-                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5  }}>^</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light"  }}>am</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light"  }}>^</Text>
+                        <Text style={{ fontSize: 12, color: "white", marginLeft: 25, marginRight: 5, marginTop: 5,fontFamily:"Roboto-Light" }}>To:</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 15, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light"  }}>07:30</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 8, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light" }}>am</Text>
+                        <Text style={{ fontSize: 10, color: "green", borderColor: '#CEF1BF', backgroundColor: '#CEF1BF', paddingHorizontal: 5, paddingVertical: 5, borderWidth: 1, borderRadius: 5, marginRight: 5,fontFamily:"Roboto-Light"  }}>^</Text>
                       </View>
         
                       {selectedTimeRanges.length > 0 && (
   <View style={styles.availableContainer}>
-    <Text style={styles.availableText}>Available:</Text>
+    <Text style={styles.availableText}>{t("Available")}:</Text>
     {selectedTimeRanges.map((timeRange, index) => (
       <Text key={index} style={styles.availableTime}>
         {timeRange.day}: {timeRange.startTime} - {timeRange.endTime}
@@ -334,19 +340,19 @@ const handleSaveEmployment = () => {
          
           <View style={{ flexDirection: "row", alignItems: "center" }}>
            <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', marginTop: 20, marginBottom: 10 }}>Service Rendered</Text>
+            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', marginTop: 20, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Service Rendered")}</Text>
             {["Career Advice", "Interview Sessions"].map((service, index) => (
             <View key={index} style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <TouchableOpacity onPress={() => toggleService(service)} style={{ height: 15, width: 15, borderRadius: 10, borderWidth: 1, borderColor: "#4A5568", marginRight: 5, backgroundColor: selectedServices.includes(service) ? "#A2BE95" : "transparent" }} />
-                <Text>{service}</Text>
+                <Text style={{fontFamily:"Roboto-Light"}}>{service}</Text>
               </View>
             ))}
           </View>
            
       {/* Rate Component */}
       <View>
-        <Text style={{ fontSize: 14, fontWeight: "500", color: "black" }}>
-          Rate ($)
+        <Text style={{ fontSize: 14, fontWeight: "500", color: "black",fontFamily:"Roboto-Light" }}>
+          {t("Rate")} ($)
         </Text>
       </View>
       <TextInput
@@ -366,7 +372,7 @@ const handleSaveEmployment = () => {
         /hr
         </View>
      </View>
-      <Text style={{ marginTop: 10, fontSize: 14, fontWeight: 'bold', color: 'black' }}>About</Text>
+      <Text style={{ marginTop: 10, fontSize: 14, fontWeight: 'bold', color: 'black',fontFamily:"Roboto-Light" }}>{t("About")}</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: '#F4F4F4', borderRadius: 5 }}>
                 <TextInput
                   style={{ padding: 6, marginTop: 2.5, fontSize: 12, fontWeight: 'normal', color: '#6B7280', borderWidth: 1, outline: 'none', borderColor: '#F4F4F4', borderRadius: 5 }}
@@ -377,25 +383,25 @@ const handleSaveEmployment = () => {
               </View>
      
     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginTop: 30 }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black', marginLeft: 10 }}>Education</Text>
-                <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00', marginRight: 20 }}>+ Add Another Education</Text>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black', marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Education")}</Text>
+                <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00', marginRight: 20,fontFamily:"Roboto-Light" }}>+ {t("Add Another Education")}</Text>
               </View>
               <View style={{ padding: 10, marginTop: 10, borderRadius: 5, backgroundColor: 'white' }}>
-                <Text style={{ fontSize: 14, fontWeight: '600', color: 'black' }}>Degree</Text>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: 'black',fontFamily:"Roboto-Light" }}>{t("Degree")}</Text>
                 <TextInput
                   style={{ padding: 10, marginTop: 5, fontWeight: 'normal', color: 'grey', borderWidth: 1, borderColor: '#206C00', borderRadius: 5 }}
                   placeholder="Enter Degree"
                   value={degree}
                   onChangeText={setDegree}
                 />
-                <Text style={{ fontSize: 14, fontWeight: '600', color: 'black', marginTop: 20 }}>College/University</Text>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: 'black', marginTop: 20,fontFamily:"Roboto-Light" }}>{t("College/University")}</Text>
                 <TextInput
                   style={{ padding: 10, marginTop: 5, fontWeight: 'normal', color: 'grey', borderWidth: 1, borderColor: '#206C00', borderRadius: 5 }}
                   placeholder="Enter College or University"
                   value={university}
                   onChangeText={setUniversity}
                 />
-                  <Text style={{ fontSize: 14, fontWeight: '600', color: 'black', marginTop: 20 }}>Graduation Year</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '600', color: 'black', marginTop: 20,fontFamily:"Roboto-Light" }}>{t("Graduation Year")}</Text>
                   <TextInput
                     style={{ padding: 10, marginTop:5, fontWeight: 'normal', color: 'grey', borderWidth: 1, borderColor: '#206C00', borderRadius: 5 }}
                     placeholder="DD/MM/YYYY"
@@ -407,23 +413,23 @@ const handleSaveEmployment = () => {
                   style={{ marginRight: 400, alignItems: 'center', marginTop: 20, padding: 10, backgroundColor: 'coral', borderRadius: 5 }}
                   onPress={handleSaveEducation}
                 >
-                  <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white' }}>Save</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light" }}>{t("Save")}</Text>
                 </TouchableOpacity>
               </View>
            
            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ marginTop:30, fontSize: 16, fontWeight: 'bold', color: 'black', marginLeft: 10 }}>Work Experience</Text>
-                <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00', marginRight: 20, marginTop:30 }}>+ Add Another Employment</Text>
+                <Text style={{ marginTop:30, fontSize: 16, fontWeight: 'bold', color: 'black', marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Work Experience")}</Text>
+                <Text style={{ fontSize: 12, fontWeight: 'normal', color: '#206C00', marginRight: 20, marginTop:30,fontFamily:"Roboto-Light" }}>+ {t("Add Another Employment")}</Text>
               </View>
               <View style={{ padding: 8, marginTop: 15, borderRadius: 5, backgroundColor: 'white' }}>
-                <Text style={{ fontSize: 14, fontWeight: '500', color: 'black' }}>Company Name</Text>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'black',fontFamily:"Roboto-Light" }}>{t("Company Name")}</Text>
                 <TextInput
                   style={{ padding: 10, marginTop: 5,  fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: '#206C00', borderRadius: 5 }}
                   placeholder="Enter Company Name"
                   value={company}
                   onChangeText={setCompany}
                 />
-                <Text style={{ fontSize: 14, fontWeight: '500', color: 'black', marginTop: 20 }}>Position Held</Text>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'black', marginTop: 20,fontFamily:"Roboto-Light" }}>{t("Position Held")}</Text>
                 <TextInput
                   style={{ padding: 10, marginTop: 5,  fontWeight: 'normal', color: '#6B7280', borderWidth: 1, borderColor: '#206C00', borderRadius: 5 }}
                   placeholder="Enter Position Held"
@@ -431,8 +437,8 @@ const handleSaveEmployment = () => {
                   onChangeText={setPositionHeld}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                  <Text style={{ fontSize: 14, fontWeight: '500', color: 'black' }}>From</Text>
-                  <Text style={{ fontSize: 14, fontWeight: '500', color: 'black', marginRight: 200 }}>To</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '500', color: 'black',fontFamily:"Roboto-Light" }}>{t("From")}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: '500', color: 'black', marginRight: 200,fontFamily:"Roboto-Light" }}>{t("To")}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                   <TextInput
@@ -452,7 +458,7 @@ const handleSaveEmployment = () => {
                   style={{  alignItems: 'center', marginTop: 20, padding: 10, marginRight: 400, backgroundColor: 'coral', borderRadius: 5 }}
                   onPress={handleSaveEmployment}
                 >
-                  <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white' }}>Save</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light" }}>{t("Save")}</Text>
                 </TouchableOpacity>
               </View>
               
@@ -464,8 +470,8 @@ const handleSaveEmployment = () => {
         <View style={styles.headingContainer}>
         </View>
         <View style={styles.subheading}>
-          <Text style={styles.subheading}>Add Preferred Roles</Text>
-          <Text>Add a maximum of 5 job roles you are proficient at</Text>
+          <Text style={styles.subheading}>{t("Add Preferred Roles")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Add a maximum of 5 job roles you are proficient at")}</Text>
           <View style={styles.rolesContainer}>
             {roles.map((role, index) => (
               <TouchableOpacity
@@ -488,12 +494,12 @@ const handleSaveEmployment = () => {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoIcon}>?</Text>
-            <Text style={styles.infoText}>Get recommended to Jobseekers searching for these roles </Text>
+            <Text style={styles.infoText}>{t("Get recommended to Jobseekers searching for these roles")} </Text>
           </View>
         </View>
         <View style={styles.section}>
-          <Text style={styles.subheading2}>Add Preferred Countries</Text>
-          <Text>Add a maximum of 5 countries you are available to work</Text>
+          <Text style={styles.subheading2}>{t("Add Preferred Countries")}</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Add a maximum of 5 countries you are available to work")}</Text>
           <View style={styles.countriesContainer}>
             {countries.map((country, index) => (
               <TouchableOpacity
@@ -516,7 +522,7 @@ const handleSaveEmployment = () => {
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoIcon}>?</Text>
-            <Text style={styles.infoText}>See Jobseekers from these countries that match your proficiency</Text>
+            <Text style={styles.infoText}>{t("See Jobseekers from these countries that match your proficiency")}</Text>
           </View>
         </View>
       </View>
@@ -530,7 +536,7 @@ const handleSaveEmployment = () => {
             onChangeText={(text) => setRoleInputValue(text)}
           />
           <TouchableOpacity style={styles.addButton} onPress={handleSaveRole}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>{t("Add")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -544,13 +550,13 @@ const handleSaveEmployment = () => {
             onChangeText={(text) => setCountryInputValue(text)}
           />
           <TouchableOpacity style={styles.addButton} onPress={handleSaveCountry}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>{t("Add")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
       <TouchableOpacity style={styles.saveAndContinueButton} onPress={handleSaveAndContinue}>
-        <Text style={styles.saveAndContinueButtonText}>Save</Text>
+        <Text style={styles.saveAndContinueButtonText}>{t("Save")}</Text>
       </TouchableOpacity>
     </View>
   
@@ -571,7 +577,7 @@ const handleSaveEmployment = () => {
         }}
         onPress={handleSaveContinue}
       >
-        <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white', TextAlign: 'center' }}>Save & Continue</Text>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white', TextAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Save & Continue")}</Text>
       </TouchableOpacity>
 
     </View>
@@ -600,13 +606,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily:"Roboto-Light"
   },
   subheading2: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily:"Roboto-Light"
   },
   rolesContainer: {
     flexDirection: 'row',
@@ -624,7 +632,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#d3f9d8',
     color: '#206C00',
-    borderRadius: 50
+    borderRadius: 50,
+    fontFamily:"Roboto-Light"
   },
   selected: {
     borderWidth: 1,
@@ -647,6 +656,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#d3f9d8',
     color: '#206C00',
     borderRadius: 50,
+    fontFamily:"Roboto-Light"
   },
   newCountry: {
     paddingHorizontal: 15,
@@ -663,7 +673,8 @@ const styles = StyleSheet.create({
     color: '#206C00',
     borderRadius: 50,
     marginLeft: 5,
-    marginRight: 10
+    marginRight: 10,
+    fontFamily:"Roboto-Light"
   },
   infoContainer: {
     flexDirection: 'row',
@@ -677,10 +688,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: '#d3f9d8',
     borderRadius: 30,
+    fontFamily:"Roboto-Light"
   },
   infoText: {
     flex: 1,
     marginLeft: 10,
+    fontFamily:"Roboto-Light"
   },
   modalContainer: {
     flex: 1,
@@ -703,6 +716,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
   saveAndContinueButton: {
     marginRight: 400,
@@ -717,6 +731,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   availableContainer: {
   marginTop: 10,
@@ -724,9 +739,11 @@ const styles = StyleSheet.create({
   },
   availableText: {
     color: '#FFFFFF', // White color
+    fontFamily:"Roboto-Light"
   },
   availableTime: {
     color: '#FFFFFF', // White color
+    fontFamily:"Roboto-Light"
   },
 });
 

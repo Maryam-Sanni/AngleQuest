@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import OpenModal from '../Jobseekers/PaymentDetailsinterview';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,6 +18,10 @@ function MyComponent({ onClose }) {
       setPaymentModalVisible(false);
       onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
       <>
@@ -31,27 +38,27 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Skip Subscription</Text>
+          <Text style={styles.headerText}>{t("Skip Subscription")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
-      <Text style={{color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65 }}>Hello Patrick, Review your cart </Text>
-       <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65 }}>$15 for Interview  </Text>
+      <Text style={{color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65,fontFamily:"Roboto-Light" }}>{t("Hello")} Patrick, {t("Review your cart")} </Text>
+       <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65,fontFamily:"Roboto-Light" }}>{t("$15 for Interview")}  </Text>
     <View style={styles.box}>
- <Text style={{fontSize: 14, color: '#206C00', marginLeft: 10 }}>1 hour interview session with Joop Melcher for the position of "Power Platform Developer" </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("1 hour interview session with Joop Melcher for the position of Power Platform Developer")} </Text>
  </View>
- <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 25 }}>Total: $15</Text>
+ <Text style={{fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 25,fontFamily:"Roboto-Light" }}>{t("Total")}: $15</Text>
 
  <View style={{ flexDirection: 'row' }}>
 <TouchableOpacity onPress={onClose} style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>Back</Text>
+      <Text style={styles.buttonTextplus}>{t("Back")}</Text>
     </TouchableOpacity>
     <TouchableOpacity onPress={handleOpenPress}  style={styles.buttonskip} >
-      <Text style={styles.buttonTextskip}>Pay</Text>
+      <Text style={styles.buttonTextskip}>{t("Pay")}</Text>
     </TouchableOpacity>
     </View>
                     </View>
@@ -105,7 +112,8 @@ greenBox: {
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   box: {
     marginTop: 10,
@@ -144,11 +152,13 @@ greenBox: {
         color: 'coral',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
       },
       buttonTextskip: {
         color: 'white',
         fontSize: 14,
         textAlign: 'center',
+        fontFamily:"Roboto-Light"
       },
 });
 

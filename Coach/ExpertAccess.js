@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -26,7 +28,11 @@ function MyComponent({ onClose }) {
         setIsAnnualPressed(false);
     }
   };
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const { t } = useTranslation()
+    
   return (
     <>
       <Modal
@@ -42,21 +48,21 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Specify Expert Accessibiity</Text>
+              <Text style={styles.headerText}>{t("Specify Expert Accessibiity")}</Text>
 
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20,}}>
-             Do you want the "Employee Name" experts to view this target?
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20,fontFamily:"Roboto-Light"}}>
+             {t("Do you want the Employee Name experts to view this target?")}
             </Text>
 
-            <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 5, marginBottom: 10 }}>
-             This could further guide the expert's direction with employee
+            <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+             {t("This could further guide the expert's direction with employee")}
             </Text>
 
             <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 20 }}>
@@ -68,7 +74,7 @@ function MyComponent({ onClose }) {
                 activeOpacity={1}
                 onPress={handlePress}
               />
-              <Text style={{ fontSize: 15 }}>Yes</Text>
+              <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}>{t("Yes")}</Text>
            
 
             <View style={{ flexDirection: 'row', marginLeft: 30 }}>
@@ -80,13 +86,13 @@ function MyComponent({ onClose }) {
                 activeOpacity={1}
                 onPress={handlePress2}
               />
-              <Text style={{ fontSize: 15 }}>No</Text>
+              <Text style={{ fontSize: 15,fontFamily:"Roboto-Light" }}>{t("No")}</Text>
             </View>
             </View>
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={onClose}  style={styles.buttonplus}>
-                <Text style={styles.buttonTextplus}>Submit</Text>
+                <Text style={styles.buttonTextplus}>{t("Submit")}</Text>
               </TouchableOpacity>
             </View>
 
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -169,7 +176,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
 });
 

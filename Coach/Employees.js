@@ -20,7 +20,6 @@ function MyComponent() {
     
 
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
     const { t } = useTranslation()
@@ -43,7 +42,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Employees</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Employees")}</Text>
                                 </View>
                             </TouchableHighlight>
                         </View>

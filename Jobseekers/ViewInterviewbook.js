@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -16,6 +18,10 @@ function MyComponent({ onClose }) {
     navigation.navigate('All Interviews');
     onClose(); // Close the modal
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -26,90 +32,90 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Interview Booking</Text>
+          <Text style={styles.headerText}>{t("Interview Booking")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
-                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>Job Information</Text>
+                        <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50 }}>{t("Job Information")}</Text>
 <View style={styles.container}>
 <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Company</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>Company</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey'}}>ASML</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>ASML</Text>
               </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Role</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey'}}>Data Analyst</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text>Your CV</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'black', fontWeight: '400'}}>MyCv.pdf</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>Data Analyst</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Job Description</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Your CV")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'black', fontWeight: '400'}}>description.pdf</Text>
+        <Text style={{color: 'black', fontWeight: '400',fontFamily:"Roboto-Light"}}>MyCv.pdf</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Job Description text (optional)</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Job Description")}</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{color: 'black', fontWeight: '400',fontFamily:"Roboto-Light"}}>description.pdf</Text>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Job Description text (optional)")}</Text>
         </View>
         <View style={[styles.cell, { height: 100 }]}>
-        <Text style={{color: 'grey'}}>This is my job description</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("This is my job description")}</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Date and Time</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>{t("Date and Time")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey'}}>Selected date and time: Thursday, 2024-05-30 11:00 am (GMT+1:0)</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Selected date and time: Thursday, 2024-05-30 11:00 am (GMT+1:0)")}</Text>
         </View>
       </View>
       </View>
      
       
-      <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50 }}>Expert's available days and time</Text>
+      <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Expert's available days and time")}</Text>
 <View style={styles.container}>
       
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text>Days</Text>
+          <Text style={{fontFamily:"Roboto-Light"}}>Days</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{ color: 'grey' }}>Mon, Tue, Wed and Thurs</Text>
+        <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>Mon, Tue, Wed and Thurs</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text>Time</Text>
         </View>
-        <View style={styles.cell}><Text style={{ color: 'grey' }}>09:00AM-05:00PM</Text>
+        <View style={styles.cell}><Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>09:00AM-05:00PM</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text>Time Zone</Text>
         </View>
-        <View style={styles.cell}><Text style={{ color: 'grey' }}>CET</Text>
+        <View style={styles.cell}><Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>CET</Text>
         </View>
       </View>
     </View>
@@ -195,7 +201,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light",
   }
 });
 

@@ -1,7 +1,14 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 
 function MyComponent({ onClose }) {
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
+
   return (
      
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -11,30 +18,30 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Completed Interview Meetings</Text>
+          <Text style={styles.headerText}>{t("Completed Interview Meetings")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View>
-                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Role</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style = {{color: 'grey'}}>Junior Platform Developer</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>Junior Platform Developer</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Level</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style = {{color: 'grey'}}>Junior</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Junior")}</Text>
         </View>
       </View>
       
@@ -43,75 +50,75 @@ function MyComponent({ onClose }) {
       
     </View>
      
-    <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600'}}>Uneditable Section</Text>
+    <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
    
 
 
      <View style={styles.container}>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Question 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize a model driven app to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>70%</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>70%</Text>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Question 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize custom pages to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>50%</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>50%</Text>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold'}}>Question 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>40%</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>40%</Text>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold'}}>Question 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize a power automate to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>50%</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>50%</Text>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Question 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize AI builder bot to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>80%</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>80%</Text>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>Question 6</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 6</Text>
         </View>
         <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey'}}>3 Ways to Optimize a canvas app to optimize its performance</Text>
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey'}}>70%</Text> 
+        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>70%</Text> 
         </View>
       </View>
       </View>
@@ -175,7 +182,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   logo: {
     width: 40,
@@ -185,7 +193,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light"
   }
 });
 

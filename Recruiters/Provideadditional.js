@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import OpenModal from './AllSet';
+import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,7 +17,11 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
-
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    const {t}=useTranslation()
+    
   return (
     <>
       <Modal
@@ -31,28 +37,28 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Note on Employee to the expert</Text>
+              <Text style={styles.headerText}>{t("Note on Employee to the expert")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 5, marginLeft: 50, fontStyle: 'italic', fontWeight: '500', marginRight: 100 }}>
-              Share important details about " Employee Name" that will enable the expert to know the employee better to tailor his guidance
+            <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 5, marginLeft: 50, fontStyle: 'italic', fontWeight: '500', marginRight: 100,fontFamily:"Roboto-Light" }}>
+              {t("Share important details about  Employee Name that will enable the expert to know the employee better to tailor his guidance")}
             </Text>
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              What area in the role would you like the expert to focus on with "Employee Name"
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("What area in the role would you like the expert to focus on with Employee Name")}
             </Text>
             <TextInput
               placeholder=" "
               style={styles.input}
             />
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Additional details to assist expert
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Additional details to assist expert")}
             </Text>
             <TextInput
               placeholder=" "
@@ -60,8 +66,8 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Expert country: (select the preferred country you would like the expert to be from)
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Expert country: (select the preferred country you would like the expert to be from)")}
             </Text>
             <Picker
               style={styles.picker}
@@ -84,10 +90,10 @@ function MyComponent({ onClose }) {
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                <Text style={styles.buttonTextplus}>Next</Text>
+                <Text style={styles.buttonTextplus}>{t("Next")}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleOpenPress} style={styles.buttonskip}>
-                <Text style={styles.buttonTextskip}>Skip</Text>
+                <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -165,11 +171,14 @@ const styles = StyleSheet.create({
     width: 100,
     paddingHorizontal: 20,
     marginBottom: 30,
+    fontFamily:"Roboto-Light"
   },
   buttonTextplus: {
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
+
   },
   buttonTextskip: {
     color: 'coral',
@@ -214,6 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

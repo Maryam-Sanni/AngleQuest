@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenInterviewbook';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,28 +17,32 @@ const ScheduledMeetingsTable = () => {
     setModalVisible(false);
   };
   
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>Hub Assignments</Text>
+      <Text style={styles.title}>{t("Hub Assignments")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Hub Member</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Hub Member")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Topic</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Topic")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Performance Rating</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Minute</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Minute")}</Text>
           </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
@@ -52,13 +59,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>7/Mar/2024</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Brilliant</Text>
+            <Text style={styles.cellText}>{t("Brilliant")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>10 Minutes</Text>
           </View>
           <TouchableOpacity style={styles.cell2} >
-          <Text style={styles.open}>View</Text>
+          <Text style={styles.open}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -66,19 +73,19 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>Maitaima Voin</Text>
           </View>
           <View style={styles.cell}> 
-            <Text style={styles.cellText}>Integration with Cost Accounting</Text>
+            <Text style={styles.cellText}>{t("Integration with Cost Accounting")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>7/Apr/2024</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>Good</Text>
+            <Text style={styles.cellText}>{t("Good")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>10 Minutes</Text>
           </View>
           <TouchableOpacity style={styles.cell} >
-          <Text style={styles.open}>View</Text>
+          <Text style={styles.open}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
         
@@ -128,7 +135,8 @@ const styles = StyleSheet.create({
       borderWidth: 2, 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 replan: {
     color: "coral",
@@ -158,6 +166,7 @@ replan: {
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

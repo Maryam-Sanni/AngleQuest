@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image} from 'react-native';
 import OpenSchedule from '../Experts/ViewCompletedfeedbacks';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -13,27 +15,30 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+const {t}=useTranslation()
   return (
     <View style={styles.greenBox}>
         <BlurView intensity={100} style={styles.blurBackground}>
-    <Text style={styles.title}>Completed Feedback</Text>
+    <Text style={styles.title}>{t("Completed Feedback")}</Text>
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Name</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Role</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Account Type</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Account Type")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>Date</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={{color: "white", fontSize: 14}}> </Text>
+          <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
         </View>
       </View>
         <View style={styles.row}>
@@ -47,13 +52,13 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP Finance Junior</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Individual Account</Text>
+            <Text style={styles.cellText}>{t("Individual Account")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>31/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
+          <Text style={{color: "#206C00", fontSize: 14}}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -73,7 +78,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>29/Mar, 2024</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>View</Text>
+          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -106,6 +111,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
+    fontFamily: 'Roboto-Light',
   },
   table: {
     marginRight: 200,
@@ -134,6 +140,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   
   greenBox: {

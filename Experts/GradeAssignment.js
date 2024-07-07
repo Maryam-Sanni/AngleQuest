@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Picker, Modal } from 'react-native';
 import OpenModal from './Assignment';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,6 +18,10 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+  const {t}=useTranslation()
 
   return (
     <>
@@ -33,9 +40,9 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Grade Assignment</Text>
+              <Text style={styles.headerText}>{t("Grade Assignment")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
@@ -46,56 +53,56 @@ function MyComponent({ onClose }) {
             <View style={{ flexDirection: "row", marginBottom: 20}}>
             <TouchableOpacity>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold' }}>Grade Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "coral", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Grade Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity  onPress={handleOpenPress} >
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>New Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      </View>
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5 }}>
-                  Hub Members
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Hub Members")}
                 </Text> 
                 
-                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 10,}}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 10,fontFamily:"Roboto-Light"}}>
                 1. Jacob Ncube
                 </Text> 
-                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5,fontFamily:"Roboto-Light" }}>
                 2. Sander Josef
                 </Text> 
-                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5,fontFamily:"Roboto-Light" }}>
                 3. Joe Jason
                 </Text> 
-                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5 }}>
+                <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5,fontFamily:"Roboto-Light" }}>
                 4. Hussein Aliyu
                 </Text> 
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Topic
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              [t("Topic")]
             </Text>
             <Text style={styles.input}>
-                 Assignment 001
+                 {t("Assignment 001")}
                 </Text> 
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Description
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Description")}
             </Text>
             <Text style={[styles.input, { height: 100 }]}>
-                 Assignment 001 description will be written here
+                 {t("Assignment 001 description will be written here")}
                 </Text> 
 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                  Assignment Due
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Assignment Due")}
                 </Text>
                 <Text style={styles.input}>
-                Selected date and time: 2024-06-25 11:00AM (GMT+1:0)
+                {t("Selected date and time")}: 2024-06-25 11:00AM (GMT+1:0)
                 </Text> 
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5 }}>
-                  Grade Assignment
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Grade Assignment")}
                 </Text> 
 <Picker
   style={styles.picker} 
@@ -114,7 +121,7 @@ function MyComponent({ onClose }) {
 
 </View>
                 <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>Send</Text>
+                  <Text style={styles.buttonTextplus}>{t("Send")}</Text>
                 </TouchableOpacity>
                 </ScrollView>
               </View>
@@ -184,6 +191,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -196,6 +204,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
+    fontFamily:"Roboto-Light"
   },
   uneditable: {
     height: 40,
@@ -230,6 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 400,

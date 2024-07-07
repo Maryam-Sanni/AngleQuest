@@ -6,6 +6,9 @@ import BidsinReview from '../components/BidsinReview';
 import WonBids from '../components/wonbids';
 import LostBids from '../components/lostbids';
 import { useNavigation } from '@react-navigation/native';
+import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
+
 
  
 function MyComponent() {
@@ -20,6 +23,10 @@ function MyComponent() {
       const goToBids = () => {
         navigation.navigate('Bids');
       };
+      const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <ImageBackground
@@ -42,7 +49,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>Offers</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Offers")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToBids}
@@ -54,7 +61,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>Bids</Text>
+                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Bids")}</Text>
               </View>
             </TouchableOpacity>
             
@@ -95,7 +102,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 3, 
     fontWeight: '500',
-    color: '#666'
+    color: '#666',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 24,

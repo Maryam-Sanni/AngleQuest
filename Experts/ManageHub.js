@@ -4,6 +4,8 @@ import { Table, Row } from 'react-native-table-component';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ExpoDevPage = () => {
   // Dummy data for trainees
@@ -78,6 +80,11 @@ const ExpoDevPage = () => {
     </TouchableOpacity>,
   ]));
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
+
   return (
     <View style={{ flex: 1 }}>
       <Topbar />
@@ -86,7 +93,7 @@ const ExpoDevPage = () => {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.heading}>Expert Hub Management</Text>
+        <Text style={styles.heading}>{t("Expert Hub Management")}</Text>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => console.log('Voice call pressed')}>
           <Image
@@ -111,13 +118,13 @@ const ExpoDevPage = () => {
       <Text style={styles.subHeading}>Manage your coaching hub and participants</Text>
     <View style={{ flexDirection: "row",  alignItems: "flex-start", paddingHorizontal: 10, marginTop: 10, marginBottom: 20 }}>
     <TouchableOpacity onPress={goToAllHubs} >
-    <Text style={{ fontSize: 14, fontWeight: "600", color: "#666", marginTop: 5  }}>All Hubs</Text>
+    <Text style={{ fontSize: 14, fontWeight: "600", color: "#666", marginTop: 5  }}>{t("All Hubs")}</Text>
     </TouchableOpacity>
       <View style={{ justifyContent: "flex-end", marginLeft: 30, paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-              <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center', fontWeight: "600", }}>SAP FI</Text>
+              <Text style={{ fontSize: 14, color: "#206C00", alignText: 'center', fontWeight: "600", fontFamily:"Roboto-Light"}}>SAP FI</Text>
             </View>
-        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5  }}>Dev Ops</Text>
-        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5  }}>Frontend Dev.</Text>
+        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5,fontFamily:"Roboto-Light"  }}>Dev Ops</Text>
+        <Text style={{ fontSize: 14, marginLeft: 30,  fontWeight: "600", color: "#666", marginTop: 5,fontFamily:"Roboto-Light"  }}>Frontend Dev.</Text>
       </View>
       
       {/* Table */}
@@ -135,7 +142,7 @@ const ExpoDevPage = () => {
       </Table>
       </View>
       <TouchableOpacity onPress={() => console.log('Delete Hub pressed')} style={styles.deleteHubButton}>
-              <Text style={styles.deleteHubButtonText}>Delete Hub</Text>
+              <Text style={styles.deleteHubButtonText}>{t("Delete Hub")}</Text>
             </TouchableOpacity>
             <Modal
           animationType="slide"
@@ -145,18 +152,18 @@ const ExpoDevPage = () => {
         >
           <View style={styles.modalView}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Are you sure you want to remove this participant?</Text>
+              <Text style={styles.modalText}>{t("Are you sure you want to remove this participant?")}</Text>
               <TouchableOpacity
                 style={[styles.modalButton, styles.removeButton]}
                 onPress={() => removeTrainee(selectedTraineeId)}
               >
-                <Text style={styles.modalButtonText}>Remove</Text>
+                <Text style={styles.modalButtonText}>{t("Remove")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonText2}>Cancel</Text>
+                <Text style={styles.modalButtonText2}>{t("Cancel")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -197,6 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 25,
     color: '#206C00',
+    fontFamily:"Roboto-Light"
   },
  head: {
     height: 40,
@@ -256,6 +264,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily:"Roboto-Light"
   },
   modalView: {
     flex: 1,
@@ -273,6 +282,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   modalButton: {
     paddingVertical: 10,
@@ -285,15 +295,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: 'red'
+    color: 'red',
+    fontFamily:"Roboto-Light"
   },
   modalButtonText2: {
     fontSize: 16,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: 'green'
+    color: 'green',
+    fontFamily:"Roboto-Light"
   },
 });
-
 
 export default ExpoDevPage;

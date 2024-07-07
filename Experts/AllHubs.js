@@ -10,6 +10,8 @@ import { BlurView } from 'expo-blur';
 import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
 import { useTranslation } from 'react-i18next';
+import {useFonts} from "expo-font"
+
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -27,7 +29,8 @@ function MyComponent() {
       };
 
       const handleOthersPress = () => {
-        setModalVisible2(true);
+        // setModalVisible2(true);
+        console.log("Hello")
       };
     
       const handleCloseModal2 = () => {
@@ -58,6 +61,10 @@ function MyComponent() {
       setModalVisible4(false);
     };
 const {t}=useTranslation()
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -107,24 +114,24 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
+                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
               </View>
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ position: 'absolute', right: 70, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center', }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600' }}>+New Hub</Text>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+{t("New Hub")}</Text>
                   </View>
      </TouchableOpacity>
      <View style={{ flexDirection: "row"}}>
             <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Edit Hub</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Hub")}</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity onPress={handleOpenPress3}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold' }}>Assignment</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Assignment")}</Text>
                   </View>
      </TouchableOpacity>
      </View>
@@ -232,7 +239,7 @@ const ScheduledMeetingsTable = () => {
       </View>
     <View style={styles.greenBox}>
     <BlurView intensity={100} style={styles.blurBackground}>
-    <Text style={styles.title}>Manage SAP FI Hub</Text>
+    <Text style={styles.title}>{t("Manage SAP FI Hub")}</Text>
     
     <View style={styles.table}>
     <View style={styles.row}>
@@ -291,7 +298,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>20 {t("Sessions")}</Text>
@@ -315,7 +322,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>19 {t("Sessions")}</Text>
@@ -363,7 +370,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>8 {t("Sessions")}</Text>
@@ -413,7 +420,7 @@ const ScheduledMeetingsTable = () => {
   )}
 </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>20 {t("Sessions")}</Text>
@@ -461,7 +468,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         </View>
           <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>Online</Text>
+          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>16 {t("Sessions")}</Text>
@@ -557,14 +564,15 @@ const styles = StyleSheet.create({
     marginRight: 90,
     marginTop: -30
   },
-  eheadertext: {
+  headertext: {
     position: 'absolute',
     right: 30,
     marginLeft: 5,
     fontSize: 14,
     marginTop: -30,
     fontWeight: '500',
-    color: '#666'
+    color: '#666',
+    fontFamily:""
   },
   title: {
     marginTop: 20,

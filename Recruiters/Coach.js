@@ -32,7 +32,6 @@ function MyComponent() {
 
 
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")  
     })
   const {t}=useTranslation()
@@ -54,7 +53,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/813d5a4a25e7ea2bc6111724f9da82bc8321c028e79ecedafab3cf526363dfe1?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>Manage Coaches</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Coaches")}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity onPress={handleOpenPress}>

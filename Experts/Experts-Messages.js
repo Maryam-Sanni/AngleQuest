@@ -6,7 +6,9 @@ import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
 import JobseekerProfile from './components/JProfile';
 
+
 function MainScreen() {
+
   return (
     <View style={{ flex: 1 }}>
       <Topbar />

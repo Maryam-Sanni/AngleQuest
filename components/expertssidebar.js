@@ -103,7 +103,7 @@ function MyComponent() {
               style={{ width: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
-              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Varta-Light"  }}>Jeremiah H.</Text>
+              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Roboto-Light"  }}>Jeremiah H.</Text>
             </View>
           </View>
           </TouchableOpacity>

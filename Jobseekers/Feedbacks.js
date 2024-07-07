@@ -4,6 +4,9 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Animated, ImageBackgro
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
@@ -194,6 +197,11 @@ function MyComponent() {
     ));
   };
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
+
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -209,13 +217,13 @@ function MyComponent() {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
               <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 10, marginTop: 20 }}>
               <View style={{ justifyContent: "flex-end", paddingHorizontal: 15, paddingVertical: 5, borderRadius: 5, backgroundColor: "#d3f9d8", borderWidth: 1, borderColor: '#206C00' }}>
-                <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00" }}>Received</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Received")}</Text>
                 </View>
-                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color:'#d3f9d8', fontWeight: 'bold' }}>Sent</Text>
+                <Text style={{ fontSize: 14, marginLeft: 25, marginTop: 5, color:'#d3f9d8', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Sent")}</Text>
               </View>
               <TouchableOpacity style={{ marginTop: 7, marginRight: 20, justifyContent: 'center', paddingHorizontal: 15, paddingVertical: 4, fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF', backgroundColor: 'coral', borderRadius: 3 }}
               onPress={handleFeedbackPress } >
-                <Text style={{ fontSize: 14, color: "white",  }}>Give Feedback</Text>
+                <Text style={{ fontSize: 14, color: "white", fontFamily:"Roboto-Light" }}>{t("Give Feedback")}</Text>
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>

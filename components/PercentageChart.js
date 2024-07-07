@@ -1,3 +1,4 @@
+import { useFonts } from 'expo-font';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -13,6 +14,9 @@ const CustomPercentageChart = ({ percentage }) => {
     borderBottomColor: filledDegrees > 0 ? '#63EC55' : 'transparent',
     transform: [{ rotate: `${filledDegrees}deg` }],
   };
+  const [fontsLoaded]=useFonts({
+    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+  })
 
   return (
     <View style={styles.container}>
@@ -50,6 +54,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#63EC55',
     position: 'absolute',
+    fontFamily:"Roboto-Light"
   },
 });
 

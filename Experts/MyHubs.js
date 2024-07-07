@@ -6,6 +6,7 @@ import Sidebar from '../components/expertssidebar';
 import OpenModal from '../components/Createhubform';
 import { BlurView } from 'expo-blur';
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -172,6 +173,7 @@ const handleCloseModal = () => {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+  const {t}=useTranslation()
 
 
   return (
@@ -199,7 +201,7 @@ const handleCloseModal = () => {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>Manage Hubs</Text>
+                <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>{t("Manage Hubs")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={goToMyHubs}
@@ -211,13 +213,13 @@ const handleCloseModal = () => {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image2}
 />
-                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>All Hubs</Text>
+                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
               </View>
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#206C00", backgroundColor: '#d3f9d8', width: 150, alignItems: 'center', marginTop: 20, marginBottom: 10, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ Create New Hub</Text>
+                    <Text style={{ fontSize: 13, color: "#206C00", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("Create New Hub")}</Text>
                   </View>
      </TouchableOpacity>
 

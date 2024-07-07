@@ -3,6 +3,8 @@ import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity } from 'rea
 import { useNavigation } from '@react-navigation/native'; 
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const data = [
   { date: '12/03', score: 25 },
@@ -20,6 +22,10 @@ function MyComponent() {
   const goToMessages = () => {
     navigation.navigate('Messages'); 
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{ height: '70%' }}>
@@ -33,19 +39,19 @@ function MyComponent() {
               style={styles.image}
             />
             <View style={styles.textContainer}>
-              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold', marginLeft: 100 }}>Manage your activities</Text>
-              <Text style={{ fontSize: 14, marginTop: 8, color: '#206C00', marginLeft: 100 }}>Find ease in managing your activities, Get insights on all your actvities in one place.</Text>
+              <Text style={{ fontSize: 25, color: '#206C00', fontWeight: 'bold', marginLeft: 100,fontFamily:"Roboto-Light" }}>{t("Manage your activities")}</Text>
+              <Text style={{ fontSize: 14, marginTop: 8, color: '#206C00', marginLeft: 100,fontFamily:"Roboto-Light"  }}>{t("Find ease in managing your activities, Get insights on all your actvities in one place.")}</Text>
             </View>
           </View>
           <View style={styles.parentcontainer}>
             <View style={styles.upcomingcontainer}>
-              <Text style={styles.upcomingtitle}>Upcoming Interview</Text>
+              <Text style={styles.upcomingtitle}>{t("Upcoming Interview")}</Text>
               <Text style={styles.upcomingtimer}>15m:22s</Text>
-              <Text style={styles.upcomingdate}>Today</Text>
+              <Text style={styles.upcomingdate}>{t("Today")}</Text>
               <Text style={styles.upcomingtime}>09:30pm - 10:30pm</Text>
             </View>
             <View style={styles.empprogresscontainer}>
-              <Text style={styles.progresstitle}>Employment Progress</Text>
+              <Text style={styles.progresstitle}>{t("Employment Progress")}</Text>
               <View style={styles.progressContainer}>
                 <View style={styles.dot} />
                 <View style={styles.bar} />
@@ -60,28 +66,28 @@ function MyComponent() {
                 <View style={styles.dot} />
               </View>
               <View style={styles.progresslabelsContainer}>
-                <Text style={styles.progresslabel}>Interview</Text>
-                <Text style={styles.progresslabel}>Feedback</Text>
-                <Text style={styles.progresslabel}>Recruiter</Text>
-                <Text style={styles.progresslabel}>Review</Text>
-                <Text style={styles.progressemptyLabel}>Employed</Text>
-                <Text style={styles.progressemptyLabel}>Resume</Text>
+                <Text style={styles.progresslabel}>{t("Interview")}</Text>
+                <Text style={styles.progresslabel}>{t("Feedback")}</Text>
+                <Text style={styles.progresslabel}>{t("Recruiter")}</Text>
+                <Text style={styles.progresslabel}>{t("Review")}</Text>
+                <Text style={styles.progressemptyLabel}>{t("Employed")}</Text>
+                <Text style={styles.progressemptyLabel}>{t("Resume")}</Text>
               </View>
             </View>
             <View style={styles.jobscontainer}>
-              <Text style={styles.jobstitle}>Job Applications</Text>
+              <Text style={styles.jobstitle}>{t("Job Applications")}</Text>
               <Text style={styles.jobscount}>13</Text>
-              <Text style={styles.jobsprogress}>In Progress - 7</Text>
-              <Text style={styles.jobsterminated}>Terminated - 6</Text>
+              <Text style={styles.jobsprogress}>{t("In Progress - 7")}</Text>
+              <Text style={styles.jobsterminated}>{t("Terminated - 6")}</Text>
             </View>
             <View style={styles.scorecontainer}>
-              <Text style={styles.scoretitle}>Interview Average</Text>
+              <Text style={styles.scoretitle}>{t("Interview Average")}</Text>
               <Text style={styles.scoreaverage}>20</Text>
             </View>
           </View>
           <View style={styles.parentcontainer}>
             <View style={styles.graphcontainer}>
-              <Text style={styles.graphtitle}>Interview Score Progression</Text>
+              <Text style={styles.graphtitle}>{t("Interview Score Progression")}</Text>
               <View style={styles.barGraphContainer}>
                 {data.map((item, index) => (
                   <View key={index} style={styles.barContainer}>
@@ -94,7 +100,7 @@ function MyComponent() {
             </View>
 
             <View style={styles.careerAdviceContainer}>
-              <Text style={styles.careerAdviceTitle}>Career Advice</Text>
+              <Text style={styles.careerAdviceTitle}>{t("Career Advice")}</Text>
               <View style={styles.careerAdviceContent}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/bcbe3d336062256960bcbe42f5bf22be8130cc8c4a877a1428d779f94805dd43?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=100' }}
@@ -102,16 +108,16 @@ function MyComponent() {
                 />
                 <View>
                   <Text style={styles.expertName}>Mr John Smith</Text>
-                  <Text style={styles.expertTitle}>Architectural Engineer</Text>
+                  <Text style={styles.expertTitle}>{t("Architectural Engineer")}</Text>
                 </View>
               </View>
               <View style={styles.adviceButtonContainer}>
-                <Text style={styles.adviceText}>Send an instant message to an expert for advice. You will need to be a pro user to access this feature...</Text>
+                <Text style={styles.adviceText}>{t("Send an instant message to an expert for advice. You will need to be a pro user to access this feature...")}</Text>
                 <TouchableOpacity
                   style={styles.startMessagingButton}
                   onPress={goToMessages}
                 >
-                  <Text style={styles.startMessagingText}>Start Messaging</Text>
+                  <Text style={styles.startMessagingText}>{t("Start Messaging")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -163,6 +169,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontWeight: '700',
     color: '#206C00',
+    fontFamily:"Roboto-Light" 
   },
   upcomingtimer: {
     marginTop: 8,
@@ -170,16 +177,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     color: 'coral',
+    fontFamily:"Roboto-Light" 
   },
   upcomingdate: {
     marginTop: 15,
     fontSize: 10,
     color: 'grey',
+    fontFamily:"Roboto-Light" 
   },
   upcomingtime: {
     marginTop: 4,
     fontSize: 10,
     color: 'grey',
+    fontFamily:"Roboto-Light" 
   },
   empprogresscontainer: {
     marginRight: 15,
@@ -196,6 +206,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#206C00',
     maxWidth: '100%',
+    fontFamily:"Roboto-Light" 
   },
   progressContainer: {
     flexDirection: 'row',
@@ -238,6 +249,7 @@ const styles = StyleSheet.create({
     color: '#206C00',
     flex: 1,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light" 
   },
   progressemptyLabel: {
     fontSize: 12,
@@ -245,6 +257,7 @@ const styles = StyleSheet.create({
     color: 'grey',
     flex: 1,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light" 
   },
   jobscontainer: {
     alignItems: 'flex-start',
@@ -260,6 +273,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#206C00',
+    fontFamily:"Roboto-Light" 
   },
   jobscount: {
     marginTop: 8,
@@ -267,16 +281,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'right',
     color: 'coral',
+    fontFamily:"Roboto-Light" 
   },
   jobsprogress: {
     marginTop: 8,
     fontSize: 12,
     color: 'green',
+    fontFamily:"Roboto-Light" 
   },
   jobsterminated: {
     marginTop: 4,
     fontSize: 12,
     color: '#EF4444',
+    fontFamily:"Roboto-Light" 
   },
   scorecontainer: {
     flexGrow: 1,
@@ -303,12 +320,14 @@ const styles = StyleSheet.create({
     color: '#206C00',
     textAlign: 'center',
     marginBottom: 8,
+    fontFamily:"Roboto-Light" 
   },
   scoreaverage: {
     fontSize: 40,
     fontWeight: 'bold',
     color: 'coral',
     textAlign: 'center',
+    fontFamily:"Roboto-Light" 
   },
   graphcontainer: {
     marginLeft: 10,
@@ -326,6 +345,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#206C00',
     marginBottom: 4,
+    fontFamily:"Roboto-Light" 
   },
   barGraphContainer: {
     flexDirection: 'row',
@@ -354,11 +374,13 @@ const styles = StyleSheet.create({
   graphscore: {
     fontSize: 12,
     color: '#000',
+    fontFamily:"Roboto-Light" 
   },
   graphdate: {
     fontSize: 12,
     color: '#6B7280',
     marginTop: 4,
+    fontFamily:"Roboto-Light" 
   },
   careerAdviceContainer: {
     marginRight: 10,
@@ -386,7 +408,8 @@ const styles = StyleSheet.create({
     color: '#206C00',
     maxWidth: '100%',
     marginTop: 10,
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily:"Roboto-Light" 
   },
   careerAdviceContent: {
     flexDirection: 'row',
@@ -395,11 +418,13 @@ const styles = StyleSheet.create({
   },
   expertName: {
     fontSize: 16,
-    color: 'black'
+    color: 'black',
+    fontFamily:"Roboto-Light" 
   },
   expertTitle: {
     fontSize: 12,
-    color: '#A9A9A9'
+    color: '#A9A9A9',
+    fontFamily:"Roboto-Light" 
   },
   adviceButtonContainer: {
     backgroundColor: '#d3f9d8',
@@ -412,7 +437,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'grey',
     textAlign: 'center',
-    marginTop: 50
+    marginTop: 50,fontFamily:"Roboto-Light" 
   },
   startMessagingButton: {
     backgroundColor: '#56866F',
@@ -432,7 +457,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily:"Roboto-Light" 
   }
 });
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ProgressBar = () => {
   return null; // Progress bar removed
@@ -41,6 +43,11 @@ const VerificationContent = ({ userEmail }) => {
   const handleChangeEmail = () => {
     navigation.navigate('Sign Up - Corporate'); // Navigate to sign-up page
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+      })
+    
+    const {t}=useTranslation()
 
   return (
     <View style={styles.verificationContent}>
@@ -58,10 +65,10 @@ const VerificationContent = ({ userEmail }) => {
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10 }}>Resend code</Text>
+          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10,fontFamily:"Roboto-Light" }}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600' }}>Change email</Text>
+          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600',fontFamily:"Roboto-Light" }}>Change email</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -113,16 +120,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: -10,
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   text: {
     marginVertical: 5,
-    fontSize: 12
+    fontSize: 12,
+    fontFamily:"Roboto-Light"
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
+    fontFamily:"Roboto-Light"
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -154,7 +164,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
 });
 

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Picker, TouchableOpacity, Modal } from 'react-n
 import { BlurView } from 'expo-blur';
 import OpenModal from './EmployeeStatus';
 import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
 
 const ScheduledMeetingsTable = () => {
     const [ModalVisible, setModalVisible] = useState(false);
@@ -16,6 +17,10 @@ const ScheduledMeetingsTable = () => {
         onClose();
       };
 const {t}=useTranslation()
+const [fontsLoaded]=useFonts({
+  "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+})
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -24,19 +29,19 @@ const {t}=useTranslation()
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Created On")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Created On")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Renewal Date")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Renewal Date")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Status")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>{t("Update")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Update")}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -125,6 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   table: {
     marginTop: 20,
@@ -152,6 +158,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'flex-start',
+    fontFamily:"Roboto-Light"
   },
   picker: {
     height: 30,
@@ -195,7 +202,8 @@ const styles = StyleSheet.create({
       backgroundColor: "coral", 
       padding: 5, 
       paddingHorizontal: 15, 
-      borderRadius: 5
+      borderRadius: 5,
+      fontFamily:"Roboto-Light"
 },
 });
 

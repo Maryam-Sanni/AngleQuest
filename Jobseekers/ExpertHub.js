@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
@@ -142,6 +143,10 @@ function MyComponent({ onClose }) {
       </Animated.View>
     ));
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
   return (
     <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
@@ -152,18 +157,18 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>Expert's Hubs</Text>
+          <Text style={styles.headerText}>{t("Expert's Hubs")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
             ✕
           </Text>
         </TouchableOpacity>
         </View> 
           
          
-          <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5, marginLeft: 50 }}>Hubs</Text>
-     <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', fontWeight: '400', marginLeft: 50, marginBottom: 20  }}>By Expert Joop Melcher</Text>
+          <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5, marginLeft: 50,fontFamily:"Roboto-Light"  }}>{t("Hubs")}</Text>
+     <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', fontWeight: '400', marginLeft: 50, marginBottom: 20,fontFamily:"Roboto-Light"   }}>{t("By Expert Joop Melcher")}</Text>
     
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, marginLeft: 30, marginRight: 30 }}>
               {renderCards()}
@@ -173,7 +178,7 @@ function MyComponent({ onClose }) {
       <Text style={styles.buttonTextplus}>Continue</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonskip} >
-      <Text style={styles.buttonTextskip}>Skip</Text>
+      <Text style={styles.buttonTextskip}>{t("Skip")}</Text>
     </TouchableOpacity>
     </View>
           </View>
@@ -206,6 +211,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light" 
   },
   buttonskip: {
     backgroundColor: 'white',
@@ -245,7 +251,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637'
+    color: '#3F5637',
+    fontFamily:"Roboto-Light" 
   }
 });
 

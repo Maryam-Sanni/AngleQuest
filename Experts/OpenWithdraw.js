@@ -1,14 +1,21 @@
+import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker } from 'react-native';
 
 function MyComponent({ onClose }) {
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
+
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center',  }}>
     
 
 <View style={styles.greenBox}>
 <TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20}}>
+            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20,fontFamily:"Roboto-Light"}}>
                             ✕
                         </Text>
                         </TouchableOpacity>
@@ -16,7 +23,7 @@ function MyComponent({ onClose }) {
                         <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Amount</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Amount")}</Text>
         </View>
         <View style={styles.cell}>
         <TextInput
@@ -28,7 +35,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Destination/Bank</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Destination/Bank")}</Text>
         </View>
         <View style={styles.cell}>
         <Picker
@@ -43,7 +50,7 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold'}}>Confirm Withdrawal Code</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Confirm Withdrawal Code")}</Text>
         </View>
         <View style={styles.cell}>
          <TextInput
@@ -61,10 +68,10 @@ function MyComponent({ onClose }) {
 
  <View style={{flexDirection: 'row'}}>
 <TouchableOpacity style={styles.buttonAcc2} >
-      <Text style={styles.buttonTextAcc}>Get Code</Text>
+      <Text style={styles.buttonTextAcc}>{t("Get Code")}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Place Request</Text>
+      <Text style={styles.buttonTextAcc}>{t("Place Request")}</Text>
     </TouchableOpacity>
     </View>
     
@@ -132,6 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     fontWeight: 'bold', 
+    fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',

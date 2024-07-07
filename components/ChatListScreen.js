@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, Text, TouchableOpacity, Image } from 'react-native';
-
 import {useFonts} from "expo-font"
+import { useTranslation } from 'react-i18next';
 
 const data = [
   {
@@ -67,10 +67,10 @@ function CustomHeader() {
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
     })
-
+const {t}=useTranslation()
   return (
     <View style={{padding: 16, backgroundColor: 'white' }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, fontFamily:"Roboto-Light"}}>Chats</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'flex-start', borderBottomWidth: 1, borderBottomColor: 'grey', padding: 16, fontFamily:"Roboto-Light"}}>{t("Chats")}</Text>
     </View>
   );
 }

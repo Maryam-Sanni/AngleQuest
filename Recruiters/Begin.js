@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
+import { useFonts } from 'expo-font';
 
 
 // SignUpButton component
@@ -49,6 +50,9 @@ const MyComponent = () => {
   const navigateToTerms = () => {
     navigation.navigate('Terms of Service');
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
 
   return (
     <View style={styles.outerContainer}>
@@ -65,7 +69,7 @@ const MyComponent = () => {
               text="Sign up with LinkedIn"
             />
             <View style={styles.divider}>
-              <Text>or</Text>
+              <Text style={{fontFamily:"Roboto-Light"}}>or</Text>
             </View>
             <FormInput placeholder="Business name" onChangeText={setBusinessName} />
             <FormInput placeholder="Administrator's Full Name" onChangeText={setAdminName} />
@@ -79,7 +83,7 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}>
-                <Text style={{ color: 'black', fontSize: 14, }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -179,6 +184,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily:"Roboto-Light"
   },
   image: {
     resizeMode: 'contain',

@@ -3,6 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() {
   const navigation = useNavigation(); // Accessing navigation object using useNavigation hook
@@ -36,6 +39,11 @@ function MyComponent() {
     navigation.navigate('Home'); // Navigating to the "EduAndWork" page
   };
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+const {t}=useTranslation()
+
   return (
     <View style={{ flex: 1}}>
     <Topbar />
@@ -50,12 +58,12 @@ function MyComponent() {
                 
                
               </View>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, color: 'coral' }}>Basic Details</Text>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, marginTop: 10, color: 'coral',fontFamily:"Roboto-Light" }}>{t("Basic Details")}</Text>
             </View>
 
             <View style={{ flexDirection: 'row', marginTop: 14 }}>
               <View style={{ flex: 1, marginRight: 40 }}>
-                <Text style={{ color: 'black', fontWeight: '600' }}>First Name</Text>
+                <Text style={{ color: 'black', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("First Name")}</Text>
                 <TextInput
                   style={{
                     borderWidth: 1,
@@ -64,7 +72,8 @@ function MyComponent() {
                     padding: 10,
                     maxWidth: '100%',
                     marginTop: 5,
-                    placeholderTextColor: 'black'
+                    placeholderTextColor: 'black',
+                    fontFamily:"Roboto-Light"
                   }}
                   placeholder='Enter your First Name'
                   value={firstName}
@@ -72,7 +81,7 @@ function MyComponent() {
                 />
               </View>
               <View style={{ flex: 1, marginLeft: 5 }}>
-                <Text style={{ fontWeight: '600', color: 'black' }}>Last Name</Text>
+                <Text style={{ fontWeight: '600', color: 'black',fontFamily:"Roboto-Light" }}>{t("Last Name")}</Text>
                 <TextInput
                   style={{
                     borderWidth: 1,
@@ -81,7 +90,8 @@ function MyComponent() {
                     padding: 10,
                     maxWidth: '100%',
                     marginTop: 5,
-                    placeholderTextColor: 'black'
+                    placeholderTextColor: 'black',
+                    fontFamily:"Roboto-Light"
                   }}
                   placeholder='Enter your Last Name'
                   value={lastName}
@@ -91,7 +101,7 @@ function MyComponent() {
             </View>
             <View style={{ flexDirection: 'row', marginTop: 7 }}>
               <View style={{ flex: 1, marginRight: 40 }}>
-                <Text style={{ fontWeight: '600', marginTop: 15, color: 'black' }}>State or Province</Text>
+                <Text style={{ fontWeight: '600', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("State or Province")}</Text>
                 <TextInput
                   style={{
                     borderWidth: 1,
@@ -100,7 +110,8 @@ function MyComponent() {
                     padding: 10,
                     maxWidth: '100%',
                     marginTop: 5,
-                    placeholderTextColor: 'grey'
+                    placeholderTextColor: 'grey',
+                    fontFamily:"Roboto-Light"
                   }}
                   placeholder="Enter your State or Province"
                   value={state}
@@ -108,7 +119,7 @@ function MyComponent() {
                 />
               </View>
               <View style={{ flex: 1, marginLeft: 5 }}>
-                <Text style={{ fontWeight: '600', marginTop: 15, color: 'black' }}>Country</Text>
+                <Text style={{ fontWeight: '600', marginTop: 15, color: 'black',fontFamily:"Roboto-Light" }}>{t("Country")}</Text>
                 <TextInput
                   style={{
                     borderWidth: 1,
@@ -117,7 +128,8 @@ function MyComponent() {
                     padding: 10,
                     maxWidth: '100%',
                     marginTop: 5,
-                    placeholderTextColor: 'grey'
+                    placeholderTextColor: 'grey',
+                    fontFamily:"Roboto-Light"
                   }}
                   placeholder="Enter your Country"
                   value={country}
@@ -126,7 +138,7 @@ function MyComponent() {
               </View>
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
-              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black' }}>Birthday</Text>
+              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black',fontFamily:"Roboto-Light" }}>{t("Birthday")}</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -135,7 +147,8 @@ function MyComponent() {
                   padding: 10,
                   maxWidth: '100%',
                   marginTop: 5,
-                  placeholderTextColor: 'grey'
+                  placeholderTextColor: 'grey',
+                  fontFamily:"Roboto-Light"
                 }}
                 placeholder="Enter your Date of Birth (DD/MM/YYYY)"
                 value={dob}
@@ -143,28 +156,28 @@ function MyComponent() {
               />
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
-              <Text style={{ marginTop: 25, color: 'black', fontWeight: '600' }}>Gender</Text>
+              <Text style={{ marginTop: 25, color: 'black', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Gender")}</Text>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                style={{ height: 40, width: '100%', borderColor: 'grey', borderRadius: 5 }}
+                style={{ height: 40, width: '100%', borderColor: 'grey', borderRadius: 5,fontFamily:"Roboto-Light" }}
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
               {/* Upload Profile Picture */}
-              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black' }}>Upload Profile Picture</Text>
+              <Text style={{ fontWeight: '600', marginTop: 25, color: 'black',fontFamily:"Roboto-Light" }}>{t("Upload Profile Picture")}</Text>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
-                style={{ marginTop: 5 }}
+                style={{ marginTop: 5,fontFamily:"Roboto-Light" }}
               />
               {profileImage ? (
                 <Image source={{ uri: profileImage }} style={{ width: 50, height: 50 }} />
               ) : (
-                <Text style={{ fontWeight: '100', marginTop: 5, color: 'black', marginBottom: 20, fontSize: 11, marginLeft: 5 }}>Your profile image is necessary for Authentication purpose</Text>
+                <Text style={{ fontWeight: '100', marginTop: 5, color: 'black', marginBottom: 20, fontSize: 11, marginLeft: 5,fontFamily:"Roboto-Light" }}>{t("Your profile image is necessary for Authentication purpose")}</Text>
               )}
             </View>
           </View>
@@ -180,7 +193,7 @@ function MyComponent() {
             }}
             onPress={() => navigation.navigate('Home')}
           >
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00' }}>Skip for now</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Skip for now")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -193,7 +206,7 @@ function MyComponent() {
             }}
             onPress={handleSaveContinue}
           >
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white' }}>Save & Continue</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'white',fontFamily:"Roboto-Light" }}>{t("Save & Continue")}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -13,7 +13,6 @@ function MyComponent() {
     const navigation = useNavigation();
 
     const [fontsLoaded]=useFonts({
-      'Varta-Light':require("../assets/fonts/Varta-Light.ttf"),
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
     })
   const {t}=useTranslation()
@@ -35,7 +34,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={styles.headertext}>Employee Performance</Text>
+                <Text style={styles.headertext}>{t("Employee Performance")}</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -45,7 +44,7 @@ function MyComponent() {
 
      <View style={styles.container}>
      <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>Angle Badge</Text>
+        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Angle Badge")}</Text>
         <View style={{flexDirection: 'row' }}>
           <Text style={{fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("This is the combined progress of your team")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 20 }}>

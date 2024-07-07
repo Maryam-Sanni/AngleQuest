@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput, ScrollView } from 'react-native';
 import DateTimePickerModal from "../components/DateTimeCoach";
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -18,6 +20,11 @@ function MyComponent({ onClose }) {
   const handleCancelDateTimeModal = () => {
     setIsDateTimeModalVisible(false);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
+    
+      })
+      const {t}=useTranslation()
 
 
   return (
@@ -30,32 +37,32 @@ function MyComponent({ onClose }) {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>Schedule Next Hub Meeting</Text>
+              <Text style={styles.headerText}>{t("Schedule Next Hub Meeting")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.container}>
-              <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 10, fontWeight: '600' }}>
-                Schedule the next hub meeting with "SAP FI Hub"
+              <Text style={{ fontSize: 16, marginLeft: 50, marginTop: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>
+                {t("Schedule the next hub meeting with SAP FI Hub")}
               </Text>
-              <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5, marginBottom: 10 }}>
-                Always remember to reference the note from the hub member employers on their preferred area of concentration for your hub memebers. This should often guide the topics, ideas, tips and tricks that you share.
+              <Text style={{ fontSize: 14, marginLeft: 50, marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                {t("Always remember to reference the note from the hub member employers on their preferred area of concentration for your hub memebers. This should often guide the topics, ideas, tips and tricks that you share.")}
               </Text>
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Topic
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Topic")}
             </Text>
             <TextInput
               placeholder=" "
               style={styles.input}
             />
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-              Description
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+              {t("Description")}
             </Text>
             <TextInput
               placeholder=" "
@@ -63,19 +70,19 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5 }}>
-                Date
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                {t("Date")}
               </Text>
               <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
                 <Text style={styles.input}><Text style={{fontWeight: '500'}}>Date: </Text>{selectedDateTime}</Text>
               </TouchableOpacity>
-              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10 }}>
-                Time
+              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
+                {t("Time")}
               </Text>
-              <Text style={styles.input}><Text style={{fontWeight: '500'}}>Time: </Text> {selectedTime}</Text>
+              <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Time: </Text> {selectedTime}</Text>
             </View>
             <TouchableOpacity style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>Schedule</Text>
+              <Text style={styles.buttonTextplus}>{t("Schedule")}</Text>
             </TouchableOpacity>
             </ScrollView>
          
@@ -125,6 +132,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   input: {
     height: 40,
@@ -137,6 +145,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     borderRadius: 5,
     padding: 10,
+    fontFamily:"Roboto-Light"
   },
   closeButton: {
     position: 'absolute',
@@ -156,6 +165,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
+    fontFamily:"Roboto-Light"
   },
   logo: {
     width: 40,

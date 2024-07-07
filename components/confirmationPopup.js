@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, Image } from 'react-native'; 
 import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
     const navigation = useNavigation();
@@ -14,13 +16,17 @@ const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
         navigation.navigate('Jobseekers Profile'); // Navigate to Jobseekers Profile screen
         onClose(); // Close the modal
     };
+    const [fontsLoaded]=useFonts({
+        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
 
     return (
         <Modal visible={visible} animationType="fade" transparent>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', marginRight: -1000 }}>
                 <View style={{ backgroundColor: '#FFF', padding: 20, borderRadius: 5 }}>
                     <TouchableOpacity onPress={onClose} style={{ alignSelf: 'flex-end' }}>
-                        <Text style={{ fontSize: 18, color:'#A2BE95' , marginBottom: 10, marginTop: -10 }}>
+                        <Text style={{ fontSize: 18, color:'#A2BE95' , marginBottom: 10, marginTop: -10,fontFamily:"Roboto-Light" }}>
                             ✕
                         </Text>
                     </TouchableOpacity>
@@ -28,7 +34,7 @@ const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
                     
                     <TouchableOpacity onPress={onConfirm}>
                     <View style={{ flexDirection: 'row'}}>
-                        <Text style={{ fontSize: 14, marginBottom: 15, color: 'black'}}>Add to Calendar </Text>
+                        <Text style={{ fontSize: 14, marginBottom: 15, color: 'black',fontFamily:"Roboto-Light"}}>{t("Add to Calendar")} </Text>
                         <Image
        source={require('../assets/calendar.png')}
         style={{
@@ -43,7 +49,7 @@ const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', flex: 1, marginLeft: -20, marginRight: -20, marginBottom: 10, marginTop: -5 }} />
                     <TouchableOpacity onPress={handleviewprofile}>
                     <View style={{ flexDirection: 'row'}}>
-                        <Text style={{ fontSize: 14, color: 'black', marginBottom: 15, }}>View Profile  
+                        <Text style={{ fontSize: 14, color: 'black', marginBottom: 15,fontFamily:"Roboto-Light" }}>{t("View Profile")}  
                         <Image
        source={require('../assets/person.png')}
         style={{
@@ -57,7 +63,7 @@ const ConfirmationPopup = ({ visible, onClose, onConfirm, onDecline }) => {
                     </TouchableOpacity>
                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', flex: 1, marginLeft: -20, marginRight: -20, marginBottom: 10, marginTop: -5 }} />
                     <TouchableOpacity onPress={handleRejectSession}>
-                        <Text style={{ fontSize: 14, marginBottom: 5, color: 'darkred' }}>Reject Session 
+                        <Text style={{ fontSize: 14, marginBottom: 5, color: 'darkred',fontFamily:"Roboto-Light" }}>{t("Reject Session")} 
                           <Image
        source={require('../assets/delete.png')}
         style={{

@@ -84,7 +84,7 @@ const MyComponent = () => {
     <View style={styles.container}>
       <Image source={{uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&"}} style={styles.logo} />
       <View style={styles.searchContainer}>
-        <TextInput style={styles.searchInput} placeholder="Search" />
+        <TextInput style={styles.searchInput} placeholder={t("Search")} />
         {icons.map((icon, index) => (
           <Icon key={index} source={icon.src} alt={icon.alt} style={styles.icon} onPress={() => handleIconPress(index)} />
         ))}

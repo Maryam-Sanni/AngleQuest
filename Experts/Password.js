@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Switch } from "react-native";
+import { View, Text, Image, StyleSheet, TextInput, Switch } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from "../components/expertssidebar";
 import Topbar from "../components/expertstopbar";
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
   const navigation = useNavigation();
@@ -11,6 +13,10 @@ function MyComponent() {
   const toggleTwoFactorAuth = () => {
     setTwoFactorAuthEnabled(!twoFactorAuthEnabled);
   };
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
+        const {t}=useTranslation()
 
   return (
     <View style={{backgroundColor: '#f7fff4', flex: 1}}>
@@ -20,9 +26,9 @@ function MyComponent() {
         <Sidebar />
         <View style={styles.leftContainer}>
           <View style={styles.sectionContainer}>
-            <Text style={styles.title}>Reset Password</Text>
+            <Text style={styles.title}>{t("Reset Password")}</Text>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Old Password</Text>
+              <Text style={styles.label}>{t("Old Password")}</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -40,7 +46,7 @@ function MyComponent() {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>New Password</Text>
+              <Text style={styles.label}>{t("New Password")}</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -58,7 +64,7 @@ function MyComponent() {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Confirm Password</Text>
+              <Text style={styles.label}>{t("Confirm Password")}</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
@@ -76,41 +82,36 @@ function MyComponent() {
               />
             </View>
             <Text style={[styles.passwordHint, {marginLeft: 170 }]}>
-              Password must contain at least 8 characters. Combine uppercase,
-              lowercase and numbers
+              {t("Password must contain at least 8 characters. Combine uppercase, lowercase and numbers")}
             </Text>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Save Changes</Text>
+              <Text style={styles.buttonText}>{t("Save Changes")}</Text>
             </View>
           </View>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 20, marginRight: 30 }} />
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Phone Verification</Text>
+            <Text style={styles.sectionTitle}>{t("Phone Verification")}</Text>
             <Text style={styles.sectionText}>
-              Your phone number is not yet verified, verify now to secure your
-              account.
+              {t("Your phone number is not yet verified, verify now to secure your account.")}
             </Text>
             <View style={styles.verifyButton}>
-              <Text style={styles.buttonText}>Verify Now</Text>
+              <Text style={styles.buttonText}>{t("Verify Now")}</Text>
             </View>
           </View>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Security Question</Text>
+            <Text style={styles.sectionTitle}>{t("Security Question")}</Text>
             <Text style={styles.sectionText}>
-              Add an additional layer of security to your account by creating a
-              security question.
+              {t("Add an additional layer of security to your account by creating a security question.")}
             </Text>
             <View style={styles.setButton}>
-              <Text style={styles.buttonText}>Set</Text>
+              <Text style={styles.buttonText}>{t("Set")}</Text>
             </View>
           </View>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Two-factor Authentication</Text>
+            <Text style={styles.sectionTitle}>{t("Two-factor Authentication")}</Text>
             <View style={{flexDirection: "row" }}>
             <Text style={styles.sectionText}>
-              Turn on two-factor authentication to help keep your account
-              secure. We’ll send a code via email which will be submitted when
-              using a new device to login. 
+              {t("Turn on two-factor authentication to help keep your account secure. We’ll send a code via email which will be submitted when using a new device to login. ")}
             </Text> 
             <View style={{marginRight: 10, marginTop: -20 }}>
             <Switch
@@ -148,6 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "#206C00",
     marginBottom: 20,
+    fontFamily:"Roboto-Light"
   },
   inputContainer: {
     flexDirection: "row",
@@ -160,6 +162,7 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontWeight: '600',
     marginRight: 10,
+    fontFamily:"Roboto-Light"
   },
   input: {
     flex: 1,
@@ -174,6 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777",
     marginBottom: 10,
+    fontFamily:"Roboto-Light"
   },
   button: {
     backgroundColor: "coral",
@@ -186,6 +190,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 12,
     color: "white",
+    fontFamily:"Roboto-Light"
   },
   sectionTitle: {
     fontSize: 16,
@@ -193,14 +198,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 5,
     marginTop: 5,
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily:"Roboto-Light"
   },
   sectionText: {
     fontSize: 14,
     color: "#555",
     marginBottom: 15,
     marginTop: -20,
-    marginLeft: 250
+    marginLeft: 250,
+    fontFamily:"Roboto-Light"
   },
   verifyButton: {
     backgroundColor: "coral",

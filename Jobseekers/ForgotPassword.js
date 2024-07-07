@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import Top from '../components/top';
+import { useFonts } from 'expo-font';
+import { useTranslation } from "react-i18next";
+
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -14,13 +17,18 @@ const ResetPasswordForm = () => {
     console.log("Confirm Password:", confirmPassword);
   };
 
+  const [fontsLoaded]=useFonts({
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+      })
+      const {t}=useTranslation()
+
   return (
     <View style={{ height: '90%'  }}>
       <Top/ >
     <View style={styles.container}>
       <Text style={styles.title}>Reset Your Password</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>{t("Email")}</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter your email"
@@ -29,7 +37,7 @@ const ResetPasswordForm = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>New Password</Text>
+        <Text style={styles.label}>{t("New Password")}</Text>
         <TextInput
           style={styles.input}
           secureTextEntry={true}
@@ -39,7 +47,7 @@ const ResetPasswordForm = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Confirm Password</Text>
+        <Text style={styles.label}>{t("Confirm Password")}</Text>
         <TextInput
           style={styles.input}
           secureTextEntry={true}
@@ -49,10 +57,10 @@ const ResetPasswordForm = () => {
         />
       </View>
       <Text style={styles.passwordHint}>
-        Password must contain at least 8 characters. Combine uppercase, lowercase and numbers.
+        {t("Password must contain at least 8 characters. Combine uppercase, lowercase and numbers.")}
       </Text>
       <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-        <Text style={styles.buttonText}>Reset Password</Text>
+        <Text style={styles.buttonText}>{t("Reset Password")}</Text>
       </TouchableOpacity>
     </View>
     </View>
@@ -73,6 +81,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     marginBottom: 30,
+    fontFamily:"Roboto-Light"
   },
   inputContainer: {
     marginBottom: 10,
@@ -82,7 +91,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#000",
     fontWeight: 500,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily:"Roboto-Light"
   },
   input: {
     width: "100%",
@@ -91,13 +101,15 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     marginTop: 5,
-    placeholderColor: 'grey'
+    placeholderColor: 'grey',
+    fontFamily:"Roboto-Light"
   },
   passwordHint: {
     fontSize: 12,
     color: "#777",
     marginBottom: 10,
     textAlign: "center",
+    fontFamily:"Roboto-Light"
   },
   button: {
     backgroundColor: "coral",
