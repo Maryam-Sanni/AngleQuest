@@ -37,7 +37,7 @@ const VerificationContent = ({ userEmail }) => {
   const handleVerify = () => {
     // Perform verification logic here
     // Navigate to page
-    navigation.navigate('Home - Experts');
+    navigation.navigate('Verified');
   };
 
   const handleChangeEmail = () => {
@@ -53,10 +53,10 @@ const VerificationContent = ({ userEmail }) => {
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1df78110c7d4fdfb4f6b7d4088e1c94a707bf505e4c12deaff442397fc5c68f5?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
         style={styles.logo}
       />
-      <Text style={styles.title}>Welcome Aboard 🚀</Text>
-      <Text style={styles.text}>A verification code has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
-      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, we need you to verify your email. It's quick and easy.</Text>
-      <Text style={styles.text}>Check your mailbox for verification instructions.</Text>
+      <Text style={styles.title}>Welcome to AngleQuest 👋</Text>
+      <Text style={styles.text}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
+      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address.</Text>
+      <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes.</Text>
       <TouchableOpacity style={styles.button} onPress={handleVerify}>
         <Text style={styles.buttonText}>Verify your email</Text>
       </TouchableOpacity>

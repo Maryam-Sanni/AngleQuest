@@ -9,7 +9,7 @@ export default function App() {
   const navigation = useNavigation();
 
   const navigateToPrivacyPolicy = () => {
-    navigation.navigate('Privacy Policy'); // Navigate to the 'PrivacyPolicy' page
+    navigation.navigate('PrivacyPolicy'); // Navigate to the 'PrivacyPolicy' page
   };
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
@@ -67,8 +67,7 @@ const {t}=useTranslation()
             {'\n'}
             {t("Your privacy is important to us. Please review our")} 
             <TouchableOpacity onPress={navigateToPrivacyPolicy}> {/* Navigate to PrivacyPolicy page */}
-              <Text style={{fontWeight: '600', color: 'black', textDecoration: 'underline',fontFamily:"Roboto-Light"}}> {t("Privacy Policy")} </Text>
-              <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline'}}> Privacy Policy </Text>
+              <Text style={{fontWeight: '600', color: 'coral', textDecoration: 'underline',fontFamily:"Roboto-Light"}}> {t("Privacy Policy")} </Text>
             </TouchableOpacity>
             {t("to understand how we collect, use, and disclose information about you when you use Recruitangle.")}
             {'\n\n'}

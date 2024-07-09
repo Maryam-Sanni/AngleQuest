@@ -15,11 +15,12 @@ function MyComponent({ onClose }) {
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    onClose();
+    onClose(); // Notify parent component to close this modal
   };
 
-  const handleClosemain = () => {
+  const handleCloseMainModal = () => {
     setMainModalVisible(false);
+    onClose(); // Notify parent component to close this modal
   };
 
   return (
@@ -33,26 +34,23 @@ function MyComponent({ onClose }) {
         <View style={styles.overlay}>
           <View style={styles.greenBox}>
             <View style={styles.header}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
-                style={styles.logo}
-              />
-              <TouchableOpacity onPress={handleClosemain} style={styles.closeButton}>
+              <TouchableOpacity onPress={handleCloseMainModal} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}> ✕</Text>
               </TouchableOpacity>
             </View>
 
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Video
-             ref={videoRef}
-              source={require('../assets/taketourexpert.mp4')}
-              style={styles.video}
-              useNativeControls
-              onLoad={() => videoRef.current.playAsync()}
-            />
-</View>
+              <Video
+                ref={videoRef}
+                source={require('../assets/taketourexpert.mp4')}
+                style={styles.video}
+                useNativeControls
+                onLoad={() => videoRef.current.playAsync()}
+              />
+            </View>
+
             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>Explore AngleQuest</Text>
+              <Text style={styles.buttonTextplus}>Start Exploring AngleQuest</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -77,35 +75,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'none',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 40
   },
   greenBox: {
-    width: '90%',
-    height: 550,
+    width: '70%',
+    height: 600,
     backgroundColor: 'white',
     borderRadius: 10,
   },
   video: {
+    marginTop: 20,
     width: 900,
-    height: 400,
-  resizeMode: 'contain'
-
+    height: 420,
+    resizeMode: 'contain'
   },
   buttonplus: {
     backgroundColor: 'coral',
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
-   marginLeft: 170,
-   width: 200,
-   marginTop: 20
+    alignSelf: 'center',
+    width: 300,
+    marginTop: 20
   },
   buttonTextplus: {
     color: 'white',
@@ -114,9 +111,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   closeButton: {
+    marginTop: 20,
     position: 'absolute',
-    top: 20,
-    right: 20,
+    right: 50
   },
   closeButtonText: {
     fontSize: 18,
@@ -127,20 +124,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
-  },
-  modalContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    backgroundColor: 'none',
+    marginTop: 10,
   },
 });
 

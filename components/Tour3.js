@@ -16,14 +16,6 @@ const CustomModal = ({ visible, onClose }) => {
     onClose();
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleOpenPress();
-    }, 5000); // 5 seconds delay
-  
-    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
-  }, []);  
-
   return (
     <View>
       <Modal
@@ -32,16 +24,24 @@ const CustomModal = ({ visible, onClose }) => {
         visible={mainModalVisible}
         onRequestClose={onClose}
       >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 210, position: "fixed", top: 310 }}>
-          <View style={{ backgroundColor: '#f7fff4', padding: 20 }}>
+         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+         <View style={{ width: 150, height: 25, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 325 } }>
+        <Text style={{ textAlign: 'center', marginLeft: -30,}}>Advice</Text>
+        </View>
+        <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 220, position: "fixed", top: 310 }}>
+          <View style={{ backgroundColor: '#f7fff4', padding: 20, borderRadius: 10 }}>
           <View style={{flexDirection: "row" } }>
           <View style={{width: 15, height: 15, borderRadius: 10, backgroundColor: '#63EC55', marginRight: 10, marginTop: 5 } }/>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Mentorship and Guidance </Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}> ✕</Text>
+              </TouchableOpacity>
             </View>
-            <Text style={{ marginBottom: 20 }}>Engage in advice sessions, answer questions, share expertise and support professional growth.</Text>
-            <TouchableOpacity onPress={() => onClose(false)} style={{ marginBottom: 10, padding: 8, backgroundColor: 'none', borderRadius: 5, borderColor: 'coral', borderWidth: 1, width: 100  }}>
-              <Text style={{ color: 'coral', textAlign: 'center' }}>Close Tour</Text>
+            <Text style={{ marginBottom: 20 }}>Engage in advice sessions, share expertise and support professional growth.</Text>
+            <TouchableOpacity onPress={handleOpenPress} style={{ marginBottom: 10, padding: 8, backgroundColor: 'coral', borderRadius: 5, width: 100  }}>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Next</Text>
             </TouchableOpacity>
+          </View>
           </View>
         </View>
       </Modal>
@@ -64,6 +64,14 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  closeButton: {
+    marginLeft: 180,
+    },
+  closeButtonText: {
+    fontSize: 18,
+    color: 'black',
+    fontWeight: 'bold',
   },
 };
 

@@ -48,7 +48,7 @@ const MyComponent = () => {
   };
 
   const navigateToTerms = () => {
-    navigation.navigate('Terms of Service');
+    navigation.navigate('TermsofService');
   };
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),

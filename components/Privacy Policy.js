@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     color: 'black',
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
     color: '#206C00'
   },
   content: {

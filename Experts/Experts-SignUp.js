@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
 import axios from 'axios';
-
-// Environment variable for API URL
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081';
+import LinkedInModal from '@gcou/react-native-linkedin';
 
 // SignUpButton component
-const SignUpButton = ({ icon, text }) => (
-  <TouchableOpacity style={styles.buttonContainer}>
+const SignUpButton = ({ icon, text, onPress }) => (
+  <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
     <Image source={{ uri: icon }} style={styles.buttonIcon} />
     <Text>{text}</Text>
   </TouchableOpacity>
@@ -35,6 +33,7 @@ const MyComponent = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -45,15 +44,20 @@ const MyComponent = () => {
       alert('Please fill all fields');
       return;
     }
-  
+
+    if (!isChecked) {
+      alert('Please agree to the Terms of Service & Privacy Policy');
+      return;
+    }
+
     try {
       const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
         first_name: firstName,
         last_name: lastName,
         email,
-        password
+        password,
       });
-  
+
       console.log('Signup success:', response.data);
       navigation.navigate('Verify mail', { userEmail: email }); // Navigate and pass email as parameter
     } catch (error) {
@@ -63,11 +67,20 @@ const MyComponent = () => {
   };
 
   const navigateToTerms = () => {
-    navigation.navigate('Terms of Service');
+    navigation.navigate('TermsofService');
   };
 
   const handleSignInPress = () => {
     navigation.navigate('Sign in');
+  };
+
+  const handleLinkedInSuccess = async (data) => {
+    console.log('LinkedIn data:', data);
+    // Here you would send the received data to your backend to complete the sign-up process
+    // For example:
+    // await axios.post('https://your-backend.com/linkedin-signup', { accessToken: data.access_token });
+    // Navigate to the next screen
+    navigation.navigate('Verify mail', { userInfo: data });
   };
 
   return (
@@ -77,12 +90,14 @@ const MyComponent = () => {
           <View style={styles.formContainer}>
             <Text style={styles.title}>Create a new account</Text>
             <SignUpButton
-              icon="https://example.com/google-icon.png"
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9b121841ef69a10b1af6ac5e748b328c728e89a39c6315e2c11281511ec4c518?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with Google"
+              onPress={() => Alert.alert('Google sign-up not implemented yet')}
             />
-            <SignUpButton
-              icon="https://example.com/linkedin-icon.png"
+            <SignUpButton 
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with LinkedIn"
+              onPress={() => setLinkedInModalVisible(true)}
             />
             <View style={styles.divider}>
               <Text style={{ color: 'black', fontSize: 14 }}>or</Text>
@@ -99,21 +114,24 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}>
-                <Text style={{ color: 'black', fontSize: 14 }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>
+                  I agree to the Terms of Service & Privacy Policy
+                </Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
               <Text style={styles.submitButtonText}>Sign up</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSignInPress}>
-        <Text style={styles.signInText}>
-          <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
-        </Text>
-      </TouchableOpacity>
+              <Text style={styles.signInText}>
+                <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
+              </Text>
+            </TouchableOpacity>
           </View>
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>
       </View>
+     
     </View>
   );
 };
@@ -219,7 +237,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signInTextGray: {
-    marginTop:10,
+    marginTop: 10,
     color: 'gray',
   },
 });

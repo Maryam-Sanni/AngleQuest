@@ -90,7 +90,7 @@ function MyComponent() {
                   source={{ uri: menuItem.icon }}
                   style={{ width: 20, height: 20, marginRight: 6 }}
                 />
-                <Text style={[styles.text, clickedItem === menuItem && styles.textActive]}>{menuItem.label}</Text>
+                <Text style={[styles.text, clickedItem === menuItem && styles.textActive]}>{t(menuItem.label)}</Text>
               </View>
             </TouchableOpacity>
           ))}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import 'react-native-gesture-handler'
-import { Dimensions, Linking } from 'react-native';
+import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import JoinAs from './Jobseekers/Joinas';
@@ -38,6 +38,7 @@ import ViewFeedback from './Jobseekers/ReceivedFeedbacks';
 import Createaccount from './Experts/Experts-SignUp';
 import About from './Experts/ExpertsDetails';
 import Verifymail from './Experts/Verifymail';
+import Verified from './Experts/Verified';
 import ContactDetails from './Experts/ContactDetails';
 import Homepage from './Experts/HomePage';
 import DashBoard from './Experts/Experts-Dashboard';
@@ -112,14 +113,32 @@ import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
 import Welcome from './LandingPage/Beta';
 import OurStory from './LandingPage/OurUnique';
+import mobile from './MobileLanding.js/Beta';
 
 const Stack = createStackNavigator();
 
 const App = () => {
+  const { width } = Dimensions.get('window');
+  const initialRouteName = width < 600 ? 'mobile' : 'Welcome'; 
+
+  const linking = {
+    config: {
+      screens: {
+        JoinAs: 'Join Recruitangle',
+        SignUp: 'Sign Up',
+        Verified: 'Verified',
+        TermsofService: 'TermsofService',
+        PrivacyPolicy: 'PrivacyPolicy',
+        mobile: 'mobile',
+        Welcome: 'Welcome',
+      },
+    },
+  };
+  
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
+    <NavigationContainer linking={linking}>
+    <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
         <Stack.Screen name="Join Recruitangle" component={JoinAs} />
         <Stack.Screen name="Sign Up" component={SignUp} />
         <Stack.Screen name="Verify Email" component={VerifyEmail} />
@@ -155,6 +174,7 @@ const App = () => {
         <Stack.Screen name="Create account" component={Createaccount} />
         <Stack.Screen name="Basic Details-Experts" component={About} />
         <Stack.Screen name="Verify mail" component={Verifymail} />
+        <Stack.Screen name="Verified" component={Verified} />
         <Stack.Screen name="Contact Details" component={ContactDetails} />
         <Stack.Screen name="Home - Experts" component={Homepage} />
         <Stack.Screen name="Dashboard - Experts" component={DashBoard} />
@@ -167,8 +187,8 @@ const App = () => {
         <Stack.Screen name="Notification Setup" component={NotificationSetup} />
         <Stack.Screen name="Withdrawal Setup" component={WithdrawalSetup} />
         <Stack.Screen name="RequestPayout" component={RequestPayout} />
-        <Stack.Screen name="Terms of Service" component={TermsofService} />
-        <Stack.Screen name="Privacy Policy" component={PrivacyPolicy} />
+        <Stack.Screen name="TermsofService" component={TermsofService} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen name="Reject Session" component={RejectSession} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
@@ -229,6 +249,7 @@ const App = () => {
         <Stack.Screen name="Hub Offer" component={HubOffer} />
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Our Story" component={OurStory} />
+        <Stack.Screen name="mobile" component={mobile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 const MyComponent = () => {
   const navigation = useNavigation();
 
   const handleXPress = () => {
-    navigation.navigate('Join Recruitangle'); // Navigate to 'JoinAs' page
+    Linking.openURL('https://mobile.anglequest.com'); // Open the link
   };
 
   return ( 
@@ -42,7 +42,7 @@ logo: {
   width: 40,
   height: 40,
   marginRight: 5,
-  marginLeft: 150,
+  marginLeft: 20,
 },
 headerText: {
   fontSize: 22,
