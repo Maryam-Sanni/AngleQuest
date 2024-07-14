@@ -111,9 +111,9 @@ import AdviceOffer from './Jobseekers/OfferAdvice';
 import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
-import Welcome from './LandingPage/Beta';
+import Welcome from './LandingPage/LandingHome';
 import OurStory from './LandingPage/OurUnique';
-import mobile from './MobileLanding.js/Beta';
+import mobile from './MobileLanding.js/LandingHome';
 
 const Stack = createStackNavigator();
 
