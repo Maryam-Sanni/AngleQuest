@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   hovered: {
-    backgroundColor: '#F2FFF2',
+    backgroundColor: '#F3FFEE',
     borderRadius: 10
   },
 });
