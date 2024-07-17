@@ -3,15 +3,45 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, Button, Modal, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const CertificationsEditModal = ({ visible, certifications, onClose, onSave }) => {
   const [editableCertifications, setEditableCertifications] = useState([...certifications]);
 
-  const handleSaveCertifications = () => {
-    onSave(editableCertifications);
-    onClose();
+  const handleSaveCertifications = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+  
+      // Prepare data for API request
+      const data = {
+        certifications: editableCertifications,
+      };
+  
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/certifications/add', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log('Save Certifications Response:', response.data);
+  
+      // Close modal after successful save
+      onClose();
+    } catch (error) {
+      console.error('Save Certifications Error:', error);
+      alert('Failed to save certifications. Please try again.');
+    }
   };
+  
 
   const handleCertificationChange = (text, index) => {
     const updatedCertifications = [...editableCertifications];
@@ -46,7 +76,7 @@ const CertificationsEditModal = ({ visible, certifications, onClose, onSave }) =
         </TouchableOpacity>
         </View>
           {editableCertifications.map((certification, index) => (
-            <TextInput
+            <TextInput 
               key={index}
               style={styles.input}
               onChangeText={(text) => handleCertificationChange(text, index)}

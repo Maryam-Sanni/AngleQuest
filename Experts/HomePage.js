@@ -7,6 +7,7 @@ import Topbar from '../components/expertstopbar';
 import SuggestionModal from '../components/Suggestion';
 import OpenModal2 from '../Experts/GProfile';
 import {useFonts} from "expo-font"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import CustomModal from './TourGuide';
 
@@ -30,10 +31,32 @@ const HomePage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
-
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  
   useEffect(() => {
     // Show the CustomModal when the component mounts
     setCustomModalVisible(true);
+  }, []);
+  
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+  
+    retrieveData();
   }, []);
 
   const handleCloseModal = () => {
@@ -79,7 +102,10 @@ const HomePage = () => {
 const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#3F5B39', flex: 1}}>
+    <ImageBackground
+    source={require ('../assets/backgroundimg2.png') }
+  style={{ height: '100%', width: '100%',flex: 1}}
+>
   <View style={{ flex: 1 }}>
     <Topbar />
     <View style={{ flexDirection: 'row', flex: 1}}>
@@ -94,7 +120,7 @@ const {t}=useTranslation()
         }}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
-      <Text style={styles.greeting}>{t("Good Day")}, Christopher Oche</Text>
+     ` <Text style={styles.greeting}>{t('Good Day')}, {first_name} {last_name}</Text>`
       <View style={styles.circle}>
         <Text style={styles.circleText}>12</Text>
         </View>
@@ -512,7 +538,7 @@ onMouseLeave={() => setIsHovered12(false)}
       </Modal>
      
     </View>
-    </View>
+    </ImageBackground>
   );
 }
 

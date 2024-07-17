@@ -66,6 +66,7 @@ const MyComponent = () => {
           style={styles.image}
         />
         <View style={{backgroundColor: 'white', padding: 10, alignSelf: 'stretch', justifyContent: 'center'}} >
+        <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 100, marginBottom: -60  }}>Begin the journey to career advancement & growth today</Text>
                 <Image
                   source={require('../assets/landingco1.gif')}
                   style={styles.landingimage}
@@ -426,7 +427,7 @@ const MyComponent = () => {
         </View>
         <View style={styles.lastsection}>
           <Text style={styles.sectionTitle}>CONTACT US</Text>
-          <Text style={styles.sectionItem}>anglequest@gmail.com</Text>
+          <Text style={styles.sectionItem}>ask@anglequest.com</Text>
         </View>
       </View>
     </View>
@@ -493,8 +494,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   landingimage: {
-    width: 900,
-    height: 540,
+    width: 1125,
+    height: 675,
     alignSelf: 'center'
   },
   shadowimage: {
@@ -608,6 +609,7 @@ borderRadius: 10,
     width: 380,
     height: 500,
     backgroundColor: 'white',
+    borderRadius: 10,
   marginTop: 50, marginRight: 20,
     padding: 20,
     shadowColor: '#39FF14',

@@ -119,7 +119,7 @@ const {t}=useTranslation()
             </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 70, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center', }}>
+    <View style={{ position: 'absolute', right: 70, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center', }}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+{t("New Hub")}</Text>
                   </View>
      </TouchableOpacity>

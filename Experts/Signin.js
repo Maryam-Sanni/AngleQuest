@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from 'react-native'; // Import ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +15,9 @@ const MyComponent = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [first_name, setFirstName] = useState(''); // State for first name
+  const [last_name, setLastName] = useState(''); // State for last name
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -23,6 +26,8 @@ const MyComponent = () => {
     }
 
     try {
+      setLoading(true); // Set loading to true when sign in is initiated
+
       const response = await axios.post('https://recruitangle.com/api/expert/signin', {
         email,
         password,
@@ -31,10 +36,17 @@ const MyComponent = () => {
       console.log('Sign In Response:', response.data);
 
       if (response.data.status === 'success') {
-        const token = response.data.token;
-
-        // Store token securely
+        const { token, user } = response.data;
+        const { first_name, last_name } = user;
+  
+        // Store token, first_name, and last_name securely
         await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('first_name', first_name);
+        await AsyncStorage.setItem('last_name', last_name);
+  
+        // Update state with retrieved values
+        setFirstName(first_name);
+        setLastName(last_name);
 
         // Navigate to home screen
         navigation.navigate('Home - Experts');
@@ -44,6 +56,8 @@ const MyComponent = () => {
     } catch (error) {
       console.error('Sign In Error:', error);
       alert('Sign in failed, please try again');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
     }
   };
 
@@ -76,8 +90,12 @@ const MyComponent = () => {
             <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
               <Text style={{ fontSize: 12, marginTop: 8, color: 'coral' }}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-              <Text style={styles.signInButtonText}>Sign in</Text>
+            <TouchableOpacity style={styles.signInButton} onPress={handleSignIn} disabled={loading}>
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.signInButtonText}>Sign in</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Create account')}>
               <Text style={styles.signUpText}>

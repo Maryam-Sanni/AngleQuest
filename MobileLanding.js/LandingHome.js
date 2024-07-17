@@ -88,7 +88,7 @@ const MyComponent = () => {
                  </View>
                   <View style={{}} >
                 <View style={styles.whiteBox} >
-                <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: 600, marginTop: 20 }}>Recommended for</Text>
+                <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: 600, marginTop: 20 }}>Built for</Text>
                 <View style={{flexDirection: 'row'}} >
                 <Image
                   source={require('../assets/39.png')}
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ECEEF8',
-  marginTop: 50, marginRight: 20,
+  marginTop: 20, marginRight: 10,
 borderRadius: 10,
     padding: 20,
     shadowColor: '#000',
@@ -623,7 +623,7 @@ borderRadius: 10,
     width: 380,
     height: 400,
     backgroundColor: 'white',
-  marginTop: 50, marginRight: 20,
+  marginTop: 20, marginRight: 10,
 borderRadius: 10,
     padding: 20,
     shadowColor: '#000',
@@ -639,9 +639,10 @@ borderRadius: 10,
     width: "90%",
     height: 500,
     backgroundColor: 'white',
+    borderRadius: 10,
   marginTop: 50,
     padding: 20,
-    shadowColor: '#39FF14',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -671,7 +672,7 @@ borderRadius: 10,
   },
   video: {
     width: 380,
-    height: 170,
+    height: 180,
     resizeMode: 'contain',
     marginLeft: -20,
     marginTop: 25,

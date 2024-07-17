@@ -4,6 +4,17 @@ import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const getToken = async () => {
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    return token;
+  } catch (error) {
+    console.error('Error retrieving token:', error);
+    return null;
+  }
+};
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
   const [hour, setHour] = useState(initialValue.split(':')[0]);
@@ -135,23 +146,19 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
   const handleSave = async () => {
     try {
-      // Retrieve token
       const token = await getToken();
-  
-      // Make sure token exists
+
       if (!token) {
         alert('User not authenticated');
         return;
       }
-  
-      // Include token in the Authorization header
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-  
-      // Make API request with token
+
       const response = await axios.post(
         `https://recruitangle.com/api/expert/hub/create`,
         {
@@ -165,7 +172,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
           goals,
           limit,
         },
-        config // Pass the config with headers
+        config
       );
   
       console.log('Create Hub Response:', response.data);
@@ -220,8 +227,6 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={styles.input}
           placeholder={t("Enter hub name")}
-          value={groupName}
-          placeholder="Enter hub name"
           value={name}
           onChangeText={text => setGroupName(text)}
         />

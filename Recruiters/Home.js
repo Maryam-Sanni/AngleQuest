@@ -125,7 +125,10 @@ const EmployeePerformance = () => {
 const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#3F5B39', flex: 1}}>
+    <ImageBackground
+    source={require ('../assets/backgroundimg2.png') }
+  style={{ height: '100%', width: '100%',flex: 1}}
+>
   <View style={{ flex: 1}}>
     <Topbar />
     <View style={{ flexDirection: 'row', flex: 1  }}>
@@ -459,7 +462,7 @@ onMouseLeave={() => setIsHovered9(false)}
         </View>
       </Modal>
     </View>
-    </View>
+    </ImageBackground>
   );
 }
 

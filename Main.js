@@ -112,7 +112,7 @@ import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
 import Welcome from './LandingPage/LandingHome';
-import OurStory from './LandingPage/OurUnique';
+import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
 
 const Stack = createStackNavigator();
@@ -122,6 +122,7 @@ const App = () => {
   const initialRouteName = width < 600 ? 'mobile' : 'Welcome'; 
 
   const linking = {
+    prefixes: ['https://www.anglequest.com', 'anglequest://'],
     config: {
       screens: {
         JoinAs: 'Join Recruitangle',
@@ -248,7 +249,7 @@ const App = () => {
         <Stack.Screen name="Interview Offer" component={InterviewOffer} />
         <Stack.Screen name="Hub Offer" component={HubOffer} />
         <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="Our Story" component={OurStory} />
+        <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
         <Stack.Screen name="mobile" component={mobile} />
       </Stack.Navigator>
     </NavigationContainer>

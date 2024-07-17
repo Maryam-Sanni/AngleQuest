@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback, FlatList } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import ProductsPopup from './ProductsPopup';
+import SolutionsPopup from './SolutionsPopup';
+import MorePopup from './MorePopup';
 
 const PickerItem = ({ label, icon, onPress }) => (
   <TouchableOpacity style={styles.pickerItem} onPress={onPress}>
@@ -15,9 +18,28 @@ const MyComponent = () => {
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
   const { i18n, t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false); // For handling the modal visibility
+  const [showProductsPopup, setShowProductsPopup] = useState(false);
+  const [showSolutionsPopup, setShowSolutionsPopup] = useState(false);
+  const [showMorePopup, setShowMorePopup] = useState(false);
+
+  const handleProductsHover = () => {
+    setShowProductsPopup(true);
+  };
+
+  const handleSolutionsHover = () => {
+    setShowSolutionsPopup(true);
+  };
+
+  const handleMoreHover = () => {
+    setShowMorePopup(true);
+  };
 
   const handleXPress = () => {
     navigation.navigate('Join Recruitangle');
+  };
+
+  const handleClientelePress = () => {
+    navigation.navigate('AngleQuest Client Testimonials');
   };
 
   const languages = [
@@ -51,22 +73,41 @@ const MyComponent = () => {
           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
           style={styles.logo}
         />
-        <Text style={styles.headerText}>AngleQuest</Text>
-        <Text style={{ fontSize: 18, marginRight: 5, marginLeft: 50, fontWeight: 600}}>Products</Text>
+        <TouchableOpacity>
+        <Text
+          style={{ fontSize: 18, marginRight: 5, marginLeft: 50, fontWeight: 600 }}
+          onMouseEnter={handleProductsHover}
+        >
+          Products
+        </Text>
+        </TouchableOpacity>
         <Image
                   source={require('../assets/icons8-arrow-down-24.png')}
                   style={styles.arrowdown}
                 />
-        <Text style={{ fontSize: 18, marginRight: 40, fontWeight: 600}}>Clientele</Text>
-        <Text style={{ fontSize: 18, marginRight: 5, fontWeight: 600}}>Company</Text>
+                
+        <TouchableOpacity>
+        <Text
+          style={{ fontSize: 18, marginRight: 5, fontWeight: 600 }}
+          onMouseEnter={handleSolutionsHover}
+        >
+          Solutions
+        </Text>
+        </TouchableOpacity>
+
         <Image
                   source={require('../assets/icons8-arrow-down-24.png')}
                   style={styles.arrowdown}
                 />
+                <TouchableOpacity>
+        <Text style={{ fontSize: 18, marginRight: 5, fontWeight: 600}}>AngleQuest AI</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onMouseEnter={handleMoreHover}>
                  <Image
                   source={require('../assets/icons8-ellipsis-30.png')}
                   style={styles.topicons}
                 />
+                </TouchableOpacity>
                 <Image
                   source={require('../assets/icons8-search-50.png')}
                   style={styles.search}
@@ -102,6 +143,9 @@ const MyComponent = () => {
           <Text style={styles.joinButtonText}>See Progress</Text>
         </TouchableOpacity>
       </View>
+      <ProductsPopup visible={showProductsPopup} onClose={() => setShowProductsPopup(false)} />
+      <SolutionsPopup visible={showSolutionsPopup} onClose={() => setShowSolutionsPopup(false)} />
+      <MorePopup visible={showMorePopup} onClose={() => setShowMorePopup(false)} />
     </View>
   );
 };
@@ -115,6 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 17,
     backgroundColor: 'white',
+     borderBottomColor: 'grey',
     shadowColor: '#39FF14',
     shadowOffset: {
       width: 0,

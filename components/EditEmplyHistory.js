@@ -2,7 +2,8 @@ import { useFonts } from 'expo-font';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Modal, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmploymentHistoryModal = ({ visible, onClose, employmentHistory, onSave }) => {
   const [history, setHistory] = useState(employmentHistory);
@@ -15,14 +16,47 @@ const EmploymentHistoryModal = ({ visible, onClose, employmentHistory, onSave })
     setHistory({ ...history, [key]: value });
   };
 
-  const handleSave = () => {
-    onSave(history);
-    onClose();
+  const handleSave = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      console.log('Token:', token); // Add this line for debugging
+
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+  
+      // Prepare data for API request
+      const data = {
+        position: history.position,
+        company: history.company,
+        duration: history.duration,
+        description: history.description,
+      };
+  
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/certifications/add', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log('Save Certifications Response:', response.data);
+  
+      // Close modal after successful save
+      onClose();
+    } catch (error) {
+      console.error('Save Certifications Error:', error);
+      alert('Failed to save certifications. Please try again.');
+    }
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+  const { t } = useTranslation();
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
@@ -119,7 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#3F5637',
     fontWeight: 'bold',
-    fontFamily:"`Roboto-Light"
+    fontFamily:"Roboto-Light"
   },
   modalContainer: {
     padding: 20,

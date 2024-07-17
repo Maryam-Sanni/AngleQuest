@@ -428,7 +428,7 @@ export default function Profile() {
         </View>
       </View>
 
-
+ 
   <PreferredRolesEditModal
     visible={preferredRolesModalVisible}
     preferredRoles={preferredRoles}
