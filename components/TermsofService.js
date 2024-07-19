@@ -1,23 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import Top from './top';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
 export default function App() {
-  const navigation = useNavigation();
+    const navigate = useNavigate(); // useNavigate for web routing
 
   const navigateToPrivacyPolicy = () => {
-    navigation.navigate('PrivacyPolicy'); // Navigate to the 'PrivacyPolicy' page
+    navigate('/PrivacyPolicy'); // Navigate to PrivacyPolicy route
   };
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 const {t}=useTranslation()
   return (
     <View style={{ flex: 1 }}>
-      <Top />
+     
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
         <View style={styles.container}>
           <Text style={styles.title}>{t("TERMS OF SERVICE")}</Text>

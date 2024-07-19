@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from 'react-native'; // Import ActivityIndicator
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import Config from 'react-native-config';
-
-const API_URL = Config.REACT_APP_API_URL;
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Button = ({ icon, text }) => (
   <View style={styles.buttonContainer}>
@@ -17,6 +15,9 @@ const MyComponent = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [first_name, setFirstName] = useState(''); // State for first name
+  const [last_name, setLastName] = useState(''); // State for last name
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -25,105 +26,132 @@ const MyComponent = () => {
     }
 
     try {
-      const response = await axios.post(`https://recruitangle.com/api/expert/signin`, {
+      setLoading(true); // Set loading to true when sign in is initiated
+
+      const response = await axios.post('https://recruitangle.com/api/signin', {
         email,
         password,
       });
+
       console.log('Sign In Response:', response.data);
 
-      if (response.data.success) {
-        navigation.navigate('Home - Manager');
+      if (response.data.status === 'success') {
+        const { token, user } = response.data;
+        const { first_name, last_name } = user;
+  
+        // Store token, first_name, and last_name securely
+        await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('first_name', first_name);
+        await AsyncStorage.setItem('last_name', last_name);
+  
+        // Update state with retrieved values
+        setFirstName(first_name);
+        setLastName(last_name);
+
+        // Navigate to home screen
+        navigation.navigate('Home');
       } else {
         alert(response.data.message || 'Sign in failed');
       }
     } catch (error) {
       console.error('Sign In Error:', error);
-      alert('An error occurred during sign in. Please check the console for more details.');
+      alert('Sign in failed, please try again');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>
-            Sign in to your account
-          </Text>
-          <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9b121841ef69a10b1af6ac5e748b328c728e89a39c6315e2c11281511ec4c518?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with Google" />
-          <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with LinkedIn" />
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
+    <View style={styles.outerContainer}>
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Sign in to your account</Text>
+            <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9b121841ef69a10b1af6ac5e748b328c728e89a39c6315e2c11281511ec4c518?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with Google" />
+            <Button icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&" text="Continue with LinkedIn" />
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+            <TextInput
+              placeholder="Email"
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              placeholder="Password"
+              secureTextEntry
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
+              <Text style={{ fontSize: 12, marginTop: 8, color: 'coral' }}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.signInButton} onPress={handleSignIn} disabled={loading}>
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.signInButtonText}>Sign in</Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Create account')}>
+              <Text style={styles.signUpText}>
+                Don't have an account? <Text style={styles.signUpLink}>Join here</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Forgot Password')}
-          >
-            <Text style={{ fontSize: 12, marginTop: 8, color: 'coral' }}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.signInButton}
-            onPress={handleSignIn}
-          >
-            <Text style={styles.signInButtonText}>Sign in</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Sign Up')}
-          >
-            <Text style={styles.signUpText}>
-              Don't have an account? <Text style={styles.signUpLink}>Join here</Text>
-            </Text>
-          </TouchableOpacity>
+          <Image source={require('../assets/jobseeker.png')} style={styles.image} resizeMode="cover" />
         </View>
-        <Image source={require('../assets/jobseeker.png')} style={styles.image} resizeMode="cover" />
       </View>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
+  outerContainer: {
     flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  container: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 400,
+    justifyContent: 'space-between',
+    flex: 1,
   },
   formContainer: {
-    padding: 40,
-    borderRadius: 0,
     backgroundColor: '#ffffff',
-    height: 550,
+    height: 580,
+    width: 350,
+    borderRadius: 0,
+    padding: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 6,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flex: 1,
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
-    marginTop: -20,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -189,8 +217,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   image: {
+    resizeMode: 'contain',
     width: 350,
-    height: 550,
+    height: 580,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
   },

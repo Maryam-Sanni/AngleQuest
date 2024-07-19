@@ -12,6 +12,7 @@ import OpenModal3 from '../Jobseekers/Pickyourcoach';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import {useFonts} from "expo-font" 
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -36,10 +37,32 @@ const HomePage = () => {
   const [modalVisible4, setModalVisible4] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
  useEffect(() => {
     // Show the CustomModal when the component mounts
     setCustomModalVisible(true);
+  }, []);
+
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+  
+    retrieveData();
   }, []);
 
   const goToGrowth = () => {
@@ -112,7 +135,7 @@ const HomePage = () => {
         }}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
-      <Text style={styles.greeting}>{t("Good Day")} , Patrick</Text>
+      <Text style={styles.greeting}>{t("Good Day")}, {first_name}</Text>
 
       </View>
       <View style={styles.mainContent}>
@@ -212,7 +235,7 @@ const HomePage = () => {
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 10, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("What is next for you")} Maryam?</Text>
+          <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("What is next for you")} {first_name}?</Text>
           <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 5, fontFamily:"Roboto-Light"}}>{t("Reaching your next career milstone is important to us")}</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[

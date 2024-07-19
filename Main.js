@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'react-native-gesture-handler'
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform, Linking } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import JoinAs from './Jobseekers/Joinas';
@@ -114,6 +114,8 @@ import HubOffer from './Jobseekers/OfferHub';
 import Welcome from './LandingPage/LandingHome';
 import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import RouterComponent from './RouterComponent';
 
 const Stack = createStackNavigator();
 
@@ -121,25 +123,20 @@ const App = () => {
   const { width } = Dimensions.get('window');
   const initialRouteName = width < 600 ? 'mobile' : 'Welcome'; 
 
-  const linking = {
-    prefixes: ['https://www.anglequest.com', 'anglequest://'],
-    config: {
-      screens: {
-        JoinAs: 'Join Recruitangle',
-        SignUp: 'Sign Up',
-        Verified: 'Verified',
-        TermsofService: 'TermsofService',
-        PrivacyPolicy: 'PrivacyPolicy',
-        mobile: 'mobile',
-        Welcome: 'Welcome',
-      },
-    },
-  };
-  
+ // Check if the URL path contains a '/'
+ const urlPath = window.location.pathname;
 
-  return (
-    <NavigationContainer linking={linking}>
+ return (
+   urlPath !== '/' ? (
+     <Router>
+       <RouterComponent />
+     </Router>
+   ) : (
+    <NavigationContainer>
     <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
+    {urlPath !== '/' && (
+          <Stack.Screen name="RouterComponent" component={RouterComponent} />
+        )}
         <Stack.Screen name="Join Recruitangle" component={JoinAs} />
         <Stack.Screen name="Sign Up" component={SignUp} />
         <Stack.Screen name="Verify Email" component={VerifyEmail} />
@@ -175,7 +172,6 @@ const App = () => {
         <Stack.Screen name="Create account" component={Createaccount} />
         <Stack.Screen name="Basic Details-Experts" component={About} />
         <Stack.Screen name="Verify mail" component={Verifymail} />
-        <Stack.Screen name="Verified" component={Verified} />
         <Stack.Screen name="Contact Details" component={ContactDetails} />
         <Stack.Screen name="Home - Experts" component={Homepage} />
         <Stack.Screen name="Dashboard - Experts" component={DashBoard} />
@@ -188,8 +184,6 @@ const App = () => {
         <Stack.Screen name="Notification Setup" component={NotificationSetup} />
         <Stack.Screen name="Withdrawal Setup" component={WithdrawalSetup} />
         <Stack.Screen name="RequestPayout" component={RequestPayout} />
-        <Stack.Screen name="TermsofService" component={TermsofService} />
-        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen name="Reject Session" component={RejectSession} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
@@ -253,6 +247,7 @@ const App = () => {
         <Stack.Screen name="mobile" component={mobile} />
       </Stack.Navigator>
     </NavigationContainer>
+       )
   );
 };
 

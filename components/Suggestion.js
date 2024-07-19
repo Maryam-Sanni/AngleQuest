@@ -2,18 +2,33 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { Modal, Text, TextInput, Button, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 export default function SuggestionModal({ visible, onClose }) {
   const [suggestion, setSuggestion] = useState('');
 
   const submitSuggestion = () => {
-    // Here you can add your logic to submit the suggestion
-    console.log("Suggestion: ", suggestion);
-    // Optionally, you can perform any other actions after submission
-
+    // Construct the data to send
+    const data = {
+      suggestion: suggestion
+    };
+  
+    // Make a POST request using Axios
+    axios.post('https://crispy-spoon-xg65jq45g6r3prpg-8000.app.github.dev/api/jobseeker/create-jobseeker-suggestion', data)
+      .then(response => {
+        console.log('Suggestion submitted successfully:', response.data);
+        // Optionally handle success response here
+      })
+      .catch(error => {
+        console.error('Error submitting suggestion:', error);
+        // Optionally handle error response here
+      });
+  
     // Close modal after submission
     onClose();
   };
+
+  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })

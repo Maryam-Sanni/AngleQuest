@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
-import {useFonts} from "expo-font"
-
+import axios from 'axios';
+import LinkedInModal from '@gcou/react-native-linkedin';
 
 // SignUpButton component
-const SignUpButton = ({ icon, text }) => (
-  <TouchableOpacity style={styles.buttonContainer}>
+const SignUpButton = ({ icon, text, onPress }) => (
+  <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
     <Image source={{ uri: icon }} style={styles.buttonIcon} />
     <Text>{text}</Text>
   </TouchableOpacity>
@@ -20,12 +20,12 @@ const FormInput = ({ placeholder, onChangeText }) => (
       style={styles.input}
       placeholder={placeholder}
       placeholderTextColor="#999"
-      onChangeText={onChangeText} // Pass onChangeText prop to handle text changes
+      onChangeText={onChangeText}
     />
   </View>
 );
 
-
+// MyComponent
 const MyComponent = () => {
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(false);
@@ -33,26 +33,60 @@ const MyComponent = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // State for loading indicator
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
   };
 
+  const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      alert('Please fill all fields');
+      return;
+    }
 
-  const handleSignUp = () => {
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigation.navigate('Verify Email');
+    if (!isChecked) {
+      alert('Please agree to the Terms of Service & Privacy Policy');
+      return;
+    }
+
+    try {
+      setLoading(true); // Set loading to true when sign in is initiated
+      
+      const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+      });
+
+      console.log('Signup success:', response.data);
+      navigation.navigate('Verify Email', { userEmail: email }); // Navigate and pass email as parameter
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert('Signup failed. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
   };
-
+ 
   const navigateToTerms = () => {
     navigation.navigate('TermsofService');
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
+
+  const handleSignInPress = () => {
+    navigation.navigate('Signin');
+  };
+
+  const handleLinkedInSuccess = async (data) => {
+    console.log('LinkedIn data:', data);
+    // Here you would send the received data to your backend to complete the sign-up process
+    // For example:
+    // await axios.post('https://your-backend.com/linkedin-signup', { accessToken: data.access_token });
+    // Navigate to the next screen
+    navigation.navigate('Verify mail', { userInfo: data });
+  };
 
   return (
     <View style={styles.outerContainer}>
@@ -61,15 +95,17 @@ const MyComponent = () => {
           <View style={styles.formContainer}>
             <Text style={styles.title}>Create a new account</Text>
             <SignUpButton
-              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/dc5261e33bdee74cda06397e01a2033a956e661a701aab68af14e75f301b54a5?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/9b121841ef69a10b1af6ac5e748b328c728e89a39c6315e2c11281511ec4c518?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with Google"
+              onPress={() => Alert.alert('Google sign-up not implemented yet')}
             />
-            <SignUpButton
+            <SignUpButton 
               icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
               text="Sign up with LinkedIn"
+              onPress={() => setLinkedInModalVisible(true)}
             />
             <View style={styles.divider}>
-              <Text>or</Text>
+              <Text style={{ color: 'black', fontSize: 14 }}>or</Text>
             </View>
             <FormInput placeholder="First name" onChangeText={setFirstName} />
             <FormInput placeholder="Last name" onChangeText={setLastName} />
@@ -83,20 +119,29 @@ const MyComponent = () => {
                 tintColors={{ true: 'coral', false: '#ccc' }}
               />
               <TouchableOpacity onPress={navigateToTerms}>
-                <Text style={{ color: 'black', fontSize: 14,fontFamily:"Roboto-Light" }}>I agree to the Terms of Service & Privacy Policy</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>
+                  I agree to the Terms of Service & Privacy Policy
+                </Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
               <Text style={styles.submitButtonText}>Sign up</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignInPress}>
+              <Text style={styles.signInText}>
+                <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
+              </Text>
+            </TouchableOpacity>
           </View>
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>
       </View>
+     
     </View>
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
@@ -117,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   formContainer: {
-    backgroundColor: '#fffff',
+    backgroundColor: '#ffffff',
     height: 580,
     borderRadius: 0,
     padding: 20,
@@ -136,13 +181,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    fontFamily:"Roboto-Light"
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   buttonIcon: {
     width: 24,
@@ -159,14 +203,14 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 12,
+    borderRadius: 8,
+    padding: 10,
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 30,
+    marginBottom: 15,
+    marginTop: 20,
   },
   checkbox: {
     width: 18,
@@ -178,13 +222,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   submitButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily:"Roboto-Light"
   },
   image: {
     resizeMode: 'contain',
@@ -192,6 +235,15 @@ const styles = StyleSheet.create({
     height: 580,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
+  },
+  signInText: {
+    marginTop: 10,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  signInTextGray: {
+    marginTop: 10,
+    color: 'gray',
   },
 });
 

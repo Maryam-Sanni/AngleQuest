@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
 
 
 const PaymentSuccessful = ({ imageSrc, altText }) => {
@@ -10,14 +9,6 @@ const PaymentSuccessful = ({ imageSrc, altText }) => {
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
   const {t}=useTranslation()
-
-  const navigation = useNavigation();
-
-  const handleVerify = () => {
-    // Perform verification logic here
-    // Navigate to page
-    navigation.navigate('Home - Experts');
-  };
 
 
   return (
@@ -31,8 +22,8 @@ const PaymentSuccessful = ({ imageSrc, altText }) => {
           <Image source={{ uri: imageSrc }} style={styles.image} />
         </View>
         <Text style={styles.text}>{altText}</Text>
-        <TouchableOpacity style={styles.button} onPress={handleVerify}>
-          <Text style={styles.buttonText}>{t("OK")}</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>{t("Sign in")}</Text>
         </TouchableOpacity>
       </View>
     </View>

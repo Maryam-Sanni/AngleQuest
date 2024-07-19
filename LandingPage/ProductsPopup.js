@@ -13,6 +13,7 @@ const ProductsPopup = ({ visible, onClose }) => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    onClose();
   };
 
   const handleAIMouseEnter = () => {
@@ -79,7 +80,7 @@ const ProductsPopup = ({ visible, onClose }) => {
           </View>
         </View>
         </View>
-        <View style={{width: 370, marginTop: 50}}>
+        <View style={{width: 370, marginTop: 30}}>
         <View
        style={[isTIHovered && styles.hovered]}
         onMouseEnter={handleTIMouseEnter}
@@ -121,10 +122,11 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '600',
     width: 350,
-    padding: 10
+    padding: 10,
+    marginTop: -10
   },
   hovered: {
-    backgroundColor: '#F2FFF2',
+    backgroundColor: '#E8FDE0',
     borderRadius: 10
   },
 });

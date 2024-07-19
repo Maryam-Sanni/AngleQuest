@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import Top from './top';
+
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +11,7 @@ export default function App() {
 const {t}=useTranslation()
   return (
     <View style={{ flex: 1 }}>
-    <Top />
+    
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
     <View style={styles.container}>
       <Text style={styles.title}>{t("PRIVACY POLICY")}</Text>

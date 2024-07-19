@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: '#135837',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     marginTop: 40,
     width: 250,
   },

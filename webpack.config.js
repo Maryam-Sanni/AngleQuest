@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv && argv.mode === 'production';
@@ -9,6 +10,7 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',
+      publicPath: '/', // Ensure all routes are handled correctly
     },
     module: {
       rules: [
@@ -57,9 +59,15 @@ module.exports = (env, argv) => {
       minimize: isProduction,
     },
     devtool: isProduction ? false : 'source-map',
+    devServer: {
+      historyApiFallback: true, // Enable SPA routing support
+    },
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+      }),
+      new HtmlWebpackPlugin({
+        template: './index.html', // Adjust according to your project structure
       }),
     ],
   };

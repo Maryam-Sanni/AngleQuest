@@ -78,7 +78,7 @@ const ProductsPopup = ({ visible, onClose }) => {
           </View>
         </View>
         </View>
-        <View style={{ flexDirection: 'column', marginTop: 50, width: 250 }}>
+        <View style={{ flexDirection: 'column', marginTop: 30, width: 250 }}>
         <View
        style={[iscontactHovered && styles.hovered]}
         onMouseEnter={handlecontactMouseEnter}
@@ -120,10 +120,11 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '600',
     width: 250,
-    padding: 10
+    padding: 10,
+    marginTop: -10
   },
   hovered: {
-    backgroundColor: '#F3FFEE',
+    backgroundColor: '#E8FDE0',
     borderRadius: 10
   },
 });

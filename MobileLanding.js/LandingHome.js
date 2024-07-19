@@ -432,7 +432,7 @@ const MyComponent = () => {
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>CONTACT US</Text>
-          <Text style={styles.sectionItem}>anglequest@gmail.com</Text>
+          <Text style={styles.sectionItem}>ask@anglequest.com</Text>
         </View>
         </View>
       
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: '#135837',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     marginTop: 40,
     width: 250,
   },

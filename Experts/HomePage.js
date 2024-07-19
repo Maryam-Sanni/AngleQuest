@@ -107,7 +107,7 @@ const {t}=useTranslation()
   style={{ height: '100%', width: '100%',flex: 1}}
 >
   <View style={{ flex: 1 }}>
-    <Topbar />
+    <Topbar /> 
     <View style={{ flexDirection: 'row', flex: 1}}>
       <Sidebar />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500}}>

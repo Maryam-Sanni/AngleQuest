@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Jobseekers/PickanExpert';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 
 function MyComponent({ onClose }) {
@@ -12,9 +13,35 @@ function MyComponent({ onClose }) {
   const [formModalVisible, setformModalVisible] = useState(false);
   
   const handleOpenPress = () => {
+    // Close the main modal
     setMainModalVisible(false);
     setformModalVisible(true);
+  
+    // Construct the data to send
+    const data = {
+      specialization: selectedSpecialization,
+      role: selectedRole,
+      target: selectedTarget
+    };
+  
+    // Make a POST request using Axios
+    axios.post('https://crispy-spoon-xg65jq45g6r3prpg-8000.app.github.dev/api/jobseeker/create-jobseeker-send-get-started', data)
+      .then(response => {
+        console.log('POST request successful:', response.data);
+        // Optionally handle success response here
+        // Navigate to the next screen or perform other actions
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+        // Optionally handle error response here
+      });
+  
+    // Show the form modal
+    
+  
+    // Optionally, you can perform other actions related to opening the form modal here
   };
+  
 
   const handleCloseformModal = () => {
     setformModalVisible(false);

@@ -178,7 +178,7 @@ const handleCloseModal = () => {
 
   return (
     <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '110%', width: '100%',flex: 1}}
 >
 <BlurView intensity={70} style={{flex:1}}>

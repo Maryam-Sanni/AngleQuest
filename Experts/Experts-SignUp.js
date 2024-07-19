@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
 import axios from 'axios';
-import LinkedInModal from '@gcou/react-native-linkedin';
+import LinkedIn from 'react-linkedin-login-oauth2';
+
+// Your LinkedIn Client ID and Redirect URI
+const CLIENT_ID = '78qmuikhnbiec4';
+const REDIRECT_URI = 'http://anglequest.com/user/oauth/ln'; // Updated redirect URI
 
 // SignUpButton component
 const SignUpButton = ({ icon, text, onPress }) => (
@@ -34,6 +38,7 @@ const MyComponent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // State for loading indicator
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -51,6 +56,8 @@ const MyComponent = () => {
     }
 
     try {
+      setLoading(true); // Set loading to true when sign in is initiated
+      
       const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
         first_name: firstName,
         last_name: lastName,
@@ -63,9 +70,11 @@ const MyComponent = () => {
     } catch (error) {
       console.error('Signup failed:', error);
       alert('Signup failed. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
     }
   };
-
+ 
   const navigateToTerms = () => {
     navigation.navigate('TermsofService');
   };

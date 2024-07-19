@@ -105,7 +105,7 @@ const ProductsPopup = ({ visible, onClose }) => {
           </View>
         </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 50 }}>
+        <View style={{ flexDirection: 'row', marginTop: 30 }}>
           <View style={{ flexDirection: 'column' }}>
           <View
        style={[israpidHovered && styles.hovered]}
@@ -131,7 +131,7 @@ const ProductsPopup = ({ visible, onClose }) => {
           </View>
         </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 50 }}>
+        <View style={{ flexDirection: 'row', marginTop: 30 }}>
           <View style={{ flexDirection: 'column' }}>
           <View
        style={[isjuniorHovered && styles.hovered]}
@@ -187,10 +187,11 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontWeight: '600',
     width: 350,
-    padding: 10
+    padding: 10,
+    marginTop: -10
   },
   hovered: {
-    backgroundColor: '#F2FFF2',
+    backgroundColor: '#E8FDE0',
     borderRadius: 10
       },
 });
