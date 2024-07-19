@@ -115,6 +115,7 @@ import Welcome from './LandingPage/LandingHome';
 import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
+import mobileAI from './MobileLanding.js/AI';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import RouterComponent from './RouterComponent';
 
@@ -247,6 +248,7 @@ const App = () => {
         <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
         <Stack.Screen name="mobile" component={mobile} />
         <Stack.Screen name="AI" component={AI} />
+        <Stack.Screen name="Anglequest AI" component={mobileAI} />
       </Stack.Navigator>
     </NavigationContainer>
        )

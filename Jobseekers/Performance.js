@@ -19,7 +19,7 @@ function MyComponent() {
 
     return (
       <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '150%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>

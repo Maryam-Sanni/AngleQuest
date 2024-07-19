@@ -8,7 +8,7 @@ const CustomModal = ({ visible, onClose }) => {
   const navigation = useNavigation();
   const goToProfile = () => {
     onClose(false); // Close the modal
-    navigation.navigate('Basic Details');
+    navigation.navigate('My Profile');
   };
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),

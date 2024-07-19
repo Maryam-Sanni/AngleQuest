@@ -6,7 +6,7 @@ module.exports = (env, argv) => {
   const isProduction = argv && argv.mode === 'production';
 
   return {
-    entry: './App.js',
+    entry: './src/index.js', // Ensure this path is correct
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',
@@ -61,13 +61,14 @@ module.exports = (env, argv) => {
     devtool: isProduction ? false : 'source-map',
     devServer: {
       historyApiFallback: true, // Enable SPA routing support
+      contentBase: path.join(__dirname, 'dist'), // Serve content from dist directory
     },
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
       }),
       new HtmlWebpackPlugin({
-        template: './index.html', // Adjust according to your project structure
+        template: './dist/index.html', // Adjust according to your project structure
       }),
     ],
   };

@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CollapsedComponent from "./expertscollapsed"; // Import your collapsed component
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() {
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null); 
   const [showMenu, setShowMenu] = useState(true);
-  const [messageCountText, setMessageCountText] = useState('0');  
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState(''); 
 
   const navigation = useNavigation(); // Get navigation object
 
@@ -37,7 +38,7 @@ function MyComponent() {
           case "Growth Plan":
           navigation.navigate('Growth Plan');
           break;
-        case "Advice":
+        case "Skills Analysis":
           navigation.navigate('Advice');
           break;
         case "Hubs":
@@ -55,7 +56,7 @@ function MyComponent() {
   const handleLogout = () => {
     // Handle logout action here
     console.log("Logout clicked");
-    navigation.navigate('Signin'); // Navigate to the sign-in page
+    navigation.navigate('Sign in'); // Navigate to the sign-in page
     setClickedItem(null);
   };
 
@@ -63,6 +64,27 @@ function MyComponent() {
     // Navigate to MyProfile screen
     navigation.navigate('Profile');
   };
+
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+  
+    retrieveData();
+  }, []);
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -103,7 +125,7 @@ function MyComponent() {
               style={{ width: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
-              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Roboto-Light"  }}>Jeremiah H.</Text>
+              <Text style={{ fontSize: 14, color: '#666',fontFamily:"Roboto-Light"  }}>{first_name} {last_name}</Text>
             </View>
           </View>
           </TouchableOpacity>
@@ -135,7 +157,7 @@ const menuItems = [
   { label: "Offers", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Growth Plan", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Advice", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Skills Analysis", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];

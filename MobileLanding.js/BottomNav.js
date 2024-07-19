@@ -34,6 +34,11 @@ const BottomTab = ({ navigation, onClose }) => {
     Linking.openURL('https://mobile.anglequest.com');
   };
 
+  const handleAIPress = () => {
+    navigation.navigate('Anglequest AI');
+    onClose();
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={openModal}>
@@ -87,7 +92,7 @@ const BottomTab = ({ navigation, onClose }) => {
               </View>
             )}
             
-            <TouchableOpacity style={styles.modalButton}>
+            <TouchableOpacity style={styles.modalButton} onPress={handleAIPress} >
               <Text style={styles.modalText}>AngleQuest AI</Text>
             </TouchableOpacity>
             

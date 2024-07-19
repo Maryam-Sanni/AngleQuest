@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() {
   const navigation = useNavigation(); // Initialize navigation
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null); // Declare hoveredItem state
   const [showMenu, setShowMenu] = useState(true); // State to toggle between menu and collapsed component
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
   const handleItemHover = (item) => {
     setHoveredItem(item);
@@ -37,7 +39,7 @@ function MyComponent() {
         case "Sessions":
           navigation.navigate('Sessions');
           break;
-        case "Advice":
+        case "Skills Analysis":
           navigation.navigate('New Advice');
           break;
         case "Hubs":
@@ -66,6 +68,27 @@ function MyComponent() {
     // Navigate to MyProfile screen
     navigation.navigate('My Profile');
   };
+
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+  
+    retrieveData();
+  }, []);
+
   const { t } = useTranslation()
 
   return (
@@ -105,7 +128,7 @@ function MyComponent() {
                 style={{ width: 40, aspectRatio: 1 }}
               />
               <View style={{ marginLeft: 5 }}>
-                <Text style={{ fontSize: 14, color: '#666' }}>John Smith</Text>
+                <Text style={{ fontSize: 14, color: '#666' }}>{first_name} {last_name}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -138,7 +161,7 @@ const menuItems = [
   { label: "All Experts", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Growth Plan", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Advice", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Skills Analysis", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Sessions", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
@@ -233,7 +256,13 @@ const styles = StyleSheet.create({
   logoutButton: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    alignItems: "center"
+    height: 30,
+    width: 140,
+    backgroundColor: '#E3F4DB',
+    alignItems: "center",
+    padding: 7,
+    marginTop: 10,
+    borderRadius: 5
   },
  
 });
