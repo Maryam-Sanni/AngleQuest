@@ -112,6 +112,7 @@ import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
 import Welcome from './LandingPage/LandingHome';
+import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -245,6 +246,7 @@ const App = () => {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
         <Stack.Screen name="mobile" component={mobile} />
+        <Stack.Screen name="AI" component={AI} />
       </Stack.Navigator>
     </NavigationContainer>
        )

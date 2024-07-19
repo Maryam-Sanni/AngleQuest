@@ -38,8 +38,8 @@ const MyComponent = () => {
     navigation.navigate('Join Recruitangle');
   };
 
-  const handleClientelePress = () => {
-    navigation.navigate('AngleQuest Client Testimonials');
+  const handleAIPress = () => {
+    navigation.navigate('AI');
   };
 
   const languages = [
@@ -99,7 +99,7 @@ const MyComponent = () => {
                   source={require('../assets/icons8-arrow-down-24.png')}
                   style={styles.arrowdown}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleAIPress}>
         <Text style={{ fontSize: 18, marginRight: 5, fontWeight: 600}}>AngleQuest AI</Text>
         </TouchableOpacity>
         <TouchableOpacity onMouseEnter={handleMoreHover}>

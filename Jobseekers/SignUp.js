@@ -42,19 +42,19 @@ const MyComponent = () => {
 
   const handleSignUp = async () => {
     if (!firstName || !lastName || !email || !password) {
-      alert('Please fill all fields');
+      Alert.alert('Error', 'Please fill all fields');
       return;
     }
 
     if (!isChecked) {
-      alert('Please agree to the Terms of Service & Privacy Policy');
+      Alert.alert('Error', 'Please agree to the Terms of Service & Privacy Policy');
       return;
     }
 
     try {
-      setLoading(true); // Set loading to true when sign in is initiated
+      setLoading(true); // Set loading to true when sign up is initiated
       
-      const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
+      const response = await axios.post(`https://recruitangle.com/api/signup`, {
         first_name: firstName,
         last_name: lastName,
         email,
@@ -65,12 +65,12 @@ const MyComponent = () => {
       navigation.navigate('Verify Email', { userEmail: email }); // Navigate and pass email as parameter
     } catch (error) {
       console.error('Signup failed:', error);
-      alert('Signup failed. Please try again.');
+      Alert.alert('Error', 'Signup failed. Please try again.');
     } finally {
       setLoading(false); // Set loading to false regardless of success or failure
     }
   };
- 
+
   const navigateToTerms = () => {
     navigation.navigate('TermsofService');
   };
@@ -132,11 +132,11 @@ const MyComponent = () => {
                 <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
               </Text>
             </TouchableOpacity>
+            {loading && <ActivityIndicator size="large" color="coral" style={styles.loader} />}
           </View>
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>
       </View>
-     
     </View>
   );
 };
@@ -244,6 +244,9 @@ const styles = StyleSheet.create({
   signInTextGray: {
     marginTop: 10,
     color: 'gray',
+  },
+  loader: {
+    marginTop: 20,
   },
 });
 
