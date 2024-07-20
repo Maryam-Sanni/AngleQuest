@@ -1,75 +1,32 @@
 const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge');
+const commonConfig = require('./webpack.common.js');
 
-module.exports = (env, argv) => {
-  const isProduction = argv && argv.mode === 'production';
-
-  return {
-    entry: './src/index.js', // Ensure this path is correct
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'bundle.js',
-      publicPath: '/', // Ensure all routes are handled correctly
-    },
-    module: {
-      rules: [
-        {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
-            },
-          },
-        },
-        {
-          test: /\.(png|jpe?g|gif|svg)$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '[name].[ext]',
-                outputPath: 'images',
-              },
-            },
-          ],
-        },
-        {
-          test: /\.(woff|woff2|eot|ttf|otf)$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '[name].[ext]',
-                outputPath: 'fonts',
-              },
-            },
-          ],
-        },
-      ],
-    },
-    resolve: {
-      fallback: {
-        crypto: require.resolve('crypto-browserify'),
+module.exports = merge(commonConfig, {
+  mode: 'development',
+  entry: './App.js',  // Path to your main entry file
+  output: {
+    path: path.resolve(__dirname, 'web-build'),
+    filename: 'bundle.js',
+    publicPath: '/',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: 'babel-loader',
       },
-    },
-    optimization: {
-      minimize: isProduction,
-    },
-    devtool: isProduction ? false : 'source-map',
-    devServer: {
-      historyApiFallback: true, // Enable SPA routing support
-      contentBase: path.join(__dirname, 'dist'), // Serve content from dist directory
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
-      }),
-      new HtmlWebpackPlugin({
-        template: './dist/index.html', // Adjust according to your project structure
-      }),
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
-  };
-};
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'web-build'),
+    compress: true,
+    port: 3000,
+    historyApiFallback: true,  // For client-side routing
+  },
+});

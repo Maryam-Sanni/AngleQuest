@@ -26,7 +26,7 @@ function MyComponent({ onClose }) {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('https://crispy-spoon-xg65jq45g6r3prpg-8000.app.github.dev/api/jobseeker/create-jobseeker-growth-plan', {
+      const response = await axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan', {
         type: selectedType,
         title,
         role,

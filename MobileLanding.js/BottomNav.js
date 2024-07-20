@@ -36,7 +36,7 @@ const BottomTab = ({ navigation, onClose }) => {
 
   const handleAIPress = () => {
     navigation.navigate('Anglequest AI');
-    onClose();
+    setModalVisible(false);
   };
 
   return (

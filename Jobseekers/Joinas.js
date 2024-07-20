@@ -57,7 +57,7 @@ const MyComponent = () => {
     <View style={{ flex: 1  }}>
       <Top/ >
     <View style={[styles.container, styles.shadow]}>
-      <Text style={styles.header}>Join as an Individual, Expert or Business</Text>
+      <Text style={styles.header}>Sign up to join AngleQuest</Text>
       <View style={styles.cardsContainer}>
         {cardData.map((card, index) => (
           <Card

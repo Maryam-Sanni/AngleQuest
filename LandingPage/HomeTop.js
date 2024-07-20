@@ -75,7 +75,7 @@ const MyComponent = () => {
         />
         <TouchableOpacity>
         <Text
-          style={{ fontSize: 18, marginRight: 5, marginLeft: 50, fontWeight: 600 }}
+          style={{ fontSize: 18, marginRight: 5, marginLeft: 50 }}
           onMouseEnter={handleProductsHover}
         >
           Products
@@ -88,7 +88,7 @@ const MyComponent = () => {
                 
         <TouchableOpacity>
         <Text
-          style={{ fontSize: 18, marginRight: 5, fontWeight: 600 }}
+          style={{ fontSize: 18, marginRight: 5 }}
           onMouseEnter={handleSolutionsHover}
         >
           Solutions
@@ -100,7 +100,7 @@ const MyComponent = () => {
                   style={styles.arrowdown}
                 />
                 <TouchableOpacity onPress={handleAIPress}>
-        <Text style={{ fontSize: 18, marginRight: 5, fontWeight: 600}}>AngleQuest AI</Text>
+        <Text style={{ fontSize: 18, marginRight: 5 }}>AngleQuest AI</Text>
         </TouchableOpacity>
         <TouchableOpacity onMouseEnter={handleMoreHover}>
                  <Image
@@ -109,11 +109,11 @@ const MyComponent = () => {
                 />
                 </TouchableOpacity>
                 <Image
-                  source={require('../assets/icons8-search-50.png')}
+                  source={require('../assets/icons8-search-24.png')}
                   style={styles.search}
                 />
                 <Image
-                  source={require('../assets/icons8-megaphone-24.png')}
+                  source={require('../assets/icons8-notification-24.png')}
                   style={styles.megaphone}
                 />
         <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
@@ -138,7 +138,7 @@ const MyComponent = () => {
             />
           </View>
         </Modal>
-        <Text style={{ fontSize: 16, marginRight: 10, fontWeight: 400, position: "absolute", right: 130 }}>Login</Text>
+        <Text style={{ fontSize: 16, marginRight: 10, fontWeight: 400, position: "absolute", right: 140 }}>Login</Text>
         <TouchableOpacity style={styles.joinButton} onPress={handleXPress}>
           <Text style={styles.joinButtonText}>See Progress</Text>
         </TouchableOpacity>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     position: 'absolute',
-    right: 200
+    right: 207
   },
   languageIcon: {
     width: 24,
@@ -253,13 +253,13 @@ const styles = StyleSheet.create({
     width: 23,
     height: 23,
    position: "absolute",
-   right: 280
+   right: 293
   },
   search: {
     width: 23,
     height: 23,
    position: "absolute",
-   right: 330
+   right: 343
   },
 });
 

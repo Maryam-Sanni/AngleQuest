@@ -413,9 +413,18 @@ const MyComponent = () => {
         
       <Text style={styles.followUsText}>FOLLOW US ON</Text>
       <View style={styles.iconsRow}>
-        <FontAwesome name="twitter" size={24} color="black" style={styles.icon} />
-        <FontAwesome name="instagram" size={24} color="black" style={styles.icon} />
-        <FontAwesome name="linkedin" size={24} color="black" style={styles.icon} />
+      <Image
+                  source={require('../assets/icons8-twitterx-50.png')}
+                  style={styles.icon}
+                />
+        <Image
+                  source={require('../assets/icons8-facebook-48.png')}
+                  style={styles.icon}
+                />
+        <Image
+                  source={require('../assets/icons8-linkedin-48.png')}
+                  style={styles.icon}
+                />
       </View>
     
       <View style={styles.sectionRow}>
@@ -703,6 +712,8 @@ borderRadius: 10,
     },
     icon: {
       marginHorizontal: 10,
+      width: 25,
+      height: 25
     },
     sectionRow: {
       flexDirection: 'row',

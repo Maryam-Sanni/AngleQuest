@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Top from './HomeTop';
+import BottomTab from './BottomNav';
 
 const MyComponent = () => {
   const navigation = useNavigation(); // Navigation object
@@ -38,7 +39,7 @@ const MyComponent = () => {
             source={require('../assets/AnglequestAI.png')}
             style={styles.image}
           />
-          <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: '600' }}>
+          <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: '600', marginBottom: 10 }}>
             AI Career Road Map Generator
           </Text>
           
@@ -62,9 +63,10 @@ const MyComponent = () => {
                 onChange={handleChooseImage}
               />
             </View>
-         
+          
         </View>
       </ScrollView>
+      <BottomTab navigation={navigation} />
     </View>
   );
 };
