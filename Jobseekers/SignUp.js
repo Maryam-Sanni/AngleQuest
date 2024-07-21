@@ -35,6 +35,7 @@ const MyComponent = () => {
   const [password, setPassword] = useState('');
   const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
   const [loading, setLoading] = useState(false); // State for loading indicator
+  const role = "Individual"; // Static role for signup
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -59,6 +60,7 @@ const MyComponent = () => {
         last_name: lastName,
         email,
         password,
+        role: role, // Include the role in the request body
       });
 
       console.log('Signup success:', response.data);
@@ -124,15 +126,18 @@ const MyComponent = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
+            <TouchableOpacity style={styles.submitButton} onPress={handleSignUp} disabled={loading}>
+            {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
               <Text style={styles.submitButtonText}>Sign up</Text>
+            )}
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSignInPress}>
               <Text style={styles.signInText}>
                 <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
               </Text>
             </TouchableOpacity>
-            {loading && <ActivityIndicator size="large" color="coral" style={styles.loader} />}
           </View>
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>

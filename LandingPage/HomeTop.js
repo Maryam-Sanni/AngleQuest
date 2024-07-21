@@ -26,16 +26,32 @@ const MyComponent = () => {
     setShowProductsPopup(true);
   };
 
+  const handleProductsClose = () => {
+    setShowProductsPopup(false);
+  };
+
   const handleSolutionsHover = () => {
     setShowSolutionsPopup(true);
+  };
+
+  const handleSolutionsclose = () => {
+    setShowSolutionsPopup(false);
   };
 
   const handleMoreHover = () => {
     setShowMorePopup(true);
   };
 
+  const handleMoreclose = () => {
+    setShowMorePopup(false);
+  };
+
   const handleXPress = () => {
     navigation.navigate('Join Recruitangle');
+  };
+
+  const handleSignInPress = () => {
+    navigation.navigate('Sign in to AngleQuest');
   };
 
   const handleAIPress = () => {
@@ -73,14 +89,14 @@ const MyComponent = () => {
           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
           style={styles.logo}
         />
-        <TouchableOpacity>
+        <View>
         <Text
-          style={{ fontSize: 18, marginRight: 5, marginLeft: 50 }}
+          style={{ fontSize: 18, marginRight: 5, marginLeft: 30, fontWeight: 500 }}
           onMouseEnter={handleProductsHover}
         >
           Products
         </Text>
-        </TouchableOpacity>
+        </View>
         <Image
                   source={require('../assets/icons8-arrow-down-24.png')}
                   style={styles.arrowdown}
@@ -88,7 +104,7 @@ const MyComponent = () => {
                 
         <TouchableOpacity>
         <Text
-          style={{ fontSize: 18, marginRight: 5 }}
+          style={{ fontSize: 18, marginRight: 5, fontWeight: 500 }}
           onMouseEnter={handleSolutionsHover}
         >
           Solutions
@@ -100,20 +116,20 @@ const MyComponent = () => {
                   style={styles.arrowdown}
                 />
                 <TouchableOpacity onPress={handleAIPress}>
-        <Text style={{ fontSize: 18, marginRight: 5 }}>AngleQuest AI</Text>
+        <Text style={{ fontSize: 18, marginRight: 5, fontWeight: 500 }}>AngleQuest AI</Text>
         </TouchableOpacity>
-        <TouchableOpacity onMouseEnter={handleMoreHover}>
+        <View onMouseEnter={handleMoreHover}>
                  <Image
                   source={require('../assets/icons8-ellipsis-30.png')}
                   style={styles.topicons}
                 />
-                </TouchableOpacity>
+                </View>
                 <Image
-                  source={require('../assets/icons8-search-24.png')}
+                  source={require('../assets/icons8-search-30.png')}
                   style={styles.search}
                 />
                 <Image
-                  source={require('../assets/icons8-notification-24.png')}
+                  source={require('../assets/icons8-notification.gif')}
                   style={styles.megaphone}
                 />
         <TouchableOpacity onPress={toggleLanguageSwitcher} style={styles.languageButton}>
@@ -138,7 +154,11 @@ const MyComponent = () => {
             />
           </View>
         </Modal>
-        <Text style={{ fontSize: 16, marginRight: 10, fontWeight: 400, position: "absolute", right: 140 }}>Login</Text>
+       
+        <TouchableOpacity style={{ position: "absolute", right: 170 }} onPress={handleSignInPress}>
+        <Text style={{ fontSize: 16, fontWeight: 500 }}>Login</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.joinButton} onPress={handleXPress}>
           <Text style={styles.joinButtonText}>See Progress</Text>
         </TouchableOpacity>
@@ -153,27 +173,20 @@ const MyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F8F8F8',
+    width: 1400,
+    alignSelf: 'center'
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 17,
     backgroundColor: 'white',
-     borderBottomColor: 'grey',
-    shadowColor: '#39FF14',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 10,
   },
   logo: {
     width: 40,
     height: 40,
     marginRight: 5,
-    marginLeft: 100,
+    marginLeft: 30,
   },
   headerText: {
     fontSize: 22,
@@ -189,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     position: 'absolute',
-    right: 207
+    right: 237
   },
   languageIcon: {
     width: 24,
@@ -198,7 +211,8 @@ const styles = StyleSheet.create({
   },
   languageButtonText: {
     color: 'black',
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: 500
   },
   joinButton: {
     backgroundColor: 'white',
@@ -206,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: 'coral',
     padding: 10,
     position: 'absolute',
-    right: 20,
+    right: 50,
     borderRadius: 5
   },
   joinButtonText: {
@@ -242,7 +256,7 @@ const styles = StyleSheet.create({
   arrowdown: {
     width: 20,
     height: 20,
-    marginRight: 40
+    marginRight: 30
   },
   topicons: {
     width: 20,
@@ -250,16 +264,16 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   megaphone: {
-    width: 23,
-    height: 23,
+    width: 25,
+    height: 25,
    position: "absolute",
-   right: 293
+   right: 323
   },
   search: {
-    width: 23,
-    height: 23,
+    width: 24,
+    height: 24,
    position: "absolute",
-   right: 343
+   right: 373
   },
 });
 

@@ -165,17 +165,7 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
               </View>
               <View style={styles.cell}>
-                <Picker
-                  selectedValue={reviewFrequency}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setReviewFrequency(itemValue)}
-                >
-                  <Picker.Item label={t('Weekly')} value="Weekly" />
-                  <Picker.Item label={t('Monthly')} value="Monthly" />
-                  <Picker.Item label={t('Quarterly')} value="Quarterly" />
-                  <Picker.Item label={t('Biannually')} value="Biannually" />
-                  <Picker.Item label={t('Annually')} value="Annually" />
-                </Picker>
+              <Text style={{color: 'grey', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>{t('Biannually')}</Text>
               </View>
             </View>
             <View style={styles.row}>

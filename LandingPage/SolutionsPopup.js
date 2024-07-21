@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, TouchableWithoutFeedback, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ProductsPopup = ({ visible, onClose }) => {
   const [isHovered, setIsHovered] = React.useState(false);
@@ -80,7 +81,7 @@ const ProductsPopup = ({ visible, onClose }) => {
         onMouseLeave={handleMouseLeave}
       >
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ flexDirection: 'column' }}>
+          <TouchableOpacity style={{ flexDirection: 'column' }}>
           <View
        style={[isNHHovered && styles.hovered]}
         onMouseEnter={handleNHMouseEnter}
@@ -91,8 +92,8 @@ const ProductsPopup = ({ visible, onClose }) => {
             Simplify onboarding with tailored resources and training to help new employees integrate quickly.
             </Text>
           </View>
-          </View>
-          <View style={{ flexDirection: 'column', marginLeft: 50 }}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flexDirection: 'column', marginLeft: 50 }}>
           <View
        style={[isboostHovered && styles.hovered]}
         onMouseEnter={handleboostMouseEnter}
@@ -103,10 +104,10 @@ const ProductsPopup = ({ visible, onClose }) => {
               Targeted training and expert support to improve employee performance.
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 30 }}>
-          <View style={{ flexDirection: 'column' }}>
+          <TouchableOpacity style={{ flexDirection: 'column' }}>
           <View
        style={[israpidHovered && styles.hovered]}
         onMouseEnter={handlerapidMouseEnter}
@@ -117,8 +118,8 @@ const ProductsPopup = ({ visible, onClose }) => {
              Intensive mentorship programs to quickly enhance employee skills and productivity.
             </Text>
           </View>
-          </View>
-          <View style={{ flexDirection: 'column', marginLeft: 50 }}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flexDirection: 'column', marginLeft: 50 }}>
           <View
        style={[isgrowthHovered && styles.hovered]}
         onMouseEnter={handlegrowthMouseEnter}
@@ -129,10 +130,10 @@ const ProductsPopup = ({ visible, onClose }) => {
               An environment fostered to focus on continuous learning and development for all employees.
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 30 }}>
-          <View style={{ flexDirection: 'column' }}>
+          <TouchableOpacity style={{ flexDirection: 'column' }}>
           <View
        style={[isjuniorHovered && styles.hovered]}
         onMouseEnter={handlejuniorMouseEnter}
@@ -143,8 +144,8 @@ const ProductsPopup = ({ visible, onClose }) => {
              Specialized training and mentorship to elevate Junior employees to senior roles.
             </Text>
           </View>
-          </View>
-          <View style={{ flexDirection: 'column', marginLeft: 50 }}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flexDirection: 'column', marginLeft: 50 }}>
           <View
        style={[isseniorHovered && styles.hovered]}
         onMouseEnter={handleseniorMouseEnter}
@@ -155,7 +156,7 @@ const ProductsPopup = ({ visible, onClose }) => {
             Accelerated career progression with structured mentorship and advanced training for senior employees.
             </Text>
           </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -164,19 +165,25 @@ const ProductsPopup = ({ visible, onClose }) => {
 
 const styles = StyleSheet.create({
   modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  productsPopupContent: {
-    position: 'absolute',
-    width: '60%',
-    left: 350,
-    top: 70,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-    padding: 30,
-    zIndex: 100, // Ensure popup is above other content
-  },
+    alignItems: 'center'
+   },
+   productsPopupContent: {
+     alignSelf: 'center',
+     top: 80,
+     marginLeft: -100,
+     backgroundColor: '#FFF',
+     borderRadius: 10,
+     padding: 30,
+     zIndex: 100,
+     shadowColor: '#000',
+         shadowOffset: {
+           width: 0,
+           height: 0,
+         },
+         shadowOpacity: 0.25,
+         shadowRadius: 3.84,
+         elevation: 0,
+   },
   productTitle: {
     fontSize: 18,
     fontWeight: 'bold',

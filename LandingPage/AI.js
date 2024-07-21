@@ -29,11 +29,23 @@ const MyComponent = () => {
     }
   };
 
+  const handlebackPress = () => {
+    navigation.navigate('Welcome');
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Top />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.container}>
+          <TouchableOpacity style={{flexDirection: 'row', alignSelf: 'flex-start'}} onPress={handlebackPress} >
+        <Image
+            source={require('../assets/back-2.png')}
+            style={styles.back}
+          /> <Text style={{ fontSize: 16, marginTop: 18, marginLeft: 10 }}>
+          Back
+        </Text>
+        </TouchableOpacity>
           <Image
             source={require('../assets/AnglequestAI.png')}
             style={styles.image}
@@ -46,10 +58,6 @@ const MyComponent = () => {
               Uncover all the steps you need to take to
               <Text style={{ fontSize: 35, color: '#135837', textAlign: 'center', fontWeight: '600' }}> REACH YOUR NEXT LEVEL</Text>
             </Text>
-            <Image
-              source={require('../assets/goAI.png')}
-              style={styles.goimage}
-            />
           </View>
           <Text style={{ fontSize: 35, color: 'grey', padding: 10, textAlign: 'center', marginTop: 50 }}>
             Join 18,578 others who have shared their CV to train our model
@@ -83,7 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#F8F8F8',
   },
   header: {
     fontSize: 16,
@@ -107,7 +114,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    marginTop: 20,
     width: 150,
     height: 150,
   },
@@ -116,6 +122,12 @@ const styles = StyleSheet.create({
     height: 100,
     marginTop: -45,
     marginLeft: -20,
+  },
+  back: {
+    marginTop: 20,
+    marginLeft: 100,
+    width: 20,
+    height: 20,
   },
   heading: {
     fontSize: 22,

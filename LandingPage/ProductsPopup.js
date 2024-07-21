@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, TouchableWithoutFeedback, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ProductsPopup = ({ visible, onClose }) => {
   const [isHovered, setIsHovered] = React.useState(false);
@@ -54,7 +55,7 @@ const ProductsPopup = ({ visible, onClose }) => {
       >
         <View style={{ flexDirection: 'row' }}>
        
-          <View style={{ flexDirection: 'column' }}>
+          <TouchableOpacity style={{ flexDirection: 'column' }}>
           <View
        style={[isAIHovered && styles.hovered]}
         onMouseEnter={handleAIMouseEnter}
@@ -65,9 +66,9 @@ const ProductsPopup = ({ visible, onClose }) => {
               Proficiency analysis and performance analytics to identify your knowledge gaps and proffer solutions.
             </Text>
           </View>
-          </View>
+          </TouchableOpacity>
          
-          <View style={{ flexDirection: 'column', marginLeft: 50 }}>
+          <TouchableOpacity style={{ flexDirection: 'column', marginLeft: 50 }}>
           <View
        style={[isCDPHovered && styles.hovered]}
         onMouseEnter={handleCDPMouseEnter}
@@ -78,9 +79,9 @@ const ProductsPopup = ({ visible, onClose }) => {
               Career Development Platform optimized with resources for employees to explore career paths, set goals, and track professional development.
             </Text>
           </View>
+        </TouchableOpacity>
         </View>
-        </View>
-        <View style={{width: 370, marginTop: 30}}>
+        <TouchableOpacity style={{width: 370, marginTop: 30}}>
         <View
        style={[isTIHovered && styles.hovered]}
         onMouseEnter={handleTIMouseEnter}
@@ -91,7 +92,7 @@ const ProductsPopup = ({ visible, onClose }) => {
           Measuring and analyzing the domain knowledge and billable work of your team members, followed with the required personalized training, suggestions, assistance, tracking, reviews, and advice.
         </Text>
         </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -99,18 +100,24 @@ const ProductsPopup = ({ visible, onClose }) => {
 
 const styles = StyleSheet.create({
   modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+   alignItems: 'center'
   },
   productsPopupContent: {
-    position: 'absolute',
-    width: '60%',
-    left: 210,
-    top: 70,
+    alignSelf: 'center',
+    top: 80,
+    marginLeft: -345,
     backgroundColor: '#FFF',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 30,
-    zIndex: 100, // Ensure popup is above other content
+    zIndex: 100,
+    shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 0,
   },
   productTitle: {
     fontSize: 18,

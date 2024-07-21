@@ -82,7 +82,7 @@ const MyComponent = () => {
             />
             <TextInput
               placeholder="Password"
-              secureTextEntry
+              secureTextEntry={true}
               style={styles.input}
               value={password}
               onChangeText={setPassword}

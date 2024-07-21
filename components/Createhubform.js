@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList, Image  } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const getToken = async () => {
-  try {
-    const token = await AsyncStorage.getItem('userToken');
-    return token;
-  } catch (error) {
-    console.error('Error retrieving token:', error);
-    return null;
-  }
-};
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
   const [hour, setHour] = useState(initialValue.split(':')[0]);
@@ -59,12 +50,12 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
     label: minute.toString().padStart(2, '0'),
     onPress: () => handleMinuteChange(minute.toString().padStart(2, '0')),
   }));
-
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
   const {t}=useTranslation()
 
+ 
   return (
     <View>
       <TouchableOpacity style={styles.input} onPress={showTimePicker}>
@@ -114,8 +105,8 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigation = useNavigation();
-  const [meeting_start, setStartTime] = useState('12:00');
-  const [meeting_end, setEndTime] = useState('12:00');
+  const [startTime, setStartTime] = useState('12:00');
+  const [endTime, setEndTime] = useState('12:00');
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -127,13 +118,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
  
   const [visibility, setVisibility] = useState('public');
-  const [name, setGroupName] = useState('');
-  const [fee, setHubFee] = useState('');
-  const [description, setGroupDescription] = useState('');
-  const [goals, setHubGoals] = useState('');
-  const [limit, setHubLimit] = useState('');
-  const [meeting_day, setMeetingDay] = useState('');
+  const [groupName, setGroupName] = useState('');
+  const [addLeaders, setAddLeaders] = useState('');
+  const [groupDescription, setGroupDescription] = useState('');
+  const [searchMembers, setSearchMembers] = useState('');
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [fee, setfee] = useState('');
   const maxDescriptionLength = 85; // Max character limit for description
 
 
@@ -144,48 +134,53 @@ const CreateCoachingHubForm = ({ onClose }) => {
     }
   };
 
+  const getBearerToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Adjust key as per your implementation
+      return token;
+    } catch (error) {
+      console.error('Failed to fetch the token from AsyncStorage', error);
+      return null;
+    }
+  };
+  
   const handleSave = async () => {
     try {
-      const token = await getToken();
-
+      const token = await getBearerToken();
       if (!token) {
-        alert('User not authenticated');
+        console.error('Bearer token not found');
         return;
       }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  
+      const formData = {
+        visibility,
+        groupName,
+        addLeaders,
+        groupDescription,
+        searchMembers,
+        startTime,
+        endTime
+        // Add other form fields as needed
       };
-
+  
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      };
+  
       const response = await axios.post(
-        `https://recruitangle.com/api/expert/hub/create`,
-        {
-          visibility,
-          name,
-          description,
-          fee,
-          meeting_day,
-          meeting_start,
-          meeting_end,
-          goals,
-          limit,
-        },
-        config
+        'https://recruitangle.com/api/expert/hub/create',
+        formData,
+        { headers }
       );
   
-      console.log('Create Hub Response:', response.data);
-      if (response.data.success) {
-        alert('Hub created successfully!');
-        onClose();
-      } else {
-        alert(response.data.message || 'Hub creation failed');
-      }
+      console.log('Hub created successfully:', response.data);
+      // Optionally handle navigation or state updates upon successful creation
     } catch (error) {
-      console.error('Create Hub Error:', error);
-      alert('An error occurred while creating the hub.');
+      console.error('Error creating hub:', error);
+      // Handle error, e.g., show an error message to the user
     }
+    onClose();
   };
 
   const [fontsLoaded]=useFonts({
@@ -195,22 +190,14 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
  
   return (
-    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
-    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
-            style={styles.logo}
-          />
-          <Text style={styles.headerText}>{t("Create New Hub")}</Text>
-       
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
-            ✕
-          </Text>
-        </TouchableOpacity>
-        </View> 
+<TouchableOpacity onPress={onClose}>
+            <Text style={{ fontSize: 18, color:'grey', marginLeft: 850,fontWeight: 'bold', marginTop: -20,fontFamily:"Roboto-Light"}}>
+                            ✕
+                        </Text>
+                        </TouchableOpacity>
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 25,fontFamily:"Roboto-Light" }}>{t("Visibility")}*</Text>
@@ -226,8 +213,8 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Name")}*</Text>
         <TextInput
           style={styles.input}
-          placeholder={t("Enter hub name")}
-          value={name}
+          placeholder="Enter hub name"
+          value={groupName}
           onChangeText={text => setGroupName(text)}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Description")}* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
@@ -235,15 +222,15 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={[styles.input, { height: 100 }]}
           placeholder= {t("Type here...")}
           multiline
-          value={description}
+          value={groupDescription}
           onChangeText={handleDescriptionChange}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Day")}*</Text>
         <Picker
-          selectedValue={meeting_day}
+          selectedValue={visibility}
           style={styles.input}
           onValueChange={(itemValue, itemIndex) =>
-            setMeetingDay(itemValue)
+            setVisibility(itemValue)
           }> 
           <Picker.Item label="Monday" value="Monday" />
           <Picker.Item label="Tuesday" value="Tuesday" />
@@ -253,17 +240,13 @@ const CreateCoachingHubForm = ({ onClose }) => {
           <Picker.Item label="Saturday" value="Saturday" />
           <Picker.Item label="Sunday" value="Sunday" />
         </Picker>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Time")}*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>{t("Meeting Time")}*</Text>
         <View style={styles.timecontainer}>
       <View style={styles.timeformContainer}>
         <Text style={styles.timelabel}>{t("From")}</Text>
         <CustomTimePicker initialValue={startTime} onChange={handleStartTimeChange} />
         <Text style={styles.timelabel}>{t("To")}</Text>
         <CustomTimePicker initialValue={endTime} onChange={handleEndTimeChange} />
-        <Text style={styles.timelabel}>From</Text>
-        <CustomTimePicker initialValue={meeting_start} onChange={handleStartTimeChange} />
-        <Text style={styles.timelabel}>To</Text>
-        <CustomTimePicker initialValue={meeting_end} onChange={handleEndTimeChange} />
       </View>
     </View>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Fee")}*</Text>
@@ -271,23 +254,23 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={styles.input}
           placeholder="$25"
           value={fee}
-          onChangeText={text => setHubFee(text)}
+          onChangeText={text => setfee(text)}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Goals (Optional)")} </Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
-          placeholder=  {t("Type here...")}
+          placeholder= "Type here..."
           multiline
-          value={goals}
-          onChangeText={text => setHubGoals(text)}
+          value={addLeaders}
+          onChangeText={text => setAddLeaders(text)}
         />
        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Limit (Optional)")} </Text>
         <TextInput
           style={styles.input}
           placeholder="50 Participants"
           keyboardType="numeric" // Set keyboardType to 'numeric' for number input
-          value={limit}
-          onChangeText={text => setHubLimit(text)}
+          value={searchMembers}
+          onChangeText={text => setSearchMembers(text)}
         />
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
@@ -330,6 +313,7 @@ const styles = StyleSheet.create({
     width: 920,
     height:850,
     backgroundColor: '#F8F8F8',
+    marginTop: 40
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -393,31 +377,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     color: 'white'
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
-    marginBottom: 20
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#3F5637',
-    fontFamily:"Roboto-Light"
   },
 });
 

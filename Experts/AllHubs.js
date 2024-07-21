@@ -37,13 +37,13 @@ function MyComponent() {
         setModalVisible2(false);
       };
 
-    const handleOpenPress = () => {
-      setModalVisible(true);
-    };
-  
-    const handleCloseModal = () => {
-      setModalVisible(false);
-    };
+      const handleOpenPress = () => {
+        setModalVisible(true);
+      };
+    
+      const handleCloseModal = () => {
+        setModalVisible(false);
+      };
 
     const handleOpenPress2 = () => {
       setModalVisible3(true);
@@ -86,9 +86,10 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
               </View>
             </TouchableOpacity>
+            
             <TouchableOpacity 
             underlayColor={isThirdHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsThirdHubsHovered(true)}
@@ -98,13 +99,12 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOthersPress}>
                 <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginRight: 5, marginLeft: 50}} />
             </TouchableOpacity>
-           
             <TouchableOpacity onPress={goToMyHubs}
             underlayColor={isAllHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsAllHovered(true)}
@@ -114,15 +114,17 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
               </View>
             </TouchableOpacity>
             </View>
+
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 70, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center', }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+{t("New Hub")}</Text>
+    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("New Hub")}</Text>
                   </View>
      </TouchableOpacity>
+
      <View style={{ flexDirection: "row"}}>
             <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
@@ -134,17 +136,9 @@ const {t}=useTranslation()
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Assignment")}</Text>
                   </View>
      </TouchableOpacity>
+    
      </View>
-     <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleCloseModal}
-      >
-          <View style={styles.modalContent}>
-          <OpenModal onClose={() => handleCloseModal()} />
-          </View>
-      </Modal>
+    
       <Modal
         animationType="slide"
         transparent={true}
@@ -176,7 +170,16 @@ const {t}=useTranslation()
           </View>
       </Modal>
 
-      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>s
 
             <ScheduledMeetingsTable />
             
@@ -547,7 +550,7 @@ const styles = StyleSheet.create({
   headertext: {
     marginLeft: 5,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: 500,
     color: '#666'
   },
   image: {

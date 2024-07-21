@@ -47,8 +47,9 @@ const MyComponent = () => {
   };
 
   const handleSignInPress = () => {
-    navigation.navigate('Signin');
+    navigation.navigate('Sign in to AngleQuest');
   };
+  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -68,6 +69,11 @@ const MyComponent = () => {
           />
         ))}
       </View>
+      <TouchableOpacity onPress={handleSignInPress}>
+              <Text style={styles.signInText}>
+                <Text style={styles.signInTextGray}>Already have an account?</Text> Log In
+              </Text>
+            </TouchableOpacity>
     </View>
     </View>
   );
