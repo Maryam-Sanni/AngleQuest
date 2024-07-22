@@ -48,6 +48,9 @@ function MyComponent() {
           case "Performance":
           navigation.navigate('My Performance');
           break;
+          case "AngleQuest AI":
+            navigation.navigate('Use AI');
+            break;
         case "Messages":
           navigation.navigate('Messages');
           break;
@@ -165,6 +168,7 @@ const menuItems = [
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Sessions", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "AngleQuest AI", icon: require('../assets/icons8-bot-80.png')  },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 

@@ -254,16 +254,13 @@ const styles = StyleSheet.create({
     },
     buttonplus: {
         backgroundColor: 'coral',
-        borderRadius: 5,
-        padding: 5,
-        position: 'absolute',
-        right: 40,
-        width: 100,
-        paddingHorizontal: 20,
-        bottom: 170,
-        marginBottom: 30,
-        borderRadius: 5,
-    },
+    borderRadius: 5,
+    padding: 5,
+    marginLeft: 800,
+    width: 100,
+    paddingHorizontal: 20,
+    marginTop: 50
+},
     buttonTextplus: {
         color: 'white',
         fontSize: 14,

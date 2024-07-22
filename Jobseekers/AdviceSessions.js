@@ -40,7 +40,7 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5,fontFamily:"Roboto-Light"}}>{t("Advice")}</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5,fontFamily:"Roboto-Light"}}>{t("Skill Analysis")}</Text>
                 </View>
             </TouchableOpacity>
             </View>
@@ -53,7 +53,7 @@ function MyComponent() {
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Advice Meeting")}</Text>
+      <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Meeting")}</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>

@@ -76,7 +76,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("Create New Advice Objective")}</Text>
+            <Text style={styles.headerText}>{t("Create New Objective")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>

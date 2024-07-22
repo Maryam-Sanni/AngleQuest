@@ -111,6 +111,7 @@ import AdviceOffer from './Jobseekers/OfferAdvice';
 import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
+import IndividualAI from './Jobseekers/AI';
 import Welcome from './LandingPage/LandingHome';
 import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
@@ -249,6 +250,7 @@ const App = () => {
         <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
         <Stack.Screen name="mobile" component={mobile} />
         <Stack.Screen name="AI" component={AI} />
+        <Stack.Screen name="Use AI" component={IndividualAI} />
         <Stack.Screen name="Anglequest AI" component={mobileAI} />
         <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
       </Stack.Navigator>

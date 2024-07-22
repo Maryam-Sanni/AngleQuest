@@ -52,7 +52,7 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Advice")}</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Skill Analysis")}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenPress2} >
@@ -62,7 +62,7 @@ function MyComponent() {
                   </TouchableOpacity>
             </View>
      <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Advice")}</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Skill Analysis")}</Text>
      <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("Are you in a place where you need some straightening, fresh insights, leverage new perspective and some realignment?")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>

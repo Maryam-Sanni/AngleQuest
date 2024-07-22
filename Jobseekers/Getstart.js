@@ -61,8 +61,14 @@ function MyComponent({ onClose }) {
       const {t}=useTranslation()
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
-         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+    <>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={mainModalVisible}
+      onRequestClose={onClose}
+    >
+      <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
 <View style={styles.greenBox}>
 <View style={styles.header}>
           <Image
@@ -129,7 +135,8 @@ function MyComponent({ onClose }) {
       <Text style={styles.buttonTextplus}>{t("Next")}</Text>
     </TouchableOpacity>
     </View>
-    
+    </View>
+    </Modal>
     <Modal
         animationType="slide"
         transparent={true}
@@ -139,9 +146,9 @@ function MyComponent({ onClose }) {
         <View style={styles.modalContent}>
           <OpenModal onClose={handleCloseformModal} />
         </View>
+     
       </Modal>
-</ScrollView>
-</View>
+      </>
 
 );
 }
@@ -157,7 +164,7 @@ const styles = StyleSheet.create({
       },
   greenBox: {
     width: 920,
-    height: '80%',
+    height: '100%',
     backgroundColor: '#F8F8F8',
   },
   picker: {
@@ -173,14 +180,13 @@ const styles = StyleSheet.create({
   },
   buttonplus: {
     backgroundColor: 'coral',
+    borderRadius: 5,
     padding: 5,
-    position: 'absolute',
-    bottom: -30,
-    right: 130,
+    marginLeft: 700,
     width: 100,
     paddingHorizontal: 20,
-    borderRadius: 5
-  },
+    marginTop: 50
+},
   buttonTextplus: {
     color: 'white',
     fontSize: 14,

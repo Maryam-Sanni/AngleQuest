@@ -7,7 +7,7 @@ import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from '../Jobseekers/Getstart';
+import OpenModal2 from '../Jobseekers/getstarted';
 import OpenModal3 from '../Jobseekers/Pickyourcoach';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import {useFonts} from "expo-font" 
