@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -94,69 +94,94 @@ function MyComponent() {
 
   const { t } = useTranslation()
 
-  return (
-    <View style={[styles.container, !showMenu && { width: 80 }]}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-      {showMenu ?  ( // Render menu if showMenu is true
-        <View style={styles.contentContainer}>
-          {/* Menu Items */}
-          {menuItems.map((menuItem, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.menuItem,
-                hoveredItem === menuItem && styles.menuItemHovered,
-                clickedItem === menuItem && styles.menuItemSelected 
-              ]}
-              onMouseEnter={() => handleItemHover(menuItem)}
-              onMouseLeave={() => handleItemHover(null)}
-              onPress={() => handleItemClick(menuItem)}
-            >
-              <View style={styles.menuItemContent}>
-                <Image
-                  source={{ uri: menuItem.icon }}
-                  style={{ width: 20, height: 20, marginRight: 6 }}
-                />
-                <Text style={[styles.text, clickedItem === menuItem && styles.textActive]}>{t(menuItem.label)}</Text>
+  const navigationState = useNavigationState((state) => state);
 
+  useEffect(() => {
+    
+    const routeName = navigationState?.routes[navigationState.index]?.name;
+    const matchedItem = menuItems.find(item => {
+      switch(item.label) {
+        case "Home": return routeName === 'Home';
+        case "All Experts": return routeName === 'Experts';
+        case "Growth Plan": return routeName === 'New Growth Plan';
+        case "Interview": return routeName === 'New Interview';
+        case "Sessions": return routeName === 'Sessions';
+        case "Skills Analysis": return routeName === 'New Advice';
+        case "Hubs": return routeName === 'Coaching Hubs';
+        case "Performance": return routeName === 'My Performance';
+        case "AngleQuest AI": return routeName === 'Use AI';
+        case "Messages": return routeName === 'Messages';
+        default: return false;
+      }
+    });
+    if (matchedItem) {
+      setClickedItem(matchedItem);
+    }
+  }, [navigationState]);
+
+  return (
+    <View style={[styles.container, !showMenu && styles.containerExpanded]}>
+      {showMenu ? ( // Render menu if showMenu is true
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.contentContainer}>
+            {/* Menu Items */}
+            {menuItems.map((menuItem, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.menuItem,
+                  hoveredItem === menuItem && styles.menuItemHovered,
+                  clickedItem === menuItem && styles.menuItemSelected 
+                ]}
+                onMouseEnter={() => handleItemHover(menuItem)}
+                onMouseLeave={() => handleItemHover(null)}
+                onPress={() => handleItemClick(menuItem)}
+              >
+                <View style={styles.menuItemContent}>
+                  <Image
+                    source={{ uri: menuItem.icon }}
+                    style={{ width: 20, height: 20, marginRight: 6 }}
+                  />
+                   <Text style={[styles.text, clickedItem === menuItem && styles.textActive]}>{t(menuItem.label)}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+            {/* Profile Info */}
+            <TouchableOpacity onPress={handleProfileClick}>
+              <View style={styles.divider} />
+              <View style={styles.profileInfo}>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
+                  style={{ width: 40, aspectRatio: 1 }}
+                />
+                <View style={{ marginLeft: 5 }}>
+                  <Text style={{ fontSize: 14, color: '#666' }}>{first_name} {last_name}</Text>
+                </View>
               </View>
             </TouchableOpacity>
-          ))}
-          {/* Profile Info */}
-          <TouchableOpacity onPress={handleProfileClick}>
-          <View style={styles.divider} />
-            <View style={styles.profileInfo}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                style={{ width: 40, aspectRatio: 1 }}
-              />
-              <View style={{ marginLeft: 5 }}>
-                <Text style={{ fontSize: 14, color: '#666' }}>{first_name} {last_name}</Text>
+            <View style={styles.divider} />
+            {/* Logout */}
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={handleLogout}
+            >
+              <View style={styles.logoutButton}>
+                <Image
+                  source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/8619284eda5dda6f5d7db1f24b673d86816adddc50319ac5f1954048b0054972?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }}
+                  style={{ width: 20, height: 20, marginRight: 6, marginTop: 5, marginBottom: 5 }}
+                />
+                <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666' }}>{t("Logout")}</Text>
               </View>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.divider} />
-          {/* Logout */}
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={handleLogout}
-          >
-            <View style={styles.logoutButton}>
-              <Image
-                source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/8619284eda5dda6f5d7db1f24b673d86816adddc50319ac5f1954048b0054972?apiKey=7b9918e68d9b487793009b3aea5b1a32&" }}
-                style={{ width: 20, height: 20, marginRight: 6, marginTop: 5, marginBottom: 5}}
-              />
-              <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666' }}>{t("Logout")}</Text>
-              </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       ) : (
         <CollapsedComponent /> // Render collapsed component if showMenu is false
       )}
-      </ScrollView>
     </View>
   );
 }
+
 // const H = t("Home");
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
@@ -167,8 +192,8 @@ const menuItems = [
   { label: "Skills Analysis", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Sessions", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "AngleQuest AI", icon: require('../assets/icons8-bot-80.png')  },
+  { label: "Performance", icon: "https://img.icons8.com/?size=100&id=42208&format=png&color=000000" },
+  { label: "AngleQuest AI", icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=000000" },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 
@@ -184,6 +209,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  containerExpanded: {
+    width: 80,
+    marginTop: 0
   },
   contentContainer: {
     padding: 20,

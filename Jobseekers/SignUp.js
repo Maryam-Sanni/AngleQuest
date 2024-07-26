@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, Acti
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native';
 import axios from 'axios';
-import LinkedInModal from '@gcou/react-native-linkedin';
+import LinkedInLogin from '../components/LinkedInLogin';
 
 // SignUpButton component
 const SignUpButton = ({ icon, text, onPress }) => (
@@ -35,7 +35,6 @@ const MyComponent = () => {
   const [password, setPassword] = useState('');
   const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
   const [loading, setLoading] = useState(false); // State for loading indicator
-  const role = "Individual"; // Static role for signup
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -43,36 +42,35 @@ const MyComponent = () => {
 
   const handleSignUp = async () => {
     if (!firstName || !lastName || !email || !password) {
-      Alert.alert('Error', 'Please fill all fields');
+      alert('Please fill all fields');
       return;
     }
 
     if (!isChecked) {
-      Alert.alert('Error', 'Please agree to the Terms of Service & Privacy Policy');
+      alert('Please agree to the Terms of Service & Privacy Policy');
       return;
     }
 
     try {
-      setLoading(true); // Set loading to true when sign up is initiated
+      setLoading(true); // Set loading to true when sign in is initiated
       
-      const response = await axios.post(`https://recruitangle.com/api/signup`, {
+      const response = await axios.post(`https://recruitangle.com/api/expert/signup`, {
         first_name: firstName,
         last_name: lastName,
         email,
         password,
-        role: role, // Include the role in the request body
       });
 
       console.log('Signup success:', response.data);
-      navigation.navigate('Verify Email', { userEmail: email }); // Navigate and pass email as parameter
+      navigation.navigate('Verify mail', { userEmail: email }); // Navigate and pass email as parameter
     } catch (error) {
       console.error('Signup failed:', error);
-      Alert.alert('Error', 'Signup failed. Please try again.');
+      alert('Signup failed. Please try again.');
     } finally {
       setLoading(false); // Set loading to false regardless of success or failure
     }
   };
-
+ 
   const navigateToTerms = () => {
     navigation.navigate('TermsofService');
   };
@@ -81,14 +79,6 @@ const MyComponent = () => {
     navigation.navigate('Signin');
   };
 
-  const handleLinkedInSuccess = async (data) => {
-    console.log('LinkedIn data:', data);
-    // Here you would send the received data to your backend to complete the sign-up process
-    // For example:
-    // await axios.post('https://your-backend.com/linkedin-signup', { accessToken: data.access_token });
-    // Navigate to the next screen
-    navigation.navigate('Verify mail', { userInfo: data });
-  };
 
   return (
     <View style={styles.outerContainer}>
@@ -101,11 +91,7 @@ const MyComponent = () => {
               text="Sign up with Google"
               onPress={() => Alert.alert('Google sign-up not implemented yet')}
             />
-            <SignUpButton 
-              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&"
-              text="Sign up with LinkedIn"
-              onPress={() => setLinkedInModalVisible(true)}
-            />
+             <LinkedInLogin />
             <View style={styles.divider}>
               <Text style={{ color: 'black', fontSize: 14 }}>or</Text>
             </View>
@@ -127,7 +113,7 @@ const MyComponent = () => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSignUp} disabled={loading}>
-            {loading ? (
+              {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
               <Text style={styles.submitButtonText}>Sign up</Text>
@@ -142,6 +128,7 @@ const MyComponent = () => {
           <Image source={require('../assets/createaccount.png')} style={styles.image} resizeMode="cover" />
         </View>
       </View>
+     
     </View>
   );
 };
@@ -249,9 +236,6 @@ const styles = StyleSheet.create({
   signInTextGray: {
     marginTop: 10,
     color: 'gray',
-  },
-  loader: {
-    marginTop: 20,
   },
 });
 

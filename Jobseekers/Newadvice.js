@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -17,7 +18,16 @@ function MyComponent({ onClose }) {
   const [startingLevel, setStartingLevel] = useState("");
   const [targetLevel, setTargetLevel] = useState("");
   const [status, setStatus] = useState("");
-  
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
+
   const handleConfirmDateTime = (dateTime) => {
     setSelectedDateTime(dateTime);
     setIsModalVisible(false);
@@ -46,7 +56,11 @@ function MyComponent({ onClose }) {
     };
 
     // Make the API request using Axios
-    axios.post('https://www.recruitangle.com/api/expert/signup', formData)
+    axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-advice', formData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(response => {
         if (response.data.status === 'success') {
           alert(t("Success"), t("Advice Objective created successfully"));
@@ -61,6 +75,7 @@ function MyComponent({ onClose }) {
         console.error(error);
       });
   };
+
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),

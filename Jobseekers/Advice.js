@@ -66,7 +66,7 @@ function MyComponent() {
      <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("Are you in a place where you need some straightening, fresh insights, leverage new perspective and some realignment?")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Meet an expert")}</Text>
                   </View>
      </TouchableOpacity>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
      marginTop: 50,
      marginLeft: 50,
      marginRight: 50, 
-     height: 220, 
+     height: 250, 
      shadowColor: '#000',
       shadowOffset: { width: 0, height: 2, }, 
       shadowOpacity: 0.25, 

@@ -255,20 +255,21 @@ function MyComponent() {
             
 </View>
 </View>
-          <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18, }}>
+          <View style={{ flexDirection: "column", marginLeft: 18, }}>
             <View style={{ flex: 1 , }}>
-            <View style={{ flexDirection: 'row', marginTop: 15,  }}>
-            <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Available Days")}</Text>
+           
+            <Text style={{ fontSize: 16, marginRight: 20, marginTop: 25, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Available Days")}</Text>
+            <View style={{ flexDirection: 'row', marginTop: 5,  }}>
             <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                          style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5,  marginLeft: 15 }}
+                          style={{ width: 14, height: 12, aspectRatio: 1, marginTop: 5 }}
                         />
-                        <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2,fontFamily:"Roboto-Light"  }}>{data.country}</Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 4, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.country}</Text>
                         </View>
                        
-              <Text style={{ fontSize: 12, color: "black", marginLeft: 5, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.date}</Text>
+              <Text style={{ fontSize: 14, color: "black", marginTop: 10,fontFamily:"Roboto-Light"  }}>{data.date}</Text>
              
-              <Text style={{ fontSize: 12, color: "black", marginLeft: 5,fontFamily:"Roboto-Light" }}>
+              <Text style={{ fontSize: 14, color: "black", fontFamily:"Roboto-Light" }}>
                  Time: {data.time}
               </Text>
               
@@ -277,77 +278,8 @@ function MyComponent() {
          
            
             
-          <View style={{ flexDirection: 'row', marginTop: 30, justifyContent: 'center'}}>
-                      <View style={{ flexDirection: 'column', alignItems: 'center'}}>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1, 
-              borderColor: '#206C00', 
-              borderRadius: 5,
-              backgroundColor: '#F0FFF9',
-              paddingHorizontal: 5,
-              paddingVertical: 10,
-              fontFamily:"Roboto-Light",
-              alignSelf: "center",
-              justifyContent: 'center', 
-              marginLeft: 10, 
-            }}
-            onPress={goToBookInterview}
-          >
-            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light"}}>
-             {t("Interview")}
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
-              {data.interviewfee}</Text>
-              </View>
-              <View style={{ flexDirection: 'column', alignItems: 'center', }}>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1, 
-              borderColor: '#206C00', 
-              borderRadius: 5,
-              backgroundColor: '#F0FFF9',
-              paddingHorizontal: 5,
-              paddingVertical: 10,
-              
-              alignSelf: "center",
-              justifyContent: 'center', 
-              marginLeft: 5, 
-            }}
-            onPress={goToBookGrowth}
-          >
-            <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light",}}>
-             {t("Growth Plan")}
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
-              {data.growthfee}</Text>
-              </View>
-          <View style={{ flexDirection: 'column', alignItems: 'center'}}>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1, 
-              borderColor: '#206C00', 
-              borderRadius: 5,
-              backgroundColor: '#F0FFF9',
-              paddingHorizontal: 5,
-              paddingVertical: 10,
-             
-              alignSelf: "center",
-              justifyContent: 'center', 
-              marginLeft: 5, marginRight: 10,
-            }}
-            onPress={goToBookAdvice}
-          >
-            <Text style={{ color: "#206C00",  alignText: 'center', fontSize: 12,fontFamily:"Roboto-Light"}}>
-             {t("Advice")}
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 14, color: "black", marginTop: 5,fontFamily:"Roboto-Light" }}>
-              {data.advicefee}</Text>
-              </View>
-          </View>
+          
+       
         </View>
       </Animated.View>
     ));

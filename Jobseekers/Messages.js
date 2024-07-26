@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import ChatListScreen from '../components/ChatListScreen'; 
 import ChatScreen from '../components/ChatScreen'; 
@@ -6,6 +6,12 @@ import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 
 function MainScreen() {
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const handleUserSelect = (userId) => {
+    setSelectedUserId(userId);
+  };
+
   return (
     <View style={{flex: 1}}>
       <Topbar />
@@ -14,11 +20,11 @@ function MainScreen() {
         <View style={styles.container}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }} style={styles.scrollView}>
             <View style={styles.chatListContainer}>
-              <ChatListScreen />
+              <ChatListScreen onUserSelect={handleUserSelect} />
             </View>
           </ScrollView>
           <View style={styles.chatScreenContainer}>
-            <ChatScreen />
+            <ChatScreen userId={selectedUserId} />
           </View>
         </View>
       </View>

@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
-import { useFonts } from "expo-font"
+import { useFonts } from 'expo-font';
 
 const ProgressBar = () => {
   return null; // Progress bar removed
@@ -36,17 +35,42 @@ const VerificationContent = ({ userEmail }) => {
 
   const handleVerify = () => {
     // Perform verification logic here
-    // Navigate to page
-    navigation.navigate('Signin');
+    // Navigate to next page
+    navigation.navigate('NextPage'); // Replace 'NextPage' with your target page
   };
 
   const handleChangeEmail = () => {
     navigation.navigate('SignUp'); // Navigate to sign-up page
   };
 
+  const handleOpenEmailClient = () => {
+    const subject = 'Verify your email';
+    const body = 'Please click the link below to verify your email:\n\n[verification link]';
+    const mailtoUrl = `mailto:${userEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    if (Platform.OS === 'web') {
+      window.location.href = mailtoUrl;
+    } else {
+      Linking.canOpenURL(mailtoUrl)
+        .then((supported) => {
+          if (!supported) {
+            Alert.alert('Email client is not available');
+          } else {
+            return Linking.openURL(mailtoUrl);
+          }
+        })
+        .catch((err) => console.error('Failed to open email client:', err));
+    }
+  };
+
   const [fontsLoaded] = useFonts({
-    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
-  })
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.verificationContent}>
       <Image
@@ -57,15 +81,15 @@ const VerificationContent = ({ userEmail }) => {
       <Text style={styles.text}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
       <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address.</Text>
       <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes.</Text>
-      <TouchableOpacity style={styles.button} onPress={handleVerify}>
-        <Text style={styles.buttonText}>Verify your email</Text>
+      <TouchableOpacity style={styles.button} onPress={handleOpenEmailClient}>
+        <Text style={styles.buttonText}>Open Email Client</Text>
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10, fontFamily: "Roboto-Light" }}>Resend code</Text>
+        <TouchableOpacity onPress={handleOpenEmailClient}>
+          <Text style={styles.resendText}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600', fontFamily: "Roboto-Light" }}>Change email</Text>
+          <Text style={styles.changeEmailText}>Change email</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -122,21 +146,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: -10,
     marginBottom: 20,
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
   },
   text: {
-    width: 500,
+    width: '100%',
     marginVertical: 5,
     fontSize: 12,
-    fontFamily: "Roboto-Light",
-    marginLeft: 50,
-    marginRight: 50
+    fontFamily: 'Roboto-Light',
+    textAlign: 'center',
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -169,7 +192,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
+  },
+  resendText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: 'coral',
+    marginBottom: 10,
+    fontFamily: 'Roboto-Light',
+  },
+  changeEmailText: {
+    fontSize: 13,
+    marginLeft: 50,
+    color: 'coral',
+    fontWeight: '600',
+    fontFamily: 'Roboto-Light',
   },
 });
 

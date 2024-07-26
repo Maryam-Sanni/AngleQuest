@@ -155,7 +155,7 @@ const MyComponent = () => {
           </View>
         </Modal>
        
-        <TouchableOpacity style={{ position: "absolute", right: 170 }} onPress={handleSignInPress}>
+        <TouchableOpacity style={{ position: "absolute", right: 210 }} onPress={handleSignInPress}>
         <Text style={{ fontSize: 16, fontWeight: 500 }}>Login</Text>
         </TouchableOpacity>
 
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginRight: 5,
-    marginLeft: 30,
+    marginLeft: 50,
   },
   headerText: {
     fontSize: 22,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     position: 'absolute',
-    right: 237
+    right: 257
   },
   languageIcon: {
     width: 24,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: 'coral',
     padding: 10,
     position: 'absolute',
-    right: 50,
+    right: 70,
     borderRadius: 5
   },
   joinButtonText: {
@@ -267,13 +267,13 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
    position: "absolute",
-   right: 323
+   right: 343
   },
   search: {
     width: 24,
     height: 24,
    position: "absolute",
-   right: 373
+   right: 393
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CollapsedComponent from "./expertscollapsed"; // Import your collapsed component
 import {useFonts} from "expo-font"
@@ -89,6 +89,28 @@ function MyComponent() {
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
   const { t } = useTranslation()
+
+  const navigationState = useNavigationState((state) => state);
+
+  useEffect(() => {
+    
+    const routeName = navigationState?.routes[navigationState.index]?.name;
+    const matchedItem = menuItems.find(item => {
+      switch(item.label) {
+        case "Home": return routeName === 'Home - Experts';
+        case "Offers": return routeName === 'Offers';
+        case "Interview": return routeName === 'Interview';
+        case "Growth Plan": return routeName === 'Growth Plan';
+        case "Skills Analysis": return routeName === 'Advice';
+        case "Hubs": return routeName === 'Manage Hubs';
+        case "Messages": return routeName === 'Messaging';
+        default: return false;
+      }
+    });
+    if (matchedItem) {
+      setClickedItem(matchedItem);
+    }
+  }, [navigationState]);
 
   return (
     <View style={[styles.container, !showMenu && { width: 80 }]}>

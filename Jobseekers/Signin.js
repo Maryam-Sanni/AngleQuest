@@ -97,7 +97,7 @@ const MyComponent = () => {
                 <Text style={styles.signInButtonText}>Sign in</Text>
               )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Create account')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Sign Up')}>
               <Text style={styles.signUpText}>
                 Don't have an account? <Text style={styles.signUpLink}>Join here</Text>
               </Text>

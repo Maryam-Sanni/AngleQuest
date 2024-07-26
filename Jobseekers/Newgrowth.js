@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -19,36 +20,55 @@ function MyComponent({ onClose }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [status, setStatus] = useState('Active');
+  const [token, setToken] = useState('');
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
   });
   const { t } = useTranslation();
 
+  useEffect(() => {
+    const fetchToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    };
+    fetchToken();
+  }, []);
+
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan', {
-        type: selectedType,
-        title,
-        role,
-        result_description: resultDescription,
-        how_to_achieve: howToAchieve,
-        needs: needs,
-        review_frequency: reviewFrequency,
-        starting_level: startingLevel,
-        target_level: targetLevel,
-        start_date: startDate,
-        end_date: endDate,
-        status,
-        coach: 'Joop Melcher', // Static value, adjust if needed
-      });
+      const response = await axios.post(
+        'https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan',
+        {
+          type: selectedType,
+          title,
+          role,
+          result_description: resultDescription,
+          how_to_achieve: howToAchieve,
+          needs: needs,
+          review_frequency: reviewFrequency,
+          starting_level: startingLevel,
+          target_level: targetLevel,
+          start_date: startDate,
+          end_date: endDate,
+          status,
+          coach: 'Joop Melcher', // Static value, adjust if needed
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log('Success:', response.data);
-      alert('Success', 'Your plan objective has been submitted.');
+      Alert.alert('Success', 'Your plan objective has been submitted.');
       navigation.navigate('Growth Offer');
       onClose();
     } catch (error) {
       console.error('Error:', error);
-      alert('Error', 'There was a problem submitting your plan objective.');
+      Alert.alert('Error', 'There was a problem submitting your plan objective.');
     }
   };
 

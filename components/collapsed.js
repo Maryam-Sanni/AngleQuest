@@ -28,7 +28,7 @@ function MyComponent() {
       case menuItems[3]:
         // Navigate to Experts
         navigation.navigate('New Growth Plan');
-        break;
+        break; 
         case menuItems[4]:
           // Navigate to Sessions
           navigation.navigate('New Interview');
@@ -46,6 +46,14 @@ function MyComponent() {
             navigation.navigate('Sessions');
             break;
             case menuItems[8]:
+            // Navigate to Messages
+            navigation.navigate('My Performance');
+            break;
+            case menuItems[9]:
+            // Navigate to Messages
+            navigation.navigate('Use AI');
+            break;
+            case menuItems[10]:
             // Navigate to Messages
             navigation.navigate('Messages');
             break;
@@ -67,7 +75,7 @@ function MyComponent() {
     
  
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, clickedItem === menuItems[0] && styles.containerExpanded]}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       <View style={styles.contentContainer}>
         {/* Menu Items */}
@@ -127,7 +135,8 @@ const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { icon: "https://img.icons8.com/?size=100&id=42208&format=png&color=000000" },
+  { icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=000000" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 
@@ -142,6 +151,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  containerExpanded: {
+    width: 210,
   },
   contentContainer: {
     padding: 20,

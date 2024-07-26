@@ -68,7 +68,7 @@ function MyComponent() {
      <Text style={{ fontSize: 15, color: "black", marginTop: 5, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("The process begins with selecting an expert to serve as your coach. Next, describe the growth objectives you wish to achieve. Your expert will then review your goals and arrange a meeting to discuss them in detail.")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 150, alignItems: 'center', alignContent: 'center',}}>
+    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Get Started")}</Text>
                   </View>
      </TouchableOpacity>
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
      marginTop: 50,
      marginLeft: 50,
      marginRight: 50, 
-     height: 220, 
+     height: 250, 
      shadowColor: '#000',
       shadowOffset: { width: 0, height: 2, }, 
       shadowOpacity: 0.25, 
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     height: 150,
    position: 'absolute',
    right: 20,
-   marginTop: -40
+   marginTop: -60
   },
 });
 export default MyComponent;

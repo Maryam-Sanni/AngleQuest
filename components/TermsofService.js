@@ -1,15 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import Top from './top';
-import { useNavigate } from 'react-router-dom';
+import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
 export default function App() {
-    const navigate = useNavigate(); // useNavigate for web routing
+  const navigation = useNavigation();
 
   const navigateToPrivacyPolicy = () => {
-    navigate('/PrivacyPolicy'); // Navigate to PrivacyPolicy route
+    navigation.navigate('PrivacyPolicy'); // Navigate to the 'PrivacyPolicy' page
   };
 
   const [fontsLoaded]=useFonts({

@@ -32,7 +32,7 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
               <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://img.icons8.com/?size=100&id=42208&format=png&color=000000' }}
   style={styles.image}
 />
                 <Text style={styles.headertext}>{t("My Performance")}</Text>
@@ -40,7 +40,7 @@ function MyComponent() {
             </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row'}}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 200, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, backgroundColor: 'rgba(211,249,216,0.1)', width: 220, alignItems: 'center', marginTop: 50, marginLeft: 50,  }}>
                     <Text style={{ fontSize: 16, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Performance Statistics")}</Text>
                   </View>  
 
@@ -70,7 +70,7 @@ function MyComponent() {
       </View>
     </View>
       </View>
-     
+      
       <View style={styles.box}>
         <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Growth Plan")}</Text>
         <View style={{flexDirection: 'row' }}>
@@ -82,7 +82,7 @@ function MyComponent() {
       </View>
       
       <View style={styles.box}>
-        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Advice")}</Text>
+        <Text style = {{fontSize: 15, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Skills Analysis")}</Text>
         <View style={{flexDirection: 'row' }}>
           <Text style={{fontSize: 14, color: 'black', width: 100,fontFamily:"Roboto-Light" }}>{t("This is the advice sessions you have had")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
       marginLeft: 5,
       fontSize: 14,
       fontWeight: '500',
-      marginTop: 5,
+      marginTop: 7,
       color: '#666',
       fontFamily:"Roboto-Light"
     },
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        width: '22%',
+        width: '24%',
         height: 150,
         borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
         shadowColor: '#000',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
       },
       PDF: {
         height: 40,
-        width: 150,
+        width: 180,
         backgroundColor: 'coral',
         borderColor: 'coral',
         borderWidth: 1, 

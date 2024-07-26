@@ -5,6 +5,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function ChatScreen() {
@@ -13,8 +15,30 @@ function ChatScreen() {
   const [isRecording, setIsRecording] = useState(false);
   const [isProfileVisible, setProfileVisible] = useState(false);
 
-  const onSend = (newMessages = []) => {
+  const onSend = async (newMessages = []) => {
     setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
+  
+    // Assuming you have a way to get receiver_id and receiver_type
+    const receiverId = '123'; // Replace with actual receiver ID
+    const receiverType = 'Individual'; // Replace with actual receiver type
+    
+    try {
+      const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
+      const messageContent = newMessages[0].text; // Assuming the first message in the array
+  
+      const response = await axios.post('https://recruitangle.com/api/chat/send', {
+        receiver_id: receiverId,
+        receiver_type: receiverType,
+        message: messageContent,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token in the request headers
+        },
+      });
+      console.log('Message sent:', response.data);
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
   };
 
   const renderSend = (props) => {
@@ -239,14 +263,16 @@ function ChatScreen() {
       </View>
 
       <View style={{ flex: 1, backgroundColor: '#F5FFFA' }}>
+
         <GiftedChat
-          messages={messages}
-          onSend={(newMessages) => onSend(newMessages)}
-          user={{ _id: 1 }}
-          placeholder="Type a message..."
-          renderSend={renderSend}
-          renderBubble={renderBubble}
-        />
+        messages={messages}
+        onSend={(newMessages) => onSend(newMessages)}
+        user={{
+          _id: 1,
+        }}
+        renderSend={renderSend}
+        renderBubble={renderBubble}
+      />
       </View>
 
       {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
