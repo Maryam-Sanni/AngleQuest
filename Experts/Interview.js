@@ -9,13 +9,16 @@ import OpenModal from '../Experts/InterviewProfile';
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() { 
     const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(false);
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
-    const [isAdviceHovered, setIsAdviceHovered] = useState(false);
+    const [role, setRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+
+
     const calculateTimeLeft = () => {
       const difference = +new Date(targetDate) - +new Date();
       let timeLeft = {};
@@ -41,6 +44,21 @@ function MyComponent() {
       return () => clearTimeout(timer);
     });
   
+    useEffect(() => {
+      const fetchRole = async () => {
+          try {
+              const storedFormData = await AsyncStorage.getItem('InterviewFormData');
+              if (storedFormData) {
+                  const parsedData = JSON.parse(storedFormData);
+                  setRole(parsedData.role || '');
+              }
+          } catch (error) {
+              console.error('Failed to load form data from AsyncStorage', error);
+          }
+      };
+      fetchRole();
+  }, []);
+
     const timerComponents = Object.keys(timeLeft).map((interval) => {
       if (!timeLeft[interval]) {
         return null;
@@ -52,6 +70,7 @@ function MyComponent() {
         </Text>
       );
     });
+
 
     const handleOpenPress = () => {
       setModalVisible(true);
@@ -76,7 +95,11 @@ function MyComponent() {
     const [fontsLoaded]=useFonts({
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
+
 const {t}=useTranslation()
+
+
+
     return (
       <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -99,7 +122,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Junior Power Platform Developer")}</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -112,7 +135,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>{t("Junior SAP FI")}</Text>
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>NIL</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity >
@@ -217,7 +240,7 @@ const styles = StyleSheet.create({
       marginLeft: 5,
       fontSize: 14,
       fontWeight: '500',
-      marginTop: 5,
+      marginTop: 7,
       color: '#666',
       fontFamily:"Roboto-Light"
     },

@@ -124,7 +124,7 @@ const data = [
   },
 ];
 
-function CustomHeader({ onPressAllChats, onPressHub1, onPressHub2, onPressHub3, onPressHub4, onPressHub5, selectedHub, scrollViewRef  }) {
+function CustomHeader({ onPressAllChats, onPressHub1, onPressHub2, onPressHub3, onPressHub4, onPressHub5, selectedHub, scrollViewRef }) {
 const scrollLeft = () => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
   };
@@ -189,7 +189,7 @@ const scrollLeft = () => {
   );
 }
 
-function ChatListScreen({ navigation }) {
+function ChatListScreen({ navigation, onUserSelect }) {
   const [selectedHub, setSelectedHub] = useState(null);
   const [messageCountText, setMessageCountText] = useState('0');
    const scrollViewRef = useRef(null);
@@ -224,7 +224,7 @@ const handlePressHub4 = () => {
   })
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Chat', { userId: item.id })}>
+    <TouchableOpacity onPress={() => onUserSelect(item.id)}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#E5E5E5', width: '100%', backgroundColor: 'white', }}>
         <Image source={item.avatar} style={{ width: 36, height: 36, borderRadius: 18, marginRight: 12 }} />
         <View style={{ flex: 1 }}>

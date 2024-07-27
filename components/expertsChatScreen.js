@@ -1,30 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Platform, KeyboardAvoidingView, Text, Image, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
 import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
 import * as DocumentPicker from 'expo-document-picker';
 import { Audio } from 'expo-av';
-import {useFonts} from "expo-font"
+import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+function ChatScreen({ userId }) {
 
-function ChatScreen() {
+  const userData = {
+    1: { name: 'Amelia Harry', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
+    2: { name: 'Bwanbale Akiki', avatar: require('../assets/account.png'), expertise: 'Microsoft Azure', role: 'individual' },
+    3: { name: 'Mardiyyah Sulaimon', avatar: require('../assets/account.png'), expertise: 'Dynamics', role: 'individual' },
+    7: { name: 'Power Point Hub', avatar: require('../assets/people.png'), expertise: 'Power Point', role: 'hub' },
+    5: { name: 'Nathan Arthur', avatar: require('../assets/account.png'), expertise: 'Frontend Developer', role: 'individual' },
+    6: { name: 'Microsoft Azure Hub', avatar: require('../assets/people.png'), expertise: 'Microsoft Azure', role: 'hub' },
+    4: { name: 'SAP FI Hub', avatar: require('../assets/people.png'), expertise: 'SAP FI', role: 'hub' },
+    8: { name: 'Akeju Benson', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
+    11: { name: 'Chiara Romano', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
+    9: { name: 'John Jenny', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
+    10: { name: 'Adedare Adeyemi', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
+    12: { name: 'Snr. Power Point Hub', avatar: require('../assets/people.png'), expertise: 'Power Point', role: 'hub' },
+    13: { name: 'Java Programming', avatar: require('../assets/people.png'), expertise: 'Java Programming', role: 'hub' },
+  };
+
   const [messages, setMessages] = useState([]);
   const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isProfileVisible, setProfileVisible] = useState(false);
 
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const storedMessages = await AsyncStorage.getItem(`chat_${userId}`);
+        if (storedMessages) {
+          setMessages(JSON.parse(storedMessages));
+        } else {
+          setMessages([]); // Clear messages if none are stored
+        }
+      } catch (error) {
+        console.error('Failed to load messages:', error);
+      }
+    };
+
+    loadMessages();
+  }, [userId]);
+
   const onSend = async (newMessages = []) => {
-    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
+    setMessages((prevMessages) => {
+      const updatedMessages = GiftedChat.append(prevMessages, newMessages);
+      AsyncStorage.setItem(`chat_${userId}`, JSON.stringify(updatedMessages)); // Save messages for this user
+      return updatedMessages;
+    });
   
-    // Assuming you have a way to get receiver_id and receiver_type
     const receiverId = '123'; // Replace with actual receiver ID
     const receiverType = 'Individual'; // Replace with actual receiver type
     
     try {
-      const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
-      const messageContent = newMessages[0].text; // Assuming the first message in the array
+      const token = await AsyncStorage.getItem('token');
+      const messageContent = newMessages[0].text;
   
       const response = await axios.post('https://recruitangle.com/api/chat/send', {
         receiver_id: receiverId,
@@ -32,7 +68,7 @@ function ChatScreen() {
         message: messageContent,
       }, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include token in the request headers
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log('Message sent:', response.data);
@@ -85,7 +121,7 @@ function ChatScreen() {
             type: fileType,
           },
         };
-        onSend([message]); // Ensure the message is sent as an array
+        onSend([message]);
       }
     } catch (error) {
       console.error('Error picking file:', error);
@@ -116,7 +152,7 @@ function ChatScreen() {
         },
         audio: uri,
       };
-      onSend([message]); // Ensure the message is sent as an array
+      onSend([message]);
     } catch (error) {
       console.error('Failed to stop recording:', error);
     }
@@ -126,155 +162,67 @@ function ChatScreen() {
     setProfileVisible(!isProfileVisible);
   };
 
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+  const { t } = useTranslation();
 
+  const user = userData[userId] || { name: 'Unknown', avatar: require('../assets/account.png'), expertise: 'Unknown' };
+  
   return (
     <View style={{ flex: 1 }}>
-    <Modal visible={isProfileVisible} animationType="slide" transparent>
+      <Modal visible={isProfileVisible} animationType="slide" transparent>
         <TouchableWithoutFeedback onPress={toggleProfileModal}>
           <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '20%', alignItems: 'center' }}>
               <TouchableOpacity onPress={toggleProfileModal} style={{ position: 'absolute', top: 10, right: 10 }}>
-            <Text>✕</Text>
-          </TouchableOpacity>
-          <View style={{ flex: 1, marginTop: 50, marginLeft: 20, marginRight: 20}}>
-     
-     <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
-       <Text style={{ fontSize: 16, fontWeight: "bold", color: "black",fontFamily:"Roboto-Light" }}>
-         Nathan Arthur
-       </Text>
-       <View
-         style={{
-           width: 2,
-           height: 2,
-           backgroundColor: "green",
-           borderRadius: 1,
-           marginLeft: 2,
-         }}
-       />
-     </View>
-     <Text style={{ fontSize: 12, color: "#A0AEC0",fontFamily:"Roboto-Light" }}>Java Programmer</Text>
-     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00",fontFamily:"Roboto-Light" }}>
-       nathanar47@gmail.com
-     </Text>
-     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "black",fontFamily:"Roboto-Light" }}>
-       {t("15 year(s) experience")}
-     </Text>
-     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light"}}>
-       {t("Hard Skills")}
-     </Text>
-     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Responsive Design")}
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-      • HTML, CSS, JavaScript
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • React & Angular
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • Python & Node.js
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Web security")}
-     </Text>
-     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#206C00", fontWeight: '600',fontFamily:"Roboto-Light" }}>
-       {t("Soft Skills")}
-     </Text>
-     <Text style={{ marginTop: 10, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Communication")}
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Problem-solving & Critical thinking")}
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Time Management")}
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Client Management")}
-     </Text>
-     <Text style={{ marginTop: 5, fontSize: 12, color: "black",fontFamily:"Roboto-Light" }}>
-       • {t("Continuous Learning Mindset")}
-     </Text>
-     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-     <Text style={{ marginTop: 10, fontSize: 14, color: "#A0AEC0",fontFamily:"Roboto-Light" }}>
-       {t("Received files")}
-     </Text>
-     <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 1, marginTop: 10 }}>
-       <View style={{ flexDirection: "row", alignItems: "center" }}>
-         <Image
-           source={{
-             uri:
-               "https://cdn.builder.io/api/v1/image/assets/TEMP/b79c39e1425278a7e41c51ee38aead4f0c299b3e3b1c3700672a00748cf50159?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-           }}
-           style={{ width: 35, height: 35, aspectRatio: 1 }}
-         />
-         <View style={{ marginLeft: 5 }}>
-           <Text style={{ color: "#206C00",fontFamily:"Roboto-Light" }}>NathanCV.pdf</Text>
-           <Text style={{ color: "#A0AEC0", fontSize: 10,fontFamily:"Roboto-Light" }}>293 kb</Text>
-         </View>
-       </View>
-     </View>
-   </View>
-        </View>
-        </View>
+                <Text>✕</Text>
+              </TouchableOpacity>
+              <View style={{ flex: 1, marginTop: 50, marginLeft: 20, marginRight: 20 }}>
+                <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold", color: "black", fontFamily: "Roboto-Light" }}>
+                    Nathan Arthur
+                  </Text>
+                  <View
+                    style={{
+                      width: 2,
+                      height: 2,
+                      backgroundColor: "green",
+                      borderRadius: 1,
+                      marginLeft: 2,
+                    }}
+                  />
+                </View>
+                <Text style={{ fontSize: 12, color: "#A0AEC0", fontFamily: "Roboto-Light" }}>Java Programmer</Text>
+                <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
+                <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00", fontFamily: "Roboto-Light" }}>{t('Profile')}</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Account Number')}</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>ACT002234</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Email')}</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>natearthur123@gmail.com</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Phone')}</Text>
+                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>+44 701 123 1234</Text>
+              </View>
+            </View>
+          </View>
         </TouchableWithoutFeedback>
       </Modal>
-
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: 'white', }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
         <TouchableOpacity onPress={toggleProfileModal}>
-          <Image
-            source={require('../assets/account.png')}
-            style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
+          <Image source={user.avatar} style={{ width: 40, height: 40, borderRadius: 20 }} />
         </TouchableOpacity>
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#3D5C3A',fontFamily:"Roboto-Light"}}>Nathan Arthur</Text>
-          <Text style={{ fontStyle: 'normal', fontSize: 12, color: '#3D5C3A',fontFamily:"Roboto-Light" }}>Java Programming - <Text style={{ fontWeight: '500', fontStyle: 'italic', color: '#3D5C3A' }}>Jobseeker</Text></Text>
+          <Text style={{ fontWeight: 'bold', color: 'black' }}>{user.name}</Text>
+          <Text style={{ fontSize: 12, color: '#A0AEC0' }}>{user.expertise} - <Text style={{ fontStyle: 'italics' }}>{user.role}</Text></Text>
         </View>
-        <TouchableOpacity style={{ marginLeft: 'auto', marginRight: 10 }} onPress={handleFilePick}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9afdd28554ea94baa9f576588ffd7e85d2ea305e799b46b23fc2336715ed2398?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
-            style={{ width: 25, height: 25, marginTop: 10 }}
-          />
-        </TouchableOpacity>
-        {isRecording ? (
-          <TouchableOpacity onPress={stopRecording}>
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/8b6ee6e3efc0882450b47e4387504c352faa72f342dc8adc7741cf3ed2a19f02?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-              style={{ width: 25, height: 25, marginTop: 10, marginRight: 10 }}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={startRecording}>
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7faa777c54d32d03bd2952b24dd7b363b4e5cd731ca521b853a6b213ebf2f277?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-              style={{ width: 25, height: 25, marginTop: 10, marginRight: 10 }}
-            />
-          </TouchableOpacity>
-        )}
       </View>
-
-      <View style={{ flex: 1, backgroundColor: '#F5FFFA' }}>
-
-        <GiftedChat
+      <GiftedChat
         messages={messages}
-        onSend={(newMessages) => onSend(newMessages)}
-        user={{
-          _id: 1,
-        }}
+        onSend={onSend}
+        user={{ _id: 1 }}
         renderSend={renderSend}
         renderBubble={renderBubble}
       />
-      </View>
-
       {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
     </View>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, FlatList, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-
+ 
 const data = [
   {
     id: '1',

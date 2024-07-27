@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/AdviceProfile';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = [
   { date: 'M', score: 10 },
@@ -26,7 +27,7 @@ function MyComponent() {
     const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(false);
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
-    const [isAdviceHovered, setIsAdviceHovered] = useState(false);
+    const [role, setRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const barHeights = useRef(data.map(() => new Animated.Value(0))).current;
     const calculateTimeLeft = () => {
@@ -75,6 +76,22 @@ function MyComponent() {
     }));
 
     Animated.stagger(100, animations).start();
+  }, []);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const storedFormData = await AsyncStorage.getItem('skillAnalysisFormData');
+        if (storedFormData) {
+          const parsedData = JSON.parse(storedFormData);
+          setRole(parsedData.role || ''); // Adjust based on your actual data structure
+        }
+      } catch (error) {
+        console.error('Failed to load form data from AsyncStorage', error);
+      }
+    };
+
+    fetchRole();
   }, []);
 
     const handleOpenPress = () => {
@@ -126,7 +143,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Junior Power Platform Developer")}</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -139,7 +156,7 @@ function MyComponent() {
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>Junior SAP FI</Text>
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>NIL</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity >
@@ -244,7 +261,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    marginTop: 5,
+    marginTop: 7,
     color: '#666',
     fontFamily:"Roboto-Light"
   },

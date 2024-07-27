@@ -29,8 +29,7 @@ function MyComponent() {
       };
 
       const handleOthersPress = () => {
-        // setModalVisible2(true);
-        console.log("Hello")
+        setModalVisible2(true);
       };
     
       const handleCloseModal2 = () => {

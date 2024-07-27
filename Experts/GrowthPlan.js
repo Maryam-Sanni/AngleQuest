@@ -9,13 +9,33 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Growthplanprofile';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() {
     const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(false);
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
-    const [isAdviceHovered, setIsAdviceHovered] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [role, setRole] = useState('');
+    
+
+    useEffect(() => {
+      const fetchRole = async () => {
+        try {
+          const storedFormData = await AsyncStorage.getItem('GrowthFormData');
+          if (storedFormData) {
+            const parsedData = JSON.parse(storedFormData);
+            setRole(parsedData.role || ''); // Adjust based on your actual data structure
+          }
+        } catch (error) {
+          console.error('Failed to load form data from AsyncStorage', error);
+        }
+      };
+  
+      fetchRole();
+    }, []);
+    
+
     const calculateTimeLeft = () => {
       const difference = +new Date(targetDate) - +new Date();
       let timeLeft = {};
@@ -104,7 +124,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Junior Power Platform Developer")}</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role}</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -117,7 +137,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>{t("Junior SAP FI")}</Text>
+                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>NIL</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableOpacity >
@@ -212,8 +232,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: '500',
-    marginTop: 5,
-    color: '#666'
+    marginTop: 7,
+    color: '#666',
+    fontFamily:"Roboto-Light"
   },
   image: {
     width: 21,

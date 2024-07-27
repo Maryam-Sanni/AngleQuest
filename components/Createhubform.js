@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import CustomAlert from './CustomAlert'; 
 
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
@@ -105,8 +106,8 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigation = useNavigation();
-  const [startTime, setStartTime] = useState('12:00');
-  const [endTime, setEndTime] = useState('12:00');
+  const [meeting_start, setStartTime] = useState('12:00');
+  const [meeting_end, setEndTime] = useState('12:00');
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -118,13 +119,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
  
   const [visibility, setVisibility] = useState('public');
-  const [groupName, setGroupName] = useState('');
-  const [addLeaders, setAddLeaders] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
-  const [searchMembers, setSearchMembers] = useState('');
+  const [name, setGroupName] = useState('');
+  const [goals, setAddgoals] = useState('');
+  const [description, setGroupDescription] = useState('');
+  const [limit, setlimit] = useState('');
+  const [meeting_day, setmeeting_day] = useState('Monday');
   const [descriptionLength, setDescriptionLength] = useState(0);
   const [fee, setfee] = useState('');
   const maxDescriptionLength = 85; // Max character limit for description
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
 
   const handleDescriptionChange = (text) => {
@@ -154,13 +158,14 @@ const CreateCoachingHubForm = ({ onClose }) => {
   
       const formData = {
         visibility,
-        groupName,
-        addLeaders,
-        groupDescription,
-        searchMembers,
-        startTime,
-        endTime
-        // Add other form fields as needed
+        name,
+        meeting_day,
+        description,
+        limit,
+        meeting_start,
+        meeting_end,
+        fee,
+        goals
       };
   
       const headers = {
@@ -174,11 +179,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
         { headers }
       );
   
-      console.log('Hub created successfully:', response.data);
-      // Optionally handle navigation or state updates upon successful creation
+      if (response.status === 200) {
+        setAlertMessage(t("Hub created successfully"));
+      } else {
+        setAlertMessage(t("Failed to create hub"));
+      }
+      setAlertVisible(true);
     } catch (error) {
       console.error('Error creating hub:', error);
-      // Handle error, e.g., show an error message to the user
+      setAlertMessage(t("Error creating hub"));
+      setAlertVisible(true);
     }
     onClose();
   };
@@ -214,7 +224,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter hub name"
-          value={groupName}
+          value={name}
           onChangeText={text => setGroupName(text)}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Description")}* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
@@ -222,16 +232,15 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={[styles.input, { height: 100 }]}
           placeholder= {t("Type here...")}
           multiline
-          value={groupDescription}
+          value={description}
           onChangeText={handleDescriptionChange}
         />
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Day")}*</Text>
         <Picker
-          selectedValue={visibility}
-          style={styles.input}
-          onValueChange={(itemValue, itemIndex) =>
-            setVisibility(itemValue)
-          }> 
+      selectedValue={meeting_day}
+      style={styles.picker}
+      onValueChange={(itemValue) => setmeeting_day (itemValue)}
+          > 
           <Picker.Item label="Monday" value="Monday" />
           <Picker.Item label="Tuesday" value="Tuesday" />
           <Picker.Item label="Wednesday" value="Wednesday" />
@@ -244,9 +253,9 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <View style={styles.timecontainer}>
       <View style={styles.timeformContainer}>
         <Text style={styles.timelabel}>{t("From")}</Text>
-        <CustomTimePicker initialValue={startTime} onChange={handleStartTimeChange} />
+        <CustomTimePicker initialValue={meeting_start} onChange={handleStartTimeChange} />
         <Text style={styles.timelabel}>{t("To")}</Text>
-        <CustomTimePicker initialValue={endTime} onChange={handleEndTimeChange} />
+        <CustomTimePicker initialValue={meeting_end} onChange={handleEndTimeChange} />
       </View>
     </View>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Fee")}*</Text>
@@ -261,16 +270,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
           style={[styles.input, { height: 100 }]}
           placeholder= "Type here..."
           multiline
-          value={addLeaders}
-          onChangeText={text => setAddLeaders(text)}
+          value={goals}
+          onChangeText={text => setAddgoals(text)}
         />
        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coaching Hub Limit (Optional)")} </Text>
         <TextInput
           style={styles.input}
           placeholder="50 Participants"
           keyboardType="numeric" // Set keyboardType to 'numeric' for number input
-          value={searchMembers}
-          onChangeText={text => setSearchMembers(text)}
+          value={limit}
+          onChangeText={text => setlimit(text)}
         />
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
@@ -282,6 +291,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
       </View>
       </View>
       </ScrollView>
+      <CustomAlert
+        visible={alertVisible}
+        title="Alert"
+        message={alertMessage}
+        onConfirm={() => setAlertVisible(false)}
+      />
       </View>
   );
 };

@@ -1,13 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import CustomAlert from '../components/CustomAlert';
  
 function MyComponent({ onClose }) {
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+
   const {t}=useTranslation()
+
+  const [role, setSkillsAnalysisRole] = useState('');
+        const [level, setlevel] = useState('');
+        const [rate, setrate] = useState('');
+        const [available_days, setavailable_days] = useState('');
+        const [available_times, setavailable_times] = useState('');
+        const [topic1, settopic1] = useState('');
+        const [topic2, settopic2] = useState('');
+        const [topic3, settopic3] = useState('');
+        const [topic4, settopic4] = useState('');
+        const [topic5, settopic5] = useState('');
+        const [topic1_percentage, settopic1_percentage] = useState('');
+        const [topic2_percentage, settopic2_percentage] = useState('');
+        const [topic3_percentage, settopic3_percentage] = useState('');
+        const [topic4_percentage, settopic4_percentage] = useState('');
+        const [topic5_percentage, settopic5_percentage] = useState('');
+        const [alertVisible, setAlertVisible] = useState(false);
+        const [alertMessage, setAlertMessage] = useState('')     
+        const [isVisible, setIsVisible] = useState(true);  
+
+        useEffect(() => {
+          const loadFormData = async () => {
+            try {
+              const storedFormData = await AsyncStorage.getItem('skillAnalysisFormData');
+              if (storedFormData) {
+                const parsedData = JSON.parse(storedFormData);
+                setSkillsAnalysisRole(parsedData.role || '');
+              }
+            } catch (error) {
+              console.error('Failed to load form data', error);
+            }
+          };
+      
+          loadFormData();
+        }, []);
+      
+        const handleSave = async () => {
+          if (!role || !level || !rate || !available_days || !available_times || !topic1 || !topic2 || !topic3 || !topic4 || !topic5 || !topic1_percentage || !topic2_percentage || !topic3_percentage || !topic4_percentage || !topic5_percentage) {
+            setAlertMessage(t('Please fill all fields'));
+            setAlertVisible(true);
+            return;
+          }
+        
+          try {
+            const data = {
+              role,
+              level,
+              rate,
+              available_days,
+              available_times,
+              topic1,
+              topic1_percentage,
+              topic2,
+              topic2_percentage,
+              topic3,
+              topic3_percentage,
+              topic4,
+              topic4_percentage,
+              topic5,
+              topic5_percentage
+            };
+        
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+        
+            const response = await axios.post(
+              'https://recruitangle.com/api/expert/skillAnalysis/create',
+              data,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+        
+            if (response.status === 201) {
+              await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
+              setAlertMessage(t('Skill Analysis profile created successfully'));
+            } else {
+              setAlertMessage(t('Failed to skill analysis profile'));
+            }
+          } catch (error) {
+            console.error('Error during save:', error); // Log error for debugging
+            setAlertMessage(t('Failed to create skill analysis profile'));
+          }
+          setAlertVisible(true);
+        };
+        
+        const hideAlert = () => {
+          setAlertVisible(false);
+          setIsVisible(false);
+          onClose();
+        };
+        
+        if (!isVisible) {
+          return null; // Return null to unmount the parent component
+        }
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -30,15 +128,15 @@ function MyComponent({ onClose }) {
      <TouchableOpacity style={styles.buttonNew} >
       <Text style={styles.buttonTextNew}>{t("New")} +</Text>
     </TouchableOpacity>
-<View style={{ flexDirection: "row", marginBottom: 10}}>
+    <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>{t("Junior Power Platform Developer")} </Text>
+      <Text style={styles.buttonTextDue}>{role}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>{t("Junior Power Platform Developer")}</Text>
+      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>{t("Junior Power Platform Developer")}</Text>
+      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
 </View>
 
@@ -54,6 +152,8 @@ function MyComponent({ onClose }) {
             placeholder="Junior Platform Developer"
             placeholderTextColor="grey"
             style={styles.input}
+            value={role}
+            onChangeText={text => setSkillsAnalysisRole(text)}
           />
         </View>
       </View>
@@ -66,6 +166,8 @@ function MyComponent({ onClose }) {
             placeholder="Junior"
             placeholderTextColor="grey"
             style={styles.input}
+            value={level}
+            onChangeText={text => setlevel(text)}
           />
         </View>
       </View>
@@ -78,6 +180,8 @@ function MyComponent({ onClose }) {
             placeholder="$50"
             placeholderTextColor="grey"
             style={styles.input}
+            value={rate}
+            onChangeText={text => setrate(text)}
           />
         </View>
       </View>
@@ -90,6 +194,8 @@ function MyComponent({ onClose }) {
             placeholder="Mon-Fri"
             placeholderTextColor="grey"
             style={styles.input}
+            value={available_days}
+            onChangeText={text => setavailable_days(text)}
           />
         </View>
       </View>
@@ -102,12 +208,14 @@ function MyComponent({ onClose }) {
             placeholder="12PM-1PM"
             placeholderTextColor="grey"
             style={styles.input}
+            value={available_times}
+            onChangeText={text => setavailable_times(text)}
           />
         </View>
       </View>
     </View>
     <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("Topics or Questions")}</Text>
+    <Text style={{marginLeft: 50, fontWeight: 'bold', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("Topics or topics")}</Text>
      <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>+</Text>
     </TouchableOpacity>
@@ -123,23 +231,26 @@ function MyComponent({ onClose }) {
             placeholder="Discuss tools to boost performance e.g, xrm toolbox"
             placeholderTextColor="grey"
             style={styles.input}
+            value={topic1}
+            onChangeText={text => settopic1(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={topic1_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => settopic1_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
@@ -152,23 +263,26 @@ function MyComponent({ onClose }) {
             placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={topic2}
+            onChangeText={text => settopic2(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={topic2_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => settopic2_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
          </View>
@@ -181,23 +295,26 @@ function MyComponent({ onClose }) {
             placeholder={t("Being proactive")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={topic3}
+            onChangeText={text => settopic3(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={topic3_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => settopic3_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
@@ -210,58 +327,64 @@ function MyComponent({ onClose }) {
             placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={topic4}
+            onChangeText={text => settopic4(text)}
           />
         </View> 
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={topic4_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => settopic4_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold'}}>{t("Topic")} 5</Text>
+          <Text style = {{fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
          <TextInput
             placeholder={t("App performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={topic5}
+            onChangeText={text => settopic5(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={topic5_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => settopic5_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
      
       </View>
-<TouchableOpacity onPress={onClose} style={styles.buttonsave} >
+<TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
       <Text style={styles.buttonTextsave}>{t("Save")}</Text>
     </TouchableOpacity>
 
@@ -270,6 +393,12 @@ function MyComponent({ onClose }) {
   
 </View>
 </ScrollView>
+<CustomAlert
+  visible={alertVisible}
+  title={t("Alert")}
+  message={alertMessage}
+  onConfirm={hideAlert}
+/>
 </View>
 
 );

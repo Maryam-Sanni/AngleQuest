@@ -1,13 +1,111 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import CustomAlert from '../components/CustomAlert'; 
 
 function MyComponent({ onClose }) {
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+
   const {t}=useTranslation()
+
+  const [role, setGrowthRole] = useState('');
+  const [level, setlevel] = useState('');
+  const [rate, setrate] = useState('');
+  const [available_days, setavailable_days] = useState('');
+  const [available_times, setavailable_times] = useState('');
+  const [guide1, setguide1] = useState('');
+  const [guide2, setguide2] = useState('');
+  const [guide3, setguide3] = useState('');
+  const [guide4, setguide4] = useState('');
+  const [guide5, setguide5] = useState('');
+  const [guide1_percentage, setguide1_percentage] = useState('');
+  const [guide2_percentage, setguide2_percentage] = useState('');
+  const [guide3_percentage, setguide3_percentage] = useState('');
+  const [guide4_percentage, setguide4_percentage] = useState('');
+  const [guide5_percentage, setguide5_percentage] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const storedFormData = await AsyncStorage.getItem('GrowthFormData');
+        if (storedFormData) {
+          const parsedData = JSON.parse(storedFormData);
+          setGrowthRole(parsedData.role || '');
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleSave = async () => {
+    if (!role || !level || !rate || !available_days || !available_times || !guide1 || !guide2 || !guide3 || !guide4 || !guide5 || !guide1_percentage || !guide2_percentage || !guide3_percentage || !guide4_percentage || !guide5_percentage) {
+      setAlertMessage(t('Please fill all fields'));
+      setAlertVisible(true);
+      return;
+    }
+  
+    try {
+      const data = {
+        role,
+        level,
+        rate,
+        available_days,
+        available_times,
+        guide1,
+        guide1_percentage,
+        guide2,
+        guide2_percentage,
+        guide3,
+        guide3_percentage,
+        guide4,
+        guide4_percentage,
+        guide5,
+        guide5_percentage
+      };
+  
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+  
+      const response = await axios.post(
+        'https://recruitangle.com/api/expert/growthplan/create',
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      if (response.status === 201) {
+        await AsyncStorage.setItem('GrowthFormData', JSON.stringify(data));
+        setAlertMessage(t('Growth plan profile created successfully'));
+      } else {
+        setAlertMessage(t('Failed to create growth plan profile'));
+      }
+    } catch (error) {
+      console.error('Error during save:', error); // Log error for debugging
+      setAlertMessage(t('Failed to create growth plan profile'));
+    }
+    setAlertVisible(true);
+  };
+
+  const hideAlert = () => {
+    setAlertVisible(false);
+    setIsVisible(false);
+    onClose();
+  };
+  
+  if (!isVisible) {
+    return null; // Return null to unmount the parent component
+  }
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -31,13 +129,13 @@ function MyComponent({ onClose }) {
     </TouchableOpacity>
 <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>{t("Junior Power Platform Developer")} </Text>
+      <Text style={styles.buttonTextDue}>{role}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Junior SAP FI</Text>
+      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>Senior SAP FI</Text>
+      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
 </View>
 
@@ -53,6 +151,8 @@ function MyComponent({ onClose }) {
             placeholder="Junior Platform Developer"
             placeholderTextColor="grey"
             style={styles.input}
+            value={role}
+            onChangeText={text => setGrowthRole(text)}
           />
         </View>
       </View>
@@ -65,6 +165,8 @@ function MyComponent({ onClose }) {
             placeholder="Junior"
             placeholderTextColor="grey"
             style={styles.input}
+            value={level}
+            onChangeText={text => setlevel(text)}
           />
         </View>
       </View>
@@ -77,6 +179,8 @@ function MyComponent({ onClose }) {
             placeholder="$50"
             placeholderTextColor="grey"
             style={styles.input}
+            value={rate}
+            onChangeText={text => setrate(text)}
           />
         </View>
       </View>
@@ -89,6 +193,8 @@ function MyComponent({ onClose }) {
             placeholder="Mon-Fri"
             placeholderTextColor="grey"
             style={styles.input}
+            value={available_days}
+            onChangeText={text => setavailable_days(text)}
           />
         </View>
       </View>
@@ -101,6 +207,8 @@ function MyComponent({ onClose }) {
             placeholder="12PM-1PM"
             placeholderTextColor="grey"
             style={styles.input}
+            value={available_times}
+            onChangeText={text => setavailable_times(text)}
           />
         </View>
       </View>
@@ -122,23 +230,26 @@ function MyComponent({ onClose }) {
             placeholder={t("Plan around how to use tools to boost performance e.g, xrm toolbox")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={guide1}
+            onChangeText={text => setguide1(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={guide1_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => setguide1_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
@@ -151,23 +262,26 @@ function MyComponent({ onClose }) {
             placeholder={t("How to incorporate app performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={guide2}
+            onChangeText={text => setguide2(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+   selectedValue={guide2_percentage}
+   style={styles.picker}
+   onValueChange={(itemValue) => setguide2_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
          </View>
@@ -180,23 +294,26 @@ function MyComponent({ onClose }) {
             placeholder={t("How to be proactive")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={guide3}
+            onChangeText={text => setguide3(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+   selectedValue={guide3_percentage}
+   style={styles.picker}
+   onValueChange={(itemValue) => setguide3_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
@@ -209,23 +326,26 @@ function MyComponent({ onClose }) {
             placeholder={t("How to optimize power automate")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={guide4}
+            onChangeText={text => setguide4(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={guide4_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => setguide4_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
@@ -238,29 +358,32 @@ function MyComponent({ onClose }) {
             placeholder={t("How to optimize AI builder bot")}
             placeholderTextColor="grey"
             style={styles.input}
+            value={guide5}
+            onChangeText={text => setguide5(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  style={styles.picker} 
+  selectedValue={guide5_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => setguide5_percentage(itemValue)}
 >
-  <Picker.Item label=" " value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
 </Picker>
         </View>
       </View>
      
       </View>
-<TouchableOpacity onPress={onClose} style={styles.buttonsave} >
+<TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
       <Text style={styles.buttonTextsave}>{t("Save")}</Text>
     </TouchableOpacity>
 
@@ -269,6 +392,12 @@ function MyComponent({ onClose }) {
     </View>
 
 </ScrollView>
+<CustomAlert
+  visible={alertVisible}
+  title={t("Alert")}
+  message={alertMessage}
+  onConfirm={hideAlert}
+/>
 </View>
 );
 }

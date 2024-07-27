@@ -240,7 +240,7 @@ const {t}=useTranslation()
           
           <View style={{flexDirection: 'row', marginTop: 20 }}>
           <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activites")}</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>
 <View style={{flexDirection: 'row' }}>
 <TouchableOpacity onPress={goToManageHubs} 
 style={[
@@ -295,11 +295,7 @@ onMouseLeave={() => setIsHovered5(false)}
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Sessions")}</Text>
           </View>
-          <View style={{flexDirection: 'column' }}>
-          <Text style={{fontSize: 13, color: 'white', marginTop: 15, marginLeft: 130, fontWeight: 'bold', textDecoration: 'underline',fontFamily:"Roboto-Light" }}>5 Confirmations | 1 to go</Text>
-          <Text style={{fontSize: 12, color: 'white', marginTop: 3, marginLeft: 125, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
           
-          </View>
            </View>
           <View style={{flexDirection: 'row', marginBottom: 15 }}>
            <Image
@@ -367,7 +363,7 @@ onMouseLeave={() => setIsHovered9(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' ,fontFamily:"Roboto-Light"}}>{t("Growth Plan Review")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolue', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -392,7 +388,7 @@ onMouseLeave={() => setIsHovered10(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Advice Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -416,8 +412,8 @@ onMouseLeave={() => setIsHovered11(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Interview Session ")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Interview Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
@@ -600,7 +596,7 @@ const styles = StyleSheet.create({
   },
   greenBorderedBox: {
     width: 580,
-    height: 200,
+    height: 220,
     backgroundColor: 'rgba(125,125,125,0.3)',
       borderRadius: 20,
     marginBottom: 20, 
@@ -783,12 +779,15 @@ whiteBox: {
   },
   touchablerate: {
     backgroundColor: 'rgba(200,200,125,0.3)',
+    justifyContent: 'center',
     padding: 8,
     paddingHorizontal: 10, 
-    marginTop: 15,
+    marginTop: 10,
     marginRight: 5,
     marginLeft: 20,
     width: 100,
+    height: 40,
+    overflow: 'hidden',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -857,8 +856,9 @@ whiteBox: {
     padding: 8,
     paddingHorizontal: 20, 
     marginTop: 15,
-    marginLeft: 240,
     borderRadius: 10,
+    right: 20,
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -879,7 +879,8 @@ whiteBox: {
     padding: 8,
     paddingHorizontal: 20, 
     marginTop: 10,
-    marginLeft: 70,
+    position: 'absolute',
+    right: 20,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
