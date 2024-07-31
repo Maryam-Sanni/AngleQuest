@@ -119,19 +119,20 @@ const {t}=useTranslation()
         <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
           <TouchableHighlight
-                                
-                                underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
-                                onMouseEnter={() => setIsInterviewHovered(true)}
-                                onMouseLeave={() => setIsInterviewHovered(true)}>
-                                <View style={styles.item}>
-                                <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role}</Text>
-                                </View>
-                            </TouchableHighlight>
-                           
+  underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
+  onMouseEnter={() => setIsInterviewHovered(true)}
+  onMouseLeave={() => setIsInterviewHovered(false)} // Fixed hover logic
+>
+  <View style={styles.item}>
+    <Image
+      source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+      style={styles.image}
+    />
+    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>
+      {role || "Growth Plan"}
+    </Text>
+  </View>
+</TouchableHighlight>                    
                             
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>

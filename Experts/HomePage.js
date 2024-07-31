@@ -5,6 +5,7 @@ import { BlurView } from 'expo-blur';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import SuggestionModal from '../components/Suggestion';
+import HelpModal from '../components/Help';
 import OpenModal2 from '../Experts/GProfile';
 import {useFonts} from "expo-font"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,6 +29,7 @@ const HomePage = () => {
   const [isHovered14, setIsHovered14] = useState(false);
   const [isHovered15, setIsHovered15] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [helpmodalVisible, sethelpModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
@@ -476,7 +478,7 @@ onMouseLeave={() => setIsHovered12(false)}
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Need Help?")}</Text>
           </View>
           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("Do you have an issue you would like us to assist you with?")}</Text>
-          <TouchableOpacity onPress={() => setModalVisible(true)}
+          <TouchableOpacity onPress={() => sethelpModalVisible(true)}
           style={[
             styles.touchablecoach,
             isHovered14 && styles.touchableOpacityHovered
@@ -522,6 +524,7 @@ onMouseLeave={() => setIsHovered12(false)}
       
      
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    <HelpModal visible={helpmodalVisible} onClose={() => sethelpModalVisible(false)} />
     <Modal
         animationType="slide"
         transparent={true}

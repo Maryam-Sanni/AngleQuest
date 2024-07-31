@@ -1,6 +1,6 @@
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { Modal, Text, TextInput, Button, View } from 'react-native';
+import { Modal, Text, TextInput, Button, View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
@@ -42,7 +42,12 @@ const {t}=useTranslation()
     >
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)',}}>
         <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '30%' }}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10,        fontFamily:"Roboto-Light"
+        <TouchableOpacity onPress={onClose}>
+            <Text style={{ fontSize: 18, color:'grey', position: 'absolute', right: 20, fontWeight: 'bold', marginTop: 5, fontFamily:"Roboto-Light"}}>
+                            ✕
+                        </Text>
+                        </TouchableOpacity>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10, marginTop: 30,  fontFamily:"Roboto-Light"
  }}>{t("Help us improve")}</Text>
           <TextInput
             multiline
