@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-    const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(true);
+    const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
     const [modalVisible4, setModalVisible4] = useState(false);
     const [modalVisible5, setModalVisible5] = useState(false);;
     const [modalVisible2, setModalVisible2] = useState(false);
@@ -118,13 +118,13 @@ const {t}=useTranslation()
               <TouchableOpacity
             underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsFirstHubsHovered(true)}
-            onMouseLeave={() => setIsFirstHubsHovered(true)}> 
+            onMouseLeave={() => setIsFirstHubsHovered(false)}> 
               <View style={styles.item}>
               <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>{coaching_hub_name}</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>{coaching_hub_name || "Learning Hub"}</Text>
               </View>
             </TouchableOpacity>
             
