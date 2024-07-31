@@ -3,12 +3,20 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput } fro
 import DateTimePickerModal from "../components/DateTimeCoach";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomAlert from '../components/CustomAlert';
 
 
 function MyComponent({ onClose }) {
   const [isDateTimeModalVisible, setIsDateTimeModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [topic, setTopic] = useState('');
+  const [description, setDescription] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('')     
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleConfirmDateTime = (date, time) => {
     setSelectedDateTime(date);
@@ -19,6 +27,52 @@ function MyComponent({ onClose }) {
   const handleCancelDateTimeModal = () => {
     setIsDateTimeModalVisible(false);
   };
+
+  const handleSubmit = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); 
+      if (!token) {
+        alert('No token found');
+        return;
+      }
+  
+      const formData = {
+        meeting_topic: topic,
+        meeting_description: description,
+        date: selectedDateTime,
+        time: selectedTime,
+      };
+  
+      const response = await axios.post('https://recruitangle.com/api/expert/newhubmeeting/create', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log('Response:', response); // Log the response
+      if (response.status === 201) {
+        setAlertMessage(t('Meeting created successfully'));
+      } else {
+        setAlertMessage(t('Failed to create Meeting'));
+      }
+    } catch (error) {
+      console.error('Error during save:', error); // Log error for debugging
+      if (error.response) {
+        console.error('Response error data:', error.response.data); // Log server response error
+      }
+      setAlertMessage(t('Failed to create Meeting'));
+    }
+    setAlertVisible(true);
+  };
+  
+  const hideAlert = () => {
+    setAlertVisible(false);
+    // Ensure this does not inadvertently close the page
+    setIsVisible(false);
+    onClose(); // Ensure this is not closing the page prematurely
+  };
+
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
@@ -49,6 +103,8 @@ function MyComponent({ onClose }) {
             </Text>
             <TextInput
               placeholder=" "
+              value={topic}
+              onChangeText={(text) => setTopic(text)}
               style={styles.input}
             />
 
@@ -57,6 +113,8 @@ function MyComponent({ onClose }) {
             </Text>
             <TextInput
               placeholder=" "
+              value={description}
+              onChangeText={(text) => setDescription(text)}
               style={[styles.input, styles.multilineInput]}
               multiline
             />
@@ -72,12 +130,17 @@ function MyComponent({ onClose }) {
               </Text>
               <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Time: </Text> {selectedTime}</Text>
             </View>
-            <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+            <TouchableOpacity onPress={handleSubmit} style={styles.buttonplus}>
               <Text style={styles.buttonTextplus}>{t("Create Meeting")}</Text>
             </TouchableOpacity>
           </View>
        
-  
+          <CustomAlert
+  visible={alertVisible}
+  title={t("Alert")}
+  message={alertMessage}
+  onConfirm={hideAlert}
+/>
 
       <DateTimePickerModal
         isVisible={isDateTimeModalVisible}

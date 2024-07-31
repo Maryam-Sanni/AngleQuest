@@ -35,24 +35,9 @@ function MyComponent({ onClose }) {
         const [alertMessage, setAlertMessage] = useState('')    
         const [isVisible, setIsVisible] = useState(true);   
 
-        useEffect(() => {
-          const loadFormData = async () => {
-            try {
-              const storedFormData = await AsyncStorage.getItem('InterviewFormData');
-              if (storedFormData) {
-                const parsedData = JSON.parse(storedFormData);
-                setInterviewRole(parsedData.role || '');
-              }
-            } catch (error) {
-              console.error('Failed to load form data', error);
-            }
-          };
-      
-          loadFormData();
-        }, []);
       
         const handleSave = async () => {
-          if (!role || !level || !rate || !available_days || !available_times || !question1 || !question2 || !question3 || !question4 || !question5 || !question6 || !question1_percentage || !question2_percentage || !question3_percentage || !question4_percentage || !question5_percentage || !question6_percentage ) {
+          if (!role || !level || !rate || !available_days || !available_times ) {
             setAlertMessage(t('Please fill all fields'));
             setAlertVisible(true);
             return;
@@ -129,18 +114,10 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View> 
 
-     <TouchableOpacity style={styles.buttonNew} >
-      <Text style={styles.buttonTextNew}>{t("New")} +</Text>
-    </TouchableOpacity>
+
 <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
       <Text style={styles.buttonTextDue}>{role}</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>NIL</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
 </View>
 
@@ -218,10 +195,12 @@ function MyComponent({ onClose }) {
         </View>
       </View>
     </View>
+    <View style= {{flexDirection: 'row'}}>
+    <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
      <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>+</Text>
     </TouchableOpacity>
-
+</View>
 
      <View style={styles.container}>
       <View style={styles.row}>
@@ -497,10 +476,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily:"Roboto-Light",
   },
-   buttonplus: {
+  buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 750, 
+    marginLeft: 585, 
     width: 100,
     paddingHorizontal: 20,
     marginTop: 10

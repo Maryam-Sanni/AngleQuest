@@ -37,19 +37,23 @@ const MyComponent = () => {
 
       if (response.data.status === 'success') {
         const { token, user } = response.data;
-        const { first_name, last_name } = user;
-  
-        // Store token, first_name, and last_name securely
+        const { first_name, last_name, role } = user;
+
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('first_name', first_name);
         await AsyncStorage.setItem('last_name', last_name);
-  
-        // Update state with retrieved values
+
         setFirstName(first_name);
         setLastName(last_name);
 
-        // Navigate to home screen
-        navigation.navigate('Home');
+        // Show alert or navigate based on user role
+        if (role === 'expert') {
+          alert('Please sign in with an "individual" account');
+        } else if (role === 'individual') {
+          navigation.navigate('Home');
+        } else {
+          alert('Unknown user role');
+        }
       } else {
         alert(response.data.message || 'Sign in failed');
       }
@@ -57,7 +61,7 @@ const MyComponent = () => {
       console.error('Sign In Error:', error);
       alert('Sign in failed, please try again');
     } finally {
-      setLoading(false); // Set loading to false regardless of success or failure
+      setLoading(false);
     }
   };
 

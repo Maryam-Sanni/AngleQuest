@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Top from './HomeTop';
+import Top from './landtop';
+import CustomAlert from '../components/CustomAlert';
 
 const MyComponent = () => {
   const navigation = useNavigation(); // Navigation object
   const [profileImage, setProfileImage] = useState(null); // State to track the selected image
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const handleChooseImage = (event) => {
     const selectedImage = event.target.files[0];
@@ -17,94 +20,85 @@ const MyComponent = () => {
 
   const handleShareCV = () => {
     if (profileImage) {
-      alert(
-        'Thank you for sharing your CV with us. AngleQuest AI will be soon.',
-        'Thank you for sharing your CV with us. AngleQuest AI will be soon.'
-      );
+      setAlertMessage('Thank you for sharing your CV with us. Anglequest AI will be with you soon.');
     } else {
-      alert(
-        'Please Choose a File',
-        'Please Choose a File'
-      );
+      setAlertMessage('Please choose a file');
     }
+    setAlertVisible(true);
   };
 
-  const handlebackPress = () => {
+  const hideAlert = () => {
+    setAlertVisible(false);
+  };
+
+  const handleBackPress = () => {
     navigation.navigate('Welcome');
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{backgroundColor: '#001a00', flex: 1}}>
       <Top />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.container}>
-          <TouchableOpacity style={{flexDirection: 'row', alignSelf: 'flex-start'}} onPress={handlebackPress} >
-        <Image
-            source={require('../assets/back-2.png')}
-            style={styles.back}
-          /> <Text style={{ fontSize: 16, marginTop: 18, marginLeft: 10 }}>
-          Back
-        </Text>
-        </TouchableOpacity>
-          <Image
-            source={require('../assets/AnglequestAI.png')}
-            style={styles.image}
-          />
-          <Text style={{ fontSize: 35, textAlign: 'center', fontWeight: '600' }}>
-            AI Career Road Map Generator
+            <Image
+              source={require('../assets/AnglequestAI.png')}
+              style={styles.back}
+            />
+          <Text style={{ fontSize: 18, textAlign: 'center', color: 'white', marginTop: 30 }}>
+            AI CAREER ROAD MAP GENERATOR
           </Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 35, color: 'black', textAlign: 'center', fontWeight: '600' }}>
-              Uncover all the steps you need to take to
-              <Text style={{ fontSize: 35, color: '#135837', textAlign: 'center', fontWeight: '600' }}> REACH YOUR NEXT LEVEL</Text>
+          <View style={{ flexDirection: 'column', marginTop: 30 }}>
+            <Text style={{ fontSize: 35, color: 'white', textAlign: 'center', fontWeight: '600' }}>
+              Uncover all the steps you need to take
+            </Text>
+            <Text style={{ fontSize: 35, color: 'white', textAlign: 'center', fontWeight: '600' }}>
+              to reach your next level
             </Text>
           </View>
-          <Text style={{ fontSize: 35, color: 'grey', padding: 10, textAlign: 'center', marginTop: 50 }}>
+          <Image
+            source={require('../assets/AIback.png')}
+            style={styles.image}
+          />
+          <Text style={{ fontSize: 35, color: 'white', padding: 10, textAlign: 'center', marginTop: 10 }}>
             Join 18,578 others who have shared their CV to train our model
           </Text>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.buttonplus} onPress={handleShareCV}>
-              <Text style={styles.buttonTextplus}>Share CV</Text>
-            </TouchableOpacity>
+          <View style={{ flexDirection: 'column', marginTop: 50, marginBottom: 50, alignSelf: 'center' }}>
             <View style={styles.input}>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
+                style={{ color: 'white' }} // Added style to change input text color to white
               />
             </View>
+            <TouchableOpacity style={styles.buttonplus} onPress={handleShareCV}>
+              <Text style={styles.buttonTextplus}>Share CV</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
+      <CustomAlert
+        visible={alertVisible}
+        title="Alert"
+        message={alertMessage}
+        onConfirm={hideAlert}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-  },
-  header: {
-    fontSize: 16,
-    marginTop: 20,
-    marginBottom: 5,
-    fontWeight: 'bold',
-    color: 'red',
-    textAlign: 'center',
+    backgroundColor: '#001a00',
   },
   buttonplus: {
-    backgroundColor: '#135837',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 50,
+    borderWidth: 1,
+    borderColor: 'white',
+    padding: 12,
+    borderRadius: 20,
     width: 200,
   },
   buttonTextplus: {
@@ -114,47 +108,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    width: 150,
-    height: 150,
-  },
-  goimage: {
-    width: 100,
-    height: 100,
-    marginTop: -45,
-    marginLeft: -20,
+    width: 350,
+    height: 350,
+    marginTop: 20,
   },
   back: {
     marginTop: 20,
     marginLeft: 100,
-    width: 20,
-    height: 20,
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: 'darkgreen',
-    marginTop: 50,
-    textAlign: 'center',
-  },
-  buttonBeFirst: {
-    color: 'darkgreen',
-    fontSize: 14,
-    marginTop: 20,
-    fontWeight: '600',
-    padding: 5,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
+    width: 100,
+    height: 100,
+    alignSelf: 'flex-start'
   },
   input: {
-    marginTop: 50,
-    backgroundColor: 'white',
-    borderColor: '#135837',
-    borderWidth: 1,
-    color: 'black',
+    color: 'white',
     fontSize: 14,
-    borderRadius: 10,
     padding: 10,
-    marginLeft: 10,
+    marginBottom: 10,
   },
 });
 

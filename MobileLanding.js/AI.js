@@ -35,35 +35,42 @@ const MyComponent = () => {
       <Top />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.container}>
+        <Image
+              source={require('../assets/AnglequestAI.png')}
+              style={styles.back}
+            />
+          <Text style={{ fontSize: 18, textAlign: 'center', color: 'white', marginTop: 30 }}>
+            AI CAREER ROAD MAP GENERATOR
+          </Text>
+          <View style={{ flexDirection: 'column', marginTop: 30 }}>
+            <Text style={{ fontSize: 25, color: 'white', textAlign: 'center', fontWeight: '600' }}>
+              Uncover all the steps you need to take
+            </Text>
+            <Text style={{ fontSize: 25, color: 'white', textAlign: 'center', fontWeight: '600' }}>
+              to reach your next level
+            </Text>
+          </View>
           <Image
-            source={require('../assets/AnglequestAI.png')}
+            source={require('../assets/AIback.png')}
             style={styles.image}
           />
-          <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: '600', marginBottom: 10 }}>
-            AI Career Road Map Generator
-          </Text>
-          
-            <Text style={{ fontSize: 25, color: 'black', textAlign: 'center', fontWeight: '600' }}>
-              Uncover all the steps you need to take to
-              <Text style={{ fontSize: 25, color: '#135837', textAlign: 'center', fontWeight: '600' }}> REACH YOUR NEXT LEVEL</Text>
-            </Text>
-            
-         
-          <Text style={{ fontSize: 25, color: 'grey', padding: 10, textAlign: 'center', marginTop: 50 }}>
+          <Text style={{ fontSize: 25, color: 'white', padding: 10, textAlign: 'center', marginTop: 10 }}>
             Join 18,578 others who have shared their CV to train our model
           </Text>
       
-            <TouchableOpacity style={styles.buttonplus} onPress={handleShareCV}>
-              <Text style={styles.buttonTextplus}>Share CV</Text>
-            </TouchableOpacity>
-            <View style={styles.input}>
+          <View style={{ flexDirection: 'column', marginTop: 50, marginBottom: 50 }}>
+          <View style={styles.input}>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleChooseImage}
+                style={{ color: 'white' }} // Added style to change input text color to white
               />
             </View>
-          
+            <TouchableOpacity style={styles.buttonplus} onPress={handleShareCV}>
+              <Text style={styles.buttonTextplus}>Share CV</Text>
+            </TouchableOpacity>
+            </View>
         </View>
       </ScrollView>
       <BottomTab navigation={navigation} />
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#001a00',
   },
   header: {
     fontSize: 16,
@@ -93,10 +100,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonplus: {
-    backgroundColor: '#135837',
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 50,
+    borderWidth: 1,
+    borderColor: 'white',
+    padding: 12,
+    borderRadius: 20,
     width: 200,
   },
   buttonTextplus: {
@@ -107,40 +114,21 @@ const styles = StyleSheet.create({
   },
   image: {
     marginTop: 20,
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
   },
-  goimage: {
-    width: 100,
-    height: 100,
-    marginTop: -45,
-    marginLeft: -20,
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: 'darkgreen',
-    marginTop: 50,
-    textAlign: 'center',
-  },
-  buttonBeFirst: {
-    color: 'darkgreen',
-    fontSize: 14,
+  back: {
     marginTop: 20,
-    fontWeight: '600',
-    padding: 5,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
+    marginLeft: 20,
+    width: 60,
+    height: 60,
+    alignSelf: 'flex-start'
   },
   input: {
-    marginTop: 15,
-    backgroundColor: 'white',
-    borderColor: '#135837',
-    borderWidth: 1,
-    color: 'black',
+    color: 'white',
     fontSize: 14,
-    borderRadius: 10,
     padding: 10,
+    marginBottom: 10,
   },
 });
 

@@ -51,6 +51,8 @@ const MyComponent = () => {
       return;
     }
 
+    const role = 'individual'; 
+
     try {
       setLoading(true); // Set loading to true when sign in is initiated
       
@@ -59,6 +61,7 @@ const MyComponent = () => {
         last_name: lastName,
         email,
         password,
+        role,
       });
 
       console.log('Signup success:', response.data);

@@ -1,46 +1,83 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, Picker, ScrollView } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import CustomAlert from '../components/CustomAlert';
- 
+import CustomAlert from '../components/CustomAlert'; 
+
 function MyComponent({ onClose }) {
 
   const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
+    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
+        })
 
-  const {t}=useTranslation()
+        const {t}=useTranslation()
 
-  const [role, setSkillsAnalysisRole] = useState('');
+        const [role, setInterviewRole] = useState('');
         const [level, setlevel] = useState('');
         const [rate, setrate] = useState('');
         const [available_days, setavailable_days] = useState('');
         const [available_times, setavailable_times] = useState('');
-        const [topic1, settopic1] = useState('');
-        const [topic2, settopic2] = useState('');
-        const [topic3, settopic3] = useState('');
-        const [topic4, settopic4] = useState('');
-        const [topic5, settopic5] = useState('');
-        const [topic1_percentage, settopic1_percentage] = useState('');
-        const [topic2_percentage, settopic2_percentage] = useState('');
-        const [topic3_percentage, settopic3_percentage] = useState('');
-        const [topic4_percentage, settopic4_percentage] = useState('');
-        const [topic5_percentage, settopic5_percentage] = useState('');
+        const [question1, setquestion1] = useState('');
+        const [question2, setquestion2] = useState('');
+        const [question3, setquestion3] = useState('');
+        const [question4, setquestion4] = useState('');
+        const [question5, setquestion5] = useState('');
+        const [question6, setquestion6] = useState('');
+        const [question1_percentage, setquestion1_percentage] = useState('');
+        const [question2_percentage, setquestion2_percentage] = useState('');
+        const [question3_percentage, setquestion3_percentage] = useState('');
+        const [question4_percentage, setquestion4_percentage] = useState('');
+        const [question5_percentage, setquestion5_percentage] = useState('');
+        const [question6_percentage, setquestion6_percentage] = useState(''); 
         const [alertVisible, setAlertVisible] = useState(false);
-        const [alertMessage, setAlertMessage] = useState('')     
-        const [isVisible, setIsVisible] = useState(true);  
+        const [alertMessage, setAlertMessage] = useState('')    
+        const [isVisible, setIsVisible] = useState(true);   
 
+        useEffect(() => {
+          const loadFormData = async () => {
+            try {
+              const token = await AsyncStorage.getItem('token');
+              if (!token) throw new Error('No token found');
+        
+              const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+        
+              if (response.status === 200 && response.data.status === 'success') {
+                const data = response.data.interview;
+                setInterviewRole(data.role || '');
+                setlevel(data.level || '');
+                setrate(data.rate || '');
+                setavailable_days(data.available_days || '');
+                setavailable_times(data.available_times || '');
+                setquestion1(data.question1 || '');
+                setquestion2(data.question2 || '');
+                setquestion3(data.question3 || '');
+                setquestion4(data.question4 || '');
+                setquestion5(data.question5 || '');
+                setquestion6(data.question6 || '');
+                setquestion1_percentage(data.question1_percentage.toString() || '');
+                setquestion2_percentage(data.question2_percentage.toString() || '');
+                setquestion3_percentage(data.question3_percentage.toString() || '');
+                setquestion4_percentage(data.question4_percentage.toString() || '');
+                setquestion5_percentage(data.question5_percentage.toString() || '');
+                setquestion6_percentage(data.question6_percentage.toString() || '');
+              } else {
+                console.error('Failed to fetch data', response);
+              }
+            } catch (error) {
+              console.error('Failed to load form data', error);
+            }
+          };
+        
+          loadFormData();
+        }, []);
+        
       
         const handleSave = async () => {
-          if (!role || !level || !rate || !available_days || !available_times ) {
-            setAlertMessage(t('Please fill all fields'));
-            setAlertVisible(true);
-            return;
-          }
-        
+          
           try {
             const data = {
               role,
@@ -48,40 +85,42 @@ function MyComponent({ onClose }) {
               rate,
               available_days,
               available_times,
-              topic1,
-              topic1_percentage,
-              topic2,
-              topic2_percentage,
-              topic3,
-              topic3_percentage,
-              topic4,
-              topic4_percentage,
-              topic5,
-              topic5_percentage
+              question1,
+              question1_percentage,
+              question2,
+              question2_percentage,
+              question3,
+              question3_percentage,
+              question4,
+              question4_percentage,
+              question5,
+              question5_percentage,
+              question6,
+              question6_percentage
             };
         
             const token = await AsyncStorage.getItem('token');
             if (!token) throw new Error('No token found');
         
-            const response = await axios.post(
-              'https://recruitangle.com/api/expert/skillAnalysis/create',
+            const response = await axios.put(
+              'https://recruitangle.com/api/expert/interview/edit',
               data,
               { headers: { Authorization: `Bearer ${token}` } }
             );
         
-            if (response.status === 201) {
-              await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
-              setAlertMessage(t('Skill Analysis profile created successfully'));
+            if (response.status === 200) {
+              await AsyncStorage.setItem('InterviewFormData', JSON.stringify(data));
+              setAlertMessage(t('Interview profile updated successfully'));
             } else {
-              setAlertMessage(t('Failed to skill analysis profile'));
+              setAlertMessage(t('Failed to update interview profile'));
             }
           } catch (error) {
             console.error('Error during save:', error); // Log error for debugging
-            setAlertMessage(t('Failed to create skill analysis profile'));
+            setAlertMessage(t('Failed to update interview profile'));
           }
           setAlertVisible(true);
         };
-        
+
         const hideAlert = () => {
           setAlertVisible(false);
           setIsVisible(false);
@@ -101,7 +140,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Create Skills Analysis Profile")}</Text>
+          <Text style={styles.headerText}>{t("Edit Interview Profile")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -109,8 +148,8 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-               
-    <View style={{ flexDirection: "row", marginBottom: 10}}>
+
+<View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
       <Text style={styles.buttonTextDue}>{role}</Text>
     </TouchableOpacity>
@@ -129,7 +168,7 @@ function MyComponent({ onClose }) {
             placeholderTextColor="grey"
             style={styles.input}
             value={role}
-            onChangeText={text => setSkillsAnalysisRole(text)}
+            onChangeText={text => setInterviewRole(text)}
           />
         </View>
       </View>
@@ -190,32 +229,62 @@ function MyComponent({ onClose }) {
         </View>
       </View>
     </View>
+
     <View style= {{flexDirection: 'row'}}>
     <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
-     <TouchableOpacity style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>+</Text>
-    </TouchableOpacity>
-</View>
 
+</View>
      <View style={styles.container}>
       <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
            <TextInput
-            placeholder="Discuss tools to boost performance e.g, xrm toolbox"
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic1}
-            onChangeText={text => settopic1(text)}
+            value={question1}
+            onChangeText={text => setquestion1(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic1_percentage}
+  selectedValue={question1_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic1_percentage(itemValue)}
+  onValueChange={(itemValue) => setquestion1_percentage(itemValue)}
+>
+  <Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
+</Picker>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 2</Text>
+        </View>
+        <View style={[styles.cell, { flex: 5 }]}>
+        <TextInput
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
+            placeholderTextColor="grey"
+            style={styles.input}
+            value={question2}
+            onChangeText={text => setquestion2(text)}
+          />
+        </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  selectedValue={question2_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => setquestion2_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -231,55 +300,23 @@ function MyComponent({ onClose }) {
         </View>
       </View>
       <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
+        <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic2}
-            onChangeText={text => settopic2(text)}
+            value={question3}
+            onChangeText={text => setquestion3(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic2_percentage}
+  selectedValue={question3_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic2_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-         </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("Being proactive")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic3}
-            onChangeText={text => settopic3(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic3_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic3_percentage(itemValue)}
+  onValueChange={(itemValue) => setquestion3_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -295,23 +332,23 @@ function MyComponent({ onClose }) {
         </View>
       </View>
       <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
+        <View style={styles.cell}>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic4}
-            onChangeText={text => settopic4(text)}
+            value={question4}
+            onChangeText={text => setquestion4(text)}
           />
-        </View> 
+        </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic4_percentage}
+  selectedValue={question4_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic4_percentage(itemValue)}
+  onValueChange={(itemValue) => setquestion4_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -327,23 +364,23 @@ function MyComponent({ onClose }) {
         </View>
       </View>
       <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
          <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic5}
-            onChangeText={text => settopic5(text)}
+            value={question5}
+            onChangeText={text => setquestion5(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic5_percentage}
+  selectedValue={question5_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic5_percentage(itemValue)}
+  onValueChange={(itemValue) => setquestion5_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -358,25 +395,54 @@ function MyComponent({ onClose }) {
 </Picker>
         </View>
       </View>
-     
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 6</Text>
+        </View>
+        <View style={[styles.cell, { flex: 5 }]}>
+         <TextInput
+            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
+            placeholderTextColor="grey"
+            style={styles.input}
+            value={question6}
+            onChangeText={text => setquestion6(text)}
+          />
+        </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+  selectedValue={question6_percentage}
+  style={styles.picker}
+  onValueChange={(itemValue) => setquestion6_percentage(itemValue)}
+>
+<Picker.Item label="10%" value="10" />
+  <Picker.Item label="20%" value="20" />
+  <Picker.Item label="30%" value="30" />
+  <Picker.Item label="40%" value="40" />
+  <Picker.Item label="50%" value="50" />
+  <Picker.Item label="60%" value="60" />
+  <Picker.Item label="70%" value="70" />
+  <Picker.Item label="80%" value="80" />
+  <Picker.Item label="90%" value="90" />
+  <Picker.Item label="100%" value="100" />
+</Picker>
+        </View>
       </View>
-<TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>{t("Save")}</Text>
+      </View>
+<TouchableOpacity onPress={handleSave} style={styles.buttonplus} >
+      <Text style={styles.buttonTextplus}>{t("Save")} Changes</Text>
     </TouchableOpacity>
 
 
-   
-  
 </View>
-</ScrollView>
-<CustomAlert
+    
+    </ScrollView>
+    <CustomAlert
   visible={alertVisible}
   title={t("Alert")}
   message={alertMessage}
   onConfirm={hideAlert}
 />
 </View>
-
 );
 }
 
@@ -440,12 +506,12 @@ const styles = StyleSheet.create({
     color: 'coral',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
   },
    buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 585, 
+    marginLeft: 750, 
     width: 100,
     paddingHorizontal: 20,
     marginTop: 10
@@ -456,19 +522,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily:"Roboto-Light"
   },
-   buttonsave: {
-    backgroundColor: 'coral',
-    padding: 5,
-    marginLeft: 750, 
-    width: 100,
-    paddingHorizontal: 20,
-    marginTop: 30
-  },
-  buttonTextsave: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
-  },
   greenBox: {
     width: 920,
     height:600,
@@ -478,7 +531,15 @@ const styles = StyleSheet.create({
     outline: 'black',
     borderWidth: 1,
     borderColor: 'black',
-    fontFamily:"Roboto-Light"
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: '#F8F8F8',
+    borderColor: 'black',
+    borderWidth: 1, 
+    color:'grey',
+    fontSize: 14
   },
   closeButton: {
     position: 'absolute',
@@ -503,16 +564,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily:"Roboto-Light"
-  },
-  picker: {
-    height: 20,
-    width: '100%',
-    backgroundColor: '#F8F8F8',
-    borderColor: 'black',
-    borderWidth: 1, 
-    color:'grey',
-    fontSize: 14
+    fontFamily:"Roboto-Light",
   },
 });
 

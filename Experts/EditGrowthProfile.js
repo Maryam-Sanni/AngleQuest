@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import CustomAlert from '../components/CustomAlert';
- 
+import CustomAlert from '../components/CustomAlert'; 
+
 function MyComponent({ onClose }) {
 
   const [fontsLoaded]=useFonts({
@@ -14,83 +14,117 @@ function MyComponent({ onClose }) {
 
   const {t}=useTranslation()
 
-  const [role, setSkillsAnalysisRole] = useState('');
-        const [level, setlevel] = useState('');
-        const [rate, setrate] = useState('');
-        const [available_days, setavailable_days] = useState('');
-        const [available_times, setavailable_times] = useState('');
-        const [topic1, settopic1] = useState('');
-        const [topic2, settopic2] = useState('');
-        const [topic3, settopic3] = useState('');
-        const [topic4, settopic4] = useState('');
-        const [topic5, settopic5] = useState('');
-        const [topic1_percentage, settopic1_percentage] = useState('');
-        const [topic2_percentage, settopic2_percentage] = useState('');
-        const [topic3_percentage, settopic3_percentage] = useState('');
-        const [topic4_percentage, settopic4_percentage] = useState('');
-        const [topic5_percentage, settopic5_percentage] = useState('');
-        const [alertVisible, setAlertVisible] = useState(false);
-        const [alertMessage, setAlertMessage] = useState('')     
-        const [isVisible, setIsVisible] = useState(true);  
+  const [role, setGrowthRole] = useState('');
+  const [level, setlevel] = useState('');
+  const [rate, setrate] = useState('');
+  const [available_days, setavailable_days] = useState('');
+  const [available_times, setavailable_times] = useState('');
+  const [guide1, setguide1] = useState('');
+  const [guide2, setguide2] = useState('');
+  const [guide3, setguide3] = useState('');
+  const [guide4, setguide4] = useState('');
+  const [guide5, setguide5] = useState('');
+  const [guide1_percentage, setguide1_percentage] = useState('');
+  const [guide2_percentage, setguide2_percentage] = useState('');
+  const [guide3_percentage, setguide3_percentage] = useState('');
+  const [guide4_percentage, setguide4_percentage] = useState('');
+  const [guide5_percentage, setguide5_percentage] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
 
-      
-        const handleSave = async () => {
-          if (!role || !level || !rate || !available_days || !available_times ) {
-            setAlertMessage(t('Please fill all fields'));
-            setAlertVisible(true);
-            return;
-          }
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
         
-          try {
-            const data = {
-              role,
-              level,
-              rate,
-              available_days,
-              available_times,
-              topic1,
-              topic1_percentage,
-              topic2,
-              topic2_percentage,
-              topic3,
-              topic3_percentage,
-              topic4,
-              topic4_percentage,
-              topic5,
-              topic5_percentage
-            };
-        
-            const token = await AsyncStorage.getItem('token');
-            if (!token) throw new Error('No token found');
-        
-            const response = await axios.post(
-              'https://recruitangle.com/api/expert/skillAnalysis/create',
-              data,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-        
-            if (response.status === 201) {
-              await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
-              setAlertMessage(t('Skill Analysis profile created successfully'));
-            } else {
-              setAlertMessage(t('Failed to skill analysis profile'));
-            }
-          } catch (error) {
-            console.error('Error during save:', error); // Log error for debugging
-            setAlertMessage(t('Failed to create skill analysis profile'));
-          }
-          setAlertVisible(true);
-        };
-        
-        const hideAlert = () => {
-          setAlertVisible(false);
-          setIsVisible(false);
-          onClose();
-        };
-        
-        if (!isVisible) {
-          return null; // Return null to unmount the parent component
+        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+  
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.growthPlan;
+          setGrowthRole(data.role || '');
+          setlevel(data.level || '');
+          setrate(data.rate || '');
+          setavailable_days(data.available_days || '');
+          setavailable_times(data.available_times || '');
+          setguide1(data.guide1 || '');
+          setguide2(data.guide2 || '');
+          setguide3(data.guide3 || '');
+          setguide4(data.guide4 || '');
+          setguide5(data.guide5 || '');
+          setguide1_percentage(data.guide1_percentage.toString() || '');
+          setguide2_percentage(data.guide2_percentage.toString() || '');
+          setguide3_percentage(data.guide3_percentage.toString() || '');
+          setguide4_percentage(data.guide4_percentage.toString() || '');
+          setguide5_percentage(data.guide5_percentage.toString() || '');
+        } else {
+          console.error('Failed to fetch data', response);
         }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+  
+    loadFormData();
+  }, []);
+  
+  
+
+  const handleSave = async () => {
+  
+    try {
+      const data = {
+        role,
+        level,
+        rate,
+        available_days: available_days,
+        available_times:  available_times,
+        guide1,
+        guide1_percentage: guide1_percentage,
+        guide2,
+        guide2_percentage: guide2_percentage,
+        guide3,
+        guide3_percentage: guide3_percentage,
+        guide4,
+        guide4_percentage: guide4_percentage,
+        guide5,
+        guide5_percentage: guide5_percentage
+      };
+  
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+  
+      const response = await axios.put(
+        'https://recruitangle.com/api/expert/growthplan/edit',
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      if (response.status === 200) {
+        await AsyncStorage.setItem('GrowthFormData', JSON.stringify(data));
+        setAlertMessage(t('Growth plan profile updated successfully'));
+      } else {
+        setAlertMessage(t('Failed to update growth plan profile'));
+      }
+    } catch (error) {
+      console.error('Error during save:', error);
+      setAlertMessage(t('Failed to update growth plan profile'));
+    }
+    setAlertVisible(true);
+  };
+
+  const hideAlert = () => {
+    setAlertVisible(false);
+    setIsVisible(false);
+    onClose();
+  };
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -101,7 +135,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Create Skills Analysis Profile")}</Text>
+          <Text style={styles.headerText}>{t("Edit Growth Plan Profile")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -109,8 +143,8 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-               
-    <View style={{ flexDirection: "row", marginBottom: 10}}>
+
+<View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
       <Text style={styles.buttonTextDue}>{role}</Text>
     </TouchableOpacity>
@@ -129,7 +163,7 @@ function MyComponent({ onClose }) {
             placeholderTextColor="grey"
             style={styles.input}
             value={role}
-            onChangeText={text => setSkillsAnalysisRole(text)}
+            onChangeText={text => setGrowthRole(text)}
           />
         </View>
       </View>
@@ -192,30 +226,28 @@ function MyComponent({ onClose }) {
     </View>
     <View style= {{flexDirection: 'row'}}>
     <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
-     <TouchableOpacity style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>+</Text>
-    </TouchableOpacity>
+
 </View>
 
      <View style={styles.container}>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 1</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
            <TextInput
-            placeholder="Discuss tools to boost performance e.g, xrm toolbox"
+            placeholder={t("Plan around how to use tools to boost performance e.g, xrm toolbox")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic1}
-            onChangeText={text => settopic1(text)}
+            value={guide1}
+            onChangeText={text => setguide1(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic1_percentage}
+  selectedValue={guide1_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic1_percentage(itemValue)}
+  onValueChange={(itemValue) => setguide1_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -232,22 +264,22 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 2</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("How to incorporate app performance optimization")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic2}
-            onChangeText={text => settopic2(text)}
+            value={guide2}
+            onChangeText={text => setguide2(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic2_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic2_percentage(itemValue)}
+   selectedValue={guide2_percentage}
+   style={styles.picker}
+   onValueChange={(itemValue) => setguide2_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -264,22 +296,22 @@ function MyComponent({ onClose }) {
          </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 3</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
         <TextInput
-            placeholder={t("Being proactive")}
+            placeholder={t("How to be proactive")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic3}
-            onChangeText={text => settopic3(text)}
+            value={guide3}
+            onChangeText={text => setguide3(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic3_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic3_percentage(itemValue)}
+   selectedValue={guide3_percentage}
+   style={styles.picker}
+   onValueChange={(itemValue) => setguide3_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -296,22 +328,22 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
+         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 4</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("How to optimize power automate")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic4}
-            onChangeText={text => settopic4(text)}
+            value={guide4}
+            onChangeText={text => setguide4(text)}
           />
-        </View> 
+        </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic4_percentage}
+  selectedValue={guide4_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic4_percentage(itemValue)}
+  onValueChange={(itemValue) => setguide4_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -328,22 +360,22 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
       <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 5</Text>
         </View>
         <View style={[styles.cell, { flex: 5 }]}>
          <TextInput
-            placeholder={t("App performance optimization")}
+            placeholder={t("How to optimize AI builder bot")}
             placeholderTextColor="grey"
             style={styles.input}
-            value={topic5}
-            onChangeText={text => settopic5(text)}
+            value={guide5}
+            onChangeText={text => setguide5(text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
         <Picker
-  selectedValue={topic5_percentage}
+  selectedValue={guide5_percentage}
   style={styles.picker}
-  onValueChange={(itemValue) => settopic5_percentage(itemValue)}
+  onValueChange={(itemValue) => setguide5_percentage(itemValue)}
 >
 <Picker.Item label="10%" value="10" />
   <Picker.Item label="20%" value="20" />
@@ -361,13 +393,13 @@ function MyComponent({ onClose }) {
      
       </View>
 <TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>{t("Save")}</Text>
+      <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
     </TouchableOpacity>
 
 
-   
-  
-</View>
+
+    </View>
+
 </ScrollView>
 <CustomAlert
   visible={alertVisible}
@@ -376,7 +408,6 @@ function MyComponent({ onClose }) {
   onConfirm={hideAlert}
 />
 </View>
-
 );
 }
 
@@ -387,7 +418,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     marginRight: 70, 
     marginTop: 10, 
-    marginLeft: 50 
+    marginLeft: 50,
   },
   row: {
     flexDirection: 'row',
@@ -443,7 +474,7 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"
   },
    buttonplus: {
-    backgroundColor: 'coral',
+    backgroundColor: 'coral', 
     padding: 5,
     marginLeft: 585, 
     width: 100,
@@ -454,7 +485,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
   },
    buttonsave: {
     backgroundColor: 'coral',
@@ -462,12 +492,13 @@ const styles = StyleSheet.create({
     marginLeft: 750, 
     width: 100,
     paddingHorizontal: 20,
-    marginTop: 30
+    marginTop: 10
   },
   buttonTextsave: {
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
+    fontFamily:"Roboto-Light"
   },
   greenBox: {
     width: 920,
@@ -515,5 +546,4 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
 });
-
 export default MyComponent;

@@ -33,24 +33,9 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const storedFormData = await AsyncStorage.getItem('GrowthFormData');
-        if (storedFormData) {
-          const parsedData = JSON.parse(storedFormData);
-          setGrowthRole(parsedData.role || '');
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
-
-    loadFormData();
-  }, []);
 
   const handleSave = async () => {
-    if (!role || !level || !rate || !available_days || !available_times || !guide1 || !guide2 || !guide3 || !guide4 || !guide5 || !guide1_percentage || !guide2_percentage || !guide3_percentage || !guide4_percentage || !guide5_percentage) {
+    if (!role || !level || !rate || !available_days || !available_times) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
       return;
@@ -107,6 +92,7 @@ function MyComponent({ onClose }) {
     return null; // Return null to unmount the parent component
   }
 
+  
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -124,18 +110,9 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-     <TouchableOpacity style={styles.buttonNew} >
-      <Text style={styles.buttonTextNew}>{t("New")} +</Text>
-    </TouchableOpacity>
 <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
       <Text style={styles.buttonTextDue}>{role}</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>NIL</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.buttonAcc} >
-      <Text style={styles.buttonTextAcc}>NIL</Text>
     </TouchableOpacity>
 </View>
 

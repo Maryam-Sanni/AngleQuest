@@ -23,13 +23,13 @@ function MyComponent() {
 
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
-        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 20, backgroundColor: '#f7fff4', marginLeft: 230 }}>
+        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 20, backgroundColor: 'white', marginLeft: 230 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <View style={{ flex: 1, marginRight: 5, maxWidth: '70%' }}>
               <View>

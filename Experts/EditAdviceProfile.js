@@ -33,13 +33,46 @@ function MyComponent({ onClose }) {
         const [alertMessage, setAlertMessage] = useState('')     
         const [isVisible, setIsVisible] = useState(true);  
 
+        useEffect(() => {
+          const loadFormData = async () => {
+              try {
+                  const token = await AsyncStorage.getItem('token');
+                  if (!token) throw new Error('No token found');
+                  
+                  const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/get', {
+                      headers: { Authorization: `Bearer ${token}` }
+                  });
       
+                  if (response.status === 200) {
+                      const data = response.data.SkillAnalysis; // Access the SkillAnalysis property
+                      setSkillsAnalysisRole(data.role || '');
+                      setlevel(data.level || '');
+                      setrate(data.rate || '');
+                      setavailable_days(data.available_days || '');
+                      setavailable_times(data.available_times || '');
+                      settopic1(data.topic1 || '');
+                      settopic2(data.topic2 || '');
+                      settopic3(data.topic3 || '');
+                      settopic4(data.topic4 || '');
+                      settopic5(data.topic5 || '');
+                      settopic1_percentage(data.topic1_percentage ? data.topic1_percentage.toString() : '');
+                      settopic2_percentage(data.topic2_percentage ? data.topic2_percentage.toString() : '');
+                      settopic3_percentage(data.topic3_percentage ? data.topic3_percentage.toString() : '');
+                      settopic4_percentage(data.topic4_percentage ? data.topic4_percentage.toString() : '');
+                      settopic5_percentage(data.topic5_percentage ? data.topic5_percentage.toString() : '');
+                  } else {
+                      console.error('Failed to fetch data', response);
+                  }
+              } catch (error) {
+                  console.error('Failed to load form data', error);
+              }
+          };
+      
+          loadFormData();
+      }, []);
+      
+
         const handleSave = async () => {
-          if (!role || !level || !rate || !available_days || !available_times ) {
-            setAlertMessage(t('Please fill all fields'));
-            setAlertVisible(true);
-            return;
-          }
         
           try {
             const data = {
@@ -63,21 +96,21 @@ function MyComponent({ onClose }) {
             const token = await AsyncStorage.getItem('token');
             if (!token) throw new Error('No token found');
         
-            const response = await axios.post(
-              'https://recruitangle.com/api/expert/skillAnalysis/create',
+            const response = await axios.put(
+              'https://recruitangle.com/api/expert/skillAnalysis/edit',
               data,
               { headers: { Authorization: `Bearer ${token}` } }
             );
         
-            if (response.status === 201) {
+            if (response.status === 200) {
               await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
-              setAlertMessage(t('Skill Analysis profile created successfully'));
+              setAlertMessage(t('Skill Analysis profile updated successfully'));
             } else {
-              setAlertMessage(t('Failed to skill analysis profile'));
+              setAlertMessage(t('Failed to update skill analysis profile'));
             }
           } catch (error) {
             console.error('Error during save:', error); // Log error for debugging
-            setAlertMessage(t('Failed to create skill analysis profile'));
+            setAlertMessage(t('Failed to update skill analysis profile'));
           }
           setAlertVisible(true);
         };
@@ -101,7 +134,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Create Skills Analysis Profile")}</Text>
+          <Text style={styles.headerText}>{t("Edit Skills Analysis Profile")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -110,6 +143,7 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View> 
                
+
     <View style={{ flexDirection: "row", marginBottom: 10}}>
 <TouchableOpacity style={styles.buttonDue} >
       <Text style={styles.buttonTextDue}>{role}</Text>
@@ -192,9 +226,7 @@ function MyComponent({ onClose }) {
     </View>
     <View style= {{flexDirection: 'row'}}>
     <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
-     <TouchableOpacity style={styles.buttonplus} >
-      <Text style={styles.buttonTextplus}>+</Text>
-    </TouchableOpacity>
+
 </View>
 
      <View style={styles.container}>
@@ -361,7 +393,7 @@ function MyComponent({ onClose }) {
      
       </View>
 <TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>{t("Save")}</Text>
+      <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
     </TouchableOpacity>
 
 
@@ -445,7 +477,7 @@ const styles = StyleSheet.create({
    buttonplus: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 585, 
+    marginLeft: 575, 
     width: 100,
     paddingHorizontal: 20,
     marginTop: 10

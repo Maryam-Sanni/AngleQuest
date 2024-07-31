@@ -6,11 +6,11 @@ const MyComponent = () => {
   const navigation = useNavigation();
 
   const handleXPress = () => {
-    navigation.navigate('Join Recruitangle'); // Navigate to 'JoinAs' page
+    navigation.navigate('Welcome'); // Navigate to 'JoinAs' page
   };
 
   return ( 
-    <View style={{backgroundColor: '#F8F8F8', }}>
+    <View style={{backgroundColor: '#001a00' }}>
             <View style={styles.header}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
@@ -18,7 +18,7 @@ const MyComponent = () => {
           />
           <Text style={styles.headerText}>AngleQuest</Text>
           <TouchableOpacity style={styles.joinButton} onPress={handleXPress}>
-          <Text style={styles.joinButtonText}>See Progress</Text>
+          <Text style={styles.joinButtonText}>Back</Text>
         </TouchableOpacity>
        
         </View>
@@ -42,7 +42,7 @@ logo: {
   width: 40,
   height: 40,
   marginRight: 5,
-  marginLeft: 150,
+  marginLeft: 50,
 },
 headerText: {
   fontSize: 22,

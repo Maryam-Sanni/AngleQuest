@@ -18,13 +18,13 @@ function MyComponent() {
   })
 const {t}=useTranslation()
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
     <View style={{ flex: 1 }}>
       <TopBar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
-        <View style={{ backgroundColor: '#f7fff4', marginLeft: 230 }}>
+        <View style={{ backgroundColor: 'white', marginLeft: 230 }}>
           <Text style={{ fontSize: 18, color: '#206C00', fontWeight: 'bold', marginTop: 30, marginBottom: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Contact Information")}</Text>
           <View style={{ flexDirection: 'row', paddingHorizontal: 8, paddingTop: 8 }}>
             <View style={{ flex: 1 }}>

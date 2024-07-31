@@ -64,6 +64,7 @@
     "react-native-linkedin": "^2.1.1",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^17.1.0",
+    "react-native-multiple-select": "^0.5.12",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-reanimated": "~3.6.2",
     "react-native-responsive-fontsize": "^0.5.1",

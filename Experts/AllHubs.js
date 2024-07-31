@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
@@ -11,17 +11,20 @@ import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-    const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
+    const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(true);
     const [modalVisible4, setModalVisible4] = useState(false);
-    const [isThirdHubsHovered, setIsThirdHubsHovered] = useState(false);
+    const [modalVisible5, setModalVisible5] = useState(false);;
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
+    const [coaching_hub_name, setGroupName] = useState('');
     
 
       const goToMyHubs = () => {
@@ -59,10 +62,46 @@ function MyComponent() {
     const handleCloseModal4 = () => {
       setModalVisible4(false);
     };
+
+    const handleOpenPress4 = () => {
+      setModalVisible5(true);
+    };
+  
+    const handleCloseModal5 = () => {
+      setModalVisible5(false);
+      onClose();
+    };
+
 const {t}=useTranslation()
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get('https://recruitangle.com/api/expert/hubs/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.NewHub;
+          setGroupName(data.coaching_hub_name || '');
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  
 
   return (
     <ImageBackground
@@ -79,31 +118,17 @@ const {t}=useTranslation()
               <TouchableOpacity
             underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsFirstHubsHovered(true)}
-            onMouseLeave={() => setIsFirstHubsHovered(false)}> 
+            onMouseLeave={() => setIsFirstHubsHovered(true)}> 
               <View style={styles.item}>
               <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>SAP FI</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>{coaching_hub_name}</Text>
               </View>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-            underlayColor={isThirdHubsHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsThirdHubsHovered(true)}
-            onMouseLeave={() => setIsThirdHubsHovered(false)} >
-              <View style={styles.item}>
-              <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                <Text style={[{marginLeft: 5, color: "#666" }, isThirdHubsHovered && { color: 'coral' }]}>Microsoft Azure</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleOthersPress}>
-                <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginRight: 5, marginLeft: 50}} />
-            </TouchableOpacity>
+            
             <TouchableOpacity onPress={goToMyHubs}
             underlayColor={isAllHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsAllHovered(true)}
@@ -128,6 +153,11 @@ const {t}=useTranslation()
             <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Hub")}</Text>
+                  </View>
+     </TouchableOpacity>
+     <TouchableOpacity onPress={handleOpenPress4} >
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Meeting")}</Text>
                   </View>
      </TouchableOpacity>
      <TouchableOpacity onPress={handleOpenPress3}>
@@ -178,8 +208,18 @@ const {t}=useTranslation()
           <View style={styles.modalContent}>
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
-      </Modal>s
+      </Modal>
 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible5}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={handleCloseModal5} />
+        </View>
+      </Modal>
             <ScheduledMeetingsTable />
             
           </View>
@@ -192,16 +232,48 @@ const {t}=useTranslation()
 
 const ScheduledMeetingsTable = () => {
   const [messageCountText, setMessageCountText] = useState('0'); 
-    const [modalVisible4, setModalVisible4] = useState(false);
+  const [meetingData, setMeetingData] = useState({
+    date: '',
+    time: ''
+  });
+   
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
 
-    const handleOpenPress4 = () => {
-      setModalVisible4(true);
+        const response = await axios.get('https://recruitangle.com/api/expert/newhubmeeting/get', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const { NewMeeting } = response.data;
+          if (NewMeeting && NewMeeting.length > 0) {
+            const meeting = NewMeeting[0]; // Assuming there's at least one meeting
+            setMeetingData({
+              date: meeting.date,
+              time: meeting.time
+            });
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meeting data');
+        }
+      } catch (error) {
+        console.error('Error fetching meeting data:', error);
+      }
     };
-  
-    const handleCloseModal4 = () => {
-      setModalVisible4(false);
-      onClose();
-    };
+
+    fetchMeetingData();
+  }, []);
+   
     const {t}=useTranslation()
 
   return ( 
@@ -209,8 +281,8 @@ const ScheduledMeetingsTable = () => {
     <View style={{flexDirection: 'row', flexWrap: "wrap", alignItems: 'center', alignContent: 'center' }}>
     <View style={[styles.whiteBox, { marginLeft: 50, }]}>
     <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>{t("Next Meeting Schedule")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10}}>27/May/2024</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, fontWeight: '500'}}>2:00PM - 3:00PM</Text>
+    <Text style={{ fontSize: 13, color: "black", marginTop: 10}}>{meetingData.date}</Text>
+    <Text style={{ fontSize: 14, color: "black", marginTop: 10, fontWeight: '500'}}>{meetingData.time}</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("Start Session")}</Text>
           </TouchableOpacity>
@@ -226,9 +298,7 @@ const ScheduledMeetingsTable = () => {
       <View style={[styles.whiteBox, { marginLeft: 40, }]}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
     <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
-    <TouchableOpacity onPress={handleOpenPress4} style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("New Meeting")}</Text>
-          </TouchableOpacity>
+    
       </View>
 
       <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
@@ -506,16 +576,7 @@ const ScheduledMeetingsTable = () => {
           </View>
         </View>
 
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible4}
-        onRequestClose={handleCloseModal4}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal4 onClose={handleCloseModal4} />
-        </View>
-      </Modal>
+        
        
       </View>
       </BlurView>

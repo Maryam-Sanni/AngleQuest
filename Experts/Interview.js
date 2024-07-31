@@ -6,18 +6,20 @@ import ScheduledMeetingsTable from '../components/ScheduledMeetingsTable';
 import AwaitingFeedbacks from '../components/AwaitingFeedbacks';
 import CompletedFeedbacks from '../components/CompletedFeedbacks';
 import OpenModal from '../Experts/InterviewProfile'; 
+import OpenModal2 from '../Experts/EditInterviewProfile'; 
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function MyComponent() { 
     const navigation = useNavigation();
-    const [isInterviewHovered, setIsInterviewHovered] = useState(false);
+    const [isInterviewHovered, setIsInterviewHovered] = useState(true);
     const [isGrowthHovered, setIsGrowthHovered] = useState(false);
-    const [role, setRole] = useState('');
+    const [role, setInterviewRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [modalVisible2, setModalVisible2] = useState(false);
 
     const calculateTimeLeft = () => {
       const difference = +new Date(targetDate) - +new Date();
@@ -25,8 +27,8 @@ function MyComponent() {
   
       if (difference > 0) {
         timeLeft = {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hrs: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          mins: Math.floor((difference / 1000 / 60) % 60),
         };
       }
   
@@ -34,7 +36,7 @@ function MyComponent() {
     };
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const targetDate = '2024-05-30T00:00:00'; // Change this to your target date and time
+    const targetDate = '2024-08-08T00:00:00'; // Change this to your target date and time
   
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -45,19 +47,28 @@ function MyComponent() {
     });
   
     useEffect(() => {
-      const fetchRole = async () => {
-          try {
-              const storedFormData = await AsyncStorage.getItem('InterviewFormData');
-              if (storedFormData) {
-                  const parsedData = JSON.parse(storedFormData);
-                  setRole(parsedData.role || '');
-              }
-          } catch (error) {
-              console.error('Failed to load form data from AsyncStorage', error);
+      const loadFormData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          if (!token) throw new Error('No token found');
+    
+          const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+    
+          if (response.status === 200 && response.data.status === 'success') {
+            const data = response.data.interview;
+            setInterviewRole(data.role || '');
+          } else {
+            console.error('Failed to fetch data', response);
           }
+        } catch (error) {
+          console.error('Failed to load form data', error);
+        }
       };
-      fetchRole();
-  }, []);
+    
+      loadFormData();
+    }, []);
 
     const timerComponents = Object.keys(timeLeft).map((interval) => {
       if (!timeLeft[interval]) {
@@ -80,16 +91,12 @@ function MyComponent() {
       setModalVisible(false);
     };
 
-    const goToInterview = () => {
-        navigation.navigate('Interview');
+    const handleOpenPress2 = () => {
+      setModalVisible2(true);
     };
-
-    const goToGrowth = () => {
-        navigation.navigate('Growth Plan');
-    };
-
-    const goToAdvice = () => {
-        navigation.navigate('Advice');
+  
+    const handleCloseModal2 = () => {
+      setModalVisible2(false);
     };
 
     const [fontsLoaded]=useFonts({
@@ -116,7 +123,7 @@ const {t}=useTranslation()
                                 
                                 underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
                                 onMouseEnter={() => setIsInterviewHovered(true)}
-                                onMouseLeave={() => setIsInterviewHovered(false)}>
+                                onMouseLeave={() => setIsInterviewHovered(true)}>
                                 <View style={styles.item}>
                                 <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -125,22 +132,7 @@ const {t}=useTranslation()
                                     <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role}</Text>
                                 </View>
                             </TouchableHighlight>
-                            <TouchableHighlight
-                               
-                                underlayColor={isGrowthHovered ? 'transparent' : 'transparent'}
-                                onMouseEnter={() => setIsGrowthHovered(true)}
-                                onMouseLeave={() => setIsGrowthHovered(false)}>
-                                <View style={styles.item}>
-                                <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                                    <Text style={[styles.headertext, isGrowthHovered && { color: 'coral' }]}>NIL</Text>
-                                </View>
-                            </TouchableHighlight>
-                            <TouchableOpacity >
-                <Image source={require('../assets/ellipsis-down.png')} style={{width: 15, height: 15, marginLeft: 60, marginTop: 10}} />
-            </TouchableOpacity>
+                            
                             
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
@@ -148,7 +140,7 @@ const {t}=useTranslation()
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
-                        <TouchableOpacity onPress={handleOpenPress}>
+                        <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
                   </View>
@@ -202,6 +194,18 @@ const {t}=useTranslation()
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal2 onClose={() => handleCloseModal2()} />
+          </View>
+      </Modal>
+
                         <ScheduledMeetingsTable />
                         <AwaitingFeedbacks />
                         <CompletedFeedbacks />
