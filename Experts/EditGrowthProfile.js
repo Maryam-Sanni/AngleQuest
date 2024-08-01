@@ -127,7 +127,7 @@ function MyComponent({ onClose }) {
   }
 
   return (
-    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
+    <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
         <View style={styles.header}>
@@ -489,10 +489,10 @@ const styles = StyleSheet.create({
    buttonsave: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 750, 
-    width: 100,
+    marginLeft: 700, 
+    width: 150,
     paddingHorizontal: 20,
-    marginTop: 10
+    marginTop: 20
   },
   buttonTextsave: {
     color: 'white',

@@ -63,7 +63,7 @@ function MyComponent() {
   const handleLogout = () => {
     // Handle logout action here
     console.log("Logout clicked");
-    navigation.navigate('Signin'); // Navigate to the sign-in page
+    navigation.navigate('Sign in to AngleQuest'); // Navigate to the sign-in page
     setClickedItem(null);
   };
 

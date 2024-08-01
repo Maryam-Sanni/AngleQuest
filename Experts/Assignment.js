@@ -173,7 +173,7 @@ function MyComponent({ onClose }) {
               itemTextColor="black"
               selectedItemTextColor="green"
               displayKey="name"  // This is where the names are displayed
-              submitButtonText="Submit"
+              submitButtonText="Save Selection"
               styleInputGroup={styles.multiSelectSearchInput}
               styleTextDropdown={styles.multiSelectText}
               styleTextDropdownSelected={styles.multiSelectText}

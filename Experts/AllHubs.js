@@ -101,6 +101,12 @@ const {t}=useTranslation()
     loadFormData();
   }, []);
 
+  const reloadHomeExperts = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home - Experts' }],
+    });
+  };
   
 
   return (
@@ -115,6 +121,12 @@ const {t}=useTranslation()
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ marginLeft: 270 }}>
             <View style={styles.header}>
+              <TouchableOpacity onPress={reloadHomeExperts}>
+                <Image
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
+                  style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
+                />
+              </TouchableOpacity>  
               <TouchableOpacity
             underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsFirstHubsHovered(true)}
@@ -124,7 +136,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: 'coral' }]}>{coaching_hub_name || "Learning Hub"}</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: '#666' }]}>{coaching_hub_name || "loading..."}</Text>
               </View>
             </TouchableOpacity>
             
@@ -136,7 +148,7 @@ const {t}=useTranslation()
               <View style={styles.item}>
               <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
+  style={styles.image2}
 />
                 <Text style={[{marginLeft: 5, color: "#666" }, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
               </View>
@@ -144,7 +156,7 @@ const {t}=useTranslation()
             </View>
 
             <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("New Hub")}</Text>
                   </View>
      </TouchableOpacity>
@@ -617,15 +629,13 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 5,
-    marginLeft: 100
+    marginLeft: 60
   },
-  eimage: {
-    position: 'absolute',
+  image2: {
     width: 24,
     height: 24,
-    right: 0,
-    marginRight: 90,
-    marginTop: -30
+    marginRight: 5,
+    marginLeft: 120
   },
   headertext: {
     position: 'absolute',

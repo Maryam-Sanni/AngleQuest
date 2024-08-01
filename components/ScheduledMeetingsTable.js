@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,

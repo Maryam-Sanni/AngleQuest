@@ -52,13 +52,16 @@ function MyComponent({ onClose }) {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
-  
+
         const response = await axios.get('https://recruitangle.com/api/expert/newassignment/get', {
           headers: { Authorization: `Bearer ${token}` }
         });
-  
+
         if (response.status === 200 && response.data.status === 'success') {
-          setAssignments(response.data.NewAssignment || []);
+          const sortedAssignments = response.data.NewAssignment.sort((a, b) => 
+            new Date(b.created_at) - new Date(a.created_at)
+          );
+          setAssignments(sortedAssignments);
         } else {
           console.error('Failed to fetch data:', response.status, response.statusText);
         }
@@ -66,9 +69,10 @@ function MyComponent({ onClose }) {
         console.error('Failed to load assignments:', error.message);
       }
     };
-  
+
     loadAssignments();
   }, []);
+
 
   const getHubMemberCount = (hub_member) => {
     if (!hub_member) return 0;

@@ -80,7 +80,7 @@ const MyComponent = () => {
   };
 
   const handleSignInPress = () => {
-    navigation.navigate('Sign in');
+    navigation.navigate('Sign in to AngleQuest');
   };
 
 

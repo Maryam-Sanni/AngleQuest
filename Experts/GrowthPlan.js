@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Growthplanprofile';
 import OpenModal2 from '../Experts/EditGrowthProfile';
 import {useFonts} from "expo-font"
+import { CommonActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -102,10 +103,19 @@ function MyComponent() {
       setModalVisible2(false);
     };
 
+  const reloadHomeExperts = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home - Experts' }],
+    });
+  };
+  
     const [fontsLoaded]=useFonts({
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
     })
+  
 const {t}=useTranslation()
+  
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -118,6 +128,12 @@ const {t}=useTranslation()
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
+            <TouchableOpacity onPress={reloadHomeExperts}>
+              <Image
+                source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
+                style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
+              />
+            </TouchableOpacity>
           <TouchableHighlight
   underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
   onMouseEnter={() => setIsInterviewHovered(true)}
@@ -129,14 +145,15 @@ const {t}=useTranslation()
       style={styles.image}
     />
     <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>
-      {role || "Growth Plan"}
+      {role || "loading..."}
     </Text>
   </View>
-</TouchableHighlight>                    
+</TouchableHighlight>              
+             
                             
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
@@ -242,7 +259,7 @@ const styles = StyleSheet.create({
     height: 21,
     marginRight: 5,
     marginTop: 5,
-    marginLeft: 100
+    marginLeft: 60
   },
   container: {
     flexDirection: 'row',

@@ -10,27 +10,39 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ChatScreen({ userId }) {
 
-  const userData = {
-    1: { name: 'Amelia Harry', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
-    2: { name: 'Bwanbale Akiki', avatar: require('../assets/account.png'), expertise: 'Microsoft Azure', role: 'individual' },
-    3: { name: 'Mardiyyah Sulaimon', avatar: require('../assets/account.png'), expertise: 'Dynamics', role: 'individual' },
-    7: { name: 'Power Point Hub', avatar: require('../assets/people.png'), expertise: 'Power Point', role: 'hub' },
-    5: { name: 'Nathan Arthur', avatar: require('../assets/account.png'), expertise: 'Frontend Developer', role: 'individual' },
-    6: { name: 'Microsoft Azure Hub', avatar: require('../assets/people.png'), expertise: 'Microsoft Azure', role: 'hub' },
-    4: { name: 'SAP FI Hub', avatar: require('../assets/people.png'), expertise: 'SAP FI', role: 'hub' },
-    8: { name: 'Akeju Benson', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
-    11: { name: 'Chiara Romano', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
-    9: { name: 'John Jenny', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
-    10: { name: 'Adedare Adeyemi', avatar: require('../assets/account.png'), expertise: 'SAP FI', role: 'individual' },
-    12: { name: 'Snr. Power Point Hub', avatar: require('../assets/people.png'), expertise: 'Power Point', role: 'hub' },
-    13: { name: 'Java Programming', avatar: require('../assets/people.png'), expertise: 'Java Programming', role: 'hub' },
-  };
-
   const [messages, setMessages] = useState([]);
   const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isProfileVisible, setProfileVisible] = useState(false);
+  const [userData, setUserData] = useState({});
 
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get('https://recruitangle.com/api/expert/getAllJobSeekers', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const users = response.data.allJobSeekers.reduce((acc, user) => {
+          acc[user.id] = {
+            name: `${user.first_name} ${user.last_name}`,
+            avatar: require('../assets/account.png'), // Assuming a default avatar
+            role: user.role,
+          };
+          return acc;
+        }, {});
+        setUserData(users);
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  
   useEffect(() => {
     const loadMessages = async () => {
       try {
@@ -52,30 +64,37 @@ function ChatScreen({ userId }) {
     setMessages((prevMessages) => {
       const updatedMessages = GiftedChat.append(prevMessages, newMessages);
       AsyncStorage.setItem(`chat_${userId}`, JSON.stringify(updatedMessages)); // Save messages for this user
+
+      // Save last message and timestamp
+      const lastMessage = newMessages[0].text;
+      const timestamp = newMessages[0].createdAt.toISOString();
+      AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
+
       return updatedMessages;
     });
-  
-    const receiverId = '123'; // Replace with actual receiver ID
-    const receiverType = 'Individual'; // Replace with actual receiver type
-    
+
     try {
       const token = await AsyncStorage.getItem('token');
       const messageContent = newMessages[0].text;
-  
-      const response = await axios.post('https://recruitangle.com/api/chat/send', {
-        receiver_id: receiverId,
-        receiver_type: receiverType,
+      const timestamp = newMessages[0].createdAt.toISOString();
+
+      await axios.post('https://recruitangle.com/api/chat/send', {
+        receiver_id: userId,
+        receiver_type: 'Individual', 
         message: messageContent,
+        time: timestamp,
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Message sent:', response.data);
+      console.log('Message sent:', newMessages);
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
+
+
 
   const renderSend = (props) => {
     return (
@@ -93,7 +112,7 @@ function ChatScreen({ userId }) {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: 'white',
+            backgroundColor: 'lightgreen',
           },
           right: {
             backgroundColor: '#3D5C3A',
@@ -167,8 +186,13 @@ function ChatScreen({ userId }) {
   });
   const { t } = useTranslation();
 
-  const user = userData[userId] || { name: 'Unknown', avatar: require('../assets/account.png'), expertise: 'Unknown' };
-  
+  // Get the user data based on userId
+  const user = userData[userId] || {
+    name: 'Loading...',
+    avatar: require('../assets/account.png'), // Fallback avatar
+    expertise: 'Loading...'
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Modal visible={isProfileVisible} animationType="slide" transparent>
@@ -216,6 +240,7 @@ function ChatScreen({ userId }) {
           <Text style={{ fontSize: 12, color: '#A0AEC0' }}>{user.expertise} - <Text style={{ fontStyle: 'italics' }}>{user.role}</Text></Text>
         </View>
       </View>
+      <View style={{ backgroundColor: '#eafaf1', flex: 1, }}>
       <GiftedChat
         messages={messages}
         onSend={onSend}
@@ -223,6 +248,7 @@ function ChatScreen({ userId }) {
         renderSend={renderSend}
         renderBubble={renderBubble}
       />
+         </View>
       {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
     </View>
   );

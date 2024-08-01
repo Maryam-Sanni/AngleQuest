@@ -23,7 +23,7 @@ const [fontsLoaded]=useFonts({
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-      <Text style={styles.title}>{t("Scheduled Advice Meetings")}</Text>
+      <Text style={styles.title}>{t("Scheduled Skill Analysis Meetings")}</Text>
       
       <View style={styles.table}>
       <View style={styles.row}>
@@ -116,13 +116,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   title: {
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 50,
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,

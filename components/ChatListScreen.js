@@ -1,95 +1,12 @@
-import React from 'react';
-import { View, ScrollView, FlatList, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
- 
-const data = [
-  {
-    id: '1',
-    name: 'Amelia Harry',
-    message: 'Hello John, This Amelia, This is...',
-    time: '10:00 AM',
-    messagecount: '0',
-    avatar: require('../assets/useravatar1.png')
-  },
-  {
-    id: '2',
-    name: 'Bwanbale Akiki',
-    message: 'I will send my CV to you sir for proper',
-    time: '12:08 PM',
-    messagecount: '1',
-    avatar: require('../assets/useravatar2.png')
-  },
-  {
-    id: '3',
-    name: 'Mardiyyah Sulaimon',
-    message: 'Ready for the meeting?',
-    time: '05:23 PM',
-    messagecount: '3',
-    avatar: require('../assets/useravatar4.png')
-  },
-  {
-    id: '4',
-    name: 'Software Eng. Hub',
-    message: 'Lets reconvene same time tomorrow',
-    time: 'Yesterday',
-    messagecount: '0',
-    avatar: require('../assets/useravatar.jpg')
-  },
-  {
-    id: '5',
-    name: 'Nathan Arthur',
-    message: 'You are doing great! Dont doubt your potentials...',
-    time: 'Yesterday',
-    messagecount: '0',
-    avatar: require('../assets/useravatar5.jpg')
-  },
-  {
-    id: '6',
-    name: 'Microsoft Hub',
-    message: 'Remember youre here to learn',
-    time: '29/05/24',
-    messagecount: '5',
-    avatar: require('../assets/useravatar.jpg')
-  },
-  {
-    id: '7',
-    name: 'SAP Hub',
-    message: 'Welcome to the SAP coaching hub',
-    time: '27/05/24',
-    messagecount: '0',
-    avatar: require('../assets/useravatar.jpg')
-  },
-  {
-    id: '8',
-    name: 'Akeju Benson',
-    message: 'Good morning John, Lets continue from...',
-    time: '13/04/24',
-    messagecount: '10',
-    avatar: require('../assets/useravatar5.jpg')
-  },
-  {
-    id: '9',
-    name: 'Royale Charles',
-    message: 'Hi Charles, it is a great morning...',
-    time: '10/04/24',
-    messagecount: '0',
-    avatar: require('../assets/useravatar2.png')
-  },
-  {
-    id: '10',
-    name: 'Mia Gonzalez',
-    message: 'Hi',
-    time: '07/02/24',
-    messagecount: '0',
-    avatar: require('../assets/useravatar4.png')
-  },
-];
-
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function CustomHeader() {
-  const { t } = useTranslation()
-  
+  const { t } = useTranslation();
+
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.headerText}>{t("Chats")}</Text>
@@ -98,6 +15,70 @@ function CustomHeader() {
 }
 
 function ChatListScreen({ onUserSelect }) {
+  const [data, setData] = useState([]);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      // Load your fonts here, and then set fontsLoaded to true
+      // e.g., await Font.loadAsync({ 'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf') });
+      setFontsLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      console.log("Token retrieved:", token);
+
+      if (token) {
+        const response = await axios.get(
+          "https://recruitangle.com/api/expert/getAllExperts",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("API response:", response.data);
+
+        const result = response.data.allExperts;
+
+        const formattedData = result.map((item) => ({
+          id: item.id.toString(), // Ensure id is a string
+          name: `${item.first_name} ${item.last_name}`,
+          avatar: item.avatar_url ? { uri: item.avatar_url } : require('../assets/account.png'), // Assuming a default avatar
+          message: "Sample message",
+          time: "Just now",
+          messagecount: "0",
+        }));
+
+        setData(formattedData);
+      } else {
+        console.log("No token found");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      fetchData();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return (
+      <View>
+        <Text>Loading fonts...</Text>
+      </View>
+    );
+  }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => onUserSelect(item.id)}>
       <View style={styles.itemContainer}>
@@ -132,7 +113,8 @@ function ChatListScreen({ onUserSelect }) {
 
 const styles = StyleSheet.create({
   container: {
-
+    flex: 1,
+    backgroundColor: '#fff',
   },
   headerContainer: {
     padding: 16,
@@ -141,33 +123,33 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E5E5E5',
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 18,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
   },
   avatar: {
-    width: 48,
-    height: 48,
+    width: 36,
+    height: 36,
     borderRadius: 24,
     marginRight: 12,
   },
   messageContainer: {
     flex: 1,
-    
   },
   userName: {
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 16,
   },
   message: {
     color: '#777',
-    fontSize: 14,
+    fontSize: 13,
+    marginTop: 7
   },
   timeAndCount: {
     flexDirection: 'column',

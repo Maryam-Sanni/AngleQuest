@@ -129,6 +129,13 @@ function MyComponent() {
   
     const {t}=useTranslation()
 
+  const reloadHomeExperts = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home - Experts' }],
+    });
+  };
+  
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -141,24 +148,31 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, }}>
         <View style={styles.header}>
+          
+          <TouchableOpacity onPress={reloadHomeExperts}>
+            <Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
+              style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
+            />
+          </TouchableOpacity>  
           <TouchableHighlight
                                 
                                 underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
-                                onMouseEnter={() => setIsInterviewHovered(true)}
-                                onMouseLeave={() => setIsInterviewHovered(true)}>
+                                onMouseEnter={() => setIsInterviewHovered(false)}
+                                onMouseLeave={() => setIsInterviewHovered(false)}>
                                 <View style={styles.item}>
                                 <Image
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{role || "Skills Analysis"}</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "loading..."}</Text>
                                 </View>
                             </TouchableHighlight>
-                      
-                            
+
+            
                         </View>
                         <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
@@ -274,7 +288,7 @@ const styles = StyleSheet.create({
     height: 21,
     marginTop: 5,
     marginRight: 5,
-    marginLeft: 100
+    marginLeft: 60
   },
   container: {
     flexDirection: 'row',
