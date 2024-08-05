@@ -56,7 +56,7 @@ const MyComponent = () => {
           A unique toolkit for team impact management.
         </Text>
         <Text style={{ fontSize: 24, color: 'grey', padding: 10, textAlign: 'center', marginTop: -15 }}>
-        Designed for individuals & businesses of all sizes who wants to optimize their efficiency.
+        Designed for individuals, teams, recruiters and enterprise who wants to support their resource to succeed effortlessly on the job.
         </Text>
         <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
           <Text style={styles.buttonTextplus}>Sign up for early access</Text>
@@ -66,7 +66,7 @@ const MyComponent = () => {
           style={styles.image}
         />
         <View style={{backgroundColor: 'white', padding: 10, alignSelf: 'stretch', justifyContent: 'center'}} >
-        <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 100, marginBottom: -60  }}>Begin the journey to career advancement & growth today</Text>
+        <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 100, marginBottom: -60  }}>A unique toolkit to boost team members performance</Text>
                 <Image
                   source={require('../assets/landingco1.gif')}
                   style={styles.landingimage}
@@ -97,7 +97,7 @@ const MyComponent = () => {
                   style={styles.recommended2}
                 />
     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -20}}>Consulting Firms</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>A tool that keeps your consultant at their best & enable them to transit to any role easily.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>A supporting tool for consultants to ensure they perform their best work always.</Text>
     <View style={{flexDirection: 'row', alignItems: 'center'}} >
     <TouchableOpacity>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 18, fontWeight: '600', marginTop: 30 }}>TRY IT NOW</Text>
@@ -114,7 +114,7 @@ const MyComponent = () => {
                   style={styles.recommended2}
                 />
     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -20}}>Recruiting Firms</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>A tool that helps you streamline candidates and get the best of your workforce.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>Guarantee the performance & growth of secondments.</Text>
     <View style={{flexDirection: 'row', alignItems: 'center'}} >
     <TouchableOpacity>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 18, fontWeight: '600', marginTop: 30 }}>TRY IT NOW</Text>
@@ -131,7 +131,7 @@ const MyComponent = () => {
                   style={styles.recommended3}
                 />
     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -20}}>Individual Professionals</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>Use AngleQuest to manage your professional growth from one level to another.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>Support yourself with AnqleQuest to deliver good work and grow speedily</Text>
     <View style={{flexDirection: 'row', alignItems: 'center'}} >
     <TouchableOpacity>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 18, fontWeight: '600', marginTop: 30}}>TRY IT NOW</Text>
@@ -156,22 +156,22 @@ const MyComponent = () => {
     <Text style={{ fontSize: 14, color: "grey", marginTop: 5, marginLeft: 10, width: 280}}>Back your team to succeed</Text>
     </View>
     </View>
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 30}}>Streamline your team management to drive growth and monitor success</Text>
+    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 30}}>Transform your team with a tool that guarantees their growth and improved productivity</Text>
     <View style={{borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 40}}/>
     <View style={{flexDirection: 'row', marginTop: 50}} >
     <Image
                   source={require('../assets/icons8-check-50.png')}
                   style={styles.check}
                 />
-                <Text style={{ fontSize: 14, marginLeft: 10}}>Team Expansion</Text>
+                <Text style={{ fontSize: 14, marginLeft: 10}}>Analyze & Identify talents for collaborate</Text>
                 <Image
                   source={require('../assets/icons8-check-50.png')}
                   style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Data-Driven Insigts</Text>
+                  <Text style={{ fontSize: 14, marginLeft: 10}}>Personalized growth</Text>
                   <Image
                   source={require('../assets/icons8-check-50.png')}
                   style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Performance Tracking</Text>
+                  <Text style={{ fontSize: 14, marginLeft: 10}}>Skills gap analysis</Text>
                 </View>
     <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Get Started</Text>
