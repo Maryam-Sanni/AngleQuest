@@ -172,6 +172,14 @@ const MyComponent = () => {
                   source={require('../assets/icons8-check-50.png')}
                   style={[styles.check, {marginLeft: 10}]}/>
                   <Text style={{ fontSize: 14, marginLeft: 10}}>Skills gap analysis</Text>
+                  <Image
+                  source={require('../assets/icons8-check-50.png')}
+                  style={[styles.check, {marginLeft: 10}]}/>
+                  <Text style={{ fontSize: 14, marginLeft: 10}}>Knowledge Sharing</Text>
+                  <Image
+                  source={require('../assets/icons8-check-50.png')}
+                  style={[styles.check, {marginLeft: 10}]}/>
+                  <Text style={{ fontSize: 14, marginLeft: 10}}>Support on blockers</Text>
                 </View>
     <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Get Started</Text>
