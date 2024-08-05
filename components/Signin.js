@@ -35,16 +35,14 @@ const MyComponent = () => {
 
       console.log('Sign In Response:', response.data);
 
-      if (response.data.status === 'success') {
-        const { token, user } = response.data;
-        const { first_name, last_name, role } = user;
+        if (response.data.status === 'success') {
+          const { token, user } = response.data;
+          const { id, first_name, last_name, role } = user;
 
-        await AsyncStorage.setItem('token', token);
-        await AsyncStorage.setItem('first_name', first_name);
-        await AsyncStorage.setItem('last_name', last_name);
-
-        setFirstName(first_name);
-        setLastName(last_name);
+          await AsyncStorage.setItem('token', token);
+          await AsyncStorage.setItem('user_id', id.toString()); 
+          await AsyncStorage.setItem('first_name', first_name);
+          await AsyncStorage.setItem('last_name', last_name);
 
         // Navigate based on user role
         if (role === 'expert') {

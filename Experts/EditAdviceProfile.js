@@ -15,20 +15,12 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
 
   const [role, setSkillsAnalysisRole] = useState('');
+  const [category, setCategory] = useState('');
         const [level, setlevel] = useState('');
         const [rate, setrate] = useState('');
         const [available_days, setavailable_days] = useState('');
         const [available_times, setavailable_times] = useState('');
-        const [topic1, settopic1] = useState('');
-        const [topic2, settopic2] = useState('');
-        const [topic3, settopic3] = useState('');
-        const [topic4, settopic4] = useState('');
-        const [topic5, settopic5] = useState('');
-        const [topic1_percentage, settopic1_percentage] = useState('');
-        const [topic2_percentage, settopic2_percentage] = useState('');
-        const [topic3_percentage, settopic3_percentage] = useState('');
-        const [topic4_percentage, settopic4_percentage] = useState('');
-        const [topic5_percentage, settopic5_percentage] = useState('');
+        const [topics, setTopics] = useState([]);
         const [alertVisible, setAlertVisible] = useState(false);
         const [alertMessage, setAlertMessage] = useState('')     
         const [isVisible, setIsVisible] = useState(true);  
@@ -50,16 +42,7 @@ function MyComponent({ onClose }) {
                       setrate(data.rate || '');
                       setavailable_days(data.available_days || '');
                       setavailable_times(data.available_times || '');
-                      settopic1(data.topic1 || '');
-                      settopic2(data.topic2 || '');
-                      settopic3(data.topic3 || '');
-                      settopic4(data.topic4 || '');
-                      settopic5(data.topic5 || '');
-                      settopic1_percentage(data.topic1_percentage ? data.topic1_percentage.toString() : '');
-                      settopic2_percentage(data.topic2_percentage ? data.topic2_percentage.toString() : '');
-                      settopic3_percentage(data.topic3_percentage ? data.topic3_percentage.toString() : '');
-                      settopic4_percentage(data.topic4_percentage ? data.topic4_percentage.toString() : '');
-                      settopic5_percentage(data.topic5_percentage ? data.topic5_percentage.toString() : '');
+                    setTopics(data.topics || []);
                   } else {
                       console.error('Failed to fetch data', response);
                   }
@@ -81,16 +64,8 @@ function MyComponent({ onClose }) {
               rate,
               available_days,
               available_times,
-              topic1,
-              topic1_percentage,
-              topic2,
-              topic2_percentage,
-              topic3,
-              topic3_percentage,
-              topic4,
-              topic4_percentage,
-              topic5,
-              topic5_percentage
+              category,
+              topics
             };
         
             const token = await AsyncStorage.getItem('token');
@@ -125,6 +100,12 @@ function MyComponent({ onClose }) {
           return null; // Return null to unmount the parent component
         }
 
+  const handleTopicChange = (index, field, value) => {
+    const newTopics = [...topics];
+    newTopics[index] = { ...newTopics[index], [field]: value };
+    setTopics(newTopics);
+  };
+  
   return (
     <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -167,20 +148,45 @@ function MyComponent({ onClose }) {
           />
         </View>
       </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <TextInput
-            placeholder="Junior"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={level}
-            onChangeText={text => setlevel(text)}
-          />
-        </View>
-      </View>
+   <View style={styles.row}>
+     <View style={styles.cell}>
+       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+     </View>
+     <View style={styles.cell}>
+       <Picker
+         selectedValue={category}
+         style={styles.picker}
+         onValueChange={(itemValue) => setCategory(itemValue)}
+       >
+         <Picker.Item label={t('SAP')} value="SAP" />
+         <Picker.Item label={t('Microsoft')} value="Microsoft" />
+         <Picker.Item label={t('Salesforce')} value="Salesforce" />
+         <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
+         <Picker.Item label={t('Backend Development')} value="Backend Development" />
+         <Picker.Item label={t('UI/UX')} value="UI/UX" />
+         <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+         <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+         <Picker.Item label={t('Management')} value="Management" />
+       </Picker>
+     </View>
+   </View>
+   <View style={styles.row}>
+     <View style={styles.cell}>
+       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
+     </View>
+     <View style={styles.cell}>
+       <Picker
+         selectedValue={level}
+         style={styles.picker}
+         onValueChange={(itemValue) => setlevel(itemValue)}
+       >
+         <Picker.Item label={t('Junior')} value="Junior" />
+         <Picker.Item label={t('Medior')} value="Medior" />
+         <Picker.Item label={t('Senior')} value="Senior" />
+         <Picker.Item label={t('Professional')} value="Professional" />
+       </Picker>
+     </View>
+   </View>
       <View style={styles.row}>
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Rate")}</Text>
@@ -224,174 +230,50 @@ function MyComponent({ onClose }) {
         </View>
       </View>
     </View>
-    <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
+          <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Topics")}</Text>
 
-</View>
+          <View style={styles.container}>
+            {topics.map((topic, index) => (
+              <View style={styles.row} key={index}>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Topic")} {index + 1}</Text>
+                </View>
+                <View style={[styles.cell, { flex: 5 }]}>
+                  <TextInput
+                    placeholder={t("Topic description")}
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={topic.topic}
+                    onChangeText={text => handleTopicChange(index, 'topic', text)}
+                  />
+                </View>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Picker
+                    selectedValue={topic.percentage}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => handleTopicChange(index, 'percentage', itemValue)}
+                  >
+                    <Picker.Item label="10%" value="10" />
+                    <Picker.Item label="20%" value="20" />
+                    <Picker.Item label="30%" value="30" />
+                    <Picker.Item label="40%" value="40" />
+                    <Picker.Item label="50%" value="50" />
+                    <Picker.Item label="60%" value="60" />
+                    <Picker.Item label="70%" value="70" />
+                    <Picker.Item label="80%" value="80" />
+                    <Picker.Item label="90%" value="90" />
+                    <Picker.Item label="100%" value="100" />
+                  </Picker>
+                </View>
+              </View>
+            ))}
+            <TouchableOpacity
+              onPress={() => setTopics([...topics, { topic: '', percentage: '0' }])}
+              style={styles.addButton}
+            >
 
-     <View style={styles.container}>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-           <TextInput
-            placeholder="Discuss tools to boost performance e.g, xrm toolbox"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic1}
-            onChangeText={text => settopic1(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic1_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic1_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("App performance optimization")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic2}
-            onChangeText={text => settopic2(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic2_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic2_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-         </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("Being proactive")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic3}
-            onChangeText={text => settopic3(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic3_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic3_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("App performance optimization")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic4}
-            onChangeText={text => settopic4(text)}
-          />
-        </View> 
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic4_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic4_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-         <TextInput
-            placeholder={t("App performance optimization")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={topic5}
-            onChangeText={text => settopic5(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={topic5_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => settopic5_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-     
-      </View>
+            </TouchableOpacity>
+          </View>
 <TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
       <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
     </TouchableOpacity>

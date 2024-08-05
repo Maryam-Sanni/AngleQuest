@@ -143,8 +143,8 @@ function MyComponent() {
           <View style={styles.divider} />
           <View style={styles.profileInfo}>
             <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, aspectRatio: 1 }}
+              source={require("../assets/account.png")}
+              style={{ width: 40, height: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
               <Text style={{ fontSize: 14, color: '#666',fontFamily:"Roboto-Light"  }}>{first_name} {last_name}</Text>

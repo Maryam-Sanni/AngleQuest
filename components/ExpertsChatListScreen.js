@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
@@ -163,14 +155,18 @@ function ChatListScreen({ navigation, onUserSelect }) {
           const messageDate = new Date(timestamp);
           let timeFormatted = '';
 
-          if (formatDistanceToNow(messageDate, { addSuffix: true }) === 'less than a minute ago') {
-            timeFormatted = 'Just now';
-          } else if (messageDate > now.setHours(now.getHours() - 1)) {
-            timeFormatted = formatDistanceToNow(messageDate, { addSuffix: true });
-          } else if (messageDate > now.setDate(now.getDate() - 1)) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+
+          if (messageDate >= today) {
             timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
+          } else if (messageDate >= yesterday) {
+            timeFormatted = 'Yesterday';
           } else {
-            timeFormatted = format(messageDate, 'dd/MM/yyyy h:mm a', { locale: enGB });
+            timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
           }
 
           return {
@@ -185,7 +181,7 @@ function ChatListScreen({ navigation, onUserSelect }) {
           };
         });
 
-        // Sort the data by timestamp in descending order
+       
         formattedData.sort((a, b) => b.timestamp - a.timestamp);
 
         setData(formattedData);
@@ -196,7 +192,6 @@ function ChatListScreen({ navigation, onUserSelect }) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -247,7 +242,9 @@ function ChatListScreen({ navigation, onUserSelect }) {
             {item.name}
           </Text>
           <Text
-            style={{ color: "#777", fontSize: 13, marginTop: 7}}
+            style={{ color: "#777", fontSize: 13, marginTop: 7 }}
+            numberOfLines={1}  // Limit to 1 line
+            ellipsizeMode="tail"  // Show "..." at the end if the text is too long
           >
             {item.message}
           </Text>

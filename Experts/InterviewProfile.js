@@ -17,6 +17,7 @@ function MyComponent({ onClose }) {
   const { t } = useTranslation();
 
   const [role, setInterviewRole] = useState('');
+  const [category, setCategory] = useState('');
   const [level, setLevel] = useState('');
   const [rate, setRate] = useState('');
   const [available_days, setAvailableDays] = useState('');
@@ -43,6 +44,7 @@ function MyComponent({ onClose }) {
         rate,
         available_days,
         available_times,
+        category,
         questions
       };
 
@@ -139,16 +141,41 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Picker
+                  selectedValue={category}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setCategory(itemValue)}
+                >
+                  <Picker.Item label={t('SAP')} value="SAP" />
+                  <Picker.Item label={t('Microsoft')} value="Microsoft" />
+                  <Picker.Item label={t('Salesforce')} value="Salesforce" />
+                  <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
+                  <Picker.Item label={t('Backend Development')} value="Backend Development" />
+                  <Picker.Item label={t('UI/UX')} value="UI/UX" />
+                  <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+                  <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+                  <Picker.Item label={t('Management')} value="Management" />
+                </Picker>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
               </View>
               <View style={styles.cell}>
-                <TextInput
-                  placeholder="Junior"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={level}
-                  onChangeText={text => setLevel(text)}
-                />
+                <Picker
+                  selectedValue={level}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setLevel(itemValue)}
+                >
+                  <Picker.Item label={t('Junior')} value="Junior" />
+                  <Picker.Item label={t('Medior')} value="Medior" />
+                  <Picker.Item label={t('Senior')} value="Senior" />
+                  <Picker.Item label={t('Professional')} value="Professional" />
+                </Picker>
               </View>
             </View>
             <View style={styles.row}>

@@ -122,6 +122,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
  
   const [visibility, setVisibility] = useState('public');
+  const [category, setCategory] = useState('');
   const [coaching_hub_name, setGroupName] = useState('');
   const [coaching_hub_goals, setAddgoals] = useState('');
   const [coaching_hub_description, setGroupDescription] = useState('');
@@ -166,6 +167,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   
       const formData = {
         visibility,
+        category,
         coaching_hub_name,
         meeting_day,
         coaching_hub_description,
@@ -232,6 +234,22 @@ const CreateCoachingHubForm = ({ onClose }) => {
           <Picker.Item label={t("Public")} value="public" />
           <Picker.Item label={t("Private")} value="private" />
         </Picker>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
+          <Picker
+        selectedValue={category}
+        style={styles.picker}
+        onValueChange={(itemValue) => setCategory (itemValue)}
+            > 
+            <Picker.Item label={t('SAP')} value="SAP" />
+            <Picker.Item label={t('Microsoft')} value="Microsoft" />
+            <Picker.Item label={t('Salesforce')} value="Salesforce" />
+            <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
+            <Picker.Item label={t('Backend Development')} value="Backend Development" />
+            <Picker.Item label={t('UI/UX')} value="UI/UX" />
+            <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+            <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+            <Picker.Item label={t('Management')} value="Management" />
+          </Picker>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Name")}*</Text>
         <TextInput
           style={styles.input}

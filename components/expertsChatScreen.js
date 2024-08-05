@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Platform, KeyboardAvoidingView, Text, Image, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, ActivityIndicator, StyleSheet } from 'react-native';
 import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
-import * as DocumentPicker from 'expo-document-picker';
-import { Audio } from 'expo-av';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import WebSocket from 'react-native-websocket';
 
-function ChatScreen({ userId }) {
-
+const ChatScreen = ({ userId: propUserId }) => {
+  const route = useRoute();
+  const userId = propUserId || route.params?.userId;
   const [messages, setMessages] = useState([]);
-  const [recording, setRecording] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
   const [isProfileVisible, setProfileVisible] = useState(false);
   const [userData, setUserData] = useState({});
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [loading, setLoading] = useState(true); // For handling loading state
+  const [latestSender, setLatestSender] = useState(null);
+  const [ws, setWs] = useState(null);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -28,79 +32,161 @@ function ChatScreen({ userId }) {
         const users = response.data.allJobSeekers.reduce((acc, user) => {
           acc[user.id] = {
             name: `${user.first_name} ${user.last_name}`,
-            avatar: require('../assets/account.png'), // Assuming a default avatar
+            avatar: require('../assets/account.png'),
             role: user.role,
+            email: user.email,
+            phone: user.phone,
+            expertise: user.expertise || 'Loading...',
           };
           return acc;
         }, {});
         setUserData(users);
+
+        const id = await AsyncStorage.getItem('user_id');
+        setCurrentUserId(id);
       } catch (error) {
         console.error('Failed to load user data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadUserData();
   }, []);
 
-  
+  useEffect(() => {
+    const socket = new WebSocket('ws://ws.recruitangle.com:80/app/qei9avxspe7qcl5sp3dl');
+
+    socket.onopen = () => {
+      console.log('WebSocket connection opened');
+      setWs(socket);
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      handleIncomingMessage(message);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+      setWs(null);
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      try {
+        if (socket) {
+          socket.close();
+        }
+      } catch (error) {
+        console.error('Error closing WebSocket:', error);
+      }
+    };
+  }, []);
+
+
   useEffect(() => {
     const loadMessages = async () => {
       try {
-        const storedMessages = await AsyncStorage.getItem(`chat_${userId}`);
-        if (storedMessages) {
-          setMessages(JSON.parse(storedMessages));
-        } else {
-          setMessages([]); // Clear messages if none are stored
-        }
+        setLoading(true); // Set loading to true when fetching messages
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`https://recruitangle.com/api/chat/get/${userId}/Individual`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const messagesFromServer = response.data.history.map(msg => ({
+          _id: msg.id,
+          text: msg.text || '',
+          createdAt: new Date(msg.created_at),
+          user: {
+            _id: msg.sender_id === currentUserId ? 1 : 2, // 1 for current user, 2 for others
+            name: msg.senderName || 'Unknown',
+          },
+          file: msg.file ? { uri: msg.file.uri, name: msg.file.name, type: msg.file.type } : undefined,
+        }));
+
+        // Sort messages by createdAt in ascending order (oldest to newest)
+        const sortedMessages = messagesFromServer.sort((a, b) => a.createdAt - b.createdAt);
+
+        // Reverse the sorted array to have latest messages at the bottom
+        const reversedMessages = sortedMessages.reverse();
+
+        const formattedMessages = reversedMessages.map(msg => ({
+          ...msg,
+          user: {
+            ...msg.user,
+            _id: msg.user._id === 1 ? currentUserId : msg.user._id,
+          },
+        }));
+
+        setMessages(formattedMessages);
+
+        // Update last message and timestamp
+        const latestMessage = formattedMessages[0];
+        const lastMessage = latestMessage.text;
+        const timestamp = latestMessage.createdAt.toISOString();
+        await AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
+
+        setLatestSender(latestMessage.user._id);
+
       } catch (error) {
         console.error('Failed to load messages:', error);
+      } finally {
+        setLoading(false); // Set loading to false when done
       }
     };
 
     loadMessages();
-  }, [userId]);
+  }, [userId, currentUserId]);
 
   const onSend = async (newMessages = []) => {
-    setMessages((prevMessages) => {
-      const updatedMessages = GiftedChat.append(prevMessages, newMessages);
-      AsyncStorage.setItem(`chat_${userId}`, JSON.stringify(updatedMessages)); // Save messages for this user
-
-      // Save last message and timestamp
-      const lastMessage = newMessages[0].text;
-      const timestamp = newMessages[0].createdAt.toISOString();
-      AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
-
-      return updatedMessages;
-    });
+    const newMessage = newMessages[0];
+    const messageData = {
+      receiver_id: userId,
+      receiver_type: 'Individual',
+      message: newMessage.text || '',
+      file: newMessage.file || {},
+      time: newMessage.createdAt.toISOString(),
+    };
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const messageContent = newMessages[0].text;
-      const timestamp = newMessages[0].createdAt.toISOString();
-
-      await axios.post('https://recruitangle.com/api/chat/send', {
-        receiver_id: userId,
-        receiver_type: 'Individual', 
-        message: messageContent,
-        time: timestamp,
-      }, {
+      await axios.post('https://recruitangle.com/api/chat/send', messageData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       console.log('Message sent:', newMessages);
     } catch (error) {
       console.error('Failed to send message:', error);
     }
+
+    if (ws) {
+      ws.send(JSON.stringify(messageData));
+    }
+
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
+    AsyncStorage.setItem(`chat_${userId}`, JSON.stringify([...messages, newMessage]));
+
+    const lastMessage = newMessage.text || 'File attached';
+    const timestamp = newMessage.createdAt.toISOString();
+    AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
   };
-
-
 
   const renderSend = (props) => {
     return (
       <Send {...props}>
         <View style={{ marginRight: 10, marginBottom: 10 }}>
-          <Text style={{ color: '#206C00', fontWeight: 'bold', fontSize: 16 }}>Send</Text>
+          <Image
+            source={{ uri: 'https://img.icons8.com/?size=100&id=94664&format=png&color=000000' }}
+            style={{ width: 30, height: 30 }}
+          />
         </View>
       </Send>
     );
@@ -122,136 +208,208 @@ function ChatScreen({ userId }) {
     );
   };
 
-  const handleFilePick = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
-      if (result.type === 'success') {
-        const { uri: fileUri, name: fileName, type: fileType } = result;
-        const message = {
-          _id: Math.random().toString(36).substring(7),
-          text: '',
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-          },
-          file: {
-            uri: fileUri,
-            name: fileName,
-            type: fileType,
-          },
-        };
-        onSend([message]);
-      }
-    } catch (error) {
-      console.error('Error picking file:', error);
-    }
+  const handleIncomingMessage = (message) => {
+    const newMessage = {
+      _id: message.id,
+      text: message.text || '',
+      createdAt: new Date(message.created_at),
+      user: {
+        _id: message.sender_id === currentUserId ? 1 : 2,
+        name: message.senderName || 'Unknown',
+      },
+      file: message.file ? { uri: message.file.uri, name: message.file.name, type: message.file.type } : undefined,
+    };
+
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessage));
   };
 
-  const startRecording = async () => {
-    try {
-      const { sound, status } = await Audio.Recording.createAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
-      setRecording(sound);
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Failed to start recording:', error);
-    }
-  };
+  const handleSelectFile = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  const stopRecording = async () => {
-    try {
-      await recording.stopAndUnloadAsync();
-      setIsRecording(false);
-      const { uri } = recording.getURI();
-      const message = {
-        _id: Math.random().toString(36).substring(7),
+    if (!result.canceled) {
+      const selectedImage = result.assets[0];
+      const newMessage = {
+        _id: messages.length + 1,
         text: '',
         createdAt: new Date(),
-        user: {
-          _id: 1,
-        },
-        audio: uri,
+        user: { _id: currentUserId, name: userData[currentUserId]?.name || 'Unknown' },
+        file: selectedImage,
       };
-      onSend([message]);
-    } catch (error) {
-      console.error('Failed to stop recording:', error);
+
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessage));
+
+      // Update last message and timestamp
+      const lastMessage = 'File attached';
+      const timestamp = newMessage.createdAt.toISOString();
+      await AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
     }
   };
 
-  const toggleProfileModal = () => {
-    setProfileVisible(!isProfileVisible);
-  };
-
-  const [fontsLoaded] = useFonts({
-    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
-  });
   const { t } = useTranslation();
 
-  // Get the user data based on userId
-  const user = userData[userId] || {
-    name: 'Loading...',
-    avatar: require('../assets/account.png'), // Fallback avatar
-    expertise: 'Loading...'
-  };
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="coral" />
+      </View>
+    );
+  }
 
   return (
-    <View style={{ flex: 1 }}>
-      <Modal visible={isProfileVisible} animationType="slide" transparent>
-        <TouchableWithoutFeedback onPress={toggleProfileModal}>
-          <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '20%', alignItems: 'center' }}>
-              <TouchableOpacity onPress={toggleProfileModal} style={{ position: 'absolute', top: 10, right: 10 }}>
-                <Text>✕</Text>
-              </TouchableOpacity>
-              <View style={{ flex: 1, marginTop: 50, marginLeft: 20, marginRight: 20 }}>
-                <View style={{ flexDirection: "row", marginTop: 4, paddingRight: 2 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold", color: "black", fontFamily: "Roboto-Light" }}>
-                    Nathan Arthur
-                  </Text>
-                  <View
-                    style={{
-                      width: 2,
-                      height: 2,
-                      backgroundColor: "green",
-                      borderRadius: 1,
-                      marginLeft: 2,
-                    }}
-                  />
-                </View>
-                <Text style={{ fontSize: 12, color: "#A0AEC0", fontFamily: "Roboto-Light" }}>Java Programmer</Text>
-                <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10 }} />
-                <Text style={{ marginTop: 10, fontSize: 12, color: "#206C00", fontFamily: "Roboto-Light" }}>{t('Profile')}</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Account Number')}</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>ACT002234</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Email')}</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>natearthur123@gmail.com</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>{t('Phone')}</Text>
-                <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>+44 701 123 1234</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-        <TouchableOpacity onPress={toggleProfileModal}>
-          <Image source={user.avatar} style={{ width: 40, height: 40, borderRadius: 20 }} />
-        </TouchableOpacity>
-        <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontWeight: 'bold', color: 'black' }}>{user.name}</Text>
-          <Text style={{ fontSize: 12, color: '#A0AEC0' }}>{user.expertise} - <Text style={{ fontStyle: 'italics' }}>{user.role}</Text></Text>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => setProfileVisible(true)}>
+        <View style={styles.profileContainer}>
+          <Image
+            source={userData[userId]?.avatar || require('../assets/account.png')}
+            style={styles.profileImage}
+          />
+          <Text style={styles.profileName}>{userData[userId]?.name || 'Loading...'}</Text>
         </View>
-      </View>
-      <View style={{ backgroundColor: '#eafaf1', flex: 1, }}>
+      </TouchableOpacity>
+      
+      <View style={{ flex: 1, backgroundColor: '#eafaf1' }}>
       <GiftedChat
         messages={messages}
         onSend={onSend}
-        user={{ _id: 1 }}
+        user={{ _id: currentUserId }}
         renderSend={renderSend}
         renderBubble={renderBubble}
+        alwaysShowSend
       />
-         </View>
-      {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
+      </View>
+
+      <View style={{ alignSelf: 'center'}}>
+      <Modal visible={isProfileVisible} animationType="slide" transparent>
+        <TouchableWithoutFeedback onPress={() => setProfileVisible(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '30%', alignItems: 'flex-start' }}>
+              <TouchableOpacity onPress={() => setProfileVisible(false)} style={styles.closeButton}>
+                <Text style={{ fontSize: 18, marginLeft: 300, marginBottom: 10 }}>✕</Text>
+              </TouchableOpacity>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: "black"}}>{t('User Info')}</Text>
+
+                            <Text style={{ marginTop: 8, fontSize: 14, color: "black", fontWeight: '600', }}>{t('Name')}</Text>
+                            <Text style={{ marginTop: 8, fontSize: 12, color: "black" }}>
+                              {userData[userId]?.name || 'N/A'}
+                            </Text>
+          <Text style={{ marginTop: 8,  fontSize: 14, color: "black", fontWeight: '600', 
+             }}>{t('Role')}</Text>
+                              <Text style={{ marginTop: 8, fontSize: 12, color: "black" }}>
+                                {userData[userId]?.role || 'N/A'}
+                              </Text>
+                            <Text style={{ marginTop: 8,  fontSize: 14, color: "black", fontWeight: '600',  }}>{t('Email')}</Text>
+                            <Text style={{ marginTop: 8, fontSize: 12, color: "black"}}>
+                              {userData[userId]?.email || 'N/A'}
+                            </Text>
+
+                            <Text style={{ marginTop: 8,  fontSize: 14, color: "black", fontWeight: '600', 
+           }}>{t('Phone')}</Text>
+                            <Text style={{ marginTop: 8, fontSize: 12, color: "black", fontFamily: "Roboto-Light" }}>
+                              {userData[userId]?.phone || 'N/A'}
+                            </Text>
+
+                           
+          <Text style={{ marginTop: 8,  fontSize: 14, color: "black", fontWeight: '600', 
+             }}>{t('Expertise')}</Text>
+                              <Text style={{ marginTop: 8, fontSize: 12, color: "black" }}>
+                                {userData[userId]?.expertise || 'N/A'}
+                              </Text>
+        </View>
+          </View>
+            </TouchableWithoutFeedback>
+      </Modal>
+      </View>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  sendingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    marginBottom: 5,
+  },
+  sendButtonText: {
+    color: '#0084ff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' 
+  },
+  modalContent: {
+    backgroundColor: 'white', padding: 20, borderRadius: 10, width: '30%', alignItems: 'flex-start' 
+  },
+  modalProfileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  modalProfileName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalProfileRole: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalProfileEmail: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalProfilePhone: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalProfileExpertise: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  closeButton: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: '#0084ff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default ChatScreen;

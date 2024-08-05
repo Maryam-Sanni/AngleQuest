@@ -15,22 +15,12 @@ function MyComponent({ onClose }) {
         const {t}=useTranslation()
 
         const [role, setInterviewRole] = useState('');
+        const [category, setCategory] = useState('');
         const [level, setlevel] = useState('');
         const [rate, setrate] = useState('');
         const [available_days, setavailable_days] = useState('');
         const [available_times, setavailable_times] = useState('');
-        const [question1, setquestion1] = useState('');
-        const [question2, setquestion2] = useState('');
-        const [question3, setquestion3] = useState('');
-        const [question4, setquestion4] = useState('');
-        const [question5, setquestion5] = useState('');
-        const [question6, setquestion6] = useState('');
-        const [question1_percentage, setquestion1_percentage] = useState('');
-        const [question2_percentage, setquestion2_percentage] = useState('');
-        const [question3_percentage, setquestion3_percentage] = useState('');
-        const [question4_percentage, setquestion4_percentage] = useState('');
-        const [question5_percentage, setquestion5_percentage] = useState('');
-        const [question6_percentage, setquestion6_percentage] = useState(''); 
+        const [questions, setQuestions] = useState([]);
         const [alertVisible, setAlertVisible] = useState(false);
         const [alertMessage, setAlertMessage] = useState('')    
         const [isVisible, setIsVisible] = useState(true);   
@@ -52,18 +42,7 @@ function MyComponent({ onClose }) {
                 setrate(data.rate || '');
                 setavailable_days(data.available_days || '');
                 setavailable_times(data.available_times || '');
-                setquestion1(data.question1 || '');
-                setquestion2(data.question2 || '');
-                setquestion3(data.question3 || '');
-                setquestion4(data.question4 || '');
-                setquestion5(data.question5 || '');
-                setquestion6(data.question6 || '');
-                setquestion1_percentage(data.question1_percentage.toString() || '');
-                setquestion2_percentage(data.question2_percentage.toString() || '');
-                setquestion3_percentage(data.question3_percentage.toString() || '');
-                setquestion4_percentage(data.question4_percentage.toString() || '');
-                setquestion5_percentage(data.question5_percentage.toString() || '');
-                setquestion6_percentage(data.question6_percentage.toString() || '');
+                setQuestions(data.questions|| []);
               } else {
                 console.error('Failed to fetch data', response);
               }
@@ -85,18 +64,8 @@ function MyComponent({ onClose }) {
               rate,
               available_days,
               available_times,
-              question1,
-              question1_percentage,
-              question2,
-              question2_percentage,
-              question3,
-              question3_percentage,
-              question4,
-              question4_percentage,
-              question5,
-              question5_percentage,
-              question6,
-              question6_percentage
+              category,
+              questions
             };
         
             const token = await AsyncStorage.getItem('token');
@@ -131,6 +100,12 @@ function MyComponent({ onClose }) {
           return null; // Return null to unmount the parent component
         }
 
+  const handleQuestionChange = (index, field, value) => {
+    const newQuestions = [...questions];
+    newQuestions[index] = { ...newQuestions[index], [field]: value };
+    setQuestions(newQuestions);
+  };
+  
   return (
     <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -172,20 +147,45 @@ function MyComponent({ onClose }) {
           />
         </View>
       </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <TextInput
-            placeholder="Junior"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={level}
-            onChangeText={text => setlevel(text)}
-          />
-        </View>
-      </View>
+   <View style={styles.row}>
+     <View style={styles.cell}>
+       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+     </View>
+     <View style={styles.cell}>
+       <Picker
+         selectedValue={category}
+         style={styles.picker}
+         onValueChange={(itemValue) => setCategory(itemValue)}
+       >
+         <Picker.Item label={t('SAP')} value="SAP" />
+         <Picker.Item label={t('Microsoft')} value="Microsoft" />
+         <Picker.Item label={t('Salesforce')} value="Salesforce" />
+         <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
+         <Picker.Item label={t('Backend Development')} value="Backend Development" />
+         <Picker.Item label={t('UI/UX')} value="UI/UX" />
+         <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+         <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+         <Picker.Item label={t('Management')} value="Management" />
+       </Picker>
+     </View>
+   </View>
+   <View style={styles.row}>
+     <View style={styles.cell}>
+       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
+     </View>
+     <View style={styles.cell}>
+       <Picker
+         selectedValue={level}
+         style={styles.picker}
+         onValueChange={(itemValue) => setlevel(itemValue)}
+       >
+         <Picker.Item label={t('Junior')} value="Junior" />
+         <Picker.Item label={t('Medior')} value="Medior" />
+         <Picker.Item label={t('Senior')} value="Senior" />
+         <Picker.Item label={t('Professional')} value="Professional" />
+       </Picker>
+     </View>
+   </View>
       <View style={styles.row}>
         <View style={styles.cell}>
          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Rate")}</Text>
@@ -230,204 +230,50 @@ function MyComponent({ onClose }) {
       </View>
     </View>
 
-    <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
+          <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Questions")}</Text>
 
-</View>
-     <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 1</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-           <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question1}
-            onChangeText={text => setquestion1(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question1_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion1_percentage(itemValue)}
->
-  <Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 2</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question2}
-            onChangeText={text => setquestion2(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question2_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion2_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question3}
-            onChangeText={text => setquestion3(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question3_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion3_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 4</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question4}
-            onChangeText={text => setquestion4(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question4_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion4_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 5</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-         <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question5}
-            onChangeText={text => setquestion5(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question5_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion5_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 6</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-         <TextInput
-            placeholder={t("3 Ways to Optimize a model driven app to optimize its performance")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={question6}
-            onChangeText={text => setquestion6(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={question6_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setquestion6_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      </View>
+          <View style={styles.container}>
+            {questions.map((question, index) => (
+              <View style={styles.row} key={index}>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Question")} {index + 1}</Text>
+                </View>
+                <View style={[styles.cell, { flex: 5 }]}>
+                  <TextInput
+                    placeholder={t("Question description")}
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={question.question}
+                    onChangeText={text => handleQuestionChange(index, 'question', text)}
+                  />
+                </View>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Picker
+                    selectedValue={question.percentage}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => handleQuestionChange(index, 'percentage', itemValue)}
+                  >
+                    <Picker.Item label="10%" value="10" />
+                    <Picker.Item label="20%" value="20" />
+                    <Picker.Item label="30%" value="30" />
+                    <Picker.Item label="40%" value="40" />
+                    <Picker.Item label="50%" value="50" />
+                    <Picker.Item label="60%" value="60" />
+                    <Picker.Item label="70%" value="70" />
+                    <Picker.Item label="80%" value="80" />
+                    <Picker.Item label="90%" value="90" />
+                    <Picker.Item label="100%" value="100" />
+                  </Picker>
+                </View>
+              </View>
+            ))}
+            <TouchableOpacity
+              onPress={() => setQuestions([...questions, { question: '', percentage: '0' }])}
+              style={styles.addButton}
+            >
+
+            </TouchableOpacity>
+          </View>
 <TouchableOpacity onPress={handleSave} style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>{t("Save")} Changes</Text>
     </TouchableOpacity>

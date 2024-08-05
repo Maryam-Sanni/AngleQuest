@@ -111,14 +111,17 @@ import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
 import IndividualAI from './Jobseekers/AI';
+import AIindv1 from './Jobseekers/AI1';
+import AIindv2 from './Jobseekers/AI2';
+import AIindv3 from './Jobseekers/AI3';
+import AIindv4 from './Jobseekers/AIFinish';
 import Welcome from './LandingPage/LandingHome';
 import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
 import mobileAI from './MobileLanding.js/AI';
 import GeneralSignin from './components/Signin';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import RouterComponent from './RouterComponent';
+import BlankScreen from './components/BlankScreen';
 
 const Stack = createStackNavigator();
 
@@ -240,9 +243,13 @@ const App = () => {
         <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
         <Stack.Screen name="mobile" component={mobile} />
         <Stack.Screen name="AI" component={AI} />
-        <Stack.Screen name="Use AI" component={IndividualAI} />
+        <Stack.Screen name="Use AI" component={AIindv1} />
+      <Stack.Screen name="Use CV" component={AIindv2} />
+      <Stack.Screen name="Use Questionnaire" component={AIindv3} />
+      <Stack.Screen name="AI Result" component={AIindv4} />
         <Stack.Screen name="Anglequest AI" component={mobileAI} />
         <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
+       <Stack.Screen name="anglequest" component={BlankScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -41,27 +41,11 @@ function MyComponent({ onClose }) {
     setProfileImage(imageUrl);
   };
 
-  const goToPlans = async () => {
-    try {
-      const response = await axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-interview', {
-        dateTime: selectedDateTime,
-        // Add other necessary fields
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-      if (response.status === 200) {
-        // Navigate to Interview Offer screen when the button is clicked
-        navigation.navigate('Interview Offer');
-        onClose(); // Close the modal
-      } else {
-        console.error('Error:', response);
-      }
-    } catch (error) {
-      console.error('Error making the request:', error);
-    }
+  const goToPlans = () => {
+    navigation.navigate('Interview Offer');
+    onClose(); // Close the modal
   };
+  
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),

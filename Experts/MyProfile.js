@@ -210,11 +210,10 @@ export default function Profile() {
         <Text style={{ fontSize: 18, fontWeight: "bold",fontFamily:"Roboto-Light", marginBottom: 20 }}>{t("My Profile")}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Image
-                    source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/42eb8a1c745d5f4771d12d615bda303b93fe9d7cb8d0941022cdd47c4212a79e?apiKey=7b9918e68d9b487793009b3aea5b1a32&width=200' }}
+                    source={require("../assets/account.png")}
                     style={{ width: 79, height: 79, borderRadius: 79, marginRight: 20 }}
                     resizeMode="cover"
                   />
-                  
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>

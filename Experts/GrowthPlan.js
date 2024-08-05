@@ -104,10 +104,10 @@ function MyComponent() {
     };
 
   const reloadHomeExperts = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home - Experts' }],
-    });
+    navigation.navigate('anglequest');
+    setTimeout(() => {
+      navigation.navigate('Growth Plan');
+    }, 2000); // Delay of 3 seconds (3000 milliseconds)
   };
   
     const [fontsLoaded]=useFonts({
@@ -145,7 +145,7 @@ const {t}=useTranslation()
       style={styles.image}
     />
     <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>
-      {role || "loading..."}
+      {role || "No update yet"}
     </Text>
   </View>
 </TouchableHighlight>              

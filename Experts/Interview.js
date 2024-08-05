@@ -107,10 +107,10 @@ function MyComponent() {
 const {t}=useTranslation()
 
   const reloadHomeExperts = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home - Experts' }],
-    });
+    navigation.navigate('anglequest');
+    setTimeout(() => {
+      navigation.navigate('Interview');
+    }, 2000); // Delay of 3 seconds (3000 milliseconds)
   };
 
     return (
@@ -141,7 +141,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "loading..."}</Text>
+                                    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "No update yet"}</Text>
                                 </View>
                             </TouchableHighlight>
                             

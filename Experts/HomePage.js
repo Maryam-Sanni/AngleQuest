@@ -9,14 +9,17 @@ import HelpModal from '../components/Help';
 import OpenModal2 from '../Experts/GProfile';
 import {useFonts} from "expo-font"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { formatDistanceToNow, format } from 'date-fns';
+import { enGB } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import CustomModal from './TourGuide';
+
+const defaultAvatar = require("../assets/account.png");
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
-  const [isHovered3, setIsHovered3] = useState(false);
-  const [isHovered4, setIsHovered4] = useState(false);
   const [isHovered5, setIsHovered5] = useState(false);
   const [isHovered6, setIsHovered6] = useState(false);
   const [isHovered7, setIsHovered7] = useState(false);
@@ -35,6 +38,82 @@ const HomePage = () => {
   const navigation = useNavigation();
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      console.log("Token retrieved:", token);
+
+      if (token) {
+        const response = await axios.get(
+          "https://recruitangle.com/api/expert/getAllJobSeekers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("API response:", response.data);
+        const result = response.data.allJobSeekers;
+
+        // Retrieve all last messages and timestamps in parallel
+        const chatDataPromises = result.map(item =>
+          AsyncStorage.getItem(`lastMessage_${item.id}`)
+        );
+        const chatData = await Promise.all(chatDataPromises);
+
+        // Process and format data
+        const formattedData = result.map((item, index) => {
+          const { lastMessage = "No messages", timestamp = new Date().toISOString() } = chatData[index] ? JSON.parse(chatData[index]) : {};
+
+          // Determine the time format
+          const now = new Date();
+          const messageDate = new Date(timestamp);
+          let timeFormatted = '';
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+
+          if (messageDate >= today) {
+            timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
+          } else if (messageDate >= yesterday) {
+            timeFormatted = 'Yesterday';
+          } else {
+            timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
+          }
+
+          return {
+            id: item.id.toString(), // Ensure id is a string
+            name: `${item.first_name} ${item.last_name}`,
+            avatar: item.avatar_url ? { uri: item.avatar_url } : defaultAvatar,
+            message: lastMessage,
+            time: timeFormatted,
+            timestamp: messageDate, // Include timestamp for sorting
+            messagecount: "0",
+            hub: "Hub Members",
+          };
+        });
+
+        // Sort the data by timestamp in descending order
+        formattedData.sort((a, b) => b.timestamp - a.timestamp);
+
+        setData(formattedData);
+      } else {
+        console.log("No token found");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   
   useEffect(() => {
     // Show the CustomModal when the component mounts
@@ -61,6 +140,10 @@ const HomePage = () => {
     retrieveData();
   }, []);
 
+  const openUser = (userId) => {
+    navigation.navigate('Messaging', { userId });
+  };
+  
   const handleCloseModal = () => {
     setCustomModalVisible(false);
   };
@@ -140,59 +223,33 @@ const {t}=useTranslation()
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Chats")}</Text>
           </View>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 20, marginLeft: 15,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>SAP FI Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
-          </View>
-          </View>
+                <Text style={styles.hubTitle}>All Hubs</Text>
+                {data.map((item, index) => (
+                  <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
+                    <Image source={item.avatar} style={styles.image} />
+                    <View style={{ flexDirection: 'column' }}>
+                       <TouchableOpacity onPress={() => openUser(item.id)}>
+                      <Text style={{ color: 'white', fontWeight: '600', fontSize: 15, fontFamily: "Roboto-Light" }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
+                        numberOfLines={1}  // Limit to 1 line
+                        ellipsizeMode="tail"  // Show "..." at the end if the text is too long
+                      >
+                        {item.message}
+                      </Text>
+                          </TouchableOpacity>
+                      <Text style={{ color: 'lightgrey', fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
+                        {item.time}
+                      </Text>
+                    </View>  
+                  </View>
+                ))}
           <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Microsoft Azure Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
-          
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 15,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Jr. PowerPoint Hub</Text>
-          <View style={{flexDirection: 'row', marginTop: 15 }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, fontFamily:"Roboto-Light"}}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")}, This is Maryam..</Text>
-          </View>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10 }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Maryam Bakahli</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3,fontFamily:"Roboto-Light"}}>{t("Hello")},, This is Maryam...</Text>
-          </View>
-          </View>
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 15, marginRight: 15 }} />
+         
  
           <TouchableOpacity onPress={goToMessages} 
           style={[
@@ -239,11 +296,11 @@ const {t}=useTranslation()
 
           <View style={styles.greenBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
-          
-          <View style={{flexDirection: 'row', marginTop: 20 }}>
-          <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>
-<View style={{flexDirection: 'row' }}>
+
+            <Text style={{fontSize: 18, color: '#63EC55', marginTop: 50, marginLeft: 50, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>
+          <View style={{flexDirection: 'row'}}>
+          <View style={styles.greenwhitebox2}> 
+<View style={{flexDirection: 'row', alignSelf: 'center' }}>
 <TouchableOpacity onPress={goToManageHubs} 
 style={[
   styles.touchablerate,
@@ -282,7 +339,7 @@ onMouseLeave={() => setIsHovered5(false)}
           onMouseEnter={() => setIsHovered8(true)}
           onMouseLeave={() => setIsHovered8(false)}
           >
-          <Text style={styles.touchableTextrate}>{t("Advice")}</Text>
+          <Text style={styles.touchableTextrate}>{t("Skills Analysis")}</Text>
           </TouchableOpacity>
 </View>
 </View>
@@ -293,52 +350,13 @@ onMouseLeave={() => setIsHovered5(false)}
          <View style={{flexDirection: 'row' }}>
           <Image
        source={require('../assets/Upcom2.png')}
-        style={{ width: 25, height: 25, marginLeft: 50, marginTop: 15,}}
+        style={{ width: 25, height: 25, marginLeft: 50, marginTop: 30,}}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 15, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Sessions")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 30, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Sessions")}</Text>
           </View>
           
            </View>
-          <View style={{flexDirection: 'row', marginBottom: 15 }}>
-           <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, marginLeft: 40, marginTop: 7,}}
-            />
-              <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40,  marginLeft: -2, marginTop: 7,}}
-            />
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, marginLeft: -2, marginTop: 7,}}
-            />
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, marginLeft: -2, marginTop: 7,}}
-            />
-              <View style={{flexDirection: 'row' }}>
-<TouchableOpacity
-style={[
-  styles.touchablesession,
-  isHovered3 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered3(true)}
-onMouseLeave={() => setIsHovered3(false)}
->
-          <Text style={styles.touchableTextsession}>Setting up master data on SAP</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style={[
-            styles.touchablejoinsession,
-            isHovered4 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered4(true)}
-          onMouseLeave={() => setIsHovered4(false)}
-          >
-          <Text style={styles.touchableTextjoinsession}>{t("Start")}</Text>
-          </TouchableOpacity>
-          </View>
-              </View>
+          
             </View>
           </View>
 
@@ -838,6 +856,16 @@ whiteBox: {
     marginTop: 10, 
     borderRadius: 20, 
     },
+  greenwhitebox2: {
+    width: 510,
+    height: 100,
+    backgroundColor: 'rgba(10,0,0,0.3)',
+    marginLeft: 35, 
+    marginTop: 10, 
+    borderRadius: 20, 
+    justifyContent: 'center',
+    alignItems: 'center'
+    },
      touchablejoinreview: {
       backgroundColor: 'rgba(200,200,125,0.3)',
     padding: 8,
@@ -956,6 +984,21 @@ whiteBox: {
     shadowRadius: 2,
     elevation: 2,
   },
+  hubTitle: {
+    fontSize: 16,
+    color: 'white',
+    marginTop: 20,
+    marginLeft: 15,
+    fontWeight: 'bold',
+    fontFamily: "Roboto-Light"
+  },
+  image: {
+    width: 30,
+    height: 30,
+    borderRadius: 25,
+    marginRight: 10,
+    marginLeft: 10
+  }
 });
 
 export default HomePage;

@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal } from 'react-native';
-import {useFonts} from "expo-font"
+import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import CustomAlert from '../components/CustomAlert'; 
+import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
 
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
+  const { t } = useTranslation();
 
-  const {t}=useTranslation()
-
-  const [role, setGrowthRole] = useState('');
-  const [level, setlevel] = useState('');
-  const [rate, setrate] = useState('');
-  const [available_days, setavailable_days] = useState('');
-  const [available_times, setavailable_times] = useState('');
-  const [guide1, setguide1] = useState('');
-  const [guide2, setguide2] = useState('');
-  const [guide3, setguide3] = useState('');
-  const [guide4, setguide4] = useState('');
-  const [guide5, setguide5] = useState('');
-  const [guide1_percentage, setguide1_percentage] = useState('');
-  const [guide2_percentage, setguide2_percentage] = useState('');
-  const [guide3_percentage, setguide3_percentage] = useState('');
-  const [guide4_percentage, setguide4_percentage] = useState('');
-  const [guide5_percentage, setguide5_percentage] = useState('');
+  const [role, setRole] = useState('');
+  const [category, setCategory] = useState('');
+  const [level, setLevel] = useState('');
+  const [rate, setRate] = useState('');
+  const [availableDays, setAvailableDays] = useState('');
+  const [availableTimes, setAvailableTimes] = useState('');
+  const [guides, setGuides] = useState([]);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true);
@@ -38,28 +29,19 @@ function MyComponent({ onClose }) {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
-        
+
         const response = await axios.get('https://recruitangle.com/api/expert/growthplan/get', {
           headers: { Authorization: `Bearer ${token}` }
         });
-  
+
         if (response.status === 200 && response.data.status === 'success') {
           const data = response.data.growthPlan;
-          setGrowthRole(data.role || '');
-          setlevel(data.level || '');
-          setrate(data.rate || '');
-          setavailable_days(data.available_days || '');
-          setavailable_times(data.available_times || '');
-          setguide1(data.guide1 || '');
-          setguide2(data.guide2 || '');
-          setguide3(data.guide3 || '');
-          setguide4(data.guide4 || '');
-          setguide5(data.guide5 || '');
-          setguide1_percentage(data.guide1_percentage.toString() || '');
-          setguide2_percentage(data.guide2_percentage.toString() || '');
-          setguide3_percentage(data.guide3_percentage.toString() || '');
-          setguide4_percentage(data.guide4_percentage.toString() || '');
-          setguide5_percentage(data.guide5_percentage.toString() || '');
+          setRole(data.role || '');
+          setLevel(data.level || '');
+          setRate(data.rate || '');
+          setAvailableDays(data.available_days || '');
+          setAvailableTimes(data.available_times || '');
+          setGuides(data.guides || []);
         } else {
           console.error('Failed to fetch data', response);
         }
@@ -67,42 +49,31 @@ function MyComponent({ onClose }) {
         console.error('Failed to load form data', error);
       }
     };
-  
+
     loadFormData();
   }, []);
-  
-  
 
   const handleSave = async () => {
-  
     try {
       const data = {
         role,
         level,
         rate,
-        available_days: available_days,
-        available_times:  available_times,
-        guide1,
-        guide1_percentage: guide1_percentage,
-        guide2,
-        guide2_percentage: guide2_percentage,
-        guide3,
-        guide3_percentage: guide3_percentage,
-        guide4,
-        guide4_percentage: guide4_percentage,
-        guide5,
-        guide5_percentage: guide5_percentage
+        available_days: availableDays,
+        available_times: availableTimes,
+        category,
+        guides
       };
-  
+
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
-  
+
       const response = await axios.put(
         'https://recruitangle.com/api/expert/growthplan/edit',
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       if (response.status === 200) {
         await AsyncStorage.setItem('GrowthFormData', JSON.stringify(data));
         setAlertMessage(t('Growth plan profile updated successfully'));
@@ -126,289 +97,192 @@ function MyComponent({ onClose }) {
     return null;
   }
 
+  const handleGuideChange = (index, field, value) => {
+    const newGuides = [...guides];
+    newGuides[index] = { ...newGuides[index], [field]: value };
+    setGuides(newGuides);
+  };
+
   return (
-    <View style={{  flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
-    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
-            style={styles.logo}
-          />
-          <Text style={styles.headerText}>{t("Edit Growth Plan Profile")}</Text>
-       
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
-            ✕
-          </Text>
-        </TouchableOpacity>
-        </View> 
+          <View style={styles.header}>
+            <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={styles.logo}
+            />
+            <Text style={styles.headerText}>{t("Edit Growth Plan Profile")}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                ✕
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-<View style={{ flexDirection: "row", marginBottom: 10}}>
-<TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>{role}</Text>
-    </TouchableOpacity>
-</View>
+          <View style={{ flexDirection: "row", marginBottom: 10}}>
+          <TouchableOpacity style={styles.buttonDue} >
+                <Text style={styles.buttonTextDue}>{role}</Text>
+              </TouchableOpacity>
+          </View>
+          
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TextInput
+                  placeholder="Junior Platform Developer"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={role}
+                  onChangeText={text => setRole(text)}
+                />
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Picker
+                  selectedValue={category}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setCategory(itemValue)}
+                >
+                  <Picker.Item label={t('SAP')} value="SAP" />
+                  <Picker.Item label={t('Microsoft')} value="Microsoft" />
+                  <Picker.Item label={t('Salesforce')} value="Salesforce" />
+                  <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
+                  <Picker.Item label={t('Backend Development')} value="Backend Development" />
+                  <Picker.Item label={t('UI/UX')} value="UI/UX" />
+                  <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+                  <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+                  <Picker.Item label={t('Management')} value="Management" />
+                </Picker>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Picker
+                  selectedValue={level}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setLevel(itemValue)}
+                >
+                  <Picker.Item label={t('Junior')} value="Junior" />
+                  <Picker.Item label={t('Medior')} value="Medior" />
+                  <Picker.Item label={t('Senior')} value="Senior" />
+                  <Picker.Item label={t('Professional')} value="Professional" />
+                </Picker>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TextInput
+                  placeholder="$50"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={rate}
+                  onChangeText={text => setRate(text)}
+                />
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Days")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TextInput
+                  placeholder="Mon-Fri"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={availableDays}
+                  onChangeText={text => setAvailableDays(text)}
+                />
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Times")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TextInput
+                  placeholder="12PM-1PM"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={availableTimes}
+                  onChangeText={text => setAvailableTimes(text)}
+                />
+              </View>
+            </View>
+          </View>
 
+          <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Guide")}</Text>
 
+          <View style={styles.container}>
+            {guides.map((guide, index) => (
+              <View style={styles.row} key={index}>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Guide")} {index + 1}</Text>
+                </View>
+                <View style={[styles.cell, { flex: 5 }]}>
+                  <TextInput
+                    placeholder={t("Guide description")}
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={guide.guide}
+                    onChangeText={text => handleGuideChange(index, 'guide', text)}
+                  />
+                </View>
+                <View style={[styles.cell, { flex: 2 }]}>
+                  <Picker
+                    selectedValue={guide.percentage}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => handleGuideChange(index, 'percentage', itemValue)}
+                  >
+                    <Picker.Item label="10%" value="10" />
+                    <Picker.Item label="20%" value="20" />
+                    <Picker.Item label="30%" value="30" />
+                    <Picker.Item label="40%" value="40" />
+                    <Picker.Item label="50%" value="50" />
+                    <Picker.Item label="60%" value="60" />
+                    <Picker.Item label="70%" value="70" />
+                    <Picker.Item label="80%" value="80" />
+                    <Picker.Item label="90%" value="90" />
+                    <Picker.Item label="100%" value="100" />
+                  </Picker>
+                </View>
+              </View>
+            ))}
+            <TouchableOpacity
+              onPress={() => setGuides([...guides, { guide: '', percentage: '0' }])}
+              style={styles.addButton}
+            >
+            
+            </TouchableOpacity>
+          </View>
 
- <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
-        </View>
-        <View style={styles.cell}>
-           <TextInput
-            placeholder="Junior Platform Developer"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={role}
-            onChangeText={text => setGrowthRole(text)}
+          <TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
+                <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
+              </TouchableOpacity>
+
+          <CustomAlert
+            visible={alertVisible}
+            title={t("Alert")}
+            message={alertMessage}
+            onConfirm={hideAlert}
           />
         </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <TextInput
-            placeholder="Junior"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={level}
-            onChangeText={text => setlevel(text)}
-          />
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Rate")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <TextInput
-            placeholder="$50"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={rate}
-            onChangeText={text => setrate(text)}
-          />
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Available Days")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <TextInput
-            placeholder="Mon-Fri"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={available_days}
-            onChangeText={text => setavailable_days(text)}
-          />
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Available Times")}</Text>
-        </View>
-        <View style={styles.cell}>
-         <TextInput
-            placeholder="12PM-1PM"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={available_times}
-            onChangeText={text => setavailable_times(text)}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </View>
-    <View style= {{flexDirection: 'row'}}>
-    <Text style={{marginLeft: 50, fontWeight: '600', marginTop: 20,fontFamily:"Roboto-Light"}}>{t("My Scoring Guide")}</Text>
-
-</View>
-
-     <View style={styles.container}>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 1</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-           <TextInput
-            placeholder={t("Plan around how to use tools to boost performance e.g, xrm toolbox")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={guide1}
-            onChangeText={text => setguide1(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={guide1_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setguide1_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 2</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("How to incorporate app performance optimization")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={guide2}
-            onChangeText={text => setguide2(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-   selectedValue={guide2_percentage}
-   style={styles.picker}
-   onValueChange={(itemValue) => setguide2_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-         </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-        <TextInput
-            placeholder={t("How to be proactive")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={guide3}
-            onChangeText={text => setguide3(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-   selectedValue={guide3_percentage}
-   style={styles.picker}
-   onValueChange={(itemValue) => setguide3_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 4</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("How to optimize power automate")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={guide4}
-            onChangeText={text => setguide4(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={guide4_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setguide4_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Guide")} 5</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-         <TextInput
-            placeholder={t("How to optimize AI builder bot")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={guide5}
-            onChangeText={text => setguide5(text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  selectedValue={guide5_percentage}
-  style={styles.picker}
-  onValueChange={(itemValue) => setguide5_percentage(itemValue)}
->
-<Picker.Item label="10%" value="10" />
-  <Picker.Item label="20%" value="20" />
-  <Picker.Item label="30%" value="30" />
-  <Picker.Item label="40%" value="40" />
-  <Picker.Item label="50%" value="50" />
-  <Picker.Item label="60%" value="60" />
-  <Picker.Item label="70%" value="70" />
-  <Picker.Item label="80%" value="80" />
-  <Picker.Item label="90%" value="90" />
-  <Picker.Item label="100%" value="100" />
-</Picker>
-        </View>
-      </View>
-     
-      </View>
-<TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
-    </TouchableOpacity>
-
-
-
-    </View>
-
-</ScrollView>
-<CustomAlert
-  visible={alertVisible}
-  title={t("Alert")}
-  message={alertMessage}
-  onConfirm={hideAlert}
-/>
-</View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
@@ -473,7 +347,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily:"Roboto-Light"
   },
-   buttonplus: {
+  buttonplus: {
     backgroundColor: 'coral', 
     padding: 5,
     marginLeft: 585, 
@@ -481,18 +355,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 10
   },
+  buttonplusPressed: {
+    backgroundColor: 'green',
+  },
+  buttonplusDisabled: {
+    backgroundColor: 'red',
+  },
   buttonTextplus: {
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
   },
-   buttonsave: {
+  buttonsave: {
     backgroundColor: 'coral',
     padding: 5,
     marginLeft: 700, 
     width: 150,
     paddingHorizontal: 20,
-    marginTop: 20
+    marginTop: 30
   },
   buttonTextsave: {
     color: 'white',
@@ -546,4 +426,5 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
 });
+
 export default MyComponent;

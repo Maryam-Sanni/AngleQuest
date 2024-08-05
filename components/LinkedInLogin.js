@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Alert, Image } from 'react-native';
 
 const CLIENT_ID = '78qmuikhnbiec4';
 const CLIENT_SECRET = 'QhCdLTELCYUe62EQ';
 const REDIRECT_URI = 'http://anglequest.com/user/oauth/ln';
-const STATE = 'random_string'; // You can generate a random string for state
+const STATE = 'random_string';
 
 const LinkedInLogin = () => {
-  const [authCode, setAuthCode] = useState(null);
-
   const handleLinkedInLogin = () => {
     const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}&scope=r_liteprofile%20r_emailaddress`;
     window.location.href = authUrl;
@@ -51,7 +49,7 @@ const LinkedInLogin = () => {
     return urlParams.get('code');
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (window.location.search) {
       const code = extractCodeFromUrl(window.location.href);
       if (code) {
@@ -61,24 +59,19 @@ const LinkedInLogin = () => {
   }, []);
 
   return (
-       <TouchableOpacity style={styles.buttonContainer} onPress={handleLinkedInLogin}>
-        <Image
-          source={{
-            uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&',
-          }}
-          style={styles.buttonIcon}
-        />
-        <Text>Sign up with LinkedIn</Text>
-      </TouchableOpacity>
+    <TouchableOpacity style={styles.buttonContainer} onPress={handleLinkedInLogin}>
+      <Image
+        source={{
+          uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/44c39c6507947c98c1b395fecfccacfdba1edd07847eab25a4f629858fa22afa?apiKey=7b9918e68d9b487793009b3aea5b1a32&',
+        }}
+        style={styles.buttonIcon}
+      />
+      <Text>Sign up with LinkedIn</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',

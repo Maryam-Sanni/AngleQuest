@@ -128,7 +128,7 @@ function MyComponent() {
               {data.coaching_hub_limit} Participants
             </Text>
             <Text style={{ fontSize: 13, color: '#206C00', marginBottom: 10 }}>
-              {data.meeting_day}
+              {data.meeting_day}s
             </Text>
             <Text style={{ fontSize: 13, color: '#206C00', marginBottom: 10 }}>
              {data.from} - {data.to}
@@ -140,7 +140,7 @@ function MyComponent() {
                 {data.coaching_hub_name}
               </Text>
               <Text style={{ fontSize: 12, color: 'black', fontWeight: '400' }}>
-                Coach: {data.coaching_hub_goals}
+                Created: {new Date(data.created_at).toLocaleDateString()}
               </Text>
             </View>
           </View>

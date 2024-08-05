@@ -131,7 +131,7 @@ const MyComponent = () => {
                   style={styles.recommended3}
                 />
     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -20}}>Individual Professionals</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>Use AngleQuest to manage your professional growthfrom one level to another.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10, textAlign: 'center',}}>Use AngleQuest to manage your professional growth from one level to another.</Text>
     <View style={{flexDirection: 'row', alignItems: 'center'}} >
     <TouchableOpacity>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 18, fontWeight: '600', marginTop: 30}}>TRY IT NOW</Text>

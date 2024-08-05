@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import ScheduledMeet from '../Experts/ScheduledMeetings';
 
 function MyComponent() {
     const navigation = useNavigation();
@@ -102,13 +102,13 @@ const {t}=useTranslation()
   }, []);
 
   const reloadHomeExperts = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home - Experts' }],
-    });
+    navigation.navigate('anglequest');
+    setTimeout(() => {
+      navigation.navigate('Manage Hubs');
+    }, 2000); // Delay of 3 seconds (3000 milliseconds)
   };
-  
 
+  
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -136,7 +136,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: '#666' }]}>{coaching_hub_name || "loading..."}</Text>
+                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: '#666' }]}>{coaching_hub_name || "No update yet"}</Text>
               </View>
             </TouchableOpacity>
             
@@ -233,6 +233,7 @@ const {t}=useTranslation()
         </View>
       </Modal>
             <ScheduledMeetingsTable />
+             <ScheduledMeet />
             
           </View>
         </ScrollView>
@@ -321,278 +322,7 @@ const ScheduledMeetingsTable = () => {
       </View>
 
       </View>
-    <View style={styles.greenBox}>
-    <BlurView intensity={100} style={styles.blurBackground}>
-    <Text style={styles.title}>{t("Manage SAP FI Hub")}</Text>
     
-    <View style={styles.table}>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Name")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}> </Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Status")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Sessions Attended")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>{t("Sessions Missed")}</Text>
-        </View>
-      </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Maria Garcia</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>3</Text>
-        </View>
-        </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14,}}>{t("Offline")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>15 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>5 {t("Sessions")}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar.jpg')} style={styles.userimage} />
-            <Text style={styles.cellText}>Ahmed Hassan</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>9</Text>
-        </View>
-        </View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
-          </View>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Isabella Ross</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>1</Text>
-        </View>
-        </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>19 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>1 {t("Sessions")}</Text>
-          </View>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar2.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Adedare Adeyemi</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>7</Text>
-        </View>
-        </View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>13 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>7 {t("Sessions")}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Sophie Dubois</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>12</Text>
-        </View>
-        </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>8 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>12 {t("Sessions")}</Text>
-          </View>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Emily Johnson</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>2</Text>
-        </View>
-        </View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
-          </View>
-        </View>
- <View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/User.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Chinwe Ekpo</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}>
-  {messageCountText !== '0' && (
-    <View style={styles.messageCount}>
-      <Text style={styles.messageCountText}>0</Text>
-    </View>
-  )}
-</View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
-          </View>
-        </View>
-<View style={styles.row}>
-          <View style={styles.cell}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar.jpg')} style={styles.userimage} />
-            <Text style={styles.cellText}>Chiara Romano</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>14</Text>
-        </View>
-        </View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>20 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>0 {t("Sessions")}</Text>
-          </View>
-        </View>
-<View style={styles.row}>
-          <View style={styles.cell2}>
-          <TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/useravatar2.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Oliver Morris</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-          <View style={styles.cell2}>
-          <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>3</Text>
-        </View>
-        </View>
-          <View style={styles.cell2}>
-          <Text style={{fontStyle: "italic", fontSize: 14, color: 'green'}}>{t("Online")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>16 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>4 {t("Sessions")}</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-<View style={styles.cell}>
-<TouchableOpacity>
-<View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/User.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>Ogoh Tochukwu</Text>
-          </View>
-         </TouchableOpacity>
-          </View>
-          <View style={styles.cell}>
-  {messageCountText !== '0' && (
-    <View style={styles.messageCount}>
-      <Text style={styles.messageCountText}>0</Text>
-    </View>
-  )}
-</View>
-          <View style={styles.cell}>
-          <Text style={{fontStyle: "italic", fontSize: 14}}>{t("Offline")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>19 {t("Sessions")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>1 {t("Sessions")}</Text>
-          </View>
-        </View>
-
-        
-       
-      </View>
-      </BlurView>
-    </View>
     
     </View>
   );

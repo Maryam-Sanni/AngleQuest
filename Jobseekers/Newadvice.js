@@ -38,6 +38,11 @@ function MyComponent({ onClose }) {
   };
 
   const goToPlans = () => {
+    navigation.navigate('Advice Offer');
+    onClose(); // Close the modal
+  };
+  
+  const goToPla = () => {
     // Validate the form data before making the API request
     if (!type || !role || !challenge || !startingLevel || !targetLevel || !status || !selectedDateTime) {
       alert(t("Please fill in all fields"), t("Please fill in all fields"));
