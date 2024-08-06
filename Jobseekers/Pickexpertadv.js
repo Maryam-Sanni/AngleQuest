@@ -4,6 +4,7 @@ import OpenSchedule2 from '../components/JProfile';
 import OpenModal from '../Jobseekers/Newadvice';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import RadioForm from 'react-native-simple-radio-button';
 
 
 function MyComponent({ onClose }) {
@@ -14,8 +15,9 @@ function MyComponent({ onClose }) {
   const [isDropdown, setIsDropdown] = useState(false);
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [formModalVisible, setformModalVisible] = useState(false);
-  const [isPressed, setIsPressed] = useState(false); // State for tracking whether the TouchableOpacity is pressed
-
+  const [isPressed, setIsPressed] = useState(false); 
+  const [selectedExpert, setSelectedExpert] = useState(null);
+  
   const handleOpenPress = () => {
     setMainModalVisible(false);
     setformModalVisible(true);
@@ -40,7 +42,6 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
-  // Sample data for the cards
   const cardData = [
     {
       description: "Here is a description of what your coach does, kindly read the description carefully.",
@@ -201,10 +202,17 @@ function MyComponent({ onClose }) {
               <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
                 {data.interviewfee}</Text>
             </View>
-            <TouchableOpacity
-              style={{ height: 18, width: 18, borderRadius: 15, borderWidth: 1, borderColor: "#4A5568", marginRight: 10, marginLeft: 80, marginTop: 10, backgroundColor: 'none' }}
-              onPressIn={handleTogglePress}  // Triggered when pressing down
-              onPressOut={handleTogglePress} // Triggered when releasing
+            <RadioForm
+              radio_props={[{ label: '', value: index }]}
+              initial={selectedExpert}
+              onPress={(value) => setSelectedExpert(value)}
+              formHorizontal={true}
+              labelHorizontal={false}
+              buttonSize={10}
+              buttonOuterSize={18}
+              buttonColor={'black'}
+              selectedButtonColor={'black'}
+              style={{ marginRight: 10, marginLeft: 70, marginTop: 10 }}
             />
           </View>
         </View>
@@ -232,7 +240,7 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
                   style={styles.logo}
                 />
-                <Text style={styles.headerText}>{t("Advice Experts")}</Text>
+                <Text style={styles.headerText}>{t("Skill Analysis Experts")}</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                   <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>✕</Text>
                 </TouchableOpacity>
@@ -242,17 +250,17 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <Picker style={styles.picker}>
-                    <Picker.Item label={t("Category")} value="Category" />
-                    <Picker.Item label="Java Engineering" value="Java Engineering" />
-                    <Picker.Item label="SAP FI" value="SAP FI" />
-                    <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
-                    <Picker.Item label="Dev Ops" value="Dev Ops" />
-                    <Picker.Item label="Frontend Development" value="Frontend Development" />
-                    <Picker.Item label="Backend Development" value="Backend Development" />
-                    <Picker.Item label="Fullstack Development" value="Fullstack Development" />
-                    <Picker.Item label="Data Analysis" value="Data Analysis" />
-                    <Picker.Item label="UI/UX Design" value="UI/UX Design" />
-                  </Picker>
+                    <Picker.Item label={t("Category")} value=" " />
+                    <Picker.Item label={t('SAP')} value="SAP" />
+                      <Picker.Item label={t('Microsoft')} value="Microsoft" />
+                      <Picker.Item label={t('Salesforce')} value="Salesforce" />
+                      <Picker.Item label={t('Frontend Development')} value="Frontend Development"/>
+                      <Picker.Item label={t('Backend Development')} value="Backend Development" />
+                      <Picker.Item label={t('UI/UX')} value="UI/UX" />
+                      <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+                      <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+                      <Picker.Item label={t('Management')} value="Management" />
+                    </Picker>
                   <TextInput placeholder={t("Search")} style={styles.input} />
                 </View>
               </View>

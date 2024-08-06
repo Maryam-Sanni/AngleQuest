@@ -107,7 +107,7 @@ function MyComponent() {
         case "Interview": return routeName === 'New Interview';
         case "Sessions": return routeName === 'Sessions';
         case "Skills Analysis":
-        return ['Use AI', 'Use CV', 'Use Questionnaire', 'AI Result'].includes(routeName);
+        return ['Use AI', 'Use CV', 'Use Questionnaire', 'AI Result', 'Advice Sessions'].includes(routeName);
         case "Hubs": return routeName === 'Coaching Hubs';
         case "Performance": return routeName === 'My Performance';
         case "Messages": return routeName === 'Messages';

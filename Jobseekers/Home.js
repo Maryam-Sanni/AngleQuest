@@ -81,8 +81,8 @@ const HomePage = () => {
     navigation.navigate('Advice');
   };
 
-  const goToTarget = () => {
-    navigation.navigate(' ');
+  const gotoAI = () => {
+    navigation.navigate('Use AI');
   };
  
   const handleOpenPress2 = () => {
@@ -237,7 +237,7 @@ const HomePage = () => {
           <View style={{flexDirection: 'column', marginTop: 10, width: 350, marginLeft: 30 }}>
           <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("What is next for you")} {first_name}?</Text>
           <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 5, fontFamily:"Roboto-Light"}}>{t("Reaching your next career milstone is important to us")}</Text>
-          <TouchableOpacity onPress={handleOpenPress2} 
+          <TouchableOpacity onPress={gotoAI} 
           style={[
           styles.touchablebegin,
           isHovered2 && styles.touchableOpacityHovered

@@ -121,12 +121,11 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 30,
-    marginLeft: 50,
-    color: "black",
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
+      marginLeft: 50,
+      color: "black",
+      fontWeight: 'bold',
+      fontSize: 15,
+      textAlign: 'flex-start',
   },
   table: {
     marginRight: 200,

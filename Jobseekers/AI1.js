@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 1000,
+    alignItems: 'center',
     backgroundColor: '#f7fff4',
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,

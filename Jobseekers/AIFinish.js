@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Animated, StyleSheet, TextInput, ScrollView, Picker, ImageBackground } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, TextInput, ScrollView, Picker, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
 import CustomAlert from '../components/CustomAlert';
+import OpenModal from './Pickexpertadv';
 
 const MyComponent = () => {
   const navigation = useNavigation();
@@ -13,6 +14,7 @@ const MyComponent = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')  
+  const [modalVisible, setModalVisible] = useState(false);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -49,12 +51,12 @@ const MyComponent = () => {
 
   const { t } = useTranslation();
 
-  const gotoCV = () => {
-      navigation.navigate('Use CV');
+  const handleOpenPress = () => {
+    setModalVisible(true);
   };
 
-  const gotoQS = () => {
-    navigation.navigate('Use Questionnaire');
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -71,7 +73,7 @@ const MyComponent = () => {
         <View style={styles.glassBox}>
         <View style={styles.container}>
 
-          <View style={{ flexDirection: 'row', marginTop: 50, alignSelf: 'flex-start', }}> 
+          <View style={{ flexDirection: 'row', marginTop: 50 }}> 
             <Image
               source={require('../assets/AnglequestAI.png')}
               style={styles.image}
@@ -235,12 +237,24 @@ const MyComponent = () => {
              </View>
            </View>
 
-
+          <TouchableOpacity onPress={handleOpenPress} style={styles.button}>
+              <Text style={styles.buttonText}>{t('Next')}</Text>
+          </TouchableOpacity>
 
 
 
           
         </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={handleCloseModal}
+          >
+              <View style={styles.modalContent}>
+                <OpenModal onClose={() => handleCloseModal()} />
+              </View>
+          </Modal>
         </View>
       </ScrollView>
     </View>
@@ -360,7 +374,7 @@ marginRight: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: "100%",
+    width: 700,
     padding: 30,
     marginLeft: 20,
     borderWidth: 2,
@@ -529,6 +543,23 @@ fontWeight: 'bold',
       height: 25,
       marginHorizontal: 5,
     },
+  button: {
+    backgroundColor: 'coral',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'coral',
+    padding: 10,
+    width: 100,
+    alignItems: 'center',
+    marginLeft: 800,
+    marginBottom: 50,
+    marginTop: 50
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Roboto-Light',
+  },
 });
 
 export default MyComponent;

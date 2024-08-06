@@ -6,6 +6,7 @@ import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -19,6 +20,11 @@ function MyComponent({ onClose }) {
   const [targetLevel, setTargetLevel] = useState("");
   const [status, setStatus] = useState("");
   const [token, setToken] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [expert_available_days, setExpertAvailableDays] = useState('Mon, Tue, Wed, and Thurs');
+  const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
+  const [expert, setExpert] = useState('Joop Melcher');
 
   useEffect(() => {
     const getToken = async () => {
@@ -37,54 +43,65 @@ function MyComponent({ onClose }) {
     setIsModalVisible(false);
   };
 
-  const goToPlans = () => {
-    navigation.navigate('Advice Offer');
-    onClose(); // Close the modal
-  };
-  
-  const goToPla = () => {
-    // Validate the form data before making the API request
-    if (!type || !role || !challenge || !startingLevel || !targetLevel || !status || !selectedDateTime) {
-      alert(t("Please fill in all fields"), t("Please fill in all fields"));
-      return;
-    }
-
-    // Prepare the data for the API request
-    const formData = {
-      type,
-      role,
-      challenge,
-      starting_level: startingLevel,
-      target_level: targetLevel,
-      status,
-      date_time: selectedDateTime,
-    };
-
-    // Make the API request using Axios
-    axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-advice', formData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+  const goToPlan = async () => {
+    try {
+      // Validate the form data before making the API request
+      if (!type || !role || !challenge || !startingLevel || !targetLevel || !status || !selectedDateTime) {
+      setAlertMessage(t('Please fill all fields'));
+        setAlertVisible(true);
+        return;
       }
-    })
-      .then(response => {
-        if (response.data.status === 'success') {
-          alert(t("Success"), t("Advice Objective created successfully"));
-          navigation.navigate('Advice Offer');
-          onClose(); // Close the modal
-        } else {
-          alert(t("Error"), t("Failed to create Advice Objective"));
-        }
-      })
-      .catch(error => {
-        alert(t("Error"), t("An error occurred. Please try again."));
-        console.error(error);
-      });
+
+      // Prepare the data for the API request
+      const formData = {
+        type,
+        role,
+        description: challenge,
+        starting_level: startingLevel,
+        target_level: targetLevel,
+        status,
+        date_time: selectedDateTime,
+        expert_available_days,
+        expert_available_time,
+        expert
+      };
+
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      const response = await axios.post(
+        'https://recruitangle.com/api/jobseeker/create-jobseeker-advice', 
+        formData, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.status === 201) {
+        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(formData));
+        navigation.navigate('Advice Offer');
+        onClose();
+      } else {
+        setAlertMessage('Failed to create skill analysis');
+      }
+    } catch (error) {
+      console.error('Error during save:', error); // Log error for debugging
+      setAlertMessage('Failed to create skill analysis');
+    } finally {
+      setAlertVisible(true);
+    }
   };
 
+  const hideAlert = () => {
+    setAlertVisible(false);
+  };
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
+
+  if (!fontsLoaded) {
+    return null; // You can return a loading indicator here if you want
+  }
+
   const { t } = useTranslation();
 
   return (
@@ -96,7 +113,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("Create New Objective")}</Text>
+            <Text style={styles.headerText}>{t("Create New Skill Analysis Session")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
@@ -206,50 +223,73 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>Joop Melcher</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert available days")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>Mon, Tue, Wed and Thurs</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert available time")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>09:00AM-05:00PM</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
               </View>
               <View style={styles.cell}>
-                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                  <Text style={{ color: 'grey', borderWidth: 1, borderColor: 'black', fontFamily: "Roboto-Light" }}>{t("Selected date and time: {selectedDateTime}")}</Text>
+                <TouchableOpacity
+                  style={styles.dateTimeButton}
+                  onPress={() => setIsModalVisible(true)}
+                >
+                  <Text style={{ fontFamily: "Roboto-Light" }}>
+                    {selectedDateTime
+                      ? selectedDateTime.toLocaleString()
+                      : t("Select Date and Time")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <TouchableOpacity onPress={goToPlans} style={styles.buttonplus}>
-            <Text style={styles.buttonTextplus}>{t("Next")}</Text>
-          </TouchableOpacity>
+            </View>
+          
+            <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Expert's available days and time")}</Text>
+            <View style={styles.container}>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+                    {expert}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+                    {expert_available_days}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
+                </View>
+                <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>  {expert_available_time}
+                  </Text>
+                </View>
+              </View>
+            </View>
+              <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
+                <Text style={styles.buttonTextplus}>{t("Save")}</Text>
+              </TouchableOpacity>
+            
+          
         </View>
-
-        <DateTimePickerModal
-          isVisible={isModalVisible}
-          onConfirm={handleConfirmDateTime}
-          onCancel={handleCancelModal}
-        />
       </ScrollView>
+      <DateTimePickerModal
+        isVisible={isModalVisible}
+        mode="datetime"
+        onConfirm={handleConfirmDateTime}
+        onCancel={handleCancelModal}
+      />
+      <CustomAlert
+        visible={alertVisible}
+        title={t("Alert")}
+        message={alertMessage}
+        onConfirm={hideAlert}
+      />
     </View>
   );
 }
@@ -261,7 +301,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     marginRight: 70,
     marginTop: 20,
-    marginLeft: 50
+    marginLeft: 50,
   },
   greenBox: {
     width: 920,
@@ -284,7 +324,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
     color: 'grey',
-    fontSize: 14
+    fontSize: 14,
   },
   buttonplus: {
     backgroundColor: 'coral',
@@ -293,18 +333,20 @@ const styles = StyleSheet.create({
     marginLeft: 750,
     width: 100,
     paddingHorizontal: 20,
-    marginTop: 10
+    marginTop: 10,
   },
   buttonTextplus: {
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
   },
   input: {
-    outline: 'black',
     borderColor: 'black',
-    borderWidth: 1
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 5,
+    fontSize: 14,
   },
   closeButton: {
     position: 'absolute',
@@ -318,19 +360,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 20
+    marginBottom: 20,
   },
   logo: {
     width: 40,
     height: 40,
-    marginRight: 10
+    marginRight: 10,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily: "Roboto-Light"
-  }
+    fontFamily: 'Roboto-Light',
+  },
 });
 
 export default MyComponent;

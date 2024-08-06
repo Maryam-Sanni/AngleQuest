@@ -87,7 +87,6 @@ const ChatScreen = ({ userId: propUserId }) => {
     };
   }, []);
 
-
   useEffect(() => {
     const loadMessages = async () => {
       try {
@@ -178,6 +177,7 @@ const ChatScreen = ({ userId: propUserId }) => {
     const timestamp = newMessage.createdAt.toISOString();
     AsyncStorage.setItem(`lastMessage_${userId}`, JSON.stringify({ lastMessage, timestamp }));
   };
+
 
   const renderSend = (props) => {
     return (
@@ -271,7 +271,7 @@ const ChatScreen = ({ userId: propUserId }) => {
           <Text style={styles.profileName}>{userData[userId]?.name || 'Loading...'}</Text>
         </View>
       </TouchableOpacity>
-      
+
       <View style={{ flex: 1, backgroundColor: '#eafaf1' }}>
       <GiftedChat
         messages={messages}
@@ -313,7 +313,7 @@ const ChatScreen = ({ userId: propUserId }) => {
                               {userData[userId]?.phone || 'N/A'}
                             </Text>
 
-                           
+
           <Text style={{ marginTop: 8,  fontSize: 14, color: "black", fontWeight: '600', 
              }}>{t('Expertise')}</Text>
                               <Text style={{ marginTop: 8, fontSize: 12, color: "black" }}>

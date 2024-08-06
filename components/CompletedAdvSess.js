@@ -25,7 +25,7 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      <Text style={styles.title}>{t("Completed Advice Sessions")}</Text>
+      <Text style={styles.title}>{t("Completed Skill Analysis Sessions")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>

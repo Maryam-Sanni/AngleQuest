@@ -100,7 +100,7 @@ function QuestionnaireModal({ onClose }) {
 
 const styles = StyleSheet.create({
     modalContent: {
-        width: 800,
+        width: 1000,
         height: '100%',
         backgroundColor: '#F8F8F8',
     },
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 100,
         alignItems: 'center',
-        marginLeft: 650,
+        marginLeft: 850,
         marginBottom: 50,
     },
     buttonText: {

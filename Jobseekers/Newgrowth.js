@@ -5,72 +5,104 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
-  const [selectedType, setSelectedType] = useState('Personal');
+  const [token, setToken] = useState("");
+  const [type, setSelectedType] = useState('Personal');
   const [title, setTitle] = useState('');
   const [role, setRole] = useState('');
-  const [resultDescription, setResultDescription] = useState('');
-  const [howToAchieve, setHowToAchieve] = useState('');
-  const [needs, setNeeds] = useState('');
-  const [reviewFrequency, setReviewFrequency] = useState('Weekly');
-  const [startingLevel, setStartingLevel] = useState('Beginner');
-  const [targetLevel, setTargetLevel] = useState('Beginner');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [status, setStatus] = useState('Active');
-  const [token, setToken] = useState('');
-  const [fontsLoaded] = useFonts({
-    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
-  });
-  const { t } = useTranslation();
+  const [result_description, setResultDescription] = useState('');
+  const [how_to_achieve, setHowToAchieve] = useState('');
+  const [achieve_the_objective, setNeeds] = useState('');
+  const [review_with_coach, setreviewwithcoach] = useState('Biannually');
+  const [starting_level, setStartingLevel] = useState('Beginner');
+  const [target_level, setTargetLevel] = useState('Beginner');
+  const [start_date, setStartDate] = useState('');
+  const [end_date, setEndDate] = useState('12 Months');
+  const [status, setStatus] = useState('');
+  const [coach, setCoach] = useState('Joop Melcher');
+   const [feedbacks, setFeedback] = useState('Read only field');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
+  const gotoCV = () => {
+      navigation.navigate('Growth Offer');
+  };
+  
   useEffect(() => {
-    const fetchToken = async () => {
+    const getToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
-      if (storedToken) {
-        setToken(storedToken);
-      }
+      setToken(storedToken);
     };
-    fetchToken();
+    getToken();
   }, []);
 
-  const handleSubmit = async () => {
+  const goToPlan = async () => {
     try {
+      // Validate the form data before making the API request
+      if (!type || !role || !title || !starting_level|| !target_level || !status || !start_date) {
+      setAlertMessage(t('Please fill all fields'));
+        setAlertVisible(true);
+        return;
+      }
+
+      // Prepare the data for the API request
+      const formData = {
+        type,
+        role,
+        title,
+        result_description,
+        how_to_achieve,
+        achieve_the_objective,
+        starting_level,
+        review_with_coach,
+        target_level,
+        start_date,
+        end_date,
+        status,
+        coach,
+        feedbacks
+      };
+
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
       const response = await axios.post(
-        'https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan',
-        {
-          type: selectedType,
-          title,
-          role,
-          result_description: resultDescription,
-          how_to_achieve: howToAchieve,
-          needs: needs,
-          review_frequency: reviewFrequency,
-          starting_level: startingLevel,
-          target_level: targetLevel,
-          start_date: startDate,
-          end_date: endDate,
-          status,
-          coach: 'Joop Melcher', // Static value, adjust if needed
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        'https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan', 
+        formData, 
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log('Success:', response.data);
-      Alert.alert('Success', 'Your plan objective has been submitted.');
-      navigation.navigate('Growth Offer');
-      onClose();
+      if (response.status === 201) {
+        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(formData));
+        navigation.navigate('Growth Offer');
+        onClose();
+      } else {
+        setAlertMessage('Failed to create growth plan');
+      }
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'There was a problem submitting your plan objective.');
+      console.error('Error during save:', error); // Log error for debugging
+      setAlertMessage('Failed to create growth plan');
+    } finally {
+      setAlertVisible(true);
     }
   };
+
+  const hideAlert = () => {
+    setAlertVisible(false);
+  };
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return null; // You can return a loading indicator here if you want
+  }
+
+  const { t } = useTranslation();
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8', alignItems: 'center', marginTop: 40 }}>
@@ -97,7 +129,7 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <Picker
-                  selectedValue={selectedType}
+                  selectedValue={type}
                   style={styles.picker}
                   onValueChange={(itemValue) => setSelectedType(itemValue)}
                 >
@@ -145,7 +177,7 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  value={resultDescription}
+                  value={result_description}
                   onChangeText={setResultDescription}
                 />
               </View>
@@ -160,7 +192,7 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  value={howToAchieve}
+                  value={how_to_achieve}
                   onChangeText={setHowToAchieve}
                 />
               </View>
@@ -175,7 +207,7 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  value={needs}
+                  value={achieve_the_objective}
                   onChangeText={setNeeds}
                 />
               </View>
@@ -185,7 +217,7 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
               </View>
               <View style={styles.cell}>
-              <Text style={{color: 'grey', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>{t('Biannually')}</Text>
+              <Text style={{color: 'grey', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>{review_with_coach}</Text>
               </View>
             </View>
             <View style={styles.row}>
@@ -194,7 +226,7 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <Picker
-                  selectedValue={startingLevel}
+                  selectedValue={starting_level}
                   style={styles.picker}
                   onValueChange={(itemValue) => setStartingLevel(itemValue)}
                 >
@@ -212,7 +244,7 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <Picker
-                  selectedValue={targetLevel}
+                  selectedValue={target_level}
                   style={styles.picker}
                   onValueChange={(itemValue) => setTargetLevel(itemValue)}
                 >
@@ -233,7 +265,7 @@ function MyComponent({ onClose }) {
                   placeholder="1/April/2024"
                   placeholderTextColor="grey"
                   style={styles.input}
-                  value={startDate}
+                  value={start_date}
                   onChangeText={setStartDate}
                 />
               </View>
@@ -247,7 +279,7 @@ function MyComponent({ onClose }) {
                   placeholder="20/Jul/2024"
                   placeholderTextColor="grey"
                   style={styles.input}
-                  value={endDate}
+                  value={end_date}
                   onChangeText={setEndDate}
                 />
               </View>
@@ -274,7 +306,7 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Coach')}</Text>
               </View>
               <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>Joop Melcher</Text>
+                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{coach}</Text>
               </View>
             </View>
             <View style={styles.row}>
@@ -282,14 +314,20 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
               </View>
               <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{t('Read only field Jobseeker')}</Text>
+                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
               </View>
             </View>
           </View>
-          <TouchableOpacity onPress={handleSubmit} style={styles.buttonplus}>
+          <TouchableOpacity onPress={gotoCV} style={styles.buttonplus}>
             <Text style={styles.buttonTextplus}>{t('Next')}</Text>
           </TouchableOpacity>
         </View>
+        <CustomAlert
+          visible={alertVisible}
+          title={t("Alert")}
+          message={alertMessage}
+          onConfirm={hideAlert}
+        />
       </ScrollView>
     </View>
   );

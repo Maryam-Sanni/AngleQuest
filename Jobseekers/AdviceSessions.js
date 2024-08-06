@@ -4,7 +4,7 @@ import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
-import OpenModal from '../Jobseekers/Newadvice';
+import OpenModal from '../Jobseekers/Pickexpertadv';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -72,16 +72,16 @@ function MyComponent() {
 
       <View style={styles.box}> 
       <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
-      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("I want to change from a data analyst to an SAP FI consultant")}</Text>
+      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{t("I want to change from a data analyst to an SAP FI consultant")}</Text>
       </View>
       
       <View style={styles.box}>
-        <View style={{flexDirection: 'row', marginTop: 30 }}>
+        <View style={{flexDirection: 'row' }}>
         <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, aspectRatio: 1, marginLeft: 10,}}
+              style={{ width: 40, height: 40, aspectRatio: 1, }}
             />
-            <Text style = {{fontSize: 12, color: 'black', fontWeight: '500', marginLeft: 5, marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Coach")} Joop Melcher</Text>
+            <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")} Joop Melcher</Text>
             </View>
     </View>
     </View>
@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7fff4',
         padding: 20,
         borderRadius: 20,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: '22%',
         height: 150,
         borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
@@ -171,8 +171,6 @@ const styles = StyleSheet.create({
       boximage: {
         width: 30,
         height: 30,
-        position: 'absolute',
-        left: 130,
         marginTop: 10,
         borderRadius: 25
       },
