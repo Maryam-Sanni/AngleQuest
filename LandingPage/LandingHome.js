@@ -249,9 +249,11 @@ const MyComponent = () => {
       </View>
       <View style={{backgroundColor: 'white', padding: 50, alignSelf: 'stretch'}} >
       <View style={{flexDirection: 'row', alignSelf: 'center'}} >
-      <Text style={{ fontSize: 35, fontWeight: 'bold', marginRight: 120, color: '#3D3D3D', width: 700, }}>As a professional, grow from one level in your career to next level assuredly!</Text>
+      <Text style={{ fontSize: 35, fontWeight: 'bold', marginRight: 120, color: '#3D3D3D', width: 700, }}>As a professional, use AngleQuest as your background support to perform your best work and exceed expectation.
+</Text>
       <View style={{flexDirection: 'column'}} >
-      <Text style={{ fontSize: 21, color: "grey", marginTop: 5, width: 500, fontWeight: 300}}>Boost your alignment, efficiency and productivity through personalized features tailored to your needs.</Text>
+      <Text style={{ fontSize: 21, color: "grey", marginTop: 5, width: 500, fontWeight: 300}}>Boost your productivity, growth and close your knowledge gap with ease. Take on your next task knowing AngleQuest will support you to achieve it.
+</Text>
       <TouchableOpacity style={[styles.joinButton, { marginTop: 20}]}>
           <Text style={styles.joinButtonText}>Get Started</Text>
         </TouchableOpacity>
@@ -317,8 +319,8 @@ const MyComponent = () => {
              </TouchableOpacity> 
       </View>
       </View>
-      <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 50 }}>End-to-End Product to Elevate Your Growth Journey</Text>
-      <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: "600", marginTop: 10, marginBottom: 5 }}>Tailored product designed for professional and business growth</Text>
+      <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 50 }}>End-to-end Product to run your team’s growth</Text>
+      <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: "600", marginTop: 10, marginBottom: 5 }}>Tailored for every member of your team.</Text>
       <View style={{flexDirection: 'row', marginBottom: 50}} >
       <View style={styles.signupBox} >
       <View style={{flexDirection: 'row'}} >
@@ -326,27 +328,40 @@ const MyComponent = () => {
                   source={require('../assets/42.png')}
                   style={styles.signupimg}
                 />
-    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>Sign up as an individual</Text>
+    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>New Employee Booster</Text>
     </View>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Unlock your potential with AngleQuest</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Sign up today to access personalized coaching, skill-building resources and career advancement tools tailored just for you.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Unlock potentials</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Have you ever wondered the best way to support new employee to maximize their talent?</Text>
     <View style={{borderBottomWidth: 1.5, borderBottomColor: 'purple', marginTop: 30}}/>
     <Text style={{ fontSize: 14, color: "grey", marginTop: 15}}>Top use cases:</Text>
     <View style={{flexDirection: 'row', marginTop: 20}} >
     < Feather name="check" size={15} color="purple" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Career Advancement</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Growth Management</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="purple" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Coaching and Mentoring</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Knowledge Gap Management</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="purple" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Personalized Growth Plan</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Hands-on Support</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="purple" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Performance Tracking</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Expert Guidance</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="purple" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Alignment with Best Practices
+</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="purple" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Expert as Buddy</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="purple" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Continuous learning opportunity</Text>
 </View>
 <TouchableOpacity style={styles.signupButton}>
           <Text style={styles.signupButtonText}>Sign Up</Text>
@@ -358,27 +373,35 @@ const MyComponent = () => {
                   source={require('../assets/43.png')}
                   style={styles.signupimg}
                 />
-    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>Sign up as an expert</Text>
+    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>Existing Employee Upskilling</Text>
     </View>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Empower individuals and earn</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Join our platform to share your expertise, guide professionals in their professional journey and earn recognition and compensation.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Empower your outliers</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Ignite employees' quest for growth by simplifying the process to attain new height using AngleQuest</Text>
     <View style={{borderBottomWidth: 1.5, borderBottomColor: '#09AD8F', marginTop: 30}}/>
     <Text style={{ fontSize: 14, color: "grey", marginTop: 15}}>Top use cases:</Text>
     <View style={{flexDirection: 'row', marginTop: 20}} >
     < Feather name="check" size={15} color="#09AD8F" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Skill Sharing</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Growing into new Position</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD8F" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Mentorship and Coaching</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Support Career Diversification</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD8F" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Thought Leadership</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Scenario Project Experience</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD8F" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Earn Compensation</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Efficiency Evaluation</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="#09AD8F" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Expert Support</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="#09AD8F" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Alignment with Best Practices</Text>
 </View>
 <TouchableOpacity style={styles.signupButton}>
           <Text style={styles.signupButtonText}>Sign Up</Text>
@@ -390,27 +413,36 @@ const MyComponent = () => {
                   source={require('../assets/44.png')}
                   style={styles.signupimg}
                 />
-    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>Sign up as a business</Text>
+    <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 5, marginTop: 7}}>Boost Under-performers</Text>
     </View>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Transform your workforce with guidance</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Sign up now to access a curated network of industry-leading mentors and coaches to empower your team with personalized professional development journey.</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 5}}>Groom resource for peak performance</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 20}}>Incubate in-house talent to maturity to reach their peak-performance and efficiency</Text>
     <View style={{borderBottomWidth: 1.5, borderBottomColor: '#09AD45', marginTop: 30}}/>
     <Text style={{ fontSize: 14, color: "grey", marginTop: 15}}>Top use cases:</Text>
     <View style={{flexDirection: 'row', marginTop: 20}} >
     < Feather name="check" size={15} color="#09AD45" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Skill Enhancement</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Skills Gap Analysis</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD45" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Performance Management</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Personalized Growth Plan</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD45" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Expert-Led Coaching</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Expert-Led Support</Text>
 </View>
 <View style={{flexDirection: 'row', marginTop: 10}} >
     < Feather name="check" size={15} color="#09AD45" />
-                <Text style={{ fontSize: 14, marginLeft: 5}}>Feedback and Evaluation</Text>
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Scenario Project Experience</Text>
+</View>
+
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="#09AD45" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Led Career Diversification</Text>
+</View>
+<View style={{flexDirection: 'row', marginTop: 10}} >
+    < Feather name="check" size={15} color="#09AD45" />
+                <Text style={{ fontSize: 14, marginLeft: 5}}>Efficiency Evaluation</Text>
 </View>
 <TouchableOpacity style={styles.signupButton}>
           <Text style={styles.signupButtonText}>Sign Up</Text>
@@ -418,7 +450,7 @@ const MyComponent = () => {
       </View>
       </View>
       <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: "bold", marginTop: 50 }}>Back your employees to succeed with anglequest.com</Text>
-      <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: "600", marginTop: 10 }}>No credit card needed* pay as you use</Text>
+      <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: "600", marginTop: 10 }}>No credit card needed pay as you use</Text>
                 <Image
                   source={require('../assets/landingco3.png')}
                   style={styles.shadowimage}
