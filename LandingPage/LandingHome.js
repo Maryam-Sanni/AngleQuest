@@ -19,7 +19,7 @@ const MyComponent = () => {
   const handleCloseModal = () => {
     setModalVisible(false);
     onClose();
-  };
+  }; 
 
   const goToStart = () => {
     navigation.navigate('Our Story'); // Navigate to 'JoinAs' page
