@@ -56,7 +56,7 @@ const MyComponent = () => {
           A unique toolkit for team impact management.
         </Text>
         <Text style={{ fontSize: 24, color: 'grey', padding: 10, textAlign: 'center', marginTop: -15 }}>
-        Designed for individuals, teams, recruiters and enterprise who wants to support their talents to succeed.
+        Designed for individuals, teams, recruiters and enterprise who wants to support their talents to succeed effortlessly on the job.
         </Text>
         <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
           <Text style={styles.buttonTextplus}>Sign up for early access</Text>
