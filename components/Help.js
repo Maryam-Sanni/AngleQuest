@@ -4,13 +4,18 @@ import { Modal, Text, View, TouchableOpacity, FlatList, StyleSheet, Linking } fr
 import { useTranslation } from 'react-i18next';
 
 const helpOptions = [
-  { id: '1', title: 'Help Center', description: 'Find answers to common questions and troubleshooting tips.', url: 'https://example.com/help-center' },
-  { id: '2', title: 'Contact Support', description: 'Reach out to our support team for personalized assistance.', url: 'mailto:support@example.com' },
+  { id: '1', title: 'FAQs', description: 'Find answers to common questions and troubleshooting tips.', url: 'https://example.com/help-center' },
+  { id: '2', title: 'Contact Support', description: 'Reach out to our support team for personalized assistance.', url: 'mailto:ask@anglequest.com' },
   { id: '3', title: 'Guided Tour', description: 'Get an interactive tour of our app\'s features.', url: 'https://example.com/guided-tour' },
   { id: '4', title: 'Tutorials and Guides', description: 'Access detailed tutorials and user manuals.', url: 'https://example.com/tutorials' },
   { id: '5', title: 'Video Tutorials', description: 'Watch video guides on how to use the app.', url: 'https://example.com/video-tutorials' },
   { id: '6', title: 'Community Forum', description: 'Join discussions and get help from other users.', url: 'https://example.com/forum' },
-  { id: '7', title: 'Feedback Form', description: 'Submit feedback or suggestions about the app.', url: 'https://example.com/feedback-form' },
+  { id: '7', title: 'AngleQuest AI', description: 'Learn about how AngleQuest AI works and its features.', url: 'https://example.com/anglequest-ai' },
+  { id: '8', title: 'System Status', description: 'Check the current status of our systems and services.', url: 'https://example.com/system-status' },
+   { id: '9', title: 'Blog', description: 'Read our latest articles and updates on our blog.', url: 'https://example.com/blog' },
+  { id: '10', title: 'App Updates', description: 'Stay informed about the latest updates and new features.', url: 'https://example.com/app-updates' },
+  { id: '11', title: 'Privacy Policy', description: 'Read about how we protect your privacy and data.', url: 'https://aq.anglequest.com/privacy-policy' },
+  { id: '12', title: 'Terms of Service', description: 'Review our terms and conditions for using the app.', url: 'https://aq.anglequest.com/terms-conditions' },
 ];
 
 const HelpOption = ({ title, description, url }) => (
@@ -39,7 +44,7 @@ export default function SuggestionModal({ visible, onClose }) {
           <TouchableOpacity onPress={onClose}>
             <Text style={styles.closeButton}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.modalTitle}>{t("Help Center")}</Text>
+          <Text style={styles.modalTitle}>{t("Welcome to AngleQuest Help Center")}</Text>
           <FlatList
             data={helpOptions}
             renderItem={({ item }) => <HelpOption {...item} />}
@@ -63,11 +68,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    width: '80%',
+    width: '50%',
   },
   closeButton: {
-    fontSize: 18,
-    color: 'grey',
+    fontSize: 24,
+    color: 'red',
     position: 'absolute',
     right: 20,
     fontWeight: 'bold',
@@ -75,11 +80,11 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 22,
+    color: '#206C00',
     fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 30,
-    fontFamily: "Roboto-Light",
   },
   helpList: {
     marginTop: 20,

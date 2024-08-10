@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, ImageBackground, StyleSheet, Picker, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
@@ -6,6 +6,8 @@ import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 function MyComponent() {
@@ -14,6 +16,8 @@ function MyComponent() {
   const [search, setSearch] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdown, setIsDropdown] = useState(false);
+  const [cardData, setCardData] = useState({ profileData: [] });
+  const [selectedCategory, setSelectedCategory] = useState('');
   
   const toggleMode = () => {
     setIsDropdown(!isDropdown);
@@ -22,120 +26,34 @@ function MyComponent() {
   };
   
 
-  
-  // Sample data for the cards
-  const cardData = [
-    {
-      date: "Mon-Fri",
-      time: "09:30AM - 12:30PM",
-      
-      expert: "Emily Ray",
-      job: "Data Analyst",
-       country: "Switzerland",
-      interviewfee: "$50",
-      growthfee: "NIL",
-      advicefee: "$70",
-    },
-    {
-    date: "Mon, Tue, Wed, Thur",
-      time: "02:00PM - 03:00PM",
-      
-      expert: "Monica Jerry",
-      job: "UI/UX Designer",
-       country: "Canada",
-      interviewfee: "NIL",
-      growthfee: "$18",
-      advicefee: "$20",
-    },
-     {
-    date: "Sat & Sun",
-      time: "09:00PM - 10:30PM",
-      
-      expert: "Fisayo Fosudo",
-      job: "Java Engineer",
-      country: "Nigeria",
-      interviewfee: "$25",
-      growthfee: "$25",
-      advicefee: "$25",
-    },
-    {
-    date: "Wed - Fri",
-    time: "02:00PM - 04:00PM",
-    
-    expert: "John Smith",
-    job: "Dev Ops",
-     country: "Canada",
-    interviewfee: "$50",
-      growthfee: "$40",
-      advicefee: "$50",
-  },
-   {
-    date: "Mon, Tue, Wed",
-    time: "02:00PM - 04:00PM",
-    
-    expert: "Vee Venice",
-    job: "SAP FI",
-     country: "India",
-    interviewfee: "$20",
-      growthfee: "NIL",
-      advicefee: "NIL",
-  },
-    {
-    date: "Mon-Fri",
-      time: "09:00AM - 12:00PM",
-      
-      expert: "Will Cooper",
-      job: "Backend Dev.",
-       country: "United Kingdom",
-      interviewfee: "$30",
-      growthfee: "$12",
-      advicefee: "NIL",
-    },
-    {
-    date: "Mon-Fri",
-    time: "02:00PM - 04:00PM",
-    
-    expert: "John Smith",
-    job: "Frontend Dev.",
-     country: "Netherlands",
-    interviewfee: "$50",
-      growthfee: "NIL",
-      advicefee: "$42",
-  },
-   {
-    date: "Mon-Fri",
-    time: "02:00PM - 04:00PM",
-    
-    expert: "John Smith",
-    job: "Dev Ops",
-     country: "United States",
-    interviewfee: "$30",
-      growthfee: "$25",
-      advicefee: "$30",
-  },
-   {
-    date: "Mon-Fri",
-    time: "02:00PM - 04:00PM",
-    
-    expert: "Vee Venice",
-    job: "SAP FI",
-    country: "United Kingdom",
-    interviewfee: "$50",
-      growthfee: "$50",
-      advicefee: "$50",
-  },
-  {
-    date: "Mon-Fri",
-    time: "09:00AM - 05:00PM",
-    
-    expert: "Michelle Raymond",
-    job: "Microsoft Azure",
-    country: "Netherlands",
-    interviewfee: "NIL",
-      growthfee: "NIL",
-      advicefee: "$50",
-  },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/getAllExpertsForJobSeekers', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          console.log('Fetched data:', response.data); // Check the response structure
+          setCardData(response.data);
+        } else {
+          console.error('Error fetching data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
@@ -207,7 +125,11 @@ function MyComponent() {
   };
 
   const renderCards = () => {
-    return cardData.map((data, index) => (
+    const filteredData = cardData.profileData.filter(data => 
+      !selectedCategory || data.preferred_role === selectedCategory
+    );
+
+    return filteredData.map((data, index) => (
       <Animated.View
         key={index}
         style={{
@@ -245,10 +167,10 @@ function MyComponent() {
             />
            
  <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"  }}>
-              {data.expert} 
+   {data.first_name} {data.last_name} 
             </Text>
             <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10,fontFamily:"Roboto-Light"   }}>
-              {data.job}
+              {data.preferred_role}
             </Text>
             
             
@@ -264,13 +186,13 @@ function MyComponent() {
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                           style={{ width: 14, height: 12, aspectRatio: 1, marginTop: 5 }}
                         />
-                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 4, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.country}</Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 4, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.preferred_locations}</Text>
                         </View>
                        
-              <Text style={{ fontSize: 14, color: "black", marginTop: 10,fontFamily:"Roboto-Light"  }}>{data.date}</Text>
+              <Text style={{ fontSize: 14, color: "black", marginTop: 10,fontFamily:"Roboto-Light"  }}>{data.available_days}</Text>
              
               <Text style={{ fontSize: 14, color: "black", fontFamily:"Roboto-Light" }}>
-                 Time: {data.time}
+                 Time: {data.available_time}
               </Text>
               
             </View>
@@ -313,7 +235,7 @@ function MyComponent() {
                 </TouchableOpacity>
                 <TouchableOpacity>
               <View style={styles.session2}>
-                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("Booked Experts")}</Text>
+                <Text style={{ fontWeight: "600", fontSize: 14, color: "#206C00",fontFamily:"Roboto-Light" }}>{t("My Expert")}</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
@@ -327,20 +249,22 @@ function MyComponent() {
             <View style={{ marginTop: 25, marginLeft: 10, marginBottom: 10 }}>
                 <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10}}>
-     <Picker
-                  style={styles.picker}
-                >
-                  <Picker.Item label={t("Category")} value="Category" />
-                  <Picker.Item label="Java Engineering" value="Java Engineering" />
-                  <Picker.Item label="SAP FI" value="SAP FI" />
-                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
-                  <Picker.Item label="Dev Ops" value="Dev Ops" />
-                  <Picker.Item label="Frontend Development" value="Frontend Development" />
-                  <Picker.Item label="Backend Development" value="Backend Development" />
-                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
-                  <Picker.Item label="Data Analysis" value="Data Analysis" />
-                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
-                </Picker>
+                  <Picker
+                    selectedValue={selectedCategory}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+                  >
+                    <Picker.Item label="All Categories" value="" />
+                    <Picker.Item label="SAP" value="SAP" />
+                    <Picker.Item label="Microsoft" value="Microsoft" />
+                    <Picker.Item label="Salesforce" value="Salesforce" />
+                    <Picker.Item label="Frontend Development" value="Frontend Development" />
+                    <Picker.Item label="Backend Development" value="Backend Development" />
+                    <Picker.Item label="UI/UX" value="UI/UX" />
+                    <Picker.Item label="Data Analysis" value="Data Analysis" />
+                    <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                    <Picker.Item label="Management" value="Management" />
+                  </Picker>
 
                 <TextInput
                   placeholder={t("Search")}

@@ -5,6 +5,7 @@ import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
+import HelpModal from '../components/Help';
 import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from '../Jobseekers/getstarted';
@@ -13,6 +14,11 @@ import OpenModal4 from '../Jobseekers/Pickyourhub';
 import {useFonts} from "expo-font" 
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { formatDistanceToNow, format } from 'date-fns';
+import { enGB } from 'date-fns/locale';
+
+const defaultAvatar = require("../assets/account.png");
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -36,10 +42,87 @@ const HomePage = () => {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
+  const [helpmodalVisible, sethelpModalVisible] = useState(false);
   const navigation = useNavigation();
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      console.log("Token retrieved:", token);
+
+      if (token) {
+        const response = await axios.get(
+          "https://recruitangle.com/api/expert/getAllExperts",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("API response:", response.data);
+        const result = response.data.allExperts;
+
+        // Retrieve all last messages and timestamps in parallel
+        const chatDataPromises = result.map(item =>
+          AsyncStorage.getItem(`lastMessage_${item.id}`)
+        );
+        const chatData = await Promise.all(chatDataPromises);
+
+        // Process and format data
+        const formattedData = result.map((item, index) => {
+          const { lastMessage = "No messages", timestamp = new Date().toISOString() } = chatData[index] ? JSON.parse(chatData[index]) : {};
+
+          // Determine the time format
+          const now = new Date();
+          const messageDate = new Date(timestamp);
+          let timeFormatted = '';
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+
+          if (messageDate >= today) {
+            timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
+          } else if (messageDate >= yesterday) {
+            timeFormatted = 'Yesterday';
+          } else {
+            timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
+          }
+
+          return {
+            id: item.id.toString(), // Ensure id is a string
+            name: `${item.first_name} ${item.last_name}`,
+            avatar: item.avatar_url ? { uri: item.avatar_url } : defaultAvatar,
+            message: lastMessage,
+            time: timeFormatted,
+            timestamp: messageDate, // Include timestamp for sorting
+            messagecount: "0",
+            hub: "Hub Members",
+          };
+        });
+
+        // Sort the data by timestamp in descending order
+        formattedData.sort((a, b) => b.timestamp - a.timestamp);
+
+        setData(formattedData);
+      } else {
+        console.log("No token found");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
  useEffect(() => {
     // Show the CustomModal when the component mounts
     setCustomModalVisible(true);
@@ -65,6 +148,10 @@ const HomePage = () => {
     retrieveData();
   }, []);
 
+  const openUser = (userId) => {
+    navigation.navigate('Messages', { userId });
+  };
+  
   const goToGrowth = () => {
     navigation.navigate('Growth Plan');
   };
@@ -368,62 +455,50 @@ onMouseLeave={() => setIsHovered12(false)}
         style={styles.input}
       />
       <TouchableOpacity>
-      <Image source={require('../assets/Sendarrow-message.png')} style={styles.icon} />
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=94664&format=png&color=000000' }}
+          style={styles.icon}
+        />
       </TouchableOpacity>
     </View>
         </View>
 
         <View style={styles.whiteBoxesContainer}>
-          {/* White boxes will go here */}
+        {/* White boxes will go here */}
           <View style={styles.whiteBox}>
           <View style={{flexDirection: 'row', marginBottom: 10 }}>
           <Image
        source={require('../assets/chat.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>SAP FI</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 25, position: 'absolute', right: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Others")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>All Experts</Text>
+          <Text style={{fontSize: 18, color: 'white', marginTop: 25, position: 'absolute', right: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Hubs")}</Text>
           </View>
-          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
-          <View style={{flexDirection: 'row', }}>
-          <Image source={require('../assets/useravatar4.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light" }}>Aliyah Hussein</Text>
-            <Text style={{color: 'white', fontSize: 14, marginTop: 3,fontFamily:"Roboto-Light"}}>Hello, This is Coach Aliyah,...</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120,fontFamily:"Roboto-Light"}}>Now</Text>
-          </View>
-          </View>
-          </View>
-          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
-          <View style={{flexDirection: 'row', }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15, fontFamily:"Roboto-Light'"}}>Imisi Akingbade</Text>
-            <Text style={{color: 'white', fontSize: 14, marginTop: 3,fontFamily:"Roboto-Light'"}}>Hello, Imisi, I hope you...</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120,fontFamily:"Roboto-Light'"}}>12:0PM</Text>
-          </View>
-          </View>
-          </View>
-          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
-          <View style={{flexDirection: 'row', }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light'" }}>Gerald Jason</Text>
-            <Text style={{color: 'white', fontSize: 14, marginTop: 3,fontFamily:"Roboto-Light'"}}>Afternoon Gerald, let's...</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120,fontFamily:"Roboto-Light'"}}>04:00PM</Text>
-          </View>
-          </View>
-          </View>
-          <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
-          <View style={{flexDirection: 'row', }}>
-          <Image source={require('../assets/useravatar1.png')} style={styles.image} />
-          <View style={{flexDirection: 'column' }}>
-            <Text style={{color: 'white', fontWeight: '600', fontSize: 15,fontFamily:"Roboto-Light'" }}>Nathan Arthur</Text>
-            <Text style={{color: 'white', fontSize: 14, marginTop: 3,fontFamily:"Roboto-Light'"}}>Perfect response Arthur...</Text>
-            <Text style={{color: 'white', fontSize: 12, marginTop: 3, marginLeft: 120,fontFamily:"Roboto-Light'"}}>09/06/24</Text>
-          </View>
-          </View>
-          </View>
+            {data.map((item, index) => (
+   <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+              <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
+                <Image source={item.avatar} style={styles.image} />
+                <View style={{ flexDirection: 'column' }}>
+                   <TouchableOpacity onPress={() => openUser(item.id)}>
+                  <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15, fontFamily: "Roboto-Light" }}>
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
+                    numberOfLines={1}  // Limit to 1 line
+                    ellipsizeMode="tail"  // Show "..." at the end if the text is too long
+                  >
+                    {item.message}
+                  </Text>
+                      </TouchableOpacity>
+                  <Text style={{ color: 'white', marginLeft: 110, fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
+                    {item.time}
+                  </Text>
+                </View>  
+              </View>
+   </View>
+            ))}
+          
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -434,7 +509,7 @@ onMouseLeave={() => setIsHovered12(false)}
           >
           <Text style={styles.touchableTextcoach}>{t("Suggestion")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setModalVisible(true)}
+          <TouchableOpacity onPress={() => sethelpModalVisible(true)}
           style={[
             styles.touchablecoach,
             isHovered14 && styles.touchableOpacityHovered
@@ -459,6 +534,7 @@ onMouseLeave={() => setIsHovered12(false)}
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     <CustomModal visible={custommodalVisible} onClose={() => setCustomModalVisible(false)} />
+    <HelpModal visible={helpmodalVisible} onClose={() => sethelpModalVisible(false)} />
     <Modal
         animationType="slide"
         transparent={true}
@@ -516,9 +592,9 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"
   },
   icon: {
-    width: 15,
-    height: 15,
-    marginLeft: 30,
+    width: 30,
+    height: 30,
+    marginLeft: 20,
     marginTop: 10
   },
   sunicon: {

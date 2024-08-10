@@ -42,7 +42,7 @@ const App = () => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={styles.boxpay}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>1. {t("Growth Plan")}</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10  }}>1. {t("Growth Plan")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -69,7 +69,7 @@ const App = () => {
               </View>
     </View>
     <View style={styles.boxpay}>
-    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>2. {t("Hubs")}</Text>
+    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10 }}>2. {t("Hubs")}</Text>
     <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}
@@ -98,7 +98,7 @@ const App = () => {
 </View>
 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10, marginRight: 10 }}>
 <View style={styles.boxpay}>
-<Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light"  }}>3. {t("Advice")}</Text>
+<Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10, marginLeft: 10 }}>3. {t("Skills Analysis")}</Text>
 <View style={{ flexDirection: 'row', marginTop: 20 }}>
               <Image
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ccb4e9d11761a733c7f0b31358f0adde0677991513c5c76300ef8731486bdcd9?apiKey=7b9918e68d9b487793009b3aea5b1a32' }}

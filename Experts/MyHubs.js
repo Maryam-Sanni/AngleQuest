@@ -144,7 +144,7 @@ function MyComponent() {
               </Text>
             </View>
           </View>
-          <Text style={{ fontSize: 12, color: '#888', marginTop: 10, marginLeft: 10 }}>
+          <Text style={{ fontSize: 12, color: '#888', marginTop: 10, marginLeft: 10, height: 60 }}>
             {data.coaching_hub_description}
           </Text>
           <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>

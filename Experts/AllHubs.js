@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import { useNavigation } from '@react-navigation/native';
@@ -72,6 +72,7 @@ function MyComponent() {
       onClose();
     };
 
+  
 const {t}=useTranslation()
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
@@ -286,7 +287,11 @@ const ScheduledMeetingsTable = () => {
 
     fetchMeetingData();
   }, []);
-   
+
+  const handlejoinPress = () => {
+    Linking.openURL('https://meet.anglequest.com');
+  };
+  
     const {t}=useTranslation()
 
   return ( 
@@ -296,7 +301,7 @@ const ScheduledMeetingsTable = () => {
     <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>{t("Next Meeting Schedule")}</Text>
     <Text style={{ fontSize: 13, color: "black", marginTop: 10}}>{meetingData.date}</Text>
     <Text style={{ fontSize: 14, color: "black", marginTop: 10, fontWeight: '500'}}>{meetingData.time}</Text>
-    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
+    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}  onPress={handlejoinPress}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("Start Session")}</Text>
           </TouchableOpacity>
       </View>

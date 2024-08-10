@@ -1,14 +1,49 @@
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
 
 function MyComponent({ onClose }) {
+   const [questions, setQuestions] = useState([]);
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
+  
         const {t}=useTranslation()
+  
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
 
+        const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.interview;
+          setQuestions(data.questions|| []);
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleQuestionChange = (index, field, value) => {
+    const newQuestions = [...questions];
+    newQuestions[index] = { ...newQuestions[index], [field]: value };
+    setQuestions(newQuestions);
+  };
+  
   return (
      
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -54,74 +89,50 @@ function MyComponent({ onClose }) {
    
 
 
-     <View style={styles.container}>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 1</Text>
+  <View style={styles.container}>
+    {questions.map((question, index) => (
+      <View style={styles.row} key={index}>
+        <View style={[styles.cell, { flex: 2 }]}>
+          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Question")} {index + 1}</Text>
         </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
+        <View style={[styles.cell, { flex: 5 }]}>
+          <TextInput
+            placeholder={t("Question description")}
+            placeholderTextColor="grey"
+            style={styles.input}
+            editable={false} 
+            value={question.question}
+            onChangeText={text => handleQuestionChange(index, 'question', text)}
+          />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>70%</Text>
+          <Picker
+            selectedValue={question.percentage}
+            style={styles.picker}
+            enabled={false}
+            onValueChange={(itemValue) => handleQuestionChange(index, 'percentage', itemValue)}
+          >
+            <Picker.Item label="10%" value="10" />
+            <Picker.Item label="20%" value="20" />
+            <Picker.Item label="30%" value="30" />
+            <Picker.Item label="40%" value="40" />
+            <Picker.Item label="50%" value="50" />
+            <Picker.Item label="60%" value="60" />
+            <Picker.Item label="70%" value="70" />
+            <Picker.Item label="80%" value="80" />
+            <Picker.Item label="90%" value="90" />
+            <Picker.Item label="100%" value="100" />
+          </Picker>
         </View>
       </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 2</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>50%</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>40%</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 4</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>50%</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 5</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>80%</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 6</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>70%</Text> 
-        </View>
-      </View>
-      </View>
+    ))}
+    <TouchableOpacity
+      onPress={() => setQuestions([...questions, { question: '', percentage: '0' }])}
+      style={styles.addButton}
+    >
+
+    </TouchableOpacity>
+  </View>
 
 
 
@@ -169,6 +180,15 @@ const styles = StyleSheet.create({
   },
   input: {
     outline: 'none',
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: '#F8F8F8',
+    borderColor: 'black',
+    borderWidth: 1, 
+    color:'grey',
+    fontSize: 14
   },
   closeButton: {
     position: 'absolute',

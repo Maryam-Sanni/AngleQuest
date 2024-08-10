@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
 import OpenSchedule2 from '../components/JProfile';
 import OpenModal from '../Jobseekers/Newgrowth';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-import RadioForm from 'react-native-simple-radio-button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 function MyComponent({ onClose }) {
@@ -16,7 +17,9 @@ function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [formModalVisible, setformModalVisible] = useState(false);
   const [isPressed, setIsPressed] = useState(false); 
-  const [selectedExpert, setSelectedExpert] = useState(null);
+   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [cardData, setCardData] = useState({ profileData: [] });
+   const [selectedCategory, setSelectedCategory] = useState('');
 
   const handleOpenPress = () => {
     setMainModalVisible(false);
@@ -42,37 +45,34 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
-  // Sample data for the cards
-  const cardData = [
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
-      expert: "Emily Ray",
-      job: "Data Analyst",
-      country: "Switzerland",
-      interviewfee: "$50",
-    },
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
-      expert: "Monica Jerry",
-      job: "UI/UX Designer",
-      country: "Canada",
-      interviewfee: "$30",
-    },
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
-      expert: "Fisayo Fosudo",
-      job: "Java Engineer",
-      country: "Nigeria",
-      interviewfee: "$25",
-    },
-    {
-      description: "Here is a description of what your coach does, kindly read the description carefully.",
-      expert: "Will Cooper",
-      job: "Backend Dev.",
-      country: "United Kingdom",
-      interviewfee: "$70",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/getAllExpertsForJobSeekers', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          console.log('Fetched data:', response.data); // Check the response structure
+          setCardData(response.data);
+        } else {
+          console.error('Error fetching data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
@@ -89,42 +89,31 @@ function MyComponent({ onClose }) {
     setIsPressed(!isPressed); // Toggle the pressed state
   };
 
-  const renderInput = () => {
-    if (isDropdown) {
-      return (
-        <Picker
-          selectedValue={selectedValue}
-          style={styles.picker}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedValue(itemValue)
-          }
-        >
-          <Picker.Item label="Pick an expert" value="Pick an expert" />
-          <Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-        </Picker>
-      );
-    } else {
-      return (
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Search for experts..."
-            value={search}
-            onChangeText={setSearch}
-          />
-          <TouchableOpacity onPress={toggleMode} style={styles.iconContainer}>
-            <Image source={require('../assets/arrow-down.png')} style={{ width: 15, height: 15, }} />
-          </TouchableOpacity>
-        </View>
-      );
+
+  const handleCardPress = async (index) => {
+    setSelectedIndex(index); // Set the selected index
+
+    // Save the selected user's data to AsyncStorage
+    try {
+      const selectedUser = cardData.profileData[index];
+      const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
+
+      await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
+      await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
+      await AsyncStorage.setItem('selectedUserFullName', fullName); // Save the full name
+
+    } catch (error) {
+      console.error('Error saving data to AsyncStorage:', error);
     }
   };
 
+  
   const renderCards = () => {
-    return cardData.map((data, index) => (
+    const filteredData = cardData.profileData.filter(data => 
+      !selectedCategory || data.preferred_role === selectedCategory
+    );
+ 
+    return filteredData.map((data, index) => (
       <Animated.View
         key={index}
         style={{
@@ -137,10 +126,11 @@ function MyComponent({ onClose }) {
         onMouseLeave={() => handleCardAnimation(index, 1)}
       >
         {/* Card content */}
-        <View
+        <TouchableOpacity 
+          onPress={() => handleCardPress(index)}
           style={{
             width: '100%',
-            height: 300,
+            height: 320,
             borderRadius: 5,
             shadowColor: "#000",
             shadowOffset: {
@@ -161,10 +151,10 @@ function MyComponent({ onClose }) {
                   style={{ width: 50, height: 50, aspectRatio: 1, marginTop: 10, }}
                 />
                 <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', }}>
-                  {data.expert}
+                   {data.first_name} {data.last_name} 
                 </Text>
                 <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
-                  {data.job}
+                  {data.preferred_role}
                 </Text>
               </View>
             </View>
@@ -176,11 +166,11 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                   style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5, }}
                 />
-                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.country}</Text>
+                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.preferred_locations}</Text>
               </View>
             </View>
           </View>
-          <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
+          <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, height: 70, overflow: 'hidden' }}>{data.about}</Text>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TouchableOpacity
@@ -200,23 +190,15 @@ function MyComponent({ onClose }) {
                   {t("Growth")}
                 </Text>
               </TouchableOpacity>
-              <Text style={{ fontSize: 14, color: "#206C00", marginTop: 5 }}>
-                {data.interviewfee}</Text>
+             
             </View>
-            <RadioForm
-              radio_props={[{ label: '', value: index }]}
-              initial={selectedExpert}
-              onPress={(value) => setSelectedExpert(value)}
-              formHorizontal={true}
-              labelHorizontal={false}
-              buttonSize={10}
-              buttonOuterSize={18}
-              buttonColor={'black'}
-              selectedButtonColor={'black'}
-              style={{ marginRight: 10, marginLeft: 70, marginTop: 10 }}
-            />
+            <View style={{ marginRight: 10, marginLeft: 70, marginTop: 10 }}>
+                <View style={styles.circleContainer}>
+                  <View style={[styles.circle, selectedIndex === index && styles.filledCircle]} />
+                </View>
+              </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </Animated.View>
     ));
   };
@@ -250,16 +232,21 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick your growth plan coach")}</Text>
                 <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                  <Picker style={styles.picker}>
-                    <Picker.Item label={t('SAP')} value="SAP" />
-                    <Picker.Item label={t('Microsoft')} value="Microsoft" />
-                    <Picker.Item label={t('Salesforce')} value="Salesforce" />
-                    <Picker.Item label={t('Frontend Development')} value="Frontend Development"/>
-                    <Picker.Item label={t('Backend Development')} value="Backend Development" />
-                    <Picker.Item label={t('UI/UX')} value="UI/UX" />
-                    <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-                    <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-                    <Picker.Item label={t('Management')} value="Management" />
+                  <Picker
+                    selectedValue={selectedCategory}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+                  >
+                    <Picker.Item label="All Categories" value="" />
+                    <Picker.Item label="SAP" value="SAP" />
+                    <Picker.Item label="Microsoft" value="Microsoft" />
+                    <Picker.Item label="Salesforce" value="Salesforce" />
+                    <Picker.Item label="Frontend Development" value="Frontend Development" />
+                    <Picker.Item label="Backend Development" value="Backend Development" />
+                    <Picker.Item label="UI/UX" value="UI/UX" />
+                    <Picker.Item label="Data Analysis" value="Data Analysis" />
+                    <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                    <Picker.Item label="Management" value="Management" />
                   </Picker>
                   <TextInput placeholder={t("Search")} style={styles.input} />
                 </View>
@@ -386,6 +373,21 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     padding: 8,
+  },
+  circleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#206C00',
+    backgroundColor: 'transparent',
+  },
+  filledCircle: {
+    backgroundColor: 'black',
   },
 });
 

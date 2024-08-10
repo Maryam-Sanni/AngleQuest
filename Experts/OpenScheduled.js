@@ -1,14 +1,49 @@
+import React, { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function MyComponent({ onClose }) {
+   const [questions, setQuestions] = useState([]);
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
+  
         const {t}=useTranslation()
 
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.interview;
+          setQuestions(data.questions|| []);
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleQuestionChange = (index, field, value) => {
+    const newQuestions = [...questions];
+    newQuestions[index] = { ...newQuestions[index], [field]: value };
+    setQuestions(newQuestions);
+  };
+  
   return (
      
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
@@ -69,186 +104,51 @@ function MyComponent({ onClose }) {
       
     </View>
      
-      <Text style={{marginLeft: 800, marginTop: 20, marginBottom: -20, width: 100, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Rating")}</Text>
-   
+  <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Questions")}</Text>
 
-
-     <View style={styles.container}>
-      <View style={styles.row}>
+  <View style={styles.container}>
+    {questions.map((question, index) => (
+      <View style={styles.row} key={index}>
         <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 1</Text>
+          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Question")} {index + 1}</Text>
         </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-           <TextInput
-            placeholder="3 Ways to Optimize a model driven app to optimize its performance"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 2</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <TextInput
-            placeholder="3 Ways to Optimize custom pages to optimize its performance"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 3</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-        <TextInput
-            placeholder="3 Ways to Optimize a canvas app to optimize its performance"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-         <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 4</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
+        <View style={[styles.cell, { flex: 5 }]}>
           <TextInput
-            placeholder="3 Ways to Optimize a power automate to optimize its performance"
+            placeholder={t("Question description")}
             placeholderTextColor="grey"
             style={styles.input}
+             editable={false}
+            value={question.question}
+            onChangeText={text => handleQuestionChange(index, 'question', text)}
           />
         </View>
         <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
+          <Picker
+            selectedValue={question.percentage}
+            style={styles.picker}
+            onValueChange={(itemValue) => handleQuestionChange(index, 'percentage', itemValue)}
+          >
+            <Picker.Item label="10%" value="10" />
+            <Picker.Item label="20%" value="20" />
+            <Picker.Item label="30%" value="30" />
+            <Picker.Item label="40%" value="40" />
+            <Picker.Item label="50%" value="50" />
+            <Picker.Item label="60%" value="60" />
+            <Picker.Item label="70%" value="70" />
+            <Picker.Item label="80%" value="80" />
+            <Picker.Item label="90%" value="90" />
+            <Picker.Item label="100%" value="100" />
+          </Picker>
         </View>
       </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 5</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-         <TextInput
-            placeholder="3 Ways to Optimize AI builder bot to optimize its performance"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
-        </View>
-      </View>
-      <View style={styles.row}>
-      <View style={[styles.cell, { flex: 2 }]}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Question")} 6</Text>
-        </View>
-        <View style={[styles.cell, { flex: 7 }]}>
-         <TextInput
-            placeholder="3 Ways to Optimize a canvas app to optimize its performance"
-            placeholderTextColor="grey"
-            style={styles.input}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="10%" value="" />
-  <Picker.Item label="10%" value="10%" />
-  <Picker.Item label="20%" value="20%" />
-  <Picker.Item label="30%" value="30%" />
-  <Picker.Item label="40%" value="40%" />
-  <Picker.Item label="50%" value="50%" />
-  <Picker.Item label="60%" value="60%" />
-  <Picker.Item label="70%" value="70%" />
-  <Picker.Item label="80%" value="80%" />
-  <Picker.Item label="90%" value="90%" />
-  <Picker.Item label="100%" value="100%" />
-</Picker>
-        </View>
-      </View>
-      </View>
+    ))}
+    <TouchableOpacity
+      onPress={() => setQuestions([...questions, { question: '', percentage: '0' }])}
+      style={styles.addButton}
+    >
+
+    </TouchableOpacity>
+  </View>
 <TouchableOpacity style={styles.buttonplus} >
       <Text style={styles.buttonTextplus}>{t("Save")}</Text>
     </TouchableOpacity>
@@ -307,9 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
   },
   input: {
-    outline: 'black',
-    borderWidth: 1,
-    borderColor: 'black',
+    outline: 'none',
   },
   closeButton: {
     position: 'absolute',

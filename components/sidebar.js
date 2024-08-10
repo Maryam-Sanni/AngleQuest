@@ -103,12 +103,15 @@ function MyComponent() {
       switch(item.label) {
         case "Home": return routeName === 'Home';
         case "All Experts": return routeName === 'Experts';
-        case "Growth Plan": return routeName === 'New Growth Plan';
-        case "Interview": return routeName === 'New Interview';
+          case "Growth Plan":
+          return ['New Growth Plan', 'Growth Plan Sessions'].includes(routeName);
+          case "Interview":
+          return ['New Interview', 'Interview Sessions'].includes(routeName);
         case "Sessions": return routeName === 'Sessions';
         case "Skills Analysis":
         return ['Use AI', 'Use CV', 'Use Questionnaire', 'AI Result', 'Advice Sessions'].includes(routeName);
-        case "Hubs": return routeName === 'Coaching Hubs';
+          case "Hubs":
+          return ['Coaching Hubs', 'Coaching Hub Sessions'].includes(routeName);
         case "Performance": return routeName === 'My Performance';
         case "Messages": return routeName === 'Messages';
         default: return false;
@@ -151,8 +154,8 @@ function MyComponent() {
               <View style={styles.divider} />
               <View style={styles.profileInfo}>
                 <Image
-                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                  style={{ width: 40, aspectRatio: 1 }}
+                  source={require("../assets/account.png")}
+                  style={{ width: 40, height: 40, aspectRatio: 1 }}
                 />
                 <View style={{ marginLeft: 5 }}>
                   <Text style={{ fontSize: 14, color: '#666' }}>{first_name} {last_name}</Text>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
@@ -9,6 +10,9 @@ import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  
   const [token, setToken] = useState("");
   const [type, setSelectedType] = useState('Personal');
   const [title, setTitle] = useState('');
@@ -18,19 +22,54 @@ function MyComponent({ onClose }) {
   const [achieve_the_objective, setNeeds] = useState('');
   const [review_with_coach, setreviewwithcoach] = useState('Biannually');
   const [starting_level, setStartingLevel] = useState('Beginner');
-  const [target_level, setTargetLevel] = useState('Beginner');
-  const [start_date, setStartDate] = useState('');
+  const [target_level, setTargetLevel] = useState('Medior');
   const [end_date, setEndDate] = useState('12 Months');
-  const [status, setStatus] = useState('');
-  const [coach, setCoach] = useState('Joop Melcher');
+  const [status, setStatus] = useState('Active');
+  const [coach, setCoach] = useState('');
    const [feedbacks, setFeedback] = useState('Read only field');
+  const [expert_available_days, setExpertAvailableDays] = useState('Mon, Tue, Wed, and Thurs');
+  const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   const gotoCV = () => {
       navigation.navigate('Growth Offer');
   };
+
+    useEffect(() => {
+      const getTokenAndUser = async () => {
+        try {
+          // Retrieve token and user data from AsyncStorage
+          const storedToken = await AsyncStorage.getItem('token');
+          setToken(storedToken);
+
+          const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+          const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
+          if (storedFirstName && storedLastName) {
+            setCoach(`${storedFirstName} ${storedLastName}`);
+          } else {
+            console.warn('No user data found');
+          }
+        } catch (error) {
+          console.error('Error retrieving token or user:', error);
+        }
+      };
+
+      getTokenAndUser();
+    }, []);
   
+ 
+
+  const handleConfirmDateTime = (dateTime) => {
+    setSelectedDateTime(dateTime);
+    setIsModalVisible(false);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalVisible(false);
+  };
+
   useEffect(() => {
     const getToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
@@ -38,11 +77,11 @@ function MyComponent({ onClose }) {
     };
     getToken();
   }, []);
-
+  
   const goToPlan = async () => {
     try {
       // Validate the form data before making the API request
-      if (!type || !role || !title || !starting_level|| !target_level || !status || !start_date) {
+      if ( !role || !title || !result_description || !how_to_achieve ) {
       setAlertMessage(t('Please fill all fields'));
         setAlertVisible(true);
         return;
@@ -59,8 +98,8 @@ function MyComponent({ onClose }) {
         starting_level,
         review_with_coach,
         target_level,
-        start_date,
-        end_date,
+        start_date: selectedDateTime,
+        end_date: end_date,
         status,
         coach,
         feedbacks
@@ -76,7 +115,7 @@ function MyComponent({ onClose }) {
       );
 
       if (response.status === 201) {
-        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(formData));
+        await AsyncStorage.setItem('GrowthFormData', JSON.stringify(formData));
         navigation.navigate('Growth Offer');
         onClose();
       } else {
@@ -93,6 +132,7 @@ function MyComponent({ onClose }) {
   const hideAlert = () => {
     setAlertVisible(false);
   };
+
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -258,34 +298,6 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Start Date')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder="1/April/2024"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={start_date}
-                  onChangeText={setStartDate}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('End Date')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder="20/Jul/2024"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={end_date}
-                  onChangeText={setEndDate}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Status')}</Text>
               </View>
               <View style={styles.cell}>
@@ -303,14 +315,6 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Coach')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{coach}</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
               </View>
               <View style={styles.cell}>
@@ -318,10 +322,72 @@ function MyComponent({ onClose }) {
               </View>
             </View>
           </View>
-          <TouchableOpacity onPress={gotoCV} style={styles.buttonplus}>
+
+
+          <Text style={{ fontSize: 15, color: 'black', marginLeft: 50, fontWeight: '500', marginTop: 30, marginBottom: -10, }}>{t("Expert's available days and time")}</Text>
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Coach")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+                  {coach}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+                  {expert_available_days}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
+              </View>
+              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>  {expert_available_time}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50 }}>{t("Pick a date and time")}</Text>
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TouchableOpacity
+                  style={styles.dateTimeButton}
+                  onPress={() => setIsModalVisible(true)}
+                >
+                  <Text style={{ fontFamily: "Roboto-Light" }}>
+                    {selectedDateTime
+                      ? selectedDateTime.toLocaleString()
+                      : t("Select Date and Time")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          
+          <TouchableOpacity onPress={goToPlan} style={styles.buttonplus}>
             <Text style={styles.buttonTextplus}>{t('Next')}</Text>
           </TouchableOpacity>
+          
         </View>
+        <DateTimePickerModal
+          isVisible={isModalVisible}
+          mode="datetime"
+          onConfirm={handleConfirmDateTime}
+          onCancel={handleCancelModal}
+        />
         <CustomAlert
           visible={alertVisible}
           title={t("Alert")}

@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
- 
+
+const MAX_TOPICS = 15;
+
 function MyComponent({ onClose }) {
 
   const [fontsLoaded]=useFonts({
@@ -104,6 +106,10 @@ function MyComponent({ onClose }) {
     const newTopics = [...topics];
     newTopics[index] = { ...newTopics[index], [field]: value };
     setTopics(newTopics);
+  };
+
+  const addNewTopic = () => {
+    setTopics([...topics, { topic: '', percentage: '0' }]);
   };
   
   return (
@@ -230,17 +236,28 @@ function MyComponent({ onClose }) {
         </View>
       </View>
     </View>
+
+           <View style={{ flexDirection: 'row' }}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Topics")}</Text>
 
+          <TouchableOpacity
+            style={styles.buttonplus}
+            onPress={addNewTopic}
+            disabled={topics.length >= MAX_TOPICS}
+          >
+            <Text style={styles.buttonTextplus}>+</Text>
+          </TouchableOpacity>
+           </View>
+          
           <View style={styles.container}>
             {topics.map((topic, index) => (
-              <View style={styles.row} key={index}>
+              <View key={index} style={styles.row}>
                 <View style={[styles.cell, { flex: 2 }]}>
-                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Topic")} {index + 1}</Text>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(`Topic`)} {index + 1}</Text>
                 </View>
                 <View style={[styles.cell, { flex: 5 }]}>
                   <TextInput
-                    placeholder={t("Topic description")}
+                    placeholder={t("Topic")}
                     placeholderTextColor="grey"
                     style={styles.input}
                     value={topic.topic}
@@ -356,13 +373,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily:"Roboto-Light"
   },
-   buttonplus: {
+  buttonplus: {
      backgroundColor: 'coral',
      padding: 5,
-     marginLeft: 700, 
-     width: 150,
+     marginLeft: 585, 
+     width: 100,
      paddingHorizontal: 20,
-     marginTop: 20
+     marginTop: 30
+  },
+  buttonsave: {
+    backgroundColor: 'coral',
+    padding: 5,
+    marginLeft: 700, 
+    width: 150,
+    paddingHorizontal: 20,
+    marginTop: 30
   },
   buttonTextplus: {
     color: 'white',

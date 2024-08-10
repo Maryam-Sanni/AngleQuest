@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert'; 
 
+const MAX_QUESTIONS = 15;
+
 function MyComponent({ onClose }) {
 
   const [fontsLoaded]=useFonts({
@@ -104,6 +106,10 @@ function MyComponent({ onClose }) {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
     setQuestions(newQuestions);
+  };
+
+  const addNewTopic = () => {
+    setQuestions([...questions, { question: '', percentage: '0' }]);
   };
   
   return (
@@ -230,13 +236,23 @@ function MyComponent({ onClose }) {
       </View>
     </View>
 
+          <View style={{ flexDirection: 'row' }}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Questions")}</Text>
+
+            <TouchableOpacity
+              style={styles.buttonplus}
+              onPress={addNewTopic}
+              disabled={questions.length >= MAX_QUESTIONS}
+            >
+              <Text style={styles.buttonTextplus}>+</Text>
+            </TouchableOpacity>
+            </View>
 
           <View style={styles.container}>
             {questions.map((question, index) => (
-              <View style={styles.row} key={index}>
+              <View key={index} style={styles.row}>
                 <View style={[styles.cell, { flex: 2 }]}>
-                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Question")} {index + 1}</Text>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(`Question`)} {index + 1}</Text>
                 </View>
                 <View style={[styles.cell, { flex: 5 }]}>
                   <TextInput
@@ -267,6 +283,8 @@ function MyComponent({ onClose }) {
                 </View>
               </View>
             ))}
+            
+          
             <TouchableOpacity
               onPress={() => setQuestions([...questions, { question: '', percentage: '0' }])}
               style={styles.addButton}
@@ -274,7 +292,7 @@ function MyComponent({ onClose }) {
 
             </TouchableOpacity>
           </View>
-<TouchableOpacity onPress={handleSave} style={styles.buttonplus} >
+<TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
       <Text style={styles.buttonTextplus}>{t("Save")} Changes</Text>
     </TouchableOpacity>
 
@@ -357,10 +375,18 @@ const styles = StyleSheet.create({
    buttonplus: {
      backgroundColor: 'coral',
      padding: 5,
-     marginLeft: 700, 
-     width: 150,
+     marginLeft: 570, 
+     width: 100,
      paddingHorizontal: 20,
      marginTop: 30
+  },
+  buttonsave: {
+    backgroundColor: 'coral',
+    padding: 5,
+    marginLeft: 700, 
+    width: 150,
+    paddingHorizontal: 20,
+    marginTop: 30
   },
   buttonTextplus: {
     color: 'white',

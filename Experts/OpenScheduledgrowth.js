@@ -1,14 +1,49 @@
-import { useFonts } from 'expo-font';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from 'react'; 
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
+   const [guides, setGuides] = useState([]);
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
         const {t}=useTranslation()
 
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.growthPlan;
+          setGuides(data.guides || []);
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleGuideChange = (index, field, value) => {
+    const newGuides = [...guides];
+    newGuides[index] = { ...newGuides[index], [field]: value };
+    setGuides(newGuides);
+  };
+  
   return ( 
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center',  }}>
     <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -97,105 +132,51 @@ function MyComponent({ onClose }) {
      
       
  </View>
-<Text style={{ marginTop: 20, marginBottom: -10, fontWeight: 'bold', fontSize: 16, color: 'black', marginLeft: 50 }}>{t("Growth Plan Scoring")}</Text>
-       <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
+  <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20 }}>{t("Growth Plan Scoring")}</Text>
+
+  <View style={styles.container}>
+    {guides.map((guide, index) => (
+      <View style={styles.row} key={index}>
+        <View style={[styles.cell, { flex: 2 }]}>
+          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Guide")} {index + 1}</Text>
         </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker}
->
-  <Picker.Item label="PV01-Passion" value="" />
-  <Picker.Item label="PV02-Passion" value="PV02-Passion" />
-  <Picker.Item label="PV03-Passion" value="PV03-Passion" />
-  <Picker.Item label="PV01-Passion" value="PV01-Passion" />
-  {/* Add more Picker.Item components for additional options */}
-</Picker>
+        <View style={[styles.cell, { flex: 5 }]}>
+          <TextInput
+            placeholder={t("Guide description")}
+            placeholderTextColor="grey"
+            style={styles.input}
+            editable={false} 
+            value={guide.guide}
+            onChangeText={text => handleGuideChange(index, 'guide', text)}
+          />
         </View>
+        <View style={[styles.cell, { flex: 2 }]}>
+          <Picker
+            selectedValue={guide.percentage}
+            style={styles.picker}
+            onValueChange={(itemValue) => handleGuideChange(index, 'percentage', itemValue)}
+          >
+            <Picker.Item label="10%" value="10" />
+            <Picker.Item label="20%" value="20" />
+            <Picker.Item label="30%" value="30" />
+            <Picker.Item label="40%" value="40" />
+            <Picker.Item label="50%" value="50" />
+            <Picker.Item label="60%" value="60" />
+            <Picker.Item label="70%" value="70" />
+            <Picker.Item label="80%" value="80" />
+            <Picker.Item label="90%" value="90" />
+            <Picker.Item label="100%" value="100" />
+          </Picker>
         </View>
-        <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker}
->
-  <Picker.Item label="PV07-Customer Orientation" value="" />
-  <Picker.Item label="PV06-Customer Orientation" value="PV06-Customer Orientation" />
-  <Picker.Item label="PV05-Customer Orientation" value="PV05-Customer Orientation" />
-  <Picker.Item label="PV07-Customer Orientation" value="PV07-Customer Orientation" />
-  {/* Add more Picker.Item components for additional options */}
-</Picker>
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker}
->
-  <Picker.Item label="SV01-Creativity and Innovation" value="" />
-  <Picker.Item label="SV02-Creativity and Innovation" value="SV02-Creativity and Innovation" />
-  <Picker.Item label="SV03-Creativity and Innovation" value="SV03-Creativity and Innovation" />
-  <Picker.Item label="SV04-Creativity and Innovation" value="SV04-Creativity and Innovation" />
-  {/* Add more Picker.Item components for additional options */}
-</Picker>
-         
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker}
->
-  <Picker.Item label="FxT01-Knowledge of product " value="" />
-  <Picker.Item label="FxT02-Knowledge of product " value="FxT02-Knowledge of product " />
-  <Picker.Item label="FxT01-Knowledge of product " value="FxT01-Knowledge of product " />
-  <Picker.Item label="FxT03-Knowledge of product " value="FxT03-Knowledge of product " />
-  {/* Add more Picker.Item components for additional options */}
-</Picker>
-        </View>
-        </View>
-<View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker}
->
-  <Picker.Item label="PV09-Pro-activity " value="" />
-  <Picker.Item label="PV09-Pro-activity" value="PV09-Pro-activity" />
-  <Picker.Item label="PV08-Pro-activity " value="PV08-Pro-activity" />
-  <Picker.Item label="PV07-Pro-activity " value="PV07-Pro-activity" />
-  {/* Add more Picker.Item components for additional options */}
-</Picker>
-        </View>
-        </View>
- <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-  style={styles.picker} 
->
-  <Picker.Item label="LO05-Planning and Organization" value="" />
-  <Picker.Item label="LO05-Planning and Organization" value="LO05-Planning and Organization" />
-  <Picker.Item label="LO04-Planning and Organization" value="LO04-Planning and Organization" />
-  <Picker.Item label="LO03-Planning and Organization" value="LO03-Planning and Organization" />
-</Picker>
-        </View>
-        </View>
-        </View>
+      </View>
+    ))}
+    <TouchableOpacity
+      onPress={() => setGuides([...guides, { guide: '', percentage: '0' }])}
+      style={styles.addButton}
+    >
+
+    </TouchableOpacity>
+  </View>
 <Text style={{ marginTop: 20, fontWeight: 'bold', color: 'black', marginLeft: 50, fontSize: 16, marginBottom: 10,fontFamily:"Roboto-Light" }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
                 <TextInput
@@ -213,11 +194,9 @@ function MyComponent({ onClose }) {
         <Picker
   style={styles.picker}
 >
-  <Picker.Item label="RT01-Brilliant" value="" />
-  <Picker.Item label="RT02-Good" value="RT02-Good" />
-  <Picker.Item label="RT03-Perfect" value="RT03-Perfect" />
-  <Picker.Item label="RT01-Brilliant" value="RT01-Brilliant" />
-  {/* Add more Picker.Item components for additional options */}
+  <Picker.Item label="Brilliant" value="Brilliant" />
+  <Picker.Item label="Good" value="Good" />
+  <Picker.Item label="Perfect" value="Perfect" />
 </Picker>
         </View>
         </View>
@@ -258,7 +237,6 @@ const styles = StyleSheet.create({
     width: 920,
     height:850,
     backgroundColor: '#F8F8F8',
-    marginTop: 40
   },
   picker: {
     height: 20,
@@ -272,8 +250,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   buttonAcc: {
-    borderWidth: 3,
-    borderColor: 'grey',
+   backgroundColor: 'coral',
     padding: 10,
     marginTop: 30,
     marginLeft: 700, 
@@ -282,15 +259,13 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   buttonTextAcc: {
-    color: 'black',
+    color: 'white',
     fontSize: 14,
     textAlign: 'center',
     fontFamily:"Roboto-Light"
   },
   input: {
-    outline: 'black',
-    borderWidth: 1,
-    borderColor: 'black',
+    outline: 'none',
   },
   closeButton: {
     position: 'absolute',

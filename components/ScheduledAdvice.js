@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduledadvice';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,10 @@ const ScheduledMeetingsTable = () => {
   
   const [modalVisible, setModalVisible] = useState(false);
 
+  const handlejoinPress = () => {
+    Linking.openURL('https://meet.anglequest.com');
+  };
+  
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -65,7 +69,7 @@ const [fontsLoaded]=useFonts({
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14}}>{t("Open")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
+          <TouchableOpacity style={styles.cell2} onPress={handlejoinPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>
@@ -88,7 +92,7 @@ const [fontsLoaded]=useFonts({
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Open")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
+          <TouchableOpacity style={styles.cell} onPress={handlejoinPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>

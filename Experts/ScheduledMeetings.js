@@ -122,9 +122,11 @@ const ScheduledMeetingsTable = () => {
                   </View>
                 </TouchableOpacity>
               </View>
+               <TouchableOpacity onPress={() => openUser(item.id)}>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.messageCount}>{item.messageCount}</Text>
               </View>
+                  </TouchableOpacity>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{item.time}</Text>
               </View>
@@ -188,15 +190,17 @@ const styles = StyleSheet.create({
     width: 200
   },
   messageCount: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    alignContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#4CAF50',
     textAlign: 'center',
     marginLeft: 70,
     color: 'white',
     fontWeight: '500',
-    fontSize: 11
+    fontSize: 13
   },
   messageCountText: {
     color: 'white',

@@ -2,14 +2,46 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, TextInput, TouchableOpacity, Text, Modal, StyleSheet, Image } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AboutEditModal({ visible, about, onClose, onSave }) {
   const [editedAbout, setEditedAbout] = useState(about);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        about: editedAbout,
+      };
+
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Save about Response:', response.data);
+
+      // Close modal after successful save
+      onClose();
+    } catch (error) {
+      console.error('Save about Error:', error);
+      alert('Failed to save about. Please try again.');
+    }
     onSave(editedAbout);
     onClose();
   };
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
       })

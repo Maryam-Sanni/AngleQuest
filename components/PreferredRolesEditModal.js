@@ -1,25 +1,55 @@
-import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useFonts } from 'expo-font';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PreferredRolesEditModal = ({ visible, preferredRoles, onClose, onSave }) => {
-  const [editablePreferredRoles, setEditablePreferredRoles] = useState([...preferredRoles]);
+const PreferredRolesEditModal = ({ visible, onClose, onSave }) => {
+  const roles = ['SAP', 'Microsoft', 'Salesforce', 'Frontend Development', 'Backend Development', 'UI/UX', 'Data Analysis', 'Cloud Computing', 'Management']; // List of roles
+  const [selectedRole, setSelectedRole] = useState(roles[0]); // Default to the first role
 
-  const handleSavePreferredRoles = () => {
-    onSave(editablePreferredRoles);
-    onClose();
+  const handleSavePreferredRole = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        preferred_role: selectedRole
+      };
+
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Save Specification Response:', response.data);
+
+      // Close modal after successful save
+      onClose();
+    } catch (error) {
+      console.error('Save Specification Error:', error);
+      alert('Failed to save preferred locations. Please try again.');
+    }
+
+    // Save the locations in the parent component
+    onSave(selectedRole);
   };
 
-  const handlePreferredRoleChange = (text, index) => {
-    const updatedPreferredRoles = [...editablePreferredRoles];
-    updatedPreferredRoles[index] = text;
-    setEditablePreferredRoles(updatedPreferredRoles);
-  };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-const {t}=useTranslation()
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  });
+
+  const { t } = useTranslation();
+
   return (
     <Modal
       animationType="slide"
@@ -34,24 +64,25 @@ const {t}=useTranslation()
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("Edit Preferred Roles")}</Text>
+            <Text style={styles.headerText}>{t('Edit Preferred Role')}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>✕</Text>
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: 'Roboto-Light' }}>✕</Text>
             </TouchableOpacity>
           </View>
 
-          {editablePreferredRoles.map((role, index) => (
-            <TextInput
+          {roles.map((role, index) => (
+            <TouchableOpacity
               key={index}
-              style={styles.input}
-              onChangeText={(text) => handlePreferredRoleChange(text, index)}
-              value={role}
-            />
+              style={[styles.roleItem, selectedRole === role && styles.selectedRole]}
+              onPress={() => setSelectedRole(role)}
+            >
+              <Text style={styles.roleText}>{role}</Text>
+            </TouchableOpacity>
           ))}
 
           <View style={{ width: 200, marginTop: 20 }}>
-            <Button title="Save" onPress={handleSavePreferredRoles} color="coral" />
+            <Button title="Save" onPress={handleSavePreferredRole} color="coral" />
           </View>
         </View>
       </View>
@@ -65,17 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
     marginTop: 40,
-    width: 600
-  },
-  input: {
-    height: 40,
-    borderColor: 'none',
-    borderRadius: 20,
-    marginBottom: 10,
-    width: '50%',
-    paddingHorizontal: 10,
-    backgroundColor: '#d3f9d8',
-    color: '#206C00'
+    width: 600,
   },
   closeButton: {
     position: 'absolute',
@@ -95,14 +116,29 @@ const styles = StyleSheet.create({
   logo: {
     width: 40,
     height: 40,
-    marginRight: 10
+    marginRight: 10,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily:"Roboto-Light"
-  }
+    fontFamily: 'Roboto-Light',
+  },
+  roleItem: {
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#d3f9d8',
+    marginBottom: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  selectedRole: {
+    backgroundColor: '#a1e6a1',
+  },
+  roleText: {
+    fontSize: 16,
+    color: '#206C00',
+  },
 });
 
 export default PreferredRolesEditModal;

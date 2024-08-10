@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
 
+const MAX_GUIDES = 15;
+
 function MyComponent({ onClose }) {
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -103,6 +105,10 @@ function MyComponent({ onClose }) {
     setGuides(newGuides);
   };
 
+  const addNewTopic = () => {
+    setGuides([...guides, { guide: '', percentage: '0' }]);
+  };
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -224,13 +230,23 @@ function MyComponent({ onClose }) {
             </View>
           </View>
 
+          <View style={{ flexDirection: 'row' }}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Guide")}</Text>
 
+          <TouchableOpacity
+            style={styles.buttonplus}
+            onPress={addNewTopic}
+            disabled={guides.length >= MAX_GUIDES}
+          >
+            <Text style={styles.buttonTextplus}>+</Text>
+          </TouchableOpacity>
+          </View>
+            
           <View style={styles.container}>
             {guides.map((guide, index) => (
-              <View style={styles.row} key={index}>
+              <View key={index} style={styles.row}>
                 <View style={[styles.cell, { flex: 2 }]}>
-                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Guide")} {index + 1}</Text>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(`Guide`)} {index + 1}</Text>
                 </View>
                 <View style={[styles.cell, { flex: 5 }]}>
                   <TextInput

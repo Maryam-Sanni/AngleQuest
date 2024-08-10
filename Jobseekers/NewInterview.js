@@ -1,187 +1,285 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import DateTimePickerModal from "../components/DateTimePickerModal";
-import { useFonts } from "expo-font";
-import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+  import React, { useState, useEffect } from 'react';
+  import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Modal } from 'react-native';
+  import { useNavigation } from '@react-navigation/native';
+  import DateTimePickerModal from "../components/DateTimePickerModal";
+  import { useFonts } from "expo-font";
+  import { useTranslation } from 'react-i18next';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  import axios from 'axios';
+  import CustomAlert from '../components/CustomAlert';
 
-function MyComponent({ onClose }) {
-  const navigation = useNavigation();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
-  const [token, setToken] = useState('');
-  
-  useEffect(() => {
-    const getToken = async () => {
+  function MyComponent({ onClose }) {
+    const navigation = useNavigation();
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedDateTime, setSelectedDateTime] = useState(null);
+
+    const [company, setCompany] = useState("");
+    const [role, setRole] = useState("");
+    const [cv, setCV] = useState(null);
+    const [job_description_file, setJobFile] = useState(null);
+    const [job_description_text, setjobText] = useState("Job description text");
+    const [token, setToken] = useState("");
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [expert_available_days, setExpertAvailableDays] = useState('Mon, Tue, Wed, and Thurs');
+    const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
+    const [expert, setExpert] = useState('');
+
+    const handleConfirmDateTime = (dateTime) => {
+      setSelectedDateTime(dateTime);
+      setIsModalVisible(false);
+    };
+
+    const handleCancelModal = () => {
+      setIsModalVisible(false);
+    };
+
+    const handleChooseImage = (setter) => (event) => {
+      const selectedFile = event.target.files[0];
+      setter(selectedFile);
+    };
+    
+    useEffect(() => {
+      const getTokenAndUser = async () => {
+        try {
+          // Retrieve token and user data from AsyncStorage
+          const storedToken = await AsyncStorage.getItem('token');
+          setToken(storedToken);
+
+          const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+          const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
+          if (storedFirstName && storedLastName) {
+            setExpert(`${storedFirstName} ${storedLastName}`);
+          } else {
+            console.warn('No user data found');
+          }
+        } catch (error) {
+          console.error('Error retrieving token or user:', error);
+        }
+      };
+
+      getTokenAndUser();
+    }, []);
+    
+    useEffect(() => {
+      const getToken = async () => {
+        const storedToken = await AsyncStorage.getItem('token');
+        setToken(storedToken);
+      };
+      getToken();
+    }, []);
+
+    const goToPlan = async () => {
       try {
+        if (!company || !role || !cv || !job_description_file || !selectedDateTime) {
+          setAlertMessage('Please fill all fields');
+          setAlertVisible(true);
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('company', company);
+        formData.append('role', role);
+        formData.append('cv', cv);
+        formData.append('job_description_file', job_description_file);
+        formData.append('job_description_text', job_description_text);
+        formData.append('date_time', selectedDateTime);
+
         const token = await AsyncStorage.getItem('token');
-        setToken(token);
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.post(
+          'https://recruitangle.com/api/jobseeker/create-jobseeker-interview',
+          formData,
+          { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+        );
+
+        if (response.status === 200) {
+          await AsyncStorage.setItem('InterviewFormData', JSON.stringify(formData));
+          navigation.navigate('Interview Offer');
+          onClose();
+        } else {
+          setAlertMessage('Failed to create Interview Session');
+        }
       } catch (error) {
-        console.error('Error retrieving token:', error);
+        console.error('Error during save:', error);
+        setAlertMessage('Failed to create Interview Session');
+      } finally {
+        setAlertVisible(true);
       }
     };
-    getToken();
-  }, []);
 
-  const handleConfirmDateTime = (dateTime) => {
-    setSelectedDateTime(dateTime);
-    setIsModalVisible(false);
-  };
+    const hideAlert = () => {
+      setAlertVisible(false);
+    };
 
-  const handleCancelModal = () => {
-    setIsModalVisible(false);
-  };
+    const [fontsLoaded] = useFonts({
+      'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+    });
 
-  const handleChooseImage = (event) => {
-    const selectedImage = event.target.files[0];
-    const imageUrl = URL.createObjectURL(selectedImage);
-    setProfileImage(imageUrl);
-  };
+    if (!fontsLoaded) {
+      return null;
+    }
 
-  const goToPlans = () => {
-    navigation.navigate('Interview Offer');
-    onClose(); // Close the modal
-  };
-  
+    const { t } = useTranslation();
 
-  const [fontsLoaded] = useFonts({
-    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
-  });
-  const { t } = useTranslation();
+    return (
+      <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+          <View style={styles.greenBox}>
+            <View style={styles.header}>
+              <Image
+                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                style={styles.logo}
+              />
+              <Text style={styles.headerText}>{t("Interview Booking")}</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                  ✕
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Job Information")}</Text>
+            <View style={styles.container}>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Company")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <TextInput
+                    placeholder="ASML"
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={company}
+                    onChangeText={setCompany}
+                  />
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <TextInput
+                    placeholder={t("Data Analyst")}
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={role}
+                    onChangeText={setRole}
+                  />
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handleChooseImage(setCV)}
+                    style={{ marginTop: 5 }}
+                  />
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handleChooseImage(setJobFile)}
+                    style={{ marginTop: 5 }}
+                  />
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description text (optional)")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <TextInput
+                    placeholder={t("This is my job description")}
+                    placeholderTextColor="grey"
+                    multiline
+                    style={[styles.input, { height: 100 }]}
+                    value={job_description_text}
+                    onChangeText={setjobText}
+                  />
+                </View>
+              </View>
+             
+            </View>
+            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
+            <View style={styles.container}>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={styles.text}>{expert_available_days}</Text>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Time")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={styles.text}>{expert_available_time}</Text>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <Text style={styles.text}>{expert}</Text>
+                </View>
+              </View>
+            </View>
 
-  return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={styles.greenBox}>
-          <View style={styles.header}>
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
-              style={styles.logo}
-            />
-            <Text style={styles.headerText}>{t("Interview Booking")}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
-                ✕
-              </Text>
+            <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50 }}>{t("Pick a date and time")}</Text>
+            <View style={styles.container}>
+              <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <TouchableOpacity
+                    style={styles.dateTimeButton}
+                    onPress={() => setIsModalVisible(true)}
+                  >
+                    <Text style={{ fontFamily: "Roboto-Light" }}>
+                      {selectedDateTime
+                        ? selectedDateTime.toLocaleString()
+                        : t("Select Date and Time")}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity onPress={goToPlan} style={styles.buttonplus}>
+              <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
             </TouchableOpacity>
+            <CustomAlert
+              visible={alertVisible}
+              title={t("Alert")}
+              message={alertMessage}
+              onConfirm={hideAlert}
+            />
+            <DateTimePickerModal
+              isVisible={isModalVisible}
+              onConfirm={handleConfirmDateTime}
+              onCancel={handleCancelModal}
+            />
           </View>
-          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Job Information")}</Text>
-          <View style={styles.container}>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Company")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder="ASML"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t("Data Analyst")}
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleChooseImage}
-                  style={{ marginTop: 5 }}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleChooseImage}
-                  style={{ marginTop: 5 }}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description text (optional)")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t("This is my job description")}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 100 }]}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                  <Text style={{ color: 'grey', borderWidth: 1, borderColor: 'black', fontFamily: "Roboto-Light" }}>{t("Selected date and time: {selectedDateTime}")}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Expert's available days and time")}</Text>
-          <View style={styles.container}>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>Mon, Tue, Wed and Thurs</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
-              </View>
-              <View style={styles.cell}><Text style={{ color: 'grey' }}>09:00AM-05:00PM</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Time Zone")}</Text>
-              </View>
-              <View style={styles.cell}><Text style={{ color: 'grey' }}>CET</Text>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity onPress={goToPlans} style={styles.buttonplus}>
-            <Text style={styles.buttonTextplus}>{t("Next")}</Text>
-          </TouchableOpacity>
-        </View>
-        <DateTimePickerModal
-          isVisible={isModalVisible}
-          onConfirm={handleConfirmDateTime}
-          onCancel={handleCancelModal}
-        />
-      </ScrollView>
-    </View>
-  );
-}
+        </ScrollView>
+      </View>
+    );
+  }
 
 const styles = StyleSheet.create({
   container: {

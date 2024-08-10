@@ -2,15 +2,48 @@ import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PreferredLocationsEditModal = ({ visible, preferredLocations, onClose, onSave }) => {
   const [editableLocations, setEditableLocations] = useState([...preferredLocations]);
 
-  const handleSaveLocations = () => {
+  const handleSaveLocations = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        preferred_locations: editableLocations.join(', '), // Join array into a string
+      };
+
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Save Specification Response:', response.data);
+
+      // Close modal after successful save
+      onClose();
+    } catch (error) {
+      console.error('Save Specification Error:', error);
+      alert('Failed to save preferred locations. Please try again.');
+    }
+
+    // Save the locations in the parent component
     onSave(editableLocations);
-    onClose();
   };
 
+  
   const handleLocationChange = (text, index) => {
     const updatedLocations = [...editableLocations];
     updatedLocations[index] = text;

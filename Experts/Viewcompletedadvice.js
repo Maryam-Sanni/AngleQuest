@@ -1,14 +1,48 @@
 import { useFonts } from 'expo-font';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Picker, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function MyComponent({ onClose }) {
+  const [topics, setTopics] = useState([]);
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
         const {t}=useTranslation()
 
+  useEffect(() => {
+    const loadFormData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/get', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 200) {
+                const data = response.data.SkillAnalysis; // Access the SkillAnalysis property
+              setTopics(data.topics || []);
+            } else {
+                console.error('Failed to fetch data', response);
+            }
+        } catch (error) {
+            console.error('Failed to load form data', error);
+        }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleTopicChange = (index, field, value) => {
+  const newTopics = [...topics];
+  newTopics[index] = { ...newTopics[index], [field]: value };
+  setTopics(newTopics);
+  };
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
       <View style={styles.greenBox}>
@@ -55,73 +89,53 @@ function MyComponent({ onClose }) {
 
         <Text style={{ marginLeft: 730, marginTop: 20, marginBottom: -25, width: 200, fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Uneditable Section")}</Text>
         <View style={styles.container}>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 1</Text>
+          {topics.map((topic, index) => (
+            <View style={styles.row} key={index}>
+              <View style={[styles.cell, { flex: 2 }]}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Topic")} {index + 1}</Text>
+              </View>
+              <View style={[styles.cell, { flex: 5 }]}>
+                <TextInput
+                  placeholder={t("Topic description")}
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  editable={false} 
+                  value={topic.topic}
+                  onChangeText={text => handleTopicChange(index, 'topic', text)}
+                />
+              </View>
+              <View style={[styles.cell, { flex: 2 }]}>
+                <Picker
+                  selectedValue={topic.percentage}
+                  style={styles.picker}
+                   enabled={false}
+                  onValueChange={(itemValue) => handleTopicChange(index, 'percentage', itemValue)}
+                >
+                  <Picker.Item label="10%" value="10" />
+                  <Picker.Item label="20%" value="20" />
+                  <Picker.Item label="30%" value="30" />
+                  <Picker.Item label="40%" value="40" />
+                  <Picker.Item label="50%" value="50" />
+                  <Picker.Item label="60%" value="60" />
+                  <Picker.Item label="70%" value="70" />
+                  <Picker.Item label="80%" value="80" />
+                  <Picker.Item label="90%" value="90" />
+                  <Picker.Item label="100%" value="100" />
+                </Picker>
+              </View>
             </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Covered")}</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 2</Text>
-            </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Covered")}</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 3</Text>
-            </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Skipped")}</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 4</Text>
-            </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Covered")}</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 5</Text>
-            </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Skipped")}</Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.cell}>
-              <Text style={{ fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{("Topic")} 6</Text>
-            </View>
-            <View style={[styles.cell, { flex: 7 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("3 Ways to Optimize a canvas app to optimize its performance")}</Text>
-            </View>
-            <View style={[styles.cell, { flex: 2 }]}>
-              <Text style={{ color: 'grey',fontFamily:"Roboto-Light" }}>{t("Covered")}</Text>
-            </View>
-          </View>
+          ))}
+          <TouchableOpacity
+            onPress={() => setTopics([...topics, { topic: '', percentage: '0' }])}
+            style={styles.addButton}
+          >
+
+          </TouchableOpacity>
         </View>
+
+
+
+        
       </View>
     </View>
   );
@@ -149,12 +163,9 @@ const styles = StyleSheet.create({
     width: 920,
     height: 600,
     backgroundColor: '#F8F8F8',
-    marginTop: 40
   },
   input: {
     outline: 'none',
-    borderWidth: 1,
-    borderColor: 'black'
   },
   closeButton: {
     position: 'absolute',
@@ -180,7 +191,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637',
     fontFamily:"Roboto-Light"
-  }
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: '#F8F8F8',
+    borderColor: '#F8F8F8',
+    color:'grey',
+    fontSize: 14,
+    outline: 'black',
+    borderWidth: 1,
+    borderColor: 'black'
+  },
 });
 
 export default MyComponent;

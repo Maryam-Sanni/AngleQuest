@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Jobseekers/Moreabouthub';
 import OpenSchedule2 from '../components/JProfile';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-
+ 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
   const navigation = useNavigation();
@@ -16,6 +18,10 @@ function MyComponent({ onClose }) {
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdown, setIsDropdown] = useState(false);
   const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
+  const [cardData, setCardData] = useState({ AllHubs: [] });
+   const [selectedCategory, setSelectedCategory] = useState('');
+   const [selectedIndex, setSelectedIndex] = useState(null);
+ 
 
   const goToPlans = () => {
     navigation.navigate('Hub Offer');
@@ -46,53 +52,47 @@ function MyComponent({ onClose }) {
 
   const handleJoinPressIn = (index) => {
     setIsPressed((prev) => {
-      const newState = [...prev];
-      newState[index] = !prev[index]; // Toggle the state only if it's different from the previous state
+      // Create a new state where only the currently pressed index is true
+      const newState = Array(4).fill(false);
+      newState[index] = true;
       return newState;
     });
-  };  
+  };
   
   const handleJoinPressOut = (index) => {
     // No need to update the state here
   };
   
   
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
 
-  const cardData = [
-    {
-      title: "SAP FI",
-      coach: "Joop Melcher",
-      description: "Customizing and configuring the SAP FICO system. Testing, support, and user training.",
-      participants: 104,
-      schedule: "10:30AM - 01:30PM, Thurs.",
-      fee: "$50.00"
-    },
-    {
-      title: "Frontend",
-      coach: "Philip Josh",
-      description: "Create UI and optimize User Experiences with HTML, CSS, and JavaScript.",
-      participants: 30,
-      schedule: "09:00PM - 10:30PM, Fri.",
-      fee: "$120.00"
-    },
-    {
-      title: "Backend",
-      coach: "Olatunji Raymond",
-      description: "Build server-side systems that handle data storage and communication with frontend.",
-      participants: 90,
-      schedule: "09:00AM - 12:00PM, Tue.",
-      fee: "$75.00"
-    },
-    {
-      title: "Java Programming",
-      coach: "John Doe",
-      description: "Learn Java programming from scratch. From basic to advanced concepts covered.",
-      participants: 75,
-      schedule: "02:00PM - 04:00PM, Mon.",
-      fee: "$40.00"
-    },
-  ];
+        const response = await axios.get('https://recruitangle.com/api/expert/hubs/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          console.log('Fetched data:', response.data); // Check the response structure
+          setCardData(response.data);
+        } else {
+          console.error('Error fetching data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
@@ -106,10 +106,17 @@ function MyComponent({ onClose }) {
   };
 
   const {t}=useTranslation()
+  
+  const handleCardPress = (index) => {
+    setSelectedIndex(index); // Set the selected index
+  };
 
+    const renderCards = () => {
+      if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
+        return <Text>No data available</Text>;
+      }
 
-  const renderCards = () => {
-    return cardData.map((data, index) => (
+      return cardData.AllHubs.map((data, index) => (
       <Animated.View
         key={index}
         style={{
@@ -138,7 +145,7 @@ function MyComponent({ onClose }) {
           }}
         >
           <TouchableOpacity onPress={handleOpenPress2}>
-            <View style={{ justifyContent: "center", alignSelf: 'center', width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10, borderWidth: 1, borderColor: '#206C00' }}>
+            <View style={{ justifyContent: "center", alignSelf: 'center', width: '90%', height: 110, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10, borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'row' }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -154,29 +161,32 @@ function MyComponent({ onClose }) {
                 />
               </View>
               <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-                {data.participants} {t("Participants")}
+                {data.coaching_hub_limit} {t("Participants")}
+              </Text>
+              <Text style={{ fontSize: 13, color: "#206C00", marginTop: 5 }}>
+                {data.meeting_day}s
               </Text>
               <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
-                {data.schedule}
+               {data.from} - {data.to}
               </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenPress}>
             <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
               <View style={{ flex: 1, }}>
-                <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.title}</Text>
+                <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
                 <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
-                  {t("Coach")}: {data.coach}
+                  {t("Coach")}: {data.visibility}
                 </Text>
               </View>
             </View>
 
-            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, }}>{data.description}</Text>
+            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, height: 40 }}>{data.coaching_hub_description}</Text>
 
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>{t("Hub Fee")}</Text>
               <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
-                {data.fee} </Text>
+                {data.coaching_hub_fee} </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -229,16 +239,16 @@ function MyComponent({ onClose }) {
      <Picker
                   style={styles.picker}
                 >
-                  <Picker.Item label={t("Category")} value="Category" />
-                  <Picker.Item label="Java Engineering" value="Java Engineering" />
-                  <Picker.Item label="SAP FI" value="SAP FI" />
-                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
-                  <Picker.Item label="Dev Ops" value="Dev Ops" />
-                  <Picker.Item label="Frontend Development" value="Frontend Development" />
-                  <Picker.Item label="Backend Development" value="Backend Development" />
-                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
-                  <Picker.Item label="Data Analysis" value="Data Analysis" />
-                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+       <Picker.Item label="All Categories" value="" />
+       <Picker.Item label={t('SAP')} value="SAP" />
+       <Picker.Item label={t('Microsoft')} value="Microsoft" />
+       <Picker.Item label={t('Salesforce')} value="Salesforce" />
+       <Picker.Item label={t('Frontend Development')} value="Frontend Development"/>
+       <Picker.Item label={t('Backend Development')} value="Backend Development" />
+       <Picker.Item label={t('UI/UX')} value="UI/UX" />
+       <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
+       <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
+       <Picker.Item label={t('Management')} value="Management" />
                 </Picker>
 
                 <TextInput

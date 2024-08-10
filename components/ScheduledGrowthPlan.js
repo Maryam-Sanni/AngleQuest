@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduledgrowth';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,10 @@ const ScheduledMeetingsTable = () => {
   'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
 })
 
+  const handlejoinPress = () => {
+    Linking.openURL('https://meet.anglequest.com');
+  };
+  
   return ( 
     <View style={styles.greenBox}>
          <BlurView intensity={100} style={styles.blurBackground}>
@@ -66,7 +70,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Open")}</Text>
     </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} >
+          <TouchableOpacity style={styles.cell2} onPress={handlejoinPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>
@@ -89,7 +93,7 @@ const ScheduledMeetingsTable = () => {
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Open")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} >
+          <TouchableOpacity style={styles.cell} onPress={handlejoinPress}>
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Meeting")}</Text>
           </TouchableOpacity>
         </View>

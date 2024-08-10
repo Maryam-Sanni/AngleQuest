@@ -126,7 +126,7 @@ function MyComponent({ onClose }) {
                   placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
                 />
                 </View>
-<View style={{ flexDirection: "row", marginBottom: 10}}>
+<View style={{ flexDirection: "row", marginBottom: 50 }}>
     <TouchableOpacity style={styles.buttonAcc} >
       <Text style={styles.buttonTextAcc}>{t("Satisfied, Proceed")}</Text>
     </TouchableOpacity>
@@ -166,33 +166,32 @@ const styles = StyleSheet.create({
     width: 920,
     height:620,
     backgroundColor: '#F8F8F8',
-    marginTop: 40
   },
   buttonAcc: {
-    borderWidth: 2,
-    borderColor: '#CCC',
+backgroundColor: 'coral',
     padding: 10,
     marginTop: 30,
     marginLeft: 500, 
     paddingHorizontal: 20,
+    marginBottom: 50
   },
   buttonTextAcc: {
-    color: 'black',
+    color: 'white',
     fontSize: 14,
     textAlign: 'center',
     fontFamily:"Roboto-Light"
   },
   buttonAcc2: {
-    borderWidth: 2,
-    borderColor: '#CCC',
+    backgroundColor: 'green',
     padding: 10,
     marginTop: 30,
     marginLeft: 30, 
     paddingHorizontal: 20,
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
+    marginBottom: 50
   },
   buttonTextAcc2: {
-    color: 'black',
+    color: 'white',
     fontSize: 14,
     textAlign: 'center',
   },

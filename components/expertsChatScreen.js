@@ -18,6 +18,7 @@ const ChatScreen = ({ userId: propUserId }) => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [loading, setLoading] = useState(true); // For handling loading state
   const [latestSender, setLatestSender] = useState(null);
+  const [presence, setPresence] = useState({});
   const [ws, setWs] = useState(null);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const ChatScreen = ({ userId: propUserId }) => {
   }, []);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://ws.recruitangle.com:80/app/qei9avxspe7qcl5sp3dl');
+    const socket = new WebSocket('wss://ws.recruitangle.com:443/app/qei9avxspe7qcl5sp3dl');
 
     socket.onopen = () => {
       console.log('WebSocket connection opened');
@@ -86,6 +87,41 @@ const ChatScreen = ({ userId: propUserId }) => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const presenceSocket = new WebSocket('wss://ws.recruitangle.com:443/app/qei9avxspe7qcl5sp3dl/presence');
+
+    presenceSocket.onopen = () => {
+      console.log('Presence WebSocket connection opened');
+    };
+
+    presenceSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setPresence((prevPresence) => ({
+        ...prevPresence,
+        [data.user_id]: data.status,
+      }));
+    };
+
+    presenceSocket.onclose = () => {
+      console.log('Presence WebSocket connection closed');
+    };
+
+    presenceSocket.onerror = (error) => {
+      console.error('Presence WebSocket error:', error);
+    };
+
+    return () => {
+      try {
+        if (presenceSocket) {
+          presenceSocket.close();
+        }
+      } catch (error) {
+        console.error('Error closing Presence WebSocket:', error);
+      }
+    };
+  }, []);
+
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -214,7 +250,7 @@ const ChatScreen = ({ userId: propUserId }) => {
       text: message.text || '',
       createdAt: new Date(message.created_at),
       user: {
-        _id: message.sender_id === currentUserId ? 1 : 2,
+        _id: message.sender_id,
         name: message.senderName || 'Unknown',
       },
       file: message.file ? { uri: message.file.uri, name: message.file.name, type: message.file.type } : undefined,
@@ -260,6 +296,17 @@ const ChatScreen = ({ userId: propUserId }) => {
     );
   }
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'online':
+        return 'green';
+      case 'offline':
+        return 'grey';
+      default:
+        return 'grey';
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setProfileVisible(true)}>
@@ -268,7 +315,15 @@ const ChatScreen = ({ userId: propUserId }) => {
             source={userData[userId]?.avatar || require('../assets/account.png')}
             style={styles.profileImage}
           />
+          <View style={{flexDirection: 'column'}}>
           <Text style={styles.profileName}>{userData[userId]?.name || 'Loading...'}</Text>
+          <Text style={[
+            styles.profileStatus,
+            { color: getStatusColor(presence[userId]?.status) }
+          ]}>
+            {presence[userId]?.status || 'offline'}
+          </Text>
+          </View>
         </View>
       </TouchableOpacity>
 
@@ -336,16 +391,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     marginRight: 10,
+  },
+  profileTextContainer: {
+    flexDirection: 'column',
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  profileStatus: {
+    fontSize: 14,
+    fontStyle: 'italic',
   },
   sendingContainer: {
     justifyContent: 'center',

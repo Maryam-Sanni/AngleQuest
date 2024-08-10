@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, Modal,  } from 'react-native';
+import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, TextInput, } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import { BlurView } from 'expo-blur';
@@ -10,50 +10,92 @@ import OtherExperiencesEditModal from '../components/OtherExperiencesEditModal';
 import PreferredLocationsEditModal from '../components/PreferredLocationsEditModal';
 import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
 import AboutEditModal from '../components/AboutEditModal';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import { FaDiceD20 } from 'react-icons/fa';
 
 export default function Profile() {
   const initialHistory = [
     {
       id: 1,
-      position: 'Senior Architectural Engineer',
-      company: 'KIX Architecture Firm',
+      position: 'Cloud Engineer',
+      company: 'IBM',
       duration: 'May 2020 - Present',
-      description: `- Lead the design and development of high-profile commercial projects, overseeing a team of engineers and architects.
-- Implemented innovative sustainable design strategies, resulting in LEED Platinum certification for several projects.
-- Collaborated closely with clients to understand their needs and objectives, delivering tailored solutions within budget and timeline constraints.
-- Conducted technical reviews and provided mentorship to junior staff members to foster professional growth and development.`,
+      description: `- Deployed and managed over 50 Azure Virtual Machines (VMs) for internal and client-facing applications, optimizing resource allocation and ensuring high availability.
+- Implemented Azure Active Directory for secure identity management, including multi-factor authentication and role-based access control (RBAC) for multiple client projects.
+- Automated infrastructure deployment using Azure Resource Manager (ARM) templates, reducing manual configuration errors and deployment time by 30%.
+- Designed and implemented scalable storage solutions using Azure Blob Storage and Azure File Storage, ensuring secure and efficient data management for enterprise-level applications.`,
     },
     {
       id: 2,
-      position: 'Architectural Engineer',
-      company: 'Phoenix Engineering Consultants',
+      position: 'Cloud Solutions Architect',
+      company: 'Microsoft',
       duration: 'July 2015 - Jan 2020',
-      description: `- Designed and managed the construction of various residential and mixed-use developments, ensuring compliance with building codes and regulations.
-- Utilized advanced software tools such as Revit and AutoCAD to create detailed architectural drawings and 3D models.
-- Conducted site visits and inspections to monitor construction progress and address any design or engineering challenges.
-- Coordinated with contractors, subcontractors, and vendors to procure materials and equipment, optimizing project efficiency and cost-effectiveness.`,
+      description: `- Led the migration of on-premises workloads to Azure for several large enterprises, reducing infrastructure costs by 25% and improving application scalability.
+- Implemented and managed Azure Kubernetes Service (AKS) clusters for microservices-based applications, enabling seamless scaling and efficient resource management.
+- Integrated Azure DevOps for continuous integration and continuous deployment (CI/CD) pipelines, improving software delivery speed and quality for multiple client projects.
+- Conducted security audits and implemented Azure Security Center recommendations, enhancing the security posture of cloud environments for Fortune 500 clients.`,
     },
     {
       id: 3,
-      position: 'Junior Architectural Engineer',
-      company: 'Zenith Design & Construction',
+      position: 'Junior Azure Consultant',
+      company: 'Capgemini',
       duration: 'Sept 2012 - Feb 2015',
-      description: `- Assisted senior engineers in the design and analysis of structural systems for commercial and institutional buildings.
-- Conducted feasibility studies and prepared design proposals, contributing to the successful acquisition of new projects.
-- Participated in interdisciplinary project meetings, communicating effectively with architects, MEP engineers, and other stakeholders.
-- Developed proficiency in building information modeling (BIM) software and contributed to the integration of BIM workflows within the firm.`,
+      description: `- Assisted in organizing and managing Azure resources through effective use of Azure Resource Groups, ensuring efficient resource allocation and streamlined management.
+- Supported the setup and configuration of Azure Virtual Machines (VMs) for development and testing environments, contributing to project delivery timelines.
+- Helped implement Azure Active Directory (Azure AD) for identity management, setting up role-based access control (RBAC) to secure cloud resources for clients.
+- Monitored and diagnosed performance issues using Azure Monitor and Application Insights, assisting in maintaining the health and performance of client applications.`,
     },
   ];
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentHistory, setCurrentHistory] = useState(null);
-  const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
-  const [about, setAbout] = useState(`Alex Johnson is a dedicated Microsoft Azure expert with over 10 years of experience in cloud computing and IT infrastructure. With a Bachelor's degree in Computer Science from XYZ University and a Master's degree in Information Technology, Alex combines in-depth technical knowledge with a passion for innovative cloud solutions.
+  const [availableDays, setAvailableDays] = useState('Mon, Tue, Wed');
+  const [hours, setHours] = useState('9:00 AM - 3:00 PM');
 
-    Outside of work, Alex enjoys coding, playing chess, and contributing to open-source projects. Alex also volunteers to mentor aspiring IT professionals and participates in community initiatives aimed at promoting digital literacy.`);
+  const handleSavedays = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        available_days: availableDays, // Ensure availableDays is defined
+        available_time: hours,         // Ensure hours is defined
+      };
+
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('Save Days Response:', response.data);
+        alert('Your profile has been successfully saved.');
+        
+      } else {
+        alert('Failed to save days. Please try again.');
+      }
+    } catch (error) {
+      console.error('Save Days Error:', error);
+      alert('Failed to save days. Please try again.');
+    }
+  };
+
+
+  
+  const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
+  const [about, setAbout] = useState(`Alex Johnson is a dedicated Microsoft Azure expert with over 10 years of experience in cloud computing and IT infrastructure. With a Bachelor's degree in Computer Science from XYZ University and a Master's degree in Information Technology, Alex combines in-depth technical knowledge with a passion for innovative cloud solutions.`);
       const [aboutModalVisible, setAboutModalVisible] = useState(false);
 
   const handleOpenPress = (history) => {
@@ -73,11 +115,11 @@ export default function Profile() {
   };
 
   const [skills, setSkills] = useState([
-    'Building Information Modeling',
-    'Structural Analysis Software',
-    'Construction Documentation',
-    'Cost Estimation',
-    'AutoCAD'
+    'Kuberbetes Experience',
+    'Cloud Platform',
+    'Data backup and recovery',
+    'Information security',
+    'Application management'
   ]);
 
   const [skillsmodalVisible, setskillsModalVisible] = useState(false);
@@ -96,10 +138,6 @@ export default function Profile() {
 
   const [preferredLocations, setPreferredLocations] = useState([
     'United States',
-    'Germany',
-    'Canada',
-    'UAE',
-    'Nigeria',
   ]);
 
   const [preferredLocationsModalVisible, setPreferredLocationsModalVisible] = useState(false);
@@ -117,14 +155,11 @@ export default function Profile() {
   };
 
   const [certifications, setCertifications] = useState([
-    'Licensed Professional Engineer (PE) - [London/United Kingdom]',
-    'LEED Accredited Professional (LEED AP)',
-    'Revit Architecture Certified Professional',
-    'Autodesk Certified Professional (AutoCAD)',
-    'Certified Passive House Designer (CPHD)',
-    'Building Performance Institute (BPI) Certification',
-    'Certified Construction Specifier (CCS)',
-    'Certified Energy Manager (CEM)'
+    'Licensed Cloud Computing with Azure - [London/United Kingdom]',
+    'Azure Administration Essential Training [LinkedIn Learning (Certification Course)]',
+    'Architecting Microsoft Azure Solutions [edX]',
+    'Microsoft Azure Cloud Engineering [Udemy Bootcamp]',
+    'Microsoft Azure Fundamentals [Coursera]',
   ]);
 
   const [certificationsmodalVisible, setcertificationsModalVisible] = useState(false);
@@ -146,7 +181,7 @@ export default function Profile() {
     'Research and Development',
     'Quality Assurance/Quality Control (QA/QC)',
     'Client Relationship Management',
-    'Construction Administration',
+    'Communication skills',
     'Feasibility Studies',
     'Risk Management'
   ]);
@@ -165,23 +200,18 @@ export default function Profile() {
   };
 
   const [preferredRoles, setPreferredRoles] = useState([
-    'Java Programming',
     'Microsoft Azure',
-    'SAP',
   ]);
   
+  const [preferredRole, setPreferredRole] = useState('Microsoft'); // Default role
   const [preferredRolesModalVisible, setPreferredRolesModalVisible] = useState(false);
-  
+
   const handleOpenPreferredRoles = () => {
     setPreferredRolesModalVisible(true);
   };
-  
-  const handleClosePreferredRolesModal = () => {
-    setPreferredRolesModalVisible(false);
-  };
-  
-  const handleSavePreferredRoles = (newPreferredRoles) => {
-    setPreferredRoles(newPreferredRoles);
+
+  const handleSavePreferredRole = (selectedRole) => {
+    setPreferredRole(selectedRole);
   };
 
   const [fontsLoaded]=useFonts({
@@ -189,6 +219,45 @@ export default function Profile() {
   })
   const {t}=useTranslation()
 
+  const handleSaveall = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        alert('Token not found. Please sign in again.');
+        return;
+      }
+
+      // Prepare data for API request
+      const data = {
+        available_days: availableDays, // Ensure availableDays is defined
+        available_time: hours,    
+        preferred_role: preferredRole,
+        about: about,
+        preferred_locations: preferredLocations.join(', '), 
+      };
+
+      // Send POST request to API
+      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('Save Days Response:', response.data);
+        alert('Your availability has been successfully saved.');
+
+      } else {
+        alert('Failed to save. Please try again.');
+      }
+    } catch (error) {
+      console.error('Save Error:', error);
+      alert('Failed to save. Please try again.');
+    }
+  };
+  
   return (
     <ImageBackground
     source={require ('../assets/Background.png') }
@@ -217,11 +286,21 @@ export default function Profile() {
                 </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Available Balance")}</Text>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>$1,234.00</Text>
-                  <Text style={{ fontSize: 16, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>$25/hr</Text>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
-                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light" }}>{t("Preview Profile")}</Text>
+                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', marginBottom: 5, fontWeight: '600' }}>{t("Available Days")}</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={availableDays}
+                    onChangeText={setAvailableDays}
+                    placeholder="Mon, Tue, Wed, Thur, Fri, Sat, Sun"
+                  />
+                  <TextInput
+                    style={styles.textInput}
+                    value={hours}
+                    onChangeText={setHours}
+                    placeholder="9:00AM - 5:00PM"
+                  />
+                  <TouchableOpacity onPress={handleSavedays} style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: 'coral', borderRadius: 5, borderWidth: 1, borderColor: 'coral' }}>
+                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light", color: 'white' }}>{t("Save Changes")}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -280,7 +359,7 @@ export default function Profile() {
           <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>{t("Skills")}</Text>
+ }}>{t("Technical Skills")}</Text>
         <TouchableOpacity onPress={handleOpenSkills}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -343,7 +422,7 @@ export default function Profile() {
   <View style={{ marginTop: 20, marginRight: 30 }}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
     <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>{t("Other Experience")}</Text>
+ }}>{t("Soft Skills")}</Text>
     <TouchableOpacity onPress={handleOpenOtherExperiences}>
       <Image
         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -374,7 +453,7 @@ export default function Profile() {
                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>{t("Preferred Locations")}</Text>
+ }}>{t("Location")}</Text>
                       <TouchableOpacity onPress={handleOpenPreferredLocations}>
                         <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -403,38 +482,41 @@ export default function Profile() {
                     />
                   </View>
                    {/*Roles*/}
-                   <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
-                  <View style={{ marginTop: 20, marginRight: 30 }}>
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
-}}>{t("Preferred Roles")}</Text>
-    <TouchableOpacity onPress={handleOpenPreferredRoles}>
-      <Image
-        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-        style={{ width: 20, height: 20 }} // adjust width and height as needed
-        resizeMode="cover" // or any other resizeMode that suits your need
-      />
-    </TouchableOpacity>
-  </View>
-  <View style={{ marginRight: 50 }}>
-        <View style={styles.container}>
-          <View style={styles.row}>
-          {preferredRoles.map((role, index) => (
-              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Roboto-Light"
-              }]}>{role}</Text>
-            ))}
-          </View>
-        </View>
-      </View>
+                    <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+                    <View style={{ marginTop: 20, marginRight: 30 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
+                          {t('Specialization')}
+                        </Text>
+                        <TouchableOpacity onPress={handleOpenPreferredRoles}>
+                          <Image
+                            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                            style={{ width: 20, height: 20 }} // adjust width and height as needed
+                            resizeMode="cover"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={{ marginRight: 50 }}>
+                        <View style={styles.container}>
+                          <View style={styles.row}>
+                            <Text style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light' }]}>
+                              {preferredRole}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
 
- 
-  <PreferredRolesEditModal
-    visible={preferredRolesModalVisible}
-    preferredRoles={preferredRoles}
-    onClose={handleClosePreferredRolesModal}
-    onSave={handleSavePreferredRoles}
-  />
-</View>
+            <Text style={{ fontSize: 14, marginTop: 40, fontStyle: 'italic', fontFamily:"Roboto-Light" }}>{t("You will need to edit and update your profile for it to be visible to 'Individuals' and 'Businesses'")}</Text>
+           <TouchableOpacity style={{ justifyContent: 'center', marginLeft: 10, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 10, marginBottom: 50, backgroundColor: 'coral', borderRadius: 5, }} onPress={handleSaveall} >
+             <Text style={{ fontSize: 14, color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Update Profile")}</Text>
+           </TouchableOpacity>
+           
+                    <PreferredRolesEditModal
+                      visible={preferredRolesModalVisible}
+                      onClose={() => setPreferredRolesModalVisible(false)}
+                      onSave={handleSavePreferredRole}
+                    />
 <AboutEditModal
             visible={aboutModalVisible}
             about={about}
@@ -542,5 +624,16 @@ const styles = {
     resizeMode: 'cover',
     position: 'absolute',
     right: 50
+  },
+  textInput: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 5,
+    fontFamily: 'Roboto-Light',
+    marginRight: -50,
+    borderBottomWidth: 0, // Remove bottom border (outline)
+    borderWidth: 0, // Remove border outline
+    padding: 0, // Adjust padding if necessary
+    color: 'black', // Text color
   },
 };

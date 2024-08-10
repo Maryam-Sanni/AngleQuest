@@ -13,12 +13,12 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
 
-  const [type, setType] = useState("");
+  const [type, setType] = useState("Career Change");
   const [role, setRole] = useState("");
   const [challenge, setChallenge] = useState("");
-  const [startingLevel, setStartingLevel] = useState("");
-  const [targetLevel, setTargetLevel] = useState("");
-  const [status, setStatus] = useState("");
+  const [startingLevel, setStartingLevel] = useState("Beginner");
+  const [targetLevel, setTargetLevel] = useState("Medior");
+  const [status, setStatus] = useState("Active");
   const [token, setToken] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -26,6 +26,29 @@ function MyComponent({ onClose }) {
   const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
   const [expert, setExpert] = useState('Joop Melcher');
 
+  useEffect(() => {
+    const getTokenAndUser = async () => {
+      try {
+        // Retrieve token and user data from AsyncStorage
+        const storedToken = await AsyncStorage.getItem('token');
+        setToken(storedToken);
+
+        const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+        const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
+        if (storedFirstName && storedLastName) {
+          setExpert(`${storedFirstName} ${storedLastName}`);
+        } else {
+          console.warn('No user data found');
+        }
+      } catch (error) {
+        console.error('Error retrieving token or user:', error);
+      }
+    };
+
+    getTokenAndUser();
+  }, []);
+  
   useEffect(() => {
     const getToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
@@ -46,7 +69,7 @@ function MyComponent({ onClose }) {
   const goToPlan = async () => {
     try {
       // Validate the form data before making the API request
-      if (!type || !role || !challenge || !startingLevel || !targetLevel || !status || !selectedDateTime) {
+      if ( !role || !challenge || !targetLevel || !selectedDateTime) {
       setAlertMessage(t('Please fill all fields'));
         setAlertVisible(true);
         return;
@@ -70,7 +93,7 @@ function MyComponent({ onClose }) {
       if (!token) throw new Error('No token found');
 
       const response = await axios.post(
-        'https://recruitangle.com/api/jobseeker/create-jobseeker-advice', 
+        'https://recruitangle.com/api/jobseeker/create-jobseeker-skill-analysis', 
         formData, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -221,26 +244,10 @@ function MyComponent({ onClose }) {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TouchableOpacity
-                  style={styles.dateTimeButton}
-                  onPress={() => setIsModalVisible(true)}
-                >
-                  <Text style={{ fontFamily: "Roboto-Light" }}>
-                    {selectedDateTime
-                      ? selectedDateTime.toLocaleString()
-                      : t("Select Date and Time")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+           
             </View>
           
-            <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Expert's available days and time")}</Text>
+            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
                 <View style={styles.cell}>
@@ -271,6 +278,27 @@ function MyComponent({ onClose }) {
                 </View>
               </View>
             </View>
+          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50 }}>{t("Pick a date and time")}</Text>
+          <View style={styles.container}>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
+              </View>
+              <View style={styles.cell}>
+                <TouchableOpacity
+                  style={styles.dateTimeButton}
+                  onPress={() => setIsModalVisible(true)}
+                >
+                  <Text style={{ fontFamily: "Roboto-Light" }}>
+                    {selectedDateTime
+                      ? selectedDateTime.toLocaleString()
+                      : t("Select Date and Time")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          
               <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
                 <Text style={styles.buttonTextplus}>{t("Save")}</Text>
               </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import PastSessions from '../components/PastSessions';
@@ -8,6 +8,7 @@ import OpenModal from '../Jobseekers/Pickyourhub';
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+
 
 function MyComponent() { 
     const navigation = useNavigation();
@@ -20,6 +21,10 @@ function MyComponent() {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
+
+  const handlejoinPress = () => {
+    Linking.openURL('https://meet.anglequest.com');
+  };
 
     const [fontsLoaded]=useFonts({
       "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
@@ -56,9 +61,9 @@ function MyComponent() {
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{ fontSize: 18, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Hub Meeting")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
-    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>No Date yet</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>No time yet</Text>
+    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
           </View>
@@ -83,7 +88,7 @@ function MyComponent() {
       <View style={styles.box}>
       <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Confirmed Attendant")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', color: '#206C00',fontFamily:"Roboto-Light" }}>10</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>10</Text>
            <Image source={require('../assets/organization.png')} style={styles.boximage}  />
      </View>
      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Unconfirmed")}</Text>
@@ -159,8 +164,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7fff4',
         padding: 20,
         borderRadius: 20,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: '22%',
         height: 150,
         borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
@@ -176,8 +181,7 @@ const styles = StyleSheet.create({
       boximage: {
         width: 30,
         height: 30,
-        position: 'absolute',
-        left: 130,
+        marginLeft: 5,
         borderRadius: 25
       },
 });

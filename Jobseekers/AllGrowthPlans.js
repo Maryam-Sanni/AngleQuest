@@ -1,18 +1,70 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import GrowthPlantype from '../components/growthplantype';
 import GrowthPlanreview from '../components/gpexpertreview';
-import OpenModal from '../Jobseekers/Newgrowth';
+import OpenModal from '../Jobseekers/Pickyourcoach';
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function MyComponent() { 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
+   const [meetingData, setMeetingData] = useState({ date: '', time: '' })
 
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan-datetime', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const { GrowthPlanDT } = response.data;
+          if (GrowthPlanDT && GrowthPlanDT.length > 0) {
+            const meeting = GrowthPlanDT[0];
+            const dateTime = new Date(meeting.date_time);
+
+            // Format date as 'DD/MM/YYYY'
+            const date = dateTime.toLocaleDateString('en-GB');
+
+            // Format time as 'HH:MM AM/PM'
+            const time = dateTime.toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            });
+
+            setMeetingData({
+              date,
+              time,
+            });
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meeting data');
+        }
+      } catch (error) {
+        console.error('Error fetching meeting data:', error);
+      }
+    };
+
+    fetchMeetingData();
+  }, []);
+  
     const handleOpenPress = () => {
       setModalVisible(true);
     };
@@ -20,6 +72,11 @@ function MyComponent() {
     const handleCloseModal = () => {
       setModalVisible(false);
     };
+
+  const handlejoinPress = () => {
+    Linking.openURL('https://meet.anglequest.com');
+  };
+  
     const [fontsLoaded]=useFonts({
       "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
@@ -54,9 +111,9 @@ function MyComponent() {
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next growth plan session")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>27/May/2024</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>2:00PM - 3:00PM</Text>
-    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{meetingData.date}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{meetingData.time}</Text>
+    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
           </View>
@@ -83,7 +140,7 @@ function MyComponent() {
       </View>
       
       <View style={styles.box}>
-      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Organizational Development")}</Text>
+      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light", textAlign: 'center'}}>{t("Organizational Development")}</Text>
         <View style={{flexDirection: 'row'}}>
            <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
            <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>Completed</Text>
@@ -160,8 +217,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7fff4',
         padding: 20,
         borderRadius: 20,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+          justifyContent: 'center',
         width: '22%',
         height: 150,
         borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
@@ -177,8 +234,7 @@ const styles = StyleSheet.create({
       boximage: {
         width: 30,
         height: 30,
-        position: 'absolute',
-        left: 130,
+        marginLeft: 10,
         borderRadius: 25
       },
 });
