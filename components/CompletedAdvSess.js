@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
-import OpenSchedule from '../Jobseekers/OpenInterviewbook';
+import OpenSchedule from '../Jobseekers/OpenSkillAnalysis';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +69,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
             <Text style={styles.cellText}>Joop Melcher</Text>
           </View>
-          <TouchableOpacity style={styles.cell2} >
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress} >
           <Text style={styles.open}>{t("View")}</Text>
           </TouchableOpacity>
         </View>
@@ -92,7 +92,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>Donald Roberts</Text>
           </View>
-          <TouchableOpacity style={styles.cell} >
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress} >
           <Text style={styles.open}>{t("View")}</Text>
           </TouchableOpacity>
         </View>

@@ -15,9 +15,66 @@ function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
   const [meetingData, setMeetingData] = useState({ date: '', time: '' })
+  const [lastCandidateLink, setLastCandidateLink] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const [type, setType] = useState("Career Change");
+  const [role, setRole] = useState("");
+  const [startingLevel, setStartingLevel] = useState("Beginner");
+  const [targetLevel, setTargetLevel] = useState("Medior");
+  const [expert, setExpert] = useState(" ");
+  const [description, setDescription] = useState(" ");
+
 
   useEffect(() => {
-    const fetchMeetingData = async () => {
+      const loadFormData = async () => {
+          try {
+              const token = await AsyncStorage.getItem('token');
+              if (!token) {
+                  console.error('No token found');
+                  return;
+              }
+
+              const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+                  headers: { Authorization: `Bearer ${token}` }
+              });
+
+              if (response.status === 200) {
+                  const data = response.data.skillAnalysis; // Updated to `skillAnalysis` based on your response
+
+                  setRole(data.role || '');
+                  setType(data.type || '');
+                  setStartingLevel(data.starting_level || '');
+                  setTargetLevel(data.target_level || '');
+                setExpert(data.expert_name || '');
+                 setDescription(data.description || '');
+
+                // Convert date_time to date and time
+                const dateTime = new Date(data.date_time);
+                const date = dateTime.toLocaleDateString();
+                const time = dateTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true  // Use 12-hour clock with AM/PM
+                });
+
+                setSelectedDate(date);
+                setSelectedTime(time);
+                
+              } else {
+                  console.error('Failed to fetch data', response);
+              }
+          } catch (error) {
+              console.error('Failed to load form data', error);
+          }
+      };
+
+      loadFormData();
+  }, []);
+  
+  useEffect(() => {
+    const fetchLastCreatedMeeting = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) {
@@ -25,52 +82,53 @@ function MyComponent() {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skillanalysis-datetime', {
+        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=advice', {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            'Authorization': `Bearer ${token}`
+          }
         });
 
-        if (response.status === 200) {
-          const { SkillAnalysisDT } = response.data;
-          if (SkillAnalysisDT && SkillAnalysisDT.length > 0) {
-            const meeting = SkillAnalysisDT[0];
-            const dateTime = new Date(meeting.date_time);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-            // Format date as 'DD/MM/YYYY'
-            const date = dateTime.toLocaleDateString('en-GB');
+        const data = await response.json();
 
-            // Format time as 'HH:MM AM/PM'
-            const time = dateTime.toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true,
-            });
+        if (data.status === 'success') {
+          const meetings = Object.values(data.meetings);
 
-            setMeetingData({
-              date,
-              time,
-            });
+          if (meetings.length > 0) {
+            // Sort the meetings by created_at in descending order to get the latest one
+            const sortedMeetings = meetings.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            // Set the candidate_link from the last created meeting
+            setLastCandidateLink(sortedMeetings[0].candidate_link);
           } else {
             console.error('No meetings found');
           }
         } else {
-          console.error('Failed to fetch meeting data');
+          console.error('Failed to fetch meetings:', data.message);
         }
       } catch (error) {
-        console.error('Error fetching meeting data:', error);
+        console.error('Failed to fetch meetings:', error);
       }
     };
 
-    fetchMeetingData();
+    fetchLastCreatedMeeting();
   }, []);
-  
+
   const handlejoinPress = () => {
-    Linking.openURL('https://meet.anglequest.com');
+    if (lastCandidateLink) {
+      Linking.openURL(lastCandidateLink);
+    } else {
+      console.error('No candidate link found');
+    }
   };
 
     const handleOpenPress = () => {
-      setModalVisible(true);
+       navigation.navigate('Use AI');
     };
   
     const handleCloseModal = () => {
@@ -109,8 +167,8 @@ function MyComponent() {
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Meeting")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{meetingData.date}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{meetingData.time}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{selectedDate}</Text>
+    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{selectedTime}</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
@@ -118,16 +176,16 @@ function MyComponent() {
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>SAP FI </Text>
+        <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{role}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{t("Career Change")}</Text>
+           <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{type}</Text>
            <Image source={require('../assets/traffic-sign.png')} style={styles.boximage}  />
       </View>
      </View>
 
       <View style={styles.box}> 
       <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
-      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{t("I want to change from a data analyst to an SAP FI consultant")}</Text>
+      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{description}</Text>
       </View>
       
       <View style={styles.box}>
@@ -136,7 +194,8 @@ function MyComponent() {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, height: 40, aspectRatio: 1, }}
             />
-            <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")} Joop Melcher</Text>
+            <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")}</Text>
+          <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{expert}</Text>
             </View>
     </View>
     </View>

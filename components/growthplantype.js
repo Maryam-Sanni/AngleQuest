@@ -1,16 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import OpenSchedule from '../Jobseekers/Replan';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [token, setToken] = useState("");
+  const [type, setSelectedType] = useState('Personal');
+  const [title, setTitle] = useState('');
+  const [role, setRole] = useState('');
+  const [starting_level, setStartingLevel] = useState('Beginner');
+  const [status, setStatus] = useState('Active');
+
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200) {
+          const data = response.data.growthPlan; // Check the structure of `data`
+
+          setRole(data.role || '');
+          setSelectedType(data.type || '');
+          setTitle(data.title || '');
+          setResultDescription(data.result_description || '');
+          setHowToAchieve(data.how_to_achieve || '');
+          setNeeds(data.achieve_the_objective || '');
+          setStartingLevel(data.starting_level || '');
+          setTargetLevel(data.target_level || '');
+          setStatus(data.status || '');
+
+          // Split date and time
+          const dateTime = new Date(data.date_time);
+          const date = dateTime.toLocaleDateString();
+          const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+          setSelectedDate(date);
+          setSelectedTime(time);
+
+
+
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+  
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -35,7 +95,7 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
       
-      
+        <Text style={styles.title}>{t("Scheduled Growth Plan Sessions")}</Text>
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
@@ -48,10 +108,10 @@ const ScheduledMeetingsTable = () => {
           <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Starting Level")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("End Date")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
           </View>
           <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
@@ -62,22 +122,22 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Team Development")}</Text>
+            <Text style={styles.cellText}>{type}</Text>
           </View>
           <View style={styles.cell2}> 
-          <Text style={styles.cellText}>{t("Become SAP FI Mentor to another team member")}</Text>
+          <Text style={styles.cellText}>{title}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI Medior</Text>
+            <Text style={styles.cellText}>{role}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}>{starting_level}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Nov/2024</Text>
+            <Text style={styles.cellText}>{selectedDate} {selectedTime}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Active")}</Text>
+            <Text style={styles.cellText}>{status}</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
           <Text style={styles.open}>{t("Open")}</Text>
@@ -85,7 +145,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Personal Development")}</Text>
+            <Text style={styles.cellText}>{t("Personal")}</Text>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>{t("Become SAP FI Mentor to another team member")}</Text>
@@ -94,7 +154,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP FI Medior</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>6/Dec/2024</Text>
+            <Text style={styles.cellText}>{starting_level}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>6/May/2025</Text>
@@ -108,7 +168,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-          <Text style={styles.cellText}>{t("Organization Development")}</Text>
+          <Text style={styles.cellText}>{t("Team")}</Text>
           </View>
           <View style={styles.cell2}> 
           <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
@@ -117,7 +177,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP FI Medior</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>6/Dec/2024</Text>
+            <Text style={styles.cellText}>{starting_level}</Text>
           </View>
           <View style={styles.cell2}>
             <Text style={styles.cellText}>6/May/2025</Text>
@@ -131,7 +191,7 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Organization Development")}</Text>
+            <Text style={styles.cellText}>{t("Organization")}</Text>
           </View>
           <View style={styles.cell}> 
             <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
@@ -140,7 +200,7 @@ const ScheduledMeetingsTable = () => {
             <Text style={styles.cellText}>SAP FI Medior</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>6/Dec/2024</Text>
+            <Text style={styles.cellText}>{starting_level}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.cellText}>6/May/2025</Text>

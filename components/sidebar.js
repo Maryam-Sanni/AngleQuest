@@ -4,6 +4,7 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function MyComponent() {
   const navigation = useNavigation(); // Initialize navigation
@@ -13,11 +14,104 @@ function MyComponent() {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
 
+  // Function to check if interview data is filled
+  const checkInterviewData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert("Error", "No token found");
+        return false;
+      }
+
+      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.interview) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error fetching interview data:", error);
+      Alert.alert("Error", "Failed to fetch interview data");
+      return false;
+    }
+  };
+
+  // Function to check if advice data is filled
+  const checkSkillAnalysisData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert("Error", "No token found");
+        return false;
+      }
+
+      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.skillAnalysis) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error fetching skill analysis data:", error);
+      Alert.alert("Error", "Failed to fetch skill analysis data");
+      return false;
+    }
+  };
+
+  // Function to check if advice data is filled
+  const checkgrowthPlanData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert("Error", "No token found");
+        return false;
+      }
+
+      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.growthPlan) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error fetching growth Plan data:", error);
+      Alert.alert("Error", "Failed to fetch growth Plan data");
+      return false;
+    }
+  };
+  
   const handleItemHover = (item) => {
     setHoveredItem(item);
   };
 
-  const handleItemClick = (item) => {
+  const handleItemClick = async (item) => {
     if (item === menuItems[0]) {
       setShowMenu(false); // Directly set showMenu to false if the first menu item is clicked
     } else {
@@ -31,16 +125,31 @@ function MyComponent() {
           navigation.navigate('Experts');
           break;
         case "Growth Plan":
-          navigation.navigate('New Growth Plan');
+          const isgrowthPlanDataFilled = await checkgrowthPlanData();
+          if (isgrowthPlanDataFilled) {
+            navigation.navigate('Growth Plan Sessions');
+          } else {
+            navigation.navigate('New Growth Plan');
+          }
           break;
-        case "Interview":
-          navigation.navigate('New Interview'); 
+          case "Interview":
+          const isInterviewDataFilled = await checkInterviewData();
+          if (isInterviewDataFilled) {
+            navigation.navigate('Interview Sessions');
+          } else {
+            navigation.navigate('New Interview');
+          }
           break;
         case "Sessions":
           navigation.navigate('Sessions');
           break;
         case "Skills Analysis":
-          navigation.navigate('Use AI');
+          const isSkillAnalysisDataFilled = await checkSkillAnalysisData();
+          if (isSkillAnalysisDataFilled) {
+            navigation.navigate('Advice Sessions');
+          } else {
+            navigation.navigate('Use AI');
+          }
           break;
         case "Hubs":
           navigation.navigate('Coaching Hubs');
@@ -88,7 +197,7 @@ function MyComponent() {
         console.error('Error retrieving data from AsyncStorage:', error);
       }
     };
-  
+
     retrieveData();
   }, []);
 
@@ -97,7 +206,7 @@ function MyComponent() {
   const navigationState = useNavigationState((state) => state);
 
   useEffect(() => {
-    
+
     const routeName = navigationState?.routes[navigationState.index]?.name;
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
@@ -298,9 +407,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 5
   },
- 
+
 });
 
 
 
-export default MyComponent;
+export default MyComponent; 

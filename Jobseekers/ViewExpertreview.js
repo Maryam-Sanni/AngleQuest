@@ -1,10 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function MyComponent({ onClose }) {
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [token, setToken] = useState("");
+  const [type, setSelectedType] = useState('Personal');
+  const [title, setTitle] = useState('');
+  const [role, setRole] = useState('');
+  const [result_description, setResultDescription] = useState('');
+  const [how_to_achieve, setHowToAchieve] = useState('');
+  const [achieve_the_objective, setNeeds] = useState('');
+  const [review_with_coach, setreviewwithcoach] = useState('Biannually');
+  const [starting_level, setStartingLevel] = useState('Beginner');
+  const [target_level, setTargetLevel] = useState('Medior');
+  const [end_date, setEndDate] = useState('12 Months');
+  const [status, setStatus] = useState('Active');
+  const [coach, setCoach] = useState('Patrick OCHE');
+   const [feedbacks, setFeedback] = useState('Read only field');
+  const [expert_available_days, setExpertAvailableDays] = useState('Mon-Fri');
+  const [expert_available_time, setExpertAvailableTime] = useState('10AM - 5PM');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [candidate, setCandidate] = useState("Individual");
+  const [expertid, setExpertid] = useState(" ");
+   const [meetingtype, setType] = useState("growth");
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200) {
+          const data = response.data.growthPlan; // Check the structure of `data`
+
+          setRole(data.role || '');
+          setSelectedType(data.type || '');
+          setTitle(data.title || '');
+          setResultDescription(data.result_description || '');
+          setHowToAchieve(data.how_to_achieve || '');
+          setNeeds(data.achieve_the_objective || '');
+          setStartingLevel(data.starting_level || '');
+          setTargetLevel(data.target_level || '');
+          setStatus(data.status || '');
+          setSelectedDateTime(data.start_date || '');
+
+
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
+  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -29,80 +103,179 @@ function MyComponent({ onClose }) {
         </TouchableOpacity>
         </View> 
                         <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
- <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Type")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Team")}</Text>    
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Title")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Become SAP FI Medior expert in 6 months")}</Text>    
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Junior")}</Text>
-        </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Result Description")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("To be able to find my way around SAP FI")}</Text>
-        </View>
-        </View>
-        <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("How to achieve")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("To be taught to troubleshoot, find 'codes, navigate the system")}</Text>
-        </View>
-        </View>
+  <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: 'Roboto-Light' }}>
+    {t('Development Objectives')}
+  </Text>
+  <View style={styles.container}>
+    {/* Form fields */}
     <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Anticipated Progress (Target)")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("I want to be bale to lead a a project")}</Text>
-        </View>
-        </View>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Type')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <Picker
+          selectedValue={type}
+           enabled={false}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedType(itemValue)}
+        >
+          <Picker.Item label={t('Personal')} value="Personal" />
+          <Picker.Item label={t('Team')} value="Team" />
+          <Picker.Item label={t('Organization')} value="Organization" />
+        </Picker>
+      </View>
+    </View>
     <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("What do you need to achieve this objective?")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Continuous training, practice and support")}</Text>
-        </View>
-        </View>
- <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Progress/Level")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Goal Setting Stage")}</Text>
-        </View>
-        </View>
- <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Goal Timeline")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Start Date-End Date")}</Text>
-        </View>
-        </View>
- </View>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Title')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <TextInput
+          placeholder={t('Become SAP FI Medior expert in 6 months')}
+          placeholderTextColor="black"
+          style={styles.input}
+          editable={false}
+          value={title}
+          onChangeText={setTitle}
+        />
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Role')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <TextInput
+          placeholder="SAP FI"
+          placeholderTextColor="black"
+          style={styles.input}
+          editable={false}
+          value={role}
+          onChangeText={setRole}
+        />
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Result description')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <TextInput
+          placeholder={t('Example: To be able to find my way around SAP fi...')}
+          placeholderTextColor="grey"
+          multiline
+          style={[styles.input, { height: 50 }]}
+          editable={false}
+          value={result_description}
+          onChangeText={setResultDescription}
+        />
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How to achieve')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <TextInput
+          placeholder={t('Example: To be taught how to troubleshoot, find T\'codes...')}
+          placeholderTextColor="black"
+          multiline
+          style={[styles.input, { height: 50 }]}
+          editable={false}
+          value={how_to_achieve}
+          onChangeText={setHowToAchieve}
+        />
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('What do you need to achieve the objective?')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <TextInput
+          placeholder={t('Continous training, practice and support')}
+          placeholderTextColor="black"
+          multiline
+          style={[styles.input, { height: 50 }]}
+          editable={false}
+          value={achieve_the_objective}
+          onChangeText={setNeeds}
+        />
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
+      </View>
+      <View style={styles.cell}>
+      <Text style={{color: 'black', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>Biannually</Text>
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Starting Level')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <Picker
+          selectedValue={starting_level}
+           enabled={false}
+          style={styles.picker}
+          onValueChange={(itemValue) => setStartingLevel(itemValue)}
+        >
+          <Picker.Item label={t('Beginner')} value="Beginner" />
+          <Picker.Item label={t('Junior')} value="Junior" />
+          <Picker.Item label={t('Medior')} value="Medior" />
+          <Picker.Item label={t('Senior')} value="Senior" />
+          <Picker.Item label={t('Professional')} value="Professional" />
+        </Picker>
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Target Level')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <Picker
+          selectedValue={target_level}
+           enabled={false}
+          style={styles.picker}
+          onValueChange={(itemValue) => setTargetLevel(itemValue)}
+        >
+          <Picker.Item label={t('Beginner')} value="Beginner" />
+          <Picker.Item label={t('Junior')} value="Junior" />
+          <Picker.Item label={t('Medior')} value="Medior" />
+          <Picker.Item label={t('Senior')} value="Senior" />
+          <Picker.Item label={t('Professional')} value="Professional" />
+        </Picker>
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Status')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <Picker
+          selectedValue={status}
+           enabled={false}
+          style={styles.picker}
+          onValueChange={(itemValue) => setStatus(itemValue)}
+        >
+          <Picker.Item label={t('Active')} value="Active" />
+          <Picker.Item label={t('Review')} value="Review" />
+          <Picker.Item label={t('Replan')} value="Replan" />
+          <Picker.Item label={t('Completed')} value="Completed" />
+        </Picker>
+      </View>
+    </View>
+    <View style={styles.row}>
+      <View style={styles.cell}>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
+      </View>
+      <View style={styles.cell}>
+        <Text style={{ color: 'black', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
+      </View>
+    </View>
+  </View>
 
  <View style={{flexDirection: 'row'}}>
 <Text style={{ marginTop: 20, marginBottom: -10, fontWeight: '500', fontSize: 14, color: 'black', marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Growth Plan Scoring")}</Text>
@@ -111,50 +284,50 @@ function MyComponent({ onClose }) {
        <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("PV01-Passion")}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
         <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("PV07-Customer Orientation")}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
     <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Strongest Competency")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>SV01-Creativity and Innovation</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>FxT01-Knowledge of product</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
 <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>PV09-Pro-activity</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
  <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Competency to develop")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 6</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("LO05-Planning and Organization")}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
         </View>
         </View>
         </View>
@@ -213,7 +386,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#F8F8F8',
     borderColor: '#F8F8F8',
-    color:'grey',
+    color:'black',
     fontSize: 14,
     outline: 'black',
     borderWidth: 1,

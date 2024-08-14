@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -96,7 +96,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.selectButton} onPress={selectTime}>
-            <Text style={{fontFamily:"Roboto-Light"}}>{t("Select")}</Text>
+            <Text style={{fontFamily:"Roboto-Light", color: 'white'}}>{t("Apply")}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -129,6 +129,8 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [coaching_hub_limit, setlimit] = useState('');
   const [meeting_day, setmeeting_day] = useState('Monday');
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [coaching_hub_fee, setfee] = useState('');
   const maxDescriptionLength = 85; // Max character limit for description
 
@@ -141,6 +143,26 @@ const CreateCoachingHubForm = ({ onClose }) => {
     }
   };
 
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+  
   const getBearerToken = async () => {
     try {
       const token = await AsyncStorage.getItem('token'); // Adjust key as per your implementation
@@ -175,7 +197,8 @@ const CreateCoachingHubForm = ({ onClose }) => {
         to,
         coaching_hub_fee,
         coaching_hub_goals,
-        coaching_hub_limit
+        coaching_hub_limit,
+        expert_name: first_name + ' ' + last_name,
       };
   
       const headers = {
@@ -388,7 +411,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     fontStyle: 'italic',
-    fontFamily:"Roboto-Light"
+    fontFamily:"Roboto-Light",
+
   },
   modalContainer: {
     backgroundColor: '#F8F8F8',
@@ -397,6 +421,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: 20,
+    alignSelf: 'center'
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -420,17 +445,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 5
   },
   selected: {
-    backgroundColor: 'coral',
+    backgroundColor: '#135837',
+    fontColor: 'white'
   },
   selectButton: {
-    backgroundColor: 'coral',
+    backgroundColor: '#135837',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    color: 'white'
   },
 });
 

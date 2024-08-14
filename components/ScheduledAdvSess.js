@@ -1,12 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
-import OpenSchedule from '../Jobseekers/OpenInterviewbook';
+import OpenSchedule from '../Jobseekers/OpenSkillAnalysis';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const [type, setType] = useState("Career Change");
+  const [role, setRole] = useState("");
+  const [startingLevel, setStartingLevel] = useState("Beginner");
+  const [targetLevel, setTargetLevel] = useState("Medior");
+
+
+  useEffect(() => {
+      const loadFormData = async () => {
+          try {
+              const token = await AsyncStorage.getItem('token');
+              if (!token) {
+                  console.error('No token found');
+                  return;
+              }
+
+              const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+                  headers: { Authorization: `Bearer ${token}` }
+              });
+
+              if (response.status === 200) {
+                  const data = response.data.skillAnalysis; // Updated to `skillAnalysis` based on your response
+
+                  setRole(data.role || '');
+                  setType(data.type || '');
+                  setStartingLevel(data.starting_level || '');
+                  setTargetLevel(data.target_level || '');
+
+              
+                // Convert date_time to date and time
+                const dateTime = new Date(data.date_time);
+                const date = dateTime.toLocaleDateString();
+                const time = dateTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true  // Use 12-hour clock with AM/PM
+                });
+
+                setSelectedDate(date);
+                setSelectedTime(time);
+
+              } else {
+                  console.error('Failed to fetch data', response);
+              }
+          } catch (error) {
+              console.error('Failed to load form data', error);
+          }
+      };
+
+      loadFormData();
+  }, []);
+
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -51,24 +107,24 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
+            <Text style={styles.cellText}>{role}</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>{t("Career Change")}</Text>
+            <Text style={styles.cellText}>{type}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Beginner")}</Text>
+            <Text style={styles.cellText}>{startingLevel}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Junior")}</Text>
+            <Text style={styles.cellText}>{targetLevel}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/May/2024</Text>
+            <Text style={styles.cellText}>{selectedDate}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3:00PM</Text>
+            <Text style={styles.cellText}>{selectedTime}</Text>
           </View>
-          <TouchableOpacity style={styles.cell2} >
+          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress} >
           <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>
@@ -91,7 +147,7 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell}>
             <Text style={styles.cellText}>3:00PM</Text>
           </View>
-          <TouchableOpacity style={styles.cell} >
+          <TouchableOpacity style={styles.cell} onPress={handleOpenPress} >
           <Text style={styles.open}>{t("Open")}</Text>
           </TouchableOpacity>
         </View>

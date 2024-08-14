@@ -76,7 +76,7 @@ const MyComponent = () => {
   const handleIconPress = (index) => {
     setSelectedIconIndex(index);
     if (index === 0) {
-      navigation.navigate('MyNotifications'); // Replace 'Notifications' with your actual route name
+      navigation.navigate('Notifications'); // Replace 'Notifications' with your actual route name
     } else if (index === 1) {
       setShowSettingsModal(true);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput } from 'react-native';
 import DateTimePickerModal from "../components/DateTimeCoach";
 import { useFonts } from 'expo-font';
@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
+import { format } from 'date-fns';
 
 
 function MyComponent({ onClose }) {
@@ -17,7 +18,26 @@ function MyComponent({ onClose }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true);
+  const [candidate, setCandidate] = useState("expert");
+  const [expertid, setExpertid] = useState(" ");
+   const [meetingtype, setType] = useState("hub");
 
+  // useEffect to retrieve the expert id from AsyncStorage
+  useEffect(() => {
+    const getExpertId = async () => {
+      try {
+        const storedExpertId = await AsyncStorage.getItem('user_id');
+        if (storedExpertId) {
+          setExpertid(storedExpertId);
+        }
+      } catch (error) {
+        console.error('Failed to load expert ID from AsyncStorage', error);
+      }
+    };
+
+    getExpertId();
+  }, []);
+  
   const handleConfirmDateTime = (date, time) => {
     setSelectedDateTime(date);
     setSelectedTime(time);
@@ -35,7 +55,28 @@ function MyComponent({ onClose }) {
         alert('No token found');
         return;
       }
-  
+
+      const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
+
+      const meetingFormData = new FormData();
+      meetingFormData.append('candidate_account_type', candidate);
+      meetingFormData.append('role', topic);
+      meetingFormData.append('expert_id', expertid);
+      meetingFormData.append('type', meetingtype);
+      meetingFormData.append('date_scheduled', formattedDate);
+
+      // Post to create-jobseeker-interview endpoint
+      const MeetingResponse = await axios.post(
+        'https://recruitangle.com/api/jobseeker/meetings/schedule',
+        meetingFormData,
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+      );
+
+      if (MeetingResponse.status !== 200) {
+        onClose();
+        return;
+      }
+      
       const formData = {
         meeting_topic: topic,
         meeting_description: description,
@@ -99,7 +140,7 @@ function MyComponent({ onClose }) {
             
 
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-              {t("Meeting Topic")}
+              {t("Meeting Topic *")}
             </Text>
             <TextInput
               placeholder=" "
@@ -109,7 +150,7 @@ function MyComponent({ onClose }) {
             />
 
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-              {t("Meeting Description (Optional)")}
+              {t("Meeting Description *")}
             </Text>
             <TextInput
               placeholder=" "
@@ -120,13 +161,13 @@ function MyComponent({ onClose }) {
             />
 
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                {t("Date")}
+                {t("Date *")}
               </Text>
               <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
                 <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Date: </Text>{selectedDateTime}</Text>
               </TouchableOpacity>
               <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
-                {t("Time")}
+                {t("Time *")}
               </Text>
               <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Time: </Text> {selectedTime}</Text>
             </View>

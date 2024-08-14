@@ -16,7 +16,7 @@ function MyComponent() {
     const handleOpenPress = () => {
         setModalVisible(true);
       };
-    
+
       const handleCloseModal = () => {
         setModalVisible(false);
       };
@@ -24,16 +24,16 @@ function MyComponent() {
       const handleOpenPress2 = () => {
         setModalVisible2(true);
       };
-    
+
       const handleCloseModal2 = () => {
         setModalVisible2(false);
       };
-      
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf")
   })
 
- 
+
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -77,7 +77,7 @@ function MyComponent() {
             </View>
             </View>
         </ScrollView>
-        
+
         </View>
       </View>
 
@@ -104,7 +104,7 @@ function MyComponent() {
       </Modal>
 
     </BlurView>
-    
+
     </ImageBackground>
   );
 }

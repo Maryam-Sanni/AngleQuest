@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Image, ScrollView, Picker } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
+import DaysTimePickerModal from "../components/TimePicker";
 
 const MAX_TOPICS = 15;
 
@@ -27,6 +28,13 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [isPressed, setIsPressed] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleConfirm = ({ selectedDays, startTime, endTime }) => {
+    setAvailableDays(selectedDays);
+    setAvailableTimes(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
+    setModalVisible(false);
+  };
 
   const handleSave = async () => {
     if (!role || !level || !rate || !availableDays || !availableTimes) {
@@ -195,13 +203,16 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Days")}</Text>
               </View>
               <View style={styles.cell}>
-                <TextInput
-                  placeholder="Mon-Fri"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={availableDays}
-                  onChangeText={text => setAvailableDays(text)}
-                />
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <TextInput
+                    placeholder="Mon,Tue,Wed...,Sun"
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={availableDays}
+                    editable={false} // Prevent manual input
+                    pointerEvents="none" // Ensure it behaves like a button
+                  />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.row}>
@@ -209,13 +220,16 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Times")}</Text>
               </View>
               <View style={styles.cell}>
-                <TextInput
-                  placeholder="12PM-1PM"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={availableTimes}
-                  onChangeText={text => setAvailableTimes(text)}
-                />
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <TextInput
+                    placeholder="12PM-1PM"
+                    placeholderTextColor="grey"
+                    style={styles.input}
+                    value={availableTimes}
+                    editable={false} // Prevent manual input
+                    pointerEvents="none" // Ensure it behaves like a button
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -280,6 +294,11 @@ function MyComponent({ onClose }) {
         title={t("Alert")}
         message={alertMessage}
         onConfirm={hideAlert}
+      />
+      <DaysTimePickerModal
+        isVisible={isModalVisible}
+        onConfirm={handleConfirm}
+        onCancel={() => setModalVisible(false)}
       />
     </View>
   );

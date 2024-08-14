@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Picker, StyleSheet, Image } from "react-native";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
 import { useFonts } from "expo-font";
@@ -34,16 +34,32 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         <Text style={styles.headerText}>{t("Select a Date and Time")}</Text>
         <Calendar
           onDayPress={handleDayPress}
-          markedDates={{ [selectedDate]: { selected: true } }}
+          markedDates={{
+            [selectedDate]: { selected: true },
+            [new Date().toISOString().split('T')[0]]: {
+              marked: true,
+              dotColor: 'green',
+            },
+          }}
+          minDate={new Date().toISOString().split('T')[0]} // Disable past dates
           style={styles.calendar}
           theme={{
-            selectedDayBackgroundColor: 'coral',
+            selectedDayBackgroundColor: '#135837',
             selectedDayTextColor: '#FFFFFF',
-            todayTextColor: 'coral',
-            arrowColor: 'coral',
+            todayTextColor: 'green',
+            todayTextFontWeight: 'bold',
+            arrowColor: 'black',
+            textSectionTitleColor: 'black',
+            dotColor: '#135837', 
+            textDayHeaderFontFamily: 'Roboto-Light',
+            textMonthFontWeight: '500',
           }}
         />
         <View style={styles.timePickerContainer}>
+          <Image
+            source={{ uri: 'https://img.icons8.com/?size=100&id=9&format=png&color=000000' }}
+            style={{ width: 30, height: 30, marginLeft: 30, marginRight: 20 }}
+          />
           <Picker
             style={styles.picker}
             selectedValue={selectedHour}
@@ -73,10 +89,10 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
           </Picker>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={onCancel}>
+          <TouchableOpacity style={styles.buttoncancel} onPress={onCancel}>
             <Text style={styles.buttonText}>{t("Cancel")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: 'coral' }]} onPress={handleConfirm}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#135837' }]} onPress={handleConfirm}>
             <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{t("Confirm")}</Text>
           </TouchableOpacity>
         </View>
@@ -88,16 +104,16 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 const styles = StyleSheet.create({
   modalContainer: {
     alignSelf: 'center',
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    width: 920
+    width: 700
   },
   headerText: {
     fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
-    fontFamily:"Robto-Light"
+    fontWeight: '600'
   },
   calendar: {
     marginBottom: 10,
@@ -111,10 +127,10 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     marginRight: 5,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'white',
     borderRadius: 5,
     padding: 10,
-    borderColor: '#206C00'
+    borderColor: 'black'
   },
   timeSeparator: {
     fontSize: 18,
@@ -123,9 +139,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    justifyContent: 'flex-end'
   },
   button: {
-    flex: 1,
+     width: 100,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -133,9 +150,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#DDDDDD',
     marginHorizontal: 5,
   },
+  buttoncancel: {
+    width: 100,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#135837',
+    marginHorizontal: 5,
+  },
   buttonText: {
     fontSize: 16,
-    fontFamily:"Roboto-Light"
+    fontFamily:"`Roboto-Light"
   },
 });
 

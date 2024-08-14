@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     textAlign: 'flex-start',
   },
   table: {
+    flex: 1,
     marginRight: 200,
     marginTop: 20,
     marginBottom: 20,
@@ -145,9 +146,7 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"  },
   
   greenBox: {
-    flex: 1,
    width: "90%",
-    height:250,
     marginBottom: 20,
     marginLeft: 50, 
     backgroundColor: 'rgba(225,225,212,0.3)',

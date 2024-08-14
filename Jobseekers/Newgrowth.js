@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
+import { format } from 'date-fns';
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
@@ -27,10 +28,13 @@ function MyComponent({ onClose }) {
   const [status, setStatus] = useState('Active');
   const [coach, setCoach] = useState('');
    const [feedbacks, setFeedback] = useState('Read only field');
-  const [expert_available_days, setExpertAvailableDays] = useState('Mon, Tue, Wed, and Thurs');
-  const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
+  const [expert_available_days, setExpertAvailableDays] = useState('');
+  const [expert_available_time, setExpertAvailableTime] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [candidate, setCandidate] = useState("Individual");
+  const [expertid, setExpertid] = useState(" ");
+   const [meetingtype, setType] = useState("growth");
 
   const gotoCV = () => {
       navigation.navigate('Growth Offer');
@@ -45,9 +49,15 @@ function MyComponent({ onClose }) {
 
           const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
           const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+          const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
+          const storedDays = await AsyncStorage.getItem('selectedUserDays');
+          const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
 
           if (storedFirstName && storedLastName) {
             setCoach(`${storedFirstName} ${storedLastName}`);
+            setExpertid(`${storedExpertid}`);
+            setExpertAvailableDays(`${storedDays}`);
+            setExpertAvailableTime(`${storedTimes}`);
           } else {
             console.warn('No user data found');
           }
@@ -87,6 +97,31 @@ function MyComponent({ onClose }) {
         return;
       }
 
+      // Format selectedDateTime to Y-m-d H:i:s
+      const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
+
+      const meetingFormData = new FormData();
+      meetingFormData.append('candidate_account_type', candidate);
+      meetingFormData.append('role', role);
+      meetingFormData.append('expert_id', expertid);
+      meetingFormData.append('type', meetingtype);
+      meetingFormData.append('date_scheduled', formattedDate);
+
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      // Post to create-jobseeker-interview endpoint
+      const MeetingResponse = await axios.post(
+        'https://recruitangle.com/api/jobseeker/meetings/schedule',
+        meetingFormData,
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+      );
+
+      if (MeetingResponse.status !== 200) {
+        onClose();
+        return;
+      }
+      
       // Prepare the data for the API request
       const formData = {
         type,
@@ -98,16 +133,24 @@ function MyComponent({ onClose }) {
         starting_level,
         review_with_coach,
         target_level,
-        start_date: selectedDateTime,
-        end_date: end_date,
+        date_time: selectedDateTime,
         status,
+        feedbacks,
+        expert_available_days,
+        expert_available_time,
         coach,
-        feedbacks
       };
 
-      const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
+      // Make the GET request to check the subscription status
+      const subscriptionResponse = await axios.get(
+          'https://recruitangle.com/api/jobseeker/get-subscription',
+          { headers: { Authorization: `Bearer ${token}` } }
+      );
 
+      // Check if JSSubscriptionStatus exists and if subscribed is "Yes"
+      const subscribed = subscriptionResponse?.data?.JSSubscriptionStatus?.subscribed;
+
+      // Save the growth plan regardless of the subscription status
       const response = await axios.post(
         'https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan', 
         formData, 
@@ -116,18 +159,22 @@ function MyComponent({ onClose }) {
 
       if (response.status === 201) {
         await AsyncStorage.setItem('GrowthFormData', JSON.stringify(formData));
-        navigation.navigate('Growth Offer');
-        onClose();
-      } else {
-        setAlertMessage('Failed to create growth plan');
-      }
-    } catch (error) {
-      console.error('Error during save:', error); // Log error for debugging
-      setAlertMessage('Failed to create growth plan');
-    } finally {
-      setAlertVisible(true);
-    }
-  };
+
+        // Navigate based on the subscription status
+        if (subscribed === 'Yes') {
+          navigation.navigate('Growth Plan Sessions');
+        } else {
+          navigation.navigate('Growth Offer');
+        }
+
+              onClose(); // Close the form/modal
+            }
+          } catch (error) {
+            console.error('Error during save:', error);
+            setAlertMessage('Failed to create Growth PlanSession');
+            setAlertVisible(true);
+          }
+        };
 
   const hideAlert = () => {
     setAlertVisible(false);
@@ -350,13 +397,13 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
               </View>
-              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>  {expert_available_time}
+              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
                 </Text>
               </View>
             </View>
           </View>
 
-          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50 }}>{t("Pick a date and time")}</Text>
+          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for growth plan session.")} {coach} is available {expert_available_days} {expert_available_time}</Text>
           <View style={styles.container}>
             <View style={styles.row}>
               <View style={styles.cell}>

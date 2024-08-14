@@ -16,6 +16,7 @@ function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
   const [meetingData, setMeetingData] = useState({ date: '', time: '' });
+  const [lastCandidateLink, setLastCandidateLink] = useState(null);
 
   useEffect(() => {
     const fetchMeetingData = async () => {
@@ -46,7 +47,7 @@ function MyComponent() {
               hour: '2-digit',
               minute: '2-digit',
               hour12: true,
-            });
+            }); 
 
             setMeetingData({
               date,
@@ -67,8 +68,58 @@ function MyComponent() {
   }, []);
 
   
+  useEffect(() => {
+    const fetchLastCreatedMeeting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=interview', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          const meetings = Object.values(data.meetings);
+
+          if (meetings.length > 0) {
+            // Sort the meetings by created_at in descending order to get the latest one
+            const sortedMeetings = meetings.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            // Set the candidate_link from the last created meeting
+            setLastCandidateLink(sortedMeetings[0].candidate_link);
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meetings:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch meetings:', error);
+      }
+    };
+
+    fetchLastCreatedMeeting();
+  }, []);
+
   const handlejoinPress = () => {
-    Linking.openURL('https://meet.anglequest.com');
+    if (lastCandidateLink) {
+      Linking.openURL(lastCandidateLink);
+    } else {
+      console.error('No candidate link found');
+    }
   };
    
 
@@ -122,27 +173,27 @@ function MyComponent() {
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Badge Angle Rating")}</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("My Junior Data Analyst rating by expert")}</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
-      <CustomPercentageChart percentage={81} />
-      </View>
-    </View>
-    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>Emily Ray</Text>
-    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Excellent")}</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>Badge Angle Rating</Text>
+            <View style={{flexDirection: 'row' }}>
+              <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("No rating available yet")}</Text>
+              <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
+          <CustomPercentageChart percentage={0} />
+          </View>
+        </View>
+        <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>---</Text>
+        <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>---</Text>
       </View>
      
       <View style={styles.box}>
         <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginBottom: 10,fontFamily:"Roboto-Light" }}>Badge Angle Rating</Text>
-        <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("My Medior Data Analyst rating by expert")}</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
-      <CustomPercentageChart percentage={50} />
-      </View>
-    </View>
-    <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>Emily Ray</Text>
-    <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>{t("Good")}</Text>
+            <View style={{flexDirection: 'row' }}>
+              <Text style={{fontSize: 12, color: 'black',fontFamily:"Roboto-Light" }}>{t("No rating available yet")}</Text>
+              <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 15 }}>
+          <CustomPercentageChart percentage={0} />
+          </View>
+        </View>
+        <Text style = {{fontSize: 12, fontWeight: '500', marginTop: -20, marginBottom: 5,fontFamily:"Roboto-Light" }}>---</Text>
+        <Text style = {{fontSize: 13, fontWeight: 'bold', marginBottom: 10, color: '#206C00',fontFamily:"Roboto-Light" }}>---</Text>
       </View>
       
       <View style={styles.box}>

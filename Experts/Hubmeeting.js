@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
+import { format } from 'date-fns';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -18,6 +19,9 @@ function MyComponent({ onClose }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true);
+  const [candidate, setCandidate] = useState("expert");
+  const [expertid, setExpertid] = useState("37");
+   const [meetingtype, setType] = useState("hub meeting");
 
   const handleConfirmDateTime = (date, time) => {
     setSelectedDateTime(date);
@@ -36,7 +40,28 @@ function MyComponent({ onClose }) {
         alert('No token found');
         return;
       }
-  
+      
+      const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
+
+      const meetingFormData = new FormData();
+      meetingFormData.append('candidate_account_type', candidate);
+      meetingFormData.append('role', topic);
+      meetingFormData.append('expert_id', expertid);
+      meetingFormData.append('type', meetingtype);
+      meetingFormData.append('date_scheduled', formattedDate);
+
+      // Post to create-jobseeker-interview endpoint
+      const MeetingResponse = await axios.post(
+        'https://recruitangle.com/api/jobseeker/meetings/schedule',
+        meetingFormData,
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+      );
+
+      if (MeetingResponse.status !== 200) {
+        onClose();
+        return;
+      }
+      
       const formData = {
         meeting_topic: topic,
         meeting_description: description,

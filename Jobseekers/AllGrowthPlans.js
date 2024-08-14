@@ -15,6 +15,7 @@ function MyComponent() {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
    const [meetingData, setMeetingData] = useState({ date: '', time: '' })
+  const [lastCandidateLink, setLastCandidateLink] = useState(null);
 
   useEffect(() => {
     const fetchMeetingData = async () => {
@@ -73,8 +74,58 @@ function MyComponent() {
       setModalVisible(false);
     };
 
+  useEffect(() => {
+    const fetchLastCreatedMeeting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=growth', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          const meetings = Object.values(data.meetings);
+
+          if (meetings.length > 0) {
+            // Sort the meetings by created_at in descending order to get the latest one
+            const sortedMeetings = meetings.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            // Set the candidate_link from the last created meeting
+            setLastCandidateLink(sortedMeetings[0].candidate_link);
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meetings:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch meetings:', error);
+      }
+    };
+
+    fetchLastCreatedMeeting();
+  }, []);
+
   const handlejoinPress = () => {
-    Linking.openURL('https://meet.anglequest.com');
+    if (lastCandidateLink) {
+      Linking.openURL(lastCandidateLink);
+    } else {
+      console.error('No candidate link found');
+    }
   };
   
     const [fontsLoaded]=useFonts({
@@ -120,7 +171,7 @@ function MyComponent() {
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Persoal Development")}</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Personal Development")}</Text>
         <View style={{flexDirection: 'row'}}>
            <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
            <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Active")}</Text>
@@ -133,7 +184,7 @@ function MyComponent() {
       <View style={styles.box}> 
       <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Team Development")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>0</Text>
            <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Completed")}</Text>
            <Image source={require('../assets/teamicon.jpg')} style={styles.boximage}  />
      </View>
@@ -142,7 +193,7 @@ function MyComponent() {
       <View style={styles.box}>
       <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light", textAlign: 'center'}}>{t("Organizational Development")}</Text>
         <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
+           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>0</Text>
            <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>Completed</Text>
            <Image source={require('../assets/organization.png')} style={styles.boximage}  />
      </View>

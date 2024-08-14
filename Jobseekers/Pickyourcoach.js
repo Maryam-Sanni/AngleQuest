@@ -18,7 +18,7 @@ function MyComponent({ onClose }) {
   const [formModalVisible, setformModalVisible] = useState(false);
   const [isPressed, setIsPressed] = useState(false); 
    const [selectedIndex, setSelectedIndex] = useState(null);
-  const [cardData, setCardData] = useState({ profileData: [] });
+  const [cardData, setCardData] = useState({ combinedData: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
 
   const handleOpenPress = () => {
@@ -54,7 +54,7 @@ function MyComponent({ onClose }) {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/getAllExpertsForJobSeekers', {
+        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/getAllExpertsGrowthPlan', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -95,12 +95,19 @@ function MyComponent({ onClose }) {
 
     // Save the selected user's data to AsyncStorage
     try {
-      const selectedUser = cardData.profileData[index];
+      const selectedUser = cardData.combinedData[index];
       const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
+      const expertid = `${selectedUser.user_id}`;
+      const availabledays = `${selectedUser.available_days}`;
+      const availabletimes = `${selectedUser.available_times}`;
 
       await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
       await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
       await AsyncStorage.setItem('selectedUserFullName', fullName); // Save the full name
+      await AsyncStorage.setItem('selectedUserExpertid', expertid);
+      await AsyncStorage.setItem('selectedUserDays', availabledays);
+      await AsyncStorage.setItem('selectedUserTimes', availabletimes);
+
 
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
@@ -109,8 +116,8 @@ function MyComponent({ onClose }) {
 
   
   const renderCards = () => {
-    const filteredData = cardData.profileData.filter(data => 
-      !selectedCategory || data.preferred_role === selectedCategory
+    const filteredData = cardData.combinedData.filter(data => 
+      !selectedCategory || data.category === selectedCategory
     );
  
     return filteredData.map((data, index) => (
@@ -154,7 +161,7 @@ function MyComponent({ onClose }) {
                    {data.first_name} {data.last_name} 
                 </Text>
                 <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
-                  {data.preferred_role}
+                  {data.category}
                 </Text>
               </View>
             </View>
@@ -166,11 +173,17 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                   style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5, }}
                 />
-                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.preferred_locations}</Text>
+                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>location</Text>
               </View>
             </View>
           </View>
-          <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, height: 70, overflow: 'hidden' }}>{data.about}</Text>
+          <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {data.available_days}</Text>
+          <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+             Time: {data.available_times}
+          </Text>
+          <Text style={{ fontSize: 14, height: 40, color: "#d3f9d8", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+             {data.user_id}
+          </Text>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TouchableOpacity

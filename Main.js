@@ -176,7 +176,7 @@ const App = () => {
         <Stack.Screen name="Give feedback" component={Givefeedback} />
         <Stack.Screen name="Messaging" component={Messaging} />
         <Stack.Screen name="Account Setup" component={AccountSetup} />
-        <Stack.Screen name="MyNotifications" component={MyNotifications} />
+        <Stack.Screen name="My Notifications" component={MyNotifications} />
         <Stack.Screen name="Password" component={Password} />
         <Stack.Screen name="Notification Setup" component={NotificationSetup} />
         <Stack.Screen name="Withdrawal Setup" component={WithdrawalSetup} />

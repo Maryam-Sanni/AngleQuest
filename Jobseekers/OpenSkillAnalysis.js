@@ -23,48 +23,49 @@ function MyComponent({ onClose }) {
   const [token, setToken] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [expert_available_days, setExpertAvailableDays] = useState(' ');
-  const [expert_available_time, setExpertAvailableTime] = useState(' ');
-  const [expert, setExpert] = useState(' ');
+  const [expert_available_days, setExpertAvailableDays] = useState('Mon-Fri');
+  const [expert_available_time, setExpertAvailableTime] = useState('10AM-5PM');
+  const [expert, setExpert] = useState('Joop Melcher');
   const [candidate, setCandidate] = useState("Individual");
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setmeetType] = useState("advice");
 
   useEffect(() => {
-    const getTokenAndUser = async () => {
+    const loadFormData = async () => {
       try {
-        // Retrieve token and user data from AsyncStorage
-        const storedToken = await AsyncStorage.getItem('token');
-        setToken(storedToken);
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
 
-        const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
-        const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
-        const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
-        const storedDays = await AsyncStorage.getItem('selectedUserDays');
-        const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-        if (storedFirstName && storedLastName) {
-          setExpert(`${storedFirstName} ${storedLastName}`);
-          setExpertid(`${storedExpertid}`);
-          setExpertAvailableDays(`${storedDays}`);
-          setExpertAvailableTime(`${storedTimes}`);
+        if (response.status === 200) {
+          const data = response.data.skillAnalysis; // Check the structure of `data`
+
+          setRole(data.role || '');
+          setType(data.type || '');
+          setChallenge(data.description || '');
+          setStartingLevel(data.starting_level || '');
+          setTargetLevel(data.target_level || '');
+          setStatus(data.status || '');
+
+          // Parse date_time if necessary
+          const dateTime = data.date_time ? new Date(data.date_time) : null;
+          setSelectedDateTime(dateTime);
+
         } else {
-          console.warn('No user data found');
+          console.error('Failed to fetch data', response);
         }
       } catch (error) {
-        console.error('Error retrieving token or user:', error);
+        console.error('Failed to load form data', error);
       }
     };
 
-    getTokenAndUser();
-  }, []);
-  
-  useEffect(() => {
-    const getToken = async () => {
-      const storedToken = await AsyncStorage.getItem('token');
-      setToken(storedToken);
-    };
-    getToken();
+    loadFormData();
   }, []);
 
   const handleConfirmDateTime = (dateTime) => {
@@ -75,91 +76,6 @@ function MyComponent({ onClose }) {
   const handleCancelModal = () => {
     setIsModalVisible(false);
   };
-
-  const goToPlan = async () => {
-    try {
-      // Validate the form data before making the API request
-      if ( !role || !challenge || !targetLevel || !selectedDateTime) {
-      setAlertMessage(t('Please fill all fields'));
-        setAlertVisible(true);
-        return;
-      }
-
-      // Format selectedDateTime to Y-m-d H:i:s
-      const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
-
-      const meetingFormData = new FormData();
-      meetingFormData.append('candidate_account_type', candidate);
-      meetingFormData.append('role', role);
-      meetingFormData.append('expert_id', expertid);
-      meetingFormData.append('type', meetingtype);
-      meetingFormData.append('date_scheduled', formattedDate);
-
-      const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
-
-      // Post to create-jobseeker-interview endpoint
-      const MeetingResponse = await axios.post(
-        'https://recruitangle.com/api/jobseeker/meetings/schedule',
-        meetingFormData,
-        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
-      );
-
-      if (MeetingResponse.status !== 200) {
-        navigation.navigate('Advice Offer');
-        onClose();
-        return;
-      }
-      
-      // Prepare the data for the API request
-      const formData = {
-        type,
-        role,
-        description: challenge,
-        starting_level: startingLevel,
-        target_level: targetLevel,
-        status,
-        date_time: selectedDateTime,
-        expert_available_days,
-        expert_available_time,
-        expert_name: expert,
-      };
-
-      // Make the GET request to check the subscription status
-      const subscriptionResponse = await axios.get(
-          'https://recruitangle.com/api/jobseeker/get-subscription',
-          { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      // Check if JSSubscriptionStatus exists and if subscribed is "Yes"
-      const subscribed = subscriptionResponse?.data?.JSSubscriptionStatus?.subscribed;
-
-          // Save the growth plan regardless of the subscription status
-          const response = await axios.post(
-            'https://recruitangle.com/api/jobseeker/create-jobseeker-skill-analysis', 
-            formData, 
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-
-          if (response.status === 201) {
-            await AsyncStorage.setItem('SkillAnalysisFormData', JSON.stringify(formData));
-
-            // Navigate based on the subscription status
-            if (subscribed === 'Yes') {
-              navigation.navigate('Advice Sessions');
-            } else {
-              navigation.navigate('Advice Offer');
-            }
-
-                  onClose(); // Close the form/modal
-                }
-              } catch (error) {
-                console.error('Error during save:', error);
-                setAlertMessage('Failed to create Skill Analysis Session');
-                setAlertVisible(true);
-              }
-            };
-
     
 
   const hideAlert = () => {
@@ -185,7 +101,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("Create New Skill Analysis Session")}</Text>
+            <Text style={styles.headerText}>{t("View Skill Analysis Session")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
@@ -339,17 +255,15 @@ function MyComponent({ onClose }) {
                   onPress={() => setIsModalVisible(true)}
                 >
                   <Text style={{ fontFamily: "Roboto-Light" }}>
-                    {selectedDateTime
-                      ? selectedDateTime.toLocaleString()
-                      : t("Select Date and Time")}
+                    {selectedDateTime ? selectedDateTime.toLocaleString() : t("Select Date and Time")}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           
-              <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
-                <Text style={styles.buttonTextplus}>{t("Save")}</Text>
+              <TouchableOpacity style={styles.buttonplus} >
+                <Text style={styles.buttonTextplus}>{t("Update")}</Text>
               </TouchableOpacity>
             
           

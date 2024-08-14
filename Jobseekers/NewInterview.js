@@ -7,6 +7,7 @@
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import axios from 'axios';
   import CustomAlert from '../components/CustomAlert';
+  import { format } from 'date-fns';
 
   function MyComponent({ onClose }) {
     const navigation = useNavigation();
@@ -21,9 +22,12 @@
     const [token, setToken] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const [expert_available_days, setExpertAvailableDays] = useState('Mon, Tue, Wed, and Thurs');
-    const [expert_available_time, setExpertAvailableTime] = useState('2:00 pm -5:00 PM WAT');
+    const [expert_available_days, setExpertAvailableDays] = useState('');
+    const [expert_available_time, setExpertAvailableTime] = useState('');
     const [expert, setExpert] = useState('');
+    const [candidate, setCandidate] = useState("Individual");
+    const [expertid, setExpertid] = useState("");
+     const [meetingtype, setType] = useState("interview");
 
     const handleConfirmDateTime = (dateTime) => {
       setSelectedDateTime(dateTime);
@@ -48,9 +52,15 @@
 
           const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
           const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+          const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
+          const storedDays = await AsyncStorage.getItem('selectedUserDays');
+          const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
 
           if (storedFirstName && storedLastName) {
             setExpert(`${storedFirstName} ${storedLastName}`);
+            setExpertid(`${storedExpertid}`);
+            setExpertAvailableDays(`${storedDays}`);
+            setExpertAvailableTime(`${storedTimes}`);
           } else {
             console.warn('No user data found');
           }
@@ -70,45 +80,87 @@
       getToken();
     }, []);
 
-    const goToPlan = async () => {
-      try {
-        if (!company || !role || !cv || !job_description_file || !selectedDateTime) {
-          setAlertMessage('Please fill all fields');
-          setAlertVisible(true);
-          return;
-        }
+        const goToPlan = async () => {
+          try {
+            if (!company || !role || !cv || !job_description_file || !selectedDateTime) {
+              setAlertMessage('Please fill all fields');
+              setAlertVisible(true);
+              return;
+            }
 
+            // Format selectedDateTime to Y-m-d H:i:s
+            const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
+
+            const meetingFormData = new FormData();
+            meetingFormData.append('candidate_account_type', candidate);
+            meetingFormData.append('role', role);
+            meetingFormData.append('expert_id', expertid);
+            meetingFormData.append('type', meetingtype);
+            meetingFormData.append('date_scheduled', formattedDate);
+
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            // Post to create-jobseeker-interview endpoint
+            const MeetingResponse = await axios.post(
+              'https://recruitangle.com/api/jobseeker/meetings/schedule',
+              meetingFormData,
+              { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+            );
+
+            if (MeetingResponse.status !== 200) {
+              onClose();
+              return;
+            }
+        
         const formData = new FormData();
         formData.append('company', company);
         formData.append('role', role);
         formData.append('cv', cv);
         formData.append('job_description_file', job_description_file);
         formData.append('job_description_text', job_description_text);
-        formData.append('date_time', selectedDateTime);
+        formData.append('date_time', formattedDate);
+        formData.append('expert_available_days', expert_available_days);
+        formData.append('expert_available_time', expert_available_time);
+        formData.append('expert_name', expert);
 
-        const token = await AsyncStorage.getItem('token');
-        if (!token) throw new Error('No token found');
 
+            // Make the GET request to check the subscription status
+            const subscriptionResponse = await axios.get(
+                'https://recruitangle.com/api/jobseeker/get-subscription',
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            // Check if JSSubscriptionStatus exists and if subscribed is "Yes"
+            const subscribed = subscriptionResponse?.data?.JSSubscriptionStatus?.subscribed;
+
+        // Save the growth plan regardless of the subscription status
         const response = await axios.post(
-          'https://recruitangle.com/api/jobseeker/create-jobseeker-interview',
-          formData,
-          { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+          'https://recruitangle.com/api/jobseeker/create-jobseeker-interview', 
+          formData, 
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
         if (response.status === 200) {
           await AsyncStorage.setItem('InterviewFormData', JSON.stringify(formData));
-          navigation.navigate('Interview Offer');
-          onClose();
-        } else {
-          setAlertMessage('Failed to create Interview Session');
+
+          // Navigate based on the subscription status
+          if (subscribed === 'Yes') {
+            navigation.navigate('Interview Sessions');
+          } else {
+            navigation.navigate('Interview Offer');
+          }
+
+          onClose(); // Close the form/modal
         }
       } catch (error) {
         console.error('Error during save:', error);
         setAlertMessage('Failed to create Interview Session');
-      } finally {
         setAlertVisible(true);
       }
     };
+
+    
 
     const hideAlert = () => {
       setAlertVisible(false);
@@ -213,14 +265,14 @@
               </View>
              
             </View>
-            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
+            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
                 <View style={styles.cell}>
                   <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
                 </View>
                 <View style={styles.cell}>
-                  <Text style={styles.text}>{expert_available_days}</Text>
+                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_days}</Text>
                 </View>
               </View>
               <View style={styles.row}>
@@ -228,7 +280,7 @@
                   <Text style={{ fontFamily: "Roboto-Light" }}>{t("Time")}</Text>
                 </View>
                 <View style={styles.cell}>
-                  <Text style={styles.text}>{expert_available_time}</Text>
+                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}</Text>
                 </View>
               </View>
               <View style={styles.row}>
@@ -236,12 +288,12 @@
                   <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
                 </View>
                 <View style={styles.cell}>
-                  <Text style={styles.text}>{expert}</Text>
+                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert}</Text>
                 </View>
               </View>
             </View>
 
-            <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50 }}>{t("Pick a date and time")}</Text>
+             <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for interview session.")} {expert} is available {expert_available_days} {expert_available_time}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
                 <View style={styles.cell}>

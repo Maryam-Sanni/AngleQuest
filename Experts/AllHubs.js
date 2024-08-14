@@ -25,8 +25,8 @@ function MyComponent() {
     const [modalVisible3, setModalVisible3] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
     const [coaching_hub_name, setGroupName] = useState('');
-    
 
+  
       const goToMyHubs = () => {
         navigation.navigate('All Hubs');
       };
@@ -246,6 +246,7 @@ const {t}=useTranslation()
 
 const ScheduledMeetingsTable = () => {
   const [messageCountText, setMessageCountText] = useState('0'); 
+  const [lastCandidateLink, setLastCandidateLink] = useState(null);
   const [meetingData, setMeetingData] = useState({
     date: '',
     time: ''
@@ -288,8 +289,60 @@ const ScheduledMeetingsTable = () => {
     fetchMeetingData();
   }, []);
 
+
+
+  useEffect(() => {
+    const fetchLastCreatedMeeting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=hub', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          const meetings = Object.values(data.meetings);
+
+          if (meetings.length > 0) {
+            // Sort the meetings by created_at in descending order to get the latest one
+            const sortedMeetings = meetings.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            // Set the candidate_link from the last created meeting
+            setLastCandidateLink(sortedMeetings[0].candidate_link);
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meetings:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch meetings:', error);
+      }
+    };
+
+    fetchLastCreatedMeeting();
+  }, []);
+
   const handlejoinPress = () => {
-    Linking.openURL('https://meet.anglequest.com');
+    if (lastCandidateLink) {
+      Linking.openURL(lastCandidateLink);
+    } else {
+      console.error('No candidate link found');
+    }
   };
   
     const {t}=useTranslation()

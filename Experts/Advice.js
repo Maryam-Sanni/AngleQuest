@@ -28,49 +28,102 @@ const colors = ['#FF4040', '#CD5B45', '#FF7F50', '#F08080', '#F88379', '#FFE4E1'
 function MyComponent() {
     const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
-    const [isGrowthHovered, setIsGrowthHovered] = useState(false);
+   const [targetDate, setTargetDate] = useState(''); 
     const [role, setSkillsAnalysisRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
     const barHeights = useRef(data.map(() => new Animated.Value(0))).current;
-    const calculateTimeLeft = () => {
-      const difference = +new Date(targetDate) - +new Date();
-      let timeLeft = {};
-  
-      if (difference > 0) {
-        timeLeft = {
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hrs: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          mins: Math.floor((difference / 1000 / 60) % 60),
-          secs: Math.floor((difference / 1000) % 60),
-        };
+
+  useEffect(() => {
+    const fetchLastCreatedMeeting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
+
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=advice', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          const meetings = Object.values(data.meetings);
+
+          // Filter meetings where expert_id matches storedExpertId
+          const matchingMeetings = meetings.filter(
+            meeting => meeting.expert_id === storedExpertId
+          );
+
+          if (matchingMeetings.length > 0) {
+            // Sort the filtered meetings by created_at in descending order
+            const sortedMeetings = matchingMeetings.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            // Set the target date to the date scheduled of the latest meeting
+            setTargetDate(sortedMeetings[0].date_scheduled);
+          } else {
+            console.error('No matching meetings found for this expert ID');
+          }
+        } else {
+          console.error('Failed to fetch meetings:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch meetings:', error);
       }
-  
-      return timeLeft;
     };
-  
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    const targetDate = '2024-08-08T00:00:00'; // Change this to your target date and time
-  
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setTimeLeft(calculateTimeLeft());
-      }, 1000);
-  
-      return () => clearTimeout(timer);
-    });
-  
-    const timerComponents = Object.keys(timeLeft).map((interval) => {
-      if (!timeLeft[interval]) {
-        return null;
-      }
-  
-      return (
-        <Text key={interval}>
-          {timeLeft[interval]} {interval}{" "}
-        </Text>
-      );
-    });
+
+    fetchLastCreatedMeeting();
+  }, []);
+
+  const calculateTimeLeft = () => {
+    const difference = +new Date(targetDate) - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hrs: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        mins: Math.floor((difference / 1000 / 60) % 60),
+      };
+    }
+
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  });
+
+  const timerComponents = Object.keys(timeLeft).map((interval) => {
+    if (!timeLeft[interval]) {
+      return null;
+    }
+
+    return (
+      <Text key={interval}>
+        {timeLeft[interval]} {interval}{" "}
+      </Text>
+    );
+  });
+
 
   useEffect(() => {
     const animations = data.map((item, index) => Animated.timing(barHeights[index], {

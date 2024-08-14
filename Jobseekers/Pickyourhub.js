@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Jobseekers/Moreabouthub';
+import OpenModal3 from '../Jobseekers/PaymentDetails';
 import OpenSchedule2 from '../components/JProfile';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ function MyComponent({ onClose }) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
   const [isDropdown, setIsDropdown] = useState(false);
@@ -50,6 +52,15 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+     onClose();
+  };
+  
   const handleJoinPressIn = (index) => {
     setIsPressed((prev) => {
       // Create a new state where only the currently pressed index is true
@@ -185,7 +196,7 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>{t("Hub Fee")}</Text>
-              <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold' }}>
+              <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold', textDecorationLine: 'line-through' }}>
                 {data.coaching_hub_fee} </Text>
             </View>
           </TouchableOpacity>
@@ -260,7 +271,7 @@ function MyComponent({ onClose }) {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
             {renderCards()}
           </View>
-          <TouchableOpacity onPress={goToPlans} style={styles.buttonplus} >
+          <TouchableOpacity onPress={handleOpenPress3} style={styles.buttonplus} >
             <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
           </TouchableOpacity>
         </View>
@@ -276,6 +287,17 @@ function MyComponent({ onClose }) {
           </View>
         </Modal>
 
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible3}
+          onRequestClose={handleCloseModal}
+        >
+          <View style={styles.modalContent}>
+            <OpenModal3 onClose={() => handleCloseModal3()} />
+          </View>
+        </Modal>
+        
         <Modal
           animationType="slide"
           transparent={true}

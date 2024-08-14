@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   greenBox: {
     flex: 1,
    width: "90%",
-    height:250,
+    height: "100%",
     marginBottom: 20,
     marginLeft: 50, 
     backgroundColor: 'rgba(225,225,212,0.3)',

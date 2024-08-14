@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Animated, StyleSheet, TextInput, ScrollView, Picker, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, Animated, StyleSheet, TextInput, ScrollView, Picker, ImageBackground, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Top from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -14,6 +14,33 @@ const MyComponent = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')  
 
+  useEffect(() => {
+      const checkSkillAnalysis = async () => {
+          try {
+              const token = await AsyncStorage.getItem('token');
+              if (token) {
+                  const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+                      method: 'GET',
+                      headers: {
+                          Authorization: `Bearer ${token}`,
+                      },
+                  });
+                  const data = await response.json();
+
+                  if (data.status === 'success' && data.form_filled) {
+                      navigation.navigate('Advice Sessions');
+                  }
+              }
+          } catch (error) {
+              Alert.alert('Error', 'Failed to check skill analysis form.');
+              console.error(error);
+          }
+      };
+
+      checkSkillAnalysis();
+  }, []);
+
+  
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };

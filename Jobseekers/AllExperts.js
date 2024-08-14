@@ -180,20 +180,16 @@ function MyComponent() {
           <View style={{ flexDirection: "column", marginLeft: 18, }}>
             <View style={{ flex: 1 , }}>
            
-            <Text style={{ fontSize: 16, marginRight: 20, marginTop: 25, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Available Days")}</Text>
-            <View style={{ flexDirection: 'row', marginTop: 5,  }}>
+            <View style={{ flexDirection: 'row', marginTop: 10,  }}>
             <Image
                           source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                           style={{ width: 14, height: 12, aspectRatio: 1, marginTop: 5 }}
                         />
                         <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 4, marginTop: 5,fontFamily:"Roboto-Light"  }}>{data.preferred_locations}</Text>
                         </View>
-                       
-              <Text style={{ fontSize: 14, color: "black", marginTop: 10,fontFamily:"Roboto-Light"  }}>{data.available_days}</Text>
-             
-              <Text style={{ fontSize: 14, color: "black", fontFamily:"Roboto-Light" }}>
-                 Time: {data.available_time}
-              </Text>
+
+               <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, height: 90, overflow: 'hidden' }}>{data.about}</Text>
+              
               
             </View>
           </View>

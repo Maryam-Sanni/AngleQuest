@@ -3,42 +3,21 @@ import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet 
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function MyComponent({ onClose }) {
   const navigation = useNavigation();
-  const [subscription, setSubscription] = useState("Yes");
-
-  const goToPlans = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
-
-      const formData = {
-        subscribed: subscription,
-      };
-
-      const response = await axios.post(
-        'https://recruitangle.com/api/jobseeker/create-subscription', 
-        formData, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.status === 201) {
-        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(formData));
-        navigation.navigate('Interview Sessions');
-        onClose();
-      }
-    } catch (error) {
-      console.error('Error during subscription:', error);
-      // You can show an error message to the user here if needed
-    }
-  };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
+  
+  const goToPlans = () => {
+    // Navigate to ExpertsProfile screen when the button is clicked
+    navigation.navigate('Growth Plan Sessions');
+    onClose(); // Close the modal
+    };
+  
+    const [fontsLoaded]=useFonts({
+      'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
+    })
+    const {t}=useTranslation()
 
   return (
     <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
@@ -68,7 +47,7 @@ function MyComponent({ onClose }) {
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 10, marginRight: 50, marginBottom: 5}} />
            <Text style={{ fontSize: 14, fontWeight: "bold", color: "black", marginBottom: 30, alignText: 'center', alignSelf: 'center',fontFamily:"Roboto-Light"}}>{t("Or")}</Text>
              <View style={styles.inputField}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t("Email")}</Text>
               <View style={styles.inputContainer}>
               <TextInput style={styles.input} placeholder="titiana@stripe.com" />
             </View>

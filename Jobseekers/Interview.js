@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image, StyleSheet, Alert } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
@@ -13,6 +13,7 @@ function MyComponent() {
     const [modalVisible2, setModalVisible2] = useState(false);
     const { t } = useTranslation()
 
+  
     const handleOpenPress = () => {
         setModalVisible(true);
       };

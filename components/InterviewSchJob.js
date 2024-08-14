@@ -1,25 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenInterviewbook';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ScheduledMeetingsTable = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const ScheduledMeetingsTable = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
 
-  const handleOpenPress = () => {
-    setModalVisible(true);
-  };
+    const [company, setCompany] = useState("");
+    const [role, setRole] = useState("");
+    const [cv, setCV] = useState(null);
+    const [job_description_file, setJobFile] = useState(null);
+    const [job_description_text, setjobText] = useState("Job description text");
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
+    useEffect(() => {
+      const loadFormData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          if (!token) throw new Error('No token found');
+
+          const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (response.status === 200 && response.data.status === 'success') {
+            const data = response.data.interview;
+
+            setCompany(data.company || '');
+            setRole(data.role || '');
+            setCV(data.cv || '');
+            setJobFile(data.job_description_file || '');
+            setjobText(data.job_description_text || '');
+
+            // Convert date_time to date and time
+            const dateTime = new Date(data.date_time);
+            const date = dateTime.toLocaleDateString();
+            const time = dateTime.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true  // Use 12-hour clock with AM/PM
+            });
+
+            setSelectedDate(date);
+            setSelectedTime(time);
+            
+          } else {
+            console.error('Failed to fetch data', response);
+          }
+        } catch (error) {
+          console.error('Failed to load form data', error);
+        }
+      };
+
+      loadFormData();
+    }, []);
+
+    const handleOpenPress = () => {
+      setModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+      setModalVisible(false);
+    };
+    
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
 
 const {t}=useTranslation()
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -42,9 +96,6 @@ const {t}=useTranslation()
           <View style={styles.cell}>
           <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Time")}</Text>
           </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Time Zone")}</Text>
-          </View>
           <TouchableOpacity style={styles.cell}>
             <Text style={styles.cellText}> </Text>
           </TouchableOpacity>
@@ -54,22 +105,19 @@ const {t}=useTranslation()
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-          <Text style={styles.cellText}>{t("Data Analyst")}</Text>
+          <Text style={styles.cellText}>{role}</Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>{t("Junior")}</Text>
+            <Text style={styles.cellText}>Senior</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI Medior</Text>
+            <Text style={styles.cellText}>{company}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}>{selectedDate}</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>12:30PM</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>CET</Text>
+            <Text style={styles.cellText}>{selectedTime}</Text>
           </View>
           <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
           <Text style={styles.open}>{t("Update")}</Text>
@@ -89,13 +137,10 @@ const {t}=useTranslation()
             <Text style={styles.cellText}>SAP FI Medior</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}>07/05/2024</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={styles.cellText}>10:00aM</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>WAT</Text>
+            <Text style={styles.cellText}>10:00am</Text>
           </View>
           <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
           <Text style={styles.open}>{t("Update")}</Text>
