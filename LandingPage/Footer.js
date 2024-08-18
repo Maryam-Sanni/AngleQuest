@@ -8,8 +8,8 @@ const Footer = () => {
       style={styles.imageBackground}
     >
       <View style={styles.footerContainer}>
-        <Text style={styles.heading}>This is the Heading</Text>
-        <Text style={styles.subheading}>Some subheading texts goes here</Text>
+        <Text style={styles.heading}>Backing Professionals to Succeed</Text>
+        <Text style={styles.subheading}>Built to transform your team’s performance. Unlimited Growth.</Text>
         <TouchableOpacity style={styles.button} onPress={() => alert('Button Pressed')}>
           <Text style={styles.buttonText}>Click Me</Text>
         </TouchableOpacity>
