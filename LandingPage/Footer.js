@@ -11,7 +11,7 @@ const Footer = () => {
         <Text style={styles.heading}>Backing Professionals to Succeed</Text>
         <Text style={styles.subheading}>Built to transform your team’s performance. Unlimited Growth.</Text>
         <TouchableOpacity style={styles.button} onPress={() => alert('Button Pressed')}>
-          <Text style={styles.buttonText}>Click Me</Text>
+          <Text style={styles.buttonText}>Sign up for AngleQuest</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
