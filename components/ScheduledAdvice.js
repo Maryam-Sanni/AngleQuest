@@ -11,14 +11,25 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
+   const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
 
-  const handleOpenPress = () => {
-    setModalVisible(true);
+  const handleOpenPress = async (meeting) => {
+    try {
+      // Save the selected meeting data to AsyncStorage
+      await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
+      console.log('Selected meeting saved:', meeting);
+
+      // Set the selected meeting in state to pass it to the modal
+      setSelectedMeeting(meeting);
+      setModalVisible(true);
+    } catch (error) {
+      console.error('Failed to save selected meeting to AsyncStorage', error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -29,8 +40,10 @@ const ScheduledMeetingsTable = () => {
     const loadFormData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
+
+        if (!token || !storedExpertId) {
+          console.error('No token or user ID found');
           return;
         }
 
@@ -40,17 +53,28 @@ const ScheduledMeetingsTable = () => {
 
         if (response.status === 200) {
           const data = response.data.skillAnalysis;
-          setMeetings(data);
-        } else {
-          console.error('Failed to fetch data', response);
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
 
-    loadFormData();
-  }, []);
+          // Filter meetings based on expert_id
+          const filteredMeetings = data.filter(meeting => meeting.expertid === storedExpertId);
+          setMeetings(filteredMeetings);
+          
+         // Save all growth plans to AsyncStorage
+          try {
+            await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
+            console.log('All expert skill analysis saved:', data);
+          } catch (error) {
+            console.error('Failed to save all expert skill analysis to AsyncStorage', error);
+          }
+          } else {
+          console.error('Failed to fetch data', response);
+          }
+          } catch (error) {
+          console.error('Failed to load form data', error);
+          }
+          };
+
+          loadFormData();
+          }, []);
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -154,7 +178,7 @@ const ScheduledMeetingsTable = () => {
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.user_id}</Text>
+                    <Text style={styles.cellText}>{meeting.name}</Text>
                   </View>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
@@ -166,7 +190,7 @@ const ScheduledMeetingsTable = () => {
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{date} {time}</Text>
                 </View>
-                <TouchableOpacity onPress={handleOpenPress}>
+                <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Open")}</Text>
                    </View>
@@ -188,7 +212,7 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-            <OpenSchedule onClose={() => handleCloseModal()} />
+             <OpenSchedule onClose={handleCloseModal} meeting={selectedMeeting} />
           </View>
         </Modal>
       </BlurView>

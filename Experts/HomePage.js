@@ -39,6 +39,11 @@ const HomePage = () => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
    const [data, setData] = useState([]);
+  const [plandata, setplanData] = useState({
+      latestGrowthPlan: {},
+      latestInterview: {},
+      latestSkillAnalysis: {}
+  })
  
   useEffect(() => {
     fetchData();
@@ -119,6 +124,7 @@ const HomePage = () => {
     // Show the CustomModal when the component mounts
     setCustomModalVisible(true);
   }, []);
+
   
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -186,6 +192,129 @@ const HomePage = () => {
 
 const {t}=useTranslation()
 
+  async function fetchAllData() {
+      try {
+          const token = await AsyncStorage.getItem('token');
+          const storedExpertId = await AsyncStorage.getItem('user_id');
+
+          if (!token || !storedExpertId) {
+              console.error('No token or user ID found');
+              return;
+          }
+
+          const headers = {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          };
+
+          // Fetch all data concurrently
+          const [growthPlanResponse, interviewResponse, skillAnalysisResponse] = await Promise.all([
+              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-growthplan', { headers }),
+              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-interview', { headers }),
+              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-skillanalysis', { headers })
+          ]);
+
+          // Check if responses are OK
+          if (!growthPlanResponse.ok) {
+              throw new Error(`Growth Plan API responded with status ${growthPlanResponse.status}`);
+          }
+          if (!interviewResponse.ok) {
+              throw new Error(`Interview API responded with status ${interviewResponse.status}`);
+          }
+          if (!skillAnalysisResponse.ok) {
+              throw new Error(`Skill Analysis API responded with status ${skillAnalysisResponse.status}`);
+          }
+
+          // Parse JSON responses
+          const growthPlanData = await growthPlanResponse.json();
+          const interviewData = await interviewResponse.json();
+          const skillAnalysisData = await skillAnalysisResponse.json();
+
+          // Log the raw data for debugging
+          console.log('Raw Growth Plan Data:', growthPlanData);
+          console.log('Raw Interview Data:', interviewData);
+          console.log('Raw Skill Analysis Data:', skillAnalysisData);
+
+          // Check and filter data based on storedExpertId
+          const filteredGrowthPlan = (growthPlanData.allGrowthPlan || []).filter(plan => plan.expertid === storedExpertId);
+          const filteredInterview = (interviewData.allInterview || []).filter(entry => entry.expertid === storedExpertId);
+          const filteredSkillAnalysis = (skillAnalysisData.skillAnalysis || []).filter(entry => entry.expertid === storedExpertId);
+
+          // Log the filtered data for debugging
+          console.log('Filtered Growth Plan Data:', filteredGrowthPlan);
+          console.log('Filtered Interview Data:', filteredInterview);
+          console.log('Filtered Skill Analysis Data:', filteredSkillAnalysis);
+
+          // Process the latest entries
+          const latestGrowthPlan = processLatestEntry(filteredGrowthPlan, 'name', 'date_time');
+          const latestInterview = processLatestEntry(filteredInterview, 'name', 'date_time');
+          const latestSkillAnalysis = processLatestEntry(filteredSkillAnalysis, 'name', 'date_time');
+
+          // Log the processed latest data for debugging
+          console.log('Latest Growth Plan:', latestGrowthPlan);
+          console.log('Latest Interview:', latestInterview);
+          console.log('Latest Skill Analysis:', latestSkillAnalysis);
+
+          return {
+              latestGrowthPlan,
+              latestInterview,
+              latestSkillAnalysis
+          };
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  }
+
+
+  const processLatestEntry = (entries, nameField, dateTimeField) => {
+      if (!entries || entries.length === 0) return {};
+
+      // Log the raw entries for debugging
+      console.log('Raw Entries:', entries);
+
+      // Parse the date_time field to Date objects
+      const parsedEntries = entries.map(entry => ({
+          ...entry,
+          [dateTimeField]: new Date(entry[dateTimeField])  // Convert date_time to Date object
+      }));
+
+      // Log parsed entries for debugging
+      console.log('Parsed Entries:', parsedEntries);
+
+      // Sort entries by date_time in descending order
+      parsedEntries.sort((a, b) => b[dateTimeField] - a[dateTimeField]);
+
+      // Log sorted entries for debugging
+      console.log('Sorted Entries:', parsedEntries);
+
+      // Return the latest entry's name and formatted date_time
+      return {
+          name: parsedEntries[0][nameField] || 'No Name Available', // Default to 'No Name Available' if name is null or undefined
+          dateTime: formatDate(parsedEntries[0][dateTimeField].toISOString())
+      };
+  }
+
+  // Formatting function
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    // Use Intl.DateTimeFormat for consistent formatting
+    const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+    const day = new Intl.DateTimeFormat('en-US', { day: '2-digit' }).format(date);
+    const time = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(date);
+
+    return `${month} ${day} | ${time}`;
+  }
+
+  useEffect(() => {
+      fetchAllData().then(fetchedData => {
+          if (fetchedData) {
+              console.log('Fetched Data for State:', fetchedData);
+              setplanData(fetchedData);
+          }
+      });
+  }, []);
+  
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -224,28 +353,28 @@ const {t}=useTranslation()
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Chats")}</Text>
           </View>
                 <Text style={styles.hubTitle}>All Hubs</Text>
-                {data.map((item, index) => (
-                  <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <Image source={item.avatar} style={styles.image} />
-                    <View style={{ flexDirection: 'column' }}>
-                       <TouchableOpacity onPress={() => openUser(item.id)}>
-                      <Text style={{ color: 'white', fontWeight: '600', fontSize: 15, fontFamily: "Roboto-Light" }}>
-                        {item.name}
-                      </Text>
-                      <Text
-                        style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
-                        numberOfLines={1}  // Limit to 1 line
-                        ellipsizeMode="tail"  // Show "..." at the end if the text is too long
-                      >
-                        {item.message}
-                      </Text>
-                          </TouchableOpacity>
-                      <Text style={{ color: 'lightgrey', fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
-                        {item.time}
-                      </Text>
-                    </View>  
-                  </View>
-                ))}
+        {data.slice(0, 5).map((item, index) => (
+          <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
+            <Image source={item.avatar} style={styles.image} />
+            <View style={{ flexDirection: 'column' }}>
+              <TouchableOpacity onPress={() => openUser(item.id)}>
+                <Text style={{ color: 'white', fontWeight: '600', fontSize: 15, fontFamily: "Roboto-Light" }}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
+                  numberOfLines={1}  // Limit to 1 line
+                  ellipsizeMode="tail"  // Show "..." at the end if the text is too long
+                >
+                  {item.message}
+                </Text>
+              </TouchableOpacity>
+              <Text style={{ color: 'lightgrey', fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
+                {item.time}
+              </Text>
+            </View>
+          </View>
+        ))}
           <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
@@ -383,14 +512,14 @@ onMouseLeave={() => setIsHovered9(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' ,fontFamily:"Roboto-Light"}}>{t("Growth Plan Review")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>  {plandata.latestGrowthPlan.dateTime || 'No date Available'}</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestGrowthPlan.name || 'No name Available'}</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -407,15 +536,15 @@ onMouseLeave={() => setIsHovered10(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Advice Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Skill Analysis Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestSkillAnalysis.dateTime || 'No date Available'}</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestSkillAnalysis.name || 'No name Available'}</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -433,14 +562,14 @@ onMouseLeave={() => setIsHovered11(false)}
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Interview Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestInterview.dateTime || 'No date Available'}</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>{plandata.latestInterview.name || 'No name Available'}</Text>
 <TouchableOpacity
 style={[
   styles.touchablestart,

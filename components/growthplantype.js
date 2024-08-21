@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
-import OpenSchedule from '../Jobseekers/Replan';
+import OpenSchedule from '../Jobseekers/OpenGrowth';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
@@ -8,20 +8,11 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const [token, setToken] = useState("");
-  const [type, setSelectedType] = useState('Personal');
-  const [title, setTitle] = useState('');
-  const [role, setRole] = useState('');
-  const [starting_level, setStartingLevel] = useState('Beginner');
-  const [status, setStatus] = useState('Active');
+  const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
+  const [growthPlans, setGrowthPlans] = useState([]);
 
 
   useEffect(() => {
@@ -38,28 +29,16 @@ const ScheduledMeetingsTable = () => {
         });
 
         if (response.status === 200) {
-          const data = response.data.growthPlan; // Check the structure of `data`
+          const data = response.data.growthPlan || [];
+          setGrowthPlans(data);
 
-          setRole(data.role || '');
-          setSelectedType(data.type || '');
-          setTitle(data.title || '');
-          setResultDescription(data.result_description || '');
-          setHowToAchieve(data.how_to_achieve || '');
-          setNeeds(data.achieve_the_objective || '');
-          setStartingLevel(data.starting_level || '');
-          setTargetLevel(data.target_level || '');
-          setStatus(data.status || '');
-
-          // Split date and time
-          const dateTime = new Date(data.date_time);
-          const date = dateTime.toLocaleDateString();
-          const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-          setSelectedDate(date);
-          setSelectedTime(time);
-
-
-
+          // Save all growth plans to AsyncStorage
+          try {
+            await AsyncStorage.setItem('allGrowthPlans', JSON.stringify(data));
+            console.log('All growth plans saved:', data);
+          } catch (error) {
+            console.error('Failed to save all growth plans to AsyncStorage', error);
+          }
         } else {
           console.error('Failed to fetch data', response);
         }
@@ -70,175 +49,119 @@ const ScheduledMeetingsTable = () => {
 
     loadFormData();
   }, []);
-  
-  const handleOpenPress = () => {
+
+  const handleOpenPress2 = async (growthPlan) => {
+    setSelectedGrowthPlan(growthPlan);
     setModalVisible(true);
+
+    try {
+      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
+      console.log('Selected growth plan saved:', growthPlan);
+    } catch (error) {
+      console.error('Failed to save selected growth plan to AsyncStorage', error);
+    }
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
+    setSelectedGrowthPlan(null);
   };
-  
-  const handleOpenPress2 = () => {
-    setModalVisible2(true);
+
+  const handleOpenPress = async (growthPlan) => {
+    setSelectedGrowthPlan(growthPlan);
+    setModalVisible(true);
+
+    try {
+      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
+      console.log('Selected growth plan saved:', growthPlan);
+    } catch (error) {
+      console.error('Failed to save selected growth plan to AsyncStorage', error);
+    }
   };
 
   const handleCloseModal2 = () => {
     setModalVisible2(false);
+    setSelectedGrowthPlan(null);
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
-  
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  const { t } = useTranslation();
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-      
         <Text style={styles.title}>{t("Scheduled Growth Plan Sessions")}</Text>
-      <View style={styles.table}>
-      <View style={styles.row}>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Type")}</Text>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <View style={styles.cell2}><Text style={styles.headerText }>{t("Type")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Starting Level")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Start Date")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Status")}</Text></View>
+            <View style={styles.cell2}></View>
           </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Title")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Starting Level")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Status")}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-            <Text style={styles.cellText}> </Text>
-          </TouchableOpacity>
+          
+          {growthPlans.map((growthPlan, index) => (
+      
+            <View key={index} style={styles.row}>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.type}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.title}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.role}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.starting_level}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>
+                  {new Date(growthPlan.date_time).toLocaleDateString()} {new Date(growthPlan.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </Text>
+              </View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.status}</Text></View>
+              <TouchableOpacity onPress={() => handleOpenPress (growthPlan)}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.open}>{t("Open")}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{type}</Text>
-          </View>
-          <View style={styles.cell2}> 
-          <Text style={styles.cellText}>{title}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{role}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{starting_level}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{selectedDate} {selectedTime}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{status}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
-          <Text style={styles.open}>{t("Open")}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Personal")}</Text>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>{t("Become SAP FI Mentor to another team member")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>SAP FI Medior</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{starting_level}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>6/May/2025</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={styles.cellText}>{t("Completed")}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress2}>
-          <Text style={styles.open}>{t("Open")}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-          <Text style={styles.cellText}>{t("Team")}</Text>
-          </View>
-          <View style={styles.cell2}> 
-          <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI Medior</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{starting_level}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>6/May/2025</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Completed")}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress2}>
-          <Text style={styles.open}>{t("Open")}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Organization")}</Text>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>{t("Integrate into the company")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>SAP FI Medior</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{starting_level}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>6/May/2025</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Replan")}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}> 
-          <Text style={styles.replan}>{t("Replan")}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleCloseModal}
-      >
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleCloseModal}
+        >
           <View style={styles.modalContent}>
-          <OpenSchedule onClose={() => handleCloseModal()} />
+            <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
           </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible2}
-        onRequestClose={handleCloseModal2}
-      >
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible2}
+          onRequestClose={handleCloseModal2}
+        >
           <View style={styles.modalContent}>
-          <OpenSchedule2 onClose={() => handleCloseModal2()} />
+            <OpenSchedule2 growthPlan={selectedGrowthPlan} onClose={handleCloseModal2} />
           </View>
-      </Modal>
+        </Modal>
       </BlurView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  replan: {
+    color: "coral",
+    fontSize: 14,
+    borderColor: "coral",
+    borderWidth: 2,
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    fontFamily: "Roboto-Light"
+  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
@@ -251,36 +174,26 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
-    textAlign: 'flex-start',
+    textAlign: 'left', // Align text to the left
   },
   table: {
-    marginRight: 200,
+    flex: 1,
+    marginHorizontal: 50,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
+    justifyContent: 'flex-start', // Adjust to start alignment
   },
- open: {
-    color: "black",
-     fontSize: 14,
-      borderColor: "#63EC55", 
-      borderWidth: 2, 
-      padding: 5, 
-      paddingHorizontal: 15, 
-      borderRadius: 5,
-      fontFamily:"Roboto-Light"
-},
-replan: {
-    color: "coral",
-     fontSize: 14,
-      borderColor: "coral", 
-      borderWidth: 2, 
-      padding: 5, 
-      paddingHorizontal: 15, 
-      borderRadius: 5,
-      fontFamily:"Roboto-Light"
-},
+  greenBox: {
+    width: "90%",
+    marginBottom: 20,
+    marginLeft: 50,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    marginTop: 30,
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+  },
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -288,42 +201,48 @@ replan: {
   },
   cell: {
     flex: 1,
-   backgroundColor: 'white',
+    backgroundColor: 'none',
     padding: 10,
+    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
-   backgroundColor: 'none',
-    padding: 10, 
+    backgroundColor: 'white',
+    padding: 10,
+    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cellText: {
-    textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
+    textAlign: 'left', // Align text to the left
+    fontFamily: "Roboto-Light",
   },
-  
-  greenBox: {
-    flex: 2,
-   width: "90%",
-    height: 550,
-    marginLeft: 50, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30, 
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
+  headerText: {
+    fontWeight: '600',
+    fontFamily: "Roboto-Light",
+    textAlign: 'left', // Align header text to the left
+    paddingVertical: 10, // Adjust vertical padding if needed
   },
   image: {
     width: 30,
     height: 30,
     marginRight: 10,
     marginTop: -5,
-    borderRadius: 25
+    borderRadius: 25,
   },
   blurBackground: {
-    flex: 1, 
-    borderRadius: 20, 
+    flex: 1,
+    borderRadius: 20,
+  },
+  open: {
+    color: "black",
+    fontSize: 14,
+    borderColor: "#63EC55",
+    borderWidth: 2,
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    fontFamily: "Roboto-Light",
   },
 });
 

@@ -23,12 +23,17 @@ function MyComponent({ onClose }) {
   const [cardData, setCardData] = useState({ AllHubs: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
    const [selectedIndex, setSelectedIndex] = useState(null);
+  const [token, setToken] = useState("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
  
 
-  const goToPlans = () => {
-    navigation.navigate('Hub Offer');
-    onClose(); // Close the modal
-  };
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
 
   const toggleMode = () => {
     setIsDropdown(!isDropdown);
@@ -52,8 +57,43 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
-  const handleOpenPress3 = () => {
-    setModalVisible3(true);
+  useEffect(() => {
+    // Fetch the subscription status when the component mounts
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const response = await axios.get('https://recruitangle.com/api/jobseeker/get-subscription', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setSubscriptionStatus(response?.data?.JSSubscriptionStatus?.subscribed);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchSubscriptionStatus();
+  }, []);
+
+  const handleOpenPress3 = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      // Check subscription status before opening modal or navigating
+      if (subscriptionStatus === 'Yes') {
+        navigation.navigate('Coaching Hub Sessions'); // Navigate to Coaching Hub Sessions
+         onClose();
+      } else {
+        setModalVisible3(true); // Open the modal if not subscribed
+      }
+    } catch (error) {
+      console.error('Error checking subscription status:', error.response ? error.response.data : error.message);
+    }
   };
 
   const handleCloseModal3 = () => {
@@ -122,12 +162,12 @@ function MyComponent({ onClose }) {
     setSelectedIndex(index); // Set the selected index
   };
 
-    const renderCards = () => {
-      if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
-        return <Text>No data available</Text>;
-      }
+  const renderCards = () => {
+    const filteredData = cardData.AllHubs.filter(data => 
+      !selectedCategory || data.category === selectedCategory
+    );
 
-      return cardData.AllHubs.map((data, index) => (
+    return filteredData.map((data, index) => (
       <Animated.View
         key={index}
         style={{
@@ -172,7 +212,7 @@ function MyComponent({ onClose }) {
                 />
               </View>
               <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-                {data.coaching_hub_limit} {t("Participants")}
+                {data.category}
               </Text>
               <Text style={{ fontSize: 13, color: "#206C00", marginTop: 5 }}>
                 {data.meeting_day}s
@@ -187,7 +227,7 @@ function MyComponent({ onClose }) {
               <View style={{ flex: 1, }}>
                 <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
                 <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
-                  {t("Coach")}: {data.visibility}
+                  {t("Coach")}: {data.expert_name}
                 </Text>
               </View>
             </View>
@@ -196,8 +236,9 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>{t("Hub Fee")}</Text>
-              <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold', textDecorationLine: 'line-through' }}>
-                {data.coaching_hub_fee} </Text>
+              <Text style={{ fontSize: 16, color: subscriptionStatus === 'Yes' ? "#d3f9d8" : "coral", fontWeight: 'bold' }}>
+                {data.coaching_hub_fee} 
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -247,20 +288,22 @@ function MyComponent({ onClose }) {
             <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an hub you will like to join")}</Text>
             <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10}}>
-     <Picker
-                  style={styles.picker}
-                >
-       <Picker.Item label="All Categories" value="" />
-       <Picker.Item label={t('SAP')} value="SAP" />
-       <Picker.Item label={t('Microsoft')} value="Microsoft" />
-       <Picker.Item label={t('Salesforce')} value="Salesforce" />
-       <Picker.Item label={t('Frontend Development')} value="Frontend Development"/>
-       <Picker.Item label={t('Backend Development')} value="Backend Development" />
-       <Picker.Item label={t('UI/UX')} value="UI/UX" />
-       <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-       <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-       <Picker.Item label={t('Management')} value="Management" />
-                </Picker>
+              <Picker
+                selectedValue={selectedCategory}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                <Picker.Item label="All Categories" value="" />
+                <Picker.Item label="SAP" value="SAP" />
+                <Picker.Item label="Microsoft" value="Microsoft" />
+                <Picker.Item label="Salesforce" value="Salesforce" />
+                <Picker.Item label="Frontend Development" value="Frontend Development" />
+                <Picker.Item label="Backend Development" value="Backend Development" />
+                <Picker.Item label="UI/UX" value="UI/UX" />
+                <Picker.Item label="Data Analysis" value="Data Analysis" />
+                <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                <Picker.Item label="Management" value="Management" />
+              </Picker>
 
                 <TextInput
                   placeholder={t("Search")}

@@ -29,7 +29,29 @@ function MyComponent({ onClose }) {
   const [candidate, setCandidate] = useState("Individual");
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setmeetType] = useState("advice");
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+  
   useEffect(() => {
     const getTokenAndUser = async () => {
       try {
@@ -91,7 +113,7 @@ function MyComponent({ onClose }) {
       const meetingFormData = new FormData();
       meetingFormData.append('candidate_account_type', candidate);
       meetingFormData.append('role', role);
-      meetingFormData.append('expert_id', expertid);
+      meetingFormData.append('expert_id', expertid); 
       meetingFormData.append('type', meetingtype);
       meetingFormData.append('date_scheduled', formattedDate);
 
@@ -123,6 +145,8 @@ function MyComponent({ onClose }) {
         expert_available_days,
         expert_available_time,
         expert_name: expert,
+        expertid: expertid,
+        name: first_name  + ' ' + last_name
       };
 
       // Make the GET request to check the subscription status

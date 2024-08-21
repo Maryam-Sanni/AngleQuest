@@ -125,7 +125,7 @@ function MyComponent() {
             }}
           >
             <Text style={{ fontSize: 12, color: 'black', fontWeight: '600', marginTop: 10 }}>
-              {data.coaching_hub_limit} Participants
+              {data.category}
             </Text>
             <Text style={{ fontSize: 13, color: '#206C00', marginBottom: 10 }}>
               {data.meeting_day}s
@@ -140,7 +140,7 @@ function MyComponent() {
                 {data.coaching_hub_name}
               </Text>
               <Text style={{ fontSize: 12, color: 'black', fontWeight: '400' }}>
-                Created: {new Date(data.created_at).toLocaleDateString()}
+                 {t("Coach")}: {data.expert_name}
               </Text>
             </View>
           </View>

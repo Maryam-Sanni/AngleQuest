@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image } from 'react-native';
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
@@ -6,10 +6,36 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const App = () => {
-    const navigation = useNavigation();
+  const App = () => {
+      const navigation = useNavigation();
+     const [token, setToken] = useState("");
+    const [coach, setCoach] = useState('');
+
+    useEffect(() => {
+      const getTokenAndUser = async () => {
+        try {
+          // Retrieve token and user data from AsyncStorage
+          const storedToken = await AsyncStorage.getItem('token');
+          setToken(storedToken);
+
+          const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+          const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
+          if (storedFirstName && storedLastName) {
+            setCoach(`${storedFirstName} ${storedLastName}`);
+          } else {
+            console.warn('No user data found');
+          }
+        } catch (error) {
+          console.error('Error retrieving token or user:', error);
+        }
+      };
+
+      getTokenAndUser();
+    }, []);
 
     const goToPlans = () => {
         navigation.navigate('Interview Payment');
@@ -34,7 +60,7 @@ const App = () => {
                                 <View style={styles.pagecontainer}>
                                     <View style={{ flex: 1 }}>
                                     <Text style={{ color: '#206C00', fontSize: 20, fontWeight: 'bold', marginLeft: 50, marginTop: 3,fontFamily:"Roboto-Light" }}>
-                                          Emily Ray {t("will work with you on the journey, and do the following with you")}:
+                                      {coach} {t("will work with you on the journey, and do the following with you")}:
                                         </Text>
 
                                         <View style={styles.box}>

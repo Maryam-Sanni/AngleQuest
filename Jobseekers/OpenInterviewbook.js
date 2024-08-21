@@ -12,12 +12,13 @@ function MyComponent({ onClose }) {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [data, setData] = useState(null);
 
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [cv, setCV] = useState(null);
   const [job_description_file, setJobFile] = useState(null);
-  const [job_description_text, setjobText] = useState("Job description text");
+  const [job_description_text, setjobText] = useState(" ");
   const [token, setToken] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -27,35 +28,59 @@ function MyComponent({ onClose }) {
   const [candidate, setCandidate] = useState("Individual");
   const [expertid, setExpertid] = useState("");
    const [meetingtype, setType] = useState("interview");
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
   useEffect(() => {
-    const loadFormData = async () => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) throw new Error('No token found');
-
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200 && response.data.status === 'success') {
-          const data = response.data.interview;
-          setCompany(data.company || '');
-          setRole(data.role || '');
-          setCV(data.cv || '');
-          setJobFile(data.job_description_file || '');
-          setjobText(data.job_description_text || '');
-          setSelectedDateTime(data.date_time || '');
-        } else {
-          console.error('Failed to fetch data', response);
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Error retrieving data from AsyncStorage:', error);
       }
     };
 
-    loadFormData();
+    retrieveData();
   }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const retrievedData = await AsyncStorage.getItem('selectedInterview');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData);
+
+          // Initialize state variables with retrieved data
+          setCompany(parsedData.company || '');
+          setRole(parsedData.role || '');
+          setCV(parsedData.cv || '');
+          setJobFile(parsedData.job_description_file || '');
+          setjobText(parsedData.job_description_text || '');
+          setExpertAvailableDays(parsedData.expert_available_days || '');
+          setExpertAvailableTime(parsedData.expert_available_time || '');
+          setExpert(parsedData.expert_name || '');
+          setExpertid(parsedData.expertid || '');
+        } else {
+          console.log('No data found in AsyncStorage.');
+        }
+      } catch (error) {
+        console.error('Failed to retrieve data from AsyncStorage', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
   
   const handleConfirmDateTime = (dateTime) => {
     setSelectedDateTime(dateTime);
@@ -71,12 +96,64 @@ function MyComponent({ onClose }) {
     setter(selectedFile);
   };
 
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
+  
+  const goToPlans = async () => {
+    try {
+      // Prepare the data to be sent in the POST request
+      
+      const postData = {
+        company: company || data?.company,
+        role: role || data?.role,
+        cv: cv,
+        name: first_name + ' ' + last_name,
+        job_description_file: job_description_file,
+        job_description_text: job_description_text || data?.job_description_text,
+        expert_available_days: expert_available_days || data?.expert_available_days,
+        expert_available_time: expert_available_time || data?.expert_available_time,
+        expertid: expertid || data?.expertid,
+        date_time: selectedDateTime || data?.date_time,
+        meetingtype: meetingtype,
+        candidate: candidate,
+      };
 
-  const goToPlans = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('All Interviews');
-    onClose(); // Close the modal
+      // Send the POST request
+      const response = await axios.put(
+        'https://recruitangle.com/api/jobseeker/edit-jobseeker-interview',
+        postData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // If you're sending files
+            'Authorization': `Bearer ${token}` // Include token if authentication is required
+          }
+        }
+      );
+
+      // Handle the response
+      if (response.status === 200) {
+        console.log('Interview session updated successfully:', response.data);
+        // Optionally, you can show a success message or navigate to another screen
+        navigation.navigate('Interview Sessions');
+      } else {
+        console.error('Failed to update the interview session:', response.data);
+        setAlertMessage('Failed to update the interview session. Please try again.');
+        setAlertVisible(true);
+      }
+    } catch (error) {
+      console.error('Error updating the interview session:', error);
+      setAlertMessage('Error updating the interview session. Please try again.');
+      setAlertVisible(true);
+    } finally {
+      onClose(); // Close the modal
+    }
   };
+
   
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
@@ -141,6 +218,7 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setCV)}
           style={{ marginTop: 5 }}
         />
+        <Text style={{ fontFamily: "Roboto-Light" }}>{cv}</Text>
       </View>
     </View>
     <View style={styles.row}>
@@ -154,6 +232,7 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setJobFile)}
           style={{ marginTop: 5 }}
         />
+         <Text style={{ fontFamily: "Roboto-Light" }}>{job_description_file}</Text>
       </View>
     </View>
     <View style={styles.row}>
@@ -180,7 +259,7 @@ function MyComponent({ onClose }) {
         <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
       </View>
       <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_days}</Text>
+        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{data?.expert_available_days|| ''}</Text>
       </View>
     </View>
     <View style={styles.row}>
@@ -188,7 +267,7 @@ function MyComponent({ onClose }) {
         <Text style={{ fontFamily: "Roboto-Light" }}>{t("Time")}</Text>
       </View>
       <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}</Text>
+        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{data?.expert_available_time || ''}</Text>
       </View>
     </View>
     <View style={styles.row}>
@@ -196,11 +275,12 @@ function MyComponent({ onClose }) {
         <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
       </View>
       <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert}</Text>
+        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{data?.expert_name || ''}</Text>
       </View>
     </View>
   </View>
 
+  <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: 10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for skill analysis session.")}  {data?.expert_name || ''} is available  {data?.expert_available_days|| ''} {data?.expert_available_time || ''}</Text>
   <View style={styles.container}>
     <View style={styles.row}>
       <View style={styles.cell}>
@@ -212,9 +292,7 @@ function MyComponent({ onClose }) {
           onPress={() => setIsModalVisible(true)}
         >
           <Text style={{ fontFamily: "Roboto-Light" }}>
-            {selectedDateTime
-              ? selectedDateTime.toLocaleString()
-              : t("Select Date and Time")}
+            {data?.date_time || t("Select Date and Time")}
           </Text>
         </TouchableOpacity>
       </View>

@@ -13,6 +13,7 @@ function MyComponent({ onClose }) {
   const navigation = useNavigation();
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [data, setData] = useState(null);
 
   const [token, setToken] = useState("");
   const [type, setSelectedType] = useState('Personal');
@@ -36,53 +37,97 @@ function MyComponent({ onClose }) {
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setType] = useState("growth");
 
-  const gotoCV = () => {
-      navigation.navigate('Growth Offer');
-  };
-
   useEffect(() => {
-    const loadFormData = async () => {
+    const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200) {
-          const data = response.data.growthPlan; // Check the structure of `data`
-
-          setRole(data.role || '');
-          setSelectedType(data.type || '');
-          setTitle(data.title || '');
-          setResultDescription(data.result_description || '');
-          setHowToAchieve(data.how_to_achieve || '');
-          setNeeds(data.achieve_the_objective || '');
-          setStartingLevel(data.starting_level || '');
-          setTargetLevel(data.target_level || '');
-          setStatus(data.status || '');
-          setCoach(data.coach || '');
-          setExpertAvailableDays(data.expert_available_days || '');
-          setExpertAvailableTime(data.expert_available_time || '');
-
-          // Parse date_time if necessary
-          const dateTime = data.date_time ? new Date(data.date_time) : null;
-          setSelectedDateTime(dateTime);
-
+        const retrievedData = await AsyncStorage.getItem('selectedGrowthPlan');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData);
+          
+           // Initialize state variables with retrieved data
+          setType(parsedData.type);
+          setTitle(parsedData.title);
+          setRole(parsedData.role);
+          setResultDescription(parsedData.result_description);
+          setHowToAchieve(parsedData.how_to_achieve);
+          setNeeds(parsedData.achieve_the_objective);
+          setStartingLevel(parsedData.starting_level);
+          setTargetLevel(parsedData.target_level);
+          setStatus(parsedData.status);
+          setCoach(parsedData.coach);
+          setExpertAvailableDays(parsedData.expert_available_days);
+          setExpertAvailableTime(parsedData.expert_available_time);
         } else {
-          console.error('Failed to fetch data', response);
+          console.log('No data found in AsyncStorage.');
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Failed to retrieve data from AsyncStorage', error);
       }
     };
 
-    loadFormData();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
+
+  const goToPlans = async () => {
+    try {
+      // Ensure all fields have default values if not populated
+      const postData = {
+        type: type || 'Personal',
+        title: title || 'Default Title',
+        role: role || 'Default Role',
+        result_description: result_description || 'Default Description',
+        how_to_achieve: how_to_achieve || 'Default Plan',
+        achieve_the_objective: achieve_the_objective || 'Default Objective',
+        review_with_coach: review_with_coach || 'Biannually',
+        starting_level: starting_level || 'Beginner',
+        target_level: target_level || 'Medior',
+        end_date: end_date || '12 Months',
+        status: status || 'Active',
+        date_time: selectedDateTime || data?.date_time || 'Default DateTime',
+        coach: data?.coach || 'Default Coach',
+        expert_available_days: expert_available_days || 'Default Days',
+        expert_available_time: expert_available_time || 'Default Time',
+        expertid: data?.expertid || 'Default Expert ID',
+        meetingtype: meetingtype || 'growth',
+         feedbacks: feedbacks || 'Read only field',
+         name: data?.name || 'name',
+      };
+
+      // Send the PUT request
+      const response = await axios.put(
+        'https://recruitangle.com/api/jobseeker/edit-jobseeker-growth-plan',
+        postData,
+        {
+          headers: {
+            'Content-Type': 'application/json', // Ensure the content type is correct
+            'Authorization': `Bearer ${token}` // Include token if authentication is required
+          }
+        }
+      );
+
+      // Handle the response
+      if (response.status === 201) {
+        console.log('Growth Plan session updated successfully:', response.data);
+        // Optionally, show a success message or navigate to another screen
+        navigation.navigate('Growth Plan Sessions');
+      } else {
+        console.error('Failed to update the Growth Plan session:', response.data);
+      }
+    } catch (error) {
+      console.error('Error updating the Growth Plan session:', error);
+    } finally {
+      onClose(); // Close the modal
+    }
+  };
 
 
 
@@ -94,14 +139,6 @@ function MyComponent({ onClose }) {
   const handleCancelModal = () => {
     setIsModalVisible(false);
   };
-
-  useEffect(() => {
-    const getToken = async () => {
-      const storedToken = await AsyncStorage.getItem('token');
-      setToken(storedToken);
-    };
-    getToken();
-  }, []);
 
 
   const hideAlert = () => {
@@ -145,7 +182,6 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Picker
                   selectedValue={type}
-                   enabled={false}
                   style={styles.picker}
                   onValueChange={(itemValue) => setSelectedType(itemValue)}
                 >
@@ -164,7 +200,6 @@ function MyComponent({ onClose }) {
                   placeholder={t('Become SAP FI Medior expert in 6 months')}
                   placeholderTextColor="grey"
                   style={styles.input}
-                  editable={false}
                   value={title}
                   onChangeText={setTitle}
                 />
@@ -179,7 +214,6 @@ function MyComponent({ onClose }) {
                   placeholder="SAP FI"
                   placeholderTextColor="grey"
                   style={styles.input}
-                  editable={false}
                   value={role}
                   onChangeText={setRole}
                 />
@@ -195,7 +229,6 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  editable={false}
                   value={result_description}
                   onChangeText={setResultDescription}
                 />
@@ -211,7 +244,6 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  editable={false}
                   value={how_to_achieve}
                   onChangeText={setHowToAchieve}
                 />
@@ -227,7 +259,6 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="grey"
                   multiline
                   style={[styles.input, { height: 50 }]}
-                  editable={false}
                   value={achieve_the_objective}
                   onChangeText={setNeeds}
                 />
@@ -248,7 +279,6 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Picker
                   selectedValue={starting_level}
-                   enabled={false}
                   style={styles.picker}
                   onValueChange={(itemValue) => setStartingLevel(itemValue)}
                 >
@@ -267,7 +297,6 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Picker
                   selectedValue={target_level}
-                   enabled={false}
                   style={styles.picker}
                   onValueChange={(itemValue) => setTargetLevel(itemValue)}
                 >
@@ -286,7 +315,6 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Picker
                   selectedValue={status}
-                   enabled={false}
                   style={styles.picker}
                   onValueChange={(itemValue) => setStatus(itemValue)}
                 >
@@ -316,7 +344,7 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
-                  {coach}
+                  {data?.coach || ''}
                 </Text>
               </View>
             </View>
@@ -326,7 +354,7 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
-                  {expert_available_days}
+                   {data?.expert_available_days|| ''}
                 </Text>
               </View>
             </View>
@@ -334,13 +362,13 @@ function MyComponent({ onClose }) {
               <View style={styles.cell}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
               </View>
-              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
+              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}> {data?.expert_available_time || ''}
                 </Text>
               </View>
             </View>
           </View>
 
-          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for growth plan session.")} {coach} is available {expert_available_days} {expert_available_time}</Text>
+           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for skill analysis session.")}  {data?.coach || ''} is available  {data?.expert_available_days|| ''} {data?.expert_available_time || ''}</Text>
           <View style={styles.container}>
             <View style={styles.row}>
               <View style={styles.cell}>
@@ -352,13 +380,16 @@ function MyComponent({ onClose }) {
                   onPress={() => setIsModalVisible(true)}
                 >
                   <Text style={{ fontFamily: "Roboto-Light" }}>
-                    {selectedDateTime ? selectedDateTime.toLocaleString() : t("Select Date and Time")}
+                    {data?.date_time || t("Select Date and Time")}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
 
+          <TouchableOpacity style={styles.buttonplus} onPress={goToPlans}>
+            <Text style={styles.buttonTextplus}>{t("Update")}</Text>
+          </TouchableOpacity>
    
 
         </View>

@@ -26,7 +26,55 @@ function MyComponent() {
   const [expert, setExpert] = useState(" ");
   const [description, setDescription] = useState(" ");
 
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
 
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skillanalysis-datetime', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const { InterviewDT } = response.data;
+          if (InterviewDT && InterviewDT.length > 0) {
+            const meeting = InterviewDT[0];
+            const dateTime = new Date(meeting.date_time);
+
+            // Format date as 'DD/MM/YYYY'
+            const date = dateTime.toLocaleDateString('en-GB');
+
+            // Format time as 'HH:MM AM/PM'
+            const time = dateTime.toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }); 
+
+            setMeetingData({
+              date,
+              time,
+            });
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meeting data');
+        }
+      } catch (error) {
+        console.error('Error fetching meeting data:', error);
+      }
+    };
+
+    fetchMeetingData();
+  }, []);
+  
   useEffect(() => {
       const loadFormData = async () => {
           try {
@@ -41,27 +89,33 @@ function MyComponent() {
               });
 
               if (response.status === 200) {
-                  const data = response.data.skillAnalysis; // Updated to `skillAnalysis` based on your response
+                  const data = response.data.skillAnalysis; // Array of skillAnalysis objects
 
-                  setRole(data.role || '');
-                  setType(data.type || '');
-                  setStartingLevel(data.starting_level || '');
-                  setTargetLevel(data.target_level || '');
-                setExpert(data.expert_name || '');
-                 setDescription(data.description || '');
+                  // Sort the skillAnalysis array by created_at in descending order
+                  const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-                // Convert date_time to date and time
-                const dateTime = new Date(data.date_time);
-                const date = dateTime.toLocaleDateString();
-                const time = dateTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true  // Use 12-hour clock with AM/PM
-                });
+                  // Get the latest skill analysis
+                  const latestSkillAnalysis = sortedData[0];
 
-                setSelectedDate(date);
-                setSelectedTime(time);
-                
+                  setRole(latestSkillAnalysis.role || '');
+                  setType(latestSkillAnalysis.type || '');
+                  setStartingLevel(latestSkillAnalysis.starting_level || '');
+                  setTargetLevel(latestSkillAnalysis.target_level || '');
+                  setExpert(latestSkillAnalysis.expert_name || '');
+                  setDescription(latestSkillAnalysis.description || '');
+
+                  // Convert date_time to date and time
+                  const dateTime = new Date(latestSkillAnalysis.date_time);
+                  const date = dateTime.toLocaleDateString();
+                  const time = dateTime.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true  // Use 12-hour clock with AM/PM
+                  });
+
+                  setSelectedDate(date);
+                  setSelectedTime(time);
+
               } else {
                   console.error('Failed to fetch data', response);
               }
@@ -72,6 +126,7 @@ function MyComponent() {
 
       loadFormData();
   }, []);
+
   
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {

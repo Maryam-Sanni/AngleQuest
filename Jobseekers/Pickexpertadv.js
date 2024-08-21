@@ -45,6 +45,50 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
+  const handlesubmitandpost = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const selectedUser = cardData.combinedData[selectedIndex];
+      if (!selectedUser) {
+        console.error('No user selected');
+        return;
+      }
+
+      const response = await axios.post('https://recruitangle.com/api/jobseeker/chosen-expert-skill-analysis', {
+        expert_name: `${selectedUser.first_name} ${selectedUser.last_name}`, // Changed field name
+        category: selectedUser.category,
+        available_days: selectedUser.available_days,
+        available_times: selectedUser.available_times,
+        expertid: selectedUser.user_id,
+        location: 'location', 
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('Post successful:', response.data);
+        // Optionally, handle success (e.g., show a success message)
+      } else {
+        console.error('Error posting data:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error posting data:', error.response ? error.response.data : error.message);
+    }
+
+    // Open the modal
+    setMainModalVisible(false);
+    setformModalVisible(true);
+  };
+
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -100,6 +144,7 @@ function MyComponent({ onClose }) {
       const expertid = `${selectedUser.user_id}`;
       const availabledays = `${selectedUser.available_days}`;
       const availabletimes = `${selectedUser.available_times}`;
+       const category = `${selectedUser.category}`;
 
       await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
       await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
@@ -107,6 +152,8 @@ function MyComponent({ onClose }) {
       await AsyncStorage.setItem('selectedUserExpertid', expertid);
       await AsyncStorage.setItem('selectedUserDays', availabledays);
       await AsyncStorage.setItem('selectedUserTimes', availabletimes);
+       await AsyncStorage.setItem('selectedUserCategory', category);
+      await AsyncStorage.setItem('selectedUserLocation', 'location');
 
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
@@ -115,9 +162,27 @@ function MyComponent({ onClose }) {
 
 
   const renderCards = () => {
-    const filteredData = cardData.combinedData.filter(data => 
-      !selectedCategory || data.category === selectedCategory
-    );
+    // Filter data based on both search term and selected category
+    const filteredData = cardData.combinedData.filter((data) => {
+      const fullName = `${data.first_name} ${data.last_name}`.toLowerCase();
+      const category = data.category.toLowerCase();
+      const searchTerm = search.toLowerCase();
+      const selectedCategoryLower = selectedCategory.toLowerCase();
+
+      // Check if the full name or category matches the search term and the selected category
+      return (
+        (fullName.includes(searchTerm) || category.includes(searchTerm)) &&
+        (selectedCategory === '' || category === selectedCategoryLower)
+      );
+    });
+
+    if (filteredData.length === 0) {
+      return (
+        <View style={{ padding: 20, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ fontSize: 16, color: 'gray' }}>{t('No results found')}</Text>
+        </View>
+      );
+    }
 
     return filteredData.map((data, index) => (
       <Animated.View
@@ -176,7 +241,7 @@ function MyComponent({ onClose }) {
               </View>
             </View>
           </View>
-          <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {data.available_days}</Text>
+          <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {data.available_days.join(', ')}</Text>
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
              Time: {data.available_times}
           </Text>
@@ -220,14 +285,7 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", alignItems: 'center', marginTop: 40, }}>
+        <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40, }}>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.greenBox}>
               <View style={styles.header}>
@@ -260,19 +318,23 @@ function MyComponent({ onClose }) {
                     <Picker.Item label="Cloud Computing" value="Cloud Computing" />
                     <Picker.Item label="Management" value="Management" />
                   </Picker>
-                  <TextInput placeholder={t("Search")} style={styles.input} />
+                  <TextInput
+                    placeholder={t("Search")}
+                    style={styles.input}
+                    value={search} // Add this line to bind the TextInput value to the state
+                    onChangeText={(text) => setSearch(text)} // This updates the search state
+                  />
                 </View>
               </View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
                 {renderCards()}
               </View>
-              <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
+              <TouchableOpacity onPress={handlesubmitandpost} style={styles.buttonplus}>
                 <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-        </View>
-      </Modal>
+     
+
 
       <Modal
         animationType="slide"
@@ -295,7 +357,8 @@ function MyComponent({ onClose }) {
           <OpenSchedule2 onClose={() => handleCloseModal2()} />
         </View>
       </Modal>
-    </>
+          </ScrollView>
+          </View>
   );
 }
 

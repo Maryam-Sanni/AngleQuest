@@ -1,19 +1,53 @@
-import { useFonts } from 'expo-font';
 import React, { useState, useEffect } from 'react';
+import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image, Picker } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios'
+import axios from 'axios';
+import CustomAlert from '../components/CustomAlert';
+import { MaterialIcons } from '@expo/vector-icons';
 
 function MyComponent({ onClose }) {
    const [questions, setQuestions] = useState([]);
-  
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [remark, setRemark] = useState('');
+  const [rating, setRating] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('')     
+  const [isVisible, setIsVisible] = useState(true); 
+  const [data, setData] = useState(null);
+  const [isChecked, setIsChecked] = useState(false);
+
+
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
-  
+
         const {t}=useTranslation()
-  
+
+  const handlePress = () => {
+    onClose();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const retrievedData = await AsyncStorage.getItem('selectedMeeting');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData); // Update the state with the retrieved data
+        } else {
+          console.log('No data found in AsyncStorage.');
+        }
+      } catch (error) {
+        console.error('Failed to retrieve data from AsyncStorage', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const loadFormData = async () => {
       try {
@@ -35,18 +69,88 @@ function MyComponent({ onClose }) {
       }
     };
 
+    const retrieveExpertName = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName && storedLastName) {
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
     loadFormData();
-  }, []);
+    retrieveExpertName();
+    }, []);
 
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
     setQuestions(newQuestions);
   };
-  
+
+  const handleMarkAsCompleted = async () => {
+    if (!remark || !questions || !rating ) {
+      setAlertMessage(t('Please fill all fields'));
+      setAlertVisible(true);
+      return;
+    }
+
+    setIsChecked(!isChecked);
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) throw new Error('No token found');
+
+    const payload = {
+       jobseeker_id: data?.user_id, 
+      remark: remark,
+      expert_name: `${firstName} ${lastName}`,
+      rating: rating,
+      level: data?.expert_name,
+        company: data?.company,
+        date: data?.date_time,
+        time: data?.date_time,
+        score: rating,
+      role: data?.role,
+      descriptions: questions.map(question => ({
+        description: question.question,
+        percentage: question.percentage,
+      })),
+    };
+
+    const response = await axios.post('https://recruitangle.com/api/expert/feedback-interview', payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 201 && response.data.status === 'success') {
+      console.log('Marked as completed successfully');
+      setAlertMessage(t('Remark updated successfully'));
+    } else {
+      console.error('Failed to mark as completed', response);
+      setAlertMessage(t('Remark failed to update'));
+    }
+  } catch (error) {
+    console.error('Error marking as completed', error);
+  }
+    setAlertVisible(true);
+  };
+
+    const hideAlert = () => {
+      setAlertVisible(false);
+    };
+
+    if (!isVisible) {
+      return null; // Return null to unmount the parent component
+    }
+
   return (
-     
+
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
+       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 <View style={styles.greenBox}>
 <View style={styles.header}>
           <Image
@@ -54,40 +158,46 @@ function MyComponent({ onClose }) {
             style={styles.logo}
           />
           <Text style={styles.headerText}>{t("Completed Interview Meetings")}</Text>
-       
+
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
           </Text>
         </TouchableOpacity>
         </View>
-                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
+  <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600'}}>{t("Uneditable Section")}</Text>
  <View style={styles.container}>
+ <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.level}</Text>
+        </View>
+      </View>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>Junior Platform Developer</Text>
+          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.role}</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Company")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style = {{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Junior")}</Text>
+           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.company}</Text>
         </View>
       </View>
-      
-         
-      
-      
-    </View>
-     
-    <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -20, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
-   
 
+
+
+
+    </View>
+
+  <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20, marginBottom: -20 }}>{t("Interview Scoring")}</Text>
 
   <View style={styles.container}>
     {questions.map((question, index) => (
@@ -100,7 +210,7 @@ function MyComponent({ onClose }) {
             placeholder={t("Question description")}
             placeholderTextColor="grey"
             style={styles.input}
-            editable={false} 
+             editable={false}
             value={question.question}
             onChangeText={text => handleQuestionChange(index, 'question', text)}
           />
@@ -109,7 +219,6 @@ function MyComponent({ onClose }) {
           <Picker
             selectedValue={question.percentage}
             style={styles.picker}
-            enabled={false}
             onValueChange={(itemValue) => handleQuestionChange(index, 'percentage', itemValue)}
           >
             <Picker.Item label="10%" value="10" />
@@ -133,11 +242,49 @@ function MyComponent({ onClose }) {
 
     </TouchableOpacity>
   </View>
+  <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
+                <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
+                  <TextInput
+                    style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
+                    placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
+                    value={data?.remark}
+                    placeholderTextColor="grey"
+                     multiline={true}
+                    onChangeText={text => setRemark(text)}
+                  />
+                  </View>
 
-
+    <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Rating")}</Text>
+  <View style={styles.container}>
+        <View style={styles.row}>
+          <View style={styles.cell}>
+            <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
+          </View>
+          <View style={styles.cell}>
+          <Picker
+            selectedValue={data?.rating}
+             style={styles.picker}
+             onValueChange={(itemValue) => setRating(itemValue)}
+  >     
+    <Picker.Item label="Replan" value="Replan" />
+    <Picker.Item label="Fair" value="Fair" />
+    <Picker.Item label="Good" value="Good" />
+    <Picker.Item label="Brilliant" value="Brilliant" />
+  </Picker>
+          </View>
+          </View>
+          </View>
+ 
 
 
     </View>
+      </ScrollView>
+      <CustomAlert
+        visible={alertVisible}
+        title={t("Alert")}
+        message={alertMessage}
+        onConfirm={hideAlert}
+      />
 </View>
 );
 }
@@ -151,6 +298,19 @@ const styles = StyleSheet.create({
     marginTop: 30, 
     marginLeft: 50 
   },
+  checkcontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    marginLeft: 40
+  },
+  text: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  buttoncomplete: {
+    // Your button styles
+  },
   row: {
     flexDirection: 'row',
   },
@@ -160,27 +320,33 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     padding: 5,
   },
-   buttonplus: {
-    backgroundColor: 'coral',
-    padding: 5,
-    marginLeft: 750, 
-    width: 100,
-    paddingHorizontal: 20,
-    marginTop: 10
-  },
-  buttonTextplus: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  greenBox: {
-    width: 920,
-    height:300,
-    backgroundColor: '#F8F8F8',
-  },
-  input: {
-    outline: 'none',
-  },
+  buttonAcc: {
+     backgroundColor: 'coral',
+      padding: 10,
+      marginTop: 30,
+      marginLeft: 480, 
+      marginRight: 70,
+      width: 150,
+      paddingHorizontal: 5,
+      marginBottom: 20,
+      borderRadius: 5
+    },
+    buttoncomplete: {
+     backgroundColor: 'darkgreen',
+      padding: 10,
+      marginTop: 30,
+      marginLeft: 50, 
+      paddingHorizontal: 5,
+      marginBottom: 20,
+      borderRadius: 5,
+       width: 150,
+    },
+    buttonTextAcc: {
+      color: 'white',
+      fontSize: 14,
+      textAlign: 'center',
+      fontFamily:"Roboto-Light"
+    },
   picker: {
     height: 20,
     width: '100%',
@@ -189,6 +355,14 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     color:'grey',
     fontSize: 14
+  },
+  greenBox: {
+    width: 920,
+    height:300,
+    backgroundColor: '#F8F8F8',
+  },
+  input: {
+    outline: 'none',
   },
   closeButton: {
     position: 'absolute',
@@ -202,8 +376,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 20,
-    fontFamily:"Roboto-Light"
+    marginBottom: 20
   },
   logo: {
     width: 40,

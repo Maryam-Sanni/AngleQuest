@@ -297,7 +297,7 @@ try {
         </View>
 
   <View style={{flexDirection: 'row'}}>
-    <TouchableOpacity style={styles.checkcontainer} onPress={handleMarkAsCompleted}>
+     <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>
        <Image
          source={{
            uri: isChecked 
@@ -309,14 +309,14 @@ try {
        <Text style={[styles.text, isChecked && styles.textChecked]}>
          {isChecked ? "Completed" : "Mark as completed"}
        </Text>
-       </TouchableOpacity>
+     </TouchableOpacity>
   
     <TouchableOpacity style={styles.buttonAcc} onPress={handlePress}>
       <Text style={styles.buttonTextAcc}>{t("Save")}</Text>
     </TouchableOpacity>
 
   </View>
-  <Text style={{ marginLeft: 50, color: 'grey', fontWeight: '600', marginBottom: 20, marginTop: 10 }}>{t("When you mark as completed and save you will no longer able to edit or review this section")}</Text>
+     <Text style={{ marginLeft: 50, color: 'grey', fontWeight: '600', marginBottom: 20, marginTop: 10 }}>{t("When you mark as completed you will not be able to edit or review this section")}</Text>
  
     </View>
     </ScrollView>
