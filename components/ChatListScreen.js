@@ -187,9 +187,33 @@ function ChatListScreen({ onUserSelect }) {
     </TouchableOpacity>
   );
 
+  const createChatRoomWith = async (secondUserId) => {
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.post(
+      'https://recruitangle.com/api/chat/make-a-room',
+      {
+        name: `Room with ${secondUserId}`,
+        slug: `49-${secondUserId}`,
+        type: 'individual',
+        receiver_id: secondUserId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("API response:", response.data);
+  }
+
   return (
     <View style={styles.container}>
       <CustomHeader />
+      <TouchableOpacity onPress={() => createChatRoomWith(48)}>
+        <Text>New Chat</Text>
+      </TouchableOpacity>
       <FlatList
         data={data}
         renderItem={renderItem}

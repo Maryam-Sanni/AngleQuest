@@ -17,62 +17,62 @@ const ChatScreen = ({ userId: propUserId }) => {
   const [loading, setLoading] = useState(true);
   const [latestSender, setLatestSender] = useState(null);
   const [presence, setPresence] = useState({});
-  const [roomId, setRoomId] = useState(null);
+  const [roomId, setRoomId] = useState('40');
 
     useEffect(() => {
       const initializeChat = async () => {
         try {
-          const token = await AsyncStorage.getItem('token');
-          const storedRoomId = await AsyncStorage.getItem(`room_id_${userId}`);
+          // const token = await AsyncStorage.getItem('token');
+          // const storedRoomId = await AsyncStorage.getItem(`room_id_${userId}`);
 
-          if (!storedRoomId) {
-            const roomResponse = await axios.post(
-              'https://recruitangle.com/api/chat/make-a-room',
-              {
-                name: `Room with ${userId}`,
-                slug: `${currentUserId}-${userId}`,
-                type: 'individual',
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
+          // if (!storedRoomId) {
+          //   const roomResponse = await axios.post(
+          //     'https://recruitangle.com/api/chat/make-a-room',
+          //     {
+          //       name: `Room with ${userId}`,
+          //       slug: `${currentUserId}-${userId}`,
+          //       type: 'individual',
+          //     },
+          //     {
+          //       headers: {
+          //         Authorization: `Bearer ${token}`,
+          //       },
+          //     }
+          //   );
 
-            const newRoomId = roomResponse.data.room.id;
-            setRoomId(newRoomId);
-            await AsyncStorage.setItem(`room_id_${userId}`, newRoomId.toString());
+          //   const newRoomId = roomResponse.data.room.id;
+          //   setRoomId(newRoomId);
+          //   await AsyncStorage.setItem(`room_id_${userId}`, newRoomId.toString());
 
-            // Add both users to the room
-            await axios.post(
-              'https://recruitangle.com/api/chat/add-to-room',
-              {
-                room_id: newRoomId,
-                user_id: currentUserId,  // Add the current user
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
+          //   // Add both users to the room
+          //   await axios.post(
+          //     'https://recruitangle.com/api/chat/add-to-room',
+          //     {
+          //       room_id: newRoomId,
+          //       user_id: currentUserId,  // Add the current user
+          //     },
+          //     {
+          //       headers: {
+          //         Authorization: `Bearer ${token}`,
+          //       },
+          //     }
+          //   );
 
-            await axios.post(
-              'https://recruitangle.com/api/chat/add-to-room',
-              {
-                room_id: newRoomId,
-                user_id: userId,  // Add the other user
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-          } else {
-            setRoomId(storedRoomId);
-          }
+          //   await axios.post(
+          //     'https://recruitangle.com/api/chat/add-to-room',
+          //     {
+          //       room_id: newRoomId,
+          //       user_id: userId,  // Add the other user
+          //     },
+          //     {
+          //       headers: {
+          //         Authorization: `Bearer ${token}`,
+          //       },
+          //     }
+          //   );
+          // } else {
+          //   setRoomId(storedRoomId);
+          // }
 
           await loadUserData();
           await loadMessages();
@@ -169,8 +169,8 @@ const ChatScreen = ({ userId: propUserId }) => {
       enabledTransports: ['ws', 'wss'],
     });
 
-    echo.private(`chat.${roomId}`)
-      .listen('MessageReceived', (message) => {
+    echo.private(`chat.room.${roomId}`)
+    .listen('ChatMessageEvent', (message) => {
         handleIncomingMessage(message);
       });
 
@@ -196,7 +196,7 @@ const ChatScreen = ({ userId: propUserId }) => {
       });
 
     return () => {
-      echo.leaveChannel(`chat.${roomId}`);
+      echo.leaveChannel(`chat.room.${roomId}`);
       echo.leave(`presence-chat`);
     };
   }, [roomId]);
@@ -256,10 +256,10 @@ const ChatScreen = ({ userId: propUserId }) => {
       text: message.text || '',
       createdAt: new Date(message.created_at),
       user: {
-        _id: message.sender_id,
+        _id: message.user_id,
         name: message.senderName || 'Unknown',
       },
-      file: message.file ? { uri: message.file.uri, name: message.file.name, type: message.file.type } : undefined,
+      file: message.file_url ? { uri: message.file_url, name: message.file.name, type: message.file.type } : undefined,
     };
 
     setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessage));
