@@ -25,6 +25,8 @@ function MyComponent({ onClose }) {
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [token, setToken] = useState("");
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [selectedHub, setSelectedHub] = useState(null);
+
  
 
   useEffect(() => {
@@ -76,7 +78,28 @@ function MyComponent({ onClose }) {
     fetchSubscriptionStatus();
   }, []);
 
-  const handleOpenPress3 = async () => {
+const handleOpenPress3 = async () => {
+  try {
+    if (!subscriptionStatus) {
+      console.error('Subscription status is not available');
+      return;
+    }
+
+    if (subscriptionStatus === 'Yes') {
+      navigation.navigate('Coaching Hub Sessions');
+      onClose();
+    } else {
+      setModalVisible3(true);
+    }
+  } catch (error) {
+    console.error('Error checking subscription status:', error.response ? error.response.data : error.message);
+  }
+};
+
+useEffect(() => {
+  if (!selectedHub) return;
+
+  const createHub = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
@@ -84,17 +107,33 @@ function MyComponent({ onClose }) {
         return;
       }
 
-      // Check subscription status before opening modal or navigating
-      if (subscriptionStatus === 'Yes') {
-        navigation.navigate('Coaching Hub Sessions'); // Navigate to Coaching Hub Sessions
-         onClose();
+      const response = await axios.post('https://recruitangle.com/api/jobseeker/create-hub', {
+        category: selectedHub.category,
+        meeting_day: selectedHub.meeting_day,
+        from: selectedHub.from,
+        to: (selectedHub.to),
+        coaching_hub_name: selectedHub.coaching_hub_name,
+        expert_name: selectedHub.expert_name,
+        coaching_hub_description: selectedHub.coaching_hub_description,
+        coaching_hub_fee: selectedHub.coaching_hub_fee,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 200) {
+        console.log('Hub successfully joined');
+        // Handle success (e.g., navigate to a different screen or show a success message)
       } else {
-        setModalVisible3(true); // Open the modal if not subscribed
+        console.error('Error joining hub:', response.statusText);
       }
     } catch (error) {
-      console.error('Error checking subscription status:', error.response ? error.response.data : error.message);
+      console.error('Error joining hub:', error.response ? error.response.data : error.message);
     }
   };
+
+  createHub();
+}, [selectedHub]);
+
 
   const handleCloseModal3 = () => {
     setModalVisible3(false);
@@ -108,9 +147,11 @@ function MyComponent({ onClose }) {
       newState[index] = true;
       return newState;
     });
+    setSelectedIndex(index);
+    setSelectedHub(cardData.AllHubs[index]);
   };
   
-  const handleJoinPressOut = (index) => {
+  const handleJoinPressOut = () => {
     // No need to update the state here
   };
   
@@ -159,8 +200,10 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
   
   const handleCardPress = (index) => {
-    setSelectedIndex(index); // Set the selected index
+    setSelectedIndex(index);
+    setSelectedHub(cardData.AllHubs[index]); // Store the selected hub's data
   };
+
 
   const renderCards = () => {
     const filteredData = cardData.AllHubs.filter(data => 
@@ -241,21 +284,27 @@ function MyComponent({ onClose }) {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-          style={[
-            styles.joinButton,
-            isPressed[index] && styles.joinButtonPressed,
-          ]}
-          onPressIn={() => handleJoinPressIn(index)}
-          onPressOut={() => handleJoinPressOut(index)}
-        >
-          <Text style={[
-            styles.joinButtonText,
-            isPressed[index] && styles.joinButtonTextPressed,
-          ]}>
-            {t("Join Hub")}
-          </Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+            onPressIn={() => handleJoinPressIn(index)}
+            onPressOut={handleJoinPressOut}
+            style={{
+              borderWidth: 1,
+                borderColor: '#206C00',
+                backgroundColor: "#F0FFF9",
+                borderRadius: 5,
+                paddingHorizontal: 50,
+                paddingVertical: 5,
+                marginTop: 15,
+                width: "90%",
+                alignSelf: "center",
+                justifyContent: 'center',
+                marginLeft: 10,
+                marginRight: 10,
+              backgroundColor: isPressed[index] ? 'coral' : '#F0FFF9',
+            }}
+          >
+         <Text style={{ color: isPressed[index] ? '#fff' : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     ));

@@ -5,30 +5,38 @@ import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OpenSchedule2 from '../components/Rating Growth';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [growthPlans, setGrowthPlans] = useState([]);
   const [userId, setUserId] = useState(null);
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
+  const handleOpenPress2 = async (growthPlan) => {
+    setSelectedGrowthPlan(growthPlan);
+    setModalVisible2(true);
+
+    try {
+      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
+      console.log('Selected growth plan saved:', growthPlan);
+    } catch (error) {
+      console.error('Failed to save selected growth plan to AsyncStorage', error);
+    }
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
 
   const handleOpenPress = async (growthPlan) => {
     setSelectedGrowthPlan(growthPlan);
     setModalVisible(true);
 
-    // Create a simplified version of the growthPlan object
-    const simplifiedGrowthPlan = {
-      title: growthPlan.title,
-      role: growthPlan.role,
-      date: growthPlan.date,
-      performance_rating: growthPlan.performance_rating,
-      coach: growthPlan.coach,
-    };
-
     try {
-      // Save the simplified object to AsyncStorage
-      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(simplifiedGrowthPlan));
-      console.log('Selected growth plan saved:', simplifiedGrowthPlan);
+      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
+      console.log('Selected growth plan saved:', growthPlan);
     } catch (error) {
       console.error('Failed to save selected growth plan to AsyncStorage', error);
     }
@@ -91,32 +99,31 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Growth Plan Expert Review")}</Text>
+        <Text style={styles.title}>{t("Completed Growth Plans")}</Text>
 
         <View style={styles.table}>
           <View style={styles.row}>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Title")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Date")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Performance Rating")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Coach")}</Text>
-            </View>
-            <TouchableOpacity style={styles.cell2}>
-              <Text style={styles.cellText}> </Text>
+            <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Performance")}</Text></View>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Rate</Text>
+               </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>View</Text>
+               </View>
             </TouchableOpacity>
           </View>
 
           {growthPlans.map((plan, index) => (
             <View key={index} style={styles.row}>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{plan.coach}</Text>
+              </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{plan.title}</Text>
               </View>
@@ -124,23 +131,31 @@ const ScheduledMeetingsTable = () => {
                 <Text style={styles.cellText}>{plan.role}</Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.date}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{plan.performance_rating}</Text>
               </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.coach}</Text>
-              </View>
-              <TouchableOpacity onPress={handleOpenPress}>
+               <TouchableOpacity onPress={() => handleOpenPress2 (plan)}>
+                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.linkText}>{t('Rate')}</Text>
+                 </View>
+              </TouchableOpacity>
+               <TouchableOpacity onPress={() => handleOpenPress (plan)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.open}>{t("View")}</Text>
+                <Text style={styles.linkText}>{t("View")}</Text>
                 </View>
               </TouchableOpacity>
             </View>
           ))}
         </View>
-
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible2}
+          onRequestClose={handleCloseModal2}
+        >
+          <View style={styles.modalContent}>
+             <OpenSchedule2 growthPlan={selectedGrowthPlan} onCancel={handleCloseModal2} />
+            </View>
+          </Modal>
         <Modal
           animationType="slide"
           transparent={true}
@@ -148,7 +163,7 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-             <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
+            <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
           </View>
         </Modal>
       </BlurView>
@@ -157,11 +172,6 @@ const ScheduledMeetingsTable = () => {
 }
 
 const styles = StyleSheet.create({
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
@@ -177,21 +187,23 @@ const styles = StyleSheet.create({
     textAlign: 'flex-start',
   },
   table: {
+    flex: 1,
     marginRight: 200,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     alignContent: 'center',
     justifyContent: 'space-around',
     marginLeft: 50, marginRight: 50
   },
-  open: {
-    color: "black",
-    fontSize: 14,
-    borderColor: "#63EC55",
-    borderWidth: 2,
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5
+  greenBox: {
+    width: "90%",
+    marginBottom: 20,
+    marginLeft: 50,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    marginTop: 30,
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
   },
   row: {
     flexDirection: 'row',
@@ -202,36 +214,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'none',
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'white', 
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cellText: {
     textAlign: 'flex-start',
     fontFamily: "Roboto-Light"
   },
-  greenBox: {
-    flex: 1,
-    width: "90%",
-    height: 250,
-    marginBottom: 20,
-    marginLeft: 50,
-    marginTop: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
+  headerText: {
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  image: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginTop: -5,
+    borderRadius: 25
   },
   blurBackground: {
     flex: 1,
     borderRadius: 20,
   },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light"
+  }
 });
 
 export default ScheduledMeetingsTable;

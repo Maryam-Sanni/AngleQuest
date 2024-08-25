@@ -138,7 +138,7 @@ function MyComponent({ onClose }) {
             style={{ width: 50, height: 50, marginTop: 10 }}
           />
           <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold' }}>
-            {recommendedExpert.expert_name}
+            {recommendedExpert.first_name}
           </Text>
           <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
             {recommendedExpert.category}
@@ -183,11 +183,14 @@ function MyComponent({ onClose }) {
           </Text>
           </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => handleCardPress(0)}  >
           <View style={{ marginRight: 10, marginLeft: 60, marginTop: 10 }}>
             <View style={styles.circle}>
           {isSelected && <View style={styles.filledCircle2} />}
             </View>
           </View>
+            </TouchableOpacity>
         </View>
       </Animated.View>
     );
@@ -215,28 +218,30 @@ function MyComponent({ onClose }) {
 
       try {
           let selectedUser;
+          let expertName;
 
           // If index is 0, it means the recommended expert is selected
           if (index === 0) {
               selectedUser = recommendedExpert;
+              expertName = selectedUser.expert_name || 'N/A'; // Use expert_name for recommended expert
           } else {
               selectedUser = cardData.combinedData[index - 1]; // Subtract 1 to match the combinedData index
+              expertName = `${selectedUser.first_name || 'N/A'} ${selectedUser.last_name || 'N/A'}`.trim(); // Combine names for other users
           }
 
           // Check if selectedUser is available
           if (selectedUser) {
-              const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
-              const expertid = `${selectedUser.user_id}`;
-              const availabledays = selectedUser.available_days.join(', '); // Convert array to string
-              const availabletimes = selectedUser.available_times;
+              const expertid = `${selectedUser.user_id || 'N/A'}`;
+              const availabledays = selectedUser.available_days ? selectedUser.available_days.join(', ') : 'N/A'; // Convert array to string, handle undefined
+              const availabletimes = selectedUser.available_times || 'N/A'; // Handle undefined
 
               // Save the selected user's data to AsyncStorage
-              await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
-              await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
-              await AsyncStorage.setItem('selectedUserFullName', fullName); // Save the full name
+              await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name || ' ');
+              await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name || ' ');
               await AsyncStorage.setItem('selectedUserExpertid', expertid);
               await AsyncStorage.setItem('selectedUserDays', availabledays);
               await AsyncStorage.setItem('selectedUserTimes', availabletimes);
+              await AsyncStorage.setItem('selectedUserName', expertName); // Save expert_name
           } else {
               console.error('Selected user is not available');
           }
@@ -244,7 +249,6 @@ function MyComponent({ onClose }) {
           console.error('Error saving data to AsyncStorage:', error);
       }
   };
-
 
 
   const renderCards = () => {

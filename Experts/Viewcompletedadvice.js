@@ -173,7 +173,7 @@ function MyComponent({ onClose }) {
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Full Name")}</Text>
         </View>
         <View style={styles.cell}>
-           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.name}</Text>
+           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.expert}</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -250,7 +250,7 @@ function MyComponent({ onClose }) {
                   <TextInput
                     style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
                     placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
-                    value={remark}
+                    value={data?.remark}
                     placeholderTextColor="grey"
                      multiline={true}
                     onChangeText={text => setRemark(text)}
@@ -266,7 +266,7 @@ function MyComponent({ onClose }) {
           </View>
           <View style={styles.cell}>
           <Picker
-            selectedValue={rating}
+            selectedValue={data?.rating}
              style={styles.picker}
              onValueChange={(itemValue) => setRating(itemValue)}
   >

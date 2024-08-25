@@ -29,19 +29,19 @@ const ScheduledMeetingsTable = () => {
       <View style={styles.table}>
       <View style={styles.row}>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14 }}>{t("Name")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14 }}>{t("Role")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Account Type")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14 }}>{t("Account Type")}</Text>
           </View>
           <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
+          <Text style={{fontWeight: '600', fontSize: 14 }}>{t("Date")}</Text>
           </View>
           <View style={styles.cell}>
-            <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
+            <Text style={{color: "white", fontSize: 14 }}> </Text>
           </View>
         </View> 
         <View style={styles.row}>

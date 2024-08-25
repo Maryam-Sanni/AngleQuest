@@ -158,19 +158,19 @@ const HomePage = () => {
   };
   
   const goToGrowth = () => {
-    navigation.navigate('Growth Plan');
+    navigation.navigate('Growth Plan Sessions');
   };
 
   const goToHubs = () => {
-    navigation.navigate('Coaching Hubs');
+    navigation.navigate('Coaching Hub Sessions');
   };
 
   const goToInterview = () => {
-    navigation.navigate('Interview');
+    navigation.navigate('Interview Sessions');
   };
 
   const goToAdvice = () => {
-    navigation.navigate('Advice');
+    navigation.navigate('Advice Sessions');
   };
 
   const gotoAI = () => {
@@ -340,7 +340,37 @@ const HomePage = () => {
       </View>
 </View>
 <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.")}</Text>
-<Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>          
+<Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>  
+        <TouchableOpacity onPress={goToAdvice}
+          style={[
+            styles.touchablechat,
+            isHovered4 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered4(true)}
+          onMouseLeave={() => setIsHovered4(false)}
+        >
+          <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Skill Analysis")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>2</Text>
+        </View>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToGrowth}
+          style={[
+            styles.touchablechat,
+            isHovered3 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered3(true)}
+          onMouseLeave={() => setIsHovered3(false)}
+        >
+         <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Growth Plan")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>5</Text>
+        </View>
+        </View>
+        </TouchableOpacity>
 <TouchableOpacity onPress={goToHubs}
             style={[
               styles.touchablechat,
@@ -356,36 +386,22 @@ const HomePage = () => {
         </View>
         </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToGrowth}
-            style={[
-              styles.touchablechat,
-              isHovered3 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered3(true)}
-            onMouseLeave={() => setIsHovered3(false)}
-          >
-           <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Growth Plan")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>5</Text>
+        <TouchableOpacity
+          style={[
+            styles.touchablechat,
+            isHovered6 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered6(true)}
+          onMouseLeave={() => setIsHovered6(false)}
+        >
+          <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Scenario Project")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>1</Text>
         </View>
         </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={goToAdvice}
-            style={[
-              styles.touchablechat,
-              isHovered4 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered4(true)}
-            onMouseLeave={() => setIsHovered4(false)}
-          >
-            <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Advice")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>2</Text>
-        </View>
-        </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
+
           <TouchableOpacity onPress={goToInterview}
             style={[
               styles.touchablechat,
@@ -401,21 +417,7 @@ const HomePage = () => {
         </View>
         </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.touchablechat,
-              isHovered6 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered6(true)}
-            onMouseLeave={() => setIsHovered6(false)}
-          >
-            <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Targets")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>1</Text>
-        </View>
-        </View>
-          </TouchableOpacity>
+         
           </BlurView>
           </View>
         <View style={styles.sideColumn}>

@@ -278,7 +278,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,

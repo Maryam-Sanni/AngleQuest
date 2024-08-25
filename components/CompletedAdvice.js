@@ -7,6 +7,8 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+const POLLING_INTERVAL = 5000;
+
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
@@ -65,16 +67,66 @@ const ScheduledMeetingsTable = () => {
           } catch (error) {
             console.error('Failed to save all expert skill analysis to AsyncStorage', error);
           }
-          } else {
+        } else {
           console.error('Failed to fetch data', response);
-          }
-          } catch (error) {
-          console.error('Failed to load form data', error);
-          }
-          };
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
 
-          loadFormData();
-          }, []);
+    // Initial data load
+    loadFormData();
+
+    // Polling function
+    const pollFeedbacks = () => {
+      const fetchFeedbacks = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const storedExpertId = await AsyncStorage.getItem('user_id');
+
+          if (!token || !storedExpertId) {
+            console.error('No token or user ID found');
+            return;
+          }
+
+          const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (response.status === 200) {
+            const data = response.data.skillAnalysis;
+            const filteredMeetings = data.filter(meeting => meeting.user_id === storedExpertId);
+
+            // Only update if new data is different from current meetings
+            if (JSON.stringify(filteredMeetings) !== JSON.stringify(meetings)) {
+              setMeetings(filteredMeetings);
+
+              // Save updated data to AsyncStorage
+              try {
+                await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
+                console.log('Updated expert skill analysis saved:', data);
+              } catch (error) {
+                console.error('Failed to save updated expert skill analysis to AsyncStorage', error);
+              }
+            }
+          } else {
+            console.error('Failed to fetch data', response);
+          }
+        } catch (error) {
+          console.error('Failed to fetch feedbacks', error);
+        }
+      };
+
+      fetchFeedbacks();
+    };
+
+    // Set up polling
+    const intervalId = setInterval(pollFeedbacks, POLLING_INTERVAL);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [meetings]);
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -138,6 +190,21 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  const formatDateTime = (dateTimeString) => {
+    try {
+      const dateTime = new Date(dateTimeString);
+      if (isNaN(dateTime.getTime())) { // Check if date is invalid
+        throw new Error('Invalid date');
+      }
+      const date = dateTime.toLocaleDateString();
+      const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return `${date} ${time}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Invalid Date';
+    }
+  };
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -173,7 +240,7 @@ const ScheduledMeetingsTable = () => {
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.name}</Text>
+                    <Text style={styles.cellText}>{meeting.expert}</Text>
                   </View>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
@@ -183,7 +250,7 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.cellText}>{t("Individual Account")}</Text>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{date} {time}</Text>
+                  <Text style={styles.cellText}>{formatDateTime(meeting.date)}</Text>
                 </View>
                 <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
@@ -268,7 +335,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,

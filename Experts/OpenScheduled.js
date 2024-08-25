@@ -10,6 +10,7 @@ function MyComponent({ onClose }) {
    const [questions, setQuestions] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [completed, setCompleted] = useState('Yes');
   const [remark, setRemark] = useState('');
   const [rating, setRating] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
@@ -114,7 +115,8 @@ function MyComponent({ onClose }) {
       remark: remark,
       expert_name: `${firstName} ${lastName}`,
       rating: rating,
-      level: data?.expert_name,
+       completed: completed,
+      level: data?.name,
         company: data?.company,
         date: data?.date_time,
         time: data?.date_time,
@@ -132,7 +134,7 @@ function MyComponent({ onClose }) {
 
     if (response.status === 201 && response.data.status === 'success') {
       console.log('Marked as completed successfully');
-      setAlertMessage(t('Remark updated successfully'));
+       setAlertMessage(t('Remark updated successfully'));
     } else {
       console.error('Failed to mark as completed', response);
       setAlertMessage(t('Remark failed to update'));

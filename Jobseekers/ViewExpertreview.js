@@ -97,7 +97,7 @@ function MyComponent({ onClose }) {
            <View style={styles.row} key={index}>
              <View style={styles.cell}>
                <Text style={{fontWeight: 'bold', fontFamily: "Roboto-Light"}}>
-                 {t("Topic")} {index + 1}: {item.description}
+                 {t("Guide")} {index + 1}: {item.description}
                </Text>
              </View>
              <View style={styles.cell}>

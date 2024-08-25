@@ -1,24 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import OpenSchedule from '../Jobseekers/OpenSkillAnalysis';
+import OpenSchedule from '../Jobseekers/ViewSkillAnalysis';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import OpenSchedule2 from '../components/Rating';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [skillanalysiss, setSkillanalysis] = useState([]);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 
-
-  const handleOpenPress = async (skillanalysis) => {
-    setModalVisible(true);
+  const handleOpenPress2 = async (analysis) => {
+    setSelectedAnalysis(analysis);
+    setModalVisible2(true); // Ensure this sets the correct modal visibility
 
     try {
-      await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(skillanalysis));
-      console.log('Selected skillanalysis saved:', skillanalysis);
+      await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
+      console.log('Selected analysis saved:', analysis);
     } catch (error) {
-      console.error('Failed to save selected skillanalysis to AsyncStorage', error);
+      console.error('Failed to save selected analysis to AsyncStorage', error);
+    }
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+
+  const handleOpenPress = async (analysis) => {
+    setSelectedAnalysis(analysis);
+    setModalVisible(true); // Ensure this sets the correct modal visibility
+
+    try {
+      await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
+      console.log('Selected analysis saved:', analysis);
+    } catch (error) {
+      console.error('Failed to save selected analysis to AsyncStorage', error);
     }
   };
 
@@ -32,7 +51,6 @@ const ScheduledMeetingsTable = () => {
       const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
 
       if (token && storedUserId) {
-        // Fetch the skillanalysiss
         const response = await fetch('https://recruitangle.com/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks', {
           method: 'GET',
           headers: {
@@ -43,11 +61,9 @@ const ScheduledMeetingsTable = () => {
         const data = await response.json();
 
         if (data.status === 'success') {
-          // Filter skillanalysiss based on user_id
           const filteredSkillanalysis = data.skillAnalysis.filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId);
           setSkillanalysis(filteredSkillanalysis);
 
-          // Optionally save filtered skillanalysiss to AsyncStorage
           try {
             await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillanalysis));
             console.log('Filtered skillanalysiss saved:', filteredSkillanalysis);
@@ -77,30 +93,31 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t('Skill Analysis Feedback')}</Text>
+        <Text style={styles.title}>{t('Completed Skill Analysis')}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             {/* Table Headers */}
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Role')}</Text>
+              <Text style={styles.headerText}>{t('Expert')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Level')}</Text>
+              <Text style={styles.headerText}>{t('Role')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Company')}</Text>
+              <Text style={styles.headerText}>{t('Start Date')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Date')}</Text>
+              <Text style={styles.headerText}>{t('Starting Level')}</Text>
             </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Time')}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: 'Roboto-Light' }}>{t('Score')}</Text>
-            </View>
-            <TouchableOpacity style={styles.cell2}>
-              <Text style={styles.cellText}> </Text>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Rate</Text>
+               </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>View</Text>
+               </View>
             </TouchableOpacity>
           </View>
 
@@ -108,32 +125,40 @@ const ScheduledMeetingsTable = () => {
           {skillanalysiss.map((skillanalysis, index) => (
             <View style={styles.row} key={index}>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{skillanalysis.expert_name}</Text>
+              </View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{skillanalysis.role}</Text>
-              </View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.level}</Text>
-              </View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.company}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{new Date(skillanalysis.date).toLocaleDateString()}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(skillanalysis.time).toLocaleTimeString()}</Text>
+                <Text style={styles.cellText}>{skillanalysis.starting_level}</Text>
               </View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.score}</Text>
-              </View>
-              <TouchableOpacity onPress={handleOpenPress}>
+              <TouchableOpacity onPress={() => handleOpenPress2(skillanalysis)}>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.open}>{t('View')}</Text>
+                <Text style={styles.linkText}>{t('Rate')}</Text>
+                 </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleOpenPress(skillanalysis)}>
+                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.linkText}>{t('View')}</Text>
                  </View>
               </TouchableOpacity>
             </View>
           ))}
         </View>
-
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible2}
+          onRequestClose={handleCloseModal2}
+        >
+          <View style={styles.modalContent}>
+             <OpenSchedule2 analysis={selectedAnalysis} onCancel={handleCloseModal2} />
+          </View>
+        </Modal>
         <Modal
           animationType="slide"
           transparent={true}
@@ -141,7 +166,7 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-            <OpenSchedule onClose={() => handleCloseModal()} />
+             <OpenSchedule analysis={selectedAnalysis} onClose={handleCloseModal} />
           </View>
         </Modal>
       </BlurView>
@@ -159,29 +184,29 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 30,
     marginLeft: 50,
-    color: 'black',
+    color: "black",
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
   },
   table: {
+    flex: 1,
     marginRight: 200,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     alignContent: 'center',
     justifyContent: 'space-around',
-    marginLeft: 50,
-    marginRight: 50,
+    marginLeft: 50, marginRight: 50
   },
-  open: {
-    color: 'black',
-    fontSize: 14,
-    borderColor: '#63EC55',
-    borderWidth: 2,
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    fontFamily: 'Roboto-Light',
+  greenBox: {
+    width: "90%",
+    marginBottom: 20,
+    marginLeft: 50,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    marginTop: 30,
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
   },
   row: {
     flexDirection: 'row',
@@ -192,35 +217,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'none',
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'white', 
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cellText: {
     textAlign: 'flex-start',
-    fontFamily: 'Roboto-Light',
+    fontFamily: "Roboto-Light"
   },
-  greenBox: {
-    flex: 2,
-    width: '90%',
-    height: 550,
-    marginLeft: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30,
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
+  headerText: {
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  image: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginTop: -5,
+    borderRadius: 25
   },
   blurBackground: {
     flex: 1,
     borderRadius: 20,
   },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light"
+  }
 });
 
 export default ScheduledMeetingsTable;

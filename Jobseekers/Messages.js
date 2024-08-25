@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     width: 10,
   },
   chatListContainer: {
-    flex: 1,
+    flex: 1.5,
     borderRightWidth: 1, 
     borderRightColor: '#CCCCCC',
   },

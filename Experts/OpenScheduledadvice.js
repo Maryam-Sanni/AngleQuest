@@ -11,6 +11,7 @@ function MyComponent({ onClose }) {
   const [topics, setTopics] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [completed, setCompleted] = useState('Yes');
   const [remark, setRemark] = useState('');
   const [rating, setRating] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
@@ -110,12 +111,13 @@ function MyComponent({ onClose }) {
     remark: remark,
     expert_name: `${firstName} ${lastName}`,
     rating: rating,
-      role: data?.role,
+    completed: completed,
+    role: data?.role,
     types: data?.type,
     starting_level: data?.starting_level,
     target_level: data?.target_level,
     date: data?.date_time,
-    expert: data?.expert_name,
+    expert: data?.name,
     descriptions: topics.map(topic => ({
       description: topic.topic,
       percentage: topic.percentage,

@@ -14,6 +14,7 @@ function MyComponent({ onClose }) {
   const [lastName, setLastName] = useState('');
   const [remark, setRemark] = useState('');
   const [rating, setRating] = useState('');
+   const [completed, setCompleted] = useState('Yes');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true); 
@@ -110,11 +111,12 @@ try {
     remark: remark,
     expert_name: `${firstName} ${lastName}`,
     rating: rating,
+    completed: completed,
     title: data?.title,
     role: data?.role,
     date: data?.date_time,
     performance_rating: rating,
-    coach: data?.coach,
+    coach: data?.name,
     descriptions: guides.map(guide => ({
       description: guide.guide,
       percentage: guide.percentage,

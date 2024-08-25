@@ -13,6 +13,7 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [data, setData] = useState(null);
+   const [id, setId] = useState(null); // Store the ID
 
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -58,6 +59,7 @@ function MyComponent({ onClose }) {
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
+           setId(parsedData.id); // Store the ID
 
           // Initialize state variables with retrieved data
           setCompany(parsedData.company || '');
@@ -103,42 +105,35 @@ function MyComponent({ onClose }) {
     };
     getToken();
   }, []);
+
   
   const goToPlans = async () => {
     try {
-      // Prepare the data to be sent in the POST request
-      
-      const postData = {
-        company: company || data?.company,
-        role: role || data?.role,
-        cv: cv,
-        name: first_name + ' ' + last_name,
-        job_description_file: job_description_file,
-        job_description_text: job_description_text || data?.job_description_text,
-        expert_available_days: expert_available_days || data?.expert_available_days,
-        expert_available_time: expert_available_time || data?.expert_available_time,
-        expertid: expertid || data?.expertid,
-        date_time: selectedDateTime || data?.date_time,
-        meetingtype: meetingtype,
-        candidate: candidate,
-      };
+      const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-interview/${id}`;
 
-      // Send the POST request
-      const response = await axios.put(
-        'https://recruitangle.com/api/jobseeker/edit-jobseeker-interview',
-        postData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data', // If you're sending files
-            'Authorization': `Bearer ${token}` // Include token if authentication is required
-          }
-        }
-      );
+      const formData = new FormData();
+      formData.append('company', company || data?.company);
+      formData.append('role', role || data?.role);
+      if (cv) formData.append('cv', cv); // Append CV as file
+      formData.append('name', `${first_name} ${last_name}`);
+      if (job_description_file) formData.append('job_description_file', job_description_file); // Append job description file as file
+      formData.append('job_description_text', job_description_text || data?.job_description_text);
+      formData.append('expert_available_days', expert_available_days || data?.expert_available_days);
+      formData.append('expert_available_time', expert_available_time || data?.expert_available_time);
+      formData.append('expertid', expertid || data?.expertid);
+      formData.append('date_time', selectedDateTime || data?.date_time);
+      formData.append('meetingtype', meetingtype);
+      formData.append('candidate', candidate);
 
-      // Handle the response
+      const response = await axios.put(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Ensure multipart/form-data is used
+          'Authorization': `Bearer ${token}`, // Include token if authentication is required
+        },
+      });
+
       if (response.status === 200) {
         console.log('Interview session updated successfully:', response.data);
-        // Optionally, you can show a success message or navigate to another screen
         navigation.navigate('Interview Sessions');
       } else {
         console.error('Failed to update the interview session:', response.data);
@@ -218,7 +213,6 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setCV)}
           style={{ marginTop: 5 }}
         />
-        <Text style={{ fontFamily: "Roboto-Light" }}>{cv}</Text>
       </View>
     </View>
     <View style={styles.row}>
@@ -232,7 +226,6 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setJobFile)}
           style={{ marginTop: 5 }}
         />
-         <Text style={{ fontFamily: "Roboto-Light" }}>{job_description_file}</Text>
       </View>
     </View>
     <View style={styles.row}>

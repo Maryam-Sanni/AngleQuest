@@ -18,7 +18,7 @@
     const [role, setRole] = useState("");
     const [cv, setCV] = useState(null);
     const [job_description_file, setJobFile] = useState(null);
-    const [job_description_text, setjobText] = useState(" ");
+    const [job_description_text, setjobText] = useState("Write your description here");
     const [token, setToken] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -74,6 +74,7 @@
 
           const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
           const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
           const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
           const storedDays = await AsyncStorage.getItem('selectedUserDays');
           const storedTimes = await AsyncStorage.getItem('selectedUserTimes');

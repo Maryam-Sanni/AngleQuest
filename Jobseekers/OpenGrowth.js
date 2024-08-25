@@ -14,7 +14,8 @@ function MyComponent({ onClose }) {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [data, setData] = useState(null);
-
+  const [id, setId] = useState(null); // Store the ID
+  
   const [token, setToken] = useState("");
   const [type, setSelectedType] = useState('Personal');
   const [title, setTitle] = useState('');
@@ -44,6 +45,7 @@ function MyComponent({ onClose }) {
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
+          setId(parsedData.id); // Store the ID
           
            // Initialize state variables with retrieved data
           setType(parsedData.type);
@@ -77,9 +79,12 @@ function MyComponent({ onClose }) {
     getToken();
   }, []);
 
-  const goToPlans = async () => {
-    try {
-      // Ensure all fields have default values if not populated
+
+    const goToPlans = async () => {
+      try {
+        // Construct the URL with the `id`
+        const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-growth-plan/${id}`;
+        
       const postData = {
         type: type || 'Personal',
         title: title || 'Default Title',
@@ -102,17 +107,13 @@ function MyComponent({ onClose }) {
          name: data?.name || 'name',
       };
 
-      // Send the PUT request
-      const response = await axios.put(
-        'https://recruitangle.com/api/jobseeker/edit-jobseeker-growth-plan',
-        postData,
-        {
+        // Send the PUT request
+        const response = await axios.put(url, postData, {
           headers: {
-            'Content-Type': 'application/json', // Ensure the content type is correct
-            'Authorization': `Bearer ${token}` // Include token if authentication is required
-          }
-        }
-      );
+            'Content-Type': 'application/json', // Ensure JSON content type
+            'Authorization': `Bearer ${token}`, // Include token if authentication is required
+          },
+        });
 
       // Handle the response
       if (response.status === 201) {
@@ -165,7 +166,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t('View Growth Plan Objective')}</Text>
+            <Text style={styles.headerText}>{t('Update Growth Plan Objective')}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: 'Roboto-Light' }}>✕</Text>
             </TouchableOpacity>

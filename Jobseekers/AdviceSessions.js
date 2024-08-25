@@ -195,7 +195,7 @@ function MyComponent() {
         const {t}=useTranslation()
     return (
       <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '150%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>
@@ -207,8 +207,11 @@ function MyComponent() {
                     <View style={styles.header}>
             <TouchableOpacity>
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5,fontFamily:"Roboto-Light"}}>{t("Skill Analysis")}</Text>
+                <Image
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=666666' }}
+                  style={styles.image}
+                />
+                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14,  marginTop: 5 }}>{t("Skill Analysis")}</Text>
                 </View>
             </TouchableOpacity>
             </View>
@@ -307,18 +310,21 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     image: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         marginRight: 5,
         marginLeft: 100,
-        marginTop: 5
+        marginTop: 5,
+      tintColor: '#666',
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginLeft: 40, marginRight: 50, marginTop: 50
-      },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
+  },
       box: {
         backgroundColor: '#f7fff4',
         padding: 20,

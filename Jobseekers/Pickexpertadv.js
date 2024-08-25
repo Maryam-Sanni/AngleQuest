@@ -60,7 +60,7 @@ function MyComponent({ onClose }) {
       }
 
       const response = await axios.post('https://recruitangle.com/api/jobseeker/chosen-expert-skill-analysis', {
-        expert_name: `${selectedUser.first_name} ${selectedUser.last_name}`, // Changed field name
+        first_name: `${selectedUser.first_name} ${selectedUser.last_name}`, // Changed field name
         category: selectedUser.category,
         available_days: selectedUser.available_days,
         available_times: selectedUser.available_times,

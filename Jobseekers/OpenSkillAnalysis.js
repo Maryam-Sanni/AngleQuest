@@ -14,6 +14,7 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [data, setData] = useState(null);
+  const [id, setId] = useState(null); // Store the ID
 
   const [type, setType] = useState("Career Change");
   const [role, setRole] = useState("");
@@ -38,6 +39,7 @@ function MyComponent({ onClose }) {
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
+           setId(parsedData.id); // Store the ID
 
           // Initialize state variables with retrieved data
           setType(parsedData.type || 'Career Change');
@@ -70,35 +72,36 @@ function MyComponent({ onClose }) {
   }, []);
   
   const goToPlans = async () => {
-    try {
-      // Prepare the data to be sent in the POST request
-      const postData = {
-      type: type,
-        role: role,
-        description: challenge,
-        starting_level: startingLevel,
-        target_level: targetLevel,
-        status: status,
-        date_time: data?.date_time,
-        expert_name: data?.expert_name,
-        expert_available_days: data?.expert_available_days,
-        expert_available_time: data?.expert_available_time,
-        expertid: data?.expertid,
-        meetingtype: meetingtype,
-        name: data?.name || 'name',
-      };
+      try {
+        // Construct the URL with the `id`
+        const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
 
-      // Send the POST request
-      const response = await axios.put(
-        'https://recruitangle.com/api/jobseeker/edit-jobseeker-skill-analysis',
-        postData,
-        {
+        // Prepare the data to be sent in the POST request
+        const postData = {
+          type: type,
+          role: role,
+          description: challenge,
+          starting_level: startingLevel,
+          target_level: targetLevel,
+          status: status,
+          date_time: data?.date_time,
+          expert_name: data?.expert_name,
+          expert_available_days: data?.expert_available_days,
+          expert_available_time: data?.expert_available_time,
+          expertid: data?.expertid,
+          meetingtype: meetingtype,
+          name: data?.name || 'name',
+        };
+
+        // Send the PUT request
+        const response = await axios.put(url, postData, {
           headers: {
-            'Content-Type': 'multipart/form-data', // If you're sending files
-            'Authorization': `Bearer ${token}` // Include token if authentication is required
-          }
-        }
-      );
+            'Content-Type': 'application/json', // Ensure JSON content type
+            'Authorization': `Bearer ${token}`, // Include token if authentication is required
+          },
+        });
+
+
 
       // Handle the response
       if (response.status === 200) {
@@ -147,7 +150,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("View Skill Analysis Session")}</Text>
+            <Text style={styles.headerText}>{t("Update Skill Analysis Session")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>

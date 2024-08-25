@@ -7,6 +7,8 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+const POLLING_INTERVAL = 5000;
+
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
@@ -40,12 +42,12 @@ const ScheduledMeetingsTable = () => {
           const filteredMeetings = data.allInterview.filter(meeting => meeting.user_id === storedExpertId);
           setMeetings(filteredMeetings);
 
-          // Save all growth plans to AsyncStorage
+          // Save all interviews to AsyncStorage
           try {
             await AsyncStorage.setItem('allinterview', JSON.stringify(data.allInterview));
-            console.log('All expert growth plans saved:', data.allInterview);
+            console.log('All expert interview feedbacks saved:', data.allInterview);
           } catch (error) {
-            console.error('Failed to save all expert growth plans to AsyncStorage', error);
+            console.error('Failed to save all expert interview feedbacks to AsyncStorage', error);
           }
         } else {
           console.error('Failed to fetch data', response);
@@ -55,7 +57,14 @@ const ScheduledMeetingsTable = () => {
       }
     };
 
+    // Initial data load
     loadFormData();
+
+    // Set up polling
+    const intervalId = setInterval(loadFormData, POLLING_INTERVAL);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -163,7 +172,7 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
           </View>
 
-          {meetings.slice(0, 5).map((meeting, index) => {
+           {meetings.map((meeting, index) => {
             const dateTime = new Date(meeting.created_at);
             const date = dateTime.toLocaleDateString();
             const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -268,7 +277,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,

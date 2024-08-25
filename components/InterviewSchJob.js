@@ -10,9 +10,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [interviews, setInterviews] = useState([]);
-  
+  const POLLING_INTERVAL = 5000; // Poll every 60 seconds
+
   useEffect(() => {
-    const loadFormData = async () => {
+    const fetchInterviews = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
@@ -22,14 +23,25 @@ const ScheduledMeetingsTable = () => {
         });
 
         if (response.status === 200 && response.data.status === 'success') {
-          setInterviews(response.data.interview);
+          const newInterviews = response.data.interview;
+          setInterviews(newInterviews);
 
           // Save all interviews to AsyncStorage
           try {
-            await AsyncStorage.setItem('allInterviews', JSON.stringify(response.data.interview));
-            console.log('All interviews saved:', response.data.interview);
+            await AsyncStorage.setItem('allInterviews', JSON.stringify(newInterviews));
+            console.log('All interviews saved:', newInterviews);
           } catch (error) {
             console.error('Failed to save all interviews to AsyncStorage', error);
+          }
+
+          // Compare with previous data
+          const previousInterviews = previousInterviewsRef.current;
+          if (JSON.stringify(newInterviews) === JSON.stringify(previousInterviews)) {
+            // Stop polling if no new data
+            clearInterval(intervalId);
+          } else {
+            // Update the previous interviews
+            previousInterviewsRef.current = newInterviews;
           }
         } else {
           console.error('Failed to fetch data', response);
@@ -39,7 +51,13 @@ const ScheduledMeetingsTable = () => {
       }
     };
 
-    loadFormData();
+    fetchInterviews(); // Initial fetch
+
+    // Set up polling
+    const intervalId = setInterval(fetchInterviews, POLLING_INTERVAL);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
 
@@ -71,27 +89,34 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
-              <Text style={{fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light"}}>{t("Role")}</Text>
+              <Text style={styles.headerText}>{t('Expert')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light"}}>{t("Company")}</Text>
+              <Text style={styles.headerText}>{t('Role')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light"}}>{t("Date")}</Text>
+              <Text style={styles.headerText}>{t('Company')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light"}}>{t("Time")}</Text>
+              <Text style={styles.headerText}>{t('Start Date')}</Text>
             </View>
-            <TouchableOpacity style={styles.cell2}>
-              <Text style={styles.cellText}> </Text>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Update</Text>
+               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cell2}>
-              <Text style={styles.cellText}> </Text>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Join</Text>
+               </View>
             </TouchableOpacity>
           </View>
 
           {interviews.map((interview, index) => (
             <View key={interview.id} style={styles.row}>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{interview.expert_name}</Text>
+              </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{interview.role}</Text>
               </View>
@@ -99,23 +124,20 @@ const ScheduledMeetingsTable = () => {
                 <Text style={styles.cellText}>{interview.company}</Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(interview.date_time).toLocaleDateString()}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(interview.date_time).toLocaleTimeString([], {
+                <Text style={styles.cellText}>{new Date(interview.date_time).toLocaleDateString()} <Text style={styles.cellText}>{new Date(interview.date_time).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: true
-                })}</Text>
+                })}</Text></Text>
               </View>
                <TouchableOpacity onPress={() => handleOpenPress(interview)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.open}>{t("Update")}</Text>
+                  <Text style={styles.linkText}>{t("Update")}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity >
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.open}>{t("Join")}</Text>
+                <Text style={styles.linkText}>{t("Join")}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -151,15 +173,16 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
-    textAlign: 'left', // Align text to the left
+    textAlign: 'flex-start',
   },
   table: {
     flex: 1,
-    marginHorizontal: 50,
+    marginRight: 200,
     marginTop: 20,
     marginBottom: 30,
     alignContent: 'center',
-    justifyContent: 'flex-start', // Adjust to start alignment
+    justifyContent: 'space-around',
+    marginLeft: 50, marginRight: 50
   },
   greenBox: {
     width: "90%",
@@ -180,47 +203,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'none',
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'white', 
     padding: 10,
-    justifyContent: 'center', // Center vertically
     alignItems: 'flex-start',
   },
   cellText: {
-    textAlign: 'left', // Align text to the left
-    fontFamily: "Roboto-Light",
+    textAlign: 'flex-start',
+    fontFamily: "Roboto-Light"
   },
   headerText: {
     fontWeight: '600',
-    fontFamily: "Roboto-Light",
-    textAlign: 'left', // Align header text to the left
-    paddingVertical: 10, // Adjust vertical padding if needed
+    fontSize: 14,
   },
   image: {
     width: 30,
     height: 30,
     marginRight: 10,
     marginTop: -5,
-    borderRadius: 25,
+    borderRadius: 25
   },
   blurBackground: {
     flex: 1,
     borderRadius: 20,
   },
-  open: {
-    color: "black",
+  linkText: {
+    color: "#206C00",
     fontSize: 14,
-    borderColor: "#63EC55",
-    borderWidth: 2,
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    fontFamily: "Roboto-Light",
-  },
+    fontFamily: "Roboto-Light"
+  }
 });
 
 export default ScheduledMeetingsTable;

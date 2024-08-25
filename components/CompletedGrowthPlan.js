@@ -7,6 +7,8 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+const POLLING_INTERVAL = 5000; 
+
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
@@ -55,7 +57,14 @@ const ScheduledMeetingsTable = () => {
       }
     };
 
+    // Initial data load
     loadFormData();
+
+    // Set up polling
+    const intervalId = setInterval(loadFormData, POLLING_INTERVAL);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -163,7 +172,7 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
           </View>
 
-          {meetings.slice(0, 5).map((meeting, index) => {
+           {meetings.map((meeting, index) => {
             const dateTime = new Date(meeting.created_at);
             const date = dateTime.toLocaleDateString();
             const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -173,7 +182,7 @@ const ScheduledMeetingsTable = () => {
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.expert_name}</Text>
+                    <Text style={styles.cellText}>{meeting.coach}</Text>
                   </View>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
@@ -268,7 +277,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,

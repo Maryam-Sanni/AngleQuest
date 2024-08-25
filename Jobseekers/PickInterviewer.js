@@ -138,7 +138,7 @@ function MyComponent({ onClose }) {
             style={{ width: 50, height: 50, marginTop: 10 }}
           />
           <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold' }}>
-            {recommendedExpert.expert_name}
+            {recommendedExpert.first_name}
           </Text>
           <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
             {recommendedExpert.category}
@@ -183,11 +183,14 @@ function MyComponent({ onClose }) {
           </Text>
           </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => handleCardPress(0)}  >
           <View style={{ marginRight: 10, marginLeft: 70, marginTop: 10 }}>
             <View style={styles.circle}>
           {isSelected && <View style={styles.filledCircle2} />}
             </View>
           </View>
+             </TouchableOpacity>
         </View>
       </Animated.View>
     );
@@ -231,7 +234,7 @@ function MyComponent({ onClose }) {
 
               // Save the selected user's data to AsyncStorage
               await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
-              await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
+              await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name || ' ');
               await AsyncStorage.setItem('selectedUserExpertid', expertid);
               await AsyncStorage.setItem('selectedUserDays', availabledays);
               await AsyncStorage.setItem('selectedUserTimes', availabletimes);

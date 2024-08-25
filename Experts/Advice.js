@@ -345,8 +345,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10, marginTop: 50, marginLeft: 20, marginRight: 50
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
   },
   box2: {
     backgroundColor: '#f7fff4',

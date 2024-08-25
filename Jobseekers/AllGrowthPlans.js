@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, M
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import GrowthPlantype from '../components/growthplantype';
+import Scheduledgrowth from '../components/Scheduledgrowth';
 import GrowthPlanreview from '../components/gpexpertreview';
 import OpenModal from '../Jobseekers/Pickyourcoach';
 import { useNavigation } from '@react-navigation/native';
@@ -135,7 +136,7 @@ function MyComponent() {
         const { t } = useTranslation()
     return (
       <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '150%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>
@@ -147,8 +148,11 @@ function MyComponent() {
                     <View style={styles.header}>
             <TouchableOpacity>
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Growth Plan")}</Text>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                  style={styles.image}
+                />
+                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14, marginTop: 5 }}>{t("Growth Plan")}</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -213,6 +217,7 @@ function MyComponent() {
       </Modal>
                        
                         <GrowthPlantype />
+                      <Scheduledgrowth />
                         <GrowthPlanreview />
                     </View>
                 </ScrollView>
@@ -253,16 +258,20 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     image: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         marginRight: 5,
-        marginLeft: 100
+        marginLeft: 100,
+      marginTop: 5,
+      tintColor: '#666',
     },
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        marginLeft: 40, marginRight: 50, marginTop: 50
+     marginTop: 50,
+      maxWidth: '90%',
+      marginLeft: 50,
       },
       box: {
         backgroundColor: '#f7fff4',

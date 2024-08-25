@@ -262,8 +262,8 @@ const {t}=useTranslation()
           </View>
       </Modal>
 
+          <GrowthPlansReview />
 <ScheduledGrowthPlan />
-<GrowthPlansReview />
 <CompletedGrowthPlan />
 </View>
           
@@ -313,9 +313,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginLeft: 40, marginRight: 50, marginTop: 50
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
   },
   box: {
     backgroundColor: '#f7fff4',

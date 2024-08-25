@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
     alignContent: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     marginLeft: 50, marginRight: 50
   },
   greenBox: {
@@ -279,7 +279,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,
