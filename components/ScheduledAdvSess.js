@@ -25,10 +25,13 @@ const ScheduledMeetingsTable = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.status === 200) {
-          const data = response.data.skillAnalysis || [];
-          setSkillAnalysisData(data);
+          if (response.status === 200) {
+            let data = response.data.skillAnalysis || [];
 
+            // Filter out entries where completed is "Yes"
+            data = data.filter(item => item.completed !== "Yes");
+
+            setSkillAnalysisData(data);
           try {
             await AsyncStorage.setItem('allSkillAnalysisData', JSON.stringify(data));
             console.log('All data saved:', data);
@@ -90,10 +93,10 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Role")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Type")}</Text>
+              <Text style={styles.headerText}>{t("Starting level")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Starting Level")}</Text>
+              <Text style={styles.headerText}>{t("Meeting Date")}</Text>
             </View>
                <TouchableOpacity>
                  <View style={styles.cell2}>
@@ -127,10 +130,10 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.cellText}>{analysis.role}</Text>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{analysis.type}</Text>
+                  <Text style={styles.cellText}>{analysis.starting_level}</Text>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{analysis.starting_level}</Text>
+                  <Text style={styles.cellText}>{new Date(analysis.date_time).toLocaleDateString()} {new Date(analysis.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
                 </View>
                 <TouchableOpacity onPress={() => handleOpenPress(analysis)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>

@@ -3,10 +3,27 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView,
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
- 
+
 
 function MyComponent({ onClose }) {
   const [data, setData] = useState(null);
+  const rating = 6; 
+
+  const getRatingText = (rating) => {
+    switch (rating) {
+      case 1: return 'Very Dissatisfied';
+      case 2: return 'Dissatisfied';
+      case 3: return 'Somewhat Dissatisfied';
+      case 4: return 'Slightly Dissatisfied';
+      case 5: return 'Neutral';
+      case 6: return 'Somewhat Satisfied';
+      case 7: return 'Satisfied';
+      case 8: return 'Very Satisfied';
+      case 9: return 'Extremely Satisfied';
+      case 10: return 'Completely Satisfied';
+      default: return 'No Rating';
+    }
+  };
 
 
 
@@ -27,7 +44,7 @@ function MyComponent({ onClose }) {
 
     fetchData();
   }, []);
-  
+
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -44,7 +61,7 @@ function MyComponent({ onClose }) {
             style={styles.logo}
           />
           <Text style={styles.headerText}>{t("View Expert's Review")}</Text>
-       
+
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
@@ -85,7 +102,7 @@ function MyComponent({ onClose }) {
         />
       </View>
     </View>
-   
+
   </View>
 
  <View style={{flexDirection: 'row'}}>
@@ -111,7 +128,7 @@ function MyComponent({ onClose }) {
 <Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50, fontSize: 14, marginBottom: 10,fontFamily:"Roboto-Light" }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
               <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{data?.remark}</Text>
-               
+
                 </View>
 
 <View style={styles.container}>
@@ -125,9 +142,19 @@ function MyComponent({ onClose }) {
         </View>
         </View>
 
-    
-    
- 
+  <View style={styles.ratingContainer}>
+    <Text style={styles.ratetitle}>{t("Rating")} <Image
+      source={{ uri: 'https://img.icons8.com/?size=100&id=60003&format=png&color=206C00' }}
+      style={{width: 20, height: 20, marginLeft: 5, marginTop: 5 }}
+    /></Text>
+    <View style={styles.raterow}>
+      <Text style={styles.ratetext}>You rated {data?.coach} </Text>
+      <Text style={styles.ratetext}>{getRatingText(rating)}</Text>
+    </View>
+  </View>
+
+
+
     </View>
     </ScrollView>
 </View>
@@ -213,7 +240,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637',
     fontFamily:"Roboto-Light"
-  }
+  },
+  ratingContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: 50,
+    marginTop: 300
+  },
+  ratetitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 20,
+    color: '#206C00'
+  },
+  raterow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratetext: {
+    color: 'black',
+    fontFamily: "Roboto-Light",
+    fontSize: 16
+  },
+
 });
 
 export default MyComponent;

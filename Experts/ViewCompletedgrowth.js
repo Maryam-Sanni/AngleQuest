@@ -19,6 +19,23 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
    const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+  const rated = 3;
+
+  const getRatingText = (rated) => {
+    switch (rated) {
+      case 1: return 'Very Dissatisfied';
+      case 2: return 'Dissatisfied';
+      case 3: return 'Somewhat Dissatisfied';
+      case 4: return 'Slightly Dissatisfied';
+      case 5: return 'Neutral';
+      case 6: return 'Somewhat Satisfied';
+      case 7: return 'Satisfied';
+      case 8: return 'Very Satisfied';
+      case 9: return 'Extremely Satisfied';
+      case 10: return 'Completely Satisfied';
+      default: return 'No Rating';
+    }
+  };
 
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
@@ -183,7 +200,7 @@ try {
         <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.role}</Text>
         </View>
       </View>
-    
+
 
 
  </View>
@@ -265,7 +282,15 @@ try {
         </View>
         </View>
 
- 
+  <View style={styles.ratingContainer}>
+    <Text style={styles.ratetitle}>{t("Rating")} <Image
+      source={{ uri: 'https://img.icons8.com/?size=100&id=60003&format=png&color=206C00' }}
+      style={{width: 20, height: 20, marginLeft: 5, marginTop: 5 }}
+    /></Text>
+    <View style={styles.raterow}>
+      <Text style={styles.ratetext}>You were rated {getRatingText(rated)} by {data?.coach} </Text>
+    </View>
+  </View>
 
     </View>
     </ScrollView>
@@ -381,7 +406,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637',
     fontFamily:"Roboto-Light"
-  }
+  },
+  ratingContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: 50,
+    marginTop: 300
+  },
+  ratetitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 20,
+    color: '#206C00'
+  },
+  raterow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratetext: {
+    color: 'black',
+    fontFamily: "Roboto-Light",
+    fontSize: 16
+  },
 });
 
 export default MyComponent;

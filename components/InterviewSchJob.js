@@ -23,7 +23,11 @@ const ScheduledMeetingsTable = () => {
         });
 
         if (response.status === 200 && response.data.status === 'success') {
-          const newInterviews = response.data.interview;
+          let newInterviews = response.data.interview || [];
+
+          // Filter out interviews where completed is "Yes"
+          newInterviews = newInterviews.filter(item => item.completed !== "Yes");
+
           setInterviews(newInterviews);
 
           // Save all interviews to AsyncStorage
@@ -98,7 +102,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t('Company')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Start Date')}</Text>
+              <Text style={styles.headerText}>{t('Meeting Date')}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>

@@ -52,46 +52,50 @@ const ScheduledMeetingsTable = () => {
   });
   const { t } = useTranslation();
 
-  useEffect(() => {
-      const fetchData = async () => {
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
+
+      if (token && storedUserId) {
+        setUserId(storedUserId); // Store user_id in state
+
+        const response = await fetch('https://recruitangle.com/api/expert/growthplan/getAllExpertsGrowthPlanFeedbacks', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          // Filter the growth plans based on matching user_id and jobseeker_id
+          const filteredGrowthPlans = data.allGrowthPlan.filter(plan => plan.jobseeker_id === storedUserId);
+          setGrowthPlans(filteredGrowthPlans); // Store the filtered data in state
+
           try {
-              const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
-              const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
-
-              if (token && storedUserId) {
-                  setUserId(storedUserId); // Store user_id in state
-
-                  const response = await fetch('https://recruitangle.com/api/expert/growthplan/getAllExpertsGrowthPlanFeedbacks', {
-                      method: 'GET',
-                      headers: {
-                          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-                      },
-                  });
-
-                  const data = await response.json();
-                  if (data.status === 'success') {
-                      // Filter the growth plans based on matching user_id and jobseeker_id
-                      const filteredGrowthPlans = data.allGrowthPlan.filter(plan => plan.jobseeker_id === storedUserId);
-                      setGrowthPlans(filteredGrowthPlans); // Store the filtered data in state
-
-                      try {
-                          await AsyncStorage.setItem('Growthplanfeedback', JSON.stringify(filteredGrowthPlans)); // Save the filtered growth plans to AsyncStorage
-                          console.log('Filtered growth plans saved:', filteredGrowthPlans);
-                      } catch (error) {
-                          console.error('Failed to save filtered growth plans to AsyncStorage', error);
-                      }
-                  } else {
-                      console.error('Failed to fetch data', response);
-                  }
-              } else {
-                  console.error('Token or user ID is missing');
-              }
+            await AsyncStorage.setItem('Growthplanfeedback', JSON.stringify(filteredGrowthPlans)); // Save the filtered growth plans to AsyncStorage
+            console.log('Filtered growth plans saved:', filteredGrowthPlans);
           } catch (error) {
-              console.error('Failed to load form data', error);
+            console.error('Failed to save filtered growth plans to AsyncStorage', error);
           }
-      };
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } else {
+        console.error('Token or user ID is missing');
+      }
+    } catch (error) {
+      console.error('Failed to load form data', error);
+    }
+  };
 
-      fetchData();
+  useEffect(() => {
+    fetchData(); // Initial data load
+
+    const intervalId = setInterval(fetchData, 5000); // Polling every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear the interval when the component unmounts
   }, []);
 
 
@@ -106,6 +110,7 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Completed")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Performance")}</Text></View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -129,6 +134,9 @@ const ScheduledMeetingsTable = () => {
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{plan.role}</Text>
+              </View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{new Date(plan.updated_at).toLocaleDateString()} {new Date(plan.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{plan.performance_rating}</Text>

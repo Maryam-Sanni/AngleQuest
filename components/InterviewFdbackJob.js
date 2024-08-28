@@ -11,7 +11,7 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [interviews, setInterviews] = useState([]);
   const [modalVisible2, setModalVisible2] = useState(false);
-  
+
 
   const handleOpenPress2 = async (interview) => {
     setModalVisible2(true);
@@ -27,7 +27,7 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
-  
+
 
   const handleOpenPress = async (interview) => {
     setModalVisible(true);
@@ -62,7 +62,9 @@ const ScheduledMeetingsTable = () => {
 
         if (data.status === 'success') {
           // Filter interviews based on user_id
-          const filteredInterviews = data.allInterview.filter(interview => interview.jobseeker_id === storedUserId);
+          const filteredInterviews = data.allInterview.filter(
+            interview => interview.jobseeker_id === storedUserId
+          );
           setInterviews(filteredInterviews);
 
           // Optionally save filtered interviews to AsyncStorage
@@ -84,7 +86,11 @@ const ScheduledMeetingsTable = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(); // Initial data load
+
+    const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
   }, []);
 
   const [fontsLoaded] = useFonts({
@@ -105,7 +111,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t('Role')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Start Date')}</Text>
+              <Text style={styles.headerText}>{t('Completed')}</Text>
             </View>
             <View style={styles.cell2}>
               <Text style={styles.headerText}>{t('Performance')}</Text>
@@ -132,7 +138,7 @@ const ScheduledMeetingsTable = () => {
                 <Text style={styles.cellText}>{interview.role}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(interview.date).toLocaleDateString()}    <Text style={styles.cellText}>{new Date(interview.time).toLocaleTimeString()}</Text></Text>
+                <Text style={styles.cellText}>{new Date(interview.updated_at).toLocaleDateString()} {new Date(interview.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{interview.score}</Text>

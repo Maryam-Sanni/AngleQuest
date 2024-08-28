@@ -157,25 +157,30 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Name")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Remark")}</Text>
+              <Text style={styles.headerText}>{t("Role")}</Text>
             </View>
             <View style={styles.cell2}>
               <Text style={styles.headerText}>{t("Rating")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Date")}</Text>
+              <Text style={styles.headerText}>{t("Completed")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
                 <Text style={{ color: 'white' }}>{t("Open")}</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Start Meeting</Text>
+               </View>
+            </TouchableOpacity>
           </View>
 
            {meetings.map((meeting, index) => {
-            const dateTime = new Date(meeting.created_at);
+            const dateTime = new Date(meeting.updated_at);
             const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  });
 
             return (
               <View key={index} style={styles.row}>
@@ -186,7 +191,7 @@ const ScheduledMeetingsTable = () => {
                   </View>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{meeting.remark}</Text>
+                  <Text style={styles.cellText}>{meeting.role}</Text>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{meeting.rating}</Text>
@@ -197,6 +202,11 @@ const ScheduledMeetingsTable = () => {
                 <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                     <Text style={styles.linkText}>{t("Open")}</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity >
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={{color: 'transparent'}}>{t("Start Meeting")}</Text>
                   </View>
                 </TouchableOpacity>
               </View>

@@ -19,45 +19,53 @@ const ScheduledMeetingsTable = () => {
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
 
-  useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const storedExpertId = await AsyncStorage.getItem('user_id');
+    useEffect(() => {
+      const loadFormData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const storedExpertId = await AsyncStorage.getItem('user_id');
 
-        if (!token || !storedExpertId) {
-          console.error('No token or user ID found');
-          return;
-        }
-
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-all-jobseeker-growthplan', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200) {
-          const data = response.data.allGrowthPlan;
-
-          // Filter meetings based on expert_id
-          const filteredMeetings = data.filter(meeting => meeting.expertid === storedExpertId);
-          setMeetings(filteredMeetings);
-
-          // Save all growth plans to AsyncStorage
-          try {
-            await AsyncStorage.setItem('allExpertsgrowth', JSON.stringify(data));
-            console.log('All expert growth plans saved:', data);
-          } catch (error) {
-            console.error('Failed to save all expert growth plans to AsyncStorage', error);
+          if (!token || !storedExpertId) {
+            console.error('No token or user ID found');
+            return;
           }
-        } else {
-          console.error('Failed to fetch data', response);
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
 
-    loadFormData();
-  }, []);
+          const response = await axios.get('https://recruitangle.com/api/expert/get-review-growth-plan', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (response.status === 200) {
+            const data = response.data.reviewGrowthPlan;
+
+            // Filter meetings based on expert_id and review status "satisfied"
+            const filteredMeetings = data.filter(meeting => 
+              meeting.user_id === storedExpertId && meeting.review === "satisfied"
+            );
+            setMeetings(filteredMeetings);
+
+            // Save all growth plans to AsyncStorage
+            try {
+              await AsyncStorage.setItem('allExpertsgrowth', JSON.stringify(data));
+              console.log('All expert growth plans saved:', data);
+            } catch (error) {
+              console.error('Failed to save all expert growth plans to AsyncStorage', error);
+            }
+          } else {
+            console.error('Failed to fetch data', response);
+          }
+        } catch (error) {
+          console.error('Failed to load form data', error);
+        }
+      };
+
+      loadFormData();
+
+      // Polling every 30 seconds (30000 milliseconds)
+      const intervalId = setInterval(loadFormData, 5000);
+
+      // Clean up the interval on component unmount
+      return () => clearInterval(intervalId);
+    }, []);
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -87,7 +95,7 @@ const ScheduledMeetingsTable = () => {
 
           // Filter meetings where expert_id matches storedExpertId
           const matchingMeetings = meetings.filter(
-            meeting => meeting.expert_id === storedExpertId
+            meeting => meeting.user_id === storedExpertId
           );
 
           if (matchingMeetings.length > 0) {
@@ -155,7 +163,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Account Type")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Date")}</Text>
+              <Text style={styles.headerText}>{t("Reviewed")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -170,16 +178,16 @@ const ScheduledMeetingsTable = () => {
           </View>
 
           {meetings.map((meeting, index) => {
-            const dateTime = new Date(meeting.date_time);
+            const dateTime = new Date(meeting.date);
             const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
             return (
               <View key={index} style={styles.row}>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.name}</Text>
+                    <Text style={styles.cellText}>{meeting.coach}</Text>
                   </View>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>

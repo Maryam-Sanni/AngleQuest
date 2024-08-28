@@ -66,9 +66,9 @@ const ScheduledMeetingsTable = () => {
 
           try {
             await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillanalysis));
-            console.log('Filtered skillanalysiss saved:', filteredSkillanalysis);
+            console.log('Filtered skillanalysis saved:', filteredSkillanalysis);
           } catch (error) {
-            console.error('Failed to save filtered skillanalysiss to AsyncStorage', error);
+            console.error('Failed to save filtered skillanalysis to AsyncStorage', error);
           }
         } else {
           console.error('Failed to fetch data', data);
@@ -82,7 +82,11 @@ const ScheduledMeetingsTable = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(); // Initial data load
+
+    const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
   }, []);
 
   const [fontsLoaded] = useFonts({
@@ -104,10 +108,10 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t('Role')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Start Date')}</Text>
+              <Text style={styles.headerText}>{t('Completed')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Starting Level')}</Text>
+              <Text style={styles.headerText}>{t('Performance')}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -131,10 +135,10 @@ const ScheduledMeetingsTable = () => {
                 <Text style={styles.cellText}>{skillanalysis.role}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(skillanalysis.date).toLocaleDateString()}</Text>
+                <Text style={styles.cellText}>{new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
               </View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.starting_level}</Text>
+                <Text style={styles.cellText}>{skillanalysis.rating}</Text>
               </View>
               <TouchableOpacity onPress={() => handleOpenPress2(skillanalysis)}>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>

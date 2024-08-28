@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Switch, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import PastSessions from '../components/PastSessions';
@@ -15,6 +15,9 @@ function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [hubs, setHubs] = useState([]);
     const [selectedHub, setSelectedHub] = useState(null);
+    const [isAttending, setIsAttending] = useState(false);
+
+    const toggleAttendance = () => setIsAttending(previousState => !previousState);
 
     const handleOpenPress = () => {
         setModalVisible(true);
@@ -110,7 +113,7 @@ function MyComponent() {
                             <View style={styles.container}>
                                 <View style={styles.box}>
                                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 18, color: "black", fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Hub Meeting")}</Text>
+                                        <Text style={{ fontSize: 18, color: "black", fontWeight: 'bold' }}>{t("Hub Meeting")}</Text>
                                         <Text style={{ fontSize: 13, color: "grey", marginTop: 10, fontFamily: "Roboto-Light" }}>{selectedHub.meeting_day}s</Text>
                                         <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500', fontFamily: "Roboto-Light" }}>{selectedHub.from} - {selectedHub.to}</Text>
                                         <TouchableOpacity style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00' }} onPress={handlejoinPress}>
@@ -123,19 +126,27 @@ function MyComponent() {
                                     <Text style={{ fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10, fontFamily: "Roboto-Light" }}>{selectedHub.coaching_hub_name}</Text>
                                     <Text style={{ fontSize: 12, marginTop: 5, color: 'black', fontFamily: "Roboto-Light" }}>{selectedHub.coaching_hub_description}</Text>
                                 </View>
-
-                              <View style={styles.box}> 
-                                <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Confirm Your attendance")}</Text>
-                                  <View style={{flexDirection: 'row', marginTop: 10}}>
-                                     <Text style = {{fontSize: 12, fontWeight: 'bold', marginRight: 10, color: '#206C00', borderColor: "#63EC55", borderWidth: 2, padding: 5, paddingHorizontal: 15, borderRadius: 5,fontFamily:"Roboto-Light" }}>{t("Yes, I will attend")}</Text>
-                                     <Image source={require('../assets/teamicon.jpg')} style={styles.boximage}  />
-                               </View>
+ 
+                                <View style={styles.box}>
+                                      <Text style={{ fontSize: 16, color: "black", marginBottom: 10, fontWeight: 'bold' }}>{t("Confirm Attendance")}</Text>
+                                    <View style={styles.switchrow}>
+                                        <Switch
+                                            trackColor={{ false: "#767577", true: "#63EC55" }}
+                                            thumbColor={isAttending ? "#206C00" : "#f4f3f4"}
+                                            ios_backgroundColor="#3e3e3e"
+                                            onValueChange={toggleAttendance}
+                                            value={isAttending}
+                                        />
+                                        <Text style={styles.switchLabel}>
+                                            {isAttending ? t("Yes, I will attend") : t("No, I will not attend")}
+                                        </Text>
+                                        <Image source={require('../assets/teamicon.jpg')} style={styles.boximage} />
+                                    </View>
                                 </View>
                               <View style={styles.box}>
                                 <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Confirmed Attendant")}</Text>
                                   <View style={{flexDirection: 'row'}}>
                                      <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>10</Text>
-                                     <Image source={require('../assets/organization.png')} style={styles.boximage}  />
                                </View>
                                <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 10, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Unconfirmed")}</Text>
                                      <Text style = {{fontSize: 18, fontWeight: 'bold', color: '#206C00',fontFamily:"Roboto-Light" }}>15</Text>
@@ -318,9 +329,10 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto-Light"
     },
     boximage: {
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         marginTop: -10,
+        marginLeft: 10
     },
     attendantTitle: {
         fontSize: 14,
@@ -356,6 +368,18 @@ const styles = StyleSheet.create({
         marginTop: 5,
         tintColor: '#666',
       marginLeft: 100
+    },
+    switchrow: {
+        flexDirection: 'row',
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    switchLabel: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        color: '#206C00',
+        fontFamily: "Roboto-Light",
     },
 });
 

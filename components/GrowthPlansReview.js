@@ -38,7 +38,9 @@ const ScheduledMeetingsTable = () => {
           const data = response.data.allGrowthPlan;
 
           // Filter meetings based on expert_id
-          const filteredMeetings = data.filter(meeting => meeting.expertid === storedExpertId);
+          const filteredMeetings = data.filter(meeting => 
+            meeting.expertid === storedExpertId && meeting.completed !== "Yes"
+          );
           setMeetings(filteredMeetings);
 
           // Save all growth plans to AsyncStorage
@@ -155,11 +157,16 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Account Type")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Date")}</Text>
+              <Text style={styles.headerText}>{t("Meeting Date")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Open</Text>
+               </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Start Meeting</Text>
                </View>
             </TouchableOpacity>
           </View>
@@ -167,7 +174,7 @@ const ScheduledMeetingsTable = () => {
           {meetings.map((meeting, index) => {
             const dateTime = new Date(meeting.date_time);
             const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
             return (
               <View key={index} style={styles.row}>
@@ -190,6 +197,11 @@ const ScheduledMeetingsTable = () => {
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Open")}</Text>
                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity >
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={{color: 'transparent'}}>{t("Start Meeting")}</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );

@@ -28,7 +28,11 @@ const ScheduledMeetingsTable = () => {
       });
 
       if (response.status === 200) {
-        const data = response.data.growthPlan || [];
+        let data = response.data.growthPlan || [];
+
+        // Filter out entries where completed is "Yes"
+        data = data.filter(plan => plan.completed !== "Yes");
+
         setGrowthPlans(data);
 
         // Save all growth plans to AsyncStorage
@@ -107,7 +111,12 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Type")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Starting Level")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Meeting Date")}</Text></View>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Update</Text>
+               </View>
+            </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Update</Text>
@@ -122,10 +131,15 @@ const ScheduledMeetingsTable = () => {
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.type}</Text></View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.title}</Text></View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.role}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.starting_level}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{new Date(growthPlan.date_time).toLocaleDateString()} {new Date(growthPlan.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text></View>
               <TouchableOpacity onPress={() => handleOpenPress (growthPlan)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.linkText}>{t("Update")}</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity >
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={{color: 'transparent'}}>{t("Update")}</Text>
                 </View>
               </TouchableOpacity>
             </View>

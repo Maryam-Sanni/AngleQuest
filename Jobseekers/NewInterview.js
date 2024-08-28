@@ -18,7 +18,7 @@
     const [role, setRole] = useState("");
     const [cv, setCV] = useState(null);
     const [job_description_file, setJobFile] = useState(null);
-    const [job_description_text, setjobText] = useState("Write your description here");
+    const [job_description_text, setjobText] = useState(" ");
     const [token, setToken] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -249,7 +249,7 @@
               </View>
               <View style={styles.row}>
                 <View style={styles.cell}>
-                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}    <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
                 </View>
                 <View style={styles.cell}>
                   <input
@@ -262,7 +262,7 @@
               </View>
               <View style={styles.row}>
                 <View style={styles.cell}>
-                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")} <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
                 </View>
                 <View style={styles.cell}>
                   <input

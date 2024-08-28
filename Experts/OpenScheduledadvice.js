@@ -13,7 +13,7 @@ function MyComponent({ onClose }) {
   const [lastName, setLastName] = useState('');
   const [completed, setCompleted] = useState('Yes');
   const [remark, setRemark] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState('Replan');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true); 
@@ -107,7 +107,8 @@ function MyComponent({ onClose }) {
   if (!token) throw new Error('No token found');
 
   const payload = {
-     jobseeker_id: String(37), // Convert jobseeker_id to a string
+     jobseeker_id: String(data?.user_id), 
+    skill_analysis_id: String(data?.id),
     remark: remark,
     expert_name: `${firstName} ${lastName}`,
     rating: rating,
@@ -130,15 +131,13 @@ function MyComponent({ onClose }) {
 
   if (response.status === 201 && response.data.status === 'success') {
     console.log('Marked as completed successfully');
-    setAlertMessage(t('Remark updated successfully'));
   } else {
     console.error('Failed to mark as completed', response);
-    setAlertMessage(t('Remark failed to update'));
   }
   } catch (error) {
   console.error('Error marking as completed', error);
   }
-  setAlertVisible(true);
+
   };
 
   const hideAlert = () => {

@@ -11,8 +11,9 @@ function MyComponent({ onClose }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [completed, setCompleted] = useState('Yes');
+  const [skill_analysis_id, setskill_analysis_id] = useState('');
   const [remark, setRemark] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState('Replan');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true); 
@@ -98,7 +99,7 @@ function MyComponent({ onClose }) {
   };
 
   const handleMarkAsCompleted = async () => {
-    if (!remark || !questions || !rating ) {
+    if (!remark || !rating ) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
       return;
@@ -112,6 +113,7 @@ function MyComponent({ onClose }) {
 
     const payload = {
        jobseeker_id: data?.user_id, 
+      interview_id: String(data?.id),
       remark: remark,
       expert_name: `${firstName} ${lastName}`,
       rating: rating,
@@ -134,15 +136,13 @@ function MyComponent({ onClose }) {
 
     if (response.status === 201 && response.data.status === 'success') {
       console.log('Marked as completed successfully');
-       setAlertMessage(t('Remark updated successfully'));
     } else {
       console.error('Failed to mark as completed', response);
-      setAlertMessage(t('Remark failed to update'));
     }
   } catch (error) {
     console.error('Error marking as completed', error);
   }
-    setAlertVisible(true);
+
   };
 
     const hideAlert = () => {

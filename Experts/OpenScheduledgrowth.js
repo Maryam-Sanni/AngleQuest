@@ -13,7 +13,7 @@ function MyComponent({ onClose }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [remark, setRemark] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState('Replan');
    const [completed, setCompleted] = useState('Yes');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
@@ -108,6 +108,8 @@ try {
 
   const payload = {
      jobseeker_id: data?.user_id, // Convert jobseeker_id to a string
+    growth_plan_id: String(data?.id),
+    coach: data?.name,
     remark: remark,
     expert_name: `${firstName} ${lastName}`,
     rating: rating,
@@ -116,7 +118,6 @@ try {
     role: data?.role,
     date: data?.date_time,
     performance_rating: rating,
-    coach: data?.name,
     descriptions: guides.map(guide => ({
       description: guide.guide,
       percentage: guide.percentage,
@@ -129,15 +130,13 @@ try {
 
   if (response.status === 201 && response.data.status === 'success') {
     console.log('Marked as completed successfully');
-    setAlertMessage(t('Remark updated successfully'));
   } else {
     console.error('Failed to mark as completed', response);
-    setAlertMessage(t('Remark failed to update'));
   }
 } catch (error) {
   console.error('Error marking as completed', error);
 }
-  setAlertVisible(true);
+
 };
 
   const hideAlert = () => {
@@ -173,50 +172,28 @@ try {
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Protegee")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.name}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.coach}</Text>
            
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.starting_level}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.role}</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Result Description")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Title")}</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.result_description}</Text>
+          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.title}</Text>
         </View>
         </View>
-        <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("How to achieve")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.how_to_achieve}</Text>
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Anticipated Progress (Target)")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.target_level}</Text>
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("What do you need to achieve this objective?")}</Text>
-        </View>
-        <View style={styles.cell}>
-          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.achieve_the_objective}</Text>
-        </View>
-        </View>
+       
+   
      
       
  </View>
@@ -289,7 +266,6 @@ try {
            style={styles.picker}
            onValueChange={(itemValue) => setRating(itemValue)}
 >
-          <Picker.Item label="Replan" value="Replan" />
           <Picker.Item label="Fair" value="Fair" />
           <Picker.Item label="Good" value="Good" />
           <Picker.Item label="Brilliant" value="Brilliant" />

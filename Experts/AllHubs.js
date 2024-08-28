@@ -361,22 +361,22 @@ const ScheduledMeetingsTable = () => {
 
       <View style={styles.whiteBox}>
       <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("Next Meeting Confirmation")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>12</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>0</Text>
     <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>{t("Yet to Confirm")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>2</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
       </View>
 
       <View style={styles.whiteBox}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>1</Text>
     
       </View>
 
       <View style={styles.whiteBox}>
       <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>{t("Sessions Held")}</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>20</Text>
+    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>0</Text>
     <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>{t("Sessions Missed")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>4</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
       </View>
 
       </View>

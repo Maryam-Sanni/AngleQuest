@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
@@ -8,20 +9,29 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
   const { t } = useTranslation();
   const [expert, setExpert] = useState(' ');
   const [data, setData] = useState(null);
+  const [token, setToken] = useState("");
+  const [id, setId] = useState(null); // Add this line
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const retrievedData = await AsyncStorage.getItem('selectedSkillAnalysis');
+        const storedToken = await AsyncStorage.getItem('token');
+
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
-           setId(parsedData.id); // Store the ID
+          setId(parsedData.id); // Store the ID
 
-          // Initialize state variables with retrieved data
           setExpert(parsedData.expert_name || '');
         } else {
           console.log('No data found in AsyncStorage.');
+        }
+
+        if (storedToken) {
+          setToken(storedToken);
+        } else {
+          console.log('No token found in AsyncStorage.');
         }
       } catch (error) {
         console.error('Failed to retrieve data from AsyncStorage', error);
@@ -30,15 +40,39 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
 
     fetchData();
   }, []);
-  
+
   const handleRatingPress = (rating) => {
     setSelectedRating(rating);
   };
 
-  const handleConfirm = () => {
-    onConfirm(selectedRating);
-  };
+  const handleConfirm = async () => {
+    if (selectedRating !== null && token) {
+      try {
+        const response = await axios.post(
+          'https://recruitangle.com/api/jobseeker/create-jobseeker-skill-analysis',
+          {
+            rating: selectedRating,
+            id: data?.id, // Use the stored ID
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
+        // Handle successful response if needed
+        console.log('Rating submitted successfully', response.data);
+        onConfirm(selectedRating);
+      } catch (error) {
+        console.error('Error submitting rating', error);
+      }
+    } else {
+      console.log('Rating or token is missing');
+    }
+    onCancel();
+  };
+ 
   return (
     <View style={styles.modalContainer}>
       <Text style={styles.headerText}>

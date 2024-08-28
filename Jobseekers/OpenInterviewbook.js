@@ -204,7 +204,7 @@ function MyComponent({ onClose }) {
     </View>
     <View style={styles.row}>
       <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
+        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")} <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
       </View>
       <View style={styles.cell}>
         <input
@@ -213,11 +213,12 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setCV)}
           style={{ marginTop: 5 }}
         />
+        <Text style={{ fontFamily: "Roboto-Light" }}>{data?.cv}</Text>
       </View>
     </View>
     <View style={styles.row}>
       <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
+        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")} <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
       </View>
       <View style={styles.cell}>
         <input
@@ -226,6 +227,7 @@ function MyComponent({ onClose }) {
           onChange={handleChooseImage(setJobFile)}
           style={{ marginTop: 5 }}
         />
+        <Text style={{ fontFamily: "Roboto-Light" }}>{data?.job_description_file}</Text>
       </View>
     </View>
     <View style={styles.row}>
