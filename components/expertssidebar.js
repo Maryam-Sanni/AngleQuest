@@ -29,7 +29,7 @@ function MyComponent() {
         case "Home":
           navigation.navigate('Home - Experts');
           break;
-        case "Offers":
+        case "Preferences":
           navigation.navigate('Offers');
           break;
         case "Interview":
@@ -98,7 +98,7 @@ function MyComponent() {
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
         case "Home": return routeName === 'Home - Experts';
-        case "Offers": return routeName === 'Offers';
+        case "Preferences": return routeName === 'Offers';
         case "Interview": return routeName === 'Interview';
         case "Growth Plan": return routeName === 'Growth Plan';
         case "Skills Analysis": return routeName === 'Advice';
