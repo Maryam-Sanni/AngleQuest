@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Topbar from '../components/expertstopbar';
-import Sidebar from '../components/expertssidebar';
+import Topbar from '../components/topbar';
+import Sidebar from '../components/sidebar';
 import OpenModal from '../components/Createhubform';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
@@ -14,12 +14,10 @@ function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-  const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
-  const [isSecondHubsHovered, setIsSecondHubsHovered] = useState(false);
-  const [isThirdHubsHovered, setIsThirdHubsHovered] = useState(false);
   const [isOthersHovered, setIsOthersHovered] = useState(false);
-  const [isAllHovered, setIsAllHovered] = useState(true);
+  const [isAllHovered, setIsAllHovered] = useState(false);
   const [cardData, setCardData] = useState({ AllHubs: [] });
+  const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +27,13 @@ function MyComponent() {
           console.error('No token found');
           return;
         }
-        
+
         const response = await axios.get('https://recruitangle.com/api/expert/hubs/all', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (response.status === 200) {
           console.log('Fetched data:', response.data); // Check the response structure
           setCardData(response.data);
@@ -46,10 +44,10 @@ function MyComponent() {
         console.error('Error fetching data:', error.response ? error.response.data : error.message);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
 
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(scaleAnimations[index], {
@@ -60,11 +58,11 @@ function MyComponent() {
   };
 
   const goToMyHubs = () => {
-    navigation.navigate('All Hubs');
+    navigation.navigate('Join Courses');
   };
 
   const goToHubs = () => {
-    navigation.navigate('Manage Hubs');
+    navigation.navigate(' ');
   };
 
   const handleOpenPress = () => {
@@ -75,6 +73,21 @@ function MyComponent() {
     setModalVisible(false);
   };
 
+  const handleJoinPressIn = (index) => {
+    setIsPressed((prev) => {
+      // Create a new state where only the currently pressed index is true
+      const newState = Array(4).fill(false);
+      newState[index] = true;
+      return newState;
+    });
+    setSelectedIndex(index);
+    setSelectedHub(cardData.AllHubs[index]);
+  };
+
+  const handleJoinPressOut = () => {
+    // No need to update the state here
+  };
+  
   const renderCards = () => {
     if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
       return <Text>No data available</Text>;
@@ -147,19 +160,32 @@ function MyComponent() {
           <Text style={{ fontSize: 12, color: '#888', marginTop: 10, marginLeft: 10, height: 60 }}>
             {data.coaching_hub_description}
           </Text>
-          <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
-            <Text style={{ fontSize: 12, color: 'black', marginTop: 2, marginRight: 5 }}>
-              Hub Fee
-            </Text>
-            <Text style={{ fontSize: 16, color: 'coral', fontWeight: 'bold' }}>
-              {data.coaching_hub_fee}
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPressIn={() => handleJoinPressIn(index)}
+            onPressOut={handleJoinPressOut}
+            style={{
+              borderWidth: 1,
+                borderColor: '#206C00',
+                backgroundColor: "#F0FFF9",
+                borderRadius: 5,
+                paddingHorizontal: 50,
+                paddingVertical: 5,
+                marginTop: 15,
+                width: "90%",
+                alignSelf: "center",
+                justifyContent: 'center',
+                marginLeft: 10,
+                marginRight: 10,
+              backgroundColor: isPressed[index] ? 'coral' : '#F0FFF9',
+            }}
+          >
+          <Text style={{ color: isPressed[index] ? '#fff' : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     ));
   };
-  
+
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
@@ -191,14 +217,14 @@ function MyComponent() {
                             }}
                             style={styles.image}
                           />
-                          <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>{t('Manage Hubs')}</Text>
+                          <Text style={[styles.headertext, isOthersHovered && { color: 'coral' }]}>{t('My Hubs')}</Text>
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={goToMyHubs}
                         underlayColor={isAllHovered ? 'transparent' : 'transparent'}
                         onMouseEnter={() => setIsAllHovered(true)}
-                        onMouseLeave={() => setIsAllHovered(true)}
+                        onMouseLeave={() => setIsAllHovered(false)}
                       >
                         <View style={styles.item}>
                           <Image
@@ -207,32 +233,13 @@ function MyComponent() {
                             }}
                             style={styles.image2}
                           />
-                          <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>{t('All Hubs')}</Text>
+                          <Text style={[styles.headertext, isAllHovered && { color: 'coral' }]}>{t('Upcoming Courses')}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={handleOpenPress}>
-                      <View
-                        style={{
-                          justifyContent: 'flex-start',
-                          paddingHorizontal: 10,
-                          paddingVertical: 10,
-                          borderRadius: 5,
-                          borderColor: '#206C00',
-                          backgroundColor: '#d3f9d8',
-                          width: 150,
-                          alignItems: 'center',
-                          marginTop: 20,
-                          marginBottom: 10,
-                          marginLeft: 50,
-                          borderWidth: 1,
-                        }}
-                      >
-                        <Text style={{ fontSize: 13, color: '#206C00', alignText: 'center', fontWeight: '600', fontFamily: 'Roboto-Light' }}>
-                          + {t('Create New Hub')}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
+
+                    <Text style={{color: 'grey', fontWeight: 600, marginTop: 30, marginRight: 50, marginLeft: 50 }}>{t('Joining a course means you will not be a part of the hub for extensive training but you will be able to get access to the course content and the hub meetings.')}</Text>
+                    
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginRight: 50, marginLeft: 50 }}>
                       {renderCards()}
                     </View>

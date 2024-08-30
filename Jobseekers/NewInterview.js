@@ -18,7 +18,7 @@
     const [role, setRole] = useState("");
     const [cv, setCV] = useState(null);
     const [job_description_file, setJobFile] = useState(null);
-    const [job_description_text, setjobText] = useState("Job description text");
+    const [job_description_text, setjobText] = useState(" ");
     const [token, setToken] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -28,6 +28,8 @@
     const [candidate, setCandidate] = useState("Individual");
     const [expertid, setExpertid] = useState("");
      const [meetingtype, setType] = useState("interview");
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
 
     const handleConfirmDateTime = (dateTime) => {
       setSelectedDateTime(dateTime);
@@ -42,6 +44,26 @@
       const selectedFile = event.target.files[0];
       setter(selectedFile);
     };
+
+    useEffect(() => {
+      // Retrieve first_name and last_name from AsyncStorage
+      const retrieveData = async () => {
+        try {
+          const storedFirstName = await AsyncStorage.getItem('first_name');
+          const storedLastName = await AsyncStorage.getItem('last_name');
+          if (storedFirstName !== null && storedLastName !== null) {
+            console.log('Stored first_name:', storedFirstName);
+            console.log('Stored last_name:', storedLastName);
+            setFirstName(storedFirstName);
+            setLastName(storedLastName);
+          }
+        } catch (error) {
+          console.error('Error retrieving data from AsyncStorage:', error);
+        }
+      };
+
+      retrieveData();
+    }, []);
     
     useEffect(() => {
       const getTokenAndUser = async () => {
@@ -52,6 +74,7 @@
 
           const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
           const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+
           const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
           const storedDays = await AsyncStorage.getItem('selectedUserDays');
           const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
@@ -123,6 +146,8 @@
         formData.append('expert_available_days', expert_available_days);
         formData.append('expert_available_time', expert_available_time);
         formData.append('expert_name', expert);
+        formData.append('expertid', expertid);
+        formData.append('name', first_name  + ' ' + last_name);
 
 
             // Make the GET request to check the subscription status
@@ -224,7 +249,7 @@
               </View>
               <View style={styles.row}>
                 <View style={styles.cell}>
-                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}    <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
                 </View>
                 <View style={styles.cell}>
                   <input
@@ -237,7 +262,7 @@
               </View>
               <View style={styles.row}>
                 <View style={styles.cell}>
-                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
+                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")} <Text style={{ fontFamily: "Roboto-Light", fontSize: 12 }}>{t(" File size should not exceed 2 MB")}</Text></Text>
                 </View>
                 <View style={styles.cell}>
                   <input
@@ -316,19 +341,20 @@
             <TouchableOpacity onPress={goToPlan} style={styles.buttonplus}>
               <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
             </TouchableOpacity>
-            <CustomAlert
-              visible={alertVisible}
-              title={t("Alert")}
-              message={alertMessage}
-              onConfirm={hideAlert}
-            />
-            <DateTimePickerModal
-              isVisible={isModalVisible}
-              onConfirm={handleConfirmDateTime}
-              onCancel={handleCancelModal}
-            />
+            
           </View>
         </ScrollView>
+        <CustomAlert
+          visible={alertVisible}
+          title={t("Alert")}
+          message={alertMessage}
+          onConfirm={hideAlert}
+        />
+        <DateTimePickerModal
+          isVisible={isModalVisible}
+          onConfirm={handleConfirmDateTime}
+          onCancel={handleCancelModal}
+        />
       </View>
     );
   }

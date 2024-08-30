@@ -51,50 +51,28 @@ const {t}=useTranslation()
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Setting up Master data")} in SAP</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>25</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Yes")}</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>2:00PM</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3:00PM</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <TouchableOpacity style={styles.cell2} >
-          <Text style={styles.open}>{t("Open")}</Text>
+          
           </TouchableOpacity>
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("T-Code Shortcuts in")} SAP</Text>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>15</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("No")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>2:00PM</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3:00PM</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={styles.open}>{t("Open")}</Text>
-          </TouchableOpacity>
-        </View>
+        
         
       </View>
       <Modal

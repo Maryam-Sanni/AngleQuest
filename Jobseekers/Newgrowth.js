@@ -35,39 +35,50 @@ function MyComponent({ onClose }) {
   const [candidate, setCandidate] = useState("Individual");
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setType] = useState("growth");
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
   const gotoCV = () => {
       navigation.navigate('Growth Offer');
   };
 
-    useEffect(() => {
+  useEffect(() => {
       const getTokenAndUser = async () => {
-        try {
-          // Retrieve token and user data from AsyncStorage
-          const storedToken = await AsyncStorage.getItem('token');
-          setToken(storedToken);
+          try {
+              // Retrieve token and user data from AsyncStorage
+              const storedToken = await AsyncStorage.getItem('token');
+              setToken(storedToken);
 
-          const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
-          const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
-          const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
-          const storedDays = await AsyncStorage.getItem('selectedUserDays');
-          const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
+              const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+              const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+              const storedExpertid = await AsyncStorage.getItem('selectedUserExpertid');
+              const storedDays = await AsyncStorage.getItem('selectedUserDays');
+              const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
+              const storedUserName = await AsyncStorage.getItem('selectedUserName'); // Retrieve expert_name
 
-          if (storedFirstName && storedLastName) {
-            setCoach(`${storedFirstName} ${storedLastName}`);
-            setExpertid(`${storedExpertid}`);
-            setExpertAvailableDays(`${storedDays}`);
-            setExpertAvailableTime(`${storedTimes}`);
-          } else {
-            console.warn('No user data found');
+              if (storedFirstName && storedLastName) {
+                  // If first_name and last_name are available
+                  setCoach(`${storedFirstName} ${storedLastName}`);
+              } else if (storedUserName) {
+                  // If expert_name is available and first_name/last_name are not
+                  setCoach(storedUserName);
+              } else {
+                  console.warn('No user data found');
+              }
+
+              // Set other user data
+              setExpertid(`${storedExpertid}`);
+              setExpertAvailableDays(`${storedDays}`);
+              setExpertAvailableTime(`${storedTimes}`);
+
+          } catch (error) {
+              console.error('Error retrieving token or user:', error);
           }
-        } catch (error) {
-          console.error('Error retrieving token or user:', error);
-        }
       };
 
       getTokenAndUser();
-    }, []);
+  }, []);
+
   
  
 
@@ -80,6 +91,26 @@ function MyComponent({ onClose }) {
     setIsModalVisible(false);
   };
 
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+  
   useEffect(() => {
     const getToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
@@ -139,6 +170,8 @@ function MyComponent({ onClose }) {
         expert_available_days,
         expert_available_time,
         coach,
+        expertid: expertid,
+        name: first_name  + ' ' + last_name
       };
 
       // Make the GET request to check the subscription status

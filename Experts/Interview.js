@@ -191,7 +191,7 @@ const {t}=useTranslation()
                                 onMouseLeave={() => setIsInterviewHovered(true)}>
                                 <View style={styles.item}>
                                 <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
                                     <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "No update yet"}</Text>
@@ -272,7 +272,7 @@ const {t}=useTranslation()
       </Modal>
 
                         <ScheduledMeetingsTable />
-                        <AwaitingFeedbacks />
+                        
                         <CompletedFeedbacks />
                     </View>
                 </ScrollView>
@@ -320,12 +320,14 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginLeft: 60
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginLeft: 40, marginRight: 50, marginTop: 50
-      },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
+  },
       box: {
         backgroundColor: '#f7fff4',
         padding: 20,

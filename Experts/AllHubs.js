@@ -349,8 +349,8 @@ const ScheduledMeetingsTable = () => {
 
   return ( 
     <View style={{flex: 1}}>
-    <View style={{flexDirection: 'row', flexWrap: "wrap", alignItems: 'center', alignContent: 'center' }}>
-    <View style={[styles.whiteBox, { marginLeft: 50, }]}>
+    <View style={styles.container}>
+    <View style={styles.whiteBox}>
     <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>{t("Next Meeting Schedule")}</Text>
     <Text style={{ fontSize: 13, color: "black", marginTop: 10}}>{meetingData.date}</Text>
     <Text style={{ fontSize: 14, color: "black", marginTop: 10, fontWeight: '500'}}>{meetingData.time}</Text>
@@ -359,24 +359,24 @@ const ScheduledMeetingsTable = () => {
           </TouchableOpacity>
       </View>
 
-      <View style={[styles.whiteBox, { marginLeft: 40,  }]}>
+      <View style={styles.whiteBox}>
       <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("Next Meeting Confirmation")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>12</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>0</Text>
     <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>{t("Yet to Confirm")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>2</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
       </View>
 
-      <View style={[styles.whiteBox, { marginLeft: 40, }]}>
+      <View style={styles.whiteBox}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>108</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>1</Text>
     
       </View>
 
-      <View style={[styles.whiteBox, {  marginRight: 50, marginLeft: 30  }]}>
+      <View style={styles.whiteBox}>
       <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>{t("Sessions Held")}</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>20</Text>
+    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>0</Text>
     <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>{t("Sessions Missed")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>4</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
       </View>
 
       </View>
@@ -486,7 +486,6 @@ const styles = StyleSheet.create({
     fontSize: 11
   },
   greenBox: {
-    flex: 1,
    width: "90%",
     height:250,
     marginBottom: 20,
@@ -511,8 +510,16 @@ const styles = StyleSheet.create({
     marginTop: -5,
     borderRadius: 25
   },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+    marginLeft: 50
+  },
   whiteBox: {
-    width: '20%',
+    width: '22%',
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
@@ -522,7 +529,6 @@ const styles = StyleSheet.create({
   marginTop: 50,
   borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
-    BlurView: '100%'
   },
 });
 

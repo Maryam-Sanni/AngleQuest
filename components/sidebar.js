@@ -106,6 +106,36 @@ function MyComponent() {
       return false;
     }
   };
+
+  const checkHubData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert("Error", "No token found");
+        return false;
+      }
+
+      const response = await fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-hubs', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success" && data.AllJoinedHubs) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error fetching hub data:", error);
+      Alert.alert("Error", "Failed to fetch hub data");
+      return false;
+    }
+  };
   
   const handleItemHover = (item) => {
     setHoveredItem(item);
@@ -121,8 +151,8 @@ function MyComponent() {
         case "Home":
           navigation.navigate('Home');
           break;
-        case "All Experts":
-          navigation.navigate('Experts');
+        case "Join Courses":
+          navigation.navigate('Join Courses');
           break;
         case "Growth Plan":
           const isgrowthPlanDataFilled = await checkgrowthPlanData();
@@ -151,8 +181,13 @@ function MyComponent() {
             navigation.navigate('Use AI');
           }
           break;
-        case "Hubs":
-          navigation.navigate('Coaching Hubs');
+          case "Hubs":
+          const isHubsDataFilled = await checkHubData();
+          if (isHubsDataFilled) {
+            navigation.navigate('Coaching Hub Sessions');
+          } else {
+            navigation.navigate('Coaching Hubs');
+          }
           break;
           case "Performance":
           navigation.navigate('My Performance');
@@ -211,7 +246,7 @@ function MyComponent() {
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
         case "Home": return routeName === 'Home';
-        case "All Experts": return routeName === 'Experts';
+        case "Join Courses": return routeName === 'Join Courses';
           case "Growth Plan":
           return ['New Growth Plan', 'Growth Plan Sessions'].includes(routeName);
           case "Interview":
@@ -293,16 +328,17 @@ function MyComponent() {
     </View>
   );
 }
-
+ 
 // const H = t("Home");
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "All Experts", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+   { label: "Join Courses", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
    { label: "Skills Analysis", icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=5B5D55" },
   { label: "Growth Plan", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Scenario Project", icon: "https://img.icons8.com/?size=100&id=53380&format=png&color=5B5D55" },
+  { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Performance", icon: "https://img.icons8.com/?size=100&id=42208&format=png&color=000000" },
   { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];

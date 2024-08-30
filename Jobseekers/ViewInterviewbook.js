@@ -1,98 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import DateTimePickerModal from "../components/DateTimePickerModal";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [data, setData] = useState(null);
 
-  const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
-  const [cv, setCV] = useState(null);
-  const [job_description_file, setJobFile] = useState(null);
-  const [job_description_text, setjobText] = useState("Job description text");
-  const [token, setToken] = useState("");
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [expert_available_days, setExpertAvailableDays] = useState('');
-  const [expert_available_time, setExpertAvailableTime] = useState('');
-  const [expert, setExpert] = useState('');
-  const [candidate, setCandidate] = useState("Individual");
-  const [expertid, setExpertid] = useState("");
-   const [meetingtype, setType] = useState("interview");
+  const [rate, setRating] = useState("");
+  const [level, setLevel] = useState(null);
+  const [company, setCompany] = useState(null);
+  const [remark, setRemark] = useState("Job description text");
+  const [score, setScore] = useState("");
+   const [description, setDescriptions] = useState([]);
+  const rating = 9;
+
+  const getRatingText = (rating) => {
+    switch (rating) {
+      case 1: return 'Very Dissatisfied';
+      case 2: return 'Dissatisfied';
+      case 3: return 'Somewhat Dissatisfied';
+      case 4: return 'Slightly Dissatisfied';
+      case 5: return 'Neutral';
+      case 6: return 'Somewhat Satisfied';
+      case 7: return 'Satisfied';
+      case 8: return 'Very Satisfied';
+      case 9: return 'Extremely Satisfied';
+      case 10: return 'Completely Satisfied';
+      default: return 'No Rating';
+    }
+  };
+
+
 
   useEffect(() => {
-    const loadFormData = async () => {
+    const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) throw new Error('No token found');
+        const retrievedData = await AsyncStorage.getItem('selectedInterview');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData);
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200 && response.data.status === 'success') {
-          const data = response.data.interview;
-          setCompany(data.company || '');
-          setRole(data.role || '');
-          setCV(data.cv || '');
-          setJobFile(data.job_description_file || '');
-          setjobText(data.job_description_text || '');
-          setSelectedDateTime(data.date_time || '');
+          // Initialize state variables with retrieved data
+          setCompany(parsedData.company || '');
+          setRole(parsedData.role || '');
+          setRating(parsedData.rating|| '');
+          setRemark(parsedData.remark || '');
+          setLevel(parsedData.level || '');
+          setScore(parsedData.score || '');
         } else {
-          console.error('Failed to fetch data', response);
+          console.log('No data found in AsyncStorage.');
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Failed to retrieve data from AsyncStorage', error);
       }
     };
 
-    loadFormData();
+    fetchData();
   }, []);
-
-  const handleConfirmDateTime = (dateTime) => {
-    setSelectedDateTime(dateTime);
-    setIsModalVisible(false);
-  };
-
-  const handleCancelModal = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleChooseImage = (setter) => (event) => {
-    const selectedFile = event.target.files[0];
-    setter(selectedFile);
-  };
-
-
-  const goToPlans = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('All Interviews');
-    onClose(); // Close the modal
-  };
 
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
   const {t}=useTranslation()
 
-  return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40}}>
-         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+  return ( 
+    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center',  }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+
 <View style={styles.greenBox}>
 <View style={styles.header}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Interview Session Booked")}</Text>
+          <Text style={styles.headerText}>{t("View Interview Feedback")}</Text>
 
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -100,160 +84,107 @@ function MyComponent({ onClose }) {
           </Text>
         </TouchableOpacity>
         </View> 
-  <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: "Roboto-Light" }}>{t("Job Information")}</Text>
+                        <Text style={{marginLeft: 730, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
+  <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: 'Roboto-Light' }}>
+    {t('Development Objectives')}
+  </Text>
   <View style={styles.container}>
+    {/* Form fields */}
     <View style={styles.row}>
       <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Company")}</Text>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Company')}</Text>
       </View>
       <View style={styles.cell}>
         <TextInput
-          placeholder="ASML"
+          placeholder=''
           placeholderTextColor="black"
           style={styles.input}
           editable={false}
           value={company}
-          onChangeText={setCompany}
         />
       </View>
     </View>
     <View style={styles.row}>
       <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
+        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Role')}</Text>
       </View>
       <View style={styles.cell}>
         <TextInput
-          placeholder={t("Data Analyst")}
+          placeholder=" "
           placeholderTextColor="black"
           style={styles.input}
           editable={false}
           value={role}
-          onChangeText={setRole}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Your CV")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t("Data Analyst")}
-          placeholderTextColor="black"
-          style={styles.input}
-          editable={false}
-          value={cv}
-          onChangeText={setCV}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t("Data Analyst")}
-          placeholderTextColor="black"
-          style={styles.input}
-          editable={false}
-          value={job_description_file}
-          onChangeText={setJobFile}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Job Description text (optional)")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t("This is my job description")}
-          placeholderTextColor="grey"
-          multiline
-          style={[styles.input, { height: 100 }]}
-           editable={false}
-          value={job_description_text}
-          onChangeText={setjobText}
         />
       </View>
     </View>
 
   </View>
-  <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
-  <View style={styles.container}>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_days}</Text>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Time")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}</Text>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert}</Text>
-      </View>
+
+  <View style={{flexDirection: 'row'}}>
+    <Text style={{ marginTop: 20, marginBottom: -10, fontWeight: '500', fontSize: 14, color: 'black', marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Interview Scoring")}</Text>
+    <Text style={{marginLeft: 540, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
+           </View>
+           <View style={styles.container}>
+             {data?.descriptions?.map((item, index) => (
+               <View style={styles.row} key={index}>
+                 <View style={styles.cell}>
+                   <Text style={{fontWeight: 'bold', fontFamily: "Roboto-Light"}}>
+                     {t("Questions")} {index + 1}: {item.description}
+                   </Text>
+                 </View>
+                 <View style={styles.cell}>
+                   <Text style={{color: 'grey', fontFamily: "Roboto-Light"}}>
+                     {item.percentage}%
+                   </Text>
+                 </View>
+               </View>
+             ))}
+            </View>
+<Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50, fontSize: 14, marginBottom: 10,fontFamily:"Roboto-Light" }}> {t("Overall Feedback/Remark")}</Text>
+              <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
+              <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{remark}</Text>
+
+                </View>
+
+<View style={styles.container}>
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
+        </View>
+        <View style={styles.cell}>
+        <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{rate}</Text>
+        </View>
+        </View>
+        </View>
+
+  <View style={styles.ratingContainer}>
+    <Text style={styles.ratetitle}>{t("Rating")} <Image
+      source={{ uri: 'https://img.icons8.com/?size=100&id=60003&format=png&color=206C00' }}
+      style={{width: 20, height: 20, marginLeft: 5, marginTop: 5 }}
+    /></Text>
+    <View style={styles.raterow}>
+      <Text style={styles.ratetext}>You rated {data?.level} </Text>
+      <Text style={styles.ratetext}>{getRatingText(rating)}</Text>
     </View>
   </View>
 
-  <View style={styles.container}>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t("Data Analyst")}
-          placeholderTextColor="black"
-          style={styles.input}
-          editable={false}
-          value={selectedDateTime}
-          onChangeText={setSelectedDateTime}
-        />
-      </View>
+
     </View>
-  </View>
-
-
-    
-    </View>
-
-    <DateTimePickerModal
-        isVisible={isModalVisible}
-        onConfirm={handleConfirmDateTime}
-        onCancel={handleCancelModal}
-      />
-</ScrollView>
+    </ScrollView>
 </View>
 
 );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'column',
-        borderWidth: 1,
-        borderColor: '#CCC',
-        marginRight: 70, 
-        marginTop: 5,
-        marginLeft: 50 
-      },
-  greenBox: {
-    width: 920,
-    height:550,
-    backgroundColor: '#F8F8F8',
+  container: {
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    marginRight: 70, 
+    marginTop: 20, 
+    marginLeft: 50 
   },
   row: {
     flexDirection: 'row',
@@ -264,33 +195,41 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     padding: 5,
   },
+  greenBox: {
+    width: 920,
+    height:850,
+    backgroundColor: '#F8F8F8',
+  },
   picker: {
     height: 20,
     width: '100%',
     backgroundColor: '#F8F8F8',
+    borderColor: '#F8F8F8',
+    color:'black',
+    fontSize: 14,
+    outline: 'black',
+    borderWidth: 1,
     borderColor: 'black',
-    borderWidth: 1, 
-    color:'grey',
-    fontSize: 14
   },
-  buttonplus: {
-    backgroundColor: 'coral',
-    padding: 5,
-    marginLeft: 750, 
-    width: 100,
-    paddingHorizontal: 20,
-    marginTop: 10
+  buttonAcc: {
+    borderWidth: 3,
+    borderColor: 'grey',
+    padding: 10,
+    marginTop: 30,
+    marginLeft: 700, 
+    marginRight: 70,
+    paddingHorizontal: 5,
+    marginBottom: 20
   },
-  buttonTextplus: {
-    color: 'white',
+  buttonTextAcc: {
+    color: 'black',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
   },
   input: {
     outline: 'black',
+    borderWidth: 1,
     borderColor: 'black',
-    borderWidth: 1
   },
   closeButton: {
     position: 'absolute',
@@ -315,8 +254,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily:"Roboto-Light",
-  }
+    fontFamily:"Roboto-Light"
+  },
+  ratingContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: 50,
+    marginTop: 300
+  },
+  ratetitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 20,
+    color: '#206C00'
+  },
+  raterow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratetext: {
+    color: 'black',
+    fontFamily: "Roboto-Light",
+    fontSize: 16
+  },
+
 });
 
 export default MyComponent;

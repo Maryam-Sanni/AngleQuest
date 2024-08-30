@@ -2,83 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function MyComponent({ onClose }) {
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [data, setData] = useState(null);
+  const rating = 6; 
 
-  const [token, setToken] = useState("");
-  const [type, setSelectedType] = useState('Personal');
-  const [title, setTitle] = useState('');
-  const [role, setRole] = useState('');
-  const [result_description, setResultDescription] = useState('');
-  const [how_to_achieve, setHowToAchieve] = useState('');
-  const [achieve_the_objective, setNeeds] = useState('');
-  const [review_with_coach, setreviewwithcoach] = useState('Biannually');
-  const [starting_level, setStartingLevel] = useState('Beginner');
-  const [target_level, setTargetLevel] = useState('Medior');
-  const [end_date, setEndDate] = useState('12 Months');
-  const [status, setStatus] = useState('Active');
-  const [coach, setCoach] = useState('Patrick OCHE');
-   const [feedbacks, setFeedback] = useState('Read only field');
-  const [expert_available_days, setExpertAvailableDays] = useState('Mon-Fri');
-  const [expert_available_time, setExpertAvailableTime] = useState('10AM - 5PM');
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [candidate, setCandidate] = useState("Individual");
-  const [expertid, setExpertid] = useState(" ");
-   const [meetingtype, setType] = useState("growth");
+  const getRatingText = (rating) => {
+    switch (rating) {
+      case 1: return 'Very Dissatisfied';
+      case 2: return 'Dissatisfied';
+      case 3: return 'Somewhat Dissatisfied';
+      case 4: return 'Slightly Dissatisfied';
+      case 5: return 'Neutral';
+      case 6: return 'Somewhat Satisfied';
+      case 7: return 'Satisfied';
+      case 8: return 'Very Satisfied';
+      case 9: return 'Extremely Satisfied';
+      case 10: return 'Completely Satisfied';
+      default: return 'No Rating';
+    }
+  };
+
+
 
   useEffect(() => {
-    const loadFormData = async () => {
+    const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200) {
-          const data = response.data.growthPlan; // Check the structure of `data`
-
-          setRole(data.role || '');
-          setSelectedType(data.type || '');
-          setTitle(data.title || '');
-          setResultDescription(data.result_description || '');
-          setHowToAchieve(data.how_to_achieve || '');
-          setNeeds(data.achieve_the_objective || '');
-          setStartingLevel(data.starting_level || '');
-          setTargetLevel(data.target_level || '');
-          setStatus(data.status || '');
-          setSelectedDateTime(data.start_date || '');
-
-
+        const retrievedData = await AsyncStorage.getItem('selectedGrowthPlan');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData); // Update the state with the retrieved data
         } else {
-          console.error('Failed to fetch data', response);
+          console.log('No data found in AsyncStorage.');
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Failed to retrieve data from AsyncStorage', error);
       }
     };
 
-    loadFormData();
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    const getToken = async () => {
-      const storedToken = await AsyncStorage.getItem('token');
-      setToken(storedToken);
-    };
-    getToken();
-  }, []);
-  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -95,7 +61,7 @@ function MyComponent({ onClose }) {
             style={styles.logo}
           />
           <Text style={styles.headerText}>{t("View Expert's Review")}</Text>
-       
+
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
             ✕
@@ -110,33 +76,15 @@ function MyComponent({ onClose }) {
     {/* Form fields */}
     <View style={styles.row}>
       <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Type')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Picker
-          selectedValue={type}
-           enabled={false}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSelectedType(itemValue)}
-        >
-          <Picker.Item label={t('Personal')} value="Personal" />
-          <Picker.Item label={t('Team')} value="Team" />
-          <Picker.Item label={t('Organization')} value="Organization" />
-        </Picker>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
         <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Title')}</Text>
       </View>
       <View style={styles.cell}>
         <TextInput
-          placeholder={t('Become SAP FI Medior expert in 6 months')}
+          placeholder=''
           placeholderTextColor="black"
           style={styles.input}
           editable={false}
-          value={title}
-          onChangeText={setTitle}
+          value={data?.title}
         />
       </View>
     </View>
@@ -146,135 +94,15 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.cell}>
         <TextInput
-          placeholder="SAP FI"
+          placeholder=" "
           placeholderTextColor="black"
           style={styles.input}
           editable={false}
-          value={role}
-          onChangeText={setRole}
+          value={data?.role}
         />
       </View>
     </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Result description')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t('Example: To be able to find my way around SAP fi...')}
-          placeholderTextColor="grey"
-          multiline
-          style={[styles.input, { height: 50 }]}
-          editable={false}
-          value={result_description}
-          onChangeText={setResultDescription}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How to achieve')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t('Example: To be taught how to troubleshoot, find T\'codes...')}
-          placeholderTextColor="black"
-          multiline
-          style={[styles.input, { height: 50 }]}
-          editable={false}
-          value={how_to_achieve}
-          onChangeText={setHowToAchieve}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('What do you need to achieve the objective?')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <TextInput
-          placeholder={t('Continous training, practice and support')}
-          placeholderTextColor="black"
-          multiline
-          style={[styles.input, { height: 50 }]}
-          editable={false}
-          value={achieve_the_objective}
-          onChangeText={setNeeds}
-        />
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
-      </View>
-      <View style={styles.cell}>
-      <Text style={{color: 'black', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>Biannually</Text>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Starting Level')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Picker
-          selectedValue={starting_level}
-           enabled={false}
-          style={styles.picker}
-          onValueChange={(itemValue) => setStartingLevel(itemValue)}
-        >
-          <Picker.Item label={t('Beginner')} value="Beginner" />
-          <Picker.Item label={t('Junior')} value="Junior" />
-          <Picker.Item label={t('Medior')} value="Medior" />
-          <Picker.Item label={t('Senior')} value="Senior" />
-          <Picker.Item label={t('Professional')} value="Professional" />
-        </Picker>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Target Level')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Picker
-          selectedValue={target_level}
-           enabled={false}
-          style={styles.picker}
-          onValueChange={(itemValue) => setTargetLevel(itemValue)}
-        >
-          <Picker.Item label={t('Beginner')} value="Beginner" />
-          <Picker.Item label={t('Junior')} value="Junior" />
-          <Picker.Item label={t('Medior')} value="Medior" />
-          <Picker.Item label={t('Senior')} value="Senior" />
-          <Picker.Item label={t('Professional')} value="Professional" />
-        </Picker>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Status')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Picker
-          selectedValue={status}
-           enabled={false}
-          style={styles.picker}
-          onValueChange={(itemValue) => setStatus(itemValue)}
-        >
-          <Picker.Item label={t('Active')} value="Active" />
-          <Picker.Item label={t('Review')} value="Review" />
-          <Picker.Item label={t('Replan')} value="Replan" />
-          <Picker.Item label={t('Completed')} value="Completed" />
-        </Picker>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.cell}>
-        <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
-      </View>
-      <View style={styles.cell}>
-        <Text style={{ color: 'black', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
-      </View>
-    </View>
+
   </View>
 
  <View style={{flexDirection: 'row'}}>
@@ -282,59 +110,25 @@ function MyComponent({ onClose }) {
 <Text style={{marginLeft: 540, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
        </View>
        <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 1</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
-        <View style={styles.row}>
-        <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 2</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 3</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
-    <View style={styles.row}>
-        <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 4</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
-<View style={styles.row}>
-        <View style={styles.cell}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 5</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
- <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Topic")} 6</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>100%</Text>
-        </View>
-        </View>
+         {data?.descriptions?.map((item, index) => (
+           <View style={styles.row} key={index}>
+             <View style={styles.cell}>
+               <Text style={{fontWeight: 'bold', fontFamily: "Roboto-Light"}}>
+                 {t("Guide")} {index + 1}: {item.description}
+               </Text>
+             </View>
+             <View style={styles.cell}>
+               <Text style={{color: 'grey', fontFamily: "Roboto-Light"}}>
+                 {item.percentage}%
+               </Text>
+             </View>
+           </View>
+         ))}
         </View>
 <Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50, fontSize: 14, marginBottom: 10,fontFamily:"Roboto-Light" }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
-              <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{t("Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you.")}</Text>
-               
+              <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{data?.remark}</Text>
+
                 </View>
 
 <View style={styles.container}>
@@ -343,14 +137,24 @@ function MyComponent({ onClose }) {
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>RT01-Brilliant</Text>
+        <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{data?.rating}</Text>
         </View>
         </View>
         </View>
 
-    
-    
- 
+  <View style={styles.ratingContainer}>
+    <Text style={styles.ratetitle}>{t("Rating")} <Image
+      source={{ uri: 'https://img.icons8.com/?size=100&id=60003&format=png&color=206C00' }}
+      style={{width: 20, height: 20, marginLeft: 5, marginTop: 5 }}
+    /></Text>
+    <View style={styles.raterow}>
+      <Text style={styles.ratetext}>You rated {data?.coach} </Text>
+      <Text style={styles.ratetext}>{getRatingText(rating)}</Text>
+    </View>
+  </View>
+
+
+
     </View>
     </ScrollView>
 </View>
@@ -436,7 +240,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637',
     fontFamily:"Roboto-Light"
-  }
+  },
+  ratingContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    padding: 50,
+    marginTop: 300
+  },
+  ratetitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 20,
+    color: '#206C00'
+  },
+  raterow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratetext: {
+    color: 'black',
+    fontFamily: "Roboto-Light",
+    fontSize: 16
+  },
+
 });
 
 export default MyComponent;

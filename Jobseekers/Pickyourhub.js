@@ -18,17 +18,25 @@ function MyComponent({ onClose }) {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
+  const [attend, setattend] = useState('No');
   const [isDropdown, setIsDropdown] = useState(false);
   const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
   const [cardData, setCardData] = useState({ AllHubs: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
    const [selectedIndex, setSelectedIndex] = useState(null);
+  const [token, setToken] = useState("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null);
+  const [selectedHub, setSelectedHub] = useState(null);
+
  
 
-  const goToPlans = () => {
-    navigation.navigate('Hub Offer');
-    onClose(); // Close the modal
-  };
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
 
   const toggleMode = () => {
     setIsDropdown(!isDropdown);
@@ -52,9 +60,105 @@ function MyComponent({ onClose }) {
     setModalVisible2(false);
   };
 
-  const handleOpenPress3 = () => {
-    setModalVisible3(true);
-  };
+  useEffect(() => {
+    // Fetch the subscription status when the component mounts
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const response = await axios.get('https://recruitangle.com/api/jobseeker/get-subscription', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setSubscriptionStatus(response?.data?.JSSubscriptionStatus?.subscribed);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription status:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchSubscriptionStatus();
+  }, []);
+
+const handleOpenPress3 = async () => {
+  try {
+    if (!subscriptionStatus) {
+      console.error('Subscription status is not available');
+      return;
+    }
+
+    if (subscriptionStatus === 'Yes') {
+      navigation.navigate('Coaching Hub Sessions');
+      onClose();
+    } else {
+      setModalVisible3(true);
+    }
+  } catch (error) {
+    console.error('Error checking subscription status:', error.response ? error.response.data : error.message);
+  }
+};
+
+  useEffect(() => {
+    if (!selectedHub) return;
+
+    const createHubAndJoinExpertHub = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // POST to create the hub
+        const createHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/create-hub', {
+          category: selectedHub.category,
+          meeting_day: selectedHub.meeting_day,
+          from: selectedHub.from,
+          to: selectedHub.to,
+          coaching_hub_name: selectedHub.coaching_hub_name,
+          expert_name: selectedHub.expert_name,
+          coaching_hub_description: selectedHub.coaching_hub_description,
+          coaching_hub_fee: selectedHub.coaching_hub_fee,
+          attend: attend
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (createHubResponse.status === 200) {
+          console.log('Hub successfully created');
+
+          // Get jobseeker details from AsyncStorage
+          const firstName = await AsyncStorage.getItem('first_name');
+          const lastName = await AsyncStorage.getItem('last_name');
+          const jobseekerId = await AsyncStorage.getItem('user_id');
+          const jobseekerName = `${firstName} ${lastName}`;
+
+          // POST to join the expert hub
+          const joinHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/join-expert-hub', {
+            jobseeker_name: jobseekerName,
+            jobseeker_id: jobseekerId,
+            expert_id: selectedHub.user_id,
+            hub_id: selectedHub.data.id, 
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (joinHubResponse.status === 200) {
+            console.log('Successfully joined expert hub');
+            // Handle success (e.g., navigate to a different screen or show a success message)
+          } else {
+            console.error('Error joining expert hub:', joinHubResponse.statusText);
+          }
+        } else {
+          console.error('Error creating hub:', createHubResponse.statusText);
+        }
+      } catch (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    createHubAndJoinExpertHub();
+  }, [selectedHub]);
+
 
   const handleCloseModal3 = () => {
     setModalVisible3(false);
@@ -68,9 +172,11 @@ function MyComponent({ onClose }) {
       newState[index] = true;
       return newState;
     });
+    setSelectedIndex(index);
+    setSelectedHub(cardData.AllHubs[index]);
   };
   
-  const handleJoinPressOut = (index) => {
+  const handleJoinPressOut = () => {
     // No need to update the state here
   };
   
@@ -119,15 +225,17 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
   
   const handleCardPress = (index) => {
-    setSelectedIndex(index); // Set the selected index
+    setSelectedIndex(index);
+    setSelectedHub(cardData.AllHubs[index]); // Store the selected hub's data
   };
 
-    const renderCards = () => {
-      if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
-        return <Text>No data available</Text>;
-      }
 
-      return cardData.AllHubs.map((data, index) => (
+  const renderCards = () => {
+    const filteredData = cardData.AllHubs.filter(data => 
+      !selectedCategory || data.category === selectedCategory
+    );
+
+    return filteredData.map((data, index) => (
       <Animated.View
         key={index}
         style={{
@@ -172,7 +280,7 @@ function MyComponent({ onClose }) {
                 />
               </View>
               <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-                {data.coaching_hub_limit} {t("Participants")}
+                {data.category}
               </Text>
               <Text style={{ fontSize: 13, color: "#206C00", marginTop: 5 }}>
                 {data.meeting_day}s
@@ -187,7 +295,7 @@ function MyComponent({ onClose }) {
               <View style={{ flex: 1, }}>
                 <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
                 <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
-                  {t("Coach")}: {data.visibility}
+                  {t("Coach")}: {data.expert_name}
                 </Text>
               </View>
             </View>
@@ -196,25 +304,32 @@ function MyComponent({ onClose }) {
 
             <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
               <Text style={{ fontSize: 12, color: "black", marginTop: 2, marginRight: 5 }}>{t("Hub Fee")}</Text>
-              <Text style={{ fontSize: 16, color: "coral", fontWeight: 'bold', textDecorationLine: 'line-through' }}>
-                {data.coaching_hub_fee} </Text>
+              <Text style={{ fontSize: 16, color: subscriptionStatus === 'Yes' ? "#d3f9d8" : "coral", fontWeight: 'bold' }}>
+                {data.coaching_hub_fee} 
+              </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-          style={[
-            styles.joinButton,
-            isPressed[index] && styles.joinButtonPressed,
-          ]}
-          onPressIn={() => handleJoinPressIn(index)}
-          onPressOut={() => handleJoinPressOut(index)}
-        >
-          <Text style={[
-            styles.joinButtonText,
-            isPressed[index] && styles.joinButtonTextPressed,
-          ]}>
-            {t("Join Hub")}
-          </Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+            onPressIn={() => handleJoinPressIn(index)}
+            onPressOut={handleJoinPressOut}
+            style={{
+              borderWidth: 1,
+                borderColor: '#206C00',
+                backgroundColor: "#F0FFF9",
+                borderRadius: 5,
+                paddingHorizontal: 50,
+                paddingVertical: 5,
+                marginTop: 15,
+                width: "90%",
+                alignSelf: "center",
+                justifyContent: 'center',
+                marginLeft: 10,
+                marginRight: 10,
+              backgroundColor: isPressed[index] ? 'coral' : '#F0FFF9',
+            }}
+          >
+         <Text style={{ color: isPressed[index] ? '#fff' : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     ));
@@ -247,20 +362,22 @@ function MyComponent({ onClose }) {
             <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an hub you will like to join")}</Text>
             <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
             <View style={{ flexDirection: 'row', marginTop: 10}}>
-     <Picker
-                  style={styles.picker}
-                >
-       <Picker.Item label="All Categories" value="" />
-       <Picker.Item label={t('SAP')} value="SAP" />
-       <Picker.Item label={t('Microsoft')} value="Microsoft" />
-       <Picker.Item label={t('Salesforce')} value="Salesforce" />
-       <Picker.Item label={t('Frontend Development')} value="Frontend Development"/>
-       <Picker.Item label={t('Backend Development')} value="Backend Development" />
-       <Picker.Item label={t('UI/UX')} value="UI/UX" />
-       <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-       <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-       <Picker.Item label={t('Management')} value="Management" />
-                </Picker>
+              <Picker
+                selectedValue={selectedCategory}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                <Picker.Item label="All Categories" value="" />
+                <Picker.Item label="SAP" value="SAP" />
+                <Picker.Item label="Microsoft" value="Microsoft" />
+                <Picker.Item label="Salesforce" value="Salesforce" />
+                <Picker.Item label="Frontend Development" value="Frontend Development" />
+                <Picker.Item label="Backend Development" value="Backend Development" />
+                <Picker.Item label="UI/UX" value="UI/UX" />
+                <Picker.Item label="Data Analysis" value="Data Analysis" />
+                <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                <Picker.Item label="Management" value="Management" />
+              </Picker>
 
                 <TextInput
                   placeholder={t("Search")}

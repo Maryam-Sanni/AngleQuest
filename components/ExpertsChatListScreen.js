@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from "react-native";
+import { View, FlatList, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Modal, Button } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
@@ -14,6 +14,8 @@ function CustomHeader({
   onPressHub,
   selectedHub,
   scrollViewRef,
+  onIconPress,
+  isExpertsList
 }) {
   const scrollLeft = () => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
@@ -27,22 +29,26 @@ function CustomHeader({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
   const { t } = useTranslation();
-
+  
+ 
+  
   return (
     <View style={{ width: "100%", backgroundColor: "white" }}>
-      <View style={{ backgroundColor: '#F8F8F8' }}>
-        <Text
-          style={{
-            fontSize: 22,
-            fontWeight: "bold",
-            textAlign: "flex-start",
-            borderBottomWidth: 1,
-            borderBottomColor: '#E5E5E5',
-            padding: 18,
-          }}
-        >
-          {t("Chats")}
-        </Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>{t("Chats")}</Text>
+        {!isExpertsList && (
+          <TouchableOpacity onPress={onIconPress} style={styles.iconButton}>
+            <Image
+              source={{ uri: "https://img.icons8.com/?size=100&id=A2t8GCGbC2PY&format=png&color=000000" }}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        )}
+        {isExpertsList && (
+          <TouchableOpacity onPress={() => onIconPress(false)} style={styles.iconButton}>
+            <Text style={styles.closeIcon}>✕</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <ScrollView
         horizontal
@@ -117,6 +123,8 @@ function ChatListScreen({ navigation, onUserSelect }) {
   const [selectedHub, setSelectedHub] = useState(null);
   const [data, setData] = useState([]);
   const scrollViewRef = useRef(null);
+  const [expertsData, setExpertsData] = useState([]);
+  const [isExpertsList, setIsExpertsList] = useState(false);
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -215,7 +223,39 @@ function ChatListScreen({ navigation, onUserSelect }) {
     setSelectedHub("Hub Members");
   };
 
-  const renderItem = ({ item }) => (
+  const fetchExpertsData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        const response = await axios.get(
+          "https://recruitangle.com/api/expert/getAllJobSeekers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setExpertsData(response.data.allJobSeekers);
+        setIsExpertsList(true);
+      } else {
+        console.log("No token found");
+      }
+    } catch (error) {
+      console.error("Error fetching experts data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!isExpertsList && fontsLoaded) {
+      fetchData();
+    }
+  }, [fontsLoaded, isExpertsList]);
+  
+  if (!fontsLoaded) {
+    return <View><Text>Loading fonts...</Text></View>;
+  }
+  
+  const renderChatItem = ({ item }) => (
     <TouchableOpacity onPress={() => onUserSelect(item.id)}>
       <View
         style={{
@@ -289,6 +329,16 @@ function ChatListScreen({ navigation, onUserSelect }) {
     </TouchableOpacity>
   );
 
+  const renderExpertItem = ({ item }) => (
+    <View style={styles.modalItemContainer}>
+      <Image
+        source={item.avatar_url ? { uri: item.avatar_url } : defaultAvatar}
+        style={styles.modalItemAvatar}
+      />
+      <Text style={styles.modalItemText}>{item.first_name} {item.last_name}</Text>
+    </View>
+  );
+
   return (
     <View>
       <CustomHeader
@@ -296,11 +346,14 @@ function ChatListScreen({ navigation, onUserSelect }) {
         onPressHub={handlePressHub}
         selectedHub={selectedHub}
         scrollViewRef={scrollViewRef}
+      onIconPress={() => isExpertsList ? setIsExpertsList(false) : fetchExpertsData()}
+        isExpertsList={isExpertsList}
       />
+      {isExpertsList && <Text style={styles.heading}>New Chat</Text>}
       <FlatList
-        data={filteredData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        data={isExpertsList ? expertsData : data}
+        renderItem={isExpertsList ? renderExpertItem : renderChatItem}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );
@@ -313,6 +366,54 @@ const styles = StyleSheet.create({
   blurBackground: {
     flex: 1,
     backgroundColor: "rgba(255,255,255,0.3)",
+  },
+  headerContainer: {
+    padding: 16,
+    backgroundColor: '#F8F8F8',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  iconButton: {
+    padding: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  closeIcon: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  modalItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  modalItemAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: 12,
+  },
+  modalItemText: {
+    fontSize: 16,
+  },
+  heading: {
+    fontSize: 18,
+    padding: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+    color: 'grey'
   },
 });
 

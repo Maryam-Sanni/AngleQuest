@@ -12,54 +12,54 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [growthPlans, setGrowthPlans] = useState([]);
 
 
+useEffect(() => {
   const loadFormData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
+      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
 
-      const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      if (token && storedUserId) {
+        setUserId(storedUserId); // Store user_id in state
 
-      if (response.status === 200) {
-        let data = response.data.growthPlan || [];
+        // Make an API call to get the review growth plan
+        const response = await axios.get('https://recruitangle.com/api/expert/get-review-growth-plan', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
 
-        // Filter out entries where completed is "Yes"
-        data = data.filter(plan => plan.completed !== "Yes");
+        if (response.status === 200) {
+          let data = response.data.reviewGrowthPlan || [];
 
-        setGrowthPlans(data);
+          // Filter the growth plans based on matching user_id and jobseeker_id
+          const filteredGrowthPlans = data.filter(plan => plan.jobseeker_id === storedUserId);
+          setGrowthPlans(filteredGrowthPlans); // Store the filtered data in state
 
-        // Save all growth plans to AsyncStorage
-        try {
-          await AsyncStorage.setItem('allGrowthPlans', JSON.stringify(data));
-          console.log('All growth plans saved:', data);
-        } catch (error) {
-          console.error('Failed to save all growth plans to AsyncStorage', error);
+          // Save all growth plans to AsyncStorage
+          try {
+            await AsyncStorage.setItem('allGrowthPlans', JSON.stringify(data));
+            console.log('All growth plans saved:', data);
+          } catch (error) {
+            console.error('Failed to save all growth plans to AsyncStorage', error);
+          }
+        } else {
+          console.error('Failed to fetch data', response);
         }
       } else {
-        console.error('Failed to fetch data', response);
+        console.error('No token or user ID found');
       }
     } catch (error) {
       console.error('Failed to load form data', error);
     }
   };
 
-  useEffect(() => {
-    loadFormData(); // Initial data load
+  loadFormData();
+}, []);
 
-    // Set up polling
-    const intervalId = setInterval(loadFormData, 5000); // Poll every 30 seconds
-
-    return () => {
-      clearInterval(intervalId); // Clear interval on component unmount
-    };
-  }, []);
 
   const handleOpenPress2 = async (growthPlan) => {
     setSelectedGrowthPlan(growthPlan);
@@ -104,46 +104,58 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Growth Plan Sessions in Review")}</Text>
+        <Text style={styles.title}>{t("Scheduled Growth Plan Sessions")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Type")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Meeting Date")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Review")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Review Date")}</Text></View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Update</Text>
+              <Text style={{color: 'white'}}>Join</Text>
                </View>
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Update</Text>
+              <Text style={{color: 'white'}}>Join</Text>
                </View>
             </TouchableOpacity>
           </View>
-          
+
           {growthPlans.map((growthPlan, index) => (
-      
             <View key={index} style={styles.row}>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.coach}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.type}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.title}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.role}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{new Date(growthPlan.date_time).toLocaleDateString()} {new Date(growthPlan.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text></View>
-              <TouchableOpacity onPress={() => handleOpenPress (growthPlan)}>
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t("Update")}</Text>
+              <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={styles.cellText}>{growthPlan.expert_name}</Text>
+              </View>
+              <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={styles.cellText}>{growthPlan.role}</Text>
+              </View>
+              <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={styles.cellText}>{growthPlan.title}</Text>
+              </View>
+              <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={styles.cellText}>{growthPlan.review}</Text>
+              </View>
+              <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={styles.cellText}>
+                  {new Date(growthPlan.date).toLocaleDateString()} {new Date(growthPlan.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </Text>
+              </View>
+              <TouchableOpacity>
+                <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                  <Text style={styles.linkText}>{t("join")}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity >
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={{color: 'transparent'}}>{t("Update")}</Text>
+                <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                <Text style={{color: 'transparent'}}>{t("Join")}</Text>
                 </View>
               </TouchableOpacity>
             </View>
           ))}
+
         </View>
         <Modal
           animationType="slide"
@@ -218,6 +230,12 @@ const styles = StyleSheet.create({
   cell2: {
     flex: 1,
     backgroundColor: 'white', 
+    padding: 10,
+    alignItems: 'flex-start',
+  },
+  replanCell: {
+    flex: 1,
+    backgroundColor: 'red', 
     padding: 10,
     alignItems: 'flex-start',
   },

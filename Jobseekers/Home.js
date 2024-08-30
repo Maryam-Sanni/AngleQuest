@@ -47,7 +47,12 @@ const HomePage = () => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [data, setData] = useState([]);
-
+  const [plandata, setplanData] = useState({
+      latestGrowthPlan: {},
+      latestInterview: {},
+      latestSkillAnalysis: {}
+  })
+ 
   useEffect(() => {
     fetchData();
   }, []);
@@ -153,19 +158,19 @@ const HomePage = () => {
   };
   
   const goToGrowth = () => {
-    navigation.navigate('Growth Plan');
+    navigation.navigate('Growth Plan Sessions');
   };
 
   const goToHubs = () => {
-    navigation.navigate('Coaching Hubs');
+    navigation.navigate('Coaching Hub Sessions');
   };
 
   const goToInterview = () => {
-    navigation.navigate('Interview');
+    navigation.navigate('Interview Sessions');
   };
 
   const goToAdvice = () => {
-    navigation.navigate('Advice');
+    navigation.navigate('Advice Sessions');
   };
 
   const gotoAI = () => {
@@ -195,6 +200,102 @@ const HomePage = () => {
   const handleCloseModal4 = () => {
     setModalVisible4(false);
   };
+
+    // Function to fetch data from all APIs
+    async function fetchAllData() {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+
+            const [growthPlanResponse, interviewResponse, skillAnalysisResponse] = await Promise.all([
+                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', { headers }),
+                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', { headers }),
+                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', { headers })
+            ]);
+
+            const growthPlanData = await growthPlanResponse.json();
+            const interviewData = await interviewResponse.json();
+            const skillAnalysisData = await skillAnalysisResponse.json();
+
+            // Log the fetched data for debugging
+            console.log('Growth Plan Data:', growthPlanData);
+            console.log('Interview Data:', interviewData);
+            console.log('Skill Analysis Data:', skillAnalysisData);
+
+            const latestGrowthPlan = processLatestEntry(growthPlanData.growthPlan, 'coach', 'date_time');
+            const latestInterview = processLatestEntry(interviewData.interview, 'expert_name', 'date_time');
+            const latestSkillAnalysis = processLatestEntry(skillAnalysisData.skillAnalysis, 'expert_name', 'date_time');
+
+            // Log the processed latest data for debugging
+            console.log('Latest Growth Plan:', latestGrowthPlan);
+            console.log('Latest Interview:', latestInterview);
+            console.log('Latest Skill Analysis:', latestSkillAnalysis);
+
+            return {
+                latestGrowthPlan,
+                latestInterview,
+                latestSkillAnalysis
+            };
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+
+  // Helper function to process and find the latest entry
+  function processLatestEntry(entries, expertNameField, dateTimeField) {
+      if (!entries || entries.length === 0) return {};
+
+      // Log the raw entries for debugging
+      console.log('Raw Entries:', entries);
+
+      // Parse the date_time field to Date objects
+      const parsedEntries = entries.map(entry => ({
+          ...entry,
+          [dateTimeField]: new Date(entry[dateTimeField])
+      }));
+
+      // Log parsed entries for debugging
+      console.log('Parsed Entries:', parsedEntries);
+
+      // Sort entries by date_time in descending order
+      parsedEntries.sort((a, b) => b[dateTimeField] - a[dateTimeField]);
+
+      // Log sorted entries for debugging
+      console.log('Sorted Entries:', parsedEntries);
+
+      // Return the latest entry's expert name and formatted date_time
+      return {
+          expertName: parsedEntries[0][expertNameField],
+          dateTime: formatDate(parsedEntries[0][dateTimeField].toISOString())
+      };
+  }
+
+
+  // Formatting function
+  function formatDate(dateString) {
+      const date = new Date(dateString);
+
+      // Use Intl.DateTimeFormat for consistent formatting
+      const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+      const day = new Intl.DateTimeFormat('en-US', { day: '2-digit' }).format(date);
+      const time = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(date);
+
+      return `${month} ${day} | ${time}`;
+  }
+
+
+  useEffect(() => {
+      fetchAllData().then(fetchedData => {
+          if (fetchedData) {
+              console.log('Fetched Data for State:', fetchedData);
+              setplanData(fetchedData);
+          }
+      });
+  }, []);
 
   
   const [fontsLoaded]=useFonts({
@@ -239,7 +340,37 @@ const HomePage = () => {
       </View>
 </View>
 <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.")}</Text>
-<Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>          
+<Text style={{fontSize: 20, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Activities")}</Text>  
+        <TouchableOpacity onPress={goToAdvice}
+          style={[
+            styles.touchablechat,
+            isHovered4 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered4(true)}
+          onMouseLeave={() => setIsHovered4(false)}
+        >
+          <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Skill Analysis")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>2</Text>
+        </View>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToGrowth}
+          style={[
+            styles.touchablechat,
+            isHovered3 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered3(true)}
+          onMouseLeave={() => setIsHovered3(false)}
+        >
+         <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Growth Plan")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>5</Text>
+        </View>
+        </View>
+        </TouchableOpacity>
 <TouchableOpacity onPress={goToHubs}
             style={[
               styles.touchablechat,
@@ -255,36 +386,22 @@ const HomePage = () => {
         </View>
         </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToGrowth}
-            style={[
-              styles.touchablechat,
-              isHovered3 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered3(true)}
-            onMouseLeave={() => setIsHovered3(false)}
-          >
-           <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Growth Plan")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>5</Text>
+        <TouchableOpacity
+          style={[
+            styles.touchablechat,
+            isHovered6 && styles.touchableOpacityHovered
+          ]}
+          onMouseEnter={() => setIsHovered6(true)}
+          onMouseLeave={() => setIsHovered6(false)}
+        >
+          <View style={{flexDirection: 'row' }}>
+          <Text style={styles.touchableTextchat}>{t("Scenario Project")}</Text>
+          <View style={styles.messageCount}>
+        <Text style={styles.messageCountText}>1</Text>
         </View>
         </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={goToAdvice}
-            style={[
-              styles.touchablechat,
-              isHovered4 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered4(true)}
-            onMouseLeave={() => setIsHovered4(false)}
-          >
-            <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Advice")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>2</Text>
-        </View>
-        </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
+
           <TouchableOpacity onPress={goToInterview}
             style={[
               styles.touchablechat,
@@ -300,21 +417,7 @@ const HomePage = () => {
         </View>
         </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.touchablechat,
-              isHovered6 && styles.touchableOpacityHovered
-            ]}
-            onMouseEnter={() => setIsHovered6(true)}
-            onMouseLeave={() => setIsHovered6(false)}
-          >
-            <View style={{flexDirection: 'row' }}>
-            <Text style={styles.touchableTextchat}>{t("Targets")}</Text>
-            <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>1</Text>
-        </View>
-        </View>
-          </TouchableOpacity>
+         
           </BlurView>
           </View>
         <View style={styles.sideColumn}>
@@ -372,14 +475,14 @@ const HomePage = () => {
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Growth Plan Review")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestGrowthPlan.dateTime}</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>{plandata.latestGrowthPlan.expertName}</Text>
 <TouchableOpacity
 style={[
   styles.touchablestart,
@@ -396,15 +499,15 @@ onMouseLeave={() => setIsHovered10(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Advice Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Skill Analysis Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestSkillAnalysis.dateTime}</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestSkillAnalysis.expertName}</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -422,14 +525,14 @@ onMouseLeave={() => setIsHovered11(false)}
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Interview Session")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: 'absolute', right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>{plandata.latestInterview.dateTime}</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600', fontFamily:"Roboto-Light" }}>Maryam Bakahali</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600', fontFamily:"Roboto-Light" }}>{plandata.latestInterview.expertName}</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -474,7 +577,7 @@ onMouseLeave={() => setIsHovered12(false)}
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>All Experts</Text>
           <Text style={{fontSize: 18, color: 'white', marginTop: 25, position: 'absolute', right: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Hubs")}</Text>
           </View>
-            {data.map((item, index) => (
+             {data.slice(0, 4).map((item, index) => (
    <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
               <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
                 <Image source={item.avatar} style={styles.image} />

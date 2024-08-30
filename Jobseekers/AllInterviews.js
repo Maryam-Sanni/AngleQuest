@@ -137,7 +137,7 @@ function MyComponent() {
 
     return (
       <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '150%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>
@@ -149,8 +149,11 @@ function MyComponent() {
                     <View style={styles.header}>
             <TouchableOpacity>
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Interview")}</Text>
+                <Image
+                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                  style={styles.image}
+                />
+                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14, marginTop: 5 }}>{t("Interview")}</Text>
               </View>
             </TouchableOpacity>
             </View>
@@ -163,7 +166,7 @@ function MyComponent() {
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignSelf: 'center'}}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next Interview session")}</Text>
+      <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next Session")}</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light", textAlign: 'center'}}>{meetingData.date}</Text>
     <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light", textAlign: 'center'}}>{meetingData.time}</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
@@ -261,17 +264,21 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     image: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         marginRight: 5,
-        marginLeft: 100
+        marginLeft: 100,
+      marginTop: 5,
+      tintColor: '#666',
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginLeft: 40, marginRight: 50, marginTop: 50
-      },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
+  },
       box: {
         backgroundColor: '#f7fff4',
         padding: 20,

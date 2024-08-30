@@ -7,50 +7,65 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
+   const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
 
-  const handleOpenPress = () => {
-    setModalVisible(true);
-  };
+    useEffect(() => {
+      const loadFormData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const storedExpertId = await AsyncStorage.getItem('user_id');
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
+          if (!token || !storedExpertId) {
+            console.error('No token or user ID found');
+            return;
+          }
 
-  useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
+          const response = await axios.get('https://recruitangle.com/api/expert/get-review-growth-plan', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (response.status === 200) {
+            const data = response.data.reviewGrowthPlan;
+
+            // Filter meetings based on expert_id and review status "satisfied"
+            const filteredMeetings = data.filter(meeting => 
+              meeting.user_id === storedExpertId && meeting.review === "satisfied"
+            );
+            setMeetings(filteredMeetings);
+
+            // Save all growth plans to AsyncStorage
+            try {
+              await AsyncStorage.setItem('allExpertsgrowth', JSON.stringify(data));
+              console.log('All expert growth plans saved:', data);
+            } catch (error) {
+              console.error('Failed to save all expert growth plans to AsyncStorage', error);
+            }
+          } else {
+            console.error('Failed to fetch data', response);
+          }
+        } catch (error) {
+          console.error('Failed to load form data', error);
         }
+      };
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-all-jobseeker-growthplan', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+      loadFormData();
 
-        if (response.status === 200) {
-          const data = response.data.allGrowthPlan;
-          setMeetings(data);
-        } else {
-          console.error('Failed to fetch data', response);
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
+      // Polling every 30 seconds (30000 milliseconds)
+      const intervalId = setInterval(loadFormData, 5000);
 
-    loadFormData();
-  }, []);
+      // Clean up the interval on component unmount
+      return () => clearInterval(intervalId);
+    }, []);
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -80,7 +95,7 @@ const ScheduledMeetingsTable = () => {
 
           // Filter meetings where expert_id matches storedExpertId
           const matchingMeetings = meetings.filter(
-            meeting => meeting.expert_id === storedExpertId
+            meeting => meeting.user_id === storedExpertId
           );
 
           if (matchingMeetings.length > 0) {
@@ -114,6 +129,24 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  const handleOpenPress = async (meeting) => {
+    try {
+      // Save the selected meeting data to AsyncStorage
+      await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
+      console.log('Selected meeting saved:', meeting);
+
+      // Set the selected meeting in state to pass it to the modal
+      setSelectedMeeting(meeting);
+      setModalVisible(true);
+    } catch (error) {
+      console.error('Failed to save selected meeting to AsyncStorage', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -130,7 +163,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Account Type")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Date")}</Text>
+              <Text style={styles.headerText}>{t("Reviewed")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -145,16 +178,16 @@ const ScheduledMeetingsTable = () => {
           </View>
 
           {meetings.map((meeting, index) => {
-            const dateTime = new Date(meeting.date_time);
+            const dateTime = new Date(meeting.date);
             const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
             return (
               <View key={index} style={styles.row}>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.user_id}</Text>
+                    <Text style={styles.cellText}>{meeting.coach}</Text>
                   </View>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
@@ -166,7 +199,7 @@ const ScheduledMeetingsTable = () => {
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{date} {time}</Text>
                 </View>
-                <TouchableOpacity onPress={handleOpenPress}>
+                <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Open")}</Text>
                    </View>
@@ -188,7 +221,7 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-            <OpenSchedule onClose={() => handleCloseModal()} />
+             <OpenSchedule onClose={handleCloseModal} meeting={selectedMeeting} />
           </View>
         </Modal>
       </BlurView>
@@ -217,7 +250,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
     alignContent: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     marginLeft: 50, marginRight: 50
   },
   greenBox: {
@@ -254,7 +287,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: '600',
     fontSize: 14,
-    fontFamily: "Roboto-Light"
   },
   image: {
     width: 30,

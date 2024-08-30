@@ -4,7 +4,8 @@ import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
-import OpenModal from '../Jobseekers/Pickexpertadv';
+import OpenModal from '../Jobseekers/SkillanalysisAI';
+import NewModal from '../Jobseekers/SkillanalysisAI';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +27,55 @@ function MyComponent() {
   const [expert, setExpert] = useState(" ");
   const [description, setDescription] = useState(" ");
 
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
 
+        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skillanalysis-datetime', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const { InterviewDT } = response.data;
+          if (InterviewDT && InterviewDT.length > 0) {
+            const meeting = InterviewDT[0];
+            const dateTime = new Date(meeting.date_time);
+
+            // Format date as 'DD/MM/YYYY'
+            const date = dateTime.toLocaleDateString('en-GB');
+
+            // Format time as 'HH:MM AM/PM'
+            const time = dateTime.toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }); 
+
+            setMeetingData({
+              date,
+              time,
+            });
+          } else {
+            console.error('No meetings found');
+          }
+        } else {
+          console.error('Failed to fetch meeting data');
+        }
+      } catch (error) {
+        console.error('Error fetching meeting data:', error);
+      }
+    };
+
+    fetchMeetingData();
+  }, []);
+  
   useEffect(() => {
       const loadFormData = async () => {
           try {
@@ -41,27 +90,33 @@ function MyComponent() {
               });
 
               if (response.status === 200) {
-                  const data = response.data.skillAnalysis; // Updated to `skillAnalysis` based on your response
+                  const data = response.data.skillAnalysis; // Array of skillAnalysis objects
 
-                  setRole(data.role || '');
-                  setType(data.type || '');
-                  setStartingLevel(data.starting_level || '');
-                  setTargetLevel(data.target_level || '');
-                setExpert(data.expert_name || '');
-                 setDescription(data.description || '');
+                  // Sort the skillAnalysis array by created_at in descending order
+                  const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-                // Convert date_time to date and time
-                const dateTime = new Date(data.date_time);
-                const date = dateTime.toLocaleDateString();
-                const time = dateTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true  // Use 12-hour clock with AM/PM
-                });
+                  // Get the latest skill analysis
+                  const latestSkillAnalysis = sortedData[0];
 
-                setSelectedDate(date);
-                setSelectedTime(time);
-                
+                  setRole(latestSkillAnalysis.role || '');
+                  setType(latestSkillAnalysis.type || '');
+                  setStartingLevel(latestSkillAnalysis.starting_level || '');
+                  setTargetLevel(latestSkillAnalysis.target_level || '');
+                  setExpert(latestSkillAnalysis.expert_name || '');
+                  setDescription(latestSkillAnalysis.description || '');
+
+                  // Convert date_time to date and time
+                  const dateTime = new Date(latestSkillAnalysis.date_time);
+                  const date = dateTime.toLocaleDateString();
+                  const time = dateTime.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true  // Use 12-hour clock with AM/PM
+                  });
+
+                  setSelectedDate(date);
+                  setSelectedTime(time);
+
               } else {
                   console.error('Failed to fetch data', response);
               }
@@ -72,6 +127,7 @@ function MyComponent() {
 
       loadFormData();
   }, []);
+
   
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -128,19 +184,20 @@ function MyComponent() {
   };
 
     const handleOpenPress = () => {
-       navigation.navigate('Use AI');
+       setModalVisible(true);
     };
   
     const handleCloseModal = () => {
       setModalVisible(false);
     };
+  
     const [fontsLoaded]=useFonts({
       "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })      
         const {t}=useTranslation()
     return (
       <ImageBackground
-    source={require ('../assets/Background.png') }
+    source={require ('../assets/backgroundimg2.png') }
   style={{ height: '150%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>
@@ -152,8 +209,11 @@ function MyComponent() {
                     <View style={styles.header}>
             <TouchableOpacity>
               <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 10, fontSize: 16,  marginTop: 5,fontFamily:"Roboto-Light"}}>{t("Skill Analysis")}</Text>
+                <Image
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=666666' }}
+                  style={styles.image}
+                />
+                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14,  marginTop: 5 }}>{t("Skill Analysis")}</Text>
                 </View>
             </TouchableOpacity>
             </View>
@@ -252,18 +312,21 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     image: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         marginRight: 5,
         marginLeft: 100,
-        marginTop: 5
+        marginTop: 5,
+      tintColor: '#666',
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginLeft: 40, marginRight: 50, marginTop: 50
-      },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  marginTop: 50,
+  maxWidth: '90%',
+  marginLeft: 50,
+  },
       box: {
         backgroundColor: '#f7fff4',
         padding: 20,

@@ -14,12 +14,12 @@ const ScheduledMeetingsTable = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+   const [hubName, setHubName] = useState('');
 
   const openUser = (userId) => {
     navigation.navigate('Messaging', { userId });
   };
 
-  // Function to fetch data
   const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -90,6 +90,30 @@ const ScheduledMeetingsTable = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get('https://recruitangle.com/api/expert/hubs/get', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.NewHub;
+          setHubName(data.coaching_hub_name || '');
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
   if (loading) {
     return <Text>Loading...</Text>;
   }
@@ -101,7 +125,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>Manage SAP FI Hub</Text>
+        <Text style={styles.title}>Manage {hubName || "No update yet"} Hub</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}><Text style={styles.headerText}>Name</Text></View>

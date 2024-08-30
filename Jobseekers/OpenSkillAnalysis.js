@@ -13,6 +13,8 @@ function MyComponent({ onClose }) {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [data, setData] = useState(null);
+  const [id, setId] = useState(null); // Store the ID
 
   const [type, setType] = useState("Career Change");
   const [role, setRole] = useState("");
@@ -25,48 +27,96 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');
   const [expert_available_days, setExpertAvailableDays] = useState('Mon-Fri');
   const [expert_available_time, setExpertAvailableTime] = useState('10AM-5PM');
-  const [expert, setExpert] = useState('Joop Melcher');
+  const [expert, setExpert] = useState(' ');
   const [candidate, setCandidate] = useState("Individual");
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setmeetType] = useState("advice");
 
   useEffect(() => {
-    const loadFormData = async () => {
+    const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
+        const retrievedData = await AsyncStorage.getItem('selectedSkillAnalysis');
+        if (retrievedData) {
+          const parsedData = JSON.parse(retrievedData);
+          setData(parsedData);
+           setId(parsedData.id); // Store the ID
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200) {
-          const data = response.data.skillAnalysis; // Check the structure of `data`
-
-          setRole(data.role || '');
-          setType(data.type || '');
-          setChallenge(data.description || '');
-          setStartingLevel(data.starting_level || '');
-          setTargetLevel(data.target_level || '');
-          setStatus(data.status || '');
-
-          // Parse date_time if necessary
-          const dateTime = data.date_time ? new Date(data.date_time) : null;
-          setSelectedDateTime(dateTime);
-
+          // Initialize state variables with retrieved data
+          setType(parsedData.type || 'Career Change');
+          setRole(parsedData.role || '');
+          setChallenge(parsedData.description || '');
+          setStartingLevel(parsedData.starting_level || 'Beginner');
+          setTargetLevel(parsedData.target_level || 'Medior');
+          setStatus(parsedData.status || 'Active');
+          setExpert(parsedData.expert_name || '');
+          setExpertAvailableDays(parsedData.expert_available_days || 'Mon-Fri');
+          setExpertAvailableTime(parsedData.expert_available_time || '10AM-5PM');
+          setExpertid(parsedData.expertid || '');
         } else {
-          console.error('Failed to fetch data', response);
+          console.log('No data found in AsyncStorage.');
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Failed to retrieve data from AsyncStorage', error);
       }
     };
 
-    loadFormData();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    getToken();
+  }, []);
+  
+  const goToPlans = async () => {
+      try {
+        // Construct the URL with the `id`
+        const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
+
+        // Prepare the data to be sent in the POST request
+        const postData = {
+          type: type,
+          role: role,
+          description: challenge,
+          starting_level: startingLevel,
+          target_level: targetLevel,
+          status: status,
+          date_time: data?.date_time,
+          expert_name: data?.expert_name,
+          expert_available_days: data?.expert_available_days,
+          expert_available_time: data?.expert_available_time,
+          expertid: data?.expertid,
+          meetingtype: meetingtype,
+          name: data?.name || 'name',
+        };
+
+        // Send the PUT request
+        const response = await axios.put(url, postData, {
+          headers: {
+            'Content-Type': 'application/json', // Ensure JSON content type
+            'Authorization': `Bearer ${token}`, // Include token if authentication is required
+          },
+        });
+
+
+
+      // Handle the response
+      if (response.status === 200) {
+        console.log('Skill Analysis session updated successfully:', response.data);
+        // Optionally, you can show a success message or navigate to another screen
+        navigation.navigate('Advice Sessions');
+      } else {
+        console.error('Failed to update the skill analysis session:', response.data);
+      }
+    } catch (error) {
+      console.error('Error updating the skill analysis session:', error);
+    } finally {
+      onClose(); // Close the modal
+    }
+  };
 
   const handleConfirmDateTime = (dateTime) => {
     setSelectedDateTime(dateTime);
@@ -76,12 +126,11 @@ function MyComponent({ onClose }) {
   const handleCancelModal = () => {
     setIsModalVisible(false);
   };
-    
 
   const hideAlert = () => {
     setAlertVisible(false);
   };
-
+  
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
@@ -101,7 +150,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("View Skill Analysis Session")}</Text>
+            <Text style={styles.headerText}>{t("Update Skill Analysis Session")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
@@ -220,7 +269,7 @@ function MyComponent({ onClose }) {
                 </View>
                 <View style={styles.cell}>
                   <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
-                    {expert}
+                    {data?.expert_name || ''}
                   </Text>
                 </View>
               </View>
@@ -230,7 +279,7 @@ function MyComponent({ onClose }) {
                 </View>
                 <View style={styles.cell}>
                   <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
-                    {expert_available_days}
+                    {data?.expert_available_days|| ''}
                   </Text>
                 </View>
               </View>
@@ -238,12 +287,12 @@ function MyComponent({ onClose }) {
                 <View style={styles.cell}>
                   <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
                 </View>
-                <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
+                <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}> {data?.expert_available_time || ''}
                   </Text>
                 </View>
               </View>
             </View>
-           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for skill analysis session.")} {expert} is available {expert_available_days} {expert_available_time}</Text>
+           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for skill analysis session.")}  {data?.expert_name || ''} is available  {data?.expert_available_days|| ''} {data?.expert_available_time || ''}</Text>
           <View style={styles.container}>
             <View style={styles.row}>
               <View style={styles.cell}>
@@ -255,14 +304,14 @@ function MyComponent({ onClose }) {
                   onPress={() => setIsModalVisible(true)}
                 >
                   <Text style={{ fontFamily: "Roboto-Light" }}>
-                    {selectedDateTime ? selectedDateTime.toLocaleString() : t("Select Date and Time")}
+                    {data?.date_time || t("Select Date and Time")}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           
-              <TouchableOpacity style={styles.buttonplus} >
+              <TouchableOpacity style={styles.buttonplus} onPress={goToPlans}>
                 <Text style={styles.buttonTextplus}>{t("Update")}</Text>
               </TouchableOpacity>
             

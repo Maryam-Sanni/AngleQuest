@@ -50,44 +50,25 @@ const ScheduledMeetingsTable = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>Simpson Jagun</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}> 
-            <Text style={styles.cellText}>Common T-codes for FI</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>7/Mar/2024</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>{t("Brilliant")}</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>10 Minutes</Text>
+            <Text style={styles.cellText}> </Text>
           </View>
           <TouchableOpacity style={styles.cell2} >
-          <Text style={styles.open}>{t("View")}</Text>
+          
           </TouchableOpacity>
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Maitaima Voin</Text>
-          </View>
-          <View style={styles.cell}> 
-            <Text style={styles.cellText}>{t("Integration with Cost Accounting")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>7/Apr/2024</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>{t("Good")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>10 Minutes</Text>
-          </View>
-          <TouchableOpacity style={styles.cell} >
-          <Text style={styles.open}>{t("View")}</Text>
-          </TouchableOpacity>
-        </View>
+        
         
       </View>
       <Modal
