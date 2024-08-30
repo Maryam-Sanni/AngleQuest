@@ -110,11 +110,11 @@ import AdviceOffer from './Jobseekers/OfferAdvice';
 import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
-import IndividualAI from './Jobseekers/AI';
-import AIindv1 from './Jobseekers/AI1';
+import JoinCourse from './Jobseekers/JoinCourses';
+import AIindv1 from './Jobseekers/SkillanalysisAI';
 import AIindv2 from './Jobseekers/AI2';
 import AIindv3 from './Jobseekers/AI3';
-import AIindv4 from './Jobseekers/AIFinish';
+import AIindv4 from "./Jobseekers/Skillanalysisresult";
 import Welcome from './LandingPage/LandingHome';
 import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
@@ -250,6 +250,7 @@ const App = () => {
         <Stack.Screen name="Anglequest AI" component={mobileAI} />
         <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
        <Stack.Screen name="anglequest" component={BlankScreen} />
+      <Stack.Screen name="Join Courses" component={JoinCourse} />
       </Stack.Navigator>
     </NavigationContainer>
   );

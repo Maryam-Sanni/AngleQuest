@@ -4,7 +4,8 @@ import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
-import OpenModal from '../Jobseekers/Pickexpertadv';
+import OpenModal from '../Jobseekers/SkillanalysisAI';
+import NewModal from '../Jobseekers/SkillanalysisAI';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -183,12 +184,13 @@ function MyComponent() {
   };
 
     const handleOpenPress = () => {
-       navigation.navigate('Use AI');
+       setModalVisible(true);
     };
   
     const handleCloseModal = () => {
       setModalVisible(false);
     };
+  
     const [fontsLoaded]=useFonts({
       "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })      

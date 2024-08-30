@@ -49,10 +49,11 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
     if (selectedRating !== null && token) {
       try {
         const response = await axios.post(
-          'https://recruitangle.com/api/jobseeker/create-jobseeker-skill-analysis',
+          'https://recruitangle.com/api/jobseeker/rate-skill-analysis',
           {
             rating: selectedRating,
             id: data?.id, // Use the stored ID
+            jobseeker_id: data?.jobseeker_id
           },
           {
             headers: {

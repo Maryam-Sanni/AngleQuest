@@ -18,6 +18,7 @@ function MyComponent({ onClose }) {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
+  const [attend, setattend] = useState('No');
   const [isDropdown, setIsDropdown] = useState(false);
   const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
   const [cardData, setCardData] = useState({ AllHubs: [] });
@@ -96,43 +97,67 @@ const handleOpenPress3 = async () => {
   }
 };
 
-useEffect(() => {
-  if (!selectedHub) return;
+  useEffect(() => {
+    if (!selectedHub) return;
 
-  const createHub = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
+    const createHubAndJoinExpertHub = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // POST to create the hub
+        const createHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/create-hub', {
+          category: selectedHub.category,
+          meeting_day: selectedHub.meeting_day,
+          from: selectedHub.from,
+          to: selectedHub.to,
+          coaching_hub_name: selectedHub.coaching_hub_name,
+          expert_name: selectedHub.expert_name,
+          coaching_hub_description: selectedHub.coaching_hub_description,
+          coaching_hub_fee: selectedHub.coaching_hub_fee,
+          attend: attend
+        }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (createHubResponse.status === 200) {
+          console.log('Hub successfully created');
+
+          // Get jobseeker details from AsyncStorage
+          const firstName = await AsyncStorage.getItem('first_name');
+          const lastName = await AsyncStorage.getItem('last_name');
+          const jobseekerId = await AsyncStorage.getItem('user_id');
+          const jobseekerName = `${firstName} ${lastName}`;
+
+          // POST to join the expert hub
+          const joinHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/join-expert-hub', {
+            jobseeker_name: jobseekerName,
+            jobseeker_id: jobseekerId,
+            expert_id: selectedHub.user_id,
+            hub_id: selectedHub.data.id, 
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (joinHubResponse.status === 200) {
+            console.log('Successfully joined expert hub');
+            // Handle success (e.g., navigate to a different screen or show a success message)
+          } else {
+            console.error('Error joining expert hub:', joinHubResponse.statusText);
+          }
+        } else {
+          console.error('Error creating hub:', createHubResponse.statusText);
+        }
+      } catch (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
       }
+    };
 
-      const response = await axios.post('https://recruitangle.com/api/jobseeker/create-hub', {
-        category: selectedHub.category,
-        meeting_day: selectedHub.meeting_day,
-        from: selectedHub.from,
-        to: (selectedHub.to),
-        coaching_hub_name: selectedHub.coaching_hub_name,
-        expert_name: selectedHub.expert_name,
-        coaching_hub_description: selectedHub.coaching_hub_description,
-        coaching_hub_fee: selectedHub.coaching_hub_fee,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.status === 200) {
-        console.log('Hub successfully joined');
-        // Handle success (e.g., navigate to a different screen or show a success message)
-      } else {
-        console.error('Error joining hub:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error joining hub:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  createHub();
-}, [selectedHub]);
+    createHubAndJoinExpertHub();
+  }, [selectedHub]);
 
 
   const handleCloseModal3 = () => {

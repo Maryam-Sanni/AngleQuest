@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
   const [selectedRating, setSelectedRating] = useState(null);
   const { t } = useTranslation();
-  const [level, setLevel] = useState(null);
+  const [level, setLevel] = useState(' ');
   const [data, setData] = useState(null);
+  const [token, setToken] = useState("");
+  const [id, setId] = useState(null); // Add this line
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const retrievedData = await AsyncStorage.getItem('selectedInterview');
+        const storedToken = await AsyncStorage.getItem('token');
+        
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
+          setId(parsedData.id); // Store the ID
 
           // Initialize state variables with retrieved data
           setLevel(parsedData.level || '');
         } else {
           console.log('No data found in AsyncStorage.');
+        }
+        
+    if (storedToken) {
+          setToken(storedToken);
+        } else {
+          console.log('No token found in AsyncStorage.');
         }
       } catch (error) {
         console.error('Failed to retrieve data from AsyncStorage', error);
@@ -29,19 +41,44 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
 
     fetchData();
   }, []);
-  
+
   const handleRatingPress = (rating) => {
     setSelectedRating(rating);
   };
 
-  const handleConfirm = () => {
-    onConfirm(selectedRating);
+  const handleConfirm = async () => {
+    if (selectedRating !== null && token) {
+      try {
+        const response = await axios.post(
+          'https://recruitangle.com/api/jobseeker/rate-interview',
+          {
+            rating: selectedRating,
+            id: data?.id, // Use the stored ID
+            jobseeker_id: data?.jobseeker_id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Handle successful response if needed
+        console.log('Rating submitted successfully', response.data);
+        onConfirm(selectedRating);
+      } catch (error) {
+        console.error('Error submitting rating', error);
+      }
+    } else {
+      console.log('Rating or token is missing');
+    }
+    onCancel();
   };
 
   return (
     <View style={styles.modalContainer}>
       <Text style={styles.headerText}>
-        {t("How satisfied are you with the session with")} <Text style={styles.headerText}>{level}?</Text>
+        {t("How satisfied are you with the session with ")} <Text style={styles.headerText}>{data?.level || ''}?</Text>
       </Text> 
       <View style={styles.ratingContainer}>
         {[...Array(10)].map((_, index) => (

@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  ScrollView,
-  Picker,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker,} from "react-native";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
