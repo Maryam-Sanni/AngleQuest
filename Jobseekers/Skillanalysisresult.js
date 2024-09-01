@@ -18,7 +18,7 @@ import Sidebar from "../components/sidebar";
 import { BlurView } from "expo-blur";
 import CustomAlert from "../components/CustomAlert";
 import OpenModal from "./Pickexpertadv";
-import BotIMG from "../assets/Aq-bot.jpeg";
+import BotIMG from "../assets/AnglequestAI.png";
 import BackGArrow from "../assets/BackarrowG.jpeg";
 
 const MyComponent = () => {
@@ -86,7 +86,7 @@ const MyComponent = () => {
       >
         <AntDesign
           name="caretright"
-          size={24}
+          size={20}
           color={active ? "white" : "black"}
         />
         <Text
@@ -178,7 +178,7 @@ const MyComponent = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <View style={{ flex: "18%", paddingLeft: 30 }}>
+                    <View style={{ flex: "19%", paddingLeft: 30 }}>
                       <View style={{ marginBottom: 60 }}>
                         <Image style={styles.image} source={BotIMG} />
                       </View>
@@ -219,7 +219,7 @@ const MyComponent = () => {
                       >
                         <Image
                           source={{
-                            uri: "https://s3-alpha-sig.figma.com/img/3f0c/ed76/8d7d2bf084f8440e3305463ef58f3332?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dq4VxF5WkMgwDoirSSiglooLNKdyQJWnhbGIvhLS8g5SGxUksMqEYHy5TjgKzRp8TadyiN93EOYwMHkYyRDNd-CPCKw-PX41JyWQkzUeiEiNcAOfZWbudujMDerkxLasnDYNBoqsA4ft8ysCc0cGJ9VZaxgLYN~j1lIv41LnPmXwRQOqTudJq8dg7lJ5Y1pqm6G2i6xcqDqkahEkeErQ~Icjk8Ofcmcl46K96nUAxQayIrchUwnY~VtkhnjY7b0T2Gb1-4sDDHrabRSRQif4gfA1Xj1vHlJY8o1qTNtZbNYrQlhyJKAL5hYsuGK650sWBV2F4CGFi0Es0bYq7Wfl0w__",
+                            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b",
                           }}
                           style={{ width: 56, height: 56, borderRadius: 50 }}
                         />
@@ -250,7 +250,7 @@ const MyComponent = () => {
                       </View>
                       <View
                         style={{
-                          minHeight: 500,
+                          minHeight: 600,
                           position: "relative",
                           borderRadius: 20,
                           shadowColor: "#000000",
@@ -265,7 +265,7 @@ const MyComponent = () => {
                       >
                         <ImageBackground
                           source={BackGArrow}
-                          style={{ width: "100%", height: "100%" }}
+                          style={{ width: "100%", height: 600, marginTop: 20}}
                         ></ImageBackground>
                         <Cards
                           title={"Desired Destination |"}
@@ -340,6 +340,7 @@ const MyComponent = () => {
                             position: "absolute",
                             width: "100%",
                             bottom: -10,
+                            marginTop: 100,
                             backgroundColor: "white",
                             borderBottomLeftRadius: 20,
                             borderBottomRightRadius: 20,
@@ -347,7 +348,6 @@ const MyComponent = () => {
                         >
                           <Text
                             style={{
-                              fontFamily: "Poppins-Bold",
                               fontSize: 20,
                               textAlign: "center",
                             }}
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   container: {
-    height: 800,
+    height: 1000,
     alignItems: "center",
     backgroundColor: "#f7fff4",
     borderRadius: 20,
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   glassBox: {
-    height: 850,
+    height: 1050,
     backgroundColor: "rgba(225,255,212,0.3)",
     borderRadius: 20,
     marginTop: 30,
@@ -538,13 +538,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   image: {
-    width: 56,
-    height: 56,
+    width: 80,
+    height: 80,
   },
   timeline: {
     color: "#777676",
-    fontSize: 22,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "600",
   },
   button: {
     backgroundColor: "transaparent",
@@ -558,7 +558,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 16,
-    // fontFamily: "Roboto-Light",
   },
   monthButton: {
     flexDirection: "row",
@@ -568,12 +567,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 6,
     width: 145,
-    // justifyContent: "center",
   },
   monthButtonText: {
-    // fontFamily: "Poppins",
     fontWeight: "600",
-    fontSize: 18,
+    fontSize: 16,
   },
 });
 

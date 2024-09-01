@@ -6,10 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 import Svg, { Line, Text as SvgText, Circle } from 'react-native-svg';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 function MyComponent() { 
     const navigation = useNavigation();
+  const [groupdata, setGroupData] = useState([]);
+  const [analysisResults, setAnalysisResults] = useState({});
 
     const [fontsLoaded]=useFonts({
       'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
@@ -21,83 +24,16 @@ function MyComponent() {
     { label: 'Jul-Dec 2023', value: 77 },
     { label: 'Jan-Jun 2024', value: 60 },
     { label: 'Jul-Dec 2024', value: 35 },
-  ];
+  ]; 
 
   // Get the maximum value in the data for scaling the bars
   const maxValue = Math.max(...data.map(d => d.value));
   const chartHeight = 200; // Height of the chart area
 
-  const groupdata = [
-    {
-      group: 'M1',
-      values: [
-        { label: '', value: 5, color: 'darkblue' },
-        { label: '', value: 3, color: 'coral' },
-         { label: '', value: 1, color: 'green' },
-      ],
-    },
-    {
-      group: 'M2',
-        values: [
-          { label: '', value: 3, color: 'darkblue' },
-          { label: '', value: 4.5, color: 'coral' },
-           { label: '', value: 8, color: 'green' },
-        ],
-    },
-    {
-      group: 'M3',
-        values: [
-          { label: '', value: 4, color: 'darkblue' },
-          { label: '', value: 6, color: 'coral' },
-           { label: '', value: 32, color: 'green' },
-        ],
-    },
-    {
-      group: 'M4',
-        values: [
-          { label: '', value: 7, color: 'darkblue' },
-          { label: '', value: 4, color: 'coral' },
-           { label: '', value: 8, color: 'green' },
-        ],
-    },
-    {
-      group: 'M5',
-        values: [
-          { label: '', value: 10, color: 'darkblue' },
-          { label: '', value: 3, color: 'coral' },
-           { label: '', value: 4, color: 'green' },
-        ],
-    },
-    {
-      group: 'M6',
-        values: [
-          { label: '', value: 4.8, color: 'darkblue' },
-          { label: '', value: 2, color: 'coral' },
-           { label: '', value: 20, color: 'green' },
-        ],
-    },
-    {
-      group: 'M7',
-        values: [
-          { label: '', value: 5, color: 'darkblue' },
-          { label: '', value: 9, color: 'coral' },
-           { label: '', value: 4, color: 'green' },
-        ],
-    },
-    {
-      group: 'M8',
-        values: [
-          { label: '', value: 6, color: 'darkblue' },
-          { label: '', value: 4, color: 'coral' },
-           { label: '', value: 5, color: 'green' },
-        ],
-    },
-  ];
+ 
 
-  const groupmaxValue = Math.max(
-    ...groupdata.flatMap(group => group.values.map(d => d.value))
-  );
-  const groupchartWidth = 300; // Width of the chart area
+
+  const groupmaxValue = 100; // Set based on your data
 
 
   const { width } = Dimensions.get('window');
@@ -131,7 +67,90 @@ function MyComponent() {
     const y = height - ((value - minValue) / valueRange) * (height - 2 * padding) - padding;
     return { value: Math.round(value), y };
   });
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedUserId = await AsyncStorage.getItem('user_id');
+        if (token && storedUserId) {
+          const response = await fetch('https://recruitangle.com/api/expert/growthplan/getAllExpertsGrowthPlanFeedbacks', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          if (data.status === 'success') {
+            // Extract percentages from the response data
+            const extractedData = extractPercentages(data.allGrowthPlan.filter(plan => plan.jobseeker_id === storedUserId));
+            // Transform data for chart
+            const transformedData = transformDataForChart(extractedData);
+            setGroupData(transformedData);
+
+            const results = performGAPAnalysis(extractedData);
+            setAnalysisResults(results);
+            
+          } else {
+            console.error('Failed to fetch data:', data.message); // Log error message
+          }
+        } else {
+          console.error('Token or user ID is missing');
+        }
+      } catch (error) {
+        console.error('Failed to load data', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Function to extract percentages
+  const extractPercentages = (growthPlans) => {
+    return growthPlans.map(plan => {
+      // Ensure 'descriptions' is an array and has at least 3 items
+      const percentages = plan.descriptions.slice(0, 3).map(desc => desc.percentage || 0);
+      return {
+        id: plan.id,
+        percentages
+      };
+    });
+  };
+
+  // Transform data for chart
+  const transformDataForChart = (extractedData) => {
+    // Define a list of colors
+    const colors = ['darkblue', 'coral', 'green'];
+
+    // Example transformation using extracted percentages
+    const groupData = extractedData.map(plan => ({
+      values: plan.percentages.map((percentage, index) => ({
+        value: percentage, // Percentage value for the chart
+        color: colors[index % colors.length], // Assign color based on index
+      })),
+    }));
+
+    return groupData;
+  };
+
+  const performGAPAnalysis = (extractedData) => {
+    // Example GAP analysis logic
+    const analysis = extractedData.reduce((acc, plan) => {
+      plan.percentages.forEach((percentage) => {
+        if (percentage < 50) {
+          acc['Low'] = (acc['Low'] || 0) + 1;
+        } else if (percentage < 75) {
+          acc['Medium'] = (acc['Medium'] || 0) + 1;
+        } else {
+          acc['High'] = (acc['High'] || 0) + 1;
+        }
+      });
+      return acc;
+    }, {});
+
+    return analysis;
+  };
+
     return (
       <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -164,12 +183,12 @@ function MyComponent() {
                           <View style={{flexDirection: 'row'}}>
                           <View style={styles.smallbox}>
                             <Text style={{fontSize: 14}}>{t("TOTAL")}</Text>
-                            <Text style={{fontSize: 32, marginTop: 10, color: 'white', textShadowColor: 'black', textShadowRadius: 2, }}>22</Text>
+                            <Text style={{fontSize: 32, marginTop: 10, color: 'white', textShadowColor: 'black', textShadowRadius: 2, }}>0</Text>
                             <Text style={{fontSize: 16, fontWeight: '600', marginTop: 10}}>{t("Sessions")}</Text>
                           </View>
                           <View style={styles.smallbox}>
                             <Text style={{fontSize: 14}}>{t("LAST WEEK")}</Text>
-                            <Text style={{fontSize: 32, marginTop: 10, color: 'white', textShadowColor: 'black', textShadowRadius: 2, }}>3</Text>
+                            <Text style={{fontSize: 32, marginTop: 10, color: 'white', textShadowColor: 'black', textShadowRadius: 2, }}>0</Text>
                             <Text style={{fontSize: 16, fontWeight: '600', marginTop: 10}}>{t("Sessions")}</Text>
                             </View>
                           </View>
@@ -269,7 +288,7 @@ function MyComponent() {
                           <View style={styles.GxAxis}>
                             {Array.from({ length: 8 }, (_, i) => (
                               <Text key={i} style={styles.GxAxisLabel}>
-                                {`M${i + 1}`}
+                                {`P${i + 1}`}
                               </Text>
                             ))}
                           </View>
@@ -281,13 +300,13 @@ function MyComponent() {
                          <View style={{flexDirection: 'row', marginTop:10}}>
                             <View style={{height: 10, width: 10, backgroundColor:'darkblue', marginTop: 4, marginRight: 5}}>
                             </View>
-                           <Text style={{fontSize: 14}}>Data Migration</Text>
+                           <Text style={{fontSize: 14}}>Guide 1</Text>
                            <View style={{height: 10, width: 10, backgroundColor:'coral', marginTop: 5, marginRight: 4, marginLeft: 30}}>
                              </View>
-                            <Text style={{fontSize: 14}}>Integration</Text>
+                            <Text style={{fontSize: 14}}>Guide 2</Text>
                            <View style={{height: 10, width: 10, backgroundColor:'green', marginTop: 5, marginRight: 4, marginLeft: 30}}>
                               </View>
-                            <Text style={{fontSize: 14}}>T Codes</Text>
+                            <Text style={{fontSize: 14}}>Guide 3</Text>
                          </View>
 
 
@@ -308,8 +327,13 @@ function MyComponent() {
                              </View>
                         </View>
                         <View style={styles.whitebox}>
-                          <Text style={styles.title2}>{t("Gap Analysis Result")}</Text>
+                          <Text style={styles.title2}>Gap Analysis Result</Text>
+                          <View style={styles.resultContainer}>
+                            <Text style={styles.resultText}>Low Percentage Count: {analysisResults['Low'] || 0}</Text>
+                            <Text style={styles.resultText}>Medium Percentage Count: {analysisResults['Medium'] || 0}</Text>
+                            <Text style={styles.resultText}>High Percentage Count: {analysisResults['High'] || 0}</Text>
                           </View>
+                        </View>
                       </View>
      
 
@@ -393,7 +417,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '40%',
-    height: 100,
+    height: 200,
     marginBottom: 50,
   },
   smallbox: {
@@ -597,6 +621,13 @@ const styles = StyleSheet.create({
   Llabel: {
     fontSize: 12,
     textAlign: 'center',
+  },
+  resultContainer: {
+    marginTop: 16,
+  },
+  resultText: {
+    fontSize: 16,
+    marginVertical: 4,
   },
 });
 

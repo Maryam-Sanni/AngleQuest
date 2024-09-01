@@ -6,9 +6,9 @@ import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../components/Createhubform';
 import OpenModal2 from '../components/Edithubform';
 import ConfirmationPopup from '../Experts/OtherHubs';
-import { BlurView } from 'expo-blur';
 import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
+import OpenModal6 from './All Sessions';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 import axios from 'axios';
@@ -72,6 +72,7 @@ function MyComponent() {
       onClose();
     };
 
+ 
   
 const {t}=useTranslation()
   const [fontsLoaded]=useFonts({
@@ -101,7 +102,7 @@ const {t}=useTranslation()
 
     loadFormData();
   }, []);
-
+ 
   const reloadHomeExperts = () => {
     navigation.navigate('anglequest');
     setTimeout(() => {
@@ -245,13 +246,27 @@ const {t}=useTranslation()
 }
 
 const ScheduledMeetingsTable = () => {
-  const [messageCountText, setMessageCountText] = useState('0'); 
+   const [modalVisible6, setModalVisible6] = useState(false);
+  const [meetingConfirmation, setMeetingConfirmation] = useState(0);
+  const [yetToConfirm, setYetToConfirm] = useState(0);
+  const [totalHubMembers, setTotalHubMembers] = useState(0);
+  const [sessionsHeld, setSessionsHeld] = useState(0);
+  const [sessionsMissed, setSessionsMissed] = useState(0);
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
   const [meetingData, setMeetingData] = useState({
     date: '',
     time: ''
   });
-   
+
+  const handleOpenPress6 = () => {
+    setModalVisible6(true);
+  };
+
+  const handleCloseModal6 = () => {
+    setModalVisible6(false);
+    onClose();
+  };
+  
   useEffect(() => {
     const fetchMeetingData = async () => {
       try {
@@ -337,6 +352,55 @@ const ScheduledMeetingsTable = () => {
     fetchLastCreatedMeeting();
   }, []);
 
+  useEffect(() => {
+    const fetchAdditionalData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const userId = await AsyncStorage.getItem('user_id');
+        if (!token || !userId) {
+          console.error('No token or user ID found');
+          return;
+        }
+
+        const response = await fetch('https://recruitangle.com/api/jobseeker/get-all-joined-jobseeker', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          const meetings = data.allJoinedJobseekers || [];
+
+          // Filter meetings based on the user ID
+          const userMeetings = meetings.filter(meeting => meeting.expert_id === userId);
+
+          // Calculate the data
+          setTotalHubMembers(userMeetings.length);
+
+          // Other calculations based on `userMeetings` can be done here
+          // Example:
+          setMeetingConfirmation(userMeetings.reduce((acc, meeting) => acc + meeting.meeting_confirmation, 0));
+          setYetToConfirm(userMeetings.reduce((acc, meeting) => acc + meeting.yet_to_confirm, 0));
+          setSessionsHeld(userMeetings.reduce((acc, meeting) => acc + meeting.sessions_held, 0));
+          setSessionsMissed(userMeetings.reduce((acc, meeting) => acc + meeting.sessions_missed, 0));
+
+        } else {
+          console.error('Failed to fetch additional data:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch additional data:', error);
+      }
+    };
+
+    fetchAdditionalData();
+  }, []);
+  
   const handlejoinPress = () => {
     if (lastCandidateLink) {
       Linking.openURL(lastCandidateLink);
@@ -360,28 +424,39 @@ const ScheduledMeetingsTable = () => {
       </View>
 
       <View style={styles.whiteBox}>
-      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("Next Meeting Confirmation")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>0</Text>
+      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("All Meeting Confirmation")}</Text>
+    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>{meetingConfirmation}</Text>
     <Text style={{ fontSize: 12, color: "darkred", marginTop: 10, fontWeight: '500'}}>{t("Yet to Confirm")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>{yetToConfirm}</Text>
       </View>
 
       <View style={styles.whiteBox}>
       <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>1</Text>
-    
+    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>{totalHubMembers}</Text>
+        <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 15, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}}  onPress={handleOpenPress6}>
+          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600'}}>{t("All Sessions")}</Text>
+          </TouchableOpacity>
       </View>
 
       <View style={styles.whiteBox}>
       <Text style={{ fontSize: 12, color: "#206C00", fontWeight: '500'}}>{t("Sessions Held")}</Text>
-    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>0</Text>
+    <Text style={{ fontSize: 24, color: "#206C00", marginTop: 5, fontWeight: 'bold'}}>{sessionsHeld}</Text>
     <Text style={{ fontSize: 12, color: "darkred", fontWeight: '500', marginTop: 10,}}>{t("Sessions Missed")}</Text>
-    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>0</Text>
+    <Text style={{ fontSize: 24, color: "darkred", marginTop: 5, fontWeight: 'bold'}}>{sessionsMissed}</Text>
       </View>
 
       </View>
     
-    
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible6}
+        onRequestClose={handleCloseModal6}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal6 onClose={handleCloseModal6} />
+        </View>
+      </Modal>
     </View>
   );
 }

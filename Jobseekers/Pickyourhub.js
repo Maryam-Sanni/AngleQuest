@@ -27,7 +27,9 @@ function MyComponent({ onClose }) {
   const [token, setToken] = useState("");
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
   const [selectedHub, setSelectedHub] = useState(null);
-
+   const [Sessionsheld, setSessionsheld] = useState('0');
+   const [Sessionsmissed, setSessionsmissed] = useState('0');
+   const [Confirmed, setSetConfirmed] = useState('No');
  
 
   useEffect(() => {
@@ -137,7 +139,10 @@ const handleOpenPress3 = async () => {
             jobseeker_name: jobseekerName,
             jobseeker_id: jobseekerId,
             expert_id: selectedHub.user_id,
-            hub_id: selectedHub.data.id, 
+            hub_id: selectedHub.id, 
+            hub_sessions_held: Sessionsheld,
+            hub_sessions_missed: Sessionsmissed,
+            confirmed_attendance: Confirmed
           }, {
             headers: { Authorization: `Bearer ${token}` },
           });

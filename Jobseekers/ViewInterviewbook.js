@@ -15,7 +15,7 @@ function MyComponent({ onClose }) {
   const [remark, setRemark] = useState("Job description text");
   const [score, setScore] = useState("");
    const [description, setDescriptions] = useState([]);
-  const rating = 9;
+   const [rating, setRate] = useState(0);
 
   const getRatingText = (rating) => {
     switch (rating) {
@@ -29,7 +29,7 @@ function MyComponent({ onClose }) {
       case 8: return 'Very Satisfied';
       case 9: return 'Extremely Satisfied';
       case 10: return 'Completely Satisfied';
-      default: return 'No Rating';
+      default: return 'No Rating Yet';
     }
   };
 
@@ -50,6 +50,7 @@ function MyComponent({ onClose }) {
           setRemark(parsedData.remark || '');
           setLevel(parsedData.level || '');
           setScore(parsedData.score || '');
+          setRate(parseInt(parsedData.rating_figure, 10)); 
         } else {
           console.log('No data found in AsyncStorage.');
         }

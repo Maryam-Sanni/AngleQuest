@@ -29,7 +29,7 @@ function MyComponent({ onClose }) {
   const [candidate, setCandidate] = useState("Individual");
   const [expertId, setExpertId] = useState('');
   const [meetingType, setMeetingType] = useState("advice");
-   const rating = 4;
+  const [rating, setRating] = useState(0);
 
   const getRatingText = (rating) => {
     switch (rating) {
@@ -43,7 +43,7 @@ function MyComponent({ onClose }) {
       case 8: return 'Very Satisfied';
       case 9: return 'Extremely Satisfied';
       case 10: return 'Completely Satisfied';
-      default: return 'No Rating';
+      default: return 'No Rating Yet';
     }
   };
 
@@ -66,6 +66,7 @@ function MyComponent({ onClose }) {
           setExpertAvailableDays(parsedData.expert_available_days || 'Mon-Fri');
           setExpertAvailableTime(parsedData.expert_available_time || '10AM-5PM');
           setExpertId(parsedData.expertid || '');
+          setRating(parseInt(parsedData.rating_figure, 10));
         } else {
           console.log('No data found in AsyncStorage.');
         }

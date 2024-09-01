@@ -52,9 +52,9 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
         const response = await axios.post(
           'https://recruitangle.com/api/jobseeker/rate-growth-plan',
           {
-            rating: selectedRating,
-            id: data?.id, // Use the stored ID
-            jobseeker_id: data?.jobseeker_id
+            rating: String(selectedRating),
+            growth_plan_id: String(data?.id),
+            jobseeker_id: data?.user_id
           },
           {
             headers: {
@@ -97,7 +97,7 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
       <View style={styles.labelContainer}>
         <Text style={styles.labelText}>{t("Very Dissatisfied")}</Text>
         <Text style={styles.labelText}>{t("Neutral")}</Text>
-        <Text style={styles.labelText}>{t("Very Satisfied")}</Text>
+        <Text style={styles.labelText}>{t("Completely Satisfied")}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonCancel} onPress={onCancel}>

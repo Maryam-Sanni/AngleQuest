@@ -8,7 +8,7 @@ import SuggestionModal from '../components/Suggestion';
 import HelpModal from '../components/Help';
 import CustomModal from '../components/CustomModal'; 
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from '../Jobseekers/getstarted';
+import OpenModal2 from '../Jobseekers/SkillanalysisAI';
 import OpenModal3 from '../Jobseekers/Pickyourcoach';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import {useFonts} from "expo-font" 
@@ -427,7 +427,7 @@ const HomePage = () => {
           <View style={{flexDirection: 'column', marginTop: 10, width: 350, marginLeft: 30 }}>
           <Text style={{fontSize: 18, color: 'darkgreen', fontWeight: 'bold', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("What is next for you")} {first_name}?</Text>
           <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 5, fontFamily:"Roboto-Light"}}>{t("Reaching your next career milstone is important to us")}</Text>
-          <TouchableOpacity onPress={gotoAI} 
+          <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
           isHovered2 && styles.touchableOpacityHovered
@@ -439,7 +439,7 @@ const HomePage = () => {
           </TouchableOpacity>
          
          
-          
+           
           
           </View>
           <Image

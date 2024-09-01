@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent({ onClose }) {
   const [data, setData] = useState(null);
-  const rating = 6; 
+  const [rating, setRating] = useState(0);
 
   const getRatingText = (rating) => {
     switch (rating) {
@@ -21,7 +21,7 @@ function MyComponent({ onClose }) {
       case 8: return 'Very Satisfied';
       case 9: return 'Extremely Satisfied';
       case 10: return 'Completely Satisfied';
-      default: return 'No Rating';
+        default: return 'No Rating Yet';
     }
   };
 
@@ -33,7 +33,8 @@ function MyComponent({ onClose }) {
         const retrievedData = await AsyncStorage.getItem('selectedGrowthPlan');
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
-          setData(parsedData); // Update the state with the retrieved data
+          setData(parsedData);
+          setRating(parseInt(parsedData.rating_figure, 10)); 
         } else {
           console.log('No data found in AsyncStorage.');
         }

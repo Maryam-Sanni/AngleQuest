@@ -1,40 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
   const [selectedRating, setSelectedRating] = useState(null);
   const { t } = useTranslation();
-  const [expert, setExpert] = useState(' ');
+  const [expert, setExpert] = useState(" ");
   const [data, setData] = useState(null);
   const [token, setToken] = useState("");
-  const [id, setId] = useState(null); // Add this line
+  const [id, setId] = useState(null); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const retrievedData = await AsyncStorage.getItem('selectedSkillAnalysis');
-        const storedToken = await AsyncStorage.getItem('token');
+        const retrievedData = await AsyncStorage.getItem(
+          "selectedSkillAnalysis",
+        );
+        const storedToken = await AsyncStorage.getItem("token");
 
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
           setData(parsedData);
           setId(parsedData.id); // Store the ID
 
-          setExpert(parsedData.expert_name || '');
+          setExpert(parsedData.expert_name || "");
         } else {
-          console.log('No data found in AsyncStorage.');
+          console.log("No data found in AsyncStorage.");
         }
 
         if (storedToken) {
           setToken(storedToken);
         } else {
-          console.log('No token found in AsyncStorage.');
+          console.log("No token found in AsyncStorage.");
         }
       } catch (error) {
-        console.error('Failed to retrieve data from AsyncStorage', error);
+        console.error("Failed to retrieve data from AsyncStorage", error);
       }
     };
 
@@ -47,38 +49,39 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
 
   const handleConfirm = async () => {
     if (selectedRating !== null && token) {
-      try {
-        const response = await axios.post(
-          'https://recruitangle.com/api/jobseeker/rate-skill-analysis',
-          {
-            rating: selectedRating,
-            id: data?.id, // Use the stored ID
-            jobseeker_id: data?.jobseeker_id
-          },
+      try {const response = await axios.post(
+          "https://recruitangle.com/api/jobseeker/rate-skill-analysis",
+        {
+          rating: String(selectedRating),
+          skill_analysis_id: String(data?.id),
+          jobseeker_id: data?.user_id,
+        },
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
-          }
+          },
         );
 
         // Handle successful response if needed
-        console.log('Rating submitted successfully', response.data);
+        console.log("Rating submitted successfully", response.data);
         onConfirm(selectedRating);
       } catch (error) {
-        console.error('Error submitting rating', error);
+        console.error("Error submitting rating", error);
       }
     } else {
-      console.log('Rating or token is missing');
+      console.log("Rating or token is missing");
     }
     onCancel();
   };
- 
+
   return (
     <View style={styles.modalContainer}>
       <Text style={styles.headerText}>
-        {t("How satisfied are you with the session with ")} <Text style={styles.headerText}>{data?.expert_name || ''}?</Text>
-      </Text> 
+        {t("How satisfied are you with the session with ")}{" "}
+        <Text style={styles.headerText}>{data?.expert_name || ""}?</Text>
+      </Text>
       <View style={styles.ratingContainer}>
         {[...Array(10)].map((_, index) => (
           <TouchableOpacity
@@ -96,11 +99,11 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
       <View style={styles.labelContainer}>
         <Text style={styles.labelText}>{t("Very Dissatisfied")}</Text>
         <Text style={styles.labelText}>{t("Neutral")}</Text>
-        <Text style={styles.labelText}>{t("Very Satisfied")}</Text>
+        <Text style={styles.labelText}>{t("Completely Satisfied")}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonCancel} onPress={onCancel}>
-          <Text style={{color: 'black'}}>{t("Cancel")}</Text>
+          <Text style={{ color: "black" }}>{t("Cancel")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleConfirm}>
           <Text style={styles.buttonText}>{t("Confirm")}</Text>
@@ -112,7 +115,7 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
     backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
@@ -122,12 +125,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
   ratingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginBottom: 20,
     marginTop: 10,
   },
@@ -135,52 +138,52 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     borderRadius: 5,
-    borderColor: 'grey',
+    borderColor: "grey",
     borderWidth: 1,
     width: 50,
-    alignItems: 'center',
+    alignItems: "center",
   },
   ratingButtonSelected: {
-    backgroundColor: '#135837',
+    backgroundColor: "#135837",
   },
   ratingText: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 18,
   },
   labelContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginHorizontal: 20,
     marginBottom: 30,
   },
   labelText: {
     fontSize: 13,
-    color: 'grey',
+    color: "grey",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   button: {
     width: 100,
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#135837',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#135837",
   },
   buttonCancel: {
     width: 100,
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: '#135837',
+    borderColor: "#135837",
     marginHorizontal: 5,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
 });
 

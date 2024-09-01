@@ -32,6 +32,7 @@ const MyComponent = ({ onClose }) => {
   const navigation = useNavigation();
   const [profileImage, setProfileImage] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [document, setDocument] = useState(null);
 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -64,6 +65,7 @@ const MyComponent = ({ onClose }) => {
 
     checkSkillAnalysis();
   }, []);
+  
   const handleChooseDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -71,7 +73,7 @@ const MyComponent = ({ onClose }) => {
       });
 
       if (result.type === "success") {
-        setDocument(result);
+        setDocument(result); // Save the document details in state
       }
     } catch (error) {
       console.log("DocumentPicker Error: ", error);
@@ -213,8 +215,8 @@ const MyComponent = ({ onClose }) => {
               No
             </Text>
             <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+              trackColor={{ false: "#767577", true: "green" }}
+              thumbColor={isEnabled ? "white" : "white"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={isEnabled}
@@ -242,7 +244,7 @@ const MyComponent = ({ onClose }) => {
       >
         <View
           style={
-            switched ? [styles.container, { width: 650, height: 650 }] : styles.container
+            switched ? [styles.container, { width: 650, height: 660 }] : styles.container
           }
         >
             <View style={styles.header}>
@@ -263,23 +265,6 @@ const MyComponent = ({ onClose }) => {
                   gap: 30,
                 }}
               >
-                <Image
-                  style={{
-                    marginTop: 5,
-                    width: 50,
-                    height: 50,
-                    objectFit: "contain",
-                  }}
-                  source={BotIMG}
-                />
-                <Text
-                  style={{
-                    color: "#F5F5F5",
-                    fontSize: 16,
-                  }}
-                >
-                  AngleQuest AI Gap Analysis Questionnaire
-                </Text>
               </View>
             )}
           </View>
@@ -301,43 +286,45 @@ const MyComponent = ({ onClose }) => {
               </View>
               <DropDown
                 title={"Use CV"}
-                bgColor={openQues ? "#D9D9D9" : "#206C00"}
+                bgColor={openQues ? "#D9D9D9" : "#6A8F6D"}
                 textColor={openQues ? "#777676" : "white"}
                 subTitle={"Get a personalized skill gap analysis in 2 minutes"}
                 onPress={handleCV}
               />
 
-              {openCV && (
-                <Animated.View style={[styles.openCV, animatedStyle]}>
-                  <TouchableOpacity
-                    onPress={handleChooseDocument}
-                    style={{ alignSelf: "center" }}
-                  >
-                    <Image source={UploadImg} style={styles.uploadImg} />
-                    <Text style={{ paddingVertical: 5, textAlign: "center" }}>
-                      Upload CV
-                    </Text>
-                  </TouchableOpacity>
-                  <Picker
-                    onChange={setSpecialization}
-                    selectedValue={specialization}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSpecialization(itemValue)
-                    }
-                    style={styles.picker}
-                  >
-                    <Picker.Item label="Choose Specialization" value="" />
-                    <Picker.Item label="SAP" value="SAP" />
-                    <Picker.Item label="Microsoft" value="Microsoft" />
-                    <Picker.Item label="Salesforce" value="Salesforce" />
-                    <Picker.Item label="Frontend Development" value="Frontend Development" />
-                    <Picker.Item label="Backend Development" value="Backend Development" />
-                    <Picker.Item label="UI/UX" value="UI/UX" />
-                    <Picker.Item label="Data Analysis" value="Data Analysis" />
-                    <Picker.Item label="Cloud Computing" value="Cloud Computing" />
-                    <Picker.Item label="Management" value="Management" />
-                  </Picker>
-
+                  {openCV && (
+                    <Animated.View style={[styles.openCV, animatedStyle]}>
+                      <TouchableOpacity
+                        onPress={handleChooseDocument}
+                        style={{ alignSelf: "center" }}
+                      >
+                        <Image source={UploadImg} style={styles.uploadImg} />
+                        <Text style={{ paddingVertical: 5, textAlign: "center" }}>Upload CV</Text>
+                      </TouchableOpacity>
+                      {document && (
+                        <View style={{ marginTop: 20 }}>
+                          <Text>Document Name: {document.name}</Text>
+                          <Text>Document Size: {document.size} bytes</Text>
+                          <Text>Document URI: {document.uri}</Text>
+                        </View>
+                      )}
+                      <Picker
+                        selectedValue={specialization}
+                        style={styles.picker}
+                        onValueChange={(itemValue) => setSpecialization(itemValue)}
+                      >
+                        <Picker.Item label="Choose Specialization" value="" />
+                        <Picker.Item label="SAP" value="SAP" />
+                        <Picker.Item label="Microsoft" value="Microsoft" />
+                        <Picker.Item label="Salesforce" value="Salesforce" />
+                        <Picker.Item label="Frontend Development" value="Frontend Development" />
+                        <Picker.Item label="Backend Development" value="Backend Development" />
+                        <Picker.Item label="UI/UX" value="UI/UX" />
+                        <Picker.Item label="Data Analysis" value="Data Analysis" />
+                        <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                        <Picker.Item label="Management" value="Management" />
+                      </Picker>
+                  
                   <TouchableOpacity
                     onPress={handleSubmit}
                     style={styles.button}
@@ -354,7 +341,7 @@ const MyComponent = ({ onClose }) => {
                     "Get a personalized skill gap analysis in 10 minutes"
                   }
                   onPress={handleQuestionaire}
-                  bgColor={openQues ? "#206C00" : "#206C00"}
+                  bgColor={openQues ? "#6A8F6D" : "#6A8F6D"}
                   textColor={openQues ? "white" : "white"}
                 />
               )}
@@ -362,10 +349,8 @@ const MyComponent = ({ onClose }) => {
                 <Animated.View style={[styles.openCV, animatedStyle2]}>
                   <Picker
                     selectedValue={specialization}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSpecialization(itemValue)
-                    }
                     style={styles.picker}
+                    onValueChange={(itemValue) => setSpecialization(itemValue)}
                   >
                     <Picker.Item label="Choose Specialization" value="" />
                     <Picker.Item label="SAP" value="SAP" />
@@ -501,7 +486,7 @@ const MyComponent = ({ onClose }) => {
 const styles = StyleSheet.create({
   container: {
     width: 595,
-    minHeight: 555,
+    minHeight: 600,
   },
 
   top: {
