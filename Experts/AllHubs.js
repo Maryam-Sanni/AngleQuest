@@ -385,10 +385,16 @@ const ScheduledMeetingsTable = () => {
 
           // Other calculations based on `userMeetings` can be done here
           // Example:
-          setMeetingConfirmation(userMeetings.reduce((acc, meeting) => acc + meeting.meeting_confirmation, 0));
-          setYetToConfirm(userMeetings.reduce((acc, meeting) => acc + meeting.yet_to_confirm, 0));
-          setSessionsHeld(userMeetings.reduce((acc, meeting) => acc + meeting.sessions_held, 0));
-          setSessionsMissed(userMeetings.reduce((acc, meeting) => acc + meeting.sessions_missed, 0));
+          setSessionsHeld(userMeetings.reduce((acc, meeting) => acc + Number(meeting.hub_sessions_held), 0));
+
+          // Calculate total SessionsMissed
+          setSessionsMissed(userMeetings.reduce((acc, meeting) => acc + Number(meeting.hub_sessions_missed), 0));
+
+          // Calculate total Meeting Confirmations (`Yes`)
+          setMeetingConfirmation(userMeetings.reduce((acc, meeting) => acc + (meeting.confirmed_attendance === 'Yes' ? 1 : 0), 0));
+
+          // Calculate total Yet to Confirm (`No`)
+          setYetToConfirm(userMeetings.reduce((acc, meeting) => acc + (meeting.confirmed_attendance === 'No' ? 1 : 0), 0));
 
         } else {
           console.error('Failed to fetch additional data:', data.message);

@@ -122,6 +122,7 @@ import mobile from './MobileLanding.js/LandingHome';
 import mobileAI from './MobileLanding.js/AI';
 import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
+import Project from './Jobseekers/Scenario Project';
 
 const Stack = createStackNavigator();
 
@@ -251,6 +252,7 @@ const App = () => {
         <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
        <Stack.Screen name="anglequest" component={BlankScreen} />
       <Stack.Screen name="Join Courses" component={JoinCourse} />
+      <Stack.Screen name="Project" component={Project} />
       </Stack.Navigator>
     </NavigationContainer>
   );

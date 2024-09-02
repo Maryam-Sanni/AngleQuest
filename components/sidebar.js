@@ -200,6 +200,9 @@ function MyComponent() {
           break;
         default:
           break;
+          case "Scenario Project":
+            navigation.navigate('Project');
+            break;
       }
     }
   };
@@ -251,7 +254,7 @@ function MyComponent() {
           return ['New Growth Plan', 'Growth Plan Sessions'].includes(routeName);
           case "Interview":
           return ['New Interview', 'Interview Sessions'].includes(routeName);
-        case "Sessions": return routeName === 'Sessions';
+        case "Scenario Project": return routeName === 'Project';
         case "Skills Analysis":
         return ['Use AI', 'Use CV', 'Use Questionnaire', 'AI Result', 'Advice Sessions'].includes(routeName);
           case "Hubs":

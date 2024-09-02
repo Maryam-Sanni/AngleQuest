@@ -1,12 +1,31 @@
       import React, { useState, useEffect } from 'react';
-      import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+      import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
       import { useFonts } from 'expo-font';
       import { useTranslation } from 'react-i18next';
       import axios from 'axios';
       import AsyncStorage from '@react-native-async-storage/async-storage';
+import OpenModal from './ConfirmMeetingEnd';
 
       function MyComponent({ onClose }) {
         const [meetings, setMeetings] = useState([]);
+         const [modalVisible, setModalVisible] = useState(false);
+        const [selectedMeeting, setSelectedMeeting] = useState(null);
+
+        const handleOpenPress = async (meeting) => {
+          setSelectedMeeting(meeting);
+          setModalVisible(true);
+
+          try {
+            await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
+            console.log('Selected meeting saved:', meeting);
+          } catch (error) {
+            console.error('Failed to save selected meeting to AsyncStorage', error);
+          }
+        };
+
+        const handleCloseModal = () => {
+          setModalVisible(false);
+        };
 
         const [fontsLoaded] = useFonts({
           'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -97,13 +116,23 @@
                         <View style={styles.cell2}>
                           <Text style={styles.cellText}>{meeting.time}</Text>
                         </View>
-                        <TouchableOpacity style={styles.cell2}>
+                        <TouchableOpacity styles={styles.cell2} onPress={() => handleOpenPress(meeting)}>
                           <Text style={styles.linkText}>{t("Mark as Completed")}</Text>
                         </TouchableOpacity>
                       </View>
                     ))}
                   </View>
                 </View>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={handleCloseModal}
+                >
+                    <View style={styles.modalContent}>
+                    <OpenModal onClose={() => handleCloseModal()} />
+                    </View>
+                </Modal>
               </ScrollView>
             </View>
           </View>

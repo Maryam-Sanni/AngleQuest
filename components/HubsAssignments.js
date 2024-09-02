@@ -60,6 +60,13 @@ const ScheduledMeetingsTable = () => {
     return null; // Or a loading spinner
   }
 
+  const countHubMembers = (hubMemberString) => {
+    // Split the string by comma and trim any extra spaces
+    const membersArray = hubMemberString.split(',').map(member => member.trim());
+    // Return the number of members
+    return membersArray.length;
+  };
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -70,6 +77,9 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t("Hub Name")}</Text>
             </View>
             <View style={styles.cell2}>
+              <Text style={styles.headerText}>{t("Assignmed To")}</Text>
+            </View>
+            <View style={styles.cell2}>
               <Text style={styles.headerText}>{t("Topic")}</Text>
             </View>
             <View style={styles.cell2}>
@@ -77,9 +87,6 @@ const ScheduledMeetingsTable = () => {
             </View>
             <View style={styles.cell2}>
               <Text style={styles.headerText}>{t("Due Date")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Performance Rating")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -91,7 +98,12 @@ const ScheduledMeetingsTable = () => {
           {newAssignments.map((assignment, index) => (
             <View key={assignment.id} style={styles.row}>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{assignment.name}</Text>
+                <Text style={styles.cellText}>{assignment.hub_name}</Text>
+              </View>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>
+                  {`Members: ${countHubMembers(assignment.hub_member)}`}
+                </Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{assignment.topic}</Text>
@@ -101,9 +113,6 @@ const ScheduledMeetingsTable = () => {
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{new Date(assignment.assignment_due).toLocaleDateString()}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{assignment.performance}</Text>
               </View>
               <TouchableOpacity onPress={() => handleOpenPress(assignment)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>

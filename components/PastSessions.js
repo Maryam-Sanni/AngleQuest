@@ -1,12 +1,42 @@
-import React, { useState, useTransition } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenInterviewbook';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [sessions, setSessions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
+        const response = await fetch('https://recruitangle.com/api/jobseeker/get-hub-sessions', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include token in the Authorization header
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSessions(data.HB); // Store the fetched sessions in the state
+        } else {
+          console.error('Failed to fetch sessions:', response.status);
+          Alert.alert('Error', 'Failed to fetch sessions.');
+        }
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+        Alert.alert('Error', 'An error occurred while fetching sessions.');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -15,76 +45,82 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-const {t}=useTranslation()
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  const { t } = useTranslation();
 
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-      
-      <Text style={styles.title}>{t("Past Sessions")}</Text>
-      <View style={styles.table}>
-      <View style={styles.row}>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Topics")}</Text>
+        <Text style={styles.title}>{t("Past Sessions")}</Text>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <View style={styles.cell2}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Topic")}</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={{ fontWeight: '600', fontSize: 14  }}>{t("Description")}</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Date")}</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Time")}</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Performance Rating")}</Text>
+            </View>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Rating</Text>
+               </View>
+            </TouchableOpacity>
           </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Attendants")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Attended")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Date")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Time")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("End Time")}</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-            <Text style={styles.cellText}> </Text>
-          </TouchableOpacity>
+
+          {sessions.length > 0 ? (
+            sessions.map((session, index) => (
+              <View key={index} style={styles.row}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{session.Topic}</Text>
+                </View>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{session.Description}</Text>
+                </View>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{session.meeting_date}</Text>
+                </View>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{session.meeting_time}</Text>
+                </View>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{session.rating}</Text>
+                </View>
+                <TouchableOpacity >
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.linkText}>{t("Rate")}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <View style={styles.row}>
+              <Text style={styles.noDataText}>{t("No sessions available")}</Text>
+            </View>
+          )}
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <View style={styles.cell2}> 
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}> </Text>
-          </View>
-          <TouchableOpacity style={styles.cell2} >
-          
-          </TouchableOpacity>
-        </View>
-        
-        
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleCloseModal}
-      >
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleCloseModal}
+        >
           <View style={styles.modalContent}>
-          <OpenSchedule onClose={() => handleCloseModal()} />
+            <OpenSchedule onClose={() => handleCloseModal()} />
           </View>
-      </Modal>
+        </Modal>
       </BlurView>
     </View>
   );
@@ -106,33 +142,24 @@ const styles = StyleSheet.create({
     textAlign: 'flex-start',
   },
   table: {
+    flex: 1,
     marginRight: 200,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     alignContent: 'center',
     justifyContent: 'space-around',
     marginLeft: 50, marginRight: 50
   },
- open: {
-    color: "black",
-     fontSize: 14,
-      borderColor: "#63EC55", 
-      borderWidth: 2, 
-      padding: 5, 
-      paddingHorizontal: 15, 
-      borderRadius: 5,
-      fontFamily:"Roboto-Light"
-
-},
-replan: {
-    color: "coral",
-     fontSize: 14,
-      borderColor: "coral", 
-      borderWidth: 2, 
-      padding: 5, 
-      paddingHorizontal: 15, 
-      borderRadius: 5
-},
+  greenBox: {
+    width: "90%",
+    marginBottom: 20,
+    marginLeft: 50,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    marginTop: 30,
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+  },
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -140,32 +167,23 @@ replan: {
   },
   cell: {
     flex: 1,
-   backgroundColor: 'white',
+    backgroundColor: 'none',
     padding: 10,
     alignItems: 'flex-start',
   },
   cell2: {
     flex: 1,
-   backgroundColor: 'none',
-    padding: 10, 
+    backgroundColor: 'white', 
+    padding: 10,
     alignItems: 'flex-start',
   },
   cellText: {
     textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
-
+    fontFamily: "Roboto-Light"
   },
-  
-  greenBox: {
-    flex: 2,
-   width: "90%",
-    height: 550,
-    marginLeft: 50, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30, 
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
+  headerText: {
+    fontWeight: '600',
+    fontSize: 14,
   },
   image: {
     width: 30,
@@ -175,9 +193,14 @@ replan: {
     borderRadius: 25
   },
   blurBackground: {
-    flex: 1, 
-    borderRadius: 20, 
+    flex: 1,
+    borderRadius: 20,
   },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light"
+  }
 });
 
 export default ScheduledMeetingsTable;
