@@ -123,11 +123,35 @@ function MyComponent() {
                           <Text
                             style={{
                               fontSize: 14,
-                              marginLeft: 60,
+                              marginLeft: 90,
                               fontWeight: "300",
                             }}
                           >
                             1 of 3 &#8592; &#8594;
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                        <Image
+                         source={require('../assets/Untitled design (2).png')}
+                          style={{marginTop: 10, height: 130}}
+                        />
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontWeight: 600,
+                              marginLeft: 20,
+                              marginTop: 10,
+                            }}
+                          >
+                           What links your birthday, gen AI and career advice...
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                 fontWeight: 400,
+                              }}
+                            >
+                             They are all featured in the new Workday release, Expl...
+                            </Text>
                           </Text>
                         </View>
                       </View>
@@ -174,7 +198,6 @@ function MyComponent() {
                                 backgroundColor: "coral",
                                 justifyContent: "center",
                               }}
-                              onPress={handleOpenPress}
                             >
                               <Text
                                 style={{
@@ -221,6 +244,101 @@ function MyComponent() {
                         >
                           {t("Recommended Roles for you")}
                         </Text>
+
+                        <View style={{flexDirection: 'row'}}>
+                            <Image
+                         source={require('../assets/Untitled design.png')}
+                          style={{marginTop: 10}}
+                        />
+                          <Image
+                           source={require('../assets/Untitled design (1).png')}
+                            style={{marginTop: 10, marginLeft: 20}}
+                          />
+                        </View>
+                         <View style={{flexDirection: 'row'}}>
+                        <View style={styles.smallbox}>
+                            <Text
+                              style={{
+                                color: "#206C00",
+                                fontSize: 16,
+                                marginTop: 10,
+                              }}
+                            >
+                              SAP Junior Consultant - Finance
+                            </Text>
+                          <Text
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              marginTop: 5,
+                            }}
+                          >
+                            Some subheading goes here
+                          </Text>
+                          <TouchableOpacity
+                            style={{
+                              width: 100,
+                              height: 30,
+                              borderRadius: 5,
+                              backgroundColor: "coral",
+                              justifyContent: "center",
+                              marginTop: 10
+                            }}
+                            onPress={handleOpenPress}
+                          >
+                            <Text
+                              style={{
+                                color: "white",
+                                fontSize: 14,
+                                textAlign: "center",
+                              }}
+                            >
+                              {t("View")}
+                            </Text>
+                          </TouchableOpacity>
+                          </View>
+                        <View style={styles.smallbox}>
+                          <Text
+                            style={{
+                              color: "#206C00",
+                              fontSize: 16,
+                              marginTop: 10,
+                            }}
+                          >
+                            SAP Junior Consultant - Materials Management
+                          </Text>
+                          <Text
+                            style={{
+                              fontWeight: 500,
+                              fontSize: 14,
+                              marginTop: 5,
+                            }}
+                          >
+                            Some subheading goes here
+                          </Text>
+                          <TouchableOpacity
+                            style={{
+                              width: 100,
+                              height: 30,
+                              borderRadius: 5,
+                              backgroundColor: "coral",
+                              justifyContent: "center",
+                              marginTop: 10
+                            }}
+                            onPress={handleOpenPress}
+                          >
+                            <Text
+                              style={{
+                                color: "white",
+                                fontSize: 14,
+                                textAlign: "center",
+                              }}
+                            >
+                              {t("View")}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                         </View>
                       </View>
                       <View style={styles.leanbox}>
                         <View style={{ flexDirection: "row" }}>
@@ -373,11 +491,21 @@ const styles = StyleSheet.create({
   bigbox: {
     backgroundColor: "#f7fff4",
     width: 700,
-    height: 300,
+    height: 470,
     borderRadius: 10,
     marginTop: 30,
     padding: 20,
     borderColor: "rgba(255,255,255,0.5)",
+    borderWidth: 1,
+  },
+  smallbox: {
+    backgroundColor: "white",
+    width: 325,
+    height: 150,
+    marginRight: 10,
+    marginTop: 30,
+    padding: 20,
+    borderColor: 'green',
     borderWidth: 1,
   },
   boximage: {
