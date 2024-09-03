@@ -44,6 +44,9 @@ function MyComponent() {
         case "Hubs":
           navigation.navigate('Manage Hubs');
           break;
+          case "Scenario Project":
+            navigation.navigate('Scenario Project');
+            break;
         case "Messages":
           navigation.navigate('Messaging');
           break;
@@ -102,6 +105,7 @@ function MyComponent() {
         case "Interview": return routeName === 'Interview';
         case "Growth Plan": return routeName === 'Growth Plan';
         case "Skills Analysis": return routeName === 'Advice';
+        case "Scenario Project": return routeName === 'Scenario Project';
         case "Hubs": return routeName === 'Manage Hubs';
         case "Messages": return routeName === 'Messaging';
         default: return false;

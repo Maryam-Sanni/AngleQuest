@@ -123,6 +123,7 @@ import mobileAI from './MobileLanding.js/AI';
 import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
 import Project from './Jobseekers/Scenario Project';
+import Scenario from './Experts/Scenario';
 
 const Stack = createStackNavigator();
 
@@ -253,6 +254,7 @@ const App = () => {
        <Stack.Screen name="anglequest" component={BlankScreen} />
       <Stack.Screen name="Join Courses" component={JoinCourse} />
       <Stack.Screen name="Project" component={Project} />
+       <Stack.Screen name="Scenario Project" component={Scenario} />
       </Stack.Navigator>
     </NavigationContainer>
   );
