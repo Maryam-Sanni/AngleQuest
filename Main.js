@@ -124,6 +124,7 @@ import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
 import Project from './Jobseekers/Scenario Project';
 import Scenario from './Experts/Scenario';
+import MainMessage from './Messaging/Main';
 
 const Stack = createStackNavigator();
 
@@ -255,6 +256,7 @@ const App = () => {
       <Stack.Screen name="Join Courses" component={JoinCourse} />
       <Stack.Screen name="Project" component={Project} />
        <Stack.Screen name="Scenario Project" component={Scenario} />
+      <Stack.Screen name="Start Message" component={MainMessage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

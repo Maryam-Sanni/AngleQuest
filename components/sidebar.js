@@ -196,7 +196,7 @@ function MyComponent() {
             navigation.navigate('Use AI');
             break;
         case "Messages":
-          navigation.navigate('Messages');
+          navigation.navigate('Start Message');
           break;
         default:
           break;
