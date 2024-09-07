@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Image,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   Alert,
@@ -10,7 +11,6 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import * as DocumentPicker from "expo-document-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import Animated, {
@@ -27,15 +27,24 @@ import Animated, {
 import BotIMG from "../assets/AnglequestAI.png";
 import down from "../assets/arrow-down.png";
 import UploadImg from "../assets/UploadImg.jpeg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const MyComponent = ({ onClose }) => {
   const navigation = useNavigation();
   const [profileImage, setProfileImage] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [document, setDocument] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const handlePress = () => {
+    // Programmatically trigger the file input
+    fileInputRef.current.click();
+  };
 
   useEffect(() => {
     const checkSkillAnalysis = async () => {
@@ -49,7 +58,7 @@ const MyComponent = ({ onClose }) => {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
           const data = await response.json();
 
@@ -65,19 +74,60 @@ const MyComponent = ({ onClose }) => {
 
     checkSkillAnalysis();
   }, []);
-  
-  const handleChooseDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*", // You can specify document types like "application/pdf" for PDFs only
-      });
 
-      if (result.type === "success") {
-        setDocument(result); // Save the document details in state
+  const handleFileSelect = (event) => {
+    const selectedFile = event.target.files[0]; // Select the first file
+
+    if (selectedFile) {
+      setDocument(selectedFile); // Store the file object in state
+    } else {
+      alert("No file selected. Please choose a file to upload.");
+    }
+  };
+
+  const handleCVUpload = async () => {
+    if (!document) {
+      alert("No Document Selected. Please select a document to upload.");
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        alert("Authorization Error: No token found.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", document);
+
+      setUploading(true);
+
+      const response = await axios.post(
+        "https://recruitangle.com/api/jobseeker/upload-cv",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Explicitly set Content-Type
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        alert("Success: CV uploaded successfully.");
+        console.log(response.data);
+      } else {
+        alert(
+          `Upload Failed: ${response.data.message || "Unable to upload CV."}`,
+        );
+        console.error(response.data);
       }
     } catch (error) {
-      console.log("DocumentPicker Error: ", error);
-      Alert.alert("Error", "Failed to select document.");
+      alert("Error: An error occurred while uploading the CV.");
+      console.error("CV Upload Error:", error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -211,9 +261,7 @@ const MyComponent = ({ onClose }) => {
               flexDirection: "row",
             }}
           >
-            <Text style={{ fontSize: 12, fontFamily: "Roboto-light" }}>
-              No
-            </Text>
+            <Text style={{ fontSize: 12, fontFamily: "Roboto-light" }}>No</Text>
             <Switch
               trackColor={{ false: "#767577", true: "green" }}
               thumbColor={isEnabled ? "white" : "white"}
@@ -234,7 +282,12 @@ const MyComponent = ({ onClose }) => {
     onClose();
     navigation.navigate("AI Result");
   };
-  
+
+  const handleCVSubmit = () => {
+    onClose();
+    navigation.navigate("AI Result");
+  };
+
   return (
     <>
       <View
@@ -244,18 +297,33 @@ const MyComponent = ({ onClose }) => {
       >
         <View
           style={
-            switched ? [styles.container, { width: 650, height: 660 }] : styles.container
+            switched
+              ? [styles.container, { width: 650, height: 660 }]
+              : styles.container
           }
         >
-            <View style={styles.header}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
-                style={styles.logo}
-              />
-              <Text style={styles.headerText}>{t("Use AngleQuest AI to analyse your skills")}</Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>✕</Text>
-              </TouchableOpacity>
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
+              }} // replace with your logo URL
+              style={styles.logo}
+            />
+            <Text style={styles.headerText}>
+              {t("Use AngleQuest AI to analyse your skills")}
+            </Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "#3F5637",
+                  fontWeight: "bold",
+                  fontFamily: "Roboto-Light",
+                }}
+              >
+                ✕
+              </Text>
+            </TouchableOpacity>
             {switched && (
               <View
                 style={{
@@ -264,12 +332,11 @@ const MyComponent = ({ onClose }) => {
                   alignItems: "center",
                   gap: 30,
                 }}
-              >
-              </View>
+              ></View>
             )}
           </View>
           {!switched ? (
-          <View style={styles.bottom}>
+            <View style={styles.bottom}>
               <View style={styles.titleWrapper}>
                 <Image style={styles.image} source={BotIMG} />
                 <View style={{ flex: 1, gap: 8 }}>
@@ -292,41 +359,46 @@ const MyComponent = ({ onClose }) => {
                 onPress={handleCV}
               />
 
-                  {openCV && (
-                    <Animated.View style={[styles.openCV, animatedStyle]}>
-                      <TouchableOpacity
-                        onPress={handleChooseDocument}
-                        style={{ alignSelf: "center" }}
-                      >
-                        <Image source={UploadImg} style={styles.uploadImg} />
-                        <Text style={{ paddingVertical: 5, textAlign: "center" }}>Upload CV</Text>
-                      </TouchableOpacity>
-                      {document && (
-                        <View style={{ marginTop: 20 }}>
-                          <Text>Document Name: {document.name}</Text>
-                          <Text>Document Size: {document.size} bytes</Text>
-                          <Text>Document URI: {document.uri}</Text>
-                        </View>
-                      )}
-                      <Picker
-                        selectedValue={specialization}
-                        style={styles.picker}
-                        onValueChange={(itemValue) => setSpecialization(itemValue)}
-                      >
-                        <Picker.Item label="Choose Specialization" value="" />
-                        <Picker.Item label="SAP" value="SAP" />
-                        <Picker.Item label="Microsoft" value="Microsoft" />
-                        <Picker.Item label="Salesforce" value="Salesforce" />
-                        <Picker.Item label="Frontend Development" value="Frontend Development" />
-                        <Picker.Item label="Backend Development" value="Backend Development" />
-                        <Picker.Item label="UI/UX" value="UI/UX" />
-                        <Picker.Item label="Data Analysis" value="Data Analysis" />
-                        <Picker.Item label="Cloud Computing" value="Cloud Computing" />
-                        <Picker.Item label="Management" value="Management" />
-                      </Picker>
-                  
+              {openCV && (
+                <Animated.View style={[styles.openCV, animatedStyle]}>
                   <TouchableOpacity
-                    onPress={handleSubmit}
+                    onPress={handlePress}
+                    style={{ alignSelf: "center" }}
+                  >
+                    <Image
+                      source={UploadImg}
+                      style={{ width: 100, height: 100 }}
+                    />
+                    <Text style={{ paddingVertical: 5, textAlign: "center" }}>
+                      Upload CV
+                    </Text>
+
+                    {/* Hidden File Input */}
+                    <input
+                      type="file"
+                      accept="application/pdf,application/msword"
+                      onChange={handleFileSelect}
+                      ref={fileInputRef} // Connect the ref to the input
+                      style={{ display: "none" }} // Hide the input
+                    />
+                  </TouchableOpacity>
+
+                  {document && (
+                    <View style={{ marginLeft: 20 }}>
+                      <Text>Document Name: {document.name}</Text>
+                      <Text>Document Size: {document.size} bytes</Text>
+                    </View>
+                  )}
+
+                  <TextInput
+                    style={styles.picker}
+                    placeholder="What is your next role?"
+                    value={specialization}
+                    onChangeText={setSpecialization}
+                  />
+
+                  <TouchableOpacity
+                    onPress={handleCVUpload}
                     style={styles.button}
                   >
                     <Text style={styles.buttonText}>Submit</Text>
@@ -356,11 +428,20 @@ const MyComponent = ({ onClose }) => {
                     <Picker.Item label="SAP" value="SAP" />
                     <Picker.Item label="Microsoft" value="Microsoft" />
                     <Picker.Item label="Salesforce" value="Salesforce" />
-                    <Picker.Item label="Frontend Development" value="Frontend Development" />
-                    <Picker.Item label="Backend Development" value="Backend Development" />
+                    <Picker.Item
+                      label="Frontend Development"
+                      value="Frontend Development"
+                    />
+                    <Picker.Item
+                      label="Backend Development"
+                      value="Backend Development"
+                    />
                     <Picker.Item label="UI/UX" value="UI/UX" />
                     <Picker.Item label="Data Analysis" value="Data Analysis" />
-                    <Picker.Item label="Cloud Computing" value="Cloud Computing" />
+                    <Picker.Item
+                      label="Cloud Computing"
+                      value="Cloud Computing"
+                    />
                     <Picker.Item label="Management" value="Management" />
                   </Picker>
 
@@ -583,17 +664,17 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-light",
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     right: 20,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
+    borderBottomColor: "#CCC",
     marginBottom: 20,
   },
   logo: {
@@ -603,9 +684,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#3F5637',
-    fontFamily:"Roboto-Light"
+    fontWeight: "bold",
+    color: "#3F5637",
+    fontFamily: "Roboto-Light",
   },
   questionnaires: {
     borderRadius: 12,

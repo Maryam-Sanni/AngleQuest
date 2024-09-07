@@ -48,7 +48,7 @@ function MyComponent() {
             navigation.navigate('Scenario Project');
             break;
         case "Messages":
-          navigation.navigate('Messaging');
+          navigation.navigate('Start Message');
           break;
         default:
           break;

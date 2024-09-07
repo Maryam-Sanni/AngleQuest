@@ -1,17 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 const Message = ({ userId, message }) => {
-    const isCurrentUser = userId === message.user_id;
-
     return (
-        <View style={[styles.container, isCurrentUser ? styles.currentUser : styles.otherUser]}>
-            <View style={styles.messageContent}>
-                <Text style={[styles.time, isCurrentUser && styles.timeCurrentUser]}>
-                    {message.time}
-                </Text>
+        <View
+            style={[
+                styles.container,
+                userId === message.user_id ? styles.alignEnd : styles.alignStart
+            ]}
+        >
+            <View style={styles.messageContainer}>
+                <Text style={styles.time}>{message.time}</Text>
                 <Text style={styles.name}>{message.name}</Text>
-                <View style={[styles.alert, isCurrentUser ? styles.alertPrimary : styles.alertSecondary]}>
+                <View
+                    style={[
+                        styles.messageBox,
+                        userId === message.user_id ? styles.messageBoxPrimary : styles.messageBoxSecondary
+                    ]}
+                >
                     <Text style={styles.messageText}>{message.text}</Text>
                 </View>
             </View>
@@ -24,40 +30,38 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 5,
     },
-    currentUser: {
+    alignEnd: {
         justifyContent: 'flex-end',
     },
-    otherUser: {
+    alignStart: {
         justifyContent: 'flex-start',
     },
-    messageContent: {
-        maxWidth: '75%',
+    messageContainer: {
+        maxWidth: '80%',
+        paddingHorizontal: 10,
     },
     time: {
         fontSize: 12,
-        color: 'grey',
-        marginBottom: 2,
-    },
-    timeCurrentUser: {
+        color: 'gray',
         textAlign: 'right',
     },
     name: {
         fontSize: 14,
-        color: 'grey',
+        color: 'gray',
     },
-    alert: {
+    messageBox: {
         padding: 10,
         borderRadius: 5,
     },
-    alertPrimary: {
+    messageBoxPrimary: {
         backgroundColor: '#007bff',
     },
-    alertSecondary: {
-        backgroundColor: '#e9ecef',
+    messageBoxSecondary: {
+        backgroundColor: '#f8f9fa',
     },
     messageText: {
-        color: '#fff',
-    },
+        color: 'white',  // Change to 'black' if using secondary background color
+    }
 });
 
 export default Message;

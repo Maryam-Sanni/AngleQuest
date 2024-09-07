@@ -124,7 +124,7 @@ import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
 import Project from './Jobseekers/Scenario Project';
 import Scenario from './Experts/Scenario';
-import MainMessage from './Messaging/Main';
+import MainMessage from './Messaging/ChatScopeUI';
 
 const Stack = createStackNavigator();
 

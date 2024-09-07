@@ -1,44 +1,47 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Modal, Button } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal, Button, Image } from 'react-native';
 import { api_url, AuthContext } from './AuthProvider';
 
-const RoomList = () => {
+const RoomList = ({ navigation }) => {
     const { user, token, xsrf, setActiveRoom } = useContext(AuthContext);
-
     const [users, setUsers] = useState([]);
     const [conversations, setConversations] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const getUserChatrooms = () => {
-        fetch(`${api_url}chat/my-memberships`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            },
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res?.status === 'success') {
-                setConversations(res?.memberships);
+    const ico = 'https://chatscope.io/storybook/react/assets/emily-xzL8sDL2.svg';
+
+    const getUserChatrooms = async () => {
+        try {
+            const res = await fetch(api_url + 'chat/my-memberships', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                },
+            });
+            const data = await res.json();
+            if (data?.status === 'success') {
+                setConversations(data?.memberships);
             }
-        })
-        .catch(err => console.log(err));
+        } catch (err) {
+            console.log(err);
+        }
     };
 
-    const getOtherUsers = () => {
-        fetch(`${api_url}chat/otherUsers`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            },
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res?.status === 'success') {
-                setUsers(res?.users);
+    const getOtherUsers = async () => {
+        try {
+            const res = await fetch(api_url + 'chat/otherUsers', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                },
+            });
+            const data = await res.json();
+            if (data?.status === 'success') {
+                setUsers(data?.users);
             }
-        })
-        .catch(err => console.log(err));
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     useEffect(() => {
@@ -46,34 +49,34 @@ const RoomList = () => {
         getUserChatrooms();
     }, []);
 
-    const startNewConversation = (userID) => {
+    const startNewConversation = async (userID) => {
         const formData = new FormData();
         formData.append('type', 'individual');
         formData.append('receiver_id', userID);
 
-        fetch(`${api_url}chat/make-a-room`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': xsrf
-            },
-            body: formData
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res?.status === 'success') {
+        try {
+            const res = await fetch(api_url + 'chat/make-a-room', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': xsrf,
+                },
+                body: formData,
+            });
+            const data = await res.json();
+            if (data?.status === 'success') {
                 setActiveRoom({
-                    id: res?.room?.id,
-                    name: res?.room?.displayName,
-                    image: res?.room?.roomIcon
+                    id: data?.room?.id,
+                    name: data?.room?.displayName,
+                    image: data?.room?.roomIcon,
                 });
-
                 getUserChatrooms();
                 setModalVisible(false);
             }
-        })
-        .catch(err => console.log(err));
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -82,60 +85,70 @@ const RoomList = () => {
 
             <Modal
                 visible={isModalVisible}
-                animationType="slide"
                 transparent={true}
+                animationType="slide"
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View style={styles.modalOverlay}>
+                <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalHeader}>
                             {user?.role === 'expert' ? 'Job Seekers' : 'Experts'}
                         </Text>
-
-                        <ScrollView>
-                            {users.map((u, i) => (
+                        <FlatList
+                            data={users}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    key={i}
                                     style={styles.conversation}
-                                    onPress={() => startNewConversation(u.id)}
+                                    onPress={() => startNewConversation(item.id)}
                                 >
-                                    <Image source={{ uri: u.avatar_url }} style={styles.avatar} />
-                                    <Text style={styles.conversationName}>
-                                        {u.last_name} {u.first_name}
-                                    </Text>
-                                    <Text style={styles.conversationInfo}>
-                                        @{u.username}
-                                    </Text>
+                                    <Image
+                                        source={{ uri: item.avatar_url || ico }}
+                                        style={styles.avatar}
+                                    />
+                                    <View style={styles.conversationInfo}>
+                                        <Text style={styles.conversationName}>
+                                            {item.last_name} {item.first_name}
+                                        </Text>
+                                        <Text style={styles.conversationUsername}>
+                                            @{item.username}
+                                        </Text>
+                                    </View>
                                 </TouchableOpacity>
-                            ))}
-                        </ScrollView>
-
+                            )}
+                        />
                         <Button title="Cancel" onPress={() => setModalVisible(false)} />
                     </View>
                 </View>
             </Modal>
 
-            <ScrollView>
-                {conversations.map((c, i) => (
+            <FlatList
+                data={conversations}
+                keyExtractor={(item) => item?.room?.id.toString()}
+                renderItem={({ item }) => (
                     <TouchableOpacity
-                        key={i}
                         style={styles.conversation}
                         onPress={() => setActiveRoom({
-                            id: c?.room?.id,
-                            name: c?.room?.displayName,
-                            image: c?.room?.roomIcon
+                            id: item?.room?.id,
+                            name: item?.room?.displayName,
+                            image: item?.room?.roomIcon,
                         })}
                     >
-                        <Image source={{ uri: c?.room?.roomIcon }} style={styles.avatar} />
-                        <Text style={styles.conversationName}>
-                            {c?.room?.displayName}
-                        </Text>
-                        <Text style={styles.conversationInfo}>
-                            {c?.room?.lastMessage}
-                        </Text>
+                        <Image
+                            source={{ uri: item?.room?.roomIcon || ico }}
+                            style={styles.avatar}
+                        />
+                        <View style={styles.conversationInfo}>
+                            <Text style={styles.conversationName}>
+                                {item?.room?.displayName}
+                            </Text>
+                            <Text style={styles.conversationLastMessage}>
+                                {item?.room?.lastMessage}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
-                ))}
-            </ScrollView>
+                )}
+            />
         </View>
     );
 };
@@ -143,42 +156,49 @@ const RoomList = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+        backgroundColor: '#fff',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalHeader: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
     conversation: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
     },
     avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
         marginRight: 10,
     },
-    conversationName: {
-        fontWeight: 'bold',
-    },
     conversationInfo: {
-        color: '#666',
-    },
-    modalOverlay: {
         flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        marginHorizontal: 20,
-    },
-    modalHeader: {
-        fontSize: 18,
-        marginBottom: 10,
+    conversationName: {
+        fontSize: 16,
         fontWeight: 'bold',
+    },
+    conversationUsername: {
+        color: 'gray',
+    },
+    conversationLastMessage: {
+        color: 'gray',
     },
 });
 

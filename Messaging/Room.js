@@ -1,38 +1,27 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, Button, Image, TouchableOpacity } from 'react-native';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { View, Text, Image, StyleSheet, Platform } from 'react-native';
 import { api_url, AuthContext } from './AuthProvider';
-import { Audio } from 'expo-av';
 
 const Room = () => {
   const { activeRoom, token, xsrf, user } = useContext(AuthContext);
-  const { id: roomID, name: roomName, image: roomImage } = activeRoom;
+  const roomID = activeRoom?.id || '';
+  const roomName = activeRoom?.name || '';
+  const roomImage = activeRoom?.image || '';
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
   const [otherUserTyping, setOtherUserTyping] = useState(false);
 
-  // Load the sound
-  const [sound, setSound] = useState();
-
-  async function playSound() {
-    const { sound } = await Audio.Sound.createAsync(require('./assets/bell.mp3'));
-    setSound(sound);
-    await sound.playAsync();
-  }
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
-  const webSocketChannel = `chat.room.${roomID}`;
-  const channel = window.Echo.private(webSocketChannel);
+  // Use a library for audio playback in React Native Web
+  // const sound = new Audio('/media/bell.mp3');
 
   const connectWebSocket = () => {
-    channel.listen('ChatMessageEvent', async (e) => {
-      playSound();
+    if (!window.Echo || !roomID) return;
+
+    const webSocketChannel = `chat.room.${roomID}`;
+    const channel = window.Echo.private(webSocketChannel);
+
+    channel.listen('ChatMessageEvent', async () => {
+      // sound.play(); // Commented out because Audio is not available in React Native Web
       await getChatHistory();
     });
 
@@ -47,108 +36,139 @@ const Room = () => {
     });
   };
 
-  const typing = () => {
-    channel.whisper('typing');
-  };
-
-  const stopTyping = () => {
-    channel.whisper('typing-end');
-  };
-
   const getChatHistory = async () => {
-    fetch(`${api_url}chat/get/${roomID}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res?.status === 'success') {
-          setMessages(res?.history);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const res = await fetch(api_url + 'chat/get/' + roomID, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
       });
+      const data = await res.json();
+      if (data?.status === 'success') {
+        const formattedMessages = data.history.map((msg) => ({
+          _id: msg.id,
+          text: msg.text,
+          createdAt: new Date(msg.created_at),
+          user: {
+            _id: msg.user_id,
+            name: msg.senderName,
+          },
+        }));
+        setMessages(formattedMessages.reverse());
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
-  const sendMessage = (e) => {
-    if (message.trim() === '') {
-      alert('Please enter a message!');
-      return;
-    }
-
+  const onSend = async (newMessages = []) => {
+    const messageToSend = newMessages[0].text;
     const formData = new FormData();
     formData.append('room_id', roomID);
-    formData.append('message', e);
+    formData.append('message', messageToSend);
 
-    fetch(`${api_url}chat/send`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'X-CSRF-TOKEN': xsrf,
-      },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res?.status === 'success') {
-          setMessage('');
-          setMessages([...messages, res?.chat]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const res = await fetch(api_url + 'chat/send', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'X-CSRF-TOKEN': xsrf,
+        },
+        body: formData,
       });
+      const data = await res.json();
+      if (data?.status === 'success') {
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, newMessages)
+        );
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   useEffect(() => {
-    if (roomID > 0) {
+    if (roomID) {
       getChatHistory();
       connectWebSocket();
 
       return () => {
-        window.Echo.leave(webSocketChannel);
+        if (window.Echo) {
+          window.Echo.leave(`chat.room.${roomID}`);
+        }
       };
     }
   }, [roomID]);
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <TouchableOpacity onPress={() => {/* Handle back action */}}>
-          <Text>Back</Text>
-        </TouchableOpacity>
-        <Image source={{ uri: roomImage }} style={{ width: 40, height: 40, borderRadius: 20, marginLeft: 10 }} />
-        <Text style={{ marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>{roomName}</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        {roomImage ? (
+          <Image source={{ uri: roomImage }} style={styles.image} />
+        ) : (
+          <View style={styles.imagePlaceholder} />
+        )}
+        <Text style={styles.roomName}>{roomName}</Text>
       </View>
-
-      {otherUserTyping && <Text>{`${roomName} is typing...`}</Text>}
-
-      <FlatList
-        data={messages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={{ padding: 10, backgroundColor: item?.user_id === user?.id ? '#DCF8C6' : '#ECECEC', borderRadius: 5, marginBottom: 10 }}>
-            <Text>{item?.text}</Text>
-          </View>
+      <GiftedChat
+        messages={messages}
+        onSend={(newMessages) => onSend(newMessages)}
+        user={{
+          _id: user?.id,
+          name: user?.name,
+        }}
+        isTyping={otherUserTyping}
+        renderBubble={(props) => (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: {
+                backgroundColor: '#0084ff',
+              },
+              left: {
+                backgroundColor: '#f0f0f0',
+              },
+            }}
+          />
         )}
       />
-
-      <TextInput
-        value={message}
-        onChangeText={(txt) => setMessage(txt)}
-        onKeyPress={typing}
-        onBlur={stopTyping}
-        placeholder="Type message here"
-        style={{ borderWidth: 1, borderColor: '#CCC', padding: 10, borderRadius: 5 }}
-        onSubmitEditing={(e) => sendMessage(e.nativeEvent.text)}
-      />
-      <Button title="Send" onPress={() => sendMessage(message)} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    height: 80,
+    backgroundColor: '#f5f5f5',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  imagePlaceholder: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#ccc',
+    marginRight: 10,
+  },
+  roomName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default Room;

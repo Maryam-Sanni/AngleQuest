@@ -1,34 +1,33 @@
 import React from 'react';
-import { AppRegistry, Platform } from 'react-native';
-import ChatScopeUI from './ChatScopeUI';
+import { AppRegistry, View, Text, StyleSheet } from 'react-native'; // Import core React Native components
+import ChatScopeUI from "./ChatScopeUI";
 import { AuthProvider } from './AuthProvider';
+import { name as appName } from '../app.json';
 
-// Conditionally wrap in ChakraProvider for web only
-const Main = () => {
-    return (
-        <>
-            {Platform.OS === 'web' ? (
-                <ChakraProvider>
-                    <AuthProvider>
-                        <ChatScopeUI />
-                    </AuthProvider>
-                </ChakraProvider>
-            ) : (
-                <AuthProvider>
-                    <ChatScopeUI />
-                </AuthProvider>
-            )}
-        </>
-    );
-};
+// Define your App component using React Native components
+const App = () => (
+  <View style={styles.container}>
+    <AuthProvider>
+      <ChatScopeUI />
+    </AuthProvider>
+  </View>
+);
 
-// Register the main component for both web and native platforms
-AppRegistry.registerComponent('main', () => Main);
+// Define your styles using StyleSheet
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0', // Set your background color or other styles
+  },
+});
 
-// If we're on the web, render the app
-if (Platform.OS === 'web') {
-    AppRegistry.runApplication('main', {
-        initialProps: {},
-        rootTag: document.getElementById('main'),
-    });
-}
+// Register the component with AppRegistry for React Native
+AppRegistry.registerComponent(appName, () => App);
+
+// Render it to web using React Native for Web
+AppRegistry.runApplication(appName, {
+  initialProps: {},
+  rootTag: document.getElementById('root'),
+});

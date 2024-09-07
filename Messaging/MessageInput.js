@@ -7,7 +7,9 @@ const MessageInput = ({ rootUrl }) => {
 
     const messageRequest = async (text) => {
         try {
-            await axios.post(`${rootUrl}/message`, { text });
+            await axios.post(`${rootUrl}/message`, {
+                text,
+            });
         } catch (err) {
             console.log(err.message);
         }
@@ -15,7 +17,7 @@ const MessageInput = ({ rootUrl }) => {
 
     const sendMessage = () => {
         if (message.trim() === "") {
-            Alert.alert("Please enter a message!");
+            Alert.alert("Error", "Please enter a message!");
             return;
         }
 
@@ -26,11 +28,10 @@ const MessageInput = ({ rootUrl }) => {
     return (
         <View style={styles.container}>
             <TextInput
-                style={styles.input}
-                onChangeText={setMessage}
-                autoCompleteType="off"
-                placeholder="Message..."
+                onChangeText={(text) => setMessage(text)}
                 value={message}
+                placeholder="Message..."
+                style={styles.input}
             />
             <Button
                 onPress={sendMessage}
@@ -49,10 +50,11 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
+        height: 40,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
-        padding: 10,
+        paddingHorizontal: 10,
         marginRight: 10,
     },
 });

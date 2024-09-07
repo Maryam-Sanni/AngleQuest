@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Platform } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Set the base URL for Axios requests
 export const api_url = 'http://127.0.0.1:8000/api/';
 axios.defaults.baseURL = api_url;
 
@@ -13,49 +11,54 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [xsrf, setXSRF] = useState(null);
     const [error, setError] = useState(null);
-    const [activeRoom, setActiveRoom] = useState({
-        id: 0, name: '', image: ''
-    });
+    const [activeRoom, setActiveRoom] = useState({ id: 0, name: '', image: '' });
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState(null); // To store the token from AsyncStorage
 
-    const getToken = async () => {
-        if (Platform.OS === 'web') {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('token');
-        } else {
-            return await SecureStore.getItemAsync('userToken');
+    // Function to get token from AsyncStorage
+    const getTokenFromStorage = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('token');
+            setToken(storedToken);
+        } catch (err) {
+            console.log('Error getting token from storage:', err);
         }
     };
 
+    // Fetch user details from the API
     const getUserDetails = async () => {
+        if (!token) return; // Do nothing if the token is not yet available
+
         try {
-            const authToken = await getToken();
-            setToken(authToken);
-            const response = await fetch(api_url + 'user', {
+            const response = await axios.get('user', {
                 headers: {
-                    'Authorization': `Bearer ${authToken}`,
+                    'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
-                },
-            });
-            const res = await response.json();
-            if (res?.status === 'success') {
-                setUser(res.profile);
-                // Handle XSRF token for web, if necessary
-                if (Platform.OS === 'web') {
-                    const xsrfToken = document.getElementById('main')?.dataset.token;
-                    setXSRF(xsrfToken);
                 }
+            });
+
+            if (response.data?.status === 'success') {
+                setUser(response.data.profile);
+                // Set XSRF token manually if needed (handle based on your backend)
+                setXSRF(response.headers['x-xsrf-token']);
             }
         } catch (err) {
-            setError(err);
-            console.log(err);
+            setError(err.message);
+            console.log('Error fetching user details:', err);
         }
     };
 
     useEffect(() => {
-        getUserDetails();
+        // Fetch the token from AsyncStorage and get user details
+        getTokenFromStorage();
     }, []);
+
+    useEffect(() => {
+        // Fetch user details once token is retrieved
+        if (token) {
+            getUserDetails();
+        }
+    }, [token]);
 
     return (
         <AuthContext.Provider
@@ -68,8 +71,9 @@ export const AuthProvider = ({ children }) => {
                 token,
                 xsrf,
                 activeRoom,
-                setActiveRoom
-            }}>
+                setActiveRoom,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

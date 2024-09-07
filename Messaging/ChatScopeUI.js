@@ -1,51 +1,62 @@
-import React from 'react';
-import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet } from 'react-native';
+import TopBar from '../components/topbar';
+import Sidebar from '../components/sidebar';
 import RoomList from './RoomList';
 import Room from './Room';
 
-// Assuming you're using Expo's Dimensions API to make the component responsive
-const { height } = Dimensions.get('window');
-
 const ChatScopeUI = () => {
-    return (
-        <View style={styles.container}>
-            <View style={styles.sidebar}>
-                <TextInput 
-                    style={styles.search}
-                    placeholder="Search..." 
-                    placeholderTextColor="#888" 
-                />
-                <RoomList />
+  const [activeRoom, setActiveRoom] = useState(null);
+
+  const rooms = [
+    { id: 1, name: 'Room 1' },
+    { id: 2, name: 'Room 2' },
+    { id: 3, name: 'Room 3' },
+  ];
+
+  const selectRoom = (room) => {
+    setActiveRoom(room);
+  };
+
+  return (
+          <View style={{ flex: 1}}>
+            <TopBar />
+    <View style={styles.container}>
+          <Sidebar />
+      <View style={styles.sidebar}>
+        <TextInput
+          placeholder="Search..."
+          style={styles.searchInput}
+        />
+        <RoomList rooms={rooms} selectRoom={selectRoom} />
+      </View>
+
+      {/* Main Chat Area */}
+      <Room activeRoom={activeRoom} />
+    </View>
             </View>
-            <Room style={styles.room} />
-        </View>
-    );
+                
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        height: height,
-    },
-    sidebar: {
-        width: '25%',
-        backgroundColor: '#f0f0f0', // Example background color
-        padding: 10,
-    },
-    search: {
-        height: 40,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
-        marginBottom: 10,
-    },
-    room: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10,
-    },
+  container: {
+    flexDirection: 'row',
+  flex: 1
+  },
+  sidebar: {
+    width: '25%',
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+      marginLeft: 210
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
 });
 
 export default ChatScopeUI;
