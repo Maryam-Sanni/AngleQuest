@@ -23,27 +23,27 @@ function MyComponent() {
         break;
       case menuItems[2]:
         // Navigate to Dashboard
-        navigation.navigate('Experts');
+        navigation.navigate('Join Courses');
         break;
       case menuItems[3]:
         // Navigate to Experts
-        navigation.navigate('Use AI');
+        navigation.navigate('Advice Sessions');
         break; 
         case menuItems[4]:
           // Navigate to Sessions
-          navigation.navigate('New Growth Plan');
+          navigation.navigate('Growth Plan Sessions');
           break;
           case menuItems[5]:
           // Navigate to Feedbacks
-          navigation.navigate('Coaching Hubs');
+          navigation.navigate('Coaching Hub Sessions');
           break;
           case menuItems[6]: 
           // Navigate to Messages
-          navigation.navigate('Coaching Hubs');
+          navigation.navigate('Project');
           break;
           case menuItems[7]:
             // Navigate to Messages
-            navigation.navigate('New Interview');
+            navigation.navigate('Interview Sessions');
             break;
             case menuItems[8]:
             // Navigate to Messages
@@ -51,11 +51,11 @@ function MyComponent() {
             break;
             case menuItems[9]:
             // Navigate to Messages
-            navigation.navigate('Messages');
+            navigation.navigate('Start Message');
             break;
             case menuItems[10]:
             // Navigate to Messages
-            navigation.navigate('Messages');
+            navigation.navigate('Start Message');
             break;
       default:
         break;
@@ -129,12 +129,12 @@ function MyComponent() {
 const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=5B5D55" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://img.icons8.com/?size=100&id=53380&format=png&color=5B5D55" },
-  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { icon: "https://img.icons8.com/?size=100&id=42208&format=png&color=000000" },
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];

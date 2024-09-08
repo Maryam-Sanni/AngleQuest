@@ -1,16 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal, Button, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api_url, AuthContext } from './AuthProvider';
 
-const RoomList = ({ navigation }) => {
-    const { user, token, xsrf, setActiveRoom } = useContext(AuthContext);
+const RoomList = ({ selectRoom }) => {
+    const { setActiveRoom, user, xsrf } = useContext(AuthContext);
+    const [token, setToken] = useState(null);  // New state for storing the token
     const [users, setUsers] = useState([]);
     const [conversations, setConversations] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
     const ico = 'https://chatscope.io/storybook/react/assets/emily-xzL8sDL2.svg';
 
+    // Function to retrieve token from AsyncStorage
+    const getToken = async () => {
+        try {
+            const storedToken = await AsyncStorage.getItem('token');
+            if (storedToken) {
+                setToken(storedToken);
+            }
+        } catch (error) {
+            console.log('Error retrieving token:', error);
+        }
+    };
+
     const getUserChatrooms = async () => {
+        if (!token) return;
         try {
             const res = await fetch(api_url + 'chat/my-memberships', {
                 headers: {
@@ -28,6 +43,7 @@ const RoomList = ({ navigation }) => {
     };
 
     const getOtherUsers = async () => {
+        if (!token) return;
         try {
             const res = await fetch(api_url + 'chat/otherUsers', {
                 headers: {
@@ -45,9 +61,23 @@ const RoomList = ({ navigation }) => {
     };
 
     useEffect(() => {
-        getOtherUsers();
-        getUserChatrooms();
+        getToken(); // Retrieve token when the component is mounted
     }, []);
+
+    useEffect(() => {
+        if (token) {
+            getOtherUsers();
+            getUserChatrooms();
+        }
+    }, [token]);
+
+    const saveRoomInfoToStorage = async (room) => {
+        try {
+            await AsyncStorage.setItem('selectedRoom', JSON.stringify(room));
+        } catch (error) {
+            console.log('Error saving room info to storage:', error);
+        }
+    };
 
     const startNewConversation = async (userID) => {
         const formData = new FormData();
@@ -66,17 +96,24 @@ const RoomList = ({ navigation }) => {
             });
             const data = await res.json();
             if (data?.status === 'success') {
-                setActiveRoom({
+                const room = {
                     id: data?.room?.id,
                     name: data?.room?.displayName,
                     image: data?.room?.roomIcon,
-                });
+                };
+                selectRoom(room);
+                await saveRoomInfoToStorage(room);  // Save room info to AsyncStorage
                 getUserChatrooms();
                 setModalVisible(false);
             }
         } catch (err) {
             console.log(err);
         }
+    };
+
+    const handleSelectRoom = (room) => {
+        selectRoom(room);
+        saveRoomInfoToStorage(room);  // Save selected room to AsyncStorage
     };
 
     return (
@@ -128,7 +165,7 @@ const RoomList = ({ navigation }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.conversation}
-                        onPress={() => setActiveRoom({
+                        onPress={() => handleSelectRoom({
                             id: item?.room?.id,
                             name: item?.room?.displayName,
                             image: item?.room?.roomIcon,

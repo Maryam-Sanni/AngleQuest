@@ -15,40 +15,41 @@ const ChatScopeUI = () => {
   ];
 
   const selectRoom = (room) => {
-    setActiveRoom(room);
+    setActiveRoom(room);  // Set the selected room
   };
 
   return (
-          <View style={{ flex: 1}}>
-            <TopBar />
-    <View style={styles.container}>
-          <Sidebar />
-      <View style={styles.sidebar}>
-        <TextInput
-          placeholder="Search..."
-          style={styles.searchInput}
-        />
-        <RoomList rooms={rooms} selectRoom={selectRoom} />
-      </View>
+    <View style={{ flex: 1 }}>
+      <TopBar />
+      <View style={styles.container}>
+        <Sidebar />
 
-      {/* Main Chat Area */}
-      <Room activeRoom={activeRoom} />
+        {/* Room List Sidebar */}
+        <View style={styles.sidebar}>
+          <TextInput
+            placeholder="Search..."
+            style={styles.searchInput}
+          />
+          <RoomList rooms={rooms} selectRoom={selectRoom} />
+        </View>
+
+        {/* Main Chat Area */}
+        <Room activeRoom={activeRoom} />
+      </View>
     </View>
-            </View>
-                
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-  flex: 1
+    flex: 1,
   },
   sidebar: {
     width: '25%',
     backgroundColor: '#f2f2f2',
     padding: 10,
-      marginLeft: 210
+    marginLeft: 210,
   },
   searchInput: {
     height: 40,

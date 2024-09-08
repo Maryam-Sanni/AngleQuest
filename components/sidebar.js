@@ -178,7 +178,7 @@ function MyComponent() {
           if (isSkillAnalysisDataFilled) {
             navigation.navigate('Advice Sessions');
           } else {
-            navigation.navigate('Use AI');
+            navigation.navigate('Advice Sessions');
           }
           break;
           case "Hubs":

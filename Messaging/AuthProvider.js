@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-export const api_url = 'http://127.0.0.1:8000/api/';
+export const api_url = 'https://recruitangle.com/api/';
 axios.defaults.baseURL = api_url;
 
 export const AuthContext = React.createContext({});
@@ -13,9 +13,34 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [activeRoom, setActiveRoom] = useState({ id: 0, name: '', image: '' });
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState(null); // To store the token from AsyncStorage
+    const [token, setToken] = useState(null);
+    const [chatDetails, setChatDetails] = useState({
+        roomId: null,
+        personName: null,
+        personAvatar: null,
+    });
 
-    // Function to get token from AsyncStorage
+    const setChatInfo = async (roomId, personName, personAvatar) => {
+        const details = { roomId, personName, personAvatar };
+        setChatDetails(details);
+        try {
+            await AsyncStorage.setItem('chatDetails', JSON.stringify(details));
+        } catch (err) {
+            console.log('Error saving chat details to storage:', err);
+        }
+    };
+
+    const loadChatDetails = async () => {
+        try {
+            const storedDetails = await AsyncStorage.getItem('chatDetails');
+            if (storedDetails) {
+                setChatDetails(JSON.parse(storedDetails));
+            }
+        } catch (err) {
+            console.log('Error loading chat details from storage:', err);
+        }
+    };
+
     const getTokenFromStorage = async () => {
         try {
             const storedToken = await AsyncStorage.getItem('token');
@@ -25,9 +50,8 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Fetch user details from the API
     const getUserDetails = async () => {
-        if (!token) return; // Do nothing if the token is not yet available
+        if (!token) return;
 
         try {
             const response = await axios.get('user', {
@@ -39,7 +63,6 @@ export const AuthProvider = ({ children }) => {
 
             if (response.data?.status === 'success') {
                 setUser(response.data.profile);
-                // Set XSRF token manually if needed (handle based on your backend)
                 setXSRF(response.headers['x-xsrf-token']);
             }
         } catch (err) {
@@ -49,12 +72,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        // Fetch the token from AsyncStorage and get user details
         getTokenFromStorage();
+        loadChatDetails();
     }, []);
 
     useEffect(() => {
-        // Fetch user details once token is retrieved
         if (token) {
             getUserDetails();
         }
@@ -72,6 +94,8 @@ export const AuthProvider = ({ children }) => {
                 xsrf,
                 activeRoom,
                 setActiveRoom,
+                chatDetails,
+                setChatInfo,
             }}
         >
             {children}
