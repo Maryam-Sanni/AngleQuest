@@ -196,7 +196,7 @@ function MyComponent() {
             navigation.navigate('Use AI');
             break;
         case "Messages":
-          navigation.navigate('Start Message');
+          navigation.navigate('Chat');
           break;
         default:
           break;
@@ -260,7 +260,7 @@ function MyComponent() {
           case "Hubs":
           return ['Coaching Hubs', 'Coaching Hub Sessions'].includes(routeName);
         case "Performance": return routeName === 'My Performance';
-        case "Messages": return routeName === 'Messages';
+        case "Messages": return routeName === 'Chat';
         default: return false;
       }
     });

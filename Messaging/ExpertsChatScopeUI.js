@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
-import TopBar from '../components/topbar';
-import Sidebar from '../components/sidebar';
+import TopBar from '../components/expertstopbar';
+import Sidebar from '../components/expertssidebar';
 import RoomList from './RoomList';
 import Room from './Room';
 
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-borderRadius: 20,
+  borderRadius: 20,
     marginBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: '#f7fff4',

@@ -9,6 +9,7 @@ import {
   Alert,
   Switch,
   ScrollView,
+  ActivityIndicator
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
@@ -87,49 +88,59 @@ const MyComponent = ({ onClose }) => {
 
   const handleCVUpload = async () => {
     if (!document) {
-      alert("No Document Selected. Please select a document to upload.");
+      alert("No Document Selected", "Please select a document to upload.");
+      return;
+    }
+
+    if (!specialization || specialization.trim() === '') {
+      alert("Missing Specialization, include your target role", "Please enter the job title or specialization.");
       return;
     }
 
     try {
       const token = await AsyncStorage.getItem("token");
       if (!token) {
-        alert("Authorization Error: No token found.");
+        Alert.alert("Authorization Error", "No token found.");
         return;
       }
 
       const formData = new FormData();
-      formData.append("file", document);
+      formData.append("cv", document);
+      formData.append("job_title", specialization);
 
       setUploading(true);
 
       const response = await axios.post(
-        "https://recruitangle.com/api/jobseeker/upload-cv",
+        "https://recruitangle.com/api/jobseeker/analyze-cv",
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Explicitly set Content-Type
+            "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
-        alert("Success: CV uploaded successfully.");
+        Alert.alert("Success", "CV uploaded successfully.");
         console.log(response.data);
+        navigation.navigate('AI Result');
       } else {
-        alert(
-          `Upload Failed: ${response.data.message || "Unable to upload CV."}`,
+        Alert.alert(
+          "Upload Failed",
+          response.data.message || "Unable to upload CV."
         );
         console.error(response.data);
       }
     } catch (error) {
-      alert("Error: An error occurred while uploading the CV.");
+      Alert.alert("Error", "An error occurred while uploading the CV.");
       console.error("CV Upload Error:", error);
     } finally {
       setUploading(false);
+      onClose();
     }
   };
+
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -392,17 +403,24 @@ const MyComponent = ({ onClose }) => {
 
                   <TextInput
                     style={styles.picker}
-                    placeholder="What is your next role?"
+                    placeholder="What is your target career role?"
                     value={specialization}
                     onChangeText={setSpecialization}
                   />
 
-                  <TouchableOpacity
-                    onPress={handleCVUpload}
-                    style={styles.button}
-                  >
-                    <Text style={styles.buttonText}>Submit</Text>
-                  </TouchableOpacity>
+                  {uploading ? (
+                    <View style={styles.loadingContainer}>
+                      <Text style={styles.loadingText}>Analyzing CV, Please wait...</Text>
+                      <ActivityIndicator size="large" color="green" />
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={handleCVUpload}
+                      style={styles.button}
+                    >
+                      <Text style={styles.buttonText}>Submit</Text>
+                    </TouchableOpacity>
+                  )}
                 </Animated.View>
               )}
               {/*openCV && (  )*/}
@@ -648,6 +666,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 50,
     borderRadius: 12,
+    padding: 10
   },
   button: {
     alignSelf: "center",
@@ -703,6 +722,14 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: "center",
     flexDirection: "row",
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingText: {
+    color: 'green',
+    marginBottom: 10, 
   },
 });
 

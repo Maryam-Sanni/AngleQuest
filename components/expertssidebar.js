@@ -48,7 +48,7 @@ function MyComponent() {
             navigation.navigate('Scenario Project');
             break;
         case "Messages":
-          navigation.navigate('Start Message');
+          navigation.navigate('Chats');
           break;
         default:
           break;
@@ -107,7 +107,7 @@ function MyComponent() {
         case "Skills Analysis": return routeName === 'Advice';
         case "Scenario Project": return routeName === 'Scenario Project';
         case "Hubs": return routeName === 'Manage Hubs';
-        case "Messages": return routeName === 'Messaging';
+        case "Messages": return routeName === 'Chats';
         default: return false;
       }
     });

@@ -10,7 +10,7 @@ const RoomList = ({ selectRoom }) => {
     const [conversations, setConversations] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const ico = 'https://chatscope.io/storybook/react/assets/emily-xzL8sDL2.svg';
+    const ico = 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b';
 
     // Function to retrieve token from AsyncStorage
     const getToken = async () => {
@@ -118,7 +118,9 @@ const RoomList = ({ selectRoom }) => {
 
     return (
         <View style={styles.container}>
-            <Button title="New Conversation" onPress={() => setModalVisible(true)} />
+            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+              <Text style={styles.buttonText}>New Conversation</Text>
+            </TouchableOpacity>
 
             <Modal
                 visible={isModalVisible}
@@ -128,9 +130,14 @@ const RoomList = ({ selectRoom }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
+                        <View style={{flexDirection: 'row'}}>
                         <Text style={styles.modalHeader}>
-                            {user?.role === 'expert' ? 'Job Seekers' : 'Experts'}
+                           Select a User
                         </Text>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} >
+                            <Text style={styles.closeButtonText}>✕</Text>
+                          </TouchableOpacity>
+                        </View>
                         <FlatList
                             data={users}
                             keyExtractor={(item) => item.id.toString()}
@@ -154,7 +161,6 @@ const RoomList = ({ selectRoom }) => {
                                 </TouchableOpacity>
                             )}
                         />
-                        <Button title="Cancel" onPress={() => setModalVisible(false)} />
                     </View>
                 </View>
             </Modal>
@@ -202,11 +208,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        width: '80%',
+        width: '30%',
+        height: 600,
         backgroundColor: '#fff',
         borderRadius: 10,
         padding: 20,
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
     modalHeader: {
         fontSize: 18,
@@ -219,8 +226,8 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     avatar: {
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         borderRadius: 25,
         marginRight: 10,
     },
@@ -228,7 +235,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     conversationName: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
     },
     conversationUsername: {
@@ -237,6 +244,25 @@ const styles = StyleSheet.create({
     conversationLastMessage: {
         color: 'gray',
     },
+      button: {
+        backgroundColor: '#F2F2F2', 
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+          marginLeft: 10,
+          marginRight: 10,
+          marginTop: 10,
+      },
+      buttonText: {
+        color: '#000', 
+        fontSize: 16,
+      },
+              closeButtonText: {
+                fontSize: 20,
+                color: '#3F5637',
+                fontWeight: 'bold',
+                fontFamily:"Roboto-Light",
+                  marginLeft: 240
+              },
 });
 
 export default RoomList;

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { View, Text, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { api_url, AuthContext } from './AuthProvider';
 import axios from 'axios';
+import { api_url, AuthContext } from './AuthProvider';
 
 const Room = ({ activeRoom }) => {
-  const { xsrf, user } = React.useContext(AuthContext);
+  const { xsrf } = React.useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [token, setToken] = useState('');
+  const [userId, setUserId] = useState('');
   const [roomData, setRoomData] = useState({
     id: '',
     name: 'Unknown',
@@ -17,18 +18,22 @@ const Room = ({ activeRoom }) => {
   });
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const fetchTokenAndUserId = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('token');
+        const storedUserId = await AsyncStorage.getItem('user_id');
         if (storedToken) {
           setToken(storedToken);
         }
+        if (storedUserId) {
+          setUserId(storedUserId);
+        }
       } catch (error) {
-        console.log('Error fetching token:', error);
+        console.log('Error fetching token or user ID:', error);
       }
     };
 
-    fetchToken();
+    fetchTokenAndUserId();
   }, []);
 
   useEffect(() => {
@@ -77,28 +82,32 @@ const Room = ({ activeRoom }) => {
 
   const getChatHistory = async () => {
     try {
-      const response = await axios.get(api_url + 'chat/get/' + roomData.id, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
-
-      const data = response.data;
-      if (data?.status === 'success') {
-        const formattedMessages = data.history.map((msg) => ({
-          _id: msg.id,
-          text: msg.text,
-          createdAt: new Date(msg.created_at),
-          user: {
-            _id: msg.user_id,
-            name: msg.senderName,
+      if (userId && token) {
+        const response = await axios.get(api_url + 'chat/get/' + roomData.id, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
           },
-        }));
-        setMessages(formattedMessages.reverse());
+        });
+
+        const data = response.data;
+        if (data?.status === 'success') {
+          const formattedMessages = data.history.map((msg) => ({
+            _id: msg.id,
+            text: msg.text,
+            createdAt: new Date(msg.created_at),
+            user: {
+              _id: msg.user_id,
+              name: msg.senderName,
+            },
+            // No need for `position`, GiftedChat uses `user._id` for alignment
+          }));
+
+          setMessages(formattedMessages.reverse());
+        }
       }
     } catch (err) {
-      console.log(err.message);
+      console.log('Error fetching chat history:', err.message);
     }
   };
 
@@ -143,41 +152,55 @@ const Room = ({ activeRoom }) => {
   }, [roomData.id, token]); // Dependencies to re-connect WebSocket and fetch data on room change
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        {roomData.image ? (
-          <Image source={{ uri: roomData.image }} style={styles.image} />
-        ) : (
-          <View style={styles.imagePlaceholder} />
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.header}>
+          {roomData.image ? (
+            <Image source={{ uri: roomData.image }} style={styles.image} />
+          ) : (
+            <View style={styles.imagePlaceholder} />
+          )}
+          <Text style={styles.roomName}>{roomData.name}</Text>
+        </View>
+        {otherUserTyping && (
+          <Text style={styles.typingIndicator}>The other user is typing...</Text>
         )}
-        <Text style={styles.roomName}>{roomData.name}</Text>
-      </View>
-      {otherUserTyping && (
-        <Text style={styles.typingIndicator}>The other user is typing...</Text>
-      )}
-      <GiftedChat
-        messages={messages}
-        onSend={(newMessages) => onSend(newMessages)}
-        user={{
-          _id: user?.id,
-          name: user?.name,
-        }}
-        isTyping={otherUserTyping}
-        renderBubble={(props) => (
-          <Bubble
-            {...props}
-            wrapperStyle={{
-              right: {
-                backgroundColor: '#0084ff',
-              },
-              left: {
-                backgroundColor: '#f0f0f0',
-              },
-            }}
-          />
-        )}
-      />
-    </View>
+        <GiftedChat
+          messages={messages}
+          onSend={(newMessages) => onSend(newMessages)}
+          user={{
+            _id: userId, // Use the user ID from AsyncStorage
+            name: 'User', // Optionally set the user's name
+          }}
+          isTyping={otherUserTyping}
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              wrapperStyle={{
+                right: {
+                  backgroundColor: '#B9D6A0', 
+                  alignSelf: 'flex-end', 
+                },
+                left: {
+                  backgroundColor: '#f0f0f0',
+                },
+              }}
+              textStyle={{
+                right: {
+                  color: '#fff', 
+                },
+                left: {
+                  color: '#000', 
+                },
+              }}
+            />
+          )}
+        />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
