@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         color: 'gray',
     },
       button: {
-        backgroundColor: '#F2F2F2', 
+        backgroundColor: '#E2FFE0', 
         paddingVertical: 10,
         paddingHorizontal: 20,
           marginLeft: 10,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
           marginTop: 10,
       },
       buttonText: {
-        color: '#000', 
+        color: 'grey', 
         fontSize: 16,
       },
               closeButtonText: {

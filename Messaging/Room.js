@@ -119,7 +119,6 @@ const Room = ({ activeRoom }) => {
               _id: msg.user_id,
               name: msg.senderName,
             },
-            // No need for `position`, GiftedChat uses `user._id` for alignment
           }));
 
           setMessages(formattedMessages.reverse());
@@ -133,7 +132,7 @@ const Room = ({ activeRoom }) => {
   const onSend = async (newMessages = []) => {
     const messageToSend = newMessages[0].text;
     const formData = new FormData();
-    formData.append('room_id', roomData.id); 
+    formData.append('room_id', roomData.id);
     formData.append('message', messageToSend);
 
     try {
@@ -171,11 +170,14 @@ const Room = ({ activeRoom }) => {
   }, [roomData.id, token]); // Dependencies to re-connect WebSocket and fetch data on room change
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           {roomData.image ? (
-            <Image source={{ uri: roomData.image }} style={styles.image} />
+            <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }} style={styles.image} />
           ) : (
             <View style={styles.imagePlaceholder} />
           )}
@@ -184,58 +186,54 @@ const Room = ({ activeRoom }) => {
         {otherUserTyping && (
           <Text style={styles.typingIndicator}>The other user is typing...</Text>
         )}
-        <GiftedChat
-          style={{ flex: 1 }}
-          messages={messages}
-          onSend={(newMessages) => onSend(newMessages)}
-          user={{
-            _id: userId, // Use the user ID from AsyncStorage
-            name: 'User', // Optionally set the user's name
-          }}
-          isTyping={otherUserTyping}
-          renderBubble={(props) => (
-            <Bubble
-              {...props}
-              wrapperStyle={{
-                right: {
-                  backgroundColor: 'lightgreen', 
-                  alignSelf: 'flex-end', 
-                },
-                left: {
-                  backgroundColor: '#f0f0f0',
-                },
-              }}
-              textStyle={{
-                right: {
-                  color: 'black', 
-                },
-                left: {
-                  color: '#000', 
-                },
-              }}
-            />
-          )}
-          renderSend={renderSend}
-          renderInputToolbar={renderInputToolbar}
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.chatContainer}>
+          <GiftedChat
+            messages={messages}
+            onSend={(newMessages) => onSend(newMessages)}
+            user={{
+              _id: userId,
+              name: 'User',
+            }}
+            isTyping={otherUserTyping}
+            renderBubble={(props) => (
+              <Bubble
+                {...props}
+                wrapperStyle={{
+                  right: {
+                    backgroundColor: 'lightgreen',
+                    alignSelf: 'flex-end',
+                  },
+                  left: {
+                    backgroundColor: '#f0f0f0',
+                  },
+                }}
+                textStyle={{
+                  right: {
+                    color: 'black',
+                  },
+                  left: {
+                    color: '#000',
+                  },
+                }}
+              />
+            )}
+            renderSend={renderSend}
+            renderInputToolbar={renderInputToolbar}
+          />
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  innerContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
+    backgroundColor: '#eafaf1',
   },
   header: {
-    height: 80,
-    backgroundColor: '#f5f5f5',
+    height: 60,
+    backgroundColor: '#F6F6F6',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
@@ -243,14 +241,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 25,
     marginRight: 10,
   },
   imagePlaceholder: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 25,
     backgroundColor: '#ccc',
     marginRight: 10,
@@ -261,8 +259,8 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   roomName: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
   },
   sendButton: {
     marginRight: 10,
@@ -275,13 +273,18 @@ const styles = StyleSheet.create({
     padding: 5,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
+    backgroundColor: '#F6F6F6',
   },
   textInput: {
     paddingHorizontal: 10,
-    borderRadius: 15,
-    backgroundColor: '#f5f5f5',
+    paddingLeft: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ddd',
+  },
+  chatContainer: {
+    flex: 1,
   },
 });
 
