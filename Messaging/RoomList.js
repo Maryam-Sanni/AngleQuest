@@ -5,7 +5,7 @@ import { api_url, AuthContext } from './AuthProvider';
 
 const RoomList = ({ selectRoom }) => {
     const { setActiveRoom, user, xsrf } = useContext(AuthContext);
-    const [token, setToken] = useState(null);  // New state for storing the token
+    const [token, setToken] = useState(null);
     const [users, setUsers] = useState([]);
     const [conversations, setConversations] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);

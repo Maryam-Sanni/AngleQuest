@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { View, Text, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { api_url, AuthContext } from './AuthProvider';
@@ -16,6 +16,25 @@ const Room = ({ activeRoom }) => {
     name: 'Unknown',
     image: '',
   });
+
+  const renderSend = (props) => (
+    <Send {...props}>
+      <View style={styles.sendButton}>
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=100004&format=png&color=206C00' }}
+          style={styles.sendButtonIcon}
+        />
+      </View>
+    </Send>
+  );
+
+  const renderInputToolbar = (props) => (
+    <InputToolbar
+      {...props}
+      containerStyle={styles.inputToolbar}
+      textInputStyle={styles.textInput}
+    />
+  );
 
   useEffect(() => {
     const fetchTokenAndUserId = async () => {
@@ -153,10 +172,7 @@ const Room = ({ activeRoom }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
+      <View style={styles.innerContainer}>
         <View style={styles.header}>
           {roomData.image ? (
             <Image source={{ uri: roomData.image }} style={styles.image} />
@@ -169,6 +185,7 @@ const Room = ({ activeRoom }) => {
           <Text style={styles.typingIndicator}>The other user is typing...</Text>
         )}
         <GiftedChat
+          style={{ flex: 1 }}
           messages={messages}
           onSend={(newMessages) => onSend(newMessages)}
           user={{
@@ -181,7 +198,7 @@ const Room = ({ activeRoom }) => {
               {...props}
               wrapperStyle={{
                 right: {
-                  backgroundColor: '#B9D6A0', 
+                  backgroundColor: 'lightgreen', 
                   alignSelf: 'flex-end', 
                 },
                 left: {
@@ -190,7 +207,7 @@ const Room = ({ activeRoom }) => {
               }}
               textStyle={{
                 right: {
-                  color: '#fff', 
+                  color: 'black', 
                 },
                 left: {
                   color: '#000', 
@@ -198,8 +215,10 @@ const Room = ({ activeRoom }) => {
               }}
             />
           )}
+          renderSend={renderSend}
+          renderInputToolbar={renderInputToolbar}
         />
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -208,6 +227,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  innerContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   header: {
     height: 80,
@@ -239,6 +263,25 @@ const styles = StyleSheet.create({
   roomName: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  sendButton: {
+    marginRight: 10,
+  },
+  sendButtonIcon: {
+    width: 30,
+    height: 30,
+  },
+  inputToolbar: {
+    padding: 5,
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+  },
+  textInput: {
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: '#f5f5f5',
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
 });
 
