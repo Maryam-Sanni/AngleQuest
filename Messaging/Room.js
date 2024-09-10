@@ -4,6 +4,7 @@ import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { api_url, AuthContext } from './AuthProvider';
+import WebSocketProvider from './Echo';
 
 const Room = ({ activeRoom }) => {
   const { xsrf } = React.useContext(AuthContext);
@@ -78,16 +79,31 @@ const Room = ({ activeRoom }) => {
     }
   }, [activeRoom]); // Trigger fetch on room change
 
+  <WebSocketProvider />
+  
   const connectWebSocket = () => {
     if (!window.Echo || !roomData.id) return;
 
     const webSocketChannel = `chat.room.${roomData.id}`;
     const channel = window.Echo.private(webSocketChannel);
 
+    // WebSocket connection success
+    channel.subscribed(() => {
+      console.log('WebSocket connected to:', webSocketChannel);
+    });
+
+    // WebSocket disconnection
+    channel.error((error) => {
+      console.log('WebSocket error:', error);
+    });
+
+    // Listen for incoming messages
     channel.listen('ChatMessageEvent', async () => {
+      console.log('New chat message received.');
       await getChatHistory();
     });
 
+    // Listen for typing indicator
     channel.listenForWhisper('typing', () => {
       console.log(`${roomData.name} is typing.`);
       setOtherUserTyping(true);
@@ -98,6 +114,8 @@ const Room = ({ activeRoom }) => {
       setOtherUserTyping(false);
     });
   };
+
+
 
   const getChatHistory = async () => {
     try {
@@ -158,16 +176,21 @@ const Room = ({ activeRoom }) => {
 
   useEffect(() => {
     if (roomData.id && token) {
+      // Fetch initial chat history
       getChatHistory();
+
+      // Set up WebSocket connection
       connectWebSocket();
 
+      // Cleanup on unmount or when room changes
       return () => {
         if (window.Echo) {
           window.Echo.leave(`chat.room.${roomData.id}`);
         }
       };
     }
-  }, [roomData.id, token]); // Dependencies to re-connect WebSocket and fetch data on room change
+  }, [roomData.id, token]);
+
 
   return (
     <KeyboardAvoidingView

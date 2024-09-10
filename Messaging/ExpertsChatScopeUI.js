@@ -15,7 +15,7 @@ const ChatScopeUI = () => {
   ];
 
   const selectRoom = (room) => {
-    setActiveRoom(room);  // Set the selected room
+    setActiveRoom(room);  
   };
 
   return (

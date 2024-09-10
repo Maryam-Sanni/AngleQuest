@@ -47,7 +47,7 @@ function MyComponent() {
           case "Scenario Project":
             navigation.navigate('Scenario Project');
             break;
-        case "Messages":
+        case "Chats":
           navigation.navigate('Chats');
           break;
         default:
@@ -107,7 +107,7 @@ function MyComponent() {
         case "Skills Analysis": return routeName === 'Advice';
         case "Scenario Project": return routeName === 'Scenario Project';
         case "Hubs": return routeName === 'Manage Hubs';
-        case "Messages": return routeName === 'Chats';
+        case "Chats": return routeName === 'Chats';
         default: return false;
       }
     });
@@ -186,7 +186,7 @@ const menuItems = [
   { label: "Scenario Project", icon: "https://img.icons8.com/?size=100&id=53380&format=png&color=5B5D55" },
   { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Preferences", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Messages", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+  { label: "Chats", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 
 const styles = StyleSheet.create({

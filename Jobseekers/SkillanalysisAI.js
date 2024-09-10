@@ -125,19 +125,19 @@ const MyComponent = ({ onClose }) => {
         Alert.alert("Success", "CV uploaded successfully.");
         console.log(response.data);
         navigation.navigate('AI Result');
+        onClose();
       } else {
-        Alert.alert(
-          "Upload Failed",
+        alert(
+          "Upload Failed, please try again",
           response.data.message || "Unable to upload CV."
         );
         console.error(response.data);
       }
     } catch (error) {
-      Alert.alert("Error", "An error occurred while uploading the CV.");
+      alert("An error occurred while uploading the CV, please try again.", "An error occurred while uploading the CV.");
       console.error("CV Upload Error:", error);
     } finally {
       setUploading(false);
-      onClose();
     }
   };
 

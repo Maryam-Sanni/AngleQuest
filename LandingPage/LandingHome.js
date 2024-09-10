@@ -172,22 +172,7 @@ const MyComponent = () => {
                   source={require('../assets/icons8-check-50.png')}
                   style={[styles.check, {marginLeft: 10}]}/>
                   <Text style={{ fontSize: 14, marginLeft: 10}}>Knowledge sharing</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Support on deliverables</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Performance tracking</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Advise & coaching</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Groom under-performers</Text>
+
                 </View>
     <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Get Started</Text>
@@ -223,19 +208,8 @@ const MyComponent = () => {
                   <Image
                   source={require('../assets/icons8-check-50.png')}
                   style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Reknowed expert as buddy</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Knowledge sharing</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
                   <Text style={{ fontSize: 14, marginLeft: 10}}>Take scenerio project</Text>
-                  <Image
-                  source={require('../assets/icons8-check-50.png')}
-                  style={[styles.check, {marginLeft: 10}]}/>
-                  <Text style={{ fontSize: 14, marginLeft: 10}}>Growth monitoring</Text>
+              
                 </View>
     <TouchableOpacity style={styles.joinButton}>
           <Text style={styles.joinButtonText}>Get Started</Text>
