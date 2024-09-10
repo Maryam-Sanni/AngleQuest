@@ -1,28 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { GiftedChat, Bubble, Send, InputToolbar } from 'react-native-gifted-chat';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { api_url, AuthContext } from './AuthProvider';
-import WebSocketProvider from './Echo';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import {
+  GiftedChat,
+  Bubble,
+  Send,
+  InputToolbar,
+} from "react-native-gifted-chat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { api_url, AuthContext } from "./AuthProvider";
 
 const Room = ({ activeRoom }) => {
   const { xsrf } = React.useContext(AuthContext);
   const [messages, setMessages] = useState([]);
-  const [otherUserTyping, setOtherUserTyping] = useState(false);
-  const [token, setToken] = useState('');
-  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
   const [roomData, setRoomData] = useState({
-    id: '',
-    name: 'Unknown',
-    image: '',
+    id: "",
+    name: "Unknown",
+    image: "",
   });
 
   const renderSend = (props) => (
     <Send {...props}>
       <View style={styles.sendButton}>
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=100004&format=png&color=206C00' }}
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=100004&format=png&color=1C1C1C",
+          }}
           style={styles.sendButtonIcon}
         />
       </View>
@@ -40,8 +53,8 @@ const Room = ({ activeRoom }) => {
   useEffect(() => {
     const fetchTokenAndUserId = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('token');
-        const storedUserId = await AsyncStorage.getItem('user_id');
+        const storedToken = await AsyncStorage.getItem("token");
+        const storedUserId = await AsyncStorage.getItem("user_id");
         if (storedToken) {
           setToken(storedToken);
         }
@@ -49,7 +62,7 @@ const Room = ({ activeRoom }) => {
           setUserId(storedUserId);
         }
       } catch (error) {
-        console.log('Error fetching token or user ID:', error);
+        console.log("Error fetching token or user ID:", error);
       }
     };
 
@@ -59,13 +72,13 @@ const Room = ({ activeRoom }) => {
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
-        const storedRoom = await AsyncStorage.getItem('selectedRoom');
+        const storedRoom = await AsyncStorage.getItem("selectedRoom");
         if (storedRoom) {
           const room = JSON.parse(storedRoom);
           setRoomData(room);
         }
       } catch (error) {
-        console.log('Error retrieving room data from storage:', error);
+        console.log("Error retrieving room data from storage:", error);
       }
     };
 
@@ -73,62 +86,24 @@ const Room = ({ activeRoom }) => {
       setRoomData({
         id: activeRoom.id,
         name: activeRoom.name,
-        image: activeRoom.image || '', // Add fallback for image
+        image: activeRoom.image || "", // Add fallback for image
       });
       fetchRoomData(); // Fetch room data if needed
     }
   }, [activeRoom]); // Trigger fetch on room change
 
-  <WebSocketProvider />
-  
-  const connectWebSocket = () => {
-    if (!window.Echo || !roomData.id) return;
-
-    const webSocketChannel = `chat.room.${roomData.id}`;
-    const channel = window.Echo.private(webSocketChannel);
-
-    // WebSocket connection success
-    channel.subscribed(() => {
-      console.log('WebSocket connected to:', webSocketChannel);
-    });
-
-    // WebSocket disconnection
-    channel.error((error) => {
-      console.log('WebSocket error:', error);
-    });
-
-    // Listen for incoming messages
-    channel.listen('ChatMessageEvent', async () => {
-      console.log('New chat message received.');
-      await getChatHistory();
-    });
-
-    // Listen for typing indicator
-    channel.listenForWhisper('typing', () => {
-      console.log(`${roomData.name} is typing.`);
-      setOtherUserTyping(true);
-    });
-
-    channel.listenForWhisper('typing-end', () => {
-      console.log(`${roomData.name} stopped typing.`);
-      setOtherUserTyping(false);
-    });
-  };
-
-
-
   const getChatHistory = async () => {
     try {
       if (userId && token) {
-        const response = await axios.get(api_url + 'chat/get/' + roomData.id, {
+        const response = await axios.get(api_url + "chat/get/" + roomData.id, {
           headers: {
             Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
+            Accept: "application/json",
           },
         });
 
         const data = response.data;
-        if (data?.status === 'success') {
+        if (data?.status === "success") {
           const formattedMessages = data.history.map((msg) => ({
             _id: msg.id,
             text: msg.text,
@@ -141,32 +116,52 @@ const Room = ({ activeRoom }) => {
 
           setMessages(formattedMessages.reverse());
         }
+
+        // Long polling: Call getChatHistory again to wait for new messages
+        getChatHistory();  // Recursively call after receiving a response
       }
     } catch (err) {
-      console.log('Error fetching chat history:', err.message);
+      console.log("Error fetching chat history:", err.message);
+
+      // Retry after a delay if there's an error
+      setTimeout(() => {
+        getChatHistory();
+      }, 5000); // Retry after 5 seconds on error
     }
   };
+
+  useEffect(() => {
+    if (roomData.id && token) {
+      getChatHistory();
+
+      return () => {
+        if (window.Echo) {
+          window.Echo.leave(`chat.room.${roomData.id}`);
+        }
+      };
+    }
+  }, [roomData.id, token]); // Dependencies to re-connect and fetch data on room change
 
   const onSend = async (newMessages = []) => {
     const messageToSend = newMessages[0].text;
     const formData = new FormData();
-    formData.append('room_id', roomData.id);
-    formData.append('message', messageToSend);
+    formData.append("room_id", roomData.id);
+    formData.append("message", messageToSend);
 
     try {
-      const res = await fetch(api_url + 'chat/send', {
-        method: 'POST',
+      const res = await fetch(api_url + "chat/send", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-          'X-CSRF-TOKEN': xsrf,
+          Accept: "application/json",
+          "X-CSRF-TOKEN": xsrf,
         },
         body: formData,
       });
       const data = await res.json();
-      if (data?.status === 'success') {
+      if (data?.status === "success") {
         setMessages((previousMessages) =>
-          GiftedChat.append(previousMessages, newMessages)
+          GiftedChat.append(previousMessages, newMessages),
         );
       }
     } catch (err) {
@@ -174,68 +169,46 @@ const Room = ({ activeRoom }) => {
     }
   };
 
-  useEffect(() => {
-    if (roomData.id && token) {
-      // Fetch initial chat history
-      getChatHistory();
-
-      // Set up WebSocket connection
-      connectWebSocket();
-
-      // Cleanup on unmount or when room changes
-      return () => {
-        if (window.Echo) {
-          window.Echo.leave(`chat.room.${roomData.id}`);
-        }
-      };
-    }
-  }, [roomData.id, token]);
-
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           {roomData.image ? (
-            <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }} style={styles.image} />
+            <Image source={{ uri: roomData.image }} style={styles.image} />
           ) : (
             <View style={styles.imagePlaceholder} />
           )}
           <Text style={styles.roomName}>{roomData.name}</Text>
         </View>
-        {otherUserTyping && (
-          <Text style={styles.typingIndicator}>The other user is typing...</Text>
-        )}
         <View style={styles.chatContainer}>
           <GiftedChat
             messages={messages}
             onSend={(newMessages) => onSend(newMessages)}
             user={{
               _id: userId,
-              name: 'User',
+              name: "User",
             }}
-            isTyping={otherUserTyping}
             renderBubble={(props) => (
               <Bubble
                 {...props}
                 wrapperStyle={{
                   right: {
-                    backgroundColor: 'lightgreen',
-                    alignSelf: 'flex-end',
+                    backgroundColor: "lightgreen",
+                    alignSelf: "flex-end",
                   },
                   left: {
-                    backgroundColor: '#f0f0f0',
+                    backgroundColor: "#f0f0f0",
                   },
                 }}
                 textStyle={{
                   right: {
-                    color: 'black',
+                    color: "black",
                   },
                   left: {
-                    color: '#000',
+                    color: "#000",
                   },
                 }}
               />
@@ -252,16 +225,16 @@ const Room = ({ activeRoom }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eafaf1',
+    backgroundColor: "#eafaf1",
   },
   header: {
     height: 60,
-    backgroundColor: '#F6F6F6',
-    flexDirection: 'row',
-    alignItems: 'center',
+    backgroundColor: "#F6F6F6",
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
   },
   image: {
     width: 40,
@@ -273,17 +246,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 25,
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     marginRight: 10,
-  },
-  typingIndicator: {
-    margin: 10,
-    fontSize: 14,
-    color: '#666',
   },
   roomName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sendButton: {
     marginRight: 10,
@@ -295,16 +263,16 @@ const styles = StyleSheet.create({
   inputToolbar: {
     padding: 5,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
-    backgroundColor: '#F6F6F6',
+    borderTopColor: "#ddd",
+    backgroundColor: "#F6F6F6",
   },
   textInput: {
     paddingHorizontal: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   chatContainer: {
     flex: 1,

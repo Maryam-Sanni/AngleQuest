@@ -55,6 +55,7 @@ export default function Profile() {
   const [currentHistory, setCurrentHistory] = useState(null);
   const [availableDays, setAvailableDays] = useState('Mon, Tue, Wed');
   const [hours, setHours] = useState('9:00 AM - 3:00 PM');
+  const [special, setSpecial] = useState('');
 
   const handleSavedays = async () => {
     try {
@@ -507,6 +508,28 @@ export default function Profile() {
                       </View>
                     </View>
 
+           <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+           <View style={{ marginTop: 20, marginRight: 30 }}>
+             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
+                 {t('What do you do at')} {preferredRole}?
+               </Text>
+              
+             </View>
+             <View style={{ marginRight: 50 }}>
+               <View style={styles.container}>
+                 <View style={styles.row}>
+                   <TextInput
+                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start' }]}
+                     placeholder="Example: Microsoft Azure"
+                     value={special}
+                     onChangeText={setSpecial}
+                   />
+                 </View>
+               </View>
+             </View>
+           </View>
+           
             <Text style={{ fontSize: 14, marginTop: 40, fontStyle: 'italic', fontFamily:"Roboto-Light" }}>{t("You will need to edit and update your profile for it to be visible to 'Individuals' and 'Businesses'")}</Text>
            <TouchableOpacity style={{ justifyContent: 'center', marginLeft: 10, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 10, marginBottom: 50, backgroundColor: 'coral', borderRadius: 5, }} onPress={handleSaveall} >
              <Text style={{ fontSize: 14, color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Update Profile")}</Text>

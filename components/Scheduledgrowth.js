@@ -143,18 +143,24 @@ useEffect(() => {
                   {new Date(growthPlan.date).toLocaleDateString()} {new Date(growthPlan.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
                 </Text>
               </View>
-              <TouchableOpacity>
-                <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
-                  <Text style={styles.linkText}>{t("join")}</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity >
-                <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
-                <Text style={{color: 'transparent'}}>{t("Join")}</Text>
-                </View>
-              </TouchableOpacity>
+
+              {/* Handle Join or Replan Button */}
+              {growthPlan.review === "replan" ? (
+                <TouchableOpacity onPress={() => handleOpenPress2(growthPlan)}>
+                  <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                    <Text style={styles.linkText}>{t("Replan")}</Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                    <Text style={styles.linkText}>{t("Join")}</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
             </View>
           ))}
+
 
         </View>
         <Modal

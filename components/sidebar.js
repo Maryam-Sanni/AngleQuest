@@ -342,7 +342,6 @@ const menuItems = [
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Scenario Project", icon: "https://img.icons8.com/?size=100&id=53380&format=png&color=5B5D55" },
   { label: "Interview", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/ed6b330337dad3f4c29dae397b1a587ec9cdb40064dc06f64111e037496f2e8f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Performance", icon: "https://img.icons8.com/?size=100&id=42208&format=png&color=000000" },
   { label: "Chats", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9c32b4dde608593e6e524f321c74e924eecd6b9caebc808c0af2d5ec35003c9d?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 

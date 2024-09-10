@@ -437,31 +437,12 @@ const MyComponent = ({ onClose }) => {
               )}
               {openQues && (
                 <Animated.View style={[styles.openCV, animatedStyle2]}>
-                  <Picker
-                    selectedValue={specialization}
+                  <TextInput
                     style={styles.picker}
-                    onValueChange={(itemValue) => setSpecialization(itemValue)}
-                  >
-                    <Picker.Item label="Choose Specialization" value="" />
-                    <Picker.Item label="SAP" value="SAP" />
-                    <Picker.Item label="Microsoft" value="Microsoft" />
-                    <Picker.Item label="Salesforce" value="Salesforce" />
-                    <Picker.Item
-                      label="Frontend Development"
-                      value="Frontend Development"
-                    />
-                    <Picker.Item
-                      label="Backend Development"
-                      value="Backend Development"
-                    />
-                    <Picker.Item label="UI/UX" value="UI/UX" />
-                    <Picker.Item label="Data Analysis" value="Data Analysis" />
-                    <Picker.Item
-                      label="Cloud Computing"
-                      value="Cloud Computing"
-                    />
-                    <Picker.Item label="Management" value="Management" />
-                  </Picker>
+                    placeholder="What is your target career role?"
+                    value={specialization}
+                    onChangeText={setSpecialization}
+                  />
 
                   <TouchableOpacity style={styles.button} onPress={handleQues}>
                     <Text style={styles.buttonText}>Proceed</Text>
