@@ -231,6 +231,7 @@ function MyComponent({ onClose }) {
               const expertid = `${selectedUser.user_id}`;
               const availabledays = selectedUser.available_days.join(', '); // Convert array to string
               const availabletimes = selectedUser.available_times;
+             const category = `${selectedUser.category}`;
 
               // Save the selected user's data to AsyncStorage
               await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
@@ -238,6 +239,7 @@ function MyComponent({ onClose }) {
               await AsyncStorage.setItem('selectedUserExpertid', expertid);
               await AsyncStorage.setItem('selectedUserDays', availabledays);
               await AsyncStorage.setItem('selectedUserTimes', availabletimes);
+             await AsyncStorage.setItem('selectedUserCategory', category);
           } else {
               console.error('Selected user is not available');
           }
@@ -299,7 +301,7 @@ function MyComponent({ onClose }) {
           }}
         >
           <TouchableOpacity onPress={handleOpenPress2} onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
-            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: isPressed ? "darkgreen" : "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}

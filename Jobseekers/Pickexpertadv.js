@@ -60,12 +60,12 @@ function MyComponent({ onClose }) {
       }
 
       const response = await axios.post('https://recruitangle.com/api/jobseeker/chosen-expert-skill-analysis', {
-        first_name: `${selectedUser.first_name} ${selectedUser.last_name}`, // Changed field name
+        first_name: `${selectedUser.first_name} ${selectedUser.last_name}`,
         category: selectedUser.category,
         available_days: selectedUser.available_days,
         available_times: selectedUser.available_times,
         expertid: selectedUser.user_id,
-        location: 'location', 
+        location: 'location',
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,14 +78,25 @@ function MyComponent({ onClose }) {
       } else {
         console.error('Error posting data:', response.statusText);
       }
-    } catch (error) {
-      console.error('Error posting data:', error.response ? error.response.data : error.message);
-    }
 
-    // Open the modal
-    setMainModalVisible(false);
-    setformModalVisible(true);
+      // Save the selected user's data to AsyncStorage
+      await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
+      await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
+      await AsyncStorage.setItem('selectedUserFullName', `${selectedUser.first_name} ${selectedUser.last_name}`);
+      await AsyncStorage.setItem('selectedUserExpertid', selectedUser.user_id);
+      await AsyncStorage.setItem('selectedUserDays', selectedUser.available_days.join(', ')); 
+      await AsyncStorage.setItem('selectedUserTimes', selectedUser.available_times); 
+      await AsyncStorage.setItem('selectedUserCategory', selectedUser.category);
+      await AsyncStorage.setItem('selectedUserLocation', 'location');
+
+      // Open the form modal
+      setMainModalVisible(false);
+      setformModalVisible(true);
+    } catch (error) {
+      console.error('Error posting or saving data:', error.response ? error.response.data : error.message);
+    }
   };
+
 
 
   
@@ -142,7 +153,7 @@ function MyComponent({ onClose }) {
       const selectedUser = cardData.combinedData[index];
       const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
       const expertid = `${selectedUser.user_id}`;
-      const availabledays = `${selectedUser.available_days}`;
+      const availabledays = Array.isArray(selectedUser.available_days) ? selectedUser.available_days.join(', ') : selectedUser.available_days; // Ensure it's an array
       const availabletimes = `${selectedUser.available_times}`;
        const category = `${selectedUser.category}`;
 
@@ -215,7 +226,7 @@ function MyComponent({ onClose }) {
           }}
         >
           <TouchableOpacity onPress={handleOpenPress2} onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
-            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: isPressed ? "darkgreen" : "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}

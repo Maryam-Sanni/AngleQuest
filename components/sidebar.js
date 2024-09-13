@@ -193,7 +193,7 @@ function MyComponent() {
           navigation.navigate('My Performance');
           break;
           case "AngleQuest AI":
-            navigation.navigate('Use AI');
+            navigation.navigate('AI Result');
             break;
         case "Chats":
           navigation.navigate('Chat');
@@ -255,8 +255,9 @@ function MyComponent() {
           case "Interview":
           return ['New Interview', 'Interview Sessions'].includes(routeName);
         case "Scenario Project": return routeName === 'Project';
+          case "AngleQuest AI": return routeName === 'AI Result';
         case "Skills Analysis":
-        return ['Use AI', 'Use CV', 'Use Questionnaire', 'AI Result', 'Advice Sessions'].includes(routeName);
+        return ['Use AI', 'Use CV', 'Use Questionnaire', 'Advice Sessions'].includes(routeName);
           case "Hubs":
           return ['Coaching Hubs', 'Coaching Hub Sessions'].includes(routeName);
         case "Performance": return routeName === 'My Performance';
@@ -337,7 +338,8 @@ const menuItems = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
    { label: "Courses", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-   { label: "Skills Analysis", icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=5B5D55" },
+   { label: "Skills Analysis", icon: "https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55" },
+   { label: "AngleQuest AI", icon: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=5B5D55" },
   { label: "Growth Plan", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Scenario Project", icon: "https://img.icons8.com/?size=100&id=53380&format=png&color=5B5D55" },

@@ -38,9 +38,12 @@ const MyComponent = ({ onClose }) => {
   const [document, setDocument] = useState(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
-
+  const [questions, setQuestions] = useState([]);
+  const [switchStates, setSwitchStates] = useState([]);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePress = () => {
     // Programmatically trigger the file input
@@ -141,6 +144,105 @@ const MyComponent = ({ onClose }) => {
     }
   };
 
+  const fetchQuestions = async () => {
+    setLoadingQuestions(true); // Start loading
+
+    try {
+      const response = await fetch(
+        "https://ai.recruitangle.com/api/v1/prediction/622858da-03bd-40fc-bf7e-67293dfa70b1",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question: specialization,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log("API Response:", data);
+
+      if (data.json && data.json.questions) {
+        try {
+          const parsedQuestions = JSON.parse(data.json.questions);
+          console.log("Parsed Questions:", parsedQuestions);
+
+          if (Array.isArray(parsedQuestions.questions)) {
+            setQuestions(parsedQuestions.questions);
+          } else {
+            console.error("Questions field is not an array", parsedQuestions);
+          }
+        } catch (parseError) {
+          console.error("Failed to parse questions", parseError);
+        }
+      } else {
+        console.error("Questions field is missing or invalid", data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch questions", error);
+    } finally {
+      setLoadingQuestions(false); // End loading
+    }
+  };
+
+  const handleQuestionsResponse = async () => {
+    setIsLoading(true); // Start loading
+    
+    // Prepare the responses in the format required
+    const responses = questions.map((question, index) => ({
+      id: question.id,
+      question: question.question,
+      answer: switchStates[index] ? "yes" : "no",
+    }));
+
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append(
+      'question',
+      JSON.stringify({
+        specialization: specialization, 
+        questions: JSON.stringify({ questions: responses }),
+      })
+    );
+
+    try {
+      const response = await fetch(
+        "https://ai.recruitangle.com/api/v1/prediction/79f22450-0e1c-4035-8020-76a6013712f9",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      // Check if response status is OK (200-299)
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Submit Response:", data);
+
+        // Optionally, you can also check for specific success conditions in the response data
+        if (data && data.json && data.json.analysis) {
+          Alert.alert("Success", "Your responses have been submitted successfully.");
+          navigation.navigate('AI Result');
+          onClose();
+        } else {
+          Alert.alert("Submission Failed", data.message || "Unable to submit responses.");
+        }
+      } else {
+        // Handle HTTP errors
+        Alert.alert("Submission Failed", "The request failed with status: " + response.status);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while submitting your responses.");
+      console.error("Submit Error:", error);
+     } finally {
+        // Reset loading state
+      setIsLoading(false);
+      }
+    };
+
+
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -215,8 +317,9 @@ const MyComponent = ({ onClose }) => {
     setOpenCV(false);
   };
 
-  const handleQues = () => {
+  const handleQues = async () => {
     setSwitched(true);
+    await fetchQuestions(); // Fetch questions when proceeding
   };
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -228,28 +331,16 @@ const MyComponent = ({ onClose }) => {
       height: animeHeight2.value,
     };
   });
-
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const [isEnabled2, setIsEnabled2] = useState(false);
-  const [isEnabled3, setIsEnabled3] = useState(false);
-  const [isEnabled4, setIsEnabled4] = useState(false);
-  const [isEnabled5, setIsEnabled5] = useState(false);
-  const [isEnabled6, setIsEnabled6] = useState(false);
-  const [isEnabled7, setIsEnabled7] = useState(false);
-  const [isEnabled8, setIsEnabled8] = useState(false);
-  const [isEnabled9, setIsEnabled9] = useState(false);
-  const [isEnabled10, setIsEnabled10] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-  const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
-  const toggleSwitch4 = () => setIsEnabled4((previousState) => !previousState);
-  const toggleSwitch5 = () => setIsEnabled5((previousState) => !previousState);
-  const toggleSwitch6 = () => setIsEnabled6((previousState) => !previousState);
-  const toggleSwitch7 = () => setIsEnabled7((previousState) => !previousState);
-  const toggleSwitch8 = () => setIsEnabled8((previousState) => !previousState);
-  const toggleSwitch9 = () => setIsEnabled9((previousState) => !previousState);
-  const toggleSwitch10 = () =>
-    setIsEnabled10((previousState) => !previousState);
+  
+  const toggleSwitch = (index) => {
+    setSwitchStates(prev => {
+      const newSwitchStates = [...prev];
+      newSwitchStates[index] = !newSwitchStates[index];
+      return newSwitchStates;
+    });
+  };
+  
+ 
 
   const Questionnaires = ({ question, isEnabled, toggleSwitch }) => {
     return (
@@ -435,7 +526,7 @@ const MyComponent = ({ onClose }) => {
                   textColor={openQues ? "white" : "white"}
                 />
               )}
-              {openQues && (
+          {openQues && (
                 <Animated.View style={[styles.openCV, animatedStyle2]}>
                   <TextInput
                     style={styles.picker}
@@ -444,7 +535,7 @@ const MyComponent = ({ onClose }) => {
                     onChangeText={setSpecialization}
                   />
 
-                  <TouchableOpacity style={styles.button} onPress={handleQues}>
+                  <TouchableOpacity style={styles.button} onPress={handleQues} >
                     <Text style={styles.buttonText}>Proceed</Text>
                   </TouchableOpacity>
                 </Animated.View>
@@ -459,87 +550,36 @@ const MyComponent = ({ onClose }) => {
                   justifyContent: "space-between",
                 }}
               >
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{
-                    // paddingVertical: 10,
-                    height: 480,
-                    gap: 12,
-                    marginVertical: 10,
-                    marginHorizontal: 10,
-                  }}
-                >
-                  <Questionnaires
-                    isEnabled={isEnabled1}
-                    toggleSwitch={toggleSwitch1}
-                    question={
-                      "1. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled2}
-                    toggleSwitch={toggleSwitch2}
-                    question={
-                      "2. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled3}
-                    toggleSwitch={toggleSwitch3}
-                    question={
-                      "3. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled4}
-                    toggleSwitch={toggleSwitch4}
-                    question={
-                      "4. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled5}
-                    toggleSwitch={toggleSwitch5}
-                    question={
-                      "5. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled6}
-                    toggleSwitch={toggleSwitch6}
-                    question={
-                      "6. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled7}
-                    toggleSwitch={toggleSwitch7}
-                    question={
-                      "7. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled8}
-                    toggleSwitch={toggleSwitch8}
-                    question={
-                      "8. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled9}
-                    toggleSwitch={toggleSwitch9}
-                    question={
-                      "9. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                  <Questionnaires
-                    isEnabled={isEnabled10}
-                    toggleSwitch={toggleSwitch10}
-                    question={
-                      "10. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                    }
-                  />
-                </ScrollView>
+                {loadingQuestions ? (
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="green" />
+                  </View>
+                ) : (
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                      height: 480,
+                      gap: 12,
+                      marginVertical: 10,
+                      marginHorizontal: 10,
+                    }}
+                  >
+                    {questions.map((question, index) => (
+                      <View key={index} style={styles.questionContainer}>
+                        <Text style={styles.questionText}>{`${index + 1}. ${question.question}`}</Text>
+                        <Switch
+                          value={switchStates[index] || false}
+                          onValueChange={() => toggleSwitch(index)}
+                          trackColor={{ false: "#767577", true: "#4CAF50" }} 
+                          thumbColor={switchStates[index] ? "#fff" : "#fff"}
+                          style={styles.switch}
+                        />
+                        <Text style={styles.answerText}>{switchStates[index] ? "Yes" : "No"}</Text>
+                      </View>
+                    ))}
+
+                  </ScrollView>
+                )}
 
                 <TouchableOpacity
                   style={[
@@ -549,11 +589,14 @@ const MyComponent = ({ onClose }) => {
                       width: 100,
                       alignSelf: "flex-end",
                       marginBottom: 20,
+                      opacity: isLoading ? 0.6 : 1, // Optionally reduce opacity when loading
                     },
                   ]}
-                  onPress={handleSubmit}
+                  onPress={handleQuestionsResponse}
+                  disabled={isLoading}
                 >
                   <Text style={styles.buttonText}>Submit</Text>
+                  {isLoading && <ActivityIndicator size="small" color="white" style={{ marginTop: -15 }} />}
                 </TouchableOpacity>
               </View>
             </View>
@@ -711,6 +754,23 @@ const styles = StyleSheet.create({
   loadingText: {
     color: 'green',
     marginBottom: 10, 
+  },
+  questionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginBottom: 10, 
+  },
+  questionText: {
+    fontSize: 14,
+    flex: 1, 
+    marginRight: 10, 
+  },
+  answerText: {
+    fontSize: 12,
+    marginLeft: 10, 
+  },
+  switch: {
+    color: 'green'
   },
 });
 

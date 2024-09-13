@@ -1,171 +1,161 @@
 import { useFonts } from 'expo-font';
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function MyComponent({ onClose }) {
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
+  function MyComponent({ onClose }) {
+    const [fontsLoaded] = useFonts({
+      'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+    });
+    const { t } = useTranslation();
+    const [expertName, setExpertName] = useState('');
+     const [expertCategory, setExpertCategory] = useState('');
+
+    useEffect(() => {
+      const fetchDetails = async () => {
+        try {
+          const storedFirstName = await AsyncStorage.getItem('selectedUserFirstName');
+          const storedLastName = await AsyncStorage.getItem('selectedUserLastName');
+          const storedCategory = await AsyncStorage.getItem('selectedUserCategory');
+
+          if (storedFirstName && storedLastName) {
+            setExpertName(`${storedFirstName} ${storedLastName}`);
+          }
+          if (storedCategory) {
+            setExpertCategory(storedCategory);
+          }
+        } catch (error) {
+          console.error('Failed to fetch expert details from AsyncStorage', error);
+        }
+      };
+
+      fetchDetails();
+    }, []);
+
+    if (!fontsLoaded) {
+      return null; // Prevent rendering until fonts are loaded
+    }
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.greenBox}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={{fontFamily:"Roboto-Light"}}>✕</Text>
-          </TouchableOpacity>
-          <View style={styles.content}>
-            <View style={styles.header}>
-              <Text style={styles.name}>Joop Melcher</Text>
-              <View style={styles.statusDot} />
-            </View>
-            <Text style={styles.expertText}>{t("Expert")}</Text>
-            <View style={styles.separator} />
-            <Text style={styles.email}>joopmelcher47@gmail.com</Text>
-            <View style={styles.separator} />
-            <Text style={styles.experienceText}>{t("15 year(s) experience")}</Text>
-            <View style={styles.separator} />
-            <Text style={styles.sectionTitle}>{t("Hard Skills")}</Text>
-            <Text style={styles.skillText}>• {t("Responsive Design")}</Text>
-            <Text style={styles.skillText}>• HTML, CSS, JavaScript</Text>
-            <Text style={styles.skillText}>• React & Angular</Text>
-            <Text style={styles.skillText}>• Python & Node.js</Text>
-            <Text style={styles.skillText}>• {t("Web security")}</Text>
-            <View style={styles.separator} />
-            <Text style={styles.sectionTitle}>{t("Soft Skills")}</Text>
-            <Text style={styles.skillText}>• {t("Communication")}</Text>
-            <Text style={styles.skillText}>• {t("Problem-solving & Critical thinking")}</Text>
-            <Text style={styles.skillText}>• {t("Time Management")}</Text>
-            <Text style={styles.skillText}>• {t("Client Management")}</Text>
-            <Text style={styles.skillText}>• {t("Continuous Learning Mindset")}</Text>
-            <View style={styles.separator} />
-            <Text style={styles.sectionTitle}>{t("Work Experience")}</Text>
-            <Text style={styles.skillText}>• Senior Web Developer at XYZ Company (2015-2020)</Text>
-            <Text style={styles.skillText}>• Lead Developer at ABC Corporation (2010-2015)</Text>
-            <Text style={styles.skillText}>• Lead SAP FI at 123 Enterprise (2005-2010)</Text>
-            <View style={styles.separator} />
-            <Text style={styles.receivedFilesText}>{t("View Journal")}</Text>
-            <View style={styles.fileRow}>
-              <Image
-                source={{
-                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/b79c39e1425278a7e41c51ee38aead4f0c299b3e3b1c3700672a00748cf50159?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                }}
-                style={styles.fileImage}
-              />
-              <View style={styles.fileInfo}>
-                <Text style={styles.fileName}>JoopMelcher.pdf</Text>
-                <Text style={styles.fileSize}>293 kb</Text>
-              </View>
-            </View>
-          </View>
+      <View style={styles.profileCard}>
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={styles.closeText}>✕</Text>
+        </TouchableOpacity>
+
+        <View style={styles.header}>
+          <Image
+            source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b" }}
+            style={styles.profileImage}
+          />
+          <Text style={styles.name}>{expertName || t("Expert Name")}</Text>
+          <Text style={styles.expertText}>{t("Expert in")} {expertCategory || t("Not Available")}</Text>
         </View>
-      </ScrollView>
+
+        <View style={styles.infoSection}>
+          <Text style={styles.email}>joopmelcher47@gmail.com</Text>
+          <Text style={styles.experienceText}>{t("15 years of experience")}</Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t("Skills")}</Text>
+          <Text style={styles.skillText}>• {t("Responsive Design")}</Text>
+          <Text style={styles.skillText}>• React, Node.js, Python</Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t("Location")}</Text>
+          <Text style={styles.skillText}>• {t("United Kingdom")}</Text>
+        </View>
+
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F8F8F8',
-    borderRadius: 10,
+    flex: 1,
+    backgroundColor: 'none',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
-  scrollViewContent: {
-    flexGrow: 1,
-    maxHeight: 500,
-  },
-  greenBox: {
-    backgroundColor: '#F8F8F8',
+  profileCard: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    width: 300,
     padding: 20,
-    width: 800,
-    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    alignItems: 'center',
   },
   closeButton: {
     position: 'absolute',
     top: 10,
     right: 10,
   },
-  content: {
-    marginTop: 50,
+  closeText: {
+    fontSize: 20,
+    color: '#A0AEC0',
+    fontFamily: "Roboto-Light",
   },
   header: {
-    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 15,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
-  },
-  statusDot: {
-    width: 6,
-    height: 6,
-    backgroundColor: 'green',
-    borderRadius: 3,
-    marginLeft: 5,
+    color: '#333',
+    fontFamily: "Roboto-Light",
   },
   expertText: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#A0AEC0',
-    fontFamily:"Roboto-Light"
+    fontFamily: "Roboto-Light",
   },
-  separator: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginVertical: 10,
+  infoSection: {
+    marginVertical: 15,
+    alignItems: 'center',
   },
   email: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#206C00',
-    fontFamily:"Roboto-Light"
+    fontFamily: "Roboto-Light",
   },
   experienceText: {
-    fontSize: 14,
-    color: 'black',
-    fontFamily:"Roboto-Light"
+    fontSize: 12,
+    color: '#333',
+    fontFamily: "Roboto-Light",
+  },
+  section: {
+    marginVertical: 10,
+    alignItems: 'flex-start',
+    width: '100%',
   },
   sectionTitle: {
     fontSize: 14,
-    color: '#206C00',
     fontWeight: '600',
-    fontFamily:"Roboto-Light"
+    color: '#206C00',
+    marginBottom: 5,
+    fontFamily: "Roboto-Light",
   },
   skillText: {
     fontSize: 12,
-    color: 'black',
+    color: '#333',
     marginTop: 5,
-    fontFamily:"Roboto-Light"
-  },
-  receivedFilesText: {
-    fontSize: 14,
-    color: '#A0AEC0',
-    marginTop: 10,
-    fontFamily:"Roboto-Light"
-  },
-  fileRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  fileImage: {
-    width: 35,
-    height: 35,
-  },
-  fileInfo: {
-    marginLeft: 5,
-  },
-  fileName: {
-    color: '#206C00',
-    fontFamily:"Roboto-Light"
-  },
-  fileSize: {
-    fontSize: 10,
-    color: '#A0AEC0',
-    fontFamily:"Roboto-Light"
+    fontFamily: "Roboto-Light",
   },
 });
 

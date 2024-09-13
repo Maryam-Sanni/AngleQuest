@@ -1,45 +1,146 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Picker, StyleSheet, Image } from "react-native";
 import Modal from "react-native-modal";
 import { Calendar } from "react-native-calendars";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState("01");
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedPeriod, setSelectedPeriod] = useState("AM");
+  const [availableDays, setAvailableDays] = useState([]);
+  const [availableTimes, setAvailableTimes] = useState({});
+  const [pressedDay, setPressedDay] = useState(null);
+  const [availabilityNotice, setAvailabilityNotice] = useState("");
+
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      const storedDays = await AsyncStorage.getItem('selectedUserDays');
+      const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
+
+      console.log('Stored Days:', storedDays);
+      console.log('Stored Times:', storedTimes);
+
+      setAvailableDays(storedDays ? storedDays.split(', ') : []);
+
+      if (storedTimes) {
+        // Check if storedTimes needs additional processing
+        const times = storedTimes.split(';').map(range => range.trim());
+        console.log('Parsed Times:', times);
+        setAvailableTimes({ '*': times });
+      }
+    };
+
+    fetchAvailability();
+  }, []);
+
+
 
   const handleDayPress = (day) => {
-    setSelectedDate(day.dateString);
+    if (isDayAvailable(day.dateString)) {
+      setPressedDay(day.dateString);
+      setSelectedDate(day.dateString);
+      setSelectedHour("01");
+      setSelectedMinute("00");
+      setSelectedPeriod("AM");
+      setAvailabilityNotice("");  // Clear notice when a new date is selected
+    }
   };
 
   const handleConfirm = () => {
+    console.log('handleConfirm function called'); // Ensure this line shows in console
+
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayOfWeek = days[new Date(selectedDate).getDay()];
-    const hour = selectedPeriod === "AM" ? selectedHour : parseInt(selectedHour, 10) + 12;
+
+    const hour = selectedPeriod === "AM" 
+      ? parseInt(selectedHour, 10) % 12 
+      : (parseInt(selectedHour, 10) % 12) + 12;
+    const selectedTime24Hour = `${hour < 10 ? '0' + hour : hour}:${selectedMinute.padStart(2, '0')}`;
+
+    const convertTo24Hour = (timeStr) => {
+      const [time, period] = timeStr.split(' ');
+      const [hour, minute] = time.split(':').map(Number);
+
+      let hour24 = hour;
+      if (period === 'AM') {
+        if (hour === 12) hour24 = 0; // Midnight case
+      } else {
+        if (hour !== 12) hour24 = hour + 12; // PM case, except for noon
+      }
+
+      return `${hour24 < 10 ? '0' + hour24 : hour24}:${minute < 10 ? '0' + minute : minute}`;
+    };
+
+
+    const isTimeAvailable = () => {
+      const availableRanges = availableTimes['*'] || []; // Check for wildcard entry
+      console.log('Available Ranges:', availableRanges);
+
+      return availableRanges.some(range => {
+        const [startTime, endTime] = range.split(' - ');
+
+        const startTime24 = convertTo24Hour(startTime);
+        const endTime24 = convertTo24Hour(endTime);
+
+        console.log('Selected Time (24-hour):', selectedTime24Hour);
+        console.log('Start Time (24-hour):', startTime24);
+        console.log('End Time (24-hour):', endTime24);
+
+        return selectedTime24Hour >= startTime24 && selectedTime24Hour <= endTime24;
+      });
+    };
+
+
+    if (!isTimeAvailable()) {
+      setAvailabilityNotice(t("Please choose a time between the available time for this expert."));
+      return;
+    }
+
+    setAvailabilityNotice("");  
     const time = `${selectedHour}:${selectedMinute} ${selectedPeriod}`;
-    const selectedDateTime = `${dayOfWeek}, ${selectedDate} ${time}`;
-  
-    // Get the timezone offset in hours and minutes
-    const timeZoneOffset = new Date().getTimezoneOffset();
-    const offsetHours = Math.abs(Math.floor(timeZoneOffset / 60));
-    const offsetMinutes = Math.abs(timeZoneOffset % 60);
-  
-    // Construct the timezone string
-    const timeZoneString = `GMT${timeZoneOffset < 0 ? '+' : '-'}${offsetHours}:${offsetMinutes}`;
-  
-    // Append the timezone to the selectedDateTime
-    const dateTimeWithTimeZone = `${selectedDateTime} (${timeZoneString})`;
+    const dateTimeWithTimeZone = `${dayOfWeek}, ${selectedDate} ${time}`;
     onConfirm(dateTimeWithTimeZone);
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
 
-  
+
+
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  const { t } = useTranslation();
+
+  const isDayAvailable = (day) => {
+    const dayOfWeek = new Date(day).toLocaleDateString('en-US', { weekday: 'short' });
+    return availableDays.includes(dayOfWeek);
+  };
+
+  const getAvailableTimes = () => {
+    if (selectedDate) {
+      return availableTimes[selectedDate] || [];
+    }
+    return [];
+  };
+
+  const generateAllTimes = () => {
+    const allTimes = [];
+    for (let hour = 1; hour <= 12; hour++) {
+      for (let minute = 0; minute < 60; minute += 5) {
+        const timeString = `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`;
+        allTimes.push(`${timeString} AM`);
+        allTimes.push(`${timeString} PM`);
+      }
+    }
+    return allTimes;
+  };
+
+
+
   return (
     <Modal isVisible={isVisible} onBackdropPress={onCancel}>
       <View style={styles.modalContainer}>
@@ -53,8 +154,25 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
               dotColor: 'green',
             },
           }}
-          minDate={new Date().toISOString().split('T')[0]} // Disable past dates
+          minDate={new Date().toISOString().split('T')[0]}
           style={styles.calendar}
+          dayComponent={({ date }) => {
+            const isAvailable = isDayAvailable(date.dateString);
+            return (
+              <TouchableOpacity
+                style={[styles.dayWrapper, !isAvailable && styles.unavailableDay]}
+                onPress={() => isAvailable && handleDayPress(date)}
+              >
+                <Text style={[
+                  styles.dayText, 
+                  !isAvailable && styles.unavailableDayText, 
+                  pressedDay === date.dateString && styles.pressedDayText
+                ]}>
+                  {date.day}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
           theme={{
             selectedDayBackgroundColor: '#135837',
             selectedDayTextColor: '#FFFFFF',
@@ -62,7 +180,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
             todayTextFontWeight: 'bold',
             arrowColor: 'black',
             textSectionTitleColor: 'black',
-            dotColor: '#135837', 
+            dotColor: '#135837',
             textDayHeaderFontFamily: 'Roboto-Light',
             textMonthFontWeight: '500',
           }}
@@ -101,6 +219,11 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
             <Picker.Item label="PM" value="PM" />
           </Picker>
         </View>
+
+        {availabilityNotice ? (
+          <Text style={styles.availabilityNotice}>{availabilityNotice}</Text>
+        ) : null}
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttoncancel} onPress={onCancel}>
             <Text style={styles.buttonText}>{t("Cancel")}</Text>
@@ -131,6 +254,27 @@ const styles = StyleSheet.create({
   calendar: {
     marginBottom: 10,
   },
+  dayWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    width: 40,
+  },
+  unavailableDay: {
+    opacity: 0.3,
+  },
+  unavailableDayText: {
+    textDecorationLine: 'line-through',
+    color: 'gray',
+  },
+  pressedDayText: {
+    color: 'white', 
+    backgroundColor: 'green',
+    width: 21,
+    height: 21,
+    borderRadius: 15,
+    textAlign: 'center',
+  },
   timePickerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -147,7 +291,9 @@ const styles = StyleSheet.create({
   },
   timeSeparator: {
     fontSize: 18,
-    fontFamily:"Roboto-Light"
+    fontWeight: 'bold',
+    marginRight: 10,
+    marginLeft: 5
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -155,7 +301,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   button: {
-     width: 100,
+    width: 100,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -169,14 +315,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#135837',
+    backgroundColor: '#DDDDDD',
     marginHorizontal: 5,
   },
   buttonText: {
     fontSize: 16,
-    fontFamily:"`Roboto-Light"
+    fontWeight: '600'
   },
+  availabilityNotice: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center'
+  }
 });
 
 export default DateTimePickerModal;
