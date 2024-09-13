@@ -226,7 +226,7 @@
           <Cards
             title={"Knowledge Gaps | Things that you need to learn"}
             desc={formatList(data?.knowledge_gaps).split('\n')[0]} 
-            bgColor={"#7f65bc"}
+            bgColor={"#4782bc"}
             top={100}
             left={300}
             handleFunc={() => {
@@ -237,9 +237,9 @@
             }}
           />
           <Cards
-            title={"Study Road Map | Structure to follow"}
+            title={"Study Road Map | What to begin from"}
             desc={formatList(data?.study_road_map).split('\n')[0]} // Only first line
-            bgColor={"#4782bc"}
+            bgColor={"#01bbb6"}
             top={230}
             right={80}
             handleFunc={() => {
@@ -252,7 +252,7 @@
           <Cards
             title={"Certifications & Courses | Certification to obtain"}
             desc={formatList(data?.certifications_and_courses).split('\n')[0]} // Only first line
-            bgColor={"#01bbb6"}
+            bgColor={"#2c9fc2"}
             top={250}
             left={100}
             handleFunc={() => {
@@ -263,11 +263,11 @@
             }}
           />
           <Cards
-            title={"Learning References | Sources for learning"}
+            title={"Learning References | How to learn your goals"}
             desc={formatList(data?.learning_references).split('\n')[0]} // Only first line
-            bgColor={"#2c9fc2"}
-            bottom={45}
-            right={170}
+            bgColor={"#206c00"}
+            top={topOffset + 300}
+            right={350}
             handleFunc={() => {
               setModalVisible2(true);
               setModalTitle("Learning References");
@@ -288,7 +288,31 @@
 
     // If there's no data
     if (!apiData) {
-      return <Text>No data available</Text>;
+      return (
+        <View style={{ flex: 1 }}>
+          <Top />
+          <View style={{ flexDirection: "row", flex: 1 }}>
+            <Sidebar />
+            <ImageBackground
+              source={require("../assets/backgroundimg2.png")}
+              style={{ height: "110%", width: "100%", flex: 1 }}
+            >
+              <View style={styles.glassBox}>
+                <View style={styles.container}>
+                  <View style={{ width: "20%", }}>
+                    <View style={{ marginBottom: 60 }}>
+                      <Image style={styles.image} source={BotIMG} />
+                    </View>
+                  </View>
+            <View style={{marginTop: 100, alignItems: 'center' }}>
+              <Text style={{fontSize: 18 }}>No data available, Please create a <Text style={{fontWeight: 'bold', fontSize: 20 }}>New Skill Analysis Session</Text></Text>
+            </View>
+                </View>
+              </View>
+            </ImageBackground>
+          </View>
+        </View>
+      );
     }
 
 
@@ -391,7 +415,7 @@
                             {apiData.analysis.current_proficiency_rating}
                           </Text>
                         </Text>
-                        
+
                       </View>
                       <View
                         style={{
