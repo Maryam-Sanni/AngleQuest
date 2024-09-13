@@ -226,7 +226,7 @@
           <Cards
             title={"Knowledge Gaps | Things that you need to learn"}
             desc={formatList(data?.knowledge_gaps).split('\n')[0]} 
-            bgColor={"#4782bc"}
+            bgColor={"#7f65bc"}
             top={100}
             left={300}
             handleFunc={() => {
@@ -239,7 +239,7 @@
           <Cards
             title={"Study Road Map | What to begin from"}
             desc={formatList(data?.study_road_map).split('\n')[0]} // Only first line
-            bgColor={"#01bbb6"}
+            bgColor={"#4782bc"}
             top={230}
             right={80}
             handleFunc={() => {
@@ -252,7 +252,7 @@
           <Cards
             title={"Certifications & Courses | Certification to obtain"}
             desc={formatList(data?.certifications_and_courses).split('\n')[0]} // Only first line
-            bgColor={"#2c9fc2"}
+            bgColor={"#01bbb6"}
             top={250}
             left={100}
             handleFunc={() => {
@@ -265,9 +265,9 @@
           <Cards
             title={"Learning References | How to learn your goals"}
             desc={formatList(data?.learning_references).split('\n')[0]} // Only first line
-            bgColor={"#206c00"}
-            top={topOffset + 300}
-            right={350}
+            bgColor={"#2c9fc2"}
+            bottom={45}
+            right={170}
             handleFunc={() => {
               setModalVisible2(true);
               setModalTitle("Learning References");
