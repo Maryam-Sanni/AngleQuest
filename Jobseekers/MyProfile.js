@@ -138,7 +138,7 @@ export default function Profile() {
                         </View>
                         <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
                           <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', fontWeight: '600', fontFamily: "Roboto-Light" }}>{t("Available Balance")}</Text>
-                          <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5, color: 'black', fontFamily: "Roboto-Light" }}>$22.00</Text>
+                          <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5, color: 'black', fontFamily: "Roboto-Light" }}>$0.00</Text>
                           <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#f7fff4', borderRadius: 5, borderWidth: 1, borderColor: '#206C00' }}>
                             <Text style={{ fontSize: 12, fontFamily: "Roboto-Light" }}>{t("Preview Profile")}</Text>
                           </TouchableOpacity>

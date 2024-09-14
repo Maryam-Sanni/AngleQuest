@@ -34,9 +34,10 @@ const ChatScopeUI = () => {
           <RoomList rooms={rooms} selectRoom={selectRoom} />
         </View>
 
-        {/* Main Chat Area */}
+
         <Room activeRoom={activeRoom} />
-      </View>
+         </View>
+
     </View>
   );
 };

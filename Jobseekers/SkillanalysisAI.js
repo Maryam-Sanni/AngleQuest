@@ -318,6 +318,12 @@ const MyComponent = ({ onClose }) => {
   };
 
   const handleQues = async () => {
+
+    if (!specialization || specialization.trim() === '') {
+      alert("Missing Specialization, include your target role", "Please enter the job title or specialization.");
+      return;
+    }
+    
     setSwitched(true);
     await fetchQuestions(); // Fetch questions when proceeding
   };

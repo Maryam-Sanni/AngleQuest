@@ -82,7 +82,7 @@ function MyComponent() {
                     textAlign: "left",
                   }}
                 >
-                  {t("Hi There!")}
+                  {t("Hi There, Scenario project is coming soon!")}
                 </Text>
 
                 <View style={styles.box}>

@@ -166,8 +166,8 @@
             top: top,
             bottom: bottom,
             padding: 10,
-            width: 215,
-            height: 100,
+            width: 225,
+            height: 110,
             gap: 5,
             backgroundColor: bgColor,
             borderRadius: 8,
@@ -188,7 +188,7 @@
             style={{
               color: "white",
               fontWeight: "400",
-              fontSize: 12,
+              fontSize: 13,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
@@ -204,6 +204,7 @@
               textDecorationLine: "underline",
               fontWeight: "500",
               fontSize: 14,
+              marginTop: 10
             }}
           >
             See more
@@ -225,7 +226,7 @@
         <>
           <Cards
             title={"Knowledge Gaps | Things that you need to learn"}
-            desc={formatList(data?.knowledge_gaps).split('\n')[0]} 
+            desc={formatList(data?.knowledge_gaps)} 
             bgColor={"#7f65bc"}
             top={100}
             left={300}
@@ -238,7 +239,7 @@
           />
           <Cards
             title={"Study Road Map | What to begin from"}
-            desc={formatList(data?.study_road_map).split('\n')[0]} // Only first line
+            desc={formatList(data?.study_road_map).split('\n')[0]}
             bgColor={"#4782bc"}
             top={230}
             right={80}

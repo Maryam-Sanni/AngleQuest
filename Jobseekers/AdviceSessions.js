@@ -183,6 +183,11 @@ function MyComponent() {
     }
   };
 
+  const gotoresult = () => {
+    navigation.navigate('AI Result');
+    onClose();
+  };
+  
     const handleOpenPress = () => {
        setModalVisible(true);
     };
@@ -210,19 +215,34 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=666666' }}
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55' }}
                   style={styles.image}
                 />
                 <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14,  marginTop: 5 }}>{t("Skill Analysis")}</Text>
                 </View>
             </TouchableOpacity>
             </View>
+                      <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
+                    <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
                   </View>
      </TouchableOpacity>
-
+                      <TouchableOpacity onPress={gotoresult}>
+                        <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                          <View style={{ flexDirection: "row" }}>
+                            <Image
+                              source={{
+                                uri: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=FFFFFF",
+                              }}
+                              style={{ width: 20, height: 20, marginRight: 10 }}
+                            />
+                                        <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("AngleQuest AI")}</Text>
+                          </View>
+                                      </View>
+                         </TouchableOpacity>
+                      </View>
+                      
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>

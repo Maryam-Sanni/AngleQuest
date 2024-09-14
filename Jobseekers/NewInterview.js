@@ -290,7 +290,7 @@
               </View>
              
             </View>
-            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, }}>{t("Expert's available days and time")}</Text>
+            <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, }}>{expert}'s {t("available days and time")}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
                 <View style={styles.cell}>
@@ -308,17 +308,10 @@
                   <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}</Text>
                 </View>
               </View>
-              <View style={styles.row}>
-                <View style={styles.cell}>
-                  <Text style={{ fontFamily: "Roboto-Light" }}>{t("Expert")}</Text>
-                </View>
-                <View style={styles.cell}>
-                  <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert}</Text>
-                </View>
-              </View>
+              
             </View>
 
-             <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, marginRight: 50 }}>{t("Select date and time for interview session.")} {expert} is available {expert_available_days} {expert_available_time}</Text>
+             <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: 5, marginLeft: 50, marginRight: 50 }}>{t("Select day and time for interview session.")}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
                 <View style={styles.cell}>
@@ -329,7 +322,7 @@
                     style={styles.dateTimeButton}
                     onPress={() => setIsModalVisible(true)}
                   >
-                    <Text style={{ fontFamily: "Roboto-Light" }}>
+                     <Text style={{ fontFamily: "Roboto-Light", color: 'blue', textDecorationLine: 'underline' }}>
                       {selectedDateTime
                         ? selectedDateTime.toLocaleString()
                         : t("Select Date and Time")}

@@ -215,7 +215,7 @@ function MyComponent() {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            backgroundColor: "#F3F3F3",
+            backgroundColor: "#d3f9d8",
           }}
         >
           <View
@@ -295,7 +295,7 @@ function MyComponent() {
       <Animated.View
         key={index}
         style={{
-          width: "25%",
+          width: "100%",
           paddingHorizontal: 5,
           marginBottom: 20,
           transform: [{ scale: scaleAnimations[index] }],
@@ -306,7 +306,8 @@ function MyComponent() {
         <View
           style={{
             width: "95%",
-            height: 300,
+            height: 200,
+            padding: 20,
             borderRadius: 5,
             shadowColor: "#000",
             shadowOffset: {
@@ -316,21 +317,20 @@ function MyComponent() {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            backgroundColor: "#d3f9d8",
+            backgroundColor: "white",
           }}
         >
+          <View style={{flexDirection: 'row'}}>
           <View
             style={{
               justifyContent: "center",
               alignSelf: "center",
-              width: "90%",
-              height: 110,
+              width: "20%",
+              height: 160,
               borderRadius: 5,
               backgroundColor: "#F0FFF9",
               marginRight: "4%",
-              marginLeft: 10,
               alignItems: "center",
-              marginTop: 20,
               borderWidth: 1,
               borderColor: "#206C00",
             }}
@@ -367,79 +367,100 @@ function MyComponent() {
                 }}
               />
             </View>
-            <Text
-              style={{
-                fontSize: 12,
-                color: "black",
-                fontWeight: "600",
-                marginTop: 5,
-              }}
-            >
-              {data.category}
-            </Text>
-            <Text style={{ fontSize: 13, color: "#206C00", marginTop: 10 }}>
-              {data.meeting_day}
-            </Text>
-            <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 5 }}>
-              {data.from} - {data.to}
-            </Text>
           </View>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               marginLeft: 10,
+              width: '45%' 
             }}
           >
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 20,
                   color: "#000",
                   fontWeight: "600",
-                  marginTop: 20,
                 }}
               >
                 {data.coaching_hub_name}
               </Text>
-              <Text style={{ fontSize: 12, color: "black", fontWeight: "400" }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "grey",
+                  fontWeight: "600",
+                  marginTop: 5,
+                }}
+              >
+                {data.category}
+              </Text>
+              <Text style={{ fontSize: 14, color: "lightgrey", fontWeight: "400" }}>
                 {t("Coach")}: {data.expert_name}
+              </Text>
+             
+              
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "#888",
+                  marginTop: 10,
+                  height: 50,
+                }}
+              >
+                {data.coaching_hub_description}
               </Text>
             </View>
           </View>
-          <Text
-            style={{
-              fontSize: 12,
-              color: "#888",
-              marginTop: 10,
-              marginLeft: 10,
-              height: 50,
-            }}
-          >
-            {data.coaching_hub_description}
-          </Text>
+
+            <View style={{flexDirection: 'column', alignSelf: 'center', marginLeft: 50 }}>
+              <View style={{ flexDirection: "row" }}>
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=84997&format=png&color=2D2D2D",
+                  }}
+                  style={{ width: 20, height: 20, marginRight: 10 }}
+                />
+            <Text style={{ fontSize: 14, color: "#1C1C1C",  }}>
+              {data.meeting_day}s
+            </Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=10034&format=png&color=2D2D2D",
+                  }}
+                  style={{ width: 20, height: 20, marginRight: 10, marginTop: 5 }}
+                />
+            <Text style={{ fontSize: 14, color: "#1C1C1C", marginTop: 5 }}>
+              {data.from} - {data.to}
+            </Text>
+              </View>
+              <TouchableOpacity
+                onPressIn={() => handleJoinPressIn(index)}
+                onPressOut={handleJoinPressOut}
+                style={{
+                  borderWidth: 1,
+                    borderColor: 'darkgreen',
+                    borderRadius: 5,
+                    paddingHorizontal: 50,
+                    paddingVertical: 5,
+                    marginTop: 15,
+                    width: "90%",
+                    alignSelf: "center",
+                    justifyContent: 'center',
+                    marginLeft: 10,
+                    marginRight: 10,
+                  backgroundColor: isPressed[index] ? 'darkgreen' : 'lightgreen',
+                }}
+                onPress={joinCourse} >
+              <Text style={{ color: isPressed[index] ? '#fff' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
+              </TouchableOpacity>
+          </View>
+            
+        </View>
           
-          <TouchableOpacity
-            onPressIn={() => handleJoinPressIn(index)}
-            onPressOut={handleJoinPressOut}
-            style={{
-              borderWidth: 1,
-                borderColor: '#206C00',
-                backgroundColor: "#F0FFF9",
-                borderRadius: 5,
-                paddingHorizontal: 50,
-                paddingVertical: 5,
-                marginTop: 15,
-                width: "90%",
-                alignSelf: "center",
-                justifyContent: 'center',
-                marginLeft: 10,
-                marginRight: 10,
-              backgroundColor: isPressed[index] ? 'darkgreen' : '#F0FFF9',
-            }}
-            onPress={joinCourse} >
-          <Text style={{ color: isPressed[index] ? '#fff' : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
-          </TouchableOpacity>
         </View>
       </Animated.View>
     ));
@@ -462,66 +483,10 @@ function MyComponent() {
             <Sidebar />
             <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
               <View style={styles.glassBox}>
-                <View style={styles.pagecontainer}>
                   <View style={{ flex: 1 }}>
-                    <View style={styles.header}>
-                      <TouchableOpacity
-                        onPress={goToMyHubs}
-                        underlayColor={
-                          isOthersHovered ? "transparent" : "transparent"
-                        }
-                        onMouseEnter={() => setIsOthersHovered(true)}
-                        onMouseLeave={() => setIsOthersHovered(false)}
-                      >
-                        <View style={styles.item}>
-                          <Image
-                            source={{
-                              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                            }}
-                            style={styles.image}
-                          />
-                          <Text
-                            style={[
-                              styles.headertext,
-                              isOthersHovered && { color: "coral" },
-                            ]}
-                          >
-                            {t("View All Courses")}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={goToHubs}
-                        underlayColor={
-                          isAllHovered ? "transparent" : "transparent"
-                        }
-                        onMouseEnter={() => setIsAllHovered(true)}
-                        onMouseLeave={() => setIsAllHovered(false)}
-                      >
-                        <View style={styles.item}>
-                          <Image
-                            source={{
-                              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                            }}
-                            style={styles.image2}
-                          />
-                          <Text
-                            style={[
-                              styles.headertext,
-                              isAllHovered && { color: "coral" },
-                            ]}
-                          >
-                            {t("Join New Hub")}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-
-                    
-
                     <Text
                       style={{
-                        color: "darkgreen",
+                        color: "#63EC55",
                         fontWeight: "bold",
                         marginTop: 30,
                         marginRight: 50,
@@ -533,7 +498,7 @@ function MyComponent() {
                     </Text>
                     <Text
                       style={{
-                        color: "grey",
+                        color: "black",
                         fontWeight: 600,
                         marginTop: 10,
                         marginRight: 50,
@@ -569,7 +534,7 @@ function MyComponent() {
                     </Text>
                     <Text
                       style={{
-                        color: "grey",
+                        color: "white",
                         fontWeight: 600,
                         marginTop: 10,
                         marginRight: 50,
@@ -604,7 +569,7 @@ function MyComponent() {
                     </View>
                   </View>
                 </View>
-              </View>
+         
             </ScrollView>
           </View>
         </View>
@@ -637,7 +602,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   pagecontainer: {
-    backgroundColor: "#f7fff4",
+    backgroundColor: "none",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     padding: 20,

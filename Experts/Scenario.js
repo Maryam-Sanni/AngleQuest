@@ -73,7 +73,17 @@ function MyComponent() {
                 >
                   {t("This is a guided scenario based project")}
                 </Text>
-
+                <Text
+                  style={{
+                    color: "coral",
+                    fontSize: 24,
+                    fontWeight: "600",
+                    marginTop: 5,
+                    textAlign: "left",
+                  }}
+                >
+                  {t("Hi There, Scenario project is coming soon!")}
+                </Text>
                  <View style={{flexDirection: 'row'}}>
                 <View style={styles.viewbox}>
                   <View style={{justifyContent: 'center', alignItems: 'center'}}>

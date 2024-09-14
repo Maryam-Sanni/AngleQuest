@@ -13,6 +13,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedPeriod, setSelectedPeriod] = useState("AM");
   const [availableDays, setAvailableDays] = useState([]);
   const [availableTimes, setAvailableTimes] = useState({});
+  const [StoredTimes, setStoredTimes] = useState({});
   const [pressedDay, setPressedDay] = useState(null);
   const [availabilityNotice, setAvailabilityNotice] = useState("");
 
@@ -31,6 +32,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         const times = storedTimes.split(';').map(range => range.trim());
         console.log('Parsed Times:', times);
         setAvailableTimes({ '*': times });
+        setStoredTimes(storedTimes);
       }
     };
 
@@ -139,12 +141,12 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     return allTimes;
   };
 
-
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onCancel}>
       <View style={styles.modalContainer}>
-        <Text style={styles.headerText}>{t("What day & time works best for you?")}</Text>
+        <Text style={styles.headerText}>{t("What day between")} {availableDays.join(', ')} {StoredTimes} {t("works best for you?")}</Text>
         <Calendar
           onDayPress={handleDayPress}
           markedDates={{
@@ -153,6 +155,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
               marked: true,
               dotColor: 'green',
             },
+            [new Date(today).setDate(new Date(today).getDate() - 1)]: { disabled: true }
           }}
           minDate={new Date().toISOString().split('T')[0]}
           style={styles.calendar}
