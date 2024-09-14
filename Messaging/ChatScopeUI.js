@@ -34,8 +34,9 @@ const ChatScopeUI = () => {
           <RoomList rooms={rooms} selectRoom={selectRoom} />
         </View>
 
-
+         <View style={{ flex: 1}}>
         <Room activeRoom={activeRoom} />
+         </View>
          </View>
 
     </View>

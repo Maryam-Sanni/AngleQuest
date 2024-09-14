@@ -295,7 +295,7 @@ function MyComponent() {
       <Animated.View
         key={index}
         style={{
-          width: "100%",
+          width: "50%",
           paddingHorizontal: 5,
           marginBottom: 20,
           transform: [{ scale: scaleAnimations[index] }],
@@ -328,52 +328,18 @@ function MyComponent() {
               width: "20%",
               height: 160,
               borderRadius: 5,
-              backgroundColor: "#F0FFF9",
+              backgroundColor: "lightgreen",
               marginRight: "4%",
               alignItems: "center",
-              borderWidth: 1,
-              borderColor: "#206C00",
             }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=117557&format=png&color=000000",
-                }}
-                style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20 }}
-              />
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=m4bxQHJfLWpO&format=png&color=000000",
-                }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  aspectRatio: 1,
-                  marginLeft: -10,
-                  marginTop: 20,
-                }}
-              />
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=113989&format=png&color=000000",
-                }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  aspectRatio: 1,
-                  marginLeft: -10,
-                  marginTop: 20,
-                }}
-              />
-            </View>
+          > 
           </View>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               marginLeft: 10,
-              width: '45%' 
+              width: '25%' 
             }}
           >
             <View style={{ flex: 1, }}>
@@ -420,20 +386,20 @@ function MyComponent() {
                   source={{
                     uri: "https://img.icons8.com/?size=100&id=84997&format=png&color=2D2D2D",
                   }}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
+                  style={{ width: 18, height: 18, marginRight: 10 }}
                 />
-            <Text style={{ fontSize: 14, color: "#1C1C1C",  }}>
+            <Text style={{ fontSize: 13, color: "#1C1C1C",  }}>
               {data.meeting_day}s
             </Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
                 <Image
                   source={{
-                    uri: "https://img.icons8.com/?size=100&id=10034&format=png&color=2D2D2D",
+                    uri: "https://img.icons8.com/?size=100&id=22617&format=png&color=2D2D2D",
                   }}
-                  style={{ width: 20, height: 20, marginRight: 10, marginTop: 5 }}
+                  style={{ width: 18, height: 18, marginRight: 10, marginTop: 5 }}
                 />
-            <Text style={{ fontSize: 14, color: "#1C1C1C", marginTop: 5 }}>
+            <Text style={{ fontSize: 13, color: "#1C1C1C", marginTop: 5 }}>
               {data.from} - {data.to}
             </Text>
               </View>
@@ -447,7 +413,7 @@ function MyComponent() {
                     paddingHorizontal: 50,
                     paddingVertical: 5,
                     marginTop: 15,
-                    width: "90%",
+                    width: "80%",
                     alignSelf: "center",
                     justifyContent: 'center',
                     marginLeft: 10,
@@ -489,8 +455,8 @@ function MyComponent() {
                         color: "#63EC55",
                         fontWeight: "bold",
                         marginTop: 30,
-                        marginRight: 50,
-                        marginLeft: 60,
+                        marginRight: 30,
+                        marginLeft: 40,
                         fontSize: 18,
                       }}
                     >
@@ -501,8 +467,8 @@ function MyComponent() {
                         color: "black",
                         fontWeight: 600,
                         marginTop: 10,
-                        marginRight: 50,
-                        marginLeft: 60,
+                        marginRight: 30,
+                        marginLeft: 40,
                       }}
                     >
                       {t(
@@ -514,8 +480,8 @@ function MyComponent() {
                         flexDirection: "row",
                         flexWrap: "wrap",
                         marginTop: 20,
-                        marginRight: 50,
-                        marginLeft: 50,
+                        marginRight: 30,
+                        marginLeft: 30,
                       }}
                     >
                       {renderCards()}
