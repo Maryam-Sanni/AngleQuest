@@ -25,8 +25,8 @@ const CustomModal = ({ visible, onClose }) => {
         onRequestClose={onClose}
       >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-        <View style={{ width: 150, height: 25, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 235 } }>
-        <Text style={{ textAlign: 'center' }}>Growth Plan</Text>
+        <View style={{ width: 150, height: 30, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 235 } }>
+        <Text style={{ textAlign: 'center', marginTop: 5 }}>Growth Plan</Text>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 220, position: "fixed", top: 220 }}>
           <View style={{ backgroundColor: '#f7fff4', padding: 20, borderRadius: 10 }}>
@@ -66,7 +66,8 @@ const styles = {
     alignItems: 'center',
   },
   closeButton: {
-    marginLeft: 200,
+    position: 'absolute',
+      right: 20
     },
   closeButtonText: {
     fontSize: 18,

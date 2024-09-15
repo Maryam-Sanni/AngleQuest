@@ -114,8 +114,8 @@ try {
   const payload = {
      jobseeker_id: data?.user_id, // Convert jobseeker_id to a string
     growth_plan_id: String(data?.id),
-    coach: data?.name,
     remark: remark,
+    coach: data?.name,
     expert_name: `${firstName} ${lastName}`,
     rating: rating,
     completed: completed,
@@ -252,7 +252,7 @@ try {
                 <TextInput
                   style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
                   placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
-                  value={data?.remark}
+               
                   placeholderTextColor="grey"
                    multiline={true}
                   onChangeText={text => setRemark(text)}

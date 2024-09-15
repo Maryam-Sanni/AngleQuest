@@ -299,8 +299,8 @@ export default function Profile() {
           {/* Profile Description */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20}}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Roboto-Light" }}>
-                        {t("About")} </Text> 
+                      <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '600', color: '#206C00', fontFamily:"Roboto-Light" }}>
+                        {t("About Me")} </Text> 
                         <TouchableOpacity onPress={() => setAboutModalVisible(true)} style={{ marginLeft: 10 }}>
                         <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
@@ -320,7 +320,7 @@ export default function Profile() {
           {/* Skills */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Roboto-Light"
+        <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: 'bold', color: '#206C00',    fontFamily:"Roboto-Light"
  }}>{t("Technical Skills")}</Text>
         <TouchableOpacity onPress={handleOpenSkills}>
           <Image
@@ -353,7 +353,7 @@ export default function Profile() {
                            {/* Certifications */}
                            <View style={{ marginTop: 20, marginRight: 30 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
+        <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00' ,    fontFamily:"Roboto-Light"
 }}>{t("Certifications")}</Text>
         <TouchableOpacity onPress={handleOpenCertifications}>
           <Image
@@ -385,7 +385,7 @@ export default function Profile() {
                      {/*Location*/}
                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
+                      <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
  }}>{t("Location")}</Text>
                       <TouchableOpacity onPress={handleOpenPreferredLocations}>
                         <Image
@@ -418,7 +418,7 @@ export default function Profile() {
                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                     <View style={{ marginTop: 20, marginRight: 30 }}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
+                        <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
                           {t('Specialization')}
                         </Text>
                         <TouchableOpacity onPress={handleOpenPreferredRoles}>
@@ -443,7 +443,7 @@ export default function Profile() {
            <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
            <View style={{ marginTop: 20, marginRight: 30 }}>
              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-               <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
+               <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
                  {t('What do you do at')} {preferredRole}?
                </Text>
               

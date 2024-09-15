@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Modal, Text, TouchableOpacity } from 'react-native';
-import OpenModal from '../components/Tour5';
+import OpenModal from '../components/Tour1';
 
 const CustomModal = ({ visible, onClose }) => {
   const [mainModalVisible, setMainModalVisible] = useState(visible);
@@ -24,20 +24,20 @@ const CustomModal = ({ visible, onClose }) => {
         visible={mainModalVisible}
         onRequestClose={onClose}
       >
-         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-         <View style={{ width: 150, height: 30, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 325 } }>
-        <Text style={{ textAlign: 'center', marginLeft: -20, marginTop: 5}}>Interview</Text>
+        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+        <View style={{ width: 150, height: 30, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 190 } }>
+        <Text style={{ textAlign: 'center', marginTop: 5 }}>Skill Analysis</Text>
         </View>
-        <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 220, position: "fixed", top: 310 }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 220, position: "fixed", top: 180 }}>
           <View style={{ backgroundColor: '#f7fff4', padding: 20, borderRadius: 10 }}>
           <View style={{flexDirection: "row" } }>
           <View style={{width: 15, height: 15, borderRadius: 10, backgroundColor: '#63EC55', marginRight: 10, marginTop: 5 } }/>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Conduct Interviews </Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Access Individual skills after AI analysis</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}> ✕</Text>
               </TouchableOpacity>
             </View>
-            <Text style={{ marginBottom: 20 }}>Evaluate candidates and assess their skills to make informed decisions.</Text>
+            <Text style={{ marginBottom: 20 }}>Engage in advice sessions, share expertise and support professional growth.</Text>
             <TouchableOpacity onPress={handleOpenPress} style={{ marginBottom: 10, padding: 8, backgroundColor: 'coral', borderRadius: 5, width: 100  }}>
               <Text style={{ color: 'white', textAlign: 'center' }}>Next</Text>
             </TouchableOpacity>
@@ -46,7 +46,7 @@ const CustomModal = ({ visible, onClose }) => {
         </View>
       </Modal>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={handleCloseModal}

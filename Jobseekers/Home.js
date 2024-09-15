@@ -6,7 +6,7 @@ import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
 import SuggestionModal from '../components/Suggestion';
 import HelpModal from '../components/Help';
-import CustomModal from '../components/CustomModal'; 
+import CustomModal from '../Jobseekers/TourGuide'; 
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from '../Jobseekers/SkillanalysisAI';
 import OpenModal3 from '../Jobseekers/Pickyourcoach';

@@ -7,6 +7,7 @@ import OpenModal4 from '../components/Createhubform';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 function MyComponent({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -17,6 +18,7 @@ function MyComponent({ onClose }) {
   const [interviewStatus, setinterviewStatus] = useState('Pending');
   const [SkillAnalysisStatus, setSkillAnalysisStatus] = useState('Pending')
   const [NewHubStatus, setNewHubStatus] = useState('Pending');
+  const navigation = useNavigation();
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -184,6 +186,11 @@ function MyComponent({ onClose }) {
     setModalVisible4(false);
   };
 
+  const goToGrowth = () => {
+    navigation.navigate('Profile');
+    onClose();
+  };
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
       <View style={styles.greenBox}>
@@ -215,6 +222,21 @@ function MyComponent({ onClose }) {
               />
             </View>
             <View style={{ flexDirection: 'column' }}>
+              <View style={styles.input}>
+                <Text style={{ fontWeight: '500', fontSize: 16, fontFamily: "Roboto-Light" }}>
+                  {t("Your Viewers Profile")} <Text style={{ fontWeight: '500', fontSize: 14, color: 'black', marginLeft: 5, fontFamily: "Roboto-Light" }}>{t(growthPlanStatus)}</Text>
+                </Text>
+              </View>
+
+              <TouchableOpacity 
+                onPress={handleOpenPress2} 
+                style={[styles.buttonind, interviewStatus === 'Done' && styles.buttonDone]}
+                disabled={interviewStatus === 'Done'}
+              >
+                <Text style={[styles.buttonTextplus, interviewStatus === 'Done' && styles.buttonTextDone]}>
+                  {interviewStatus === 'Done' ? t("Profile Created") : t("Create Interview Profile")}
+                </Text>
+              </TouchableOpacity>
               <View style={styles.input}>
                 <Text style={{ fontWeight: '500', fontSize: 16, fontFamily: "Roboto-Light" }}>
                   {t("Growth Plan")} <Text style={{ fontWeight: '500', fontSize: 14, color: 'black', marginLeft: 5, fontFamily: "Roboto-Light" }}>{t(growthPlanStatus)}</Text>

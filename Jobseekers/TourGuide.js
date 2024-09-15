@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { Video } from 'expo-av';
-import OpenModal from '../components/Tour0';
+import OpenModal from '../components/Tour0b';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -41,12 +41,18 @@ function MyComponent({ onClose }) {
 
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <Video
-                ref={videoRef}
-                source={require('../assets/taketourexpert.mp4')}
-                style={styles.video}
-                useNativeControls
-                onLoad={() => videoRef.current.playAsync()}
+                source={require('../assets/VR.mp4')}
+                style={{
+                  width: 1000, 
+                  height: 300,
+                  marginTop: 50,
+                  borderRadius: 10,
+                  alignSelf: 'center', 
+                }}
+                resizeMode="contain" 
+                isLooping
                 shouldPlay
+                isMuted
               />
             </View>
 
@@ -86,8 +92,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greenBox: {
-    width: '70%',
-    height: 600,
+    width: '80%',
+    height: 500,
     backgroundColor: 'white',
     borderRadius: 10,
   },

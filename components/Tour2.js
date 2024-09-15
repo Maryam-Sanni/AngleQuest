@@ -25,19 +25,19 @@ const CustomModal = ({ visible, onClose }) => {
         onRequestClose={onClose}
       >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-        <View style={{ width: 150, height: 25, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 285 } }>
-        <Text style={{ textAlign: 'center', marginLeft: -10, }}>Interview</Text>
+        <View style={{ width: 150, height: 30, backgroundColor: '#f7fff4', borderRadius: 10, borderWidth: 2, marginLeft: 25, position: "fixed", top: 285 } }>
+        <Text style={{ textAlign: 'center', marginLeft: -30, marginTop: 5 }}>Hubs</Text>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginLeft: 220, position: "fixed", top: 270 }}>
           <View style={{ backgroundColor: '#f7fff4', padding: 20, borderRadius: 10 }}>
           <View style={{flexDirection: "row" } }>
           <View style={{width: 15, height: 15, borderRadius: 10, backgroundColor: '#63EC55', marginRight: 10, marginTop: 5 } }/>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Conduct Interviews</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Create and Manage Hubs</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}> ✕</Text>
               </TouchableOpacity>
             </View>
-            <Text style={{ marginBottom: 20 }}>Evaluate candidates and assess their skills to make informed decisions.</Text>
+            <Text style={{ marginBottom: 20 }}>Facilitate coaching sessions, track progress and engage with participants.</Text>
             <TouchableOpacity onPress={handleOpenPress} style={{ marginBottom: 10, padding: 8, backgroundColor: 'coral', borderRadius: 5, width: 100  }}>
               <Text style={{ color: 'white', textAlign: 'center' }}>Next</Text>
             </TouchableOpacity>
@@ -66,7 +66,8 @@ const styles = {
     alignItems: 'center',
   },
   closeButton: {
-    marginLeft: 210,
+    position: 'absolute',
+      right: 20
     },
   closeButtonText: {
     fontSize: 18,
