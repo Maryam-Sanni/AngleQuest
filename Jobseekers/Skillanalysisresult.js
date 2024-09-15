@@ -167,7 +167,7 @@
             bottom: bottom,
             padding: 10,
             width: 225,
-            height: 110,
+            height: 130,
             gap: 5,
             backgroundColor: bgColor,
             borderRadius: 8,
@@ -189,10 +189,10 @@
               color: "white",
               fontWeight: "400",
               fontSize: 13,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              marginTop: 5,
             }}
+            numberOfLines={5}
+            ellipsizeMode="tail" 
           >
             {desc}
           </Text>

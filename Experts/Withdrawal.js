@@ -36,13 +36,13 @@ function MyComponent() {
             const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <View style={{backgroundColor: '#11412C', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270, backgroundColor: '#f7fff4'}}>
+        <View style={{ marginLeft: 270, backgroundColor: '#11412C'}}>
           <View style={styles.header}>
             <TouchableOpacity onPress={goToOffers} 
             underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
@@ -65,8 +65,8 @@ function MyComponent() {
             
           </View>
           <TouchableOpacity onPress={handleOpenPress} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'rgba(0,0,0,0.4)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50,  }}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Request Withdrawal")}</Text>
+    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'rgba(225,225,212,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50,  }}>
+                    <Text style={{ fontSize: 13, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Request Withdrawal")}</Text>
                   </View>
      </TouchableOpacity>
 
@@ -85,8 +85,8 @@ function MyComponent() {
       </Modal>
  <Transactions />
 
-<View style={{ marginTop: 20, marginHorizontal: 5, marginLeft: 50 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  <View style={styles.greenBox}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginLeft: 50, }}>
             <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/bd6743481c726e33bcb35466888d1e3911e6448a2e87aa46de6fd902c814c762?' }}
               style={{ width: 80, height: 20, marginRight: 50, marginTop: -40 }}
@@ -100,7 +100,7 @@ function MyComponent() {
               <Text style={{ color: 'coral', fontSize: 14,fontFamily:"Roboto-Light" }}>{t("Set up")}</Text>
             </TouchableOpacity>
           </View>
-        </View>
+       
              <View style={{ marginTop: 20, marginLeft: 50, }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Image
@@ -133,7 +133,7 @@ function MyComponent() {
             </TouchableOpacity>
           </View>
         </View>       
-             
+              </View>
 </View>
           
           
@@ -178,6 +178,18 @@ const styles = StyleSheet.create({
     height: 24,
     marginRight: 5,
     marginLeft: 100
+  },
+  greenBox: {
+   width: "90%",
+    paddingBottom: 10,
+    marginBottom: 20,
+    marginLeft: 50, 
+    borderRadius: 20,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    marginTop: 50,
+    padding: 20
   },
 });
 

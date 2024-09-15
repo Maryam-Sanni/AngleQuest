@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import { BlurView } from 'expo-blur';
 
 
 const BillingSettingsPage = () => {
@@ -12,11 +13,12 @@ const BillingSettingsPage = () => {
 
 
   const [currentPlan] = useState('Standard');
-  const [amount] = useState('$80.00');
-  const [renewalDateG] = useState('April 30, 2024');
-  const [renewalDateA] = useState('July 26, 2025');
-  const [renewalDateH] = useState('December 17, 2024');
-  const [renewalDateI] = useState('August 01, 2025');
+  const [amount] = useState('$840.00');
+  const [amount2] = useState('$50.00');
+  const [amount3] = useState('$65.00');
+  const [renewalDateG] = useState('Dec 30, 2024');
+  const [renewalDateA] = useState('Nov 26, 2025');
+  const [renewalDateH] = useState('Apr 30, 2025');
   const [paymentMethod] = useState('•••• 1234');
   const [expiryDate] = useState('Expires 06/2024');
   const [billingHistory] = useState([
@@ -44,7 +46,10 @@ const BillingSettingsPage = () => {
       const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <ImageBackground
+        source={require ('../assets/backgroundimg2.png') }
+      style={{ height: '100%', width: '100%',flex: 1}}
+    >
     <View style={{ flex: 1 }}>
       <TopBar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -56,22 +61,25 @@ const BillingSettingsPage = () => {
             <View style={styles.container}>
               <Text style={styles.sectionTitle}>{t("CURRENT PLANS")}</Text>
               <View style={styles.divider} />
-              <Text style={styles.planText}>{t("Growth Plan")}</Text>
-              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
-              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateG}</Text>
-              <Text style={styles.planText}>{t("Advice Sessions")}</Text>
-              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
+               <View style={styles.greenBox}>
+                  <BlurView intensity={50} style={styles.blurBackground}>
+              <Text style={styles.planText}>{t("This plan covers HUB SESSIONS, COURSES, SKILL ANALYSIS SESSIONS, GROWTH PLANS AND INTERVIEW SESSIONS")}</Text>
+              <Text style={styles.amountText}>{amount} <Text style={styles.smallamountText}>{t("per year")}</Text></Text>
               <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateA}</Text>
-              <Text style={styles.planText}>{t("Hubs")}</Text>
-              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
-              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateH}</Text>
-              <Text style={styles.planText}>{t("Interview Session")}</Text>
-              <Text style={styles.amountText}>{amount} {t("per month")}</Text>
-              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateI}</Text>
               
+              <Text style={styles.planText}>Microsoft Mayhem Hub</Text>
+              <Text style={styles.amountText}>{amount2} <Text style={styles.smallamountText}>{t("per month")}</Text></Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateG}</Text>
+              <Text style={styles.planText}>SAP Friends</Text>
+              <Text style={styles.amountText}>{amount3} <Text style={styles.smallamountText}>{t("per month")}</Text></Text>
+              <Text style={styles.renewalDateText}>{t("Your plan renews on")}: {renewalDateH}</Text>
+                  </BlurView>
+               </View>
 
               <Text style={styles.sectionTitle}>{t("PAYMENT METHOD")}</Text>
               <View style={styles.divider} />
+              <View style={styles.greenBox}>
+                <BlurView intensity={50} style={styles.blurBackground}>
               <View style={styles.paymentMethodContainer}>
                 <Text style={styles.paymentMethodType}>VISA</Text>
                 <Text style={styles.paymentMethodText}>{paymentMethod}</Text>
@@ -85,14 +93,20 @@ const BillingSettingsPage = () => {
                   <Text style={styles.buttonText}>{t("Delete Card")}</Text>
                 </TouchableOpacity>
               </View>
+                </BlurView>
+              </View>
               <Text style={styles.sectionTitle}>{t("BILLING HISTORY")}</Text>
               <View style={styles.divider} />
+              <View style={styles.greenBox}>
+                <BlurView intensity={50} style={styles.blurBackground}>
               {billingHistory.map((entry, index) => (
                 <View key={index} style={styles.historyEntry}>
                   <Text style={{fontFamily:"Roboto-Light"}}>{t("Date")}: {entry.date}</Text>
                   <Text style={{fontFamily:"Roboto-Light"}}>{t("Amount")}: {entry.amount}</Text>
                 </View>
               ))}
+                </BlurView>
+              </View>
             </View>
            
               
@@ -100,7 +114,7 @@ const BillingSettingsPage = () => {
         </ScrollView>
       </View>
     </View>
-    </View>
+     </ImageBackground>
   );
 };
 
@@ -111,11 +125,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 50,
     marginBottom: 5,
-    color: '#206C00',
+    color: 'white',
     fontFamily:"Roboto-Light"
   },
   sectionTitlefirst: {
@@ -140,6 +154,12 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"
   },
   amountText: {
+    fontSize: 24,
+    color: 'black',
+    fontWeight: '400',
+    fontFamily:"Roboto-Light"
+  },
+  smallamountText: {
     fontSize: 14,
     color: 'black',
     fontWeight: '400',
@@ -233,6 +253,20 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 20,
     marginBottom: 5,
+  },
+  greenBox: {
+   width: "90%",
+    marginBottom: 20,
+    borderRadius: 20,
+    backgroundColor: 'rgba(225,255,212,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    marginTop: 20,    
+  },
+  blurBackground: {
+    flex: 1, 
+    borderRadius: 20, 
+    padding: 20
   },
 });
 

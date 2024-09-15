@@ -46,6 +46,7 @@ function MyComponent({ onClose }) {
                 style={styles.video}
                 useNativeControls
                 onLoad={() => videoRef.current.playAsync()}
+                shouldPlay
               />
             </View>
 

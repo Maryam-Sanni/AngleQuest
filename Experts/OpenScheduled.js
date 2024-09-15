@@ -32,7 +32,7 @@ function MyComponent({ onClose }) {
     // Add any additional logic here, such as marking the task as completed
   };
   
-  const handlePress = () => {
+  const handlePressed = () => {
     onClose();
   };
 
@@ -98,7 +98,7 @@ function MyComponent({ onClose }) {
     setQuestions(newQuestions);
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handlePress = async () => {
     if (!remark || !rating ) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
@@ -142,7 +142,7 @@ function MyComponent({ onClose }) {
   } catch (error) {
     console.error('Error marking as completed', error);
   }
-
+    onClose();
   };
 
     const hideAlert = () => {
@@ -282,7 +282,7 @@ function MyComponent({ onClose }) {
           </View>
   <View style={{flexDirection: 'row'}}>
 
-    <TouchableOpacity style={styles.checkcontainer} onPress={handleMarkAsCompleted}>
+    <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>
       <Image
         source={{
           uri: isChecked 

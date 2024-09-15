@@ -287,7 +287,6 @@ function MyComponent({ onClose }) {
              style={styles.picker}
              onValueChange={(itemValue) => setRating(itemValue)}
   >
-            <Picker.Item label="Replan" value="Replan" />
             <Picker.Item label="Fair" value="Fair" />
             <Picker.Item label="Good" value="Good" />
             <Picker.Item label="Brilliant" value="Brilliant" />

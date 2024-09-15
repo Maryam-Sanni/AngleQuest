@@ -24,7 +24,6 @@ const HomePage = () => {
   const [isHovered6, setIsHovered6] = useState(false);
   const [isHovered7, setIsHovered7] = useState(false);
   const [isHovered8, setIsHovered8] = useState(false);
-  const [isHovered9, setIsHovered9] = useState(false);
   const [isHovered10, setIsHovered10] = useState(false);
   const [isHovered11, setIsHovered11] = useState(false);
   const [isHovered12, setIsHovered12] = useState(false);
@@ -45,80 +44,11 @@ const HomePage = () => {
       latestSkillAnalysis: {}
   })
  
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      console.log("Token retrieved:", token);
 
-      if (token) {
-        const response = await axios.get(
-          "https://recruitangle.com/api/expert/getAllJobSeekers",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  
 
-        console.log("API response:", response.data);
-        const result = response.data.allJobSeekers;
-
-        // Retrieve all last messages and timestamps in parallel
-        const chatDataPromises = result.map(item =>
-          AsyncStorage.getItem(`lastMessage_${item.id}`)
-        );
-        const chatData = await Promise.all(chatDataPromises);
-
-        // Process and format data
-        const formattedData = result.map((item, index) => {
-          const { lastMessage = "No messages", timestamp = new Date().toISOString() } = chatData[index] ? JSON.parse(chatData[index]) : {};
-
-          // Determine the time format
-          const now = new Date();
-          const messageDate = new Date(timestamp);
-          let timeFormatted = '';
-
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-
-          const yesterday = new Date(today);
-          yesterday.setDate(yesterday.getDate() - 1);
-
-          if (messageDate >= today) {
-            timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
-          } else if (messageDate >= yesterday) {
-            timeFormatted = 'Yesterday';
-          } else {
-            timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
-          }
-
-          return {
-            id: item.id.toString(), // Ensure id is a string
-            name: `${item.first_name} ${item.last_name}`,
-            avatar: item.avatar_url ? { uri: item.avatar_url } : defaultAvatar,
-            message: lastMessage,
-            time: timeFormatted,
-            timestamp: messageDate, // Include timestamp for sorting
-            messagecount: "0",
-            hub: "Hub Members",
-          };
-        });
-
-        // Sort the data by timestamp in descending order
-        formattedData.sort((a, b) => b.timestamp - a.timestamp);
-
-        setData(formattedData);
-      } else {
-        console.log("No token found");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+       
   
   useEffect(() => {
     // Show the CustomModal when the component mounts
@@ -155,7 +85,7 @@ const HomePage = () => {
   };
 
   const goToMessages = () => {
-    navigation.navigate('Messaging');
+    navigation.navigate('Chats');
   };
 
   const goToManageHubs = () => {
@@ -352,29 +282,9 @@ const {t}=useTranslation()
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Chats")}</Text>
           </View>
-                <Text style={styles.hubTitle}>All Hubs</Text>
-        {data.slice(0, 5).map((item, index) => (
-          <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
-            <Image source={item.avatar} style={styles.image} />
-            <View style={{ flexDirection: 'column' }}>
-              <TouchableOpacity onPress={() => openUser(item.id)}>
-                <Text style={{ color: 'white', fontWeight: '600', fontSize: 15, fontFamily: "Roboto-Light" }}>
-                  {item.name}
-                </Text>
-                <Text
-                  style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
-                  numberOfLines={1}  // Limit to 1 line
-                  ellipsizeMode="tail"  // Show "..." at the end if the text is too long
-                >
-                  {item.message}
-                </Text>
-              </TouchableOpacity>
-              <Text style={{ color: 'lightgrey', fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
-                {item.time}
-              </Text>
-            </View>
-          </View>
-        ))}
+                <Text style={styles.hubTitle}>All Hub Messages</Text>
+        
+     
           <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
@@ -490,25 +400,7 @@ onMouseLeave={() => setIsHovered5(false)}
           </View>
 
 
-<View style={{flexDirection: 'row' }}>
-<View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 20, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("New Offer")}</Text>
-<View style={{flexDirection: 'row' }}>
-<Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 20, textDecoration: 'underline',fontFamily:"Roboto-Light" }}>ASML wanta to enroll 5 SAP FI as your protegees</Text>
-<TouchableOpacity
-style={[
-  styles.touchablejoinrate,
-  isHovered9 && styles.touchableOpacityHovered
-]}
-onMouseEnter={() => setIsHovered9(true)}
-onMouseLeave={() => setIsHovered9(false)}
->
-          <Text style={styles.touchableTextjoinrate}>{t("Send a Bid")} </Text>
-          </TouchableOpacity>
-          </View>
-</View>
-</View>
-<View style={{flexDirection: 'row' }}>
+<View style={{flexDirection: 'row', marginTop: 20 }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' ,fontFamily:"Roboto-Light"}}>{t("Growth Plan Review")}</Text>
@@ -648,7 +540,8 @@ onMouseLeave={() => setIsHovered12(false)}
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Income Overview")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20,fontFamily:"Roboto-Light"  }}>{t("You earned $ (XYZ) from session with Joop Melcher. Your available balance is...")}</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20,fontFamily:"Roboto-Light"  }}>{t("You earned $ 0.00 from session with ")} 
+ {plandata.latestSkillAnalysis.name || 'No name Available'} {t("Your available balance is...")}</Text>
           <TouchableOpacity onPress={goToWithdrawal} 
           style={[
             styles.touchablecoach,
@@ -764,7 +657,7 @@ messageBox: {
 },
 greenBox: {
   width: 580,
-  height: 800,
+  height: 650,
   backgroundColor: 'rgba(225,255,212,0.1)',
   borderRadius: 20,
   marginBottom: 20,

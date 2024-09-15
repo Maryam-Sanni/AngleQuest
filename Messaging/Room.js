@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { api_url, AuthContext } from "./AuthProvider";
 import Echo from 'laravel-echo';
-import _ from 'lodash'; // Import lodash for debounce function
+import _ from 'lodash'; 
 
 const Room = ({ activeRoom }) => {
   const { xsrf } = React.useContext(AuthContext);
@@ -23,6 +23,7 @@ const Room = ({ activeRoom }) => {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [echoInstance, setEchoInstance] = useState(null);
 
+  
   // Fetch token and user ID from AsyncStorage
   useEffect(() => {
     const fetchTokenAndUserId = async () => {

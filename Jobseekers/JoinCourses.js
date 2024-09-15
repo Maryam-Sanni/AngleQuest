@@ -14,12 +14,15 @@ import { useNavigation } from "@react-navigation/native";
 import Topbar from "../components/topbar";
 import Sidebar from "../components/sidebar";
 import OpenModal from "../components/Createhubform";
-import { BlurView } from "expo-blur";
+import { Video } from 'expo-av';
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import CustomAlert from '../components/CustomAlert';
+import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
+
 
 function MyComponent() {
   const [scaleAnimations] = useState(
@@ -27,8 +30,6 @@ function MyComponent() {
   );
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-  const [isOthersHovered, setIsOthersHovered] = useState(false);
-  const [isAllHovered, setIsAllHovered] = useState(false);
   const [cardData, setCardData] = useState({ AllHubs: [] });
   const [isPressed, setIsPressed] = useState(Array(4).fill(false));
   const [isSaved, setIsSaved] = useState(false);
@@ -202,7 +203,6 @@ function MyComponent() {
           width: "25%",
           paddingHorizontal: 5,
           marginBottom: 20,
-          transform: [{ scale: scaleAnimations[index] || 1 }],
         }}
       >
         <TouchableOpacity
@@ -286,29 +286,119 @@ function MyComponent() {
     ));
   };
 
+  const getNextDateForDay = (meetingDay) => {
+    // Map days to numbers
+    const daysMap = {
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6
+    };
+
+    // Get current date
+    const today = new Date();
+
+    // Get the target day number from meetingDay
+    const targetDay = daysMap[meetingDay];
+
+    if (targetDay === undefined) {
+      return 'Invalid day';
+    }
+
+    // Calculate the number of days to add
+    const daysToAdd = (targetDay + 7 - today.getDay()) % 7;
+
+    // If the target day is today, move to the next week
+    const nextDate = new Date(today);
+    if (daysToAdd === 0) {
+      nextDate.setDate(today.getDate() + 7);
+    } else {
+      nextDate.setDate(today.getDate() + daysToAdd);
+    }
+
+    // Format the date as needed
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return nextDate.toLocaleDateString(undefined, options);
+  };
+  
   const renderCards = () => {
     if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
       return <Text>No data available</Text>;
     }
+    
+    const categoryStyles = {
+      'frontend development': {
+        gradient: ['#d0f2d6', '#004d00'],
+        icon: 'https://img.icons8.com/?size=100&id=13662&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=fBh0aVE3C2Ba&format=png&color=FFFFFF80',
+        name: 'FR0',
+      },
+      'backend development': {
+        gradient: ['#f3e5f5', '#e1bee7'],
+        icon: 'https://img.icons8.com/?size=100&id=31481&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        name: 'BAC',
+      },
+      'sap': {
+        gradient: ['#003e6c', '#0094d8'],
+        icon: 'https://img.icons8.com/?size=100&id=38192&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF40',
+        name: 'SAP',
+      },
+      'microsoft': {
+        gradient: ['#F25022', '#E97F27'],
+        icon: 'https://img.icons8.com/?size=100&id=YJfJ0JM5Imsj&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        name: 'MIC',
+      },
+      'salesforce': {
+        gradient: ['#66b2ff', '#3399ff'],
+        icon: 'https://img.icons8.com/?size=100&id=38804&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        name: 'SAL',
+      },
+      'ui/ux': {
+        gradient: ['#4A90E2', '#0033A0'],
+        icon: 'https://img.icons8.com/?size=100&id=QVobCUiSKNwK&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        name: 'UI/',
+      },
+    };
+    
+    return cardData.AllHubs.map((data, index) => {
+      const normalizedCategory = data.category.trim().toLowerCase();
+      const style = categoryStyles[normalizedCategory] || {
+        gradient: ['#66b2ff', '#3399ff'],
+        icon: 'https://img.icons8.com/?size=100&id=YJfJ0JM5Imsj&format=png&color=000000',
+         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        name: 'MIC',
+      };
 
-    return cardData.AllHubs.map((data, index) => (
+      console.log(`Normalized Category: ${normalizedCategory}`);
+      console.log(`Gradient Colors: ${style.gradient}`);
+
+      const nextDateForMeeting = getNextDateForDay(data.meeting_day);
+      
+      return (
       <Animated.View
         key={index}
         style={{
           width: "50%",
           paddingHorizontal: 5,
           marginBottom: 20,
-          transform: [{ scale: scaleAnimations[index] }],
         }}
         onMouseEnter={() => handleCardAnimation(index, 1.05)}
         onMouseLeave={() => handleCardAnimation(index, 1)}
       >
         <View
           style={{
-            width: "95%",
+            width: "100%",
             height: 200,
             padding: 20,
-            borderRadius: 5,
+            borderRadius: 10,
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
@@ -321,25 +411,62 @@ function MyComponent() {
           }}
         >
           <View style={{flexDirection: 'row'}}>
-          <View
-            style={{
-              justifyContent: "center",
-              alignSelf: "center",
-              width: "20%",
-              height: 160,
-              borderRadius: 5,
-              backgroundColor: "lightgreen",
-              marginRight: "4%",
-              alignItems: "center",
-            }}
-          > 
-          </View>
+            <LinearGradient
+              colors={style.gradient}
+              style={{
+                justifyContent: 'center',
+                alignSelf: 'center',
+                width: '20%',
+                height: 140,
+                marginTop: 10,
+                borderRadius: 5,
+                marginRight: 10,
+                alignItems: 'center',
+                position: 'relative',
+              }}
+            >
+              
+
+              {/* Icon */}
+              <Image
+                source={{ uri: style.icon }} // Use icon based on category
+                style={{
+                  width: 40,
+                  height: 40,
+                  position: 'absolute',
+                  top: '50%', // Center vertically
+                  left: '50%', // Center horizontally
+                  transform: [{ translateX: -25 }, { translateY: -25 }], // Center the icon
+                  zIndex: 1, // Ensure the icon appears on top of the gradient
+                }}
+              />
+
+              {/* Category Name */}
+              <Text
+                style={{
+                  position: 'absolute',
+                  right: -5,
+                  bottom: 10,
+                  color: '#FFFFFF40',
+                  fontSize: 26,
+                  fontWeight: '600',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'right',
+                }}
+                numberOfLines={1}
+              >
+                {style.name}
+              </Text>
+            </LinearGradient>
+
+
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               marginLeft: 10,
-              width: '25%' 
+              width: '30%' 
             }}
           >
             <View style={{ flex: 1, }}>
@@ -355,22 +482,22 @@ function MyComponent() {
               <Text
                 style={{
                   fontSize: 14,
-                  color: "grey",
-                  fontWeight: "600",
+                  color: "#A0A0A0",
+                  fontWeight: "400",
                   marginTop: 5,
                 }}
               >
                 {data.category}
               </Text>
-              <Text style={{ fontSize: 14, color: "lightgrey", fontWeight: "400" }}>
-                {t("Coach")}: {data.expert_name}
+              <Text style={{ fontSize: 14, color: "#A0A0A0", fontWeight: "400" }}>
+                {t("by")}: {data.expert_name}
               </Text>
              
               
               <Text
                 style={{
                   fontSize: 14,
-                  color: "#888",
+                  color: "#A0A0A0",
                   marginTop: 10,
                   height: 50,
                 }}
@@ -380,7 +507,7 @@ function MyComponent() {
             </View>
           </View>
 
-            <View style={{flexDirection: 'column', alignSelf: 'center', marginLeft: 50 }}>
+            <View style={{flexDirection: 'column', alignSelf: 'center', position: 'absolute', right: 20 }}>
               <View style={{ flexDirection: "row" }}>
                 <Image
                   source={{
@@ -388,37 +515,48 @@ function MyComponent() {
                   }}
                   style={{ width: 18, height: 18, marginRight: 10 }}
                 />
-            <Text style={{ fontSize: 13, color: "#1C1C1C",  }}>
-              {data.meeting_day}s
-            </Text>
+            <Text style={{ fontSize: 13, fontWeight: '600' }}>
+             Meeting Day: <Text style={{color: "#A0A0A0"}}>{data.meeting_day}s
+            </Text></Text>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5 }}>
                 <Image
                   source={{
-                    uri: "https://img.icons8.com/?size=100&id=22617&format=png&color=2D2D2D",
+                    uri: "https://img.icons8.com/?size=100&id=23360&format=png&color=2D2D2D",
                   }}
                   style={{ width: 18, height: 18, marginRight: 10, marginTop: 5 }}
                 />
-            <Text style={{ fontSize: 13, color: "#1C1C1C", marginTop: 5 }}>
-              {data.from} - {data.to}
-            </Text>
+              <Text style={{ fontSize: 13, marginTop: 5, fontWeight: '600' }}>
+                Next Meet: <Text style={{color: "#A0A0A0"}}>{nextDateForMeeting}
+              </Text></Text>
+              </View>
+              <View style={{ flexDirection: "row", marginTop: 5 }}>
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=DVIax78ExUe5&format=png&color=2D2D2D",
+                  }}
+                  style={{ width: 18, height: 18, marginRight: 10, marginTop: 5 }}
+                />
+            <Text style={{ fontSize: 13, marginTop: 5, fontWeight: '600' }}>
+              Time: <Text style={{color: "#A0A0A0"}}>{data.from} - {data.to}
+            </Text></Text>
               </View>
               <TouchableOpacity
                 onPressIn={() => handleJoinPressIn(index)}
                 onPressOut={handleJoinPressOut}
                 style={{
-                  borderWidth: 1,
-                    borderColor: 'darkgreen',
+                  borderWidth: 2,
+                    borderColor: 'green',
                     borderRadius: 5,
                     paddingHorizontal: 50,
                     paddingVertical: 5,
                     marginTop: 15,
-                    width: "80%",
+                    width: "90%",
                     alignSelf: "center",
                     justifyContent: 'center',
                     marginLeft: 10,
                     marginRight: 10,
-                  backgroundColor: isPressed[index] ? 'darkgreen' : 'lightgreen',
+                  backgroundColor: isPressed[index] ? 'coral' : 'lightgreen',
                 }}
                 onPress={joinCourse} >
               <Text style={{ color: isPressed[index] ? '#fff' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
@@ -428,9 +566,10 @@ function MyComponent() {
         </View>
           
         </View>
-      </Animated.View>
-    ));
-  };
+            </Animated.View>
+          );
+        });
+      };
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -440,15 +579,16 @@ function MyComponent() {
   return (
     <ImageBackground
       source={require("../assets/backgroundimg2.png")}
-      style={{ height: "120%", width: "100%", flex: 1 }}
+      style={{ height: "100%", width: "100%", flex: 1 }}
     >
-      <BlurView intensity={70} style={{ flex: 1 }}>
+     
         <View style={{ flex: 1 }}>
           <Topbar />
           <View style={{ flexDirection: "row", flex: 1 }}>
             <Sidebar />
             <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
               <View style={styles.glassBox}>
+                 <BlurView intensity={10} style={styles.blurBackground}>
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
@@ -475,6 +615,20 @@ function MyComponent() {
                         "Joining a course means you will not be a part of the hub for extensive training but you will be able to get access to the course content and the hub meetings.",
                       )}
                     </Text>
+                    <Video
+                      source={require('../assets/VR.mp4')}
+                      style={{
+                        width: 1000, 
+                        height: 300,
+                        marginTop: 30,
+                        borderRadius: 10,
+                        alignSelf: 'center', 
+                      }}
+                      resizeMode="contain" 
+                      isLooping
+                      shouldPlay
+                      isMuted
+                    />
                     <View
                       style={{
                         flexDirection: "row",
@@ -486,54 +640,9 @@ function MyComponent() {
                     >
                       {renderCards()}
                     </View>
-                    <Text
-                      style={{
-                        color: "black",
-                        fontWeight: "bold",
-                        marginTop: 30,
-                        marginRight: 50,
-                        marginLeft: 60,
-                        fontSize: 18,
-                      }}
-                    >
-                      {t("My Hubs")}:
-                    </Text>
-                    <Text
-                      style={{
-                        color: "white",
-                        fontWeight: 600,
-                        marginTop: 10,
-                        marginRight: 50,
-                        marginLeft: 60,
-                      }}
-                    >
-                      {t(
-                        "These are hubs you are already a part of you will recieve extensive training from the hub expert, be mandated to join hub meetings, get assignments and follow ups. To join a new hub",
-                      )}<TouchableOpacity
-                        style={{
-                          color: "grey",
-                          fontWeight: 600,
-                          marginLeft: 3,
-                          textDecoration: "underline"
-                        }}
-                           onPress={goToHubs} >
-                        {t(
-                          " click here",
-                        )}
-                      </TouchableOpacity>
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        marginTop: 20,
-                        marginRight: 50,
-                        marginLeft: 50,
-                      }}
-                    >
-                      {renderRecommendedExpertCard()}
-                    </View>
+                    
                   </View>
+                 </BlurView>
                 </View>
          
             </ScrollView>
@@ -555,7 +664,7 @@ function MyComponent() {
             <OpenModal onClose={() => handleCloseModal()} />
           </View>
         </Modal>
-      </BlurView>
+  
     </ImageBackground>
   );
 }
@@ -577,7 +686,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginBottom: 30,
     borderWidth: 2,
-    borderColor: "rgba(225,225,212,0.3)",
+    borderColor: "rgba(125,125,125,0.3)",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -588,7 +697,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   glassBox: {
-    backgroundColor: "rgba(225,255,212,0.3)",
+    backgroundColor: "rgba(125,125,125,0.3)",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     marginTop: 30,

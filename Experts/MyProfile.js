@@ -15,7 +15,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
-import { FaDiceD20 } from 'react-icons/fa';
 
 export default function Profile() {
   const initialHistory = [
@@ -286,27 +285,16 @@ export default function Profile() {
                   />
                 </View>
                 </View>
-                <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
-                  <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', marginBottom: 5, fontWeight: '600' }}>{t("Available Days")}</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={availableDays}
-                    onChangeText={setAvailableDays}
-                    placeholder="Mon, Tue, Wed, Thur, Fri, Sat, Sun"
-                  />
-                  <TextInput
-                    style={styles.textInput}
-                    value={hours}
-                    onChangeText={setHours}
-                    placeholder="9:00AM - 5:00PM"
-                  />
-                  <TouchableOpacity onPress={handleSavedays} style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 10, marginTop: 10, backgroundColor: 'coral', borderRadius: 5, borderWidth: 1, borderColor: 'coral' }}>
-                    <Text style={{ fontSize: 12,fontFamily:"Roboto-Light", color: 'white' }}>{t("Save Changes")}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
+               
+           <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
+                   <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', marginBottom: 5, fontWeight: '600' }}>{t("Available Balance")}</Text>
+             <Text style={{ fontSize: 36, marginBottom: 5, fontWeight: '600' }}>$0.00</Text>
+                  
+                  
+                 </View>
+               </View>
+             </View>
+           </View>
 
           {/* Profile Description */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
@@ -327,34 +315,7 @@ export default function Profile() {
             </View>
          
 
-          {/* Employment History */}
-          <View style={{ marginTop: 20}}>
-          {employmentHistories.map((history) => (
-        <View key={history.id} style={styles.historyItem}>
-          <View style={styles.historyheader}>
-            <Text style={styles.historyheaderText}>{history.position} | {history.company}</Text>
-            <TouchableOpacity onPress={() => handleOpenPress(history)}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.duration}>{history.duration}</Text>
-          <Text style={styles.description}>{history.description}</Text>
-        </View>
-      ))}
-
-      {currentHistory && (
-        <EmploymentHistoryModal
-          visible={isModalVisible}
-          onClose={() => setModalVisible(false)}
-          employmentHistory={currentHistory}
-          onSave={handleSave}
-        />
-      )}
-      </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+          
 
           {/* Skills */}
           <View style={{ marginTop: 20, marginRight: 30 }}>
@@ -420,36 +381,7 @@ export default function Profile() {
     </View>
  <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
                       {/* Other Experience*/}
-  <View style={{ marginTop: 20, marginRight: 30 }}>
-  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-    <Text style={{ fontSize: 16, textAlign: 'justify', fontWeight: '500', color: '#206C00',    fontFamily:"Roboto-Light"
- }}>{t("Soft Skills")}</Text>
-    <TouchableOpacity onPress={handleOpenOtherExperiences}>
-      <Image
-        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-        style={{ width: 20, height: 20 }}
-        resizeMode="cover"
-      />
-    </TouchableOpacity>
-  </View>
-  <Text style={{ marginTop: 15, marginLeft: 5, fontSize: 14,    fontFamily:"Roboto-Light"
- }}>
-    {otherExperiences.map((experience, index) => (
-      <Text key={index}>
-        - {experience} {'\n'}
-      </Text>
-    ))}
-  </Text>
-
-  <OtherExperiencesEditModal
-    visible={otherExperiencesModalVisible}
-    otherExperiences={otherExperiences}
-    onClose={handleCloseOtherExperiencesModal}
-    onSave={handleSaveOtherExperiences}
-  />
-</View>
-
-<View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+ 
                      {/*Location*/}
                      <View style={{ marginTop: 20, marginRight: 30 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

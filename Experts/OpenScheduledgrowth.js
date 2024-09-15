@@ -26,7 +26,7 @@ function MyComponent({ onClose }) {
         })
         const {t}=useTranslation()
 
-  const handlePress = () => {
+  const handlePressed = () => {
 
     onClose();
   };
@@ -87,13 +87,18 @@ loadFormData();
 retrieveExpertName();
 }, []);
 
+  const handleToggleCheckbox = () => {
+    setIsChecked(!isChecked);
+    // Add any additional logic here, such as marking the task as completed
+  };
+  
 const handleGuideChange = (index, field, value) => {
 const newGuides = [...guides];
 newGuides[index] = { ...newGuides[index], [field]: value };
 setGuides(newGuides);
 };
 
-const handleMarkAsCompleted = async () => {
+const handlePress = async () => {
   if (!remark || !guides || !rating ) {
     setAlertMessage(t('Please fill all fields'));
     setAlertVisible(true);
@@ -136,7 +141,7 @@ try {
 } catch (error) {
   console.error('Error marking as completed', error);
 }
-
+  onClose();
 };
 
   const hideAlert = () => {
@@ -275,7 +280,7 @@ try {
         </View>
 
   <View style={{flexDirection: 'row'}}>
-    <TouchableOpacity style={styles.checkcontainer} onPress={handleMarkAsCompleted}>
+    <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>
        <Image
          source={{
            uri: isChecked 
