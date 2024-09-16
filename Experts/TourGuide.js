@@ -41,12 +41,18 @@ function MyComponent({ onClose }) {
 
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <Video
-                ref={videoRef}
-                source={require('../assets/taketourexpert.mp4')}
-                style={styles.video}
-                useNativeControls
-                onLoad={() => videoRef.current.playAsync()}
+                source={require('../assets/VR.mp4')}
+                style={{
+                  width: 1000, 
+                  height: 300,
+                  marginTop: 50,
+                  borderRadius: 10,
+                  alignSelf: 'center', 
+                }}
+                resizeMode="contain" 
+                isLooping
                 shouldPlay
+                isMuted
               />
             </View>
 
@@ -86,8 +92,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greenBox: {
-    width: '70%',
-    height: 600,
+    width: '80%',
+    height: 500,
     backgroundColor: 'white',
     borderRadius: 10,
   },

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image, Picker, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
+import { WebView } from 'react-native-webview';
 
 function MyComponent({ onClose }) {
    const [questions, setQuestions] = useState([]);
@@ -19,6 +20,16 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
   const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+  const [cvModalVisible, setCvModalVisible] = React.useState(false);
+
+  const handleViewCv = () => {
+    if (data?.cv) {
+      // Append a file download parameter or ensure correct URL
+      const fileUrl = data.cv.endsWith('/') ? `${data.cv}cv.pdf` : data.cv;
+      Linking.openURL(fileUrl).catch((err) => console.error("Failed to open URL:", err));
+    }
+  };
+  
   
   
   const [fontsLoaded]=useFonts({
@@ -99,51 +110,73 @@ function MyComponent({ onClose }) {
   };
 
   const handlePress = async () => {
-    if (!remark || !rating ) {
+    if (!remark || !rating) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
       return;
     }
 
     setIsChecked(!isChecked);
-    
-  try {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) throw new Error('No token found');
 
-    const payload = {
-       jobseeker_id: data?.user_id, 
-      interview_id: String(data?.id),
-      remark: remark,
-      expert_name: `${firstName} ${lastName}`,
-      rating: rating,
-       completed: completed,
-      level: data?.name,
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      // Define payload for feedback API call
+      const feedbackPayload = {
+        jobseeker_id: data?.user_id,
+        interview_id: String(data?.id),
+        remark: remark,
+        expert_name: `${firstName} ${lastName}`,
+        rating: rating,
+        completed: completed,
+        level: data?.name,
         company: data?.company,
         date: data?.date_time,
         time: data?.date_time,
         score: rating,
-      role: data?.role,
-      descriptions: questions.map(question => ({
-        description: question.question,
-        percentage: question.percentage,
-      })),
-    };
+        role: data?.role,
+        descriptions: questions.map(question => ({
+          description: question.question,
+          percentage: question.percentage,
+        })),
+      };
 
-    const response = await axios.post('https://recruitangle.com/api/expert/feedback-interview', payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      // First API call to submit feedback
+      const feedbackResponse = await axios.post('https://recruitangle.com/api/expert/feedback-interview', feedbackPayload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (response.status === 201 && response.data.status === 'success') {
-      console.log('Marked as completed successfully');
-    } else {
-      console.error('Failed to mark as completed', response);
+      if (feedbackResponse.status === 201 && feedbackResponse.data.status === 'success') {
+        console.log('Marked as completed successfully');
+
+        // Define payload for balance update API call
+        const balancePayload = {
+          paid_by: data?.name, // Adjust the payload as necessary
+          new_payment: 50
+        };
+
+        // Second API call to update expert balance
+        const balanceResponse = await axios.put('https://recruitangle.com/api/expert/edit-balance', balancePayload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (balanceResponse.status === 200 && balanceResponse.data.status === 'success') {
+          console.log('Expert balance updated successfully');
+        } else {
+          console.error('Failed to update expert balance', balanceResponse);
+        }
+      } else {
+        console.error('Failed to mark as completed', feedbackResponse);
+      }
+    } catch (error) {
+      console.error('Error processing request', error);
     }
-  } catch (error) {
-    console.error('Error marking as completed', error);
-  }
+
     onClose();
   };
+
+
 
     const hideAlert = () => {
       setAlertVisible(false);
@@ -181,6 +214,14 @@ function MyComponent({ onClose }) {
           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.name}</Text>
         </View>
       </View>
+   <View style={styles.row}>
+     <View style={styles.cell}>
+       <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Company")}</Text>
+     </View>
+     <View style={styles.cell}>
+       <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.company}</Text>
+     </View>
+   </View>
       <View style={styles.row}>
         <View style={styles.cell}>
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
@@ -191,11 +232,11 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("CV")}</Text>
         </View>
-        <View style={styles.cell}>
-           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.cv}</Text>
-        </View>
+        <TouchableOpacity onPress={handleViewCv} style={styles.cell}>
+           <Text style={{color: 'blue', textDecorationLine: 'underline', fontFamily:"Roboto-Light"}}>{data?.cv}</Text>
+        </TouchableOpacity>
       </View>
       
          
@@ -306,6 +347,7 @@ function MyComponent({ onClose }) {
 
     </View>
       </ScrollView>
+      
       <CustomAlert
         visible={alertVisible}
         title={t("Alert")}

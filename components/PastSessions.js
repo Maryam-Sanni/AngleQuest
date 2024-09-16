@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
-import OpenSchedule from '../Jobseekers/OpenInterviewbook';
+import OpenSchedule from '../components/RatingHub';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sessions, setSessions] = useState([]);
+   const [selectedHubsession, setSelectedHubsession] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,9 +39,17 @@ const ScheduledMeetingsTable = () => {
     fetchData();
   }, []);
 
-  const handleOpenPress = () => {
+  const handleOpenPress = async (session) => {
+    setSelectedHubsession(session);
     setModalVisible(true);
-  };
+
+    try {
+      await AsyncStorage.setItem('selectedhubsession', JSON.stringify(session));
+      console.log('Selected hub saved:', session);
+    } catch (error) {
+      console.error('Failed to save selected hub to AsyncStorage', error);
+    }
+    };
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -98,7 +107,7 @@ const ScheduledMeetingsTable = () => {
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{session.rating}</Text>
                 </View>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => handleOpenPress(session)}>
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Rate")}</Text>
                   </View>
@@ -118,7 +127,7 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-            <OpenSchedule onClose={() => handleCloseModal()} />
+            <OpenSchedule session={selectedHubsession} onCancel={handleCloseModal} />
           </View>
         </Modal>
       </BlurView>

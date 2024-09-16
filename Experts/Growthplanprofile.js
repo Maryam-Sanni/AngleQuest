@@ -91,6 +91,11 @@ function MyComponent({ onClose }) {
     setGuides(newGuides);
   };
 
+  const deleteGuide = (index) => {
+    const newGuides = guides.filter((_, i) => i !== index);
+    setGuides(newGuides);
+  };
+  
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
@@ -281,6 +286,9 @@ function MyComponent({ onClose }) {
                     <Picker.Item label="100%" value="100" />
                   </Picker>
                 </View>
+                <TouchableOpacity onPress={() => deleteGuide(index)} style={styles.deleteButton}>
+                  <Text style={{color: 'red', fontSize: 18, fontWeight: 600}}>✕</Text>
+                </TouchableOpacity>
               </View>
             ))}
           </View>

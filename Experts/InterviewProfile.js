@@ -90,6 +90,11 @@ function MyComponent({ onClose }) {
     setQuestions(newQuestions);
   };
 
+  const deleteQuestion = (index) => {
+    const newQuestions = questions.filter((_, i) => i !== index);
+    setQuestions(newQuestions);
+  };
+  
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
@@ -282,6 +287,9 @@ function MyComponent({ onClose }) {
                     <Picker.Item label="100%" value="100" />
                     </Picker>
                     </View>
+                <TouchableOpacity onPress={() => deleteQuestion(index)} style={styles.deleteButton}>
+                  <Text style={{color: 'red', fontSize: 18, fontWeight: 600}}>✕</Text>
+                </TouchableOpacity>
                     </View>
                     ))}
                     </View>
