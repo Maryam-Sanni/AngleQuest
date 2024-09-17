@@ -38,6 +38,15 @@ function MyComponent() {
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')  
+  const [hoveredIndex, setHoveredIndex] = useState(null); 
+
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
 
   const handlePress = () => {
     setIsSaved(!isSaved);
@@ -331,40 +340,58 @@ function MyComponent() {
     
     const categoryStyles = {
       'frontend development': {
-        gradient: ['#d0f2d6', '#004d00'],
+        gradient: ['#A8D5BA', '#C9E4C5'],
         icon: 'https://img.icons8.com/?size=100&id=13662&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=fBh0aVE3C2Ba&format=png&color=FFFFFF80',
         name: 'FR0',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
       'backend development': {
-        gradient: ['#f3e5f5', '#e1bee7'],
-        icon: 'https://img.icons8.com/?size=100&id=31481&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
+        gradient: ['#d1c4e9', '#b39ddb'],
+        icon: 'https://img.icons8.com/?size=100&id=9o42kRQ3hTYA&format=png&color=000000',
         name: 'BAC',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
       'sap': {
-        gradient: ['#003e6c', '#0094d8'],
+        gradient: ['#003C71', '#4F9BCF'],
         icon: 'https://img.icons8.com/?size=100&id=38192&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF40',
         name: 'SAP',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=4F9BCF20',
       },
       'microsoft': {
-        gradient: ['#F25022', '#E97F27'],
+        gradient: ['#F9C9B6', '#F8E2B4'],
         icon: 'https://img.icons8.com/?size=100&id=YJfJ0JM5Imsj&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
         name: 'MIC',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
       'salesforce': {
-        gradient: ['#66b2ff', '#3399ff'],
+        gradient: ['#B3CDE0', '#E3F2FD'],
         icon: 'https://img.icons8.com/?size=100&id=38804&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
         name: 'SAL',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
       'ui/ux': {
-        gradient: ['#4A90E2', '#0033A0'],
+        gradient: ['#0033A0', '#66B2FF'],
         icon: 'https://img.icons8.com/?size=100&id=QVobCUiSKNwK&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
-        name: 'UI/',
+        name: 'UI/U',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=66B2FF10',
+      },
+      'cloud computing': {
+        gradient: ['#a3c2e0', '#c5a6d9'],
+        icon: 'https://img.icons8.com/?size=100&id=xVkTHh34x6rW&format=png&color=000000',
+        name: 'CLO',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
+      },
+      'data analysis': {
+        gradient: ['#BAAB89', '#D1C6A8'],
+        icon: 'https://img.icons8.com/?size=100&id=80305&format=png&color=000000',
+        name: 'DAT',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
+      },
+      'management': {
+        gradient: ['#f8d7da', '#f5a9a9'],
+        icon: 'https://img.icons8.com/?size=100&id=ASbjFB9PL3Cw&format=png&color=000000',
+        name: 'MAN',
+        pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
     };
     
@@ -373,8 +400,8 @@ function MyComponent() {
       const style = categoryStyles[normalizedCategory] || {
         gradient: ['#66b2ff', '#3399ff'],
         icon: 'https://img.icons8.com/?size=100&id=YJfJ0JM5Imsj&format=png&color=000000',
-         pattern: 'https://img.icons8.com/?size=100&id=123906&format=png&color=FFFFFF',
-        name: 'MIC',
+         pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=66B2FF10',
+        name: 'NIL',
       };
 
       console.log(`Normalized Category: ${normalizedCategory}`);
@@ -383,16 +410,14 @@ function MyComponent() {
       const nextDateForMeeting = getNextDateForDay(data.meeting_day);
       
       return (
-      <Animated.View
-        key={index}
-        style={{
-          width: "50%",
-          paddingHorizontal: 5,
-          marginBottom: 20,
-        }}
-        onMouseEnter={() => handleCardAnimation(index, 1.05)}
-        onMouseLeave={() => handleCardAnimation(index, 1)}
-      >
+        <Animated.View
+          key={index}
+          style={{
+            width: '50%',
+paddingHorizontal: 5,
+            marginBottom: 20,
+          }}
+        >
         <View
           style={{
             width: "100%",
@@ -408,7 +433,11 @@ function MyComponent() {
             shadowRadius: 3.84,
             elevation: 5,
             backgroundColor: "white",
+            borderWidth: hoveredIndex === index ? 3 : 3, 
+            borderColor: hoveredIndex === index ? 'coral': 'transparent', 
           }}
+          onMouseEnter={() => handleMouseEnter(index)}
+          onMouseLeave={handleMouseLeave}
         >
           <View style={{flexDirection: 'row'}}>
             <LinearGradient
@@ -426,18 +455,28 @@ function MyComponent() {
               }}
             >
               
-
+              <Image
+                source={{ uri: style.pattern }} 
+                style={{
+                  width: 60, 
+                  height: 60, 
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  zIndex: 1, 
+                }}
+              />
               {/* Icon */}
               <Image
-                source={{ uri: style.icon }} // Use icon based on category
+                source={{ uri: style.icon }} 
                 style={{
                   width: 40,
                   height: 40,
                   position: 'absolute',
-                  top: '50%', // Center vertically
-                  left: '50%', // Center horizontally
-                  transform: [{ translateX: -25 }, { translateY: -25 }], // Center the icon
-                  zIndex: 1, // Ensure the icon appears on top of the gradient
+                  top: '50%', 
+                  left: '50%', 
+                  transform: [{ translateX: -25 }, { translateY: -25 }], 
+                  zIndex: 1, 
                 }}
               />
 
@@ -546,20 +585,20 @@ function MyComponent() {
                 onPressOut={handleJoinPressOut}
                 style={{
                   borderWidth: 2,
-                    borderColor: 'green',
+                    borderColor: '#333333',
                     borderRadius: 5,
                     paddingHorizontal: 50,
                     paddingVertical: 5,
                     marginTop: 15,
-                    width: "90%",
+                    width: 150,
                     alignSelf: "center",
                     justifyContent: 'center',
                     marginLeft: 10,
                     marginRight: 10,
-                  backgroundColor: isPressed[index] ? 'coral' : 'lightgreen',
+                  backgroundColor: isPressed[index] ? 'coral' : 'white',
                 }}
                 onPress={joinCourse} >
-              <Text style={{ color: isPressed[index] ? '#fff' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
+              <Text style={{ color: isPressed[index] ? 'white' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
               </TouchableOpacity>
           </View>
             
@@ -590,45 +629,26 @@ function MyComponent() {
               <View style={styles.glassBox}>
                  <BlurView intensity={10} style={styles.blurBackground}>
                   <View style={{ flex: 1 }}>
-                    <Text
-                      style={{
-                        color: "#63EC55",
-                        fontWeight: "bold",
-                        marginTop: 30,
-                        marginRight: 30,
-                        marginLeft: 40,
-                        fontSize: 18,
-                      }}
-                    >
-                      {t("Upcoming Courses")}:
-                    </Text>
-                    <Text
-                      style={{
-                        color: "black",
-                        fontWeight: 600,
-                        marginTop: 10,
-                        marginRight: 30,
-                        marginLeft: 40,
-                      }}
-                    >
-                      {t(
-                        "Joining a course means you will not be a part of the hub for extensive training but you will be able to get access to the course content and the hub meetings.",
-                      )}
-                    </Text>
-                    <Video
-                      source={require('../assets/VR.mp4')}
-                      style={{
-                        width: 1000, 
-                        height: 300,
-                        marginTop: 30,
-                        borderRadius: 10,
-                        alignSelf: 'center', 
-                      }}
-                      resizeMode="contain" 
-                      isLooping
-                      shouldPlay
-                      isMuted
-                    />
+                    
+                    
+                    <View style={styles.headerContainer}>
+                      <LinearGradient
+                        colors={['#3C6E47', '#11412C']}
+                        style={styles.gradientBackground}
+                      />
+
+                     
+                      <View style={[styles.circle, styles.circleTopLeft]} />
+                      <View style={[styles.circle, styles.circleBottomRight]} />
+
+                      
+                      <View style={styles.textContainer}>
+                        <Text style={styles.headingText}>{t("Upcoming Courses")}</Text>
+                        <Text style={styles.subHeadingText}>                      {t(
+                            "Joining a course means you will not be a part of the hub for extensive training but you will be able to get access to the course content and the hub meetings.",
+                          )}</Text>
+                      </View>
+                    </View>
                     <View
                       style={{
                         flexDirection: "row",
@@ -745,6 +765,62 @@ const styles = StyleSheet.create({
   },
   blurBackground: {
     flex: 1,
+  },
+  headerContainer: {
+    height: 250, 
+    width: '95%',
+    alignSelf: 'center',
+    marginTop: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    overflow: 'hidden',
+    position: 'relative', 
+  },
+  gradientBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  textContainer: {
+    position: 'absolute',
+    top: '40%',
+    left: '10%',
+    right: '10%',
+    alignItems: 'center',
+  },
+  headingText: {
+    color: '#ffffff',
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  subHeadingText: {
+    color: '#ffffff',
+    fontSize: 18,
+    textAlign: 'center',
+    opacity: 0.85,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
+  },
+  circle: {
+    position: 'absolute',
+    backgroundColor: 'rgba(17, 65, 44, 0.3)', 
+    borderRadius: 50, 
+  },
+  circleTopLeft: {
+    width: 100,
+    height: 100,
+    top: -20,
+    left: -30,
+  },
+  circleBottomRight: {
+    width: 150,
+    height: 150,
+    bottom: -40,
+    right: -50,
   },
 });
 

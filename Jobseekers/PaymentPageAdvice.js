@@ -86,9 +86,9 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Annually $840")}  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Annually $1250")}  </Text>
                                         </View>
-                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40,fontFamily:"Roboto-Light" }}> {t("Saves you 15% ($120)")}  </Text>
+                                        <Text style={{ fontSize: 12, color: '#206C00', marginTop: 7, marginLeft: 40,fontFamily:"Roboto-Light" }}> {t("Saves you 13% ($190)")}  </Text>
 
                                         <View style={{ flexDirection: 'row', marginTop: 20 }}>
                                             <TouchableOpacity
@@ -99,7 +99,7 @@ const App = () => {
                                                 activeOpacity={1}
                                                 onPress={handlePress2}
                                             />
-                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Monthly $80")}  </Text>
+                                            <Text style={{ fontSize: 15, fontWeight: 'bold',fontFamily:"Roboto-Light" }}> {t("Monthly $120")}  </Text>
                                         </View>
                                         <Text style={{ fontSize: 12, color: '#206C00', marginTop: 25, marginLeft: 30, fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Its a question of how much you believe in yourself...")}</Text>
                                         <View style={{ flexDirection: 'row' }}>

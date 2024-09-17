@@ -1,28 +1,74 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, CheckBox, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, StyleSheet, Modal, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
-import {useFonts} from "expo-font"
+import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 
 function MyComponent() {
-  const navigation = useNavigation();
-  const [isCVChecked, setIsCVChecked] = useState(false);
-  const [isInterviewResultsChecked, setIsInterviewResultsChecked] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [confirmationText, setConfirmationText] = useState('');
+
+  const handleDeactivate = async () => {
+    if (confirmationText === 'DEACTIVATE') {
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          alert('Failed to retrieve token. Please try again.');
+          return;
+        }
+
+        // Make API call to deactivate the account
+        const response = await axios.put(
+          'https://recruitangle.com/api/jobseeker/deactivate-jobseeker',
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log('Response data:', response.data); // Log the response to debug
+
+        // Check if the response was successful
+        if (response.status === 200) {
+          // If your API doesn't return a 'success' key, you can check the status code instead
+          navigation.navigate('Join Recruitangle');
+        } else {
+          // Handle API error
+          alert('Deactivation failed. Please try again.');
+        }
+      } catch (error) {
+        // Handle errors from Axios or token retrieval
+        console.error('Error deactivating:', error);
+        alert(`Deactivation failed: ${error.response?.data?.message || error.message}`);
+      }
+    } else {
+      alert('Please spell "DEACTIVATE" correctly to confirm.');
+    }
+  };
+
+
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
       })
     const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
     <View style={{ flex: 1 }}>
       <TopBar />
       <View style={{ flexDirection: 'row', flex: 1 }}>
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500}}>
-        <View style={{ backgroundColor: '#f7fff4', marginLeft: 230 }}>
+        <View style={{ backgroundColor: 'white', marginLeft: 230 }}>
           <Text style={{ fontSize: 18, color: '#206C00', fontWeight: 'bold', marginTop: 30, marginBottom: 10, marginLeft: 10,fontFamily:"Roboto-Light"
             
            }}>{t("Contact Information")}</Text>
@@ -97,20 +143,56 @@ function MyComponent() {
 
 
           <View style={{ paddingHorizontal: 8, marginTop: 10  }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#206C00', marginTop: 40,fontFamily:"Roboto-Light" }}>{t("Account Deactivation")}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#206C00', marginTop: 40,fontFamily:"Roboto-Light" }}>{t("Account Deactivation")}</Text>
             <View style={{ flexDirection: 'row', marginTop: - 20 }}>
               <View style={{ width: '100%' }}>
-                <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold', marginLeft: 230,fontFamily:"Roboto-Light" }}>{t("This is what happens when you deactivate your account")}</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 4, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Your profile will be permanently deleted from our server")}</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("All Booked sessions will be cancelled")}</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Forwarded feedbacks retracted")}</Text>
-                <Text style={{ fontSize: 14, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("You won’t be able to reactivate your sessions")}</Text>
+                <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold', marginLeft: 230,fontFamily:"Roboto-Light" }}>{t("This is what happens when you deactivate your account")}</Text>
+                <Text style={{ fontSize: 16, color: '#777', marginTop: 4, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Your profile will be permanently deleted from our server")}</Text>
+                <Text style={{ fontSize: 16, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("All Booked sessions will be cancelled")}</Text>
+                <Text style={{ fontSize: 16, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("Forwarded feedbacks retracted")}</Text>
+                <Text style={{ fontSize: 16, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("You won’t be able to reactivate your sessions")}</Text>
+                <Text style={{ fontSize: 16, color: '#777', marginTop: 2, marginLeft: 240,fontFamily:"Roboto-Light" }}>• {t("You won’t be able to create another account with this email address")}</Text>
               </View>
             </View>
           </View>
-          <View style={{ justifyContent: 'center', marginLeft: 250, width: 150, paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginBottom: 50, backgroundColor: 'red', borderRadius: 5, }}>
-            <Text style={{ fontSize: 12, fontWeight: 'bold', color: 'white', textAlign: 'center',fontFamily:"Roboto-Light" }}>{t("Deactivate account")}</Text>
-          </View>
+          <TouchableOpacity 
+            style={styles.deactivateButton} 
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.deactivateButtonText}>{t("Deactivate account")}</Text>
+          </TouchableOpacity>
+
+          <Modal
+            visible={isModalVisible}
+            transparent={true}
+            animationType="slide"
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalText}>{t("Are you sure you want to deactivate? This process is not reversible.")}</Text>
+                <Text style={styles.modalText}>{t("Type 'DEACTIVATE' to confirm")}</Text>
+                <TextInput
+                  placeholder=''
+                  style={styles.input}
+                  value={confirmationText}
+                  onChangeText={setConfirmationText}
+                />
+                <TouchableOpacity
+                  style={styles.confirmButton}
+                  onPress={handleDeactivate}
+                >
+                  <Text style={styles.confirmButtonText}>{t("Yes")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.cancelButtonText}>{t("Cancel")}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          
         </View>
         </ScrollView>
       </View>
@@ -152,6 +234,69 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 5,
   },
+  deactivateButton: {
+    justifyContent: 'center',
+    marginLeft: 250,
+    width: 150,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginTop: 40,
+    marginBottom: 50,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  deactivateButtonText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  modalContent: {
+    width: 400,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    fontFamily: "Roboto-Light"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#206C00',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    fontFamily: "Roboto-Light"
+  },
+  confirmButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10
+  },
+  confirmButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: "Roboto-Light"
+  },
+  cancelButton: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  cancelButtonText: {
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  }
 });
 
 export default MyComponent;

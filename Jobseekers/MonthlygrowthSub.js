@@ -46,10 +46,10 @@ function MyComponent({ onClose }) {
                             </TouchableOpacity>
                         </View>
                         <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', marginBottom: 40, marginLeft: 65,fontFamily:"Roboto-Light" }}>{t("Hi")} Patrick, {t("Congratulations for taking the plunge")} </Text>
-                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 35,fontFamily:"Roboto-Light" }}>{t("$80 for Monthly Subscription")}</Text>
+                        <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 65, marginTop: 35,fontFamily:"Roboto-Light" }}>{t("$120 for Monthly Subscription")}</Text>
                         <View style={styles.box}>
                         <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15,fontFamily:"Roboto-Light" }}>{t("All packages inclusive for the next one month")} </Text>
-                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15,fontFamily:"Roboto-Light" }}>• {t("Joop Melcher is now your coach, mentor, teacher, adviser towards attaining the next level in your career")} </Text>
+                            <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 15,fontFamily:"Roboto-Light" }}>• {t("This expert is now your coach, mentor, teacher, adviser towards attaining the next level in your career")} </Text>
                             <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Personal Development Plans with your coach and reviews")} </Text>
                             <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Hubs: Hands-on training to achieve your goal with expert Joop Melcher")} </Text>
                             <Text style={{ fontSize: 14, color: '#206C00', marginLeft: 10, marginTop: 3,fontFamily:"Roboto-Light" }}>• {t("Advisory sessions")}</Text>

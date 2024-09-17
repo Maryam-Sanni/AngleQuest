@@ -151,24 +151,31 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
           onDayPress={handleDayPress}
           markedDates={{
             [selectedDate]: { selected: true },
-            [new Date().toISOString().split('T')[0]]: {
+            [today]: {
               marked: true,
               dotColor: 'green',
             },
-            [new Date(today).setDate(new Date(today).getDate() - 1)]: { disabled: true }
           }}
-          minDate={new Date().toISOString().split('T')[0]}
+          minDate={new Date().toISOString().split('T')[0]} // Disable past dates
           style={styles.calendar}
           dayComponent={({ date }) => {
             const isAvailable = isDayAvailable(date.dateString);
+            const isPastDate = new Date(date.dateString) < new Date();
+
             return (
               <TouchableOpacity
-                style={[styles.dayWrapper, !isAvailable && styles.unavailableDay]}
-                onPress={() => isAvailable && handleDayPress(date)}
+                style={[
+                  styles.dayWrapper,
+                  !isAvailable && styles.unavailableDay,
+                  isPastDate && styles.pastDay
+                ]}
+                onPress={() => isAvailable && !isPastDate && handleDayPress(date)}
+                disabled={isPastDate} // Disable past dates
               >
                 <Text style={[
-                  styles.dayText, 
-                  !isAvailable && styles.unavailableDayText, 
+                  styles.dayText,
+                  !isAvailable && styles.unavailableDayText,
+                  isPastDate && styles.pastDayText,
                   pressedDay === date.dateString && styles.pressedDayText
                 ]}>
                   {date.day}
@@ -188,6 +195,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
             textMonthFontWeight: '500',
           }}
         />
+
 
         <View style={styles.timePickerContainer}>
           <Image
@@ -330,7 +338,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     textAlign: 'center'
-  }
+  },
+  pastDay: {
+    opacity: 0.5,
+  },
+  pastDayText: {
+    textDecorationLine: 'line-through',
+    color: 'gray',
+  },
 });
 
 export default DateTimePickerModal;

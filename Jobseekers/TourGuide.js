@@ -40,12 +40,13 @@ function MyComponent({ onClose }) {
             </View>
 
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
+               <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 30 }}>Hello There, Welcome to AngleQuest</Text>
               <Video
-                source={require('../assets/VR.mp4')}
+                source={require('../assets/Tg1.mp4')}
                 style={{
                   width: 1000, 
                   height: 300,
-                  marginTop: 50,
+                  marginTop: 20,
                   borderRadius: 10,
                   alignSelf: 'center', 
                 }}
@@ -57,7 +58,7 @@ function MyComponent({ onClose }) {
             </View>
 
             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>Start Exploring AngleQuest</Text>
+              <Text style={styles.buttonTextplus}>Start Tour</Text>
             </TouchableOpacity>
           </View>
         </View>

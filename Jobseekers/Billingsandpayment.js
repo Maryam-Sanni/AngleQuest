@@ -13,11 +13,11 @@ const BillingSettingsPage = () => {
 
 
   const [currentPlan] = useState('Standard');
-  const [amount] = useState('$840.00');
+  const [amount] = useState('$1250.00');
   const [amount2] = useState('$50.00');
   const [amount3] = useState('$65.00');
   const [renewalDateG] = useState('Dec 30, 2024');
-  const [renewalDateA] = useState('Nov 26, 2025');
+  const [renewalDateA] = useState('Sep 16, 2025');
   const [renewalDateH] = useState('Apr 30, 2025');
   const [paymentMethod] = useState('•••• 1234');
   const [expiryDate] = useState('Expires 06/2024');

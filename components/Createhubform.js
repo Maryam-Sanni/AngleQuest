@@ -124,7 +124,10 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [visibility, setVisibility] = useState('public');
   const [category, setCategory] = useState('');
   const [coaching_hub_name, setGroupName] = useState('');
-   const [specialization, setSpecialization] = useState('');
+  const [specialization, setSpecialization] = useState('');
+  const [skills, setSkills] = useState('Expert');
+  const [years_experience, setExperience] = useState('2');
+  const [location, setLocation] = useState('Netherlands');
   const [coaching_hub_goals, setAddgoals] = useState('');
   const [coaching_hub_description, setGroupDescription] = useState('');
   const [coaching_hub_limit, setlimit] = useState('');
@@ -192,6 +195,10 @@ const CreateCoachingHubForm = ({ onClose }) => {
         visibility,
         category,
         coaching_hub_name,
+        specialization,
+        years_experience,
+        skills,
+        location,
         meeting_day,
         coaching_hub_description,
         from,

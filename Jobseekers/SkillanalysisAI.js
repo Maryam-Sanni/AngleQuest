@@ -406,7 +406,7 @@ const MyComponent = ({ onClose }) => {
         <View
           style={
             switched
-              ? [styles.container, { width: 650, height: 660 }]
+              ? [styles.container, { width: 650, height: 700 }]
               : styles.container
           }
         >
@@ -508,7 +508,10 @@ const MyComponent = ({ onClose }) => {
                   {uploading ? (
                     <View style={styles.loadingContainer}>
                       <Text style={styles.loadingText}>Analyzing CV, Please wait...</Text>
-                      <ActivityIndicator size="large" color="green" />
+                      <Image 
+                        source={require('../assets/loading.gif')}
+                        style={styles.loadingGif} 
+                      />
                     </View>
                   ) : (
                     <TouchableOpacity
@@ -558,7 +561,11 @@ const MyComponent = ({ onClose }) => {
               >
                 {loadingQuestions ? (
                   <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color="green" />
+                    <Text style={styles.loadingText}>Compiling questions, Please wait...</Text>
+                    <Image 
+                      source={require('../assets/loading.gif')}
+                      style={styles.loadingGif} 
+                    />
                   </View>
                 ) : (
                   <ScrollView
@@ -614,7 +621,7 @@ const MyComponent = ({ onClose }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    width: 595,
+    width: 650,
     minHeight: 600,
   },
 
@@ -631,6 +638,7 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: 50,
     paddingTop: 20,
+    paddingBottom: 50,
   },
   titleWrapper: {
     flexDirection: "row",
@@ -777,6 +785,11 @@ const styles = StyleSheet.create({
   },
   switch: {
     color: 'green'
+  },
+  loadingGif: {
+    width: 100, 
+    height: 100, 
+    resizeMode: 'contain', 
   },
 });
 
