@@ -23,6 +23,7 @@ const Room = ({ activeRoom }) => {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [echoInstance, setEchoInstance] = useState(null);
 
+
   
   // Fetch token and user ID from AsyncStorage
   useEffect(() => {

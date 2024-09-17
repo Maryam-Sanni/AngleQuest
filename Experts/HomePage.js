@@ -1,5 +1,5 @@
-import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal  } from 'react-native';
+import React, { useState,  useEffect, useContext } from 'react';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import Sidebar from '../components/expertssidebar';
@@ -14,6 +14,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import CustomModal from './TourGuide';
+import { api_url, AuthContext } from '../Messaging/AuthProvider';
 
 const defaultAvatar = require("../assets/account.png");
 
@@ -33,6 +34,8 @@ const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [helpmodalVisible, sethelpModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [token, setToken] = useState(null);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
   const [first_name, setFirstName] = useState('');
@@ -44,7 +47,61 @@ const HomePage = () => {
       latestSkillAnalysis: {}
   })
  
+  const ico = 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b';
 
+  const getToken = async () => {
+    try {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+        console.log('Token retrieved from AsyncStorage:', storedToken);
+      } else {
+        console.log('No token found in AsyncStorage.');
+      }
+    } catch (error) {
+      console.log('Error retrieving token:', error);
+    }
+  };
+
+  // Function to fetch user chatrooms
+  const getUserChatrooms = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`${api_url}chat/my-memberships`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      });
+      const data = await res.json();
+      if (data?.status === 'success') {
+        setConversations(data?.memberships);
+        console.log('Chatrooms fetched successfully:', data?.memberships);
+      } else {
+        console.log('Failed to fetch chatrooms:', data);
+      }
+    } catch (err) {
+      console.log('Error fetching chatrooms:', err);
+    }
+  };
+
+  // Fetch token on component mount
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  // Fetch chatrooms once the token is retrieved
+  useEffect(() => {
+    if (token) {
+      getUserChatrooms();
+    }
+  }, [token]);
+
+  const handleSelectRoom = (room) => {
+    console.log('Selected Room:', room);
+    // Navigate to Room screen, passing room details as parameters
+    navigation.navigate('Chats', { activeRoom: room });
+  };
 
   
 
@@ -280,10 +337,35 @@ const {t}=useTranslation()
        source={require('../assets/chat.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Chats")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold', fontFamily:"Roboto-Light"}}>{t("Hub Chats")}</Text>
           </View>
-                <Text style={styles.hubTitle}>All Hub Messages</Text>
-        
+        <FlatList
+          data={conversations.slice(0, 5)}
+          keyExtractor={(item) => item?.room?.id.toString()}
+          renderItem={({ item }) => (
+              <TouchableOpacity
+                  style={styles.conversation}
+                  onPress={() => handleSelectRoom({
+                      id: item?.room?.id,
+                      name: item?.room?.displayName,
+                      image: item?.room?.roomIcon,
+                  })}
+              >
+                  <Image
+                      source={{ uri: item?.room?.roomIcon || ico }}
+                      style={styles.avatar}
+                  />
+                  <View style={styles.conversationInfo}>
+                      <Text style={styles.conversationName}>
+                          {item?.room?.displayName}
+                      </Text>
+                      <Text style={styles.conversationLastMessage}>
+                          {item?.room?.lastMessage}
+                      </Text>
+                  </View>
+                 </TouchableOpacity>
+            )}
+                />
      
           <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
           <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
@@ -653,7 +735,8 @@ messageBox: {
     borderRadius: 20,
   marginRight: 15, 
   borderColor: 'rgba(255,255,255,0.5)',
-  borderWidth: 1
+  borderWidth: 1,
+  marginBottom: 30,
 },
 greenBox: {
   width: 580,
@@ -1020,7 +1103,31 @@ whiteBox: {
     borderRadius: 25,
     marginRight: 10,
     marginLeft: 10
-  }
+  },
+  conversation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  conversationInfo: {
+    flex: 1,
+  },
+  conversationName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  conversationUsername: {
+    color: 'white',
+  },
+  conversationLastMessage: {
+    color: '#F2F2F2',
+  },
 });
 
 export default HomePage;

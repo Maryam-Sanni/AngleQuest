@@ -38,7 +38,9 @@ function MyComponent() {
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')  
-  const [hoveredIndex, setHoveredIndex] = useState(null); 
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+   const [isHovered, setIsHovered] = useState(false);
+   const [isHovered2, setIsHovered2] = useState({});
 
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
@@ -52,6 +54,14 @@ function MyComponent() {
     setIsSaved(!isSaved);
   };
 
+  const handleMouseEnter2 = (index) => {
+    setIsHovered2((prev) => ({ ...prev, [index]: true }));
+  };
+
+  const handleMouseLeave2 = (index) => {
+    setIsHovered2((prev) => ({ ...prev, [index]: false }));
+  };
+  
   const joinCourse = async () => {
     if (!selectedHub) {
       console.error("No hub selected");
@@ -581,24 +591,36 @@ paddingHorizontal: 5,
             </Text></Text>
               </View>
               <TouchableOpacity
+                onMouseEnter={() => handleMouseEnter2(index)}
+                onMouseLeave={() => handleMouseLeave2(index)}
                 onPressIn={() => handleJoinPressIn(index)}
-                onPressOut={handleJoinPressOut}
+                onPressOut={() => handleJoinPressOut(index)}
                 style={{
                   borderWidth: 2,
-                    borderColor: '#333333',
-                    borderRadius: 5,
-                    paddingHorizontal: 50,
-                    paddingVertical: 5,
-                    marginTop: 15,
-                    width: 150,
-                    alignSelf: "center",
-                    justifyContent: 'center',
-                    marginLeft: 10,
-                    marginRight: 10,
-                  backgroundColor: isPressed[index] ? 'coral' : 'white',
+                  borderColor: '#333333',
+                  borderRadius: 5,
+                  paddingHorizontal: 50,
+                  paddingVertical: 5,
+                  marginTop: 15,
+                  width: 170,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 10,
+                  marginRight: 10,
+                  backgroundColor: isPressed[index] ? 'coral' : isHovered[index] ? 'green' : 'white',
                 }}
-                onPress={joinCourse} >
-              <Text style={{ color: isPressed[index] ? 'white' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join</Text>
+                onPress={joinCourse}
+              >
+                <Text
+                  style={{
+                    color: isPressed[index] || isHovered[index] ? 'white' : 'black',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                  }}
+                >
+                  Register
+                </Text>
               </TouchableOpacity>
           </View>
             
@@ -643,10 +665,17 @@ paddingHorizontal: 5,
 
                       
                       <View style={styles.textContainer}>
-                        <Text style={styles.headingText}>{t("Upcoming Courses")}</Text>
+                        <Text style={styles.headingText}>{t("All Courses")}</Text>
                         <Text style={styles.subHeadingText}>                      {t(
-                            "Joining a course means you will not be a part of the hub for extensive training but you will be able to get access to the course content and the hub meetings.",
+                            "By clicking 'Register', you agree to join the course. However, you will not be part of the hub for extensive training. You will still have access to the course content and be able to participate in the hub meetings.",
                           )}</Text>
+                        <TouchableOpacity
+                          style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                        >
+                          <Text style={styles.buttonTextplus}>My Courses</Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                     <View
@@ -781,7 +810,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     position: 'absolute',
-    top: '40%',
+    top: '30%',
     left: '10%',
     right: '10%',
     alignItems: 'center',
@@ -821,6 +850,25 @@ const styles = StyleSheet.create({
     height: 150,
     bottom: -40,
     right: -50,
+  },
+  buttonplus: {
+    backgroundColor: '#3C6E47',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    width: 200,
+    marginTop: 20,
+    marginBottom: 30
+  },
+  buttonplusHovered: {
+    backgroundColor: 'coral', 
+  },
+  buttonTextplus: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
 

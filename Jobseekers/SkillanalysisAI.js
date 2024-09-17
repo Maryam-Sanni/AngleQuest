@@ -189,36 +189,46 @@ const MyComponent = ({ onClose }) => {
 
   const handleQuestionsResponse = async () => {
     setIsLoading(true); // Start loading
-    
-    // Prepare the responses in the format required
-    const responses = questions.map((question, index) => ({
-      id: question.id,
-      question: question.question,
-      answer: switchStates[index] ? "yes" : "no",
-    }));
-
-    // Prepare the form data
-    const formData = new FormData();
-    formData.append(
-      'question',
-      JSON.stringify({
-        specialization: specialization, 
-        questions: JSON.stringify({ questions: responses }),
-      })
-    );
 
     try {
-      const response = await fetch(
-        "https://ai.recruitangle.com/api/v1/prediction/79f22450-0e1c-4035-8020-76a6013712f9",
+      // Fetch the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      // Prepare the responses in the format required
+      const responses = questions.map((question, index) => ({
+        id: question.id,
+        question: question.question,
+        answer: switchStates[index] ? "yes" : "no",
+      }));
+
+      // Prepare the form data
+      const formData = new FormData();
+      formData.append(
+        'question',
+        JSON.stringify({
+          specialization: specialization,
+          questions: JSON.stringify({ questions: responses }),
+        })
+      );
+
+      // Make the POST request using Axios
+      const response = await axios.post(
+        'https://recruitangle.com/api/jobseeker/process/questionnaire',
+        formData,
         {
-          method: "POST",
-          body: formData,
+          headers: {
+            'Authorization': `Bearer ${token}`, // Add token to headers
+            'Content-Type': 'multipart/form-data', // Set Content-Type for FormData
+          },
         }
       );
 
       // Check if response status is OK (200-299)
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status >= 200 && response.status < 300) {
+        const data = response.data;
         console.log("Submit Response:", data);
 
         // Optionally, you can also check for specific success conditions in the response data
@@ -236,11 +246,12 @@ const MyComponent = ({ onClose }) => {
     } catch (error) {
       Alert.alert("Error", "An error occurred while submitting your responses.");
       console.error("Submit Error:", error);
-     } finally {
-        // Reset loading state
+    } finally {
+      // Reset loading state
       setIsLoading(false);
-      }
-    };
+    }
+  };
+
 
 
 

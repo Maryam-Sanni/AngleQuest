@@ -1,5 +1,5 @@
-import React, { useState,  useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, TextInput  } from 'react-native';
+import React, { useState,  useEffect, useContext } from 'react';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, TextInput, FlatList  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
@@ -15,6 +15,7 @@ import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { api_url, AuthContext } from '../Messaging/AuthProvider';
 import { formatDistanceToNow, format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 
@@ -27,16 +28,11 @@ const HomePage = () => {
   const [isHovered4, setIsHovered4] = useState(false);
   const [isHovered5, setIsHovered5] = useState(false);
   const [isHovered6, setIsHovered6] = useState(false);
-  const [isHovered7, setIsHovered7] = useState(false);
-  const [isHovered8, setIsHovered8] = useState(false);
-  const [isHovered9, setIsHovered9] = useState(false);
   const [isHovered10, setIsHovered10] = useState(false);
   const [isHovered11, setIsHovered11] = useState(false);
   const [isHovered12, setIsHovered12] = useState(false);
   const [isHovered13, setIsHovered13] = useState(false);
   const [isHovered14, setIsHovered14] = useState(false);
-  const [isHovered15, setIsHovered15] = useState(false);
-  const [isHovered16, setIsHovered16] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
@@ -44,6 +40,8 @@ const HomePage = () => {
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const [helpmodalVisible, sethelpModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [conversations, setConversations] = useState([]);
+  const [token, setToken] = useState(null);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [data, setData] = useState([]);
@@ -52,80 +50,61 @@ const HomePage = () => {
       latestInterview: {},
       latestSkillAnalysis: {}
   })
- 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
+  const ico = 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b';
+
+  const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      console.log("Token retrieved:", token);
-
-      if (token) {
-        const response = await axios.get(
-          "https://recruitangle.com/api/expert/getAllExperts",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log("API response:", response.data);
-        const result = response.data.allExperts;
-
-        // Retrieve all last messages and timestamps in parallel
-        const chatDataPromises = result.map(item =>
-          AsyncStorage.getItem(`lastMessage_${item.id}`)
-        );
-        const chatData = await Promise.all(chatDataPromises);
-
-        // Process and format data
-        const formattedData = result.map((item, index) => {
-          const { lastMessage = "No messages", timestamp = new Date().toISOString() } = chatData[index] ? JSON.parse(chatData[index]) : {};
-
-          // Determine the time format
-          const now = new Date();
-          const messageDate = new Date(timestamp);
-          let timeFormatted = '';
-
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-
-          const yesterday = new Date(today);
-          yesterday.setDate(yesterday.getDate() - 1);
-
-          if (messageDate >= today) {
-            timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
-          } else if (messageDate >= yesterday) {
-            timeFormatted = 'Yesterday';
-          } else {
-            timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
-          }
-
-          return {
-            id: item.id.toString(), // Ensure id is a string
-            name: `${item.first_name} ${item.last_name}`,
-            avatar: item.avatar_url ? { uri: item.avatar_url } : defaultAvatar,
-            message: lastMessage,
-            time: timeFormatted,
-            timestamp: messageDate, // Include timestamp for sorting
-            messagecount: "0",
-            hub: "Hub Members",
-          };
-        });
-
-        // Sort the data by timestamp in descending order
-        formattedData.sort((a, b) => b.timestamp - a.timestamp);
-
-        setData(formattedData);
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+        console.log('Token retrieved from AsyncStorage:', storedToken);
       } else {
-        console.log("No token found");
+        console.log('No token found in AsyncStorage.');
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log('Error retrieving token:', error);
     }
+  };
+
+  // Function to fetch user chatrooms
+  const getUserChatrooms = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`${api_url}chat/my-memberships`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      });
+      const data = await res.json();
+      if (data?.status === 'success') {
+        setConversations(data?.memberships);
+        console.log('Chatrooms fetched successfully:', data?.memberships);
+      } else {
+        console.log('Failed to fetch chatrooms:', data);
+      }
+    } catch (err) {
+      console.log('Error fetching chatrooms:', err);
+    }
+  };
+
+  // Fetch token on component mount
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  // Fetch chatrooms once the token is retrieved
+  useEffect(() => {
+    if (token) {
+      getUserChatrooms();
+    }
+  }, [token]);
+
+  const handleSelectRoom = (room) => {
+    console.log('Selected Room:', room);
+    // Navigate to Room screen, passing room details as parameters
+    navigation.navigate('Chat', { activeRoom: room });
   };
   
  useEffect(() => {
@@ -574,33 +553,38 @@ onMouseLeave={() => setIsHovered12(false)}
        source={require('../assets/chat.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>All Experts</Text>
-          <Text style={{fontSize: 18, color: 'white', marginTop: 25, position: 'absolute', right: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Hubs")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 30, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Hub Chats</Text>
           </View>
-             {data.slice(0, 4).map((item, index) => (
-   <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 20, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
-              <View key={index} style={{ flexDirection: 'row', marginTop: 15 }}>
-                <Image source={item.avatar} style={styles.image} />
-                <View style={{ flexDirection: 'column' }}>
-                   <TouchableOpacity onPress={() => openUser(item.id)}>
-                  <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15, fontFamily: "Roboto-Light" }}>
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{ color: "white", fontSize: 13, marginTop: 5, width: 150, height: 15, fontFamily: "Roboto-Light" }}
-                    numberOfLines={1}  // Limit to 1 line
-                    ellipsizeMode="tail"  // Show "..." at the end if the text is too long
+            <FlatList
+              data={conversations.slice(0, 5)}
+              keyExtractor={(item) => item?.room?.id.toString()}
+              renderItem={({ item }) => (
+                 <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 10, marginLeft: 10, marginRight: 10, borderRadius: 5}}>
+                  <TouchableOpacity
+                      style={styles.conversation}
+                      onPress={() => handleSelectRoom({
+                          id: item?.room?.id,
+                          name: item?.room?.displayName,
+                          image: item?.room?.roomIcon,
+                      })}
                   >
-                    {item.message}
-                  </Text>
-                      </TouchableOpacity>
-                  <Text style={{ color: 'white', marginLeft: 110, fontSize: 12, marginTop: 3, fontFamily: "Roboto-Light" }}>
-                    {item.time}
-                  </Text>
-                </View>  
-              </View>
-   </View>
-            ))}
+                      <Image
+                          source={{ uri: item?.room?.roomIcon || ico }}
+                          style={styles.avatar}
+                      />
+                      <View style={styles.conversationInfo}>
+                          <Text style={styles.conversationName}>
+                              {item?.room?.displayName}
+                          </Text>
+                          <Text style={styles.conversationLastMessage}>
+                              {item?.room?.lastMessage}
+                          </Text>
+                      </View>
+                     </TouchableOpacity>
+                 </View>
+                )}
+                    />
+              
           
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
@@ -743,7 +727,7 @@ messageBox: {
     borderRadius: 20,
   marginRight: 15, 
   borderColor: 'rgba(255,255,255,0.5)',
-  borderWidth: 1
+  borderWidth: 1,
 },
 greenBox: {
   width: 580,
@@ -777,7 +761,8 @@ blurBackground: {
       borderRadius: 20,
       marginBottom: 15,
       borderColor: 'rgba(255,255,255,0.5)',
-      borderWidth: 1
+      borderWidth: 1,
+      paddingBottom: 30
     },
   touchable: {
     padding: 8,
@@ -1079,6 +1064,30 @@ blurBackground: {
     width: 25,
     height: 25,
     marginHorizontal: 5,
+  },
+  conversation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  conversationInfo: {
+    flex: 1,
+  },
+  conversationName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  conversationUsername: {
+    color: 'white',
+  },
+  conversationLastMessage: {
+    color: '#F2F2F2',
   },
 });
 
