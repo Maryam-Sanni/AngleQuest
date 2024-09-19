@@ -22,6 +22,8 @@ function MyComponent({ onClose }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hubMembers, setHubMembers] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleConfirmDateTime = (dateTime) => {
     setSelectedDateTime(dateTime);
     setIsModalVisible(false);
@@ -62,7 +64,7 @@ function MyComponent({ onClose }) {
         assignment_due: selectedDateTime,
       };
 
-      const response = await axios.post('https://recruitangle.com/api/expert/newassignment/create', formData, {
+      const response = await axios.post(`${apiUrl}/api/expert/newassignment/create`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

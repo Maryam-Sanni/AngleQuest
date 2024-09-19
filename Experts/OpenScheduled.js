@@ -30,7 +30,7 @@ function MyComponent({ onClose }) {
     }
   };
   
-  
+   const apiUrl = process.env.REACT_APP_API_URL;
   
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
@@ -71,7 +71,7 @@ function MyComponent({ onClose }) {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/interview/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -143,7 +143,7 @@ function MyComponent({ onClose }) {
       };
 
       // First API call to submit feedback
-      const feedbackResponse = await axios.post('https://recruitangle.com/api/expert/feedback-interview', feedbackPayload, {
+      const feedbackResponse = await axios.post(`${apiUrl}/api/expert/feedback-interview`, feedbackPayload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -157,7 +157,7 @@ function MyComponent({ onClose }) {
         };
 
         // Second API call to update expert balance
-        const balanceResponse = await axios.put('https://recruitangle.com/api/expert/edit-balance', balancePayload, {
+        const balanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, balancePayload, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

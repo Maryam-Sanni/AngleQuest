@@ -22,6 +22,8 @@ function MyComponent({ onClose }) {
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setType] = useState("hub");
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   // useEffect to retrieve the expert id from AsyncStorage
   useEffect(() => {
     const getExpertId = async () => {
@@ -67,7 +69,7 @@ function MyComponent({ onClose }) {
 
       // Post to create-jobseeker-interview endpoint
       const MeetingResponse = await axios.post(
-        'https://recruitangle.com/api/jobseeker/meetings/schedule',
+        `${apiUrl}/api/jobseeker/meetings/schedule`,
         meetingFormData,
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
       );
@@ -84,7 +86,7 @@ function MyComponent({ onClose }) {
         time: selectedTime,
       };
   
-      const response = await axios.post('https://recruitangle.com/api/expert/newhubmeeting/create', formData, {
+      const response = await axios.post(`${apiUrl}/api/expert/newhubmeeting/create`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

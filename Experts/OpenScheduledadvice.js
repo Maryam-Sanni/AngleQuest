@@ -19,6 +19,8 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
   const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
@@ -54,7 +56,7 @@ function MyComponent({ onClose }) {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -129,7 +131,7 @@ function MyComponent({ onClose }) {
     })),
   };
 
-  const response = await axios.post('https://recruitangle.com/api/expert/feedback-skillAnalysis', payload, {
+  const response = await axios.post(`${apiUrl}/api/expert/feedback-skillAnalysis`, payload, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

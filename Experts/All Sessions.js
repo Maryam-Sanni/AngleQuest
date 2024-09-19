@@ -11,6 +11,8 @@ import OpenModal from './ConfirmMeetingEnd';
          const [modalVisible, setModalVisible] = useState(false);
         const [selectedMeeting, setSelectedMeeting] = useState(null);
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+        
         const handleOpenPress = async (meeting) => {
           setSelectedMeeting(meeting);
           setModalVisible(true);
@@ -41,7 +43,7 @@ import OpenModal from './ConfirmMeetingEnd';
                 return;
               }
 
-              const response = await axios.get('https://recruitangle.com/api/expert/newhubmeeting/get', {
+              const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },

@@ -22,13 +22,15 @@ function MyComponent() {
     const [role, setGrowthRole] = useState('');
      const [targetDate, setTargetDate] = useState(''); 
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
     useEffect(() => {
       const loadFormData = async () => {
         try {
           const token = await AsyncStorage.getItem('token');
           if (!token) throw new Error('No token found');
           
-          const response = await axios.get('https://recruitangle.com/api/expert/growthplan/get', {
+          const response = await axios.get(`${apiUrl}/api/expert/growthplan/get`, {
             headers: { Authorization: `Bearer ${token}` }
           });
     
@@ -57,7 +59,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=growth', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=growth`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

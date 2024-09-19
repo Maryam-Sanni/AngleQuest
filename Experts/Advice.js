@@ -34,6 +34,8 @@ function MyComponent() {
     const [modalVisible2, setModalVisible2] = useState(false);
     const barHeights = useRef(data.map(() => new Animated.Value(0))).current;
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
       try {
@@ -45,7 +47,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=advice', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=advice`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -141,7 +143,7 @@ function MyComponent() {
             const token = await AsyncStorage.getItem('token');
             if (!token) throw new Error('No token found');
             
-            const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/get', {
+            const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/get`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

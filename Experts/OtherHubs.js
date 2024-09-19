@@ -6,6 +6,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 function MyComponent({ onClose }) {
     const [clickedItem, setClickedItem] = useState(null);
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+    
     const handleItemClick = (item) => {
         setClickedItem(clickedItem === item ? null : item);
     };

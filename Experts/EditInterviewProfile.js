@@ -29,7 +29,8 @@ function MyComponent({ onClose }) {
         const [isVisible, setIsVisible] = useState(true);   
   const [isModalVisible, setModalVisible] = useState(false);
 
-
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleConfirm = ({ selectedDays, startTime, endTime }) => {
     setavailable_days(selectedDays);
     setavailable_times(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);

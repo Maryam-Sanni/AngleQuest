@@ -13,6 +13,8 @@ const ScheduledMeetingsTable = () => {
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -47,7 +49,7 @@ const ScheduledMeetingsTable = () => {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-all-jobseeker-skillanalysis', {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

@@ -9,9 +9,6 @@ import HelpModal from '../components/Help';
 import OpenModal2 from '../Experts/GProfile';
 import {useFonts} from "expo-font"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { formatDistanceToNow, format } from 'date-fns';
-import { enGB } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import CustomModal from './TourGuide';
 import { api_url, AuthContext } from '../Messaging/AuthProvider';
@@ -46,7 +43,9 @@ const HomePage = () => {
       latestInterview: {},
       latestSkillAnalysis: {}
   })
- 
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const ico = 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b';
 
   const getToken = async () => {
@@ -196,9 +195,9 @@ const {t}=useTranslation()
 
           // Fetch all data concurrently
           const [growthPlanResponse, interviewResponse, skillAnalysisResponse] = await Promise.all([
-              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-growthplan', { headers }),
-              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-interview', { headers }),
-              fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-skillanalysis', { headers })
+              fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-growthplan`, { headers }),
+              fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-interview`, { headers }),
+              fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, { headers })
           ]);
 
           // Check if responses are OK

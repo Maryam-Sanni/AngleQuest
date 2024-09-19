@@ -13,7 +13,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
   const [minute, setMinute] = useState(initialValue.split(':')[1]);
   const [isPM, setIsPM] = useState(initialValue.includes('PM'));
   const [modalVisible, setModalVisible] = useState(false);
-
+  
   const handleHourChange = (selectedHour) => {
     setHour(selectedHour);
   };
@@ -132,7 +132,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [coaching_hub_fee, setfee] = useState('');
   const maxDescriptionLength = 85; // Max character limit for description
 
-
+   const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleDescriptionChange = (text) => {
     if (text.length <= maxDescriptionLength) {
@@ -147,7 +147,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
         
-        const response = await axios.get('https://recruitangle.com/api/expert/hubs/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
   
@@ -211,7 +211,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
       };
   
       const response = await axios.put(
-        'https://recruitangle.com/api/expert/hubs/edit',
+        `${apiUrl}/api/expert/hubs/edit`,
         formData,
         { headers }
       );

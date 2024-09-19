@@ -26,6 +26,7 @@ function MyComponent() {
     const [isAllHovered, setIsAllHovered] = useState(false);
     const [coaching_hub_name, setGroupName] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
   
       const goToMyHubs = () => {
         navigation.navigate('All Hubs');
@@ -85,7 +86,7 @@ const {t}=useTranslation()
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/hubs/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

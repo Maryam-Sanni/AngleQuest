@@ -28,7 +28,8 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleConfirm = ({ selectedDays, startTime, endTime }) => {
     setAvailableDays(selectedDays);
     setAvailableTimes(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
@@ -41,7 +42,7 @@ function MyComponent({ onClose }) {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/growthplan/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -80,7 +81,7 @@ function MyComponent({ onClose }) {
       if (!token) throw new Error('No token found');
 
       const response = await axios.put(
-        'https://recruitangle.com/api/expert/growthplan/edit',
+        `${apiUrl}/api/expert/growthplan/edit`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );

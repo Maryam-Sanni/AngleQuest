@@ -16,6 +16,8 @@ const ScheduledMeetingsTable = () => {
   const [error, setError] = useState(null);
    const [hubName, setHubName] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const openUser = (userId) => {
     navigation.navigate('Messaging', { userId });
   };
@@ -28,7 +30,7 @@ const ScheduledMeetingsTable = () => {
       }
 
       const response = await axios.get(
-        "https://recruitangle.com/api/expert/getAllJobSeekers",
+        `${apiUrl}/api/expert/getAllJobSeekers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,7 +98,7 @@ const ScheduledMeetingsTable = () => {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/hubs/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

@@ -45,6 +45,8 @@ const MyComponent = () => {
   const [linkedInModalVisible, setLinkedInModalVisible] = useState(false);
   const [loading, setLoading] = useState(false); // State for loading indicator
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
   };
@@ -66,7 +68,7 @@ const MyComponent = () => {
       setLoading(true); // Set loading to true when sign in is initiated
 
       const response = await axios.post(
-        `https://recruitangle.com/api/expert/signup`,
+        `${apiUrl}/api/expert/signup`,
         {
           first_name: firstName,
           last_name: lastName,

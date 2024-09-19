@@ -20,6 +20,8 @@ function MyComponent({ onClose }) {
   const [isChecked, setIsChecked] = useState(false);
   const [review, setReview] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
@@ -55,7 +57,7 @@ function MyComponent({ onClose }) {
         if (!token) throw new Error("No token found");
 
         const response = await axios.get(
-          "https://recruitangle.com/api/expert/growthplan/get",
+          `${apiUrl}/api/expert/growthplan/get`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -119,7 +121,7 @@ function MyComponent({ onClose }) {
       };
 
       const response = await axios.post(
-        "https://recruitangle.com/api/expert/review-growth-plan",
+        `${apiUrl}/api/expert/review-growth-plan`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

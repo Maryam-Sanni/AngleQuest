@@ -22,6 +22,7 @@ function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
 
+   const apiUrl = process.env.REACT_APP_API_URL;
   
     useEffect(() => {
       const loadFormData = async () => {
@@ -58,7 +59,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=interview', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=interview`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -216,7 +217,7 @@ const {t}=useTranslation()
          <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light"}}>{t("No of candidates interviewed")}</Text>
          <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-line-chart.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5,fontFamily:"Roboto-Light" }}>500</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'blue', marginTop: 5,fontFamily:"Roboto-Light" }}>0</Text>
            </View>
            <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have 2 new booked session(s) today")}</Text>
            </View>
@@ -225,7 +226,7 @@ const {t}=useTranslation()
         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Total Earnings")}</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-money.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue',fontFamily:"Roboto-Light" }}>$1,580</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'lightblue',fontFamily:"Roboto-Light" }}>$0.00</Text>
      </View>
      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You earned a total of $30 today")}</Text>
     
@@ -235,7 +236,7 @@ const {t}=useTranslation()
         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Profile Visits")}</Text>
         <View style={{flexDirection: 'row'}}>
          <Image source={require('../assets/icons8-people.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey',fontFamily:"Roboto-Light" }}>20</Text>
+           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgrey',fontFamily:"Roboto-Light" }}>0</Text>
       </View>
       <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have 10 profile visit(s) this week")}</Text>
       </View>

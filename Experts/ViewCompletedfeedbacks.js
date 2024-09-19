@@ -36,6 +36,8 @@ function MyComponent({ onClose }) {
     }
   };
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
@@ -70,7 +72,7 @@ function MyComponent({ onClose }) {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/expert/interview/get', {
+        const response = await axios.get(`${apiUrl}/api/expert/interview/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -138,7 +140,7 @@ function MyComponent({ onClose }) {
       })),
     };
 
-    const response = await axios.post('https://recruitangle.com/api/expert/feedback-interview', payload, {
+    const response = await axios.post(`${apiUrl}/api/expert/feedback-interview`, payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

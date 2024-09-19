@@ -29,7 +29,8 @@ function MyComponent({ onClose }) {
         const [isVisible, setIsVisible] = useState(true);  
   const [isModalVisible, setModalVisible] = useState(false);
 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleConfirm = ({ selectedDays, startTime, endTime }) => {
     setavailable_days(selectedDays);
     setavailable_times(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
@@ -83,7 +84,7 @@ function MyComponent({ onClose }) {
             if (!token) throw new Error('No token found');
         
             const response = await axios.put(
-              'https://recruitangle.com/api/expert/skillAnalysis/edit',
+              `${apiUrl}/api/expert/skillAnalysis/edit`,
               data,
               { headers: { Authorization: `Bearer ${token}` } }
             );
