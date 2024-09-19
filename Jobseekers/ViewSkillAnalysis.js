@@ -31,6 +31,8 @@ function MyComponent({ onClose }) {
   const [meetingType, setMeetingType] = useState("advice");
   const [rating, setRating] = useState(0);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const getRatingText = (rating) => {
     switch (rating) {
       case 1: return 'Very Dissatisfied';
@@ -88,7 +90,7 @@ function MyComponent({ onClose }) {
 
   const goToPlans = async () => {
     try {
-      const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
+      const url = `${apiUrl}/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
 
       const postData = {
         type,

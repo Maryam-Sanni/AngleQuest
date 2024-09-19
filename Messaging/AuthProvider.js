@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-export const api_url = 'https://recruitangle.com/api/';
+const apiUrl = process.env.REACT_APP_API_URL;
+
+export const api_url = `${apiUrl}/api/`;
 axios.defaults.baseURL = api_url;
 
 export const AuthContext = React.createContext({});

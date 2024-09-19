@@ -51,6 +51,8 @@ const HomePage = () => {
       latestSkillAnalysis: {}
   })
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const ico = 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b';
 
   const getToken = async () => {
@@ -190,9 +192,9 @@ const HomePage = () => {
             };
 
             const [growthPlanResponse, interviewResponse, skillAnalysisResponse] = await Promise.all([
-                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', { headers }),
-                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', { headers }),
-                fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', { headers })
+                fetch(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, { headers }),
+                fetch(`${apiUrl}/api/jobseeker/get-jobseeker-interview`, { headers }),
+                fetch(`${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`, { headers })
             ]);
 
             const growthPlanData = await growthPlanResponse.json();

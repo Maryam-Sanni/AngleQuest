@@ -45,6 +45,8 @@ const MyComponent = ({ onClose }) => {
   const [loadingQuestions, setLoadingQuestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handlePress = () => {
     // Programmatically trigger the file input
     fileInputRef.current.click();
@@ -56,7 +58,7 @@ const MyComponent = ({ onClose }) => {
         const token = await AsyncStorage.getItem("token");
         if (token) {
           const response = await fetch(
-            "https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis",
+            `${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`,
             {
               method: "GET",
               headers: {
@@ -114,7 +116,7 @@ const MyComponent = ({ onClose }) => {
       setUploading(true);
 
       const response = await axios.post(
-        "https://recruitangle.com/api/jobseeker/analyze-cv",
+         `${apiUrl}/api/jobseeker/analyze-cv`,
         formData,
         {
           headers: {
@@ -216,7 +218,7 @@ const MyComponent = ({ onClose }) => {
 
       // Make the POST request using Axios
       const response = await axios.post(
-        'https://recruitangle.com/api/jobseeker/process/questionnaire',
+        `${apiUrl}/api/jobseeker/process/questionnaire`,
         formData,
         {
           headers: {

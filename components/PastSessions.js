@@ -11,11 +11,13 @@ const ScheduledMeetingsTable = () => {
   const [sessions, setSessions] = useState([]);
    const [selectedHubsession, setSelectedHubsession] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
-        const response = await fetch('https://recruitangle.com/api/jobseeker/get-hub-sessions', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/get-hub-sessions`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Include token in the Authorization header

@@ -18,7 +18,9 @@ const MyComponent = () => {
   const [loading, setLoading] = useState(false); // State for loading indicator
   const [first_name, setFirstName] = useState(''); // State for first name
   const [last_name, setLastName] = useState(''); // State for last name
-
+ 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleSignIn = async () => {
     if (!email || !password) {
       alert('Please fill in both email and password');
@@ -28,7 +30,7 @@ const MyComponent = () => {
     try {
       setLoading(true); // Set loading to true when sign in is initiated
 
-      const response = await axios.post('https://recruitangle.com/api/expert/signin', {
+      const response = await axios.post(`${apiUrl}/api/expert/signin`, {
         email,
         password,
       });

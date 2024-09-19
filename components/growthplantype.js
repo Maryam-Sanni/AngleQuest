@@ -14,7 +14,8 @@ const ScheduledMeetingsTable = () => {
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
   const [growthPlans, setGrowthPlans] = useState([]);
 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const loadFormData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -23,7 +24,7 @@ const ScheduledMeetingsTable = () => {
         return;
       }
 
-      const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

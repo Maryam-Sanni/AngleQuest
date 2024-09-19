@@ -22,6 +22,8 @@ function MyComponent({ onClose }) {
    const [selectedCategory, setSelectedCategory] = useState('');
   const [recommendedExpert, setRecommendedExpert] = useState(null);
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleOpenPress = () => {
     setMainModalVisible(false);
     setformModalVisible(true);
@@ -55,7 +57,7 @@ function MyComponent({ onClose }) {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/getAllExpertsGrowthPlan', {
+        const response = await axios.get(`${apiUrl}/api/expert/growthplan/getAllExpertsGrowthPlan`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -69,7 +71,7 @@ function MyComponent({ onClose }) {
         }
 
       // Fetch recommended expert data
-        const responseRecommended = await axios.get('https://recruitangle.com/api/jobseeker/get-chosen-expert-skill-analysis', {
+        const responseRecommended = await axios.get(`${apiUrl}/api/jobseeker/get-chosen-expert-skill-analysis`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

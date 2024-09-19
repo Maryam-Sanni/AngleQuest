@@ -1,32 +1,17 @@
-const path = require('path');
-const { merge } = require('webpack-merge');
-const commonConfig = require('./webpack.common.js');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
 
-module.exports = merge(commonConfig, {
-  mode: 'development',
-  entry: './App.js',  // Path to your main entry file
-  output: {
-    path: path.resolve(__dirname, 'web-build'),
-    filename: 'bundle.js',
-    publicPath: '/',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'babel-loader',
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
+module.exports = function(env, argv) {
+  const envFile = `.env.${process.env.NODE_ENV}`;
+  const envConfig = dotenv.config({ path: envFile }).parsed;
+
+  return {
+    // other configurations...
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': JSON.stringify(envConfig),
+      }),
     ],
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'web-build'),
-    compress: true,
-    port: 3000,
-    historyApiFallback: true,  // For client-side routing
-  },
-});
+    // other configurations...
+  };
+};

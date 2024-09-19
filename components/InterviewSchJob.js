@@ -12,13 +12,15 @@ const ScheduledMeetingsTable = () => {
   const [interviews, setInterviews] = useState([]);
   const POLLING_INTERVAL = 5000; // Poll every 60 seconds
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-interview`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

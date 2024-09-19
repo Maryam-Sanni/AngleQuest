@@ -31,7 +31,8 @@ function MyComponent({ onClose }) {
    const [Sessionsmissed, setSessionsmissed] = useState('0');
    const [Confirmed, setSetConfirmed] = useState('No');
  
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const getToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
@@ -68,7 +69,7 @@ function MyComponent({ onClose }) {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          const response = await axios.get('https://recruitangle.com/api/jobseeker/get-subscription', {
+          const response = await axios.get(`${apiUrl}/api/jobseeker/get-subscription`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setSubscriptionStatus(response?.data?.JSSubscriptionStatus?.subscribed);
@@ -111,7 +112,7 @@ const handleOpenPress3 = async () => {
         }
 
         // POST to create the hub
-        const createHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/create-hub', {
+        const createHubResponse = await axios.post(`${apiUrl}/api/jobseeker/create-hub`, {
           category: selectedHub.category,
           meeting_day: selectedHub.meeting_day,
           from: selectedHub.from,
@@ -135,7 +136,7 @@ const handleOpenPress3 = async () => {
           const jobseekerName = `${firstName} ${lastName}`;
 
           // POST to join the expert hub
-          const joinHubResponse = await axios.post('https://recruitangle.com/api/jobseeker/join-expert-hub', {
+          const joinHubResponse = await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
             jobseeker_name: jobseekerName,
             jobseeker_id: jobseekerId,
             expert_id: selectedHub.user_id,
@@ -195,7 +196,7 @@ const handleOpenPress3 = async () => {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/expert/hubs/all', {
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/all`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

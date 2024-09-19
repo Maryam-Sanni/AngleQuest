@@ -13,6 +13,8 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleOpenPress2 = async (analysis) => {
     setSelectedAnalysis(analysis);
     setModalVisible2(true); // Ensure this sets the correct modal visibility
@@ -51,7 +53,7 @@ const ScheduledMeetingsTable = () => {
       const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
 
       if (token && storedUserId) {
-        const response = await fetch('https://recruitangle.com/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks', {
+        const response = await fetch(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header

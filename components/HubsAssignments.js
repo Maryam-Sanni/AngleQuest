@@ -12,6 +12,8 @@ const ScheduledMeetingsTable = () => {
   const [newAssignments, setNewAssignments] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleOpenPress = async (assignment) => {
     setSelectedAssignment(assignment);
     setModalVisible(true);
@@ -32,7 +34,7 @@ const ScheduledMeetingsTable = () => {
   const fetchNewAssignments = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.get('https://recruitangle.com/api/expert/newassignment/get-all', {
+      const response = await axios.get(`${apiUrl}/api/expert/newassignment/get-all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

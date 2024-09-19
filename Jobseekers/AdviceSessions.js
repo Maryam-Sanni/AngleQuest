@@ -5,7 +5,6 @@ import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
 import OpenModal from '../Jobseekers/SkillanalysisAI';
-import NewModal from '../Jobseekers/SkillanalysisAI';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +26,8 @@ function MyComponent() {
   const [expert, setExpert] = useState(" ");
   const [description, setDescription] = useState(" ");
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchMeetingData = async () => {
       try {
@@ -36,7 +37,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skillanalysis-datetime', {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-skillanalysis-datetime`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -85,7 +86,7 @@ function MyComponent() {
                   return;
               }
 
-              const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+              const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`, {
                   headers: { Authorization: `Bearer ${token}` }
               });
 
@@ -138,7 +139,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=advice', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=advice`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

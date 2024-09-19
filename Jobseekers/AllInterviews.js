@@ -18,6 +18,8 @@ function MyComponent() {
   const [meetingData, setMeetingData] = useState({ date: '', time: '' });
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchMeetingData = async () => {
       try {
@@ -27,7 +29,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-interview-datetime', {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-interview-datetime`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -77,7 +79,7 @@ function MyComponent() {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=interview', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=interview`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -31,6 +31,8 @@
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
 
+     const apiUrl = process.env.REACT_APP_API_URL;
+    
     const handleConfirmDateTime = (dateTime) => {
       setSelectedDateTime(dateTime);
       setIsModalVisible(false);
@@ -126,7 +128,7 @@
 
             // Post to create-jobseeker-interview endpoint
             const MeetingResponse = await axios.post(
-              'https://recruitangle.com/api/jobseeker/meetings/schedule',
+              `${apiUrl}/api/jobseeker/meetings/schedule`,
               meetingFormData,
               { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
             );
@@ -161,7 +163,7 @@
 
         // Save the growth plan regardless of the subscription status
         const response = await axios.post(
-          'https://recruitangle.com/api/jobseeker/create-jobseeker-interview', 
+          `${apiUrl}/api/jobseeker/create-jobseeker-interview`, 
           formData, 
           { headers: { Authorization: `Bearer ${token}` } }
         );

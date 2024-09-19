@@ -28,6 +28,8 @@ export default function Profile() {
   const [birthday, setBirthday] = useState('');
   const [gender, setGender] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   // Function to retrieve the token from AsyncStorage
   const getToken = async () => {
     try {
@@ -64,7 +66,7 @@ export default function Profile() {
       await AsyncStorage.setItem('gender', gender);
   
       // Make API call to save profile data
-      await axios.post('https://recruitangle.com/api/jobseeker/create-jobseeker-profile', profileData, {
+      await axios.post(`${apiUrl}/api/jobseeker/create-jobseeker-profile`, profileData, {
         headers: {
           Authorization: `Bearer ${token}`, // Include token in the headers
         },

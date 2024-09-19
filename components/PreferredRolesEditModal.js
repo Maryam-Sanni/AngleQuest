@@ -2,47 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PreferredRolesEditModal = ({ visible, onClose, onSave }) => {
   const roles = ['SAP', 'Microsoft', 'Salesforce', 'Frontend Development', 'Backend Development', 'UI/UX', 'Data Analysis', 'Cloud Computing', 'Management']; // List of roles
   const [selectedRole, setSelectedRole] = useState(roles[0]); // Default to the first role
 
-  const handleSavePreferredRole = async () => {
+  const handleSavePreferredRole = () => {
     try {
-      // Retrieve token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        alert('Token not found. Please sign in again.');
-        return;
-      }
-
-      // Prepare data for API request
-      const data = {
-        preferred_role: selectedRole
-      };
-
-      // Send POST request to API
-      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Save Specification Response:', response.data);
-
-      // Close modal after successful save
+      onSave(selectedRole);
       onClose();
     } catch (error) {
-      console.error('Save Specification Error:', error);
-      alert('Failed to save preferred locations. Please try again.');
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
     }
-
-    // Save the locations in the parent component
-    onSave(selectedRole);
   };
+  
+  
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),

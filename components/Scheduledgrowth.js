@@ -15,7 +15,8 @@ const ScheduledMeetingsTable = () => {
   const [userId, setUserId] = useState(null);
   const [growthPlans, setGrowthPlans] = useState([]);
 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
 useEffect(() => {
   const loadFormData = async () => {
     try {
@@ -26,7 +27,7 @@ useEffect(() => {
         setUserId(storedUserId); // Store user_id in state
 
         // Make an API call to get the review growth plan
-        const response = await axios.get('https://recruitangle.com/api/expert/get-review-growth-plan', {
+        const response = await axios.get(`${apiUrl}/api/expert/get-review-growth-plan`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },

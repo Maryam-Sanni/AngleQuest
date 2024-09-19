@@ -19,7 +19,6 @@
   import Top from "../components/topbar";
   import Sidebar from "../components/sidebar";
   import { BlurView } from "expo-blur";
-  import CustomAlert from "../components/CustomAlert";
   import OpenModal from "./Pickexpertadv";
   import BotIMG from "../assets/AnglequestAI.png";
   import BackGArrow from "../assets/BackarrowG.jpeg";
@@ -40,6 +39,8 @@
     const [apiData, setApiData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+    
     useEffect(() => {
       console.log('useEffect triggered');
       const fetchTokenAndData = async () => {
@@ -47,7 +48,7 @@
           const token = await AsyncStorage.getItem('token');
           console.log('Token:', token); // Verify if token is retrieved
           if (token) {
-            const response = await axios.get('https://recruitangle.com/api/jobseeker/cv/analysis', {
+            const response = await axios.get(`${apiUrl}/api/jobseeker/cv/analysis`, {
               headers: { Authorization: `Bearer ${token}` },
             });
             console.log('API Response:', response.data);

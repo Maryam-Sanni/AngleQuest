@@ -12,6 +12,8 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
   const [token, setToken] = useState("");
   const [id, setId] = useState(null); // Add this line
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,7 +52,7 @@ const RatingBoardModal = ({ isVisible, onConfirm, onCancel, expertName }) => {
     if (selectedRating !== null && token) {
       try {
         const response = await axios.post(
-          'https://recruitangle.com/api/jobseeker/rate-growth-plan',
+          `${apiUrl}/api/jobseeker/rate-growth-plan`,
           {
             rating: String(selectedRating),
             growth_plan_id: String(data?.id),

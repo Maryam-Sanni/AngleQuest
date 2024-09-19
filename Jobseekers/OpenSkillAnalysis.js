@@ -32,6 +32,8 @@ function MyComponent({ onClose }) {
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setmeetType] = useState("advice");
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -74,7 +76,7 @@ function MyComponent({ onClose }) {
   const goToPlans = async () => {
       try {
         // Construct the URL with the `id`
-        const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
+        const url = `${apiUrl}/api/jobseeker/edit-jobseeker-skill-analysis/${id}`;
 
         // Prepare the data to be sent in the POST request
         const postData = {
@@ -170,9 +172,11 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                   onValueChange={(itemValue) => setType(itemValue)}
                 >
+                <Picker.Item label={t("Optimize Productivity")} value="Optimize Productivity" />
                   <Picker.Item label={t("Career Change")} value="Career Change" />
                   <Picker.Item label={t("Getting a raise")} value="Getting a raise" />
-                  <Picker.Item label={t("Visibility at work")} value="Visibility at work" />
+                  <Picker.Item label={t("New Skill Acquisition")} value="New Skill Acquisition" />
+                   <Picker.Item label={t("Role Transition")} value="Role Transition" />
                 </Picker>
               </View>
             </View>

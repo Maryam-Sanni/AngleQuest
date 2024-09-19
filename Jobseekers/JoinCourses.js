@@ -13,8 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Topbar from "../components/topbar";
 import Sidebar from "../components/sidebar";
-import OpenModal from "../components/Createhubform";
-import { Video } from 'expo-av';
+import OpenModal from "../Jobseekers/Pickyourhub";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -40,26 +39,27 @@ function MyComponent() {
   const [alertMessage, setAlertMessage] = useState('')  
   const [hoveredIndex, setHoveredIndex] = useState(null);
    const [isHovered, setIsHovered] = useState(false);
-   const [isHovered2, setIsHovered2] = useState({});
+  const [isViewHovered, setIsViewHovered] = useState(false);
+   const [isHoveredhub, setIsHoveredhub] = useState(false);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
+    setIsViewHovered((prev) => ({ ...prev, [index]: true }));
   };
 
   const handleMouseLeave = () => {
     setHoveredIndex(null);
+    setIsViewHovered(false);
   };
 
   const handlePress = () => {
     setIsSaved(!isSaved);
   };
 
-  const handleMouseEnter2 = (index) => {
-    setIsHovered2((prev) => ({ ...prev, [index]: true }));
-  };
-
-  const handleMouseLeave2 = (index) => {
-    setIsHovered2((prev) => ({ ...prev, [index]: false }));
+  const goToHubs = () => {
+    navigation.navigate("Coaching Hub Sessions");
   };
   
   const joinCourse = async () => {
@@ -68,7 +68,7 @@ function MyComponent() {
       return;
     }
 
-    const url = 'https://recruitangle.com/api/jobseeker/join-course';
+    const url = `${apiUrl}/api/jobseeker/join-course`;
 
     // Create payload from selectedHub data
     const payload = {
@@ -103,6 +103,7 @@ function MyComponent() {
       } else {
 
         console.log('Failed to join the course:', data);
+        setAlertMessage(t('Error'));
       }
     } catch (error) {
 
@@ -127,7 +128,7 @@ function MyComponent() {
         }
 
         const response = await axios.get(
-          "https://recruitangle.com/api/expert/hubs/all",
+          `${apiUrl}/api/expert/hubs/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -144,7 +145,7 @@ function MyComponent() {
 
         // Fetch recommended expert data
         const responseRecommended = await axios.get(
-          "https://recruitangle.com/api/jobseeker/get-all-jobseeker-hubs",
+          `${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -177,14 +178,6 @@ function MyComponent() {
       duration: 200,
       useNativeDriver: true,
     }).start();
-  };
-
-  const goToMyHubs = () => {
-    navigation.navigate("Join Courses");
-  };
-
-  const goToHubs = () => {
-    navigation.navigate("Coaching Hub Sessions");
   };
 
   const handleOpenPress = () => {
@@ -591,13 +584,11 @@ paddingHorizontal: 5,
             </Text></Text>
               </View>
               <TouchableOpacity
-                onMouseEnter={() => handleMouseEnter2(index)}
-                onMouseLeave={() => handleMouseLeave2(index)}
                 onPressIn={() => handleJoinPressIn(index)}
                 onPressOut={() => handleJoinPressOut(index)}
                 style={{
                   borderWidth: 2,
-                  borderColor: '#333333',
+                  borderColor: isPressed[index] ? 'darkgreen' : isViewHovered[index] ? 'coral': '#333333',
                   borderRadius: 5,
                   paddingHorizontal: 50,
                   paddingVertical: 5,
@@ -607,13 +598,13 @@ paddingHorizontal: 5,
                   justifyContent: 'center',
                   marginLeft: 10,
                   marginRight: 10,
-                  backgroundColor: isPressed[index] ? 'coral' : isHovered[index] ? 'green' : 'white',
+                  backgroundColor: isPressed[index] ? 'darkgreen' : isViewHovered[index] ? 'coral' : 'white',
                 }}
                 onPress={joinCourse}
               >
                 <Text
                   style={{
-                    color: isPressed[index] || isHovered[index] ? 'white' : 'black',
+                    color: isPressed[index] || isViewHovered[index] ? 'white' : 'black',
                     textAlign: 'center',
                     fontWeight: 'bold',
                     fontSize: 14,
@@ -667,15 +658,24 @@ paddingHorizontal: 5,
                       <View style={styles.textContainer}>
                         <Text style={styles.headingText}>{t("All Courses")}</Text>
                         <Text style={styles.subHeadingText}>                      {t(
-                            "By clicking 'Register', you agree to join the course. However, you will not be part of the hub for extensive training. You will still have access to the course content and be able to participate in the hub meetings.",
+                            "By clicking 'Register', you agree to join the course. You will have access to the course content and be able to participate in the hub meetings. However, you will not be part of the extensive trainings and supervision hubs provide.",
                           )}</Text>
+                        <View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity onPress={goToHubs}
+                          style={[styles.buttonplus, isHoveredhub && styles.buttonplusHovered]}
+                          onMouseEnter={() => setIsHoveredhub(true)}
+                          onMouseLeave={() => setIsHoveredhub(false)}
+                        >
+                          <Text style={styles.buttonTextplus}>Join a Hub</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity
                           style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
                           onMouseEnter={() => setIsHovered(true)}
                           onMouseLeave={() => setIsHovered(false)}
                         >
-                          <Text style={styles.buttonTextplus}>My Courses</Text>
+                          <Text style={styles.buttonTextplus}>View My Courses</Text>
                         </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                     <View
@@ -852,22 +852,30 @@ const styles = StyleSheet.create({
     right: -50,
   },
   buttonplus: {
-    backgroundColor: '#3C6E47',
+    backgroundColor: '#11412C',
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignSelf: 'center',
     width: 200,
     marginTop: 20,
-    marginBottom: 30
-  },
+    marginHorizontal: 10,
+    marginBottom: 30,
+    shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
   buttonplusHovered: {
     backgroundColor: 'coral', 
   },
   buttonTextplus: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
     textAlign: 'center',
   },
 });

@@ -38,6 +38,8 @@ function MyComponent({ onClose }) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const gotoCV = () => {
       navigation.navigate('Growth Offer');
   };
@@ -143,7 +145,7 @@ function MyComponent({ onClose }) {
 
       // Post to create-jobseeker-interview endpoint
       const MeetingResponse = await axios.post(
-        'https://recruitangle.com/api/jobseeker/meetings/schedule',
+        `${apiUrl}/api/jobseeker/meetings/schedule`,
         meetingFormData,
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
       );
@@ -176,7 +178,7 @@ function MyComponent({ onClose }) {
 
       // Make the GET request to check the subscription status
       const subscriptionResponse = await axios.get(
-          'https://recruitangle.com/api/jobseeker/get-subscription',
+        `${apiUrl}/api/jobseeker/get-subscription`,
           { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -185,7 +187,7 @@ function MyComponent({ onClose }) {
 
       // Save the growth plan regardless of the subscription status
       const response = await axios.post(
-        'https://recruitangle.com/api/jobseeker/create-jobseeker-growth-plan', 
+        `${apiUrl}/api/jobseeker/create-jobseeker-growth-plan`, 
         formData, 
         { headers: { Authorization: `Bearer ${token}` } }
       );

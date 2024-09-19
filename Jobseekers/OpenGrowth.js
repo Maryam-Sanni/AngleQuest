@@ -38,6 +38,8 @@ function MyComponent({ onClose }) {
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setType] = useState("growth");
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,7 +85,7 @@ function MyComponent({ onClose }) {
     const goToPlans = async () => {
       try {
         // Construct the URL with the `id`
-        const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-growth-plan/${id}`;
+        const url = `${apiUrl}/api/jobseeker/edit-jobseeker-growth-plan/${id}`;
         
       const postData = {
         type: type || 'Personal',

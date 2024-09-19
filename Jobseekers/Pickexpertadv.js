@@ -21,6 +21,8 @@ function MyComponent({ onClose }) {
   const [cardData, setCardData] = useState({ combinedData: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleOpenPress = () => {
     setMainModalVisible(false);
     setformModalVisible(true);
@@ -59,7 +61,7 @@ function MyComponent({ onClose }) {
         return;
       }
 
-      const response = await axios.post('https://recruitangle.com/api/jobseeker/chosen-expert-skill-analysis', {
+      const response = await axios.post(`${apiUrl}/api/jobseeker/chosen-expert-skill-analysis`, {
         first_name: `${selectedUser.first_name} ${selectedUser.last_name}`,
         category: selectedUser.category,
         available_days: selectedUser.available_days,
@@ -109,7 +111,7 @@ function MyComponent({ onClose }) {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/expert/growthplan/getAllExpertsSkillAnalysis', {
+        const response = await axios.get(`${apiUrl}/api/expert/growthplan/getAllExpertsSkillAnalysis`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

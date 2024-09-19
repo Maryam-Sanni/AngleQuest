@@ -2,8 +2,6 @@ import { useFonts } from 'expo-font';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SkillsEditModal = ({ visible, skills, onClose, onSave }) => {
   const [editableSkills, setEditableSkills] = useState([...skills]);
@@ -12,40 +10,13 @@ const SkillsEditModal = ({ visible, skills, onClose, onSave }) => {
     setEditableSkills([...skills]);
   }, [skills]);
 
-  const handleSaveSkills = async () => {
+  const handleSaveSkills = () => {
     try {
-      // Retrieve token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-      console.log('Token:', token); // Debugging line
-
-      if (!token) {
-        alert('Token not found. Please sign in again.');
-        return;
-      }
-
-      // Prepare data for API request
-      const data = {
-        skills: editableSkills,
-      };
-
-      // Send POST request to API
-      const response = await axios.post('https://recruitangle.com/api/skills/add', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Save Skills Response:', response.data);
-
-      // Call onSave callback with updated skills
       onSave(editableSkills);
-
-      // Close modal after successful save
       onClose();
     } catch (error) {
-      console.error('Save Skills Error:', error);
-      alert('Failed to save skills. Please try again.');
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
     }
   };
 

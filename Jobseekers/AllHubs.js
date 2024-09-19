@@ -28,6 +28,8 @@ function MyComponent() {
     const [selectedHub, setSelectedHub] = useState(null);
     const [isAttending, setIsAttending] = useState(false);
 
+     const apiUrl = process.env.REACT_APP_API_URL;
+    
     const toggleAttendance = () =>
         setIsAttending((previousState) => !previousState);
 
@@ -52,7 +54,7 @@ function MyComponent() {
             }
 
             try {
-                const response = await fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-hubs', {
+                const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

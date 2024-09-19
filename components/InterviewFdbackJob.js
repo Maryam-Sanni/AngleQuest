@@ -12,7 +12,8 @@ const ScheduledMeetingsTable = () => {
   const [interviews, setInterviews] = useState([]);
   const [modalVisible2, setModalVisible2] = useState(false);
 
-
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleOpenPress2 = async (interview) => {
     setModalVisible2(true);
 
@@ -51,7 +52,7 @@ const ScheduledMeetingsTable = () => {
 
       if (token && storedUserId) {
         // Fetch the interviews
-        const response = await fetch('https://recruitangle.com/api/expert/interview/getAllExpertsInterviewFeedbacks', {
+        const response = await fetch(`${apiUrl}/api/expert/interview/getAllExpertsInterviewFeedbacks`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header

@@ -12,6 +12,8 @@ const ScheduledMeetingsTable = () => {
   const [skillAnalysisData, setSkillAnalysisData] = useState([]);
   const [selectedAnalysis, setSelectedAnalysis] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const loadFormData = async () => {
       try {
@@ -21,7 +23,7 @@ const ScheduledMeetingsTable = () => {
           return;
         }
 
-        const response = await axios.get('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

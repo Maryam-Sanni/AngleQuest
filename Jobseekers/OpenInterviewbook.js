@@ -32,6 +32,8 @@ function MyComponent({ onClose }) {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
     const retrieveData = async () => {
@@ -109,7 +111,7 @@ function MyComponent({ onClose }) {
   
   const goToPlans = async () => {
     try {
-      const url = `https://recruitangle.com/api/jobseeker/edit-jobseeker-interview/${id}`;
+      const url = `${apiUrl}/api/jobseeker/edit-jobseeker-interview/${id}`;
 
       const formData = new FormData();
       formData.append('company', company || data?.company);

@@ -230,11 +230,12 @@ export default function Profile() {
 
       // Prepare data for API request
       const data = {
-        available_days: availableDays, // Ensure availableDays is defined
-        available_time: hours,    
-        preferred_role: preferredRole,
         about: about,
-        preferred_locations: preferredLocations.join(', '), 
+        skills: skills,
+        certifications: certifications,
+        location: preferredLocations.join(', '), 
+        category: preferredRole,
+        specialization: special
       };
 
       // Send POST request to API
