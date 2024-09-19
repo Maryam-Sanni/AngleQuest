@@ -214,6 +214,8 @@ export default function Profile() {
     setPreferredRole(selectedRole);
   };
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -239,7 +241,7 @@ export default function Profile() {
       };
 
       // Send POST request to API
-      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
+      const response = await axios.post(`${apiUrl}/api/expert/update-profile`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -453,8 +455,9 @@ export default function Profile() {
                <View style={styles.container}>
                  <View style={styles.row}>
                    <TextInput
-                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start' }]}
-                     placeholder="Example: Microsoft Azure"
+                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start', borderWidth: 1, borderColor: 'black' }]}
+                     placeholder="Type here Example: Microsoft Azure"
+                     placeholderTextColor="black"
                      value={special}
                      onChangeText={setSpecial}
                    />

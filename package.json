@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=development expo start --web",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "export:web": "expo build:web && expo export",
-    "build:development": "cross-env NODE_ENV=development expo build:web",
-    "build:production": "cross-env NODE_ENV=production expo build:web"
+    "start:production": "cross-env NODE_ENV=production expo start --web",
+    "export": "expo export",
+    "build:development": "expo build:web",
+    "build:production": "expo build:web"
   },
   "dependencies": {
     "@chakra-ui/alert": "^2.2.2",
@@ -112,9 +110,9 @@
     "cross-env": "^7.0.3",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.6.0",
-    "webpack": "^5.93.0",
+    "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "webpack-dev-server": "^5.1.0"
   },
   "private": true
 }

@@ -8,6 +8,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import MultiSelect from 'react-native-multiple-select';
+import { api_url, AuthContext } from '../Messaging/AuthProvider';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -21,6 +22,7 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');     
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hubMembers, setHubMembers] = useState([]);
+  const [coaching_hub_name, setGroupName] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -42,7 +44,31 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
 
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.NewHub;
+          setGroupName(data.coaching_hub_name || '');
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+  
   const handleSubmit = async () => {
     try {
       const token = await AsyncStorage.getItem('token'); 
@@ -62,6 +88,8 @@ function MyComponent({ onClose }) {
         topic: topic,
         description: description,
         assignment_due: selectedDateTime,
+        hub_name: coaching_hub_name,
+        assignment_response: "Pending"
       };
 
       const response = await axios.post(`${apiUrl}/api/expert/newassignment/create`, formData, {
@@ -91,30 +119,39 @@ function MyComponent({ onClose }) {
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
   const { t } = useTranslation();
+ 
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.get(`${apiUrl}/api/expert/getAllJobSeekers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Extract the relevant data (id and full name)
+      const result = response.data.allJobSeekers.map((jobSeeker) => ({
+        id: jobSeeker.id.toString(),
+        name: `${jobSeeker.first_name} ${jobSeeker.last_name}`,
+      }));
+
+      // Update state directly with the fetched members
+      setHubMembers(result);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
 
   useEffect(() => {
-    const loadHubMembers = async () => {
-      try {
-        const storedMembers = await AsyncStorage.getItem('hubMembers');
-        if (storedMembers) {
-          setHubMembers(JSON.parse(storedMembers));
-        } else {
-          const defaultMembers = [
-            { id: '1', name: 'Jacob Ncube' },
-            { id: '2', name: 'Sander Josef' },
-            { id: '3', name: 'Joe Jason' },
-            { id: '4', name: 'Hussein Aliyu' }
-          ];
-          setHubMembers(defaultMembers);
-          await AsyncStorage.setItem('hubMembers', JSON.stringify(defaultMembers));
-        }
-      } catch (error) {
-        console.error('Failed to load hub members:', error);
-      }
-    };
-
-    loadHubMembers();
+    // Fetch the members directly when the component mounts
+    fetchData();
   }, []);
+
+
 
   useEffect(() => {
     const saveSelectedMembers = async () => {
@@ -158,32 +195,32 @@ function MyComponent({ onClose }) {
             </TouchableOpacity>
           </View>
 
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Hub Member")}
-          </Text>
-          <View style={[styles.multiSelectContainer, isDropdownOpen && styles.multiSelectContainerExpanded]}>
-            <MultiSelect
-              items={hubMembers}
-              uniqueKey="id"
-              onSelectedItemsChange={setSelectedMembers}
-              selectedItems={selectedMembers}
-              selectText="Pick Members"
-              searchInputPlaceholderText="Search Members..."
-              styleMainWrapper={styles.multiSelectContainer}
-              styleDropdownMenuSubsection={styles.multiSelectInputGroup}
-              styleListContainer={styles.multiSelectDropdown}
-              itemTextColor="black"
-              selectedItemTextColor="green"
-              displayKey="name"  // This is where the names are displayed
-              submitButtonText="Save Selection"
-              styleInputGroup={styles.multiSelectSearchInput}
-              styleTextDropdown={styles.multiSelectText}
-              styleTextDropdownSelected={styles.multiSelectText}
-              onToggleList={(isOpen) => setIsDropdownOpen(isOpen)}
-              iconDropdown={{ color: 'black' }}
-              iconSearch={{ color: 'black' }}
-              iconCancel={{ color: 'black' }}
-            />
+            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5, fontFamily: "Roboto-Light" }}>
+              Hub Members
+            </Text>
+            <View style={[styles.multiSelectContainer, isDropdownOpen && styles.multiSelectContainerExpanded]}>
+              <MultiSelect
+                items={hubMembers} // Pass hubMembers to the items prop
+                uniqueKey="id"
+                onSelectedItemsChange={setSelectedMembers}
+                selectedItems={selectedMembers}
+                selectText="Pick Members"
+                searchInputPlaceholderText="Search Members..."
+                styleMainWrapper={styles.multiSelectContainer}
+                styleDropdownMenuSubsection={styles.multiSelectInputGroup}
+                styleListContainer={styles.multiSelectDropdown}
+                itemTextColor='black'
+                selectedItemTextColor='green'
+                displayKey="name"
+                submitButtonText="Save Selection"
+                styleInputGroup={styles.multiSelectSearchInput}
+                styleTextDropdown={styles.multiSelectText}
+                styleTextDropdownSelected={styles.multiSelectText}
+                onToggleList={(isOpen) => setIsDropdownOpen(isOpen)}
+                iconDropdown={{ color: 'black' }}
+                iconSearch={{ color: 'black' }}
+                iconCancel={{ color: 'black' }}
+              />
           </View>
 
           <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
@@ -346,7 +383,10 @@ const styles = StyleSheet.create({
   },
   multiSelectSearchInput: {
     height: 40,
-    marginTop: 5
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#206C00',
+    fontSize: 20
   },
   multiSelectText: {
     fontSize: 16,
