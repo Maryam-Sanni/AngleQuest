@@ -43,7 +43,7 @@ function MyComponent() {
    const [isHoveredhub, setIsHoveredhub] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const handleMouseEnter = (index) => {
     setHoveredIndex(index);
     setIsViewHovered((prev) => ({ ...prev, [index]: true }));
@@ -63,16 +63,16 @@ function MyComponent() {
   };
 
   const goToCourse= () => {
-    navigation.navigate("My Courses");
+    navigation.navigate("Join Courses");
   };
-  
+
   const joinCourse = async () => {
     if (!selectedHub) {
       console.error("No hub selected");
       return;
     }
 
-    const url = `${apiUrl}/api/jobseeker/join-course`;
+    const url = `${apiUrl}/api/jobseeker/get-joined-courses`;
 
     // Create payload from selectedHub data
     const payload = {
@@ -90,7 +90,7 @@ function MyComponent() {
     try {
       const token = await AsyncStorage.getItem('token'); 
       const response = await fetch(url, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -149,7 +149,7 @@ function MyComponent() {
 
         // Fetch recommended expert data
         const responseRecommended = await axios.get(
-          `${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`,
+          `${apiUrl}/api/jobseeker/get-joined-courses`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -339,12 +339,12 @@ function MyComponent() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return nextDate.toLocaleDateString(undefined, options);
   };
-  
+
   const renderCards = () => {
     if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
       return <Text>No data available</Text>;
     }
-    
+
     const categoryStyles = {
       'frontend development': {
         gradient: ['#A8D5BA', '#C9E4C5'],
@@ -401,7 +401,7 @@ function MyComponent() {
         pattern: 'https://img.icons8.com/?size=100&id=9dXTGX8frZOm&format=png&color=FFFFFF20',
       },
     };
-    
+
     return cardData.AllHubs.map((data, index) => {
       const normalizedCategory = data.category.trim().toLowerCase();
       const style = categoryStyles[normalizedCategory] || {
@@ -415,7 +415,7 @@ function MyComponent() {
       console.log(`Gradient Colors: ${style.gradient}`);
 
       const nextDateForMeeting = getNextDateForDay(data.meeting_day);
-      
+
       return (
         <Animated.View
           key={index}
@@ -461,7 +461,7 @@ paddingHorizontal: 5,
                 position: 'relative',
               }}
             >
-              
+
               <Image
                 source={{ uri: style.pattern }} 
                 style={{
@@ -538,8 +538,8 @@ paddingHorizontal: 5,
               <Text style={{ fontSize: 14, color: "#A0A0A0", fontWeight: "400" }}>
                 {t("by")}: {data.expert_name}
               </Text>
-             
-              
+
+
               <Text
                 style={{
                   fontSize: 14,
@@ -604,7 +604,7 @@ paddingHorizontal: 5,
                   marginRight: 10,
                   backgroundColor: isPressed[index] ? 'darkgreen' : isViewHovered[index] ? 'coral' : 'white',
                 }}
-                onPress={joinCourse}
+           
               >
                 <Text
                   style={{
@@ -614,13 +614,13 @@ paddingHorizontal: 5,
                     fontSize: 14,
                   }}
                 >
-                  Register
+                  Join
                 </Text>
               </TouchableOpacity>
           </View>
-            
+
         </View>
-          
+
         </View>
             </Animated.View>
           );
@@ -637,7 +637,7 @@ paddingHorizontal: 5,
       source={require("../assets/backgroundimg2.png")}
       style={{ height: "100%", width: "100%", flex: 1 }}
     >
-     
+
         <View style={{ flex: 1 }}>
           <Topbar />
           <View style={{ flexDirection: "row", flex: 1 }}>
@@ -646,23 +646,23 @@ paddingHorizontal: 5,
               <View style={styles.glassBox}>
                  <BlurView intensity={10} style={styles.blurBackground}>
                   <View style={{ flex: 1 }}>
-                    
-                    
+
+
                     <View style={styles.headerContainer}>
                       <LinearGradient
                         colors={['#3C6E47', '#11412C']}
                         style={styles.gradientBackground}
                       />
 
-                     
+
                       <View style={[styles.circle, styles.circleTopLeft]} />
                       <View style={[styles.circle, styles.circleBottomRight]} />
 
-                      
+
                       <View style={styles.textContainer}>
-                        <Text style={styles.headingText}>{t("All Courses")}</Text>
+                        <Text style={styles.headingText}>{t("My Courses")}</Text>
                         <Text style={styles.subHeadingText}>                      {t(
-                            "By clicking 'Register', you agree to join the course. You will have access to the course content and be able to participate in the hub meetings. However, you will not be part of the extensive trainings and supervision hubs provide.",
+                            "These are the courses you're currently enrolled in. Click 'Join' to participate in this week's course meeting if it has already started",
                           )}</Text>
                         <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={goToHubs}
@@ -677,7 +677,7 @@ paddingHorizontal: 5,
                           onMouseEnter={() => setIsHovered(true)}
                           onMouseLeave={() => setIsHovered(false)}
                         >
-                          <Text style={styles.buttonTextplus}>View My Courses</Text>
+                          <Text style={styles.buttonTextplus}>See All Courses</Text>
                         </TouchableOpacity>
                         </View>
                       </View>
@@ -693,11 +693,11 @@ paddingHorizontal: 5,
                     >
                       {renderCards()}
                     </View>
-                    
+
                   </View>
                  </BlurView>
                 </View>
-         
+
             </ScrollView>
           </View>
         </View>
@@ -717,7 +717,7 @@ paddingHorizontal: 5,
             <OpenModal onClose={() => handleCloseModal()} />
           </View>
         </Modal>
-  
+
     </ImageBackground>
   );
 }

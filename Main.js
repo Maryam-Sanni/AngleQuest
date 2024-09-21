@@ -126,6 +126,7 @@ import Project from './Jobseekers/Scenario Project';
 import Scenario from './Experts/Scenario';
 import MainMessage from './Messaging/ChatScopeUI';
 import MainExpertMessage from './Messaging/ExpertsChatScopeUI';
+import MyCourse from './Jobseekers/MyCourses';
 
 const Stack = createStackNavigator();
 
@@ -255,6 +256,7 @@ const App = () => {
         <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
        <Stack.Screen name="anglequest" component={BlankScreen} />
       <Stack.Screen name="Join Courses" component={JoinCourse} />
+       <Stack.Screen name="My Courses" component={MyCourse} />
       <Stack.Screen name="Project" component={Project} />
        <Stack.Screen name="Scenario Project" component={Scenario} />
       <Stack.Screen name="Chat" component={MainMessage} />

@@ -249,7 +249,7 @@ function MyComponent() {
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
         case "Home": return routeName === 'Home';
-        case "Courses": return routeName === 'Join Courses';
+        case "Courses": return ['My Courses', 'Join Courses'].includes(routeName);
           case "Growth Plan":
           return ['New Growth Plan', 'Growth Plan Sessions'].includes(routeName);
           case "Interview":
