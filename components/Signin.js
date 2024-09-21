@@ -26,9 +26,9 @@ const MyComponent = () => {
       alert('Please fill in both email and password');
       return;
     }
- 
+
     try {
-      setLoading(true); // Set loading to true when sign in is initiated
+      setLoading(true); 
 
       const response = await axios.post(`${apiUrl}/api/expert/signin`, {
         email,
@@ -37,14 +37,42 @@ const MyComponent = () => {
 
       console.log('Sign In Response:', response.data);
 
-        if (response.data.status === 'success') {
-          const { token, user } = response.data;
-          const { id, first_name, last_name, role } = user;
+      if (response.data.status === 'success') {
+        const { token, user } = response.data;
+        const { id, first_name, last_name, role } = user;
 
-          await AsyncStorage.setItem('token', token);
-          await AsyncStorage.setItem('user_id', id.toString()); 
-          await AsyncStorage.setItem('first_name', first_name);
-          await AsyncStorage.setItem('last_name', last_name);
+        await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('user_id', id.toString()); 
+        await AsyncStorage.setItem('first_name', first_name);
+        await AsyncStorage.setItem('last_name', last_name);
+
+        // Check if the balance was already sent
+        const balanceSent = await AsyncStorage.getItem('balanceSent');
+        if (!balanceSent) {
+          // Retrieve the token from AsyncStorage
+          const authToken = await AsyncStorage.getItem('token');
+
+          // Post the balance data if it hasn't been sent before
+          const balanceResponse = await axios.post(
+            `${apiUrl}/api/expert/send-balance`,
+            {
+              total_balance: 0,
+              withdrawal: "0",
+              new_payment: 0,
+              paid_by: "Admin"
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}` // Include token in Authorization header
+              }
+            }
+          );
+
+          console.log('Balance Post Response:', balanceResponse.data);
+
+          // Store a flag to indicate the balance was sent
+          await AsyncStorage.setItem('balanceSent', 'true');
+        }
 
         // Navigate based on user role
         if (role === 'expert') {
@@ -64,7 +92,7 @@ const MyComponent = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <View style={styles.outerContainer}>
       <View style={styles.container}>

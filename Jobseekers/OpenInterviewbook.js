@@ -19,7 +19,7 @@ function MyComponent({ onClose }) {
   const [role, setRole] = useState("");
   const [cv, setCV] = useState(null);
   const [job_description_file, setJobFile] = useState(null);
-  const [job_description_text, setjobText] = useState(" ");
+  const [job_description_text, setjobText] = useState('This is some texts about job description');
   const [token, setToken] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -239,7 +239,7 @@ function MyComponent({ onClose }) {
       <View style={styles.cell}>
         <TextInput
           placeholder={t("This is my job description")}
-          placeholderTextColor="grey"
+          placeholderTextColor="gray"
           multiline
           style={[styles.input, { height: 100 }]}
           value={job_description_text}

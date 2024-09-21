@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
-import { MaterialIcons } from '@expo/vector-icons';
 
 
 function MyComponent({ onClose }) {
@@ -100,51 +99,85 @@ newGuides[index] = { ...newGuides[index], [field]: value };
 setGuides(newGuides);
 };
 
-const handlePress = async () => {
-  if (!remark || !guides || !rating ) {
-    setAlertMessage(t('Please fill all fields'));
-    setAlertVisible(true);
-    return;
-  }
+  const handlePress = async () => {
+    if (!remark || !guides || !rating ) {
+      setAlertMessage(t('Please fill all fields'));
+      setAlertVisible(true);
+      return;
+    }
 
-  setIsChecked(!isChecked);
-  
-try {
-  const token = await AsyncStorage.getItem('token');
-  if (!token) throw new Error('No token found');
+    setIsChecked(!isChecked);
 
-  const payload = {
-     jobseeker_id: data?.user_id, // Convert jobseeker_id to a string
-    growth_plan_id: String(data?.id),
-    remark: remark,
-    coach: data?.name,
-    expert_name: `${firstName} ${lastName}`,
-    rating: rating,
-    completed: completed,
-    title: data?.title,
-    role: data?.role,
-    date: data?.date_time,
-    performance_rating: rating,
-    descriptions: guides.map(guide => ({
-      description: guide.guide,
-      percentage: guide.percentage,
-    })),
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      const payload = {
+         jobseeker_id: data?.user_id,
+        growth_plan_id: String(data?.id),
+        remark: remark,
+        coach: data?.coach,
+        expert_name: `${firstName} ${lastName}`,
+        rating: rating,
+        completed: completed,
+        title: data?.title,
+        role: data?.role,
+        date: data?.date,
+        performance_rating: rating,
+        descriptions: guides.map(guide => ({
+          description: guide.guide,
+          percentage: guide.percentage,
+        })),
+      };
+
+      // POST request for feedback
+      const response = await axios.post(`${apiUrl}/api/expert/feedback-growthPlan`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 201 && response.data.status === 'success') {
+        console.log('Marked as completed successfully');
+
+        // GET current balance
+        const balanceResponse = await axios.get(`${apiUrl}/api/expert/get-balance`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (balanceResponse.status === 200 && balanceResponse.data && balanceResponse.data.bal) {
+          const currentBalance = balanceResponse.data.bal.total_balance !== null 
+            ? parseInt(balanceResponse.data.bal.total_balance, 10) 
+            : 0; // Default to 0 if total_balance is null
+
+          const newBalance = currentBalance + 50; // Add 50 to the current balance
+
+          // PUT request to update the balance
+          const updateBalanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, {
+            total_balance: newBalance, 
+            withdrawal: "0",  
+            new_payment: 50,  
+            paid_by: data?.coach, 
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (updateBalanceResponse.status === 200) {
+            console.log('Balance updated successfully');
+          } else {
+            console.error('Failed to update balance', updateBalanceResponse);
+          }
+        } else {
+          console.error('Failed to retrieve current balance', balanceResponse);
+        }
+
+      } else {
+        console.error('Failed to mark as completed', response);
+      }
+    } catch (error) {
+      console.error('Error marking as completed', error);
+    } finally {
+      onClose();
+    }
   };
-
-  const response = await axios.post(`${apiUrl}/api/expert/feedback-growthPlan`, payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  if (response.status === 201 && response.data.status === 'success') {
-    console.log('Marked as completed successfully');
-  } else {
-    console.error('Failed to mark as completed', response);
-  }
-} catch (error) {
-  console.error('Error marking as completed', error);
-}
-  onClose();
-};
 
   const hideAlert = () => {
     setAlertVisible(false);

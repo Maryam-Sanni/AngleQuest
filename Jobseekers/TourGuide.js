@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import { Video } from 'expo-av';
 import OpenModal from '../components/Tour0b';
 
 function MyComponent({ onClose }) {
@@ -41,19 +40,16 @@ function MyComponent({ onClose }) {
 
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
                <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 30 }}>Hello There, Welcome to AngleQuest</Text>
-              <Video
-                source={require('../assets/Tg1.mp4')}
+              <Image
+                source={require('../assets/TG1.png')}
                 style={{
-                  width: 1000, 
+                  width: 1000,
                   height: 300,
                   marginTop: 20,
                   borderRadius: 10,
-                  alignSelf: 'center', 
+                  alignSelf: 'center',
                 }}
-                resizeMode="contain" 
-                isLooping
-                shouldPlay
-                isMuted
+                resizeMode="contain"
               />
             </View>
 

@@ -5,6 +5,10 @@ run = "npm start"
 channel = "stable-24_05"
 
 [[ports]]
+localPort = 3000
+externalPort = 3001
+
+[[ports]]
 localPort = 8081
 externalPort = 80
 

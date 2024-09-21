@@ -79,9 +79,10 @@ function MyComponent({ onClose }) {
 
       // Map selected member IDs to names
       const selectedNames = selectedMembers.map(id => {
-        const member = hubMembers.find(member => member.id === id);
-        return member ? member.name : id;
+          const member = hubMembers.find(member => member.id === id);
+          return member ? member.name : id;
       });
+
 
       const formData = {
         hub_member: selectedNames.join(', '),
@@ -133,13 +134,13 @@ function MyComponent({ onClose }) {
         },
       });
 
-      // Extract the relevant data (id and full name)
       const result = response.data.allJobSeekers.map((jobSeeker) => ({
         id: jobSeeker.id.toString(),
         name: `${jobSeeker.first_name} ${jobSeeker.last_name}`,
       }));
 
-      // Update state directly with the fetched members
+      console.log('Fetched members:', result); // Add this line
+
       setHubMembers(result);
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -200,7 +201,7 @@ function MyComponent({ onClose }) {
             </Text>
             <View style={[styles.multiSelectContainer, isDropdownOpen && styles.multiSelectContainerExpanded]}>
               <MultiSelect
-                items={hubMembers} // Pass hubMembers to the items prop
+                items={hubMembers || []} // Fallback to empty array
                 uniqueKey="id"
                 onSelectedItemsChange={setSelectedMembers}
                 selectedItems={selectedMembers}

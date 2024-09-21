@@ -209,7 +209,7 @@ const MyComponent = ({ onClose }) => {
       // Prepare the form data
       const formData = new FormData();
       formData.append(
-        'question',
+        'questions',
         JSON.stringify({
           specialization: specialization,
           questions: JSON.stringify({ questions: responses }),
@@ -232,7 +232,8 @@ const MyComponent = ({ onClose }) => {
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
         console.log("Submit Response:", data);
-
+        navigation.navigate('AI Result');
+        onClose();
         // Optionally, you can also check for specific success conditions in the response data
         if (data && data.json && data.json.analysis) {
           Alert.alert("Success", "Your responses have been submitted successfully.");

@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, TextInput, } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import { BlurView } from 'expo-blur';
-import EmploymentHistoryModal from'../components/EditEmplyHistory'; 
 import SkillsEditModal from '../components/SkillsEditModal';
 import CertificationsEditModal from '../components/CertificationsEditModal';
-import OtherExperiencesEditModal from '../components/OtherExperiencesEditModal';
 import PreferredLocationsEditModal from '../components/PreferredLocationsEditModal';
 import PreferredRolesEditModal from '../components/PreferredRolesEditModal';
 import AboutEditModal from '../components/AboutEditModal';
@@ -55,6 +53,41 @@ export default function Profile() {
   const [availableDays, setAvailableDays] = useState('Mon, Tue, Wed');
   const [hours, setHours] = useState('9:00 AM - 3:00 PM');
   const [special, setSpecial] = useState('');
+  const [totalBalance, setTotalBalance] = useState(null);
+
+  useEffect(() => {
+    // Function to fetch balance data with token from AsyncStorage
+    const fetchBalance = async () => {
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+
+        // Make API request with token in headers
+        const response = await fetch(`${apiUrl}/api/expert/get-balance`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success' && data.bal) {
+          setTotalBalance(data.bal.total_balance);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBalance();
+  }, []);
 
   const handleSavedays = async () => {
     try {
@@ -285,13 +318,13 @@ export default function Profile() {
                     source={require("../assets/account.png")}
                     style={{ width: 79, height: 79, borderRadius: 79, marginRight: 20 }}
                     resizeMode="cover"
-                  />
+                  /> 
                 </View>
                 </View>
                
            <View style={{ alignItems: 'flex-end', alignSelf: 'flex-start', justifyContent: 'center', marginRight: 20 }}>
                    <Text style={{ fontSize: 16, color: '#206C00', textAlign: 'right', marginBottom: 5, fontWeight: '600' }}>{t("Available Balance")}</Text>
-             <Text style={{ fontSize: 36, marginBottom: 5, fontWeight: '600' }}>$0.00</Text>
+             <Text style={{ fontSize: 36, marginBottom: 5, fontWeight: '600' }}>${totalBalance !== null ? totalBalance : '0'}.00</Text>
                   
                   
                  </View>

@@ -122,9 +122,8 @@ function MyComponent({ onClose }) {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
-      // Define payload for feedback API call
-      const feedbackPayload = {
-        jobseeker_id: data?.user_id,
+      const payload = {
+      jobseeker_id: data?.user_id,
         interview_id: String(data?.id),
         remark: remark,
         expert_name: `${firstName} ${lastName}`,
@@ -142,49 +141,63 @@ function MyComponent({ onClose }) {
         })),
       };
 
-      // First API call to submit feedback
-      const feedbackResponse = await axios.post(`${apiUrl}/api/expert/feedback-interview`, feedbackPayload, {
+      // POST request for feedback
+      const response = await axios.post(`${apiUrl}/api/expert/feedback-interview`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (feedbackResponse.status === 201 && feedbackResponse.data.status === 'success') {
+      if (response.status === 201 && response.data.status === 'success') {
         console.log('Marked as completed successfully');
 
-        // Define payload for balance update API call
-        const balancePayload = {
-          paid_by: data?.name, // Adjust the payload as necessary
-          new_payment: 50
-        };
-
-        // Second API call to update expert balance
-        const balanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, balancePayload, {
+        // GET current balance
+        const balanceResponse = await axios.get(`${apiUrl}/api/expert/get-balance`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (balanceResponse.status === 200 && balanceResponse.data.status === 'success') {
-          console.log('Expert balance updated successfully');
+        if (balanceResponse.status === 200 && balanceResponse.data && balanceResponse.data.bal) {
+          const currentBalance = balanceResponse.data.bal.total_balance !== null 
+            ? parseInt(balanceResponse.data.bal.total_balance, 10) 
+            : 0; // Default to 0 if total_balance is null
+
+          const newBalance = currentBalance + 50; // Add 50 to the current balance
+
+          // PUT request to update the balance
+          const updateBalanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, {
+            total_balance: newBalance, 
+            withdrawal: "0",  
+            new_payment: 50,  
+            paid_by: data?.name, 
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (updateBalanceResponse.status === 200) {
+            console.log('Balance updated successfully');
+          } else {
+            console.error('Failed to update balance', updateBalanceResponse);
+          }
         } else {
-          console.error('Failed to update expert balance', balanceResponse);
+          console.error('Failed to retrieve current balance', balanceResponse);
         }
+
       } else {
-        console.error('Failed to mark as completed', feedbackResponse);
+        console.error('Failed to mark as completed', response);
       }
     } catch (error) {
-      console.error('Error processing request', error);
+      console.error('Error marking as completed', error);
+    } finally {
+      onClose();
     }
-
-    onClose();
   };
 
+  const hideAlert = () => {
+    setAlertVisible(false);
+  };
 
-
-    const hideAlert = () => {
-      setAlertVisible(false);
-    };
-
-    if (!isVisible) {
-      return null; // Return null to unmount the parent component
-    }
+  if (!isVisible) {
+    return null; // Return null to unmount the parent component
+  }
+  
   
   return (
      

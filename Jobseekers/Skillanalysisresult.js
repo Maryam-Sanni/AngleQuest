@@ -80,6 +80,10 @@
     }, []);
 
 
+
+
+
+
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
@@ -213,8 +217,6 @@
         </View>
       );
     };
-
-
 
     const { three_months_step_by_step_guide, six_months_step_by_step_guide, nine_months_step_by_step_guide } = apiData || {};
 
@@ -377,7 +379,7 @@
                         <Text style={[styles.timeline, { color: "black" }]}>
                           Current Position |{" "}
                           <Text style={{ fontSize: 16, fontWeight: "400" }}>
-                             {apiData.analysis.current_position.title}
+                            {apiData.analysis?.current_position?.title || 'No title available' }
                           </Text>
                         </Text>
                         <Text
@@ -389,7 +391,7 @@
                         >
                           Next Career Level |{" "}
                           <Text style={{ fontWeight: "500" }}>
-                            {apiData.next_career_stage.title}
+                            {apiData.next_career_stage?.title }
                           </Text>
                         </Text>
                         <Text
@@ -401,7 +403,7 @@
                         >
                           Rationale |{" "}
                           <Text style={{ fontWeight: "500" }}>
-                            {apiData.next_career_stage.rationale}
+                            {apiData?.next_career_stage?.rationale }
                           </Text>
                         </Text>
                         <Text
@@ -414,7 +416,7 @@
                         >
                           Your proficiency rating |{" "}
                           <Text style={{ fontWeight: "500" }}>
-                            {apiData.analysis.current_proficiency_rating}
+                            {apiData.analysis?.current_proficiency_rating }
                           </Text>
                         </Text>
 

@@ -18,7 +18,7 @@
     const [role, setRole] = useState("");
     const [cv, setCV] = useState(null);
     const [job_description_file, setJobFile] = useState(null);
-    const [job_description_text, setjobText] = useState(" ");
+    const [job_description_text, setjobText] = useState('This is some texts about job description');
     const [token, setToken] = useState("");
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');

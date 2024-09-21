@@ -35,6 +35,9 @@ const HomePage = () => {
   const [token, setToken] = useState(null);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [totalBalance, setTotalBalance] = useState(null);
+  const [totalBal, setTotalBal] = useState(null);
+   const [NewPay, setNewPayer] = useState(null);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
    const [data, setData] = useState([]);
@@ -62,6 +65,44 @@ const HomePage = () => {
     }
   };
 
+
+
+  useEffect(() => {
+    // Function to fetch balance data with token from AsyncStorage
+    const fetchBalance = async () => {
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+
+        // Make API request with token in headers
+        const response = await fetch(`${apiUrl}/api/expert/get-balance`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success' && data.bal) {
+          setTotalBalance(data.bal.new_payment);
+          setNewPayer(data.bal.paid_by);
+          setTotalBal(data.bal.total_balance);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBalance();
+  }, []);
+  
   // Function to fetch user chatrooms
   const getUserChatrooms = async () => {
     if (!token) return;
@@ -621,8 +662,7 @@ onMouseLeave={() => setIsHovered12(false)}
       />
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Income Overview")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20,fontFamily:"Roboto-Light"  }}>{t("You earned $ 0.00 from session with ")} 
- {plandata.latestSkillAnalysis.name || 'No name Available'} {t("Your available balance is...")}</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20,fontFamily:"Roboto-Light"  }}>{t("You earned ")} ${totalBalance !== null ? totalBalance : 'N/A'}.00 from { NewPay || 'No name Available'} {t("Your available balance is")} ${totalBal !== null ? totalBal : '0'}.00</Text>
           <TouchableOpacity onPress={goToWithdrawal} 
           style={[
             styles.touchablecoach,

@@ -100,50 +100,84 @@ function MyComponent({ onClose }) {
   };
   
   const handlePress = async () => {
-  if (!remark || !topics || !rating ) {
-    setAlertMessage(t('Please fill all fields'));
-    setAlertVisible(true);
-    return;
-  }
+    if (!remark || !topics || !rating) {
+      setAlertMessage(t('Please fill all fields'));
+      setAlertVisible(true);
+      return;
+    }
 
     setIsChecked(!isChecked);
-    
-  try {
-  const token = await AsyncStorage.getItem('token');
-  if (!token) throw new Error('No token found');
 
-  const payload = {
-     jobseeker_id: String(data?.user_id), 
-    skill_analysis_id: String(data?.id),
-    remark: remark,
-    expert_name: `${firstName} ${lastName}`,
-    rating: rating,
-    completed: completed,
-    role: data?.role,
-    types: data?.type,
-    starting_level: data?.starting_level,
-    target_level: data?.target_level,
-    date: data?.date_time,
-    expert: data?.name,
-    descriptions: topics.map(topic => ({
-      description: topic.topic,
-      percentage: topic.percentage,
-    })),
-  };
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
 
-  const response = await axios.post(`${apiUrl}/api/expert/feedback-skillAnalysis`, payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+      const payload = {
+        jobseeker_id: String(data?.user_id),
+        skill_analysis_id: String(data?.id),
+        remark: remark,
+        expert_name: `${firstName} ${lastName}`,
+        rating: rating,
+        completed: completed,
+        role: data?.role,
+        types: data?.type,
+        starting_level: data?.starting_level,
+        target_level: data?.target_level,
+        date: data?.date_time,
+        expert: data?.name,
+        descriptions: topics.map(topic => ({
+          description: topic.topic,
+          percentage: topic.percentage,
+        })),
+      };
 
-  if (response.status === 201 && response.data.status === 'success') {
-    console.log('Marked as completed successfully');
-  } else {
-    console.error('Failed to mark as completed', response);
-  }
-  } catch (error) {
-  console.error('Error marking as completed', error);
-  }
-    onClose();
+      // POST request for feedback
+      const response = await axios.post(`${apiUrl}/api/expert/feedback-skillAnalysis`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 201 && response.data.status === 'success') {
+        console.log('Marked as completed successfully');
+
+        // GET current balance
+        const balanceResponse = await axios.get(`${apiUrl}/api/expert/get-balance`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (balanceResponse.status === 200 && balanceResponse.data && balanceResponse.data.bal) {
+          const currentBalance = balanceResponse.data.bal.total_balance !== null 
+            ? parseInt(balanceResponse.data.bal.total_balance, 10) 
+            : 0; // Default to 0 if total_balance is null
+
+          const newBalance = currentBalance + 50; // Add 50 to the current balance
+
+          // PUT request to update the balance
+          const updateBalanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, {
+            total_balance: newBalance,  
+            withdrawal: "0",  
+            new_payment: 50,  
+            paid_by: data?.name, 
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (updateBalanceResponse.status === 200) {
+            console.log('Balance updated successfully');
+          } else {
+            console.error('Failed to update balance', updateBalanceResponse);
+          }
+        } else {
+          console.error('Failed to retrieve current balance', balanceResponse);
+        }
+
+      } else {
+        console.error('Failed to mark as completed', response);
+      }
+    } catch (error) {
+      console.error('Error marking as completed', error);
+    } finally {
+      onClose();
+    }
   };
 
   const hideAlert = () => {
@@ -153,8 +187,6 @@ function MyComponent({ onClose }) {
   if (!isVisible) {
     return null; // Return null to unmount the parent component
   }
-
-
   
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center'  }}>

@@ -1,7 +1,12 @@
 import 'dotenv/config';
 
-export default {
-  expo: {
+export default ({ config }) => {
+  // Determine the environment
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  // Return the configuration with environment-specific values
+  return {
+    ...config,
     name: 'anglequest',
     slug: 'anglequest',
     version: '1.0.0',
@@ -11,7 +16,7 @@ export default {
     splash: {
       image: './assets/icon.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
     },
     assetBundlePatterns: ['**/*'],
     ios: {
@@ -20,33 +25,36 @@ export default {
       infoPlist: {
         CFBundleURLTypes: [
           {
-            CFBundleURLSchemes: ['myapp']
-          }
-        ]
-      }
+            CFBundleURLSchemes: ['myapp'],
+          },
+        ],
+      },
     },
     android: {
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
       },
       package: 'com.yourcompany.anglequest',
       intentFilters: [
         {
           action: 'VIEW',
           data: [{ scheme: 'myapp' }],
-          category: ['DEFAULT', 'BROWSABLE']
-        }
-      ]
+          category: ['DEFAULT', 'BROWSABLE'],
+        },
+      ],
     },
     web: {
       favicon: './assets/Recruitangle Icon.png',
+      source: './src/index.html',
       config: {
-        navigation: { root: '/' }
-      }
+        navigation: {
+          root: '/',
+        },
+      },
     },
     extra: {
-      apiUrl: process.env.REACT_APP_API_URL // Dynamically set the API URL
+      apiUrl: isDevelopment ? 'https://recruitangle.com' : 'https://prod.recruitangle.com',
     },
     plugins: [
       [
@@ -63,10 +71,10 @@ export default {
             'Roboto-Regular': './assets/fonts/Roboto-Regular.ttf',
             'Sora-Bold': './assets/fonts/Sora-Bold.ttf',
             'Sora-Regular': './assets/fonts/Sora-Regular.ttf',
-            'Sora-Light': './assets/fonts/Sora-Light.ttf'
-          }
-        }
-      ]
-    ]
-  }
+            'Sora-Light': './assets/fonts/Sora-Light.ttf',
+          },
+        },
+      ],
+    ],
+  };
 };

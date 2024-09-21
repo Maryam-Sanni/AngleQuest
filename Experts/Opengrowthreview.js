@@ -106,7 +106,7 @@ function MyComponent({ onClose }) {
         jobseeker_id: data?.user_id,
         remark: remark,
         expert_name: `${firstName} ${lastName}`,
-        growthplan_id: data?.id,
+        growthplan_id: String(data?.id),
         rating: rating,
         review: reviewStatus,
         title: data?.title,
