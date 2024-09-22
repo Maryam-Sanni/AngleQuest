@@ -29,7 +29,7 @@ function MyComponent() {
   );
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-  const [cardData, setCardData] = useState({ AllHubs: [] });
+  const [cardData, setCardData] = useState({ JoinedCourses: [] });
   const [isPressed, setIsPressed] = useState(Array(4).fill(false));
   const [isSaved, setIsSaved] = useState(false);
   const [recommendedExperts, setRecommendedExperts] = useState([]);
@@ -132,7 +132,7 @@ function MyComponent() {
         }
 
         const response = await axios.get(
-          `${apiUrl}/api/expert/hubs/all`,
+          `${apiUrl}/api/jobseeker/get-joined-courses`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -341,7 +341,7 @@ function MyComponent() {
   };
 
   const renderCards = () => {
-    if (!cardData.AllHubs || cardData.AllHubs.length === 0) {
+    if (!cardData.JoinedCourses || cardData.JoinedCourses.length === 0) {
       return <Text>No data available</Text>;
     }
 
@@ -402,7 +402,7 @@ function MyComponent() {
       },
     };
 
-    return cardData.AllHubs.map((data, index) => {
+    return cardData.JoinedCourses.map((data, index) => {
       const normalizedCategory = data.category.trim().toLowerCase();
       const style = categoryStyles[normalizedCategory] || {
         gradient: ['#66b2ff', '#3399ff'],
@@ -665,13 +665,7 @@ paddingHorizontal: 5,
                             "These are the courses you're currently enrolled in. Click 'Join' to participate in this week's course meeting if it has already started",
                           )}</Text>
                         <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={goToHubs}
-                          style={[styles.buttonplus, isHoveredhub && styles.buttonplusHovered]}
-                          onMouseEnter={() => setIsHoveredhub(true)}
-                          onMouseLeave={() => setIsHoveredhub(false)}
-                        >
-                          <Text style={styles.buttonTextplus}>Join a Hub</Text>
-                        </TouchableOpacity>
+                        
                         <TouchableOpacity onPress={goToCourse}
                           style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
                           onMouseEnter={() => setIsHovered(true)}

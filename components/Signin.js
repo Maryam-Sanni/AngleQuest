@@ -28,7 +28,7 @@ const MyComponent = () => {
     }
 
     try {
-      setLoading(true); 
+      setLoading(true);
 
       const response = await axios.post(`${apiUrl}/api/expert/signin`, {
         email,
@@ -42,39 +42,43 @@ const MyComponent = () => {
         const { id, first_name, last_name, role } = user;
 
         await AsyncStorage.setItem('token', token);
-        await AsyncStorage.setItem('user_id', id.toString()); 
+        await AsyncStorage.setItem('user_id', id.toString());
         await AsyncStorage.setItem('first_name', first_name);
         await AsyncStorage.setItem('last_name', last_name);
 
         // Check if the balance was already sent
         const balanceSent = await AsyncStorage.getItem('balanceSent');
         if (!balanceSent) {
-          // Retrieve the token from AsyncStorage
-          const authToken = await AsyncStorage.getItem('token');
+          try {
+            // Retrieve the token from AsyncStorage
+            const authToken = await AsyncStorage.getItem('token');
 
-          // Post the balance data if it hasn't been sent before
-          const balanceResponse = await axios.post(
-            `${apiUrl}/api/expert/send-balance`,
-            {
-              total_balance: 0,
-              withdrawal: "0",
-              new_payment: 0,
-              paid_by: "Admin"
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${authToken}` // Include token in Authorization header
+            // Post the balance data if it hasn't been sent before
+            const balanceResponse = await axios.post(
+              `${apiUrl}/api/expert/send-balance`,
+              {
+                total_balance: 0,
+                withdrawal: '0',
+                new_payment: 0,
+                paid_by: 'Admin',
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`, // Include token in Authorization header
+                },
               }
-            }
-          );
+            );
 
-          console.log('Balance Post Response:', balanceResponse.data);
+            console.log('Balance Post Response:', balanceResponse.data);
 
-          // Store a flag to indicate the balance was sent
-          await AsyncStorage.setItem('balanceSent', 'true');
+            // Store a flag to indicate the balance was sent
+            await AsyncStorage.setItem('balanceSent', 'true');
+          } catch (balanceError) {
+            console.error('Error sending balance:', balanceError);
+          }
         }
 
-        // Navigate based on user role
+        // Navigate based on user role (regardless of whether balance was successfully sent)
         if (role === 'expert') {
           navigation.navigate('Home - Experts');
         } else if (role === 'individual') {
@@ -92,6 +96,7 @@ const MyComponent = () => {
       setLoading(false);
     }
   };
+
   
   return (
     <View style={styles.outerContainer}>

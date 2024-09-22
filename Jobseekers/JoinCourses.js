@@ -665,13 +665,7 @@ paddingHorizontal: 5,
                             "By clicking 'Register', you agree to join the course. You will have access to the course content and be able to participate in the hub meetings. However, you will not be part of the extensive trainings and supervision hubs provide.",
                           )}</Text>
                         <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={goToHubs}
-                          style={[styles.buttonplus, isHoveredhub && styles.buttonplusHovered]}
-                          onMouseEnter={() => setIsHoveredhub(true)}
-                          onMouseLeave={() => setIsHoveredhub(false)}
-                        >
-                          <Text style={styles.buttonTextplus}>Join a Hub</Text>
-                        </TouchableOpacity>
+                        
                         <TouchableOpacity onPress={goToCourse}
                           style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
                           onMouseEnter={() => setIsHovered(true)}
