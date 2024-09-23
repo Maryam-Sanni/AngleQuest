@@ -65,9 +65,13 @@ const MyComponent = ({ value, tint, intensity }) => {
   };
 
   const handleAIPress = () => {
-    navigation.navigate("AI");
+    navigation.navigate("AI Screen");
   };
 
+  const handlebackPress = () => {
+    navigation.navigate("Welcome");
+  };
+  
   const languages = [
     { code: "en", label: "English", icon: require("../assets/english.png") },
     { code: "nl", label: "Dutch", icon: require("../assets/dutch.png") },
@@ -106,18 +110,20 @@ const MyComponent = ({ value, tint, intensity }) => {
         style={styles.header}
       >
         <View style={styles.left}>
+          <TouchableOpacity  onPress={handlebackPress}>
           <Image
             source={{
               uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
             }}
             style={styles.logo}
           />
+          </TouchableOpacity>
           <HButton //onPress={handleProductsHover}
             title={"Products"}
             dropdown
             onPress={handleProductsHover}
           />
-          <HButton //onPress={handleAIPress}
+          <HButton onPress={handleAIPress}
             title={"AngleQuest AI"}
           />
           <HButton // onPress={handleAIPress}

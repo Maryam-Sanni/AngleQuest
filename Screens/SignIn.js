@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
+  ScrollView, ActivityIndicator
 } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import Top from "../components/HomeTop";
@@ -17,15 +17,98 @@ import loginImg from "../assets/loginImg.png";
 import InputField from "../components/InputField";
 import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = () => {
   const navigation = useNavigation(); // Navigation object
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  
   const handleSignUp = () => {
     navigation.dispatch(CommonActions.navigate("Sign Up2"));
   };
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      alert('Please fill in both email and password');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(`${apiUrl}/api/expert/signin`, {
+        email,
+        password,
+      });
+
+      console.log('Sign In Response:', response.data);
+
+      if (response.data.status === 'success') {
+        const { token, user } = response.data;
+        const { id, first_name, last_name, role } = user;
+
+        await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('user_id', id.toString());
+        await AsyncStorage.setItem('first_name', first_name);
+        await AsyncStorage.setItem('last_name', last_name);
+
+        // Check if the balance was already sent
+        const balanceSent = await AsyncStorage.getItem('balanceSent');
+        if (!balanceSent) {
+          try {
+            // Retrieve the token from AsyncStorage
+            const authToken = await AsyncStorage.getItem('token');
+
+            // Post the balance data if it hasn't been sent before
+            const balanceResponse = await axios.post(
+              `${apiUrl}/api/expert/send-balance`,
+              {
+                total_balance: 0,
+                withdrawal: '0',
+                new_payment: 0,
+                paid_by: 'Admin',
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`, // Include token in Authorization header
+                },
+              }
+            );
+
+            console.log('Balance Post Response:', balanceResponse.data);
+
+            // Store a flag to indicate the balance was sent
+            await AsyncStorage.setItem('balanceSent', 'true');
+          } catch (balanceError) {
+            console.error('Error sending balance:', balanceError);
+          }
+        }
+
+        // Navigate based on user role (regardless of whether balance was successfully sent)
+        if (role === 'expert') {
+          navigation.navigate('Home - Experts');
+        } else if (role === 'individual') {
+          navigation.navigate('Home');
+        } else {
+          alert('Unknown user role');
+        }
+      } else {
+        alert(response.data.message || 'Sign in failed');
+      }
+    } catch (error) {
+      console.error('Sign In Error:', error);
+      alert('Sign in failed, please try again');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <View style={{ flex: 1 }}>
       <Top value={3} intensity={100} tint={"light"} />
@@ -119,6 +202,7 @@ const SignIn = () => {
                         onChangeText={setPassword}
                       />
 
+                      <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
                       <Text
                         style={{
                           fontSize: 14,
@@ -130,12 +214,20 @@ const SignIn = () => {
                       >
                         Forget Password
                       </Text>
+                      </TouchableOpacity>
+                    
+                      <TouchableOpacity onPress={handleSignIn} disabled={loading}>
+                        {loading ? (
+                          <ActivityIndicator color="green" />
+                        ) : (
                       <MainButtons
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
                         textColor={"white"}
                         title={"Log In"}
                       />
+                  )}
+                  </TouchableOpacity>
                     </View>
                     <Text style={styles.signUpText} onPress={handleSignUp}>
                       Need to create an account?{" "}

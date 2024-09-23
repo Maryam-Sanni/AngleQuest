@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
+  ScrollView, ActivityIndicator
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -16,23 +16,26 @@ import Row from "../components/Row";
 import Title from "../components/Title";
 import google from "../assets/google.png";
 import linkedIn from "../assets/linkedin.png";
-//import loginImg from "../assets/loginImg.png";
 import option1 from "../assets/option1.png";
 import option2 from "../assets/option2.png";
 import option3 from "../assets/option3.png";
 import InputField from "../components/InputField";
 import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
+import axios from "axios";
+import { CheckBox } from "react-native";
 
 const SignUp = () => {
   const navigation = useNavigation(); // Navigation object
 
   const [email, setEmail] = useState("");
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
+  const [firstName, setFName] = useState("");
+  const [lastName, setLName] = useState("");
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
   const [agree3, setAgree3] = useState(false);
+   const [loading, setLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState("");
   const [signUpOption, setSignUpOption] = useState(0);
   const handleSignIn = () => {
@@ -47,6 +50,84 @@ const SignUp = () => {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    if (!isChecked) {
+      alert("Please agree to the Terms of Service & Privacy Policy");
+      return;
+    }
+
+    const role = "individual";
+
+    try {
+      setLoading(true); // Set loading to true when sign in is initiated
+
+      const response = await axios.post(
+        `${apiUrl}/api/expert/signup`,
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+          role,
+        },
+      );
+
+      console.log("Signup success:", response.data);
+      navigation.navigate("Verify mail", { userEmail: email }); // Navigate and pass email as parameter
+    } catch (error) {
+      console.error("Signup failed:", error);
+      alert("Signup failed. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
+  };
+
+
+  const handleSignUp2 = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    if (!isChecked) {
+      alert('Please agree to the Terms of Service & Privacy Policy');
+      return;
+    }
+
+    const role = 'expert';
+
+    try {
+      setLoading(true); // Set loading to true when sign in is initiated
+
+      const response = await axios.post(`${apiUrl}/api/expert/signup`, {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        role,
+      });
+
+      console.log('Signup success:', response.data);
+      navigation.navigate('Verify mail', { userEmail: email }); // Navigate and pass email as parameter
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert('Signup failed. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
+  };
+  
   return (
     <View style={{ flex: 1 }}>
       <Top value={3} intensity={100} tint={"light"} />
@@ -198,13 +279,13 @@ const SignUp = () => {
                     <View style={{ marginTop: 40, gap: 20 }}>
                       <InputField
                         keyboardType="name"
-                        val={fName}
+                        val={firstName}
                         onChangeText={setFName}
                         placeholder="First name"
                       />
                       <InputField
                         keyboardType="name"
-                        val={lName}
+                        val={lastName}
                         onChangeText={setLName}
                         placeholder="Last name"
                       />
@@ -212,7 +293,7 @@ const SignUp = () => {
                         keyboardType="email"
                         val={email}
                         onChangeText={setEmail}
-                        placeholder="Username"
+                        placeholder="Email"
                       />
 
                       <InputField
@@ -221,7 +302,10 @@ const SignUp = () => {
                         placeholder="Password"
                         onChangeText={setPassword}
                       />
-                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                      <TouchableOpacity   onPress={() => {
+                          setAgree1(!agree1); 
+                    toggleCheckbox();   
+                        }} >
                         <Row style={{ gap: 10 }}>
                           {agree1 ? (
                             <MaterialIcons
@@ -247,12 +331,21 @@ const SignUp = () => {
                           </Text>
                         </Row>
                       </TouchableOpacity>
-                      <MainButtons
+                      <TouchableOpacity
+                        onPress={handleSignUp}
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <ActivityIndicator color="green" />
+                        ) : (
+                      <MainButtons 
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
                         textColor={"white"}
                         title={"Sign Up"}
                       />
+                          )}
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.signUpText} onPress={handleSignIn}>
                       Already have an Account?{" "}
@@ -351,13 +444,13 @@ const SignUp = () => {
                     <View style={{ marginTop: 40, gap: 20 }}>
                       <InputField
                         keyboardType="name"
-                        val={fName}
+                        val={firstName}
                         onChangeText={setFName}
                         placeholder="First name"
                       />
                       <InputField
                         keyboardType="name"
-                        val={lName}
+                        val={lastName}
                         onChangeText={setLName}
                         placeholder="Last name"
                       />
@@ -374,7 +467,10 @@ const SignUp = () => {
                         placeholder="Password"
                         onChangeText={setPassword}
                       />
-                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                      <TouchableOpacity   onPress={() => {
+                        setAgree1(!agree1); 
+                      toggleCheckbox();   
+                      }} >
                         <Row style={{ gap: 10 }}>
                           {agree1 ? (
                             <MaterialIcons
@@ -400,12 +496,22 @@ const SignUp = () => {
                           </Text>
                         </Row>
                       </TouchableOpacity>
-                      <MainButtons
+
+                      <TouchableOpacity
+                        onPress={handleSignUp2}
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <ActivityIndicator color="green" />
+                        ) : (
+                      <MainButtons 
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
                         textColor={"white"}
                         title={"Sign Up"}
                       />
+                          )}
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.signUpText} onPress={handleSignIn}>
                       Already have an Account?{" "}
