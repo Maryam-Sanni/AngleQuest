@@ -115,7 +115,6 @@ import AIindv1 from './Jobseekers/SkillanalysisAI';
 import AIindv2 from './Jobseekers/AI2';
 import AIindv3 from './Jobseekers/AI3';
 import AIindv4 from "./Jobseekers/Skillanalysisresult";
-import Welcome from './LandingPage/LandingHome';
 import AI from './LandingPage/AI';
 import Clientele from './LandingPage/Clientele';
 import mobile from './MobileLanding.js/LandingHome';
@@ -127,6 +126,11 @@ import Scenario from './Experts/Scenario';
 import MainMessage from './Messaging/ChatScopeUI';
 import MainExpertMessage from './Messaging/ExpertsChatScopeUI';
 import MyCourse from './Jobseekers/MyCourses';
+import ContactSales from "./Screens/ContactSales";
+import AIScreen from "./Screens/AIscreen";
+import Welcome from "./Screens/LandingHome";
+import SignIn2 from "./Screens/SignIn";
+import SignUp2 from "./Screens/SignUp";
 
 const Stack = createStackNavigator();
 
@@ -138,6 +142,10 @@ const App = () => {
     <NavigationContainer>
     <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
         <Stack.Screen name="Join Recruitangle" component={JoinAs} />
+      <Stack.Screen name="AI Screen" component={AIScreen} />
+      <Stack.Screen name="Sign In2" component={SignIn2} />
+      <Stack.Screen name="Sign Up2" component={SignUp2} />
+      <Stack.Screen name="ContactSales" component={ContactSales} />
         <Stack.Screen name="Sign Up" component={SignUp} />
         <Stack.Screen name="Verify Email" component={VerifyEmail} />
         <Stack.Screen name="Choose Plan" component={ChoosePlan} />

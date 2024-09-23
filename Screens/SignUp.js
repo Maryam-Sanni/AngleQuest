@@ -1,0 +1,653 @@
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import Top from "../components/HomeTop";
+import MainButtons from "../LandingPage/MainButton";
+import Row from "../components/Row";
+import Title from "../components/Title";
+import google from "../assets/google.png";
+import linkedIn from "../assets/linkedin.png";
+//import loginImg from "../assets/loginImg.png";
+import option1 from "../assets/option1.png";
+import option2 from "../assets/option2.png";
+import option3 from "../assets/option3.png";
+import InputField from "../components/InputField";
+import PeopleComponent from "../components/PeopleComponent";
+import Footer from "../components/Footer";
+
+const SignUp = () => {
+  const navigation = useNavigation(); // Navigation object
+
+  const [email, setEmail] = useState("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [agree1, setAgree1] = useState(false);
+  const [agree2, setAgree2] = useState(false);
+  const [agree3, setAgree3] = useState(false);
+  const [password, setPassword] = useState("");
+  const [signUpOption, setSignUpOption] = useState(0);
+  const handleSignIn = () => {
+    navigation.dispatch(CommonActions.navigate("Sign In2"));
+  };
+  const handleGoBack = () => {
+    if (signUpOption > 0) {
+      setSignUpOption(0);
+      //navigation.dispatch(CommonActions.navigate("Sign In2"));
+    } else {
+      navigation.dispatch(CommonActions.goBack());
+    }
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Top value={3} intensity={100} tint={"light"} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={styles.container}>
+          <View
+            style={{
+              width: "100%",
+              paddingHorizontal: 100,
+              position: "relative",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ width: 1400, alignItems: "center" }}>
+              {signUpOption === 0 ? (
+                <View style={styles.option1}>
+                  <TouchableOpacity
+                    style={styles.goBack}
+                    onPress={handleGoBack}
+                  >
+                    <MaterialIcons
+                      name="arrow-back-ios-new"
+                      size={24}
+                      color="black"
+                    />
+                    <Title title="Back" />
+                  </TouchableOpacity>
+                  <View style={styles.optionContainer}>
+                    <Title title={"Sign up to join AngleQuest"} textSize={18} />
+                    <MainButtons
+                      outlined
+                      borderRadius={8}
+                      width={"100%"}
+                      title={"Join as an Individual"}
+                      textColor={"#135837"}
+                      onPress={() => setSignUpOption(1)}
+                    />
+                    <MainButtons
+                      outlined
+                      borderRadius={8}
+                      width={"100%"}
+                      title={"Join as an Expert"}
+                      textColor={"#135837"}
+                      onPress={() => setSignUpOption(2)}
+                    />
+                    <MainButtons
+                      outlined
+                      borderRadius={8}
+                      width={"100%"}
+                      title={"Join as a Business"}
+                      textColor={"#135837"}
+                      onPress={() => setSignUpOption(3)}
+                    />
+                    <Text style={styles.signUpText} onPress={handleSignIn}>
+                      Already have an account?
+                      <Text
+                        style={{
+                          fontWeight: "700",
+                          fontFamily: "Poppins-Bold",
+                        }}
+                      >
+                        {" "}
+                        Log in
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+              ) : signUpOption === 1 ? (
+                <Row
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    paddingVertical: 60,
+                    paddingHorizontal: 140,
+                    gap: 50,
+                  }}
+                >
+                  <View>
+                    <Image
+                      source={option1}
+                      style={{ width: 620, height: 916 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 4,
+                      },
+                      shadowOpacity: 0.32,
+                      shadowRadius: 5.46,
+                      padding: 40,
+                      elevation: 9,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={[styles.goBack, { marginBottom: 30 }]}
+                      onPress={handleGoBack}
+                    >
+                      <MaterialIcons
+                        name="arrow-back-ios-new"
+                        size={24}
+                        color="black"
+                      />
+                      <Title title="Back" />
+                    </TouchableOpacity>
+                    <View style={{ marginVertical: 20, gap: 20 }}>
+                      <Title title={"Sign up as an Individual"} textSize={18} />
+
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using Google"}
+                        textColor={"black"}
+                        leftImg={google}
+                      />
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using LinkedIn"}
+                        textColor={"black"}
+                        leftImg={linkedIn}
+                      />
+                    </View>
+
+                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                      <Title title={"or"} />
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    </Row>
+
+                    <View style={{ marginTop: 40, gap: 20 }}>
+                      <InputField
+                        keyboardType="name"
+                        val={fName}
+                        onChangeText={setFName}
+                        placeholder="First name"
+                      />
+                      <InputField
+                        keyboardType="name"
+                        val={lName}
+                        onChangeText={setLName}
+                        placeholder="Last name"
+                      />
+                      <InputField
+                        keyboardType="email"
+                        val={email}
+                        onChangeText={setEmail}
+                        placeholder="Username"
+                      />
+
+                      <InputField
+                        keyboardType="text"
+                        val={password}
+                        placeholder="Password"
+                        onChangeText={setPassword}
+                      />
+                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                        <Row style={{ gap: 10 }}>
+                          {agree1 ? (
+                            <MaterialIcons
+                              name="check-box"
+                              size={24}
+                              color="black"
+                            />
+                          ) : (
+                            <MaterialIcons
+                              name="check-box-outline-blank"
+                              size={24}
+                              color="black"
+                            />
+                          )}
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: "400",
+                              fontFamily: "Poppins-Regular",
+                            }}
+                          >
+                            I agree to the Terms of Service & Privacy Policy
+                          </Text>
+                        </Row>
+                      </TouchableOpacity>
+                      <MainButtons
+                        style={{ alignSelf: "center", width: "100%" }}
+                        gradient
+                        textColor={"white"}
+                        title={"Sign Up"}
+                      />
+                    </View>
+                    <Text style={styles.signUpText} onPress={handleSignIn}>
+                      Already have an Account?{" "}
+                      <Text
+                        style={{
+                          fontWeight: "700",
+                          fontFamily: "Poppins-Bold",
+                        }}
+                      >
+                        Sign in
+                      </Text>
+                    </Text>
+                  </View>
+                </Row>
+              ) : signUpOption === 2 ? (
+                <Row
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    paddingVertical: 60,
+                    paddingHorizontal: 140,
+                    gap: 50,
+                  }}
+                >
+                  <View>
+                    <Image
+                      source={option2}
+                      style={{ width: 620, height: 916 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 4,
+                      },
+                      shadowOpacity: 0.32,
+                      shadowRadius: 5.46,
+                      padding: 40,
+                      elevation: 9,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={[styles.goBack, { marginBottom: 30 }]}
+                      onPress={handleGoBack}
+                    >
+                      <MaterialIcons
+                        name="arrow-back-ios-new"
+                        size={24}
+                        color="black"
+                      />
+                      <Title title="Back" />
+                    </TouchableOpacity>
+                    <View style={{ marginVertical: 20, gap: 20 }}>
+                      <Title title={"Sign up as an Expert"} textSize={18} />
+
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using Google"}
+                        textColor={"black"}
+                        leftImg={google}
+                      />
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using LinkedIn"}
+                        textColor={"black"}
+                        leftImg={linkedIn}
+                      />
+                    </View>
+
+                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                      <Title title={"or"} />
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    </Row>
+
+                    <View style={{ marginTop: 40, gap: 20 }}>
+                      <InputField
+                        keyboardType="name"
+                        val={fName}
+                        onChangeText={setFName}
+                        placeholder="First name"
+                      />
+                      <InputField
+                        keyboardType="name"
+                        val={lName}
+                        onChangeText={setLName}
+                        placeholder="Last name"
+                      />
+                      <InputField
+                        keyboardType="email"
+                        val={email}
+                        onChangeText={setEmail}
+                        placeholder="Email"
+                      />
+
+                      <InputField
+                        keyboardType="text"
+                        val={password}
+                        placeholder="Password"
+                        onChangeText={setPassword}
+                      />
+                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                        <Row style={{ gap: 10 }}>
+                          {agree1 ? (
+                            <MaterialIcons
+                              name="check-box"
+                              size={24}
+                              color="black"
+                            />
+                          ) : (
+                            <MaterialIcons
+                              name="check-box-outline-blank"
+                              size={24}
+                              color="black"
+                            />
+                          )}
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: "400",
+                              fontFamily: "Poppins-Regular",
+                            }}
+                          >
+                            I agree to the Terms of Service & Privacy Policy
+                          </Text>
+                        </Row>
+                      </TouchableOpacity>
+                      <MainButtons
+                        style={{ alignSelf: "center", width: "100%" }}
+                        gradient
+                        textColor={"white"}
+                        title={"Sign Up"}
+                      />
+                    </View>
+                    <Text style={styles.signUpText} onPress={handleSignIn}>
+                      Already have an Account?{" "}
+                      <Text
+                        style={{
+                          fontWeight: "700",
+                          fontFamily: "Poppins-Bold",
+                        }}
+                      >
+                        Sign in
+                      </Text>
+                    </Text>
+                  </View>
+                </Row>
+              ) : (
+                <Row
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    paddingVertical: 60,
+                    paddingHorizontal: 140,
+                    gap: 50,
+                  }}
+                >
+                  <View>
+                    <Image
+                      source={option3}
+                      style={{ width: 620, height: 916 }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 4,
+                      },
+                      shadowOpacity: 0.32,
+                      shadowRadius: 5.46,
+                      padding: 40,
+                      elevation: 9,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={[styles.goBack, { marginBottom: 30 }]}
+                      onPress={handleGoBack}
+                    >
+                      <MaterialIcons
+                        name="arrow-back-ios-new"
+                        size={24}
+                        color="black"
+                      />
+                      <Title title="Back" />
+                    </TouchableOpacity>
+                    <View style={{ marginVertical: 20, gap: 20 }}>
+                      <Title title={"Sign up as a Business"} textSize={18} />
+
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using Google"}
+                        textColor={"black"}
+                        leftImg={google}
+                      />
+                      <MainButtons
+                        outlined
+                        paddingVertical={5}
+                        borderRadius={8}
+                        width={"100%"}
+                        title={"Sign up using LinkedIn"}
+                        textColor={"black"}
+                        leftImg={linkedIn}
+                      />
+                    </View>
+
+                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                      <Title title={"or"} />
+                      <View
+                        style={{
+                          width: "47%",
+                          height: 1,
+                          backgroundColor: "black",
+                        }}
+                      />
+                    </Row>
+
+                    <View style={{ marginTop: 40, gap: 20 }}>
+                      <InputField
+                        keyboardType="name"
+                        val={fName}
+                        onChangeText={setFName}
+                        placeholder="Business name"
+                      />
+                      <InputField
+                        keyboardType="name"
+                        val={lName}
+                        onChangeText={setLName}
+                        placeholder="Administrator's name"
+                      />
+                      <InputField
+                        keyboardType="email"
+                        val={email}
+                        onChangeText={setEmail}
+                        placeholder="Business email"
+                      />
+
+                      <InputField
+                        keyboardType="text"
+                        val={password}
+                        placeholder="Password"
+                        onChangeText={setPassword}
+                      />
+                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                        <Row style={{ gap: 10 }}>
+                          {agree1 ? (
+                            <MaterialIcons
+                              name="check-box"
+                              size={24}
+                              color="black"
+                            />
+                          ) : (
+                            <MaterialIcons
+                              name="check-box-outline-blank"
+                              size={24}
+                              color="black"
+                            />
+                          )}
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: "400",
+                              fontFamily: "Poppins-Regular",
+                            }}
+                          >
+                            I agree to the Terms of Service & Privacy Policy
+                          </Text>
+                        </Row>
+                      </TouchableOpacity>
+                      <MainButtons
+                        style={{ alignSelf: "center", width: "100%" }}
+                        gradient
+                        textColor={"white"}
+                        title={"Sign Up"}
+                      />
+                    </View>
+                    <Text style={styles.signUpText} onPress={handleSignIn}>
+                      Already have an Account?{" "}
+                      <Text
+                        style={{
+                          fontWeight: "700",
+                          fontFamily: "Poppins-Bold",
+                        }}
+                      >
+                        Sign in
+                      </Text>
+                    </Text>
+                  </View>
+                </Row>
+              )}
+            </View>
+          </View>
+          <View style={{ position: "relative", width: "100%" }}>
+            <View
+              style={{
+                width: "100%",
+                height: 155,
+              }}
+            />
+            <PeopleComponent />
+            <Footer />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  header: {
+    fontSize: 16,
+    marginTop: 70,
+    marginBottom: 5,
+    fontWeight: "bold",
+    color: "red",
+    textAlign: "center",
+  },
+  signUpText: {
+    fontSize: 18,
+    fontWeight: "400",
+    fontFamily: "Poppins-Regular",
+    marginVertical: 40,
+    textAlign: "center",
+  },
+  option1: {
+    marginTop: 80,
+    width: "80%",
+    backgroundColor: "#fff",
+    paddingVertical: 60,
+    gap: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    padding: 40,
+    elevation: 9,
+    alignItems: "center",
+    position: "relative",
+    borderRadius: 10,
+  },
+  goBack: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    gap: 10,
+  },
+  optionContainer: {
+    marginTop: 20,
+    gap: 16,
+    width: 486,
+  },
+});
+
+export default SignUp;

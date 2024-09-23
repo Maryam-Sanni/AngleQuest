@@ -53,6 +53,7 @@ export default function Profile() {
   const [availableDays, setAvailableDays] = useState('Mon, Tue, Wed');
   const [hours, setHours] = useState('9:00 AM - 3:00 PM');
   const [special, setSpecial] = useState('');
+   const [years, setYears] = useState('');
   const [totalBalance, setTotalBalance] = useState(null);
 
   useEffect(() => {
@@ -89,43 +90,42 @@ export default function Profile() {
     fetchBalance();
   }, []);
 
-  const handleSavedays = async () => {
-    try {
-      // Retrieve token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        alert('Token not found. Please sign in again.');
-        return;
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+
+        // Make API request with token in headers
+        const response = await fetch(`${apiUrl}/api/expert/get-expert-profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success' && data.profile) {
+          setAbout(data.profile.about);
+          setPreferredLocation(data.profile.location);
+          setPreferredRoles(data.profile.category);
+          setSpecial(data.profile.specialization);
+          setYears(data.profile.years_experience);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // Prepare data for API request
-      const data = {
-        available_days: availableDays, // Ensure availableDays is defined
-        available_time: hours,         // Ensure hours is defined
-      };
-
-      // Send POST request to API
-      const response = await axios.post('https://recruitangle.com/api/expert/update-profile', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 200) {
-        console.log('Save Days Response:', response.data);
-        alert('Your profile has been successfully saved.');
-        
-      } else {
-        alert('Failed to save days. Please try again.');
-      }
-    } catch (error) {
-      console.error('Save Days Error:', error);
-      alert('Failed to save days. Please try again.');
-    }
-  };
-
-
+    fetchProfile();
+  }, []);
   
   const [employmentHistories, setEmploymentHistories] = useState(initialHistory);
   const [about, setAbout] = useState(`Alex Johnson is a dedicated Microsoft Azure expert with over 10 years of experience in cloud computing and IT infrastructure. With a Bachelor's degree in Computer Science from XYZ University and a Master's degree in Information Technology, Alex combines in-depth technical knowledge with a passion for innovative cloud solutions.`);
@@ -268,9 +268,10 @@ export default function Profile() {
         about: about,
         skills: skills,
         certifications: certifications,
-        location: preferredLocations.join(', '), 
+        location: String(preferredLocations), 
         category: preferredRole,
-        specialization: special
+        specialization: special,
+        years_experience: years
       };
 
       // Send POST request to API
@@ -283,7 +284,7 @@ export default function Profile() {
 
       if (response.status === 200) {
         console.log('Save Days Response:', response.data);
-        alert('Your availability has been successfully saved.');
+        alert('Your Profile has been successfully saved.');
 
       } else {
         alert('Failed to save. Please try again.');
@@ -350,7 +351,7 @@ export default function Profile() {
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
             </View>
          
-
+           
           
 
           {/* Skills */}
@@ -488,12 +489,38 @@ export default function Profile() {
                <View style={styles.container}>
                  <View style={styles.row}>
                    <TextInput
-                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start', borderWidth: 1, borderColor: 'black' }]}
+                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start', borderWidth: 1, borderColor: '#206C00' }]}
                      placeholder="Type here Example: Microsoft Azure"
                      placeholderTextColor="black"
                      value={special}
                      onChangeText={setSpecial}
                    />
+                 </View>
+               </View>
+             </View>
+           </View>
+
+           <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', marginTop: 30 }} />
+           <View style={{ marginTop: 20, marginRight: 30 }}>
+             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+               <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
+                 {t('How many years of experience do you have in')} {special}?
+               </Text>
+
+             </View>
+             <View style={{ marginRight: 50 }}>
+               <View style={styles.container}>
+                 <View style={styles.row}>
+                   <TextInput
+                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'center', borderWidth: 1, borderColor: '#206C00',  fontSize: 16, width: 50 }]}
+                     placeholder="2"
+                     placeholderTextColor="black"
+                     value={years}
+                     onChangeText={setYears}
+                   />
+                   <Text style={{ fontSize: 16, fontWeight: '500', fontFamily: 'Roboto-Light', marginTop: 15, marginLeft: 5 }}>
+                      {t('Years of experience')}
+                    </Text>
                  </View>
                </View>
              </View>
