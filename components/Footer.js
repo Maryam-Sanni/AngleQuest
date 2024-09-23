@@ -30,18 +30,16 @@ const Footer = ({ bgColor }) => {
       <View style={{ gap: 16 }}>
         {title && (
           <Title
-            textSize={16}
-            textColor={changeBg === "#084427" ? "white" : "#135837"}
-            textFamily={"Poppins-Bold"}
+            textSize={20}
+            textColor={changeBg === "black" ? "white" : "black"}
             textWeight={"700"}
             title={title}
           />
         )}
         {item1 && (
           <Title
-            textSize={16}
+            textSize={17}
             textColor={changeBg === "#084427" ? "white" : "black"}
-            textFamily={"Poppins-Regular"}
             textWeight={"400"}
             title={item1}
             onPress={onPress1}
@@ -49,9 +47,8 @@ const Footer = ({ bgColor }) => {
         )}
         {item2 && (
           <Title
-            textSize={16}
+            textSize={17}
             textColor={changeBg === "#084427" ? "white" : "black"}
-            textFamily={"Poppins-Regular"}
             textWeight={"400"}
             title={item2}
             onPress={onPress2}
@@ -59,9 +56,8 @@ const Footer = ({ bgColor }) => {
         )}
         {item3 && (
           <Title
-            textSize={16}
+            textSize={17}
             textColor={changeBg === "#084427" ? "white" : "black"}
-            textFamily={"Poppins-Regular"}
             textWeight={"400"}
             title={item3}
             onPress={onPress3}
@@ -71,7 +67,6 @@ const Footer = ({ bgColor }) => {
           <Title
             textSize={16}
             textColor={changeBg === "#084427" ? "white" : "black"}
-            textFamily={"Poppins-Regular"}
             textWeight={"400"}
             title={item4}
             onPress={onPress4}
@@ -81,7 +76,6 @@ const Footer = ({ bgColor }) => {
           <Title
             textSize={16}
             textColor={changeBg === "#084427" ? "white" : "black"}
-            textFamily={"Poppins-Regular"}
             textWeight={"400"}
             title={item5}
             onPress={onPress5}
@@ -111,24 +105,22 @@ const Footer = ({ bgColor }) => {
                 justifyContent: "space-between",
               }}
             >
+             
               <FooterList
                 title={"Product"}
-                item1={"Individuat"}
+                item1={"Individual"}
                 item2={"Experts"}
                 item3={"Businesses"}
-                item4={"Pricing"}
               />
               <FooterList
-                title={"Information"}
-                item1={"FAQs"}
-                item2={"Blog"}
-                item3={"Support"}
+                title={"Resources"}
+                item1={"Documentations"}
+                item2={"FAQs"}
+                item3={"Terms & privacy policy"}
               />
               <FooterList
-                title={"Company"}
-                item1={"About us"}
-                item2={"Careers"}
-                item3={"Contact us"}
+                title={"Why AngleQuest"}
+                item1={"Pricing"}
               />
             </View>
             <LinearGradient
@@ -173,7 +165,10 @@ const Footer = ({ bgColor }) => {
                     borderTopRightRadius: 6,
                   }}
                 >
-                  <AntDesign name="arrowright" size={18} color="white" />
+                  <Image
+                    source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                    style={{ width: 20, height: 20 }}
+                  />
                 </Pressable>
               </Row>
               <View>
@@ -190,7 +185,7 @@ const Footer = ({ bgColor }) => {
           </Row>
         </View>
 
-        <View style={{ gap: 25 }}>
+<View style={{ gap: 25 }}>
           <View
             style={{
               width: "100%",
@@ -203,21 +198,18 @@ const Footer = ({ bgColor }) => {
             <Row style={{ gap: 30 }}>
               <Title
                 textSize={14}
-                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Terms"}
                 textColor={changeBg === "#084427" ? "white" : "black"}
               />
               <Title
                 textSize={14}
-                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Privacy"}
                 textColor={changeBg === "#084427" ? "white" : "black"}
               />
               <Title
                 textSize={14}
-                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Cookies"}
                 textColor={changeBg === "#084427" ? "white" : "black"}

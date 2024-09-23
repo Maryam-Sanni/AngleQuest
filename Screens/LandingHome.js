@@ -53,7 +53,7 @@ const cardSliderData = [
   {
     id: 3,
     color: "#DE7423",
-    text: "Cross Community",
+    text: "Cross       Community",
     personImg: require("../assets/person3.png"),
     cardImg: require("../assets/card3.png"),
   },
@@ -67,7 +67,7 @@ const cardSliderData = [
   {
     id: 5,
     color: "#6E1D1A",
-    text: "Career Mentoring",
+    text: "Career       Mentoring",
     personImg: require("../assets/person5.png"),
     cardImg: require("../assets/card5.png"),
   },
@@ -84,7 +84,7 @@ const BigLableButton = ({ title, img, subTitle, desc }) => {
   return (
     <LinearGradient colors={["#d5f8c5", "#ffffff"]} style={styles.greyBox}>
       <Text
-        style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#135837" }}
+        style={{ fontSize: 20, color: "#135837" }}
       >
         {title}
       </Text>
@@ -98,10 +98,10 @@ const BigLableButton = ({ title, img, subTitle, desc }) => {
         }}
       />
       <View style={{ gap: 16, marginBottom: 20 }}>
-        <Text style={{ fontSize: 18, fontFamily: "Poppins-Regular" }}>
+        <Text style={{ fontSize: 18 }}>
           {subTitle}
         </Text>
-        <Text style={{ fontSize: 16, fontFamily: "Poppins-Regular" }}>
+        <Text style={{ fontSize: 16 }}>
           {desc}
         </Text>
       </View>
@@ -121,7 +121,6 @@ const SlideButton = ({ title, item1, item2, item3, item4 }) => {
       <Title
         textSize={20}
         textColor={"#C6ff64"}
-        textFamily={"Poppins-SemiBold"}
         title={title}
       />
       <View style={{ gap: 16, paddingLeft: 16 }}>
@@ -170,7 +169,10 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
   const RowItem = ({ text }) => {
     return (
       <Row style={{ gap: 8 }}>
-        <AntDesign name="checkcircle" size={16} color="white" />
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=OFocZB6PD94a&format=png&color=FFFFFF' }}
+          style={{ width: 15, height: 15 }}
+        />
         <Text style={{ fontSize: 14, color: "white" }}>{text}</Text>
       </Row>
     );
@@ -217,7 +219,10 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
               backgroundColor: bgColor ? bgColor : "white",
             }}
           >
-            <Feather name="loader" size={20} color="white" />
+            <Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=hP1kO4hPVbYU&format=png&color=FFFFFF' }}
+              style={{ width: 22, height: 22 }}
+            />
           </View>
           <View style={{ gap: 8, marginVertical: 40 }}>
             <RowItem text={"Project Management"} />
@@ -246,7 +251,6 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
           textSize={32}
           textColor={bgColor ? "white" : "black"}
           textWeight={"700"}
-          textFamily={"Poppins-SemiBold"}
         />
         <View style={{ alignItems: "flex-end", marginTop: -45 }}>
           <Image
@@ -262,14 +266,11 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
           <Image
             style={{
               position: "absolute",
-              bottom: -20,
+              bottom: -40,
               right: 0,
               width: 265,
               height: 180,
               zIndex: 10,
-              //  objectFit: "contain",
-              borderBottomEndRadius: 20,
-              borderBottomRightRadius: 20,
             }}
             source={cardImg}
           />
@@ -279,8 +280,12 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
   );
 };
 const SpecialBtn = ({ text, height, width, bgColor }) => {
+   const navigation = useNavigation();
+  const handleSignUp = () => {
+    navigation.navigate("Sign Up2");
+  };
   return (
-    <Pressable
+    <Pressable  onPress={handleSignUp}
       style={{
         backgroundColor: bgColor ? bgColor : "#00000033",
         width: width ? width : 144,
@@ -294,7 +299,6 @@ const SpecialBtn = ({ text, height, width, bgColor }) => {
         style={{
           color: "#fff",
           fontSize: 20,
-          fontFamily: "Poppins-Regular",
           fontWeight: "400",
         }}
       >
@@ -312,6 +316,8 @@ const MyComponent = () => {
     setModalVisible(true);
   };
 
+
+  
   const colorList = [
     { offset: "0%", color: "#231557", opacity: "1" },
     { offset: "29%", color: "#44107A", opacity: "1" },
@@ -338,12 +344,18 @@ const MyComponent = () => {
           padding: 10,
           zIndex: 200,
         }}
-        onPress={() => scrollRef.current?.scrollTo({ x: -300, animated: true })}
+        onPress={() => scrollRef.current?.scrollTo({ x: -200, animated: true })}
       >
         {left ? (
-          <AntDesign name="caretleft" size={24} color="#ccc" />
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=FFFFFF' }}
+          style={{ width: 40, height: 40 }}
+        />
         ) : (
-          <AntDesign name="caretright" size={24} color="#ccc" />
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=FFFFFF' }}
+          style={{ width: 40, height: 40 }}
+        />
         )}
       </TouchableOpacity>
     );
@@ -381,7 +393,6 @@ const MyComponent = () => {
                 style={{
                   color: "#fff",
                   fontSize: 48,
-                  fontFamily: "Poppins-SemiBold",
                   fontWeight: "500",
                   maxWidth: 852,
                 }}
@@ -394,7 +405,6 @@ const MyComponent = () => {
                   marginTop: 30,
                   color: "#fff",
                   fontSize: 20,
-                  fontFamily: "Poppins-Regular",
                   fontWeight: "400",
                   maxWidth: 646,
                 }}
@@ -429,7 +439,6 @@ const MyComponent = () => {
                       style={{
                         color: "#fff",
                         fontSize: 20,
-                        fontFamily: "Poppins-Regular",
                         fontWeight: "400",
                       }}
                     >
@@ -472,27 +481,23 @@ const MyComponent = () => {
                   textSize={28}
                   textWeight={"700"}
                   title={"Supercharge your growth"}
-                  textFamily={"Poppins-Bold"}
                 />
                 <Title
                   textSize={22}
-                  textFamily={"Poppins-Regular"}
                   title={
                     "We know how important your work is to you, we made it our life’s work to support you."
                   }
                 />
                 <Row style={{ gap: 10 }}>
-                  <MaterialIcons
-                    name="keyboard-arrow-left"
-                    size={20}
-                    color={"#135837"}
+                  <Image
+                    source={{ uri: 'https://img.icons8.com/?size=100&id=86517&format=png&color=135837' }}
+                    style={{ width: 22, height: 22 }}
                   />
                   <Title
-                    textSize={22}
-                    textFamily={"Poppins-SemiBold"}
+                    textSize={20}
                     textColor={"#135837"}
                     title={
-                      "Subscribe as indiviudual, team, organization or community"
+                      "Subscribe as individual, team, organization or community"
                     }
                   />
                 </Row>
@@ -549,13 +554,13 @@ const MyComponent = () => {
                   horizontal
                   ref={scrollRef}
                   pagingEnabled
-                  //   showsHorizontalScrollIndicator={true}
+                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     gap: 20,
                     marginVertical: 40,
                     flexGrow: 1,
                     justifyContent: "center",
-                    width: "100%",
+                    width: "130%",
                     height: 420,
                     zIndex: 100,
                   }}
@@ -584,30 +589,34 @@ const MyComponent = () => {
               </View>
             </View>
           </View>
-          <Row
-            style={{
-              justifyContent: "center",
-              gap: 50,
-              paddingVertical: 50,
-              backgroundColor: "white",
-              width: "100%",
-              shadowColor: "#135837",
-              shadowOffset: {
-                width: 0,
-                height: 5,
-              },
-              shadowOpacity: 0.34,
-              shadowRadius: 6.27,
-              elevation: 10,
-            }}
-          >
+            
+              <View
+                style={{
+                  justifyContent: "center",
+                  gap: 50,
+                  flexDirection: 'row',
+                  paddingVertical: 50,
+                  marginBottom: 20,
+                  backgroundColor: "white",
+                  width: "100%",
+                  shadowColor: "rgba(19, 88, 55, 0.3)",
+                  shadowOffset: {
+                    width: 0,
+                    height: 5,
+                  },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 5,
+                  elevation: 2,
+                }}
+              >
             <Image source={alix} />
             <Image source={carta} />
             <Image source={philips} />
             <Image source={heineken} />
             <Image source={deliotte} />
             <Image source={blueforte} />
-          </Row>
+               </View>
+       
 
           {/**professional AngleQuest */}
           <View
@@ -647,9 +656,7 @@ const MyComponent = () => {
                   textAlign: "center",
                   fontWeight: "700",
                   marginTop: 100,
-                  fontFamily: "Poppins-Bold",
-
-                  marginBottom: -60,
+                  marginBottom: -80,
                   color: "#135837",
                 }}
               >
@@ -666,7 +673,7 @@ const MyComponent = () => {
             style={{
               marginVertical: 40,
               width: "100%",
-              paddingHorizontal: 100,
+              paddingHorizontal: 10,
               backgroundColor: "#fffff",
               position: "relative",
               alignItems: "center",
@@ -675,19 +682,19 @@ const MyComponent = () => {
             <View
               style={{
                 width: 1400,
-                paddingVertical: 40,
+                paddingVertical: 100,
               }}
             >
               <View
                 style={{
                   flexDirection: "row",
                   alignSelf: "center",
-                  marginTop: 50,
-                  marginBottom: 100,
+                  marginTop: -70,
+                  marginBottom: 20,
                 }}
               >
-                <View style={{ flexDirection: "row", gap: 20 }}>
-                  <View style={[styles.bigwhiteBox2, { alignItems: "center" }]}>
+                <View style={{ flexDirection: "row", gap: 5}}>
+                  <View style={[styles.bigwhiteBox2, { alignItems: "center", marginRight: 10 }]}>
                     <View style={{ marginTop: 10, alignItems: "center" }}>
                       <Image
                         source={require("../assets/40.png")}
@@ -738,15 +745,15 @@ const MyComponent = () => {
                       source={require("../assets/consult.png")}
                       style={styles.innerimage}
                     />
-                    <View style={{ marginTop: 20 }}>
+                    <View style={{ marginTop: 50, }}>
                       <MainButtons
                         gradient
                         title={"Get Started"}
+                        borderRadius={5}
                         icon={
-                          <AntDesign
-                            name="arrowright"
-                            size={10}
-                            color="#ffff"
+                          <Image
+                            source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                            style={{ width: 15, height: 15 }}
                           />
                         }
                       />
@@ -804,15 +811,15 @@ const MyComponent = () => {
                       source={require("../assets/inHouse.png")}
                       style={styles.innerimage}
                     />
-                    <View style={{ marginTop: 20 }}>
+                    <View style={{ marginTop: 50 }}>
                       <MainButtons
                         gradient
                         title={"Get Started"}
+                        borderRadius={5}
                         icon={
-                          <AntDesign
-                            name="arrowright"
-                            size={10}
-                            color="#ffff"
+                          <Image
+                            source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                            style={{ width: 15, height: 15 }}
                           />
                         }
                       />
@@ -832,9 +839,10 @@ const MyComponent = () => {
               backgroundColor: "#fffff",
               position: "relative",
               alignItems: "center",
+              marginTop: -130
             }}
           >
-            <DottedImage style={{ top: -20, left: -20 }} />
+            <DottedImage style={{ top: -20, left: -20, filter: 'blur(2px)' }} />
             <View
               style={{
                 width: 1400,
@@ -842,35 +850,30 @@ const MyComponent = () => {
               }}
             >
               <Row style={{}}>
-                <View style={{ gap: 30, width: "40%" }}>
-                  <Title
-                    textSize={40}
-                    textFamily={"Poppins-SemiBold"}
-                    title={"Integrate AngleQuest with over 50 apps"}
-                  />
-                  <Title
-                    textSize={20}
-                    textWeight={"400"}
-                    title={
-                      "AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on AngleQuest Integrated Apps"
-                    }
-                  />
+                <View style={{ gap: 30, width: "30%" }}>
+                  <Text style={{ fontWeight: '600', fontSize: 40}}>Integrate AngleQuest with over 50 apps</Text>
+                  <Text style={{ fontWeight: '400', fontSize: 20}}>AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on AngleQuest Integrated Apps</Text>
+                
                   <Row style={{ gap: 10, alignItems: "center", marginTop: 10 }}>
                     <Title
                       title={"Learn more"}
-                      textSize={16}
-                      textColor={"#135837"}
+                      textSize={18}
+                      textColor={"#206C00"}
                     />
 
-                    <AntDesign name="arrowright" size={18} color="#135837" />
+                    <Image
+                      source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=206C00' }}
+                      style={{ width: 15, height: 15 }}
+                    />
                   </Row>
                 </View>
-                <View style={{ width: "60%", gap: 20 }}>
+                <View style={{ width: "60%", gap: 20, }}>
                   <Row
                     style={{
                       justifyContent: "flex-end",
                       gap: 20,
                       width: "100%",
+                      marginTop: 50 
                     }}
                   >
                     <ImageBtn
@@ -977,8 +980,9 @@ const MyComponent = () => {
             <Image
               source={require("../assets/imagineShadesL.png")}
               style={{
-                width: 573,
-                height: 573,
+                width: 400,
+                height: 400,
+                borderRadius: 200,
                 position: "absolute",
                 right: -200,
                 top: -286,
@@ -996,9 +1000,8 @@ const MyComponent = () => {
               <Text
                 style={{
                   fontSize: 36,
-                  fontFamily: "Poppins-Bold",
                   marginTop: 80,
-                  fontWeight: "700",
+                  fontWeight: "600",
                   marginBottom: 10,
                   color: "white",
                 }}
@@ -1008,7 +1011,6 @@ const MyComponent = () => {
               <Text
                 style={{
                   fontSize: 20,
-                  fontFamily: "Poppins-Regular",
                   fontWeight: "400",
                   marginBottom: 30,
                   color: "white",
@@ -1066,8 +1068,12 @@ const MyComponent = () => {
                       width={180}
                       gradient={true}
                       title={"Get Started"}
+                      borderRadius={5}
                       icon={
-                        <AntDesign name="arrowright" size={18} color="white" />
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                        style={{ width: 18, height: 18 }}
+                      />
                       }
                     />
                   </View>
@@ -1079,7 +1085,6 @@ const MyComponent = () => {
                   />
                   <Text
                     style={{
-                      fontFamily: "Poppins-SemiBold",
                       fontWeight: "600",
                       marginTop: 30,
                       color: "white",
@@ -1105,7 +1110,6 @@ const MyComponent = () => {
             <Text
               style={{
                 fontSize: 36,
-                fontFamily: "Poppins-Bold",
                 marginTop: 80,
                 fontWeight: "700",
                 marginBottom: 10,
@@ -1116,7 +1120,6 @@ const MyComponent = () => {
             <Text
               style={{
                 fontSize: 28,
-                fontFamily: "Poppins-Regular",
                 fontWeight: "400",
                 marginBottom: 30,
               }}
@@ -1163,7 +1166,7 @@ const MyComponent = () => {
             {<NoCreditSection />}
           </View>
           {/*  Footer */}
-          <Footer bgColor={"#084427"} />
+          <Footer/>
         </View>
 
         <Modal
@@ -1238,6 +1241,7 @@ const styles = StyleSheet.create({
     width: 1125,
     height: 675,
     alignSelf: "center",
+      boxShadow: '0px 10px 20px rgba(255, 255, 255, 0.7)',
   },
   shadowimage: {
     //marginTop: -40,
@@ -1301,20 +1305,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   bigwhiteBox2: {
-    width: 580,
-    height: 600,
+  width: 580,
+    height: 650,
     backgroundColor: "white",
     marginTop: 50,
+    marginRight: 40,
     padding: 20,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+    borderRadius: 5,
+    
+    boxShadow: '0px 20px 40px rgba(85, 107, 47, 0.5)', 
   },
   roundedBox: {
     width: 380,

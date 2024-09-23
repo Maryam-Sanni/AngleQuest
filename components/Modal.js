@@ -6,7 +6,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
+  Pressable, Image
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Row from "./Row";
@@ -70,7 +70,10 @@ const ProductsMenu = ({ visible, onClose }) => {
         <Text style={{ fontFamily: "Poppins-Regular", fontSize: 16 }}>
           {text}
         </Text>
-        <AntDesign name="right" size={20} color="black" />
+        <Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=60671&format=png&color=000000' }}
+          style={{ width: 20, height: 20 }}
+        />
       </TouchableOpacity>
     );
   };

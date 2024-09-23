@@ -21,7 +21,6 @@ const Title = ({
           fontSize: textSize ? textSize : 14,
           color: textColor ? textColor : "black",
           fontWeight: textWeight ? textWeight : "400",
-          fontFamily: textFamily ? textFamily : "Poppins-Regular",
         },
       ]}
     >

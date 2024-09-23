@@ -120,6 +120,7 @@ const MyComponent = ({ value, tint, intensity }) => {
           </TouchableOpacity>
           <HButton //onPress={handleProductsHover}
             title={"Products"}
+            textColor={"white"}
             dropdown
             onPress={handleProductsHover}
           />
@@ -177,17 +178,15 @@ const MyComponent = ({ value, tint, intensity }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    //  backgroundColor: "#F8F8F8",
+     backgroundColor: "rgba(0, 0, 0, 0.8)",
     width: 1400,
     alignSelf: "center",
-    // borderBottomColor: "#135837",
-    // borderBottomWidth: 1,
+    borderRadius: 12,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     padding: 17,
-    //  backgroundColor: "white",
     justifyContent: "space-between",
     alignItems: "center",
     height: 83,

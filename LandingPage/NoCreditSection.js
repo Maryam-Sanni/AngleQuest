@@ -17,30 +17,28 @@ const NoCreditSection = () => {
       style={styles.imageBackground}
     >
       <View style={styles.footerContainer}>
-        <Row style={{ marginTop: 35 }}>
+        <Row style={{ marginTop: 35, marginBottom: 7 }}>
           <Title
             textSize={24}
-            textColor={"white"}
-            textFamily={"Poppins-Bold"}
+            textColor={"#F5F5F5"}
+             textWeight={"400"}
             title={"Back your employees to success with "}
           />
           <Text
             style={{
               textDecorationLine: "underline",
               fontSize: 24,
-              fontFamily: "Poppins-SemiBold",
-              fontWeight: "600",
               color: "lightgreen",
             }}
           >
-            AngleQuest
+            anglequest.com
           </Text>
         </Row>
         <Title
-          textColor={"white"}
+          textColor={"#CCC"}
           center
           textWeight={"400"}
-          textSize={20}
+          textSize={18}
           title={"No credit card needed, pay as you use."}
         />
       </View>

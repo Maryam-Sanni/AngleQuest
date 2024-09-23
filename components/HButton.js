@@ -11,10 +11,10 @@ const HButton = ({ onPress, onMouseEnter, dropdown, title }) => {
     >
       <Text style={styles.hText}>{title}</Text>
       {dropdown && (
-        <Image
-          source={require("../assets/icons8-arrow-down-24.png")}
-          style={styles.arrowdown}
-        />
+      <Image
+        source={{ uri: 'https://img.icons8.com/?size=100&id=85018&format=png&color=FFFFFF' }}
+        style={styles.arrowdown}
+      />
       )}
     </TouchableOpacity>
   );
@@ -24,9 +24,9 @@ export default HButton;
 
 const styles = StyleSheet.create({
   hText: {
-    fontSize: 16,
+    fontSize: 18,
     marginRight: 5,
-    // marginLeft: 30,
+    color: 'white',
     fontWeight: 500,
   },
   arrowdown: {

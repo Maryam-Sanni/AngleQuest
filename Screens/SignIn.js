@@ -207,7 +207,6 @@ const SignIn = () => {
                         style={{
                           fontSize: 14,
                           fontWeight: "400",
-                          fontFamily: "Poppins-Regular",
                           color: "blue",
                           textAlign: "right",
                         }}
@@ -223,6 +222,8 @@ const SignIn = () => {
                       <MainButtons
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
+                        borderRadius={5}
+                        width={420}
                         textColor={"white"}
                         title={"Log In"}
                       />
@@ -234,7 +235,6 @@ const SignIn = () => {
                       <Text
                         style={{
                           fontWeight: "700",
-                          fontFamily: "Poppins-Bold",
                         }}
                       >
                         Sign up
@@ -287,7 +287,6 @@ const styles = StyleSheet.create({
   signUpText: {
     fontSize: 18,
     fontWeight: "400",
-    fontFamily: "Poppins-Regular",
     marginVertical: 40,
     textAlign: "center",
   },

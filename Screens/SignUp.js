@@ -148,19 +148,20 @@ const SignUp = () => {
                     style={styles.goBack}
                     onPress={handleGoBack}
                   >
-                    <MaterialIcons
-                      name="arrow-back-ios-new"
-                      size={24}
-                      color="black"
+                    <Image
+                      source={{ uri: 'https://img.icons8.com/?size=100&id=85304&format=png&color=000000' }}
+                      style={{ width: 30, height: 30 }}
                     />
-                    <Title title="Back" />
+                    <Text style= {{fontSize: 20, fontWeight: '600', color: 'black', marginLeft: -10}}> Back </Text>
                   </TouchableOpacity>
                   <View style={styles.optionContainer}>
-                    <Title title={"Sign up to join AngleQuest"} textSize={18} />
+                    <Title title={"Sign up to join AngleQuest"} textSize={20} />
                     <MainButtons
                       outlined
                       borderRadius={8}
                       width={"100%"}
+                      height={40}
+                      padding={10}
                       title={"Join as an Individual"}
                       textColor={"#135837"}
                       onPress={() => setSignUpOption(1)}
@@ -186,7 +187,6 @@ const SignUp = () => {
                       <Text
                         style={{
                           fontWeight: "700",
-                          fontFamily: "Poppins-Bold",
                         }}
                       >
                         {" "}
@@ -228,12 +228,11 @@ const SignUp = () => {
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
                     >
-                      <MaterialIcons
-                        name="arrow-back-ios-new"
-                        size={24}
-                        color="black"
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=85304&format=png&color=000000' }}
+                        style={{ width: 30, height: 30 }}
                       />
-                      <Title title="Back" />
+                      <Text style= {{fontSize: 20, fontWeight: '600', color: 'black', marginLeft: -10}}> Back </Text>
                     </TouchableOpacity>
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as an Individual"} textSize={18} />
@@ -341,6 +340,8 @@ const SignUp = () => {
                       <MainButtons 
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
+                        borderRadius={5}
+                        width={420}
                         textColor={"white"}
                         title={"Sign Up"}
                       />
@@ -352,7 +353,6 @@ const SignUp = () => {
                       <Text
                         style={{
                           fontWeight: "700",
-                          fontFamily: "Poppins-Bold",
                         }}
                       >
                         Sign in
@@ -393,12 +393,11 @@ const SignUp = () => {
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
                     >
-                      <MaterialIcons
-                        name="arrow-back-ios-new"
-                        size={24}
-                        color="black"
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=85304&format=png&color=000000' }}
+                        style={{ width: 30, height: 30 }}
                       />
-                      <Title title="Back" />
+                      <Text style= {{fontSize: 20, fontWeight: '600', color: 'black', marginLeft: -10}}> Back </Text>
                     </TouchableOpacity>
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as an Expert"} textSize={18} />
@@ -489,7 +488,6 @@ const SignUp = () => {
                             style={{
                               fontSize: 14,
                               fontWeight: "400",
-                              fontFamily: "Poppins-Regular",
                             }}
                           >
                             I agree to the Terms of Service & Privacy Policy
@@ -507,6 +505,8 @@ const SignUp = () => {
                       <MainButtons 
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
+                        borderRadius={5}
+                        width={420}
                         textColor={"white"}
                         title={"Sign Up"}
                       />
@@ -518,7 +518,6 @@ const SignUp = () => {
                       <Text
                         style={{
                           fontWeight: "700",
-                          fontFamily: "Poppins-Bold",
                         }}
                       >
                         Sign in
@@ -559,12 +558,11 @@ const SignUp = () => {
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
                     >
-                      <MaterialIcons
-                        name="arrow-back-ios-new"
-                        size={24}
-                        color="black"
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=85304&format=png&color=000000' }}
+                        style={{ width: 30, height: 30 }}
                       />
-                      <Title title="Back" />
+                      <Text style= {{fontSize: 20, fontWeight: '600', color: 'black', marginLeft: -10}}> Back </Text>
                     </TouchableOpacity>
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as a Business"} textSize={18} />
@@ -610,13 +608,13 @@ const SignUp = () => {
                     <View style={{ marginTop: 40, gap: 20 }}>
                       <InputField
                         keyboardType="name"
-                        val={fName}
+                        val={firstName}
                         onChangeText={setFName}
                         placeholder="Business name"
                       />
                       <InputField
                         keyboardType="name"
-                        val={lName}
+                        val={lastName}
                         onChangeText={setLName}
                         placeholder="Administrator's name"
                       />
@@ -652,7 +650,6 @@ const SignUp = () => {
                             style={{
                               fontSize: 14,
                               fontWeight: "400",
-                              fontFamily: "Poppins-Regular",
                             }}
                           >
                             I agree to the Terms of Service & Privacy Policy
@@ -662,6 +659,8 @@ const SignUp = () => {
                       <MainButtons
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
+                        borderRadius={5}
+                        width={420}
                         textColor={"white"}
                         title={"Sign Up"}
                       />
@@ -671,7 +670,6 @@ const SignUp = () => {
                       <Text
                         style={{
                           fontWeight: "700",
-                          fontFamily: "Poppins-Bold",
                         }}
                       >
                         Sign in
@@ -721,7 +719,6 @@ const styles = StyleSheet.create({
   signUpText: {
     fontSize: 18,
     fontWeight: "400",
-    fontFamily: "Poppins-Regular",
     marginVertical: 40,
     textAlign: "center",
   },
