@@ -1166,7 +1166,7 @@ const MyComponent = () => {
             {<NoCreditSection />}
           </View>
           {/*  Footer */}
-          <Footer/>
+          <Footer bgColor={"white"}/>
         </View>
 
         <Modal

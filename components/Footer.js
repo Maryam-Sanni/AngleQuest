@@ -30,15 +30,15 @@ const Footer = ({ bgColor }) => {
       <View style={{ gap: 16 }}>
         {title && (
           <Title
-            textSize={20}
-            textColor={changeBg === "black" ? "white" : "black"}
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "#135837"}
             textWeight={"700"}
             title={title}
           />
         )}
         {item1 && (
           <Title
-            textSize={17}
+            textSize={16}
             textColor={changeBg === "#084427" ? "white" : "black"}
             textWeight={"400"}
             title={item1}
@@ -47,7 +47,7 @@ const Footer = ({ bgColor }) => {
         )}
         {item2 && (
           <Title
-            textSize={17}
+            textSize={16}
             textColor={changeBg === "#084427" ? "white" : "black"}
             textWeight={"400"}
             title={item2}
@@ -56,7 +56,7 @@ const Footer = ({ bgColor }) => {
         )}
         {item3 && (
           <Title
-            textSize={17}
+            textSize={16}
             textColor={changeBg === "#084427" ? "white" : "black"}
             textWeight={"400"}
             title={item3}
@@ -105,22 +105,24 @@ const Footer = ({ bgColor }) => {
                 justifyContent: "space-between",
               }}
             >
-             
               <FooterList
                 title={"Product"}
                 item1={"Individual"}
                 item2={"Experts"}
                 item3={"Businesses"}
+                item4={"Pricing"}
               />
               <FooterList
-                title={"Resources"}
-                item1={"Documentations"}
-                item2={"FAQs"}
-                item3={"Terms & privacy policy"}
+                title={"Information"}
+                item1={"FAQs"}
+                item2={"Blog"}
+                item3={"Support"}
               />
               <FooterList
-                title={"Why AngleQuest"}
-                item1={"Pricing"}
+                title={"Company"}
+                item1={"About us"}
+                item2={"Careers"}
+                item3={"Contact us"}
               />
             </View>
             <LinearGradient
@@ -185,7 +187,7 @@ const Footer = ({ bgColor }) => {
           </Row>
         </View>
 
-<View style={{ gap: 25 }}>
+        <View style={{ gap: 25 }}>
           <View
             style={{
               width: "100%",
@@ -198,18 +200,21 @@ const Footer = ({ bgColor }) => {
             <Row style={{ gap: 30 }}>
               <Title
                 textSize={14}
+                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Terms"}
                 textColor={changeBg === "#084427" ? "white" : "black"}
               />
               <Title
                 textSize={14}
+                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Privacy"}
                 textColor={changeBg === "#084427" ? "white" : "black"}
               />
               <Title
                 textSize={14}
+                textFamily={"Poppins-Regular"}
                 textWeight={"400"}
                 title={"Cookies"}
                 textColor={changeBg === "#084427" ? "white" : "black"}
@@ -248,7 +253,6 @@ const Footer = ({ bgColor }) => {
             />
             <Title
               textSize={20}
-              textFamily={"Poppins-Bold"}
               textWeight={"700"}
               title={"AngleQuest"}
               textColor={changeBg === "#084427" ? "white" : "black"}
