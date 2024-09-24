@@ -211,19 +211,21 @@ const SignUp = () => {
                       style={{ width: 620, height: 916 }}
                     />
                   </View>
-                  <View
-                    style={{
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 4,
-                      },
-                      shadowOpacity: 0.32,
-                      shadowRadius: 5.46,
-                      padding: 40,
-                      elevation: 9,
-                    }}
-                  >
+                    <View
+                      style={{
+                          shadowColor: 'rgba(85, 107, 47, 0.5)', 
+                          shadowOffset: {
+                            width: 0, 
+                            height: 15, 
+                          },
+                          shadowOpacity: 0.7, 
+                          shadowRadius: 20, 
+                          padding: 40,
+                          elevation: 10,
+                          backgroundColor: "#fff", 
+                          borderRadius: 10, 
+                        }}
+                      >
                     <TouchableOpacity
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
@@ -376,19 +378,21 @@ const SignUp = () => {
                       style={{ width: 620, height: 916 }}
                     />
                   </View>
-                  <View
-                    style={{
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 4,
-                      },
-                      shadowOpacity: 0.32,
-                      shadowRadius: 5.46,
-                      padding: 40,
-                      elevation: 9,
-                    }}
-                  >
+                    <View
+                      style={{
+                          shadowColor: 'rgba(85, 107, 47, 0.5)', 
+                          shadowOffset: {
+                            width: 0, 
+                            height: 15, 
+                          },
+                          shadowOpacity: 0.7, 
+                          shadowRadius: 20, 
+                          padding: 40,
+                          elevation: 10,
+                          backgroundColor: "#fff", 
+                          borderRadius: 10, 
+                        }}
+                      >
                     <TouchableOpacity
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
@@ -541,19 +545,21 @@ const SignUp = () => {
                       style={{ width: 620, height: 916 }}
                     />
                   </View>
-                  <View
-                    style={{
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 4,
-                      },
-                      shadowOpacity: 0.32,
-                      shadowRadius: 5.46,
-                      padding: 40,
-                      elevation: 9,
-                    }}
-                  >
+                    <View
+                      style={{
+                          shadowColor: 'rgba(85, 107, 47, 0.5)', 
+                          shadowOffset: {
+                            width: 0, 
+                            height: 15, 
+                          },
+                          shadowOpacity: 0.7, 
+                          shadowRadius: 20, 
+                          padding: 40,
+                          elevation: 10,
+                          backgroundColor: "#fff", 
+                          borderRadius: 10, 
+                        }}
+                      >
                     <TouchableOpacity
                       style={[styles.goBack, { marginBottom: 30 }]}
                       onPress={handleGoBack}
@@ -728,15 +734,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingVertical: 60,
     gap: 50,
-    shadowColor: "#000",
+    shadowColor: 'rgba(85, 107, 47, 0.5)', 
     shadowOffset: {
-      width: 0,
-      height: 4,
+      width: 0, 
+      height: 15, 
     },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
+    shadowOpacity: 0.7, 
+    shadowRadius: 20, 
     padding: 40,
-    elevation: 9,
+    elevation: 10,
     alignItems: "center",
     position: "relative",
     borderRadius: 10,

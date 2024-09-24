@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  ScrollView, ActivityIndicator
+  ScrollView, ActivityIndicator, TextInput
 } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import Top from "../components/HomeTop";
@@ -19,6 +19,7 @@ import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from "react-native-vector-icons/Ionicons"; 
 
 const SignIn = () => {
   const navigation = useNavigation(); // Navigation object
@@ -26,6 +27,8 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const maskedPassword = passwordVisible ? password : '*'.repeat(password.length);
   
   const handleSignUp = () => {
     navigation.dispatch(CommonActions.navigate("Sign Up2"));
@@ -141,19 +144,20 @@ const SignIn = () => {
                   />
                 </View>
                 <View
-                  style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 4,
-                    },
-                    shadowOpacity: 0.32,
-                    shadowRadius: 5.46,
-                    padding: 40,
-                    elevation: 9,
-                    backgroundColor: "#fff",
-                  }}
-                >
+                              style={{
+                                shadowColor: 'rgba(85, 107, 47, 0.5)', 
+                                shadowOffset: {
+                                  width: 0, 
+                                  height: 15, 
+                                },
+                                shadowOpacity: 0.7, 
+                                shadowRadius: 20, 
+                                padding: 40,
+                                elevation: 10,
+                                backgroundColor: "#fff", 
+                                borderRadius: 10, 
+                              }}
+                            >
                   <MainButtons
                     outlined
                     paddingVertical={5}
@@ -195,12 +199,28 @@ const SignIn = () => {
                         placeholder="Username"
                       />
 
-                      <InputField
-                        keyboardType="text"
-                        val={password}
-                        placeholder="Password"
-                        onChangeText={setPassword}
-                      />
+                      <View style={{ position: 'relative' }}>
+                        <TextInput
+                          value={maskedPassword}
+                          onChangeText={setPassword}
+                          secureTextEntry={!passwordVisible} 
+                          placeholder="Password"
+                          style={{ borderWidth: 1, padding: 10, borderRadius: 5 }}
+                        />
+                        <TouchableOpacity
+                          style={styles.eyeIcon}
+                          onPress={() => setPasswordVisible(!passwordVisible)}
+                        >
+                          <Image
+                            source={{
+                              uri: passwordVisible
+                                ? 'https://img.icons8.com/?size=100&id=60022&format=png&color=000000' 
+                                : 'https://img.icons8.com/?size=100&id=121537&format=png&color=000000' 
+                            }}
+                            style={{width: 20, height: 20}}
+                          />
+                        </TouchableOpacity>
+                      </View>
 
                       <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
                       <Text
@@ -289,6 +309,11 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     marginVertical: 40,
     textAlign: "center",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    padding: 10, 
   },
 });
 

@@ -649,32 +649,30 @@ paddingHorizontal: 5,
 
 
                     <View style={styles.headerContainer}>
-                      <LinearGradient
-                        colors={['#3C6E47', '#11412C']}
-                        style={styles.gradientBackground}
-                      />
-
-
-                      <View style={[styles.circle, styles.circleTopLeft]} />
-                      <View style={[styles.circle, styles.circleBottomRight]} />
-
-
-                      <View style={styles.textContainer}>
-                        <Text style={styles.headingText}>{t("My Courses")}</Text>
-                        <Text style={styles.subHeadingText}>                      {t(
-                            "These are the courses you're currently enrolled in. Click 'Join' to participate in this week's course meeting if it has already started",
-                          )}</Text>
-                        <View style={{flexDirection: 'row'}}>
-                        
-                        <TouchableOpacity onPress={goToCourse}
-                          style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
-                          onMouseEnter={() => setIsHovered(true)}
-                          onMouseLeave={() => setIsHovered(false)}
-                        >
-                          <Text style={styles.buttonTextplus}>See All Courses</Text>
-                        </TouchableOpacity>
+                      <ImageBackground
+                         source={require('../assets/TG1.png')}
+                        style={styles.imageBackground}
+                        resizeMode="cover"
+                      >
+                          <View style={styles.cardContainer}>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.headingText}>{t("My Courses")}</Text>
+                              <Text style={styles.subHeadingText}>
+                                {t("Join knowledge sharing sessions")}
+                              </Text>
+                            </View>
+                          <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                              onPress={goToCourse}
+                              style={[styles.buttonplus, isHovered && styles.buttonplusHovered]}
+                              onMouseEnter={() => setIsHovered(true)}
+                              onMouseLeave={() => setIsHovered(false)}
+                            >
+                              <Text style={styles.buttonTextplus}>See All Courses</Text>
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
+                      </ImageBackground>
                     </View>
                     <View
                       style={{
@@ -794,43 +792,56 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    height: 250, 
-    width: '95%',
+    padding: 40,
+    marginTop: 20
+  },
+  imageBackground: {
+    height: 400, 
+    width: '100%',
     alignSelf: 'center',
-    marginTop: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
     overflow: 'hidden',
-    position: 'relative', 
+    padding: 20,
+    borderBottomLeftRadius: 30,
+    borderTopRightRadius: 30,
+    shadowColor: 'darkgreen', 
+      shadowOffset: {
+        width: 0, 
+        height: 5, 
+      },
+      shadowOpacity: 0.7, 
+      shadowRadius: 20, 
+      elevation: 10,
   },
   gradientBackground: {
     ...StyleSheet.absoluteFillObject,
   },
+  cardContainer: {
+    width: '30%', 
+    marginTop: 20,
+    padding: 20,
+    backgroundColor: 'white', 
+    borderRadius: 10,
+    marginLeft: 10, 
+    elevation: 5, 
+    shadowColor: 'rgba(0, 0, 0, 0.3)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+  },
   textContainer: {
-    position: 'absolute',
-    top: '30%',
-    left: '10%',
-    right: '10%',
-    alignItems: 'center',
+    alignItems: 'flex-start', 
   },
   headingText: {
-    color: '#ffffff',
-    fontSize: 28,
+    fontSize: 24,
+    color: 'black',
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 5,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    marginBottom: 10,
   },
   subHeadingText: {
-    color: '#ffffff',
-    fontSize: 18,
-    textAlign: 'center',
-    opacity: 0.85,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'left',
+    marginBottom: 20,
   },
   circle: {
     position: 'absolute',

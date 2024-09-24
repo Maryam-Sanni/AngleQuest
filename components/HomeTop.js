@@ -64,8 +64,8 @@ const MyComponent = ({ value, tint, intensity }) => {
     }
   };
 
-  const handleAIPress = () => {
-    navigation.navigate("AI Screen");
+  const navigateToSignUp = () => {
+    navigation.navigate("Sign Up2");
   };
 
   const handlebackPress = () => {
@@ -124,7 +124,7 @@ const MyComponent = ({ value, tint, intensity }) => {
             dropdown
             onPress={handleProductsHover}
           />
-          <HButton onPress={handleAIPress}
+          <HButton
             title={"AngleQuest AI"}
           />
           <HButton // onPress={handleAIPress}
@@ -151,8 +151,14 @@ const MyComponent = ({ value, tint, intensity }) => {
             bgColor={""}
             outlined={activeIndex !== 3 ? true : false}
             gradient={activeIndex === 3 ? true : false}
-            onPress={() => handleNav(3)}
-            icon={<AntDesign name="arrowright" size={10} color="#ffff" />}
+            onPress={() => {
+              handleNav(3); 
+              navigateToSignUp(); 
+            }}
+            icon={<Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+              style={{ width: 15, height: 15 }}
+            />}
           />
         </View>
       </BlurView>

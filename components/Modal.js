@@ -92,13 +92,11 @@ const ProductsMenu = ({ visible, onClose }) => {
       >
         <Title
           textSize={16}
-          textFamily={"Poppins-Bold"}
           textWeight={"700"}
           title={title}
         />
         <Title
           textSize={16}
-          textFamily={"Poppins-Regular"}
           textWeight={"400"}
           title={desc}
           style={{ maxWidth: 261 }}
@@ -188,8 +186,8 @@ const ProductsMenu = ({ visible, onClose }) => {
                 <SelectedItem
                   onPress={() => setActiveItem(4)}
                   active={activeItem === 4 ? true : false}
-                  desc="An environment fostered to focus on continious learning and development for all employees."
-                  title="Growth Culture"
+                  desc="An environment tailored to help you learn a new skill even if you have zero prequisite knowledge."
+                  title="New Skill Acquisition"
                 />
                 <SelectedItem
                   onPress={() => setActiveItem(5)}
@@ -211,14 +209,40 @@ const ProductsMenu = ({ visible, onClose }) => {
                 <SelectedItem
                   onPress={() => setActiveItem(7)}
                   active={activeItem === 7 ? true : false}
-                  desc="Measuring and analyzing the domain knowledge and billable work of your team members, followed with the required personalized trainings, suggestion, assistance, tracking reviews and advice."
+                  desc="Measuring and analyzing the domain knowledge and billable work of your team members."
                   title="AngleQuest Team Impact"
                 />
                 <SelectedItem
                   onPress={() => setActiveItem(8)}
                   active={activeItem === 8 ? true : false}
-                  desc="Career development platform optimized with resources for employees to explore career paths, set goals and track professional development."
+                  desc="Targeted training and expert support to improve employee performance."
+                  title="Boost Under-performance"
+                />
+                <SelectedItem
+                  onPress={() => setActiveItem(9)}
+                  active={activeItem === 9 ? true : false}
+                  desc="Intensive mentorship program to quickly enhance employee skill and productivity."
+                  title="Rapid Upskilling"
+                />
+              </Row>
+              <Row style={{ justifyContent: "space-between" }}>
+                <SelectedItem
+                  onPress={() => setActiveItem(10)}
+                  active={activeItem === 10 ? true : false}
+                  desc="An environment tailored to help you learn a new skill even if you have zero prequisite knowledge."
+                  title="New Skill Acquisition"
+                />
+                <SelectedItem
+                  onPress={() => setActiveItem(11)}
+                  active={activeItem === 11 ? true : false}
+                  desc="Career development platform optimized with resources to explore career paths, set goals and track professional development."
                   title="Junior to Senior Boost"
+                />
+                <SelectedItem
+                  onPress={() => setActiveItem(12)}
+                  active={activeItem === 12 ? true : false}
+                  desc="Accelerated career progression with structured mentorship and advanced training for senior employees."
+                  title="Senior to Architect Boost"
                 />
               </Row>
             </View>

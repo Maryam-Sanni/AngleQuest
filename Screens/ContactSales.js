@@ -29,14 +29,14 @@ const CheckedItem = ({ text }) => {
         source={CheckMark}
         style={{ width: 32, height: 32, objectFit: "contain" }}
       />
-      <Title title={text} textSize={20} fontFamily="Poppins-Regular" />
+      <Title title={text} textSize={20} />
     </Row>
   );
 };
 const Input = ({ label, req, val, onChangeText, keyboardType, multiline }) => {
   return (
     <View>
-      <Text style={{ fontFamily: "Poppins-Regular", fontSize: 14 }}>
+      <Text style={{ fontSize: 14 }}>
         {label}
         {req && <Text style={{ color: "red" }}>*</Text>}
       </Text>
@@ -131,20 +131,21 @@ const MyComponent = () => {
               >
                 <View
                   style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 4,
-                    },
-                    shadowOpacity: 0.32,
-                    shadowRadius: 5.46,
-                    padding: 40,
-                    elevation: 9,
-                  }}
-                >
+                      shadowColor: 'rgba(85, 107, 47, 0.5)', 
+                      shadowOffset: {
+                        width: 0, 
+                        height: 15, 
+                      },
+                      shadowOpacity: 0.7, 
+                      shadowRadius: 20, 
+                      padding: 40,
+                      elevation: 10,
+                      backgroundColor: "#fff", 
+                      borderRadius: 10, 
+                    }}
+                  >
                   <Title
                     textSize={20}
-                    textFamily={"Poppins-Regular"}
                     textColor={"#000"}
                     title={"Contact our Sales team"}
                   />
@@ -165,7 +166,7 @@ const MyComponent = () => {
                     />
                     <Input
                       keyboardType="text"
-                      label={"What would you like to manage with AngleQuest?"}
+                      label={"What would you like to manage with anglequest?"}
                       req={true}
                       val={manage}
                       onChangeText={setManage}
@@ -184,7 +185,6 @@ const MyComponent = () => {
                         style={{
                           fontSize: 14,
                           fontWeight: "400",
-                          fontFamily: "Poppins-Regular",
                         }}
                       >
                         AngleQuest’s
@@ -202,14 +202,12 @@ const MyComponent = () => {
                 <View style={{ flex: 1 }}>
                   <Title
                     textSize={48}
-                    textFamily={"Poppins-Bold"}
                     textColor={"#135837"}
                     title={"Book a personalized consultation"}
                     style={{ marginBottom: 20 }}
                   />
                   <Title
                     textSize={24}
-                    textFamily={"Poppins-SemiBold"}
                     textColor={"#000"}
                     title={
                       "Meet with a product consultant to see how AngleQuest can fit your exact business needs."
@@ -249,16 +247,16 @@ const MyComponent = () => {
               paddingVertical: 50,
               backgroundColor: "white",
               width: "100%",
-              shadowColor: "#135837",
-              shadowOffset: {
-                width: 0,
-                height: 5,
-              },
-              shadowOpacity: 0.34,
-              shadowRadius: 6.27,
-              elevation: 10,
-            }}
-          >
+            shadowColor: "rgba(200, 200, 200, 0.8)",
+                shadowOffset: {
+                  width: 0,
+                  height: 10,
+                },
+                shadowOpacity: 0.4,
+                shadowRadius: 5,
+                elevation: 10,
+              }}
+            >
             <Image source={alix} />
             <Image source={carta} />
             <Image source={philips} />

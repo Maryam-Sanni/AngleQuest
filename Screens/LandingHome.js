@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Modal,
   ScrollView,
-  ImageBackground,
+  ImageBackground, Dimensions,
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -53,7 +53,7 @@ const cardSliderData = [
   {
     id: 3,
     color: "#DE7423",
-    text: "Cross       Community",
+    text: "Cross Community Learning",
     personImg: require("../assets/person3.png"),
     cardImg: require("../assets/card3.png"),
   },
@@ -67,7 +67,7 @@ const cardSliderData = [
   {
     id: 5,
     color: "#6E1D1A",
-    text: "Career       Mentoring",
+    text: "Career          Mentoring",
     personImg: require("../assets/person5.png"),
     cardImg: require("../assets/card5.png"),
   },
@@ -75,6 +75,20 @@ const cardSliderData = [
     id: 6,
     color: "#292929",
     text: "Organizational Knowledge",
+    personImg: require("../assets/person4.png"),
+    cardImg: require("../assets/card3.png"),
+  },
+  {
+    id: 7,
+    color: "#D33336",
+    text: "Team Knowledge management",
+    personImg: require("../assets/person4.png"),
+    cardImg: require("../assets/card3.png"),
+  },
+  {
+    id: 8,
+    color: "#D3336B",
+    text: "Skill Gap         Analysis",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
   },
@@ -160,7 +174,7 @@ const DottedImage = ({ style }) => {
   return (
     <Image
       source={require("../assets/dottedFrame.png")}
-      style={[style, { width: 608, height: 344, position: "absolute" }]}
+      style={[style, { width: 608, height: 280, position: "absolute" }]}
     />
   );
 };
@@ -177,34 +191,37 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
       </Row>
     );
   };
-  return (
-    <TouchableOpacity
-      style={{
-        width: 280,
-        backgroundColor: bgColor ? bgColor : "white",
-        height: 385,
 
-        position: "relative",
-        borderRadius: 20,
-      }}
+
+  
+  return (
+      <TouchableOpacity
+        style={{
+          width: 320,
+          backgroundColor: bgColor ? bgColor : "white",
+          height: 400,
+
+          position: "relative",
+          borderRadius: 20,
+        }}
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
     >
       {active && (
-        <BlurView
-          intensity={50}
-          tint="dark"
-          style={{
-            //  backgroundColor: "#000000B2",
-            paddingVertical: 20,
-            paddingLeft: 20,
-            borderRadius: 20,
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-            zIndex: 100,
-          }}
-        >
+          <BlurView
+            intensity={100}
+            tint="dark" 
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 1)', 
+              paddingVertical: 20,
+              paddingLeft: 20,
+              borderRadius: 20,
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              zIndex: 100,
+            }}
+          >
           <Text style={{ fontSize: 18, color: "white" }}>
             Recommended Product
           </Text>
@@ -266,7 +283,7 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
           <Image
             style={{
               position: "absolute",
-              bottom: -40,
+              bottom: -30,
               right: 0,
               width: 265,
               height: 180,
@@ -281,20 +298,28 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
 };
 const SpecialBtn = ({ text, height, width, bgColor }) => {
    const navigation = useNavigation();
+   const [isHovered, setIsHovered] = useState(false);
   const handleSignUp = () => {
     navigation.navigate("Sign Up2");
   };
+  
   return (
-    <Pressable  onPress={handleSignUp}
-      style={{
-        backgroundColor: bgColor ? bgColor : "#00000033",
-        width: width ? width : 144,
-        height: height ? height : 54,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 8,
-      }}
-    >
+      <Pressable
+        onPress={handleSignUp}
+        onMouseEnter={() => setIsHovered(true)} 
+        onMouseLeave={() => setIsHovered(false)} 
+        style={{
+          backgroundColor: isHovered
+            ? 'linear-gradient(90deg, #135837, #29BE77)' 
+            : bgColor || "#00000033",
+          width: width || 144,
+          height: height || 54,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 8,
+          background: isHovered ? 'linear-gradient(90deg, #135837, #29BE77)' : (bgColor || "#00000033"),
+        }}
+      >
       <Text
         style={{
           color: "#fff",
@@ -317,6 +342,7 @@ const MyComponent = () => {
   };
 
 
+  const { width: screenWidth } = Dimensions.get('window');
   
   const colorList = [
     { offset: "0%", color: "#231557", opacity: "1" },
@@ -336,9 +362,6 @@ const MyComponent = () => {
           top: 190,
           left: left && 10,
           right: !left && 10,
-          borderRadius: 50,
-          borderWidth: 1,
-          borderColor: "#cccc",
           alignItems: "center",
           justifyContent: "center",
           padding: 10,
@@ -348,19 +371,26 @@ const MyComponent = () => {
       >
         {left ? (
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=FFFFFF' }}
-          style={{ width: 40, height: 40 }}
+          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=CCCCCC' }}
+          style={{ width: 50, height: 50 }}
         />
         ) : (
+        <TouchableOpacity
+         onPress={() => scrollRef.current?.scrollTo({ x: 400, animated: true })}>
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=FFFFFF' }}
-          style={{ width: 40, height: 40 }}
+          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=CCCCCC' }}
+          style={{ width: 50, height: 50 }}
         />
+        </TouchableOpacity>
         )}
       </TouchableOpacity>
     );
   };
 
+  const handlecontact = () => {
+    navigation.navigate("ContactSales");
+  };
+  
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -392,8 +422,9 @@ const MyComponent = () => {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 48,
+                  fontSize: 55,
                   fontWeight: "500",
+                  marginTop: 130,
                   maxWidth: 852,
                 }}
               >
@@ -404,7 +435,7 @@ const MyComponent = () => {
                 style={{
                   marginTop: 30,
                   color: "#fff",
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: "400",
                   maxWidth: 646,
                 }}
@@ -467,16 +498,16 @@ const MyComponent = () => {
           {/**toolkit */}
           <View
             style={{
-              marginVertical: 40,
+              marginVertical: 20,
               width: "100%",
-              paddingHorizontal: 100,
+              paddingLeft: 10,
+              marginTop: -70,
               backgroundColor: "#fffff",
               position: "relative",
-              alignItems: "center",
             }}
           >
-            <View style={{ width: 1400 }}>
-              <View style={{ gap: 10 }}>
+            <View style={{ width: "100%" }}>
+              <View style={{ gap: 10, paddingHorizontal: 70 }}>
                 <Title
                   textSize={28}
                   textWeight={"700"}
@@ -493,13 +524,15 @@ const MyComponent = () => {
                     source={{ uri: 'https://img.icons8.com/?size=100&id=86517&format=png&color=135837' }}
                     style={{ width: 22, height: 22 }}
                   />
+                  <TouchableOpacity onPress={handlecontact}>
                   <Title
                     textSize={20}
                     textColor={"#135837"}
-                    title={
-                      "Subscribe as individual, team, organization or community"
-                    }
+                    style={{ textDecorationLine: "underline"}} 
+                    textWeight={"bold"}
+                    title={"Subscribe as individual, team, organization or community"}
                   />
+                  </TouchableOpacity>
                 </Row>
               </View>
               <View
@@ -559,10 +592,10 @@ const MyComponent = () => {
                     gap: 20,
                     marginVertical: 40,
                     flexGrow: 1,
-                    justifyContent: "center",
-                    width: "130%",
-                    height: 420,
+                    width: "100%",
+                    height: 500,
                     zIndex: 100,
+                   
                   }}
                 >
                   {cardSliderData?.map?.((item) => (
@@ -572,6 +605,7 @@ const MyComponent = () => {
                       title={item?.text}
                       personImg={item?.personImg}
                       cardImg={item?.cardImg}
+                       style={{ width: screenWidth }}
                     />
                   ))}
                 </ScrollView>
@@ -599,14 +633,14 @@ const MyComponent = () => {
                   marginBottom: 20,
                   backgroundColor: "white",
                   width: "100%",
-                  shadowColor: "rgba(19, 88, 55, 0.3)",
+                  shadowColor: "rgba(200, 200, 200, 0.8)",
                   shadowOffset: {
                     width: 0,
-                    height: 5,
+                    height: 10,
                   },
                   shadowOpacity: 0.4,
                   shadowRadius: 5,
-                  elevation: 2,
+                  elevation: 10,
                 }}
               >
             <Image source={alix} />
@@ -842,7 +876,7 @@ const MyComponent = () => {
               marginTop: -130
             }}
           >
-            <DottedImage style={{ top: -20, left: -20, filter: 'blur(2px)' }} />
+            <DottedImage style={{ top: -20, left: -20, filter: 'blur(4px)' }} />
             <View
               style={{
                 width: 1400,
@@ -851,8 +885,8 @@ const MyComponent = () => {
             >
               <Row style={{}}>
                 <View style={{ gap: 30, width: "30%" }}>
-                  <Text style={{ fontWeight: '600', fontSize: 40}}>Integrate AngleQuest with over 50 apps</Text>
-                  <Text style={{ fontWeight: '400', fontSize: 20}}>AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on AngleQuest Integrated Apps</Text>
+                  <Text style={{ fontWeight: '600', fontSize: 40}}>Integrate anglequest with over 50 apps</Text>
+                  <Text style={{ fontWeight: '400', fontSize: 20}}>AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on anglequest Integrated Apps</Text>
                 
                   <Row style={{ gap: 10, alignItems: "center", marginTop: 10 }}>
                     <Title

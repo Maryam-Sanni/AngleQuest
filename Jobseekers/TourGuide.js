@@ -41,7 +41,7 @@ function MyComponent({ onClose }) {
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
                <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 30 }}>Hello There, Welcome to AngleQuest</Text>
               <Image
-                source={require('../assets/TG1.png')}
+                source={require('../assets/coursehead.png')}
                 style={{
                   width: 1000,
                   height: 300,
@@ -89,9 +89,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greenBox: {
-    width: '80%',
-    height: 500,
+    width: '75%',
+    height: 700,
     backgroundColor: 'white',
+    justifyContent: 'center',
     borderRadius: 10,
   },
   video: {
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: 'center',
     width: 300,
-    marginTop: 20
+    marginTop: 100
   },
   buttonTextplus: {
     color: 'white',
