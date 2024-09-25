@@ -175,7 +175,7 @@ function MyComponent({ onClose }) {
             if (subscribed === 'Yes') {
               navigate('/skill-analysis-sessions');
             } else {
-              navigate('/skill-analysis-offer');
+              navigate('/skill-analysis-sessions');
             }
 
                   onClose(); // Close the form/modal

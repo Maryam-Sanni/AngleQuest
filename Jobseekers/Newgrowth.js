@@ -41,7 +41,7 @@ function MyComponent({ onClose }) {
   const apiUrl = process.env.REACT_APP_API_URL;
   
   const gotoCV = () => {
-      navigate('/growth-plan-offer');
+      navigate('/growth-plan-sessions');
   };
 
   useEffect(() => {
@@ -199,7 +199,7 @@ function MyComponent({ onClose }) {
         if (subscribed === 'Yes') {
           navigate('/growth-plan-sessions');
         } else {
-          navigate('/growth-plan-offer');
+          navigate('/growth-plan-sessions');
         }
 
               onClose(); // Close the form/modal

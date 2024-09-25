@@ -88,16 +88,17 @@ const handleOpenPress3 = async () => {
       console.error('Subscription status is not available');
       return;
     }
-
-    if (subscriptionStatus === 'Yes') {
+    // Navigate based on the subscription status
+    if (subscribed === 'Yes') {
       navigate('/coaching-hub-sessions');
-      onClose();
     } else {
-      setModalVisible3(true);
-    }
+      navigate('/coaching-hub-sessions');
+    }      
+    onClose();
   } catch (error) {
     console.error('Error checking subscription status:', error.response ? error.response.data : error.message);
   }
+  onClose();
 };
 
   useEffect(() => {

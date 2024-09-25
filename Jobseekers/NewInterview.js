@@ -175,7 +175,7 @@
           if (subscribed === 'Yes') {
             navigate('/interview-sessions');
           } else {
-            navigate('/interview-offer');
+            navigate('/interview-sessions');
           }
 
           onClose(); // Close the form/modal

@@ -195,7 +195,7 @@ const SignIn = () => {
                         keyboardType="email"
                         val={email}
                         onChangeText={setEmail}
-                        placeholder="Username"
+                        placeholder="email"
                       />
 
                       <View style={{ position: 'relative' }}>

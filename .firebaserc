@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "staging": "anglequest-dev-server",
+    "production": "anglequestglobal"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
