@@ -5,7 +5,6 @@ import Sidebar from '../components/expertssidebar';
 import ScheduledGrowthPlan from '../components/ScheduledGrowthPlan';
 import GrowthPlansReview from '../components/GrowthPlansReview';
 import CompletedGrowthPlan from '../components/CompletedGrowthPlan';
-import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/Growthplanprofile';
 import OpenModal2 from '../Experts/EditGrowthProfile';
 import {useFonts} from "expo-font"
@@ -15,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 function MyComponent() {
-    const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
@@ -154,13 +152,6 @@ function MyComponent() {
     const handleCloseModal2 = () => {
       setModalVisible2(false);
     };
-
-  const reloadHomeExperts = () => {
-    navigation.navigate('anglequest');
-    setTimeout(() => {
-      navigation.navigate('Growth Plan');
-    }, 2000); // Delay of 3 seconds (3000 milliseconds)
-  };
   
     const [fontsLoaded]=useFonts({
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
@@ -180,12 +171,7 @@ const {t}=useTranslation()
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={reloadHomeExperts}>
-              <Image
-                source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
-                style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
-              />
-            </TouchableOpacity>
+            
           <TouchableHighlight
   underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
   onMouseEnter={() => setIsInterviewHovered(true)}

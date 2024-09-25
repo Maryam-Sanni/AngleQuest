@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
 const Settings = ({ onClose }) => {
-    const navigation = useNavigation();
+       const navigate = useNavigate();
 
     const goToAccountSettings = () => {
-        navigation.navigate('Account Setup');
+        navigate('/account-setup');
         onClose();
       };
     
       const goToResetPassword = () => {
-        navigation.navigate('Password');
+        navigate('/assword');
         onClose();
       };
     
       const goToNotificationSettings = () => {
-        navigation.navigate('Notification Setup');
+        navigate('/notification-setup');
         onClose();
       };
     
       const goToBillingsAndPayment = () => {
-        navigation.navigate('Earnings');
+        navigate('/earnings');
         onClose();
       };
+    
       const [fontsLoaded]=useFonts({
         'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
       })

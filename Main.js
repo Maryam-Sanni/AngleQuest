@@ -131,149 +131,75 @@ import AIScreen from "./Screens/AIscreen";
 import Welcome from "./Screens/LandingHome";
 import SignIn2 from "./Screens/SignIn";
 import SignUp2 from "./Screens/SignUp";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-const Stack = createStackNavigator();
+
 
 const App = () => {
   const { width } = Dimensions.get('window');
-  const initialRouteName = width < 600 ? 'mobile' : 'Welcome'; 
+  const initialRoute = width < 600 ? "/mobile" : "/welcome";
 
   return (
-    <NavigationContainer>
-    <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false, cardStyle: { backgroundColor: 'white' } }}>
-        <Stack.Screen name="Join Recruitangle" component={JoinAs} />
-      <Stack.Screen name="AI Screen" component={AIScreen} />
-      <Stack.Screen name="Sign In2" component={SignIn2} />
-      <Stack.Screen name="Sign Up2" component={SignUp2} />
-      <Stack.Screen name="ContactSales" component={ContactSales} />
-        <Stack.Screen name="Sign Up" component={SignUp} />
-        <Stack.Screen name="Verify Email" component={VerifyEmail} />
-        <Stack.Screen name="Choose Plan" component={ChoosePlan} />
-        <Stack.Screen name="Basic Details" component={BasicDetails} />
-        <Stack.Screen name="Experience" component={EduAndWork} />
-        <Stack.Screen name="Job Preferences" component={RolesAndCountries} />
-        <Stack.Screen name="Socials and address" component={SocialsAndAddress} />
-        <Stack.Screen name="Signin" component={Signin} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen name="Jobs" component={Jobs} />
-        <Stack.Screen name="Experts" component={Experts} />
-        <Stack.Screen name="Sessions" component={Sessions} />
-        <Stack.Screen name="Feedbacks" component={Feedbacks} />
-        <Stack.Screen name="Coaching Hubs" component={CoachingHubs} />
-        <Stack.Screen name="Messages" component={Messages} />
-        <Stack.Screen name="Notifications" component={Notifications} />
-        <Stack.Screen name="Notification Settings" component={NotificationSettings} />
-        <Stack.Screen name="Account Settings" component={AccountSettings} />
-        <Stack.Screen name="Billings and Payment" component={BillingsandPayment} />
-        <Stack.Screen name="Reset Password" component={ResetPassword} />
-        <Stack.Screen name="My Profile" component={MyProfile} />
-        <Stack.Screen name="Payment Details" component={PaymentDetails} />
-        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
-        <Stack.Screen name="Refer" component={Refer} />
-        <Stack.Screen name="GetStarted" component={GetStarted} />
-        <Stack.Screen name="Sign in" component={ExpertSignin} />
-        <Stack.Screen name="ExpertProfile" component={ExpertProfile} />
-        <Stack.Screen name="BookaSession" component={BookaSession} />
-        <Stack.Screen name="SendFeedback" component={SendFeedback} />
-        <Stack.Screen name="ViewFeedback" component={ViewFeedback} />
-        <Stack.Screen name="Create account" component={Createaccount} />
-        <Stack.Screen name="Basic Details-Experts" component={About} />
-        <Stack.Screen name="Verify mail" component={Verifymail} />
-        <Stack.Screen name="TermsofService" component={TermsofService} />
-        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-        <Stack.Screen name="Contact Details" component={ContactDetails} />
-        <Stack.Screen name="Home - Experts" component={Homepage} />
-        <Stack.Screen name="Dashboard - Experts" component={DashBoard} />
-        <Stack.Screen name="All Sessions" component={AllSessions} />
-        <Stack.Screen name="Give feedback" component={Givefeedback} />
-        <Stack.Screen name="Messaging" component={Messaging} />
-        <Stack.Screen name="Account Setup" component={AccountSetup} />
-        <Stack.Screen name="My Notifications" component={MyNotifications} />
-        <Stack.Screen name="Password" component={Password} />
-        <Stack.Screen name="Notification Setup" component={NotificationSetup} />
-        <Stack.Screen name="Withdrawal Setup" component={WithdrawalSetup} />
-        <Stack.Screen name="RequestPayout" component={RequestPayout} />
-        <Stack.Screen name="Reject Session" component={RejectSession} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Jobseekers Profile" component={JobseekersProfile} />
-        <Stack.Screen name="Personal Development" component={PersonalDev} />
-        <Stack.Screen name="Team Development" component={TeamDev} />
-        <Stack.Screen name="Organization Development" component={OrgDev} />
-        <Stack.Screen name="Coach Assessment" component={CoachReview} />
-        <Stack.Screen name="Interview" component={Interview} />
-        <Stack.Screen name="Growth Plan" component={GrowthPlan} />
-        <Stack.Screen name="Advice" component={Advice} />
-        <Stack.Screen name="Offers" component={Offers} />
-        <Stack.Screen name="Bids" component={Bids} />
-        <Stack.Screen name="All Hubs" component={MyHubs} />
-        <Stack.Screen name="Manage Hubs" component={AllHubs} />
-        <Stack.Screen name="Create Hub" component={Createhubform} />
-        <Stack.Screen name="Earnings" component={Earnings} />
-        <Stack.Screen name="Withdrawal" component={Withdrawal} />
-        <Stack.Screen name="New Growth Plan" component={NewGrowthPlan} />
-        <Stack.Screen name="Growth Plan Sessions" component={AllGrowthPlan} />
-        <Stack.Screen name="New Interview" component={NewInterview} />
-        <Stack.Screen name="Interview Sessions" component={AllInterviews} />
-        <Stack.Screen name="Interview Payment" component={PaymentPage} />
-        <Stack.Screen name="Growth Plan Payment" component={growthPaymentPage} />
-        <Stack.Screen name="Hubs Payment" component={hubPaymentPage} />
-        <Stack.Screen name="Coaching Hub Sessions" component={AllcoachingHubs} />
-        <Stack.Screen name="New Advice" component={NewAdvice} />
-        <Stack.Screen name="Advice Payment" component={PaymentPageadvice} />
-        <Stack.Screen name="Advice Sessions" component={AdviceSessions} />
-        <Stack.Screen name="Your Offer" component={PaymentOffer} />
-        <Stack.Screen name="Skip Offer" component={SkipOffer} />
-        <Stack.Screen name="Home - Corporate" component={HomeRecruit} />
-        <Stack.Screen name="Sign Up - Corporate" component={Begin} />
-        <Stack.Screen name="Verify Account" component={VerifyAccount} />
-        <Stack.Screen name="Employees" component={Employees} />
-        <Stack.Screen name="Managers" component={Managers} />
-        <Stack.Screen name="Schedules" component={Schedules} />
-        <Stack.Screen name="Performance" component={Performance} />
-        <Stack.Screen name="Interview Candidates" component={InterviewCandidates} />
-        <Stack.Screen name="Booked Interviews" component={BookedInterview} />
-        <Stack.Screen name="Coach" component={Coach} />
-        <Stack.Screen name="Teams" component={Teams} />
-        <Stack.Screen name="Subscription" component={Subscription} />
-        <Stack.Screen name="Home - Manager" component={HomeManager} />
-        <Stack.Screen name="Manage Employees" component={EmployeeManager} />
-        <Stack.Screen name="Manage Performance" component={EmployeePerformance} />
-        <Stack.Screen name="Meetings" component={Meetings} />
-        <Stack.Screen name="All Messages" component={AllMessages} />
-        <Stack.Screen name="Targets" component={Targets} />
-        <Stack.Screen name="Analytics" component={Analytics} />
-        <Stack.Screen name="Account Set" component={AccountSet} />
-        <Stack.Screen name="Notifications Set" component={NotificationsSet} />
-        <Stack.Screen name="Password Set" component={PasswordSet} />
-        <Stack.Screen name="Business Profile" component={BusinessProfile} />
-        <Stack.Screen name="My Performance" component={MyPerformance} />
-        <Stack.Screen name="Advice Offer" component={AdviceOffer} />
-        <Stack.Screen name="Growth Offer" component={GrowthOffer} />
-        <Stack.Screen name="Interview Offer" component={InterviewOffer} />
-        <Stack.Screen name="Hub Offer" component={HubOffer} />
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="AngleQuest Client Testimonials" component={Clientele} />
-        <Stack.Screen name="mobile" component={mobile} />
-        <Stack.Screen name="AI" component={AI} />
-        <Stack.Screen name="Use AI" component={AIindv1} />
-      <Stack.Screen name="Use CV" component={AIindv2} />
-      <Stack.Screen name="Use Questionnaire" component={AIindv3} />
-      <Stack.Screen name="AI Result" component={AIindv4} />
-        <Stack.Screen name="Anglequest AI" component={mobileAI} />
-        <Stack.Screen name="Sign in to AngleQuest" component={GeneralSignin} />
-       <Stack.Screen name="anglequest" component={BlankScreen} />
-      <Stack.Screen name="Join Courses" component={JoinCourse} />
-       <Stack.Screen name="My Courses" component={MyCourse} />
-      <Stack.Screen name="Project" component={Project} />
-       <Stack.Screen name="Scenario Project" component={Scenario} />
-      <Stack.Screen name="Chat" component={MainMessage} />
-       <Stack.Screen name="Chats" component={MainExpertMessage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Router>
+      <Routes>
+        {/* Redirect to initial route */}
+        <Route path="*" element={<Navigate to={initialRoute} />} />
+
+        {/* Define your routes */}
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/join-recruitangle" element={<JoinAs />} />
+        <Route path="/ai-screen" element={<AIScreen />} />
+        <Route path="/sign-in" element={<SignIn2 />} />
+        <Route path="/sign-up" element={<SignUp2 />} />
+        <Route path="/contact-sales" element={<ContactSales />} />
+        <Route path="/home-experts" element={<Homepage />} />
+        <Route path="/home-individuals" element={<Home />} />
+        <Route path="/join-courses" element={<JoinCourse />} />
+        <Route path="/my-courses" element={<MyCourse />} />
+         <Route path="/growth-plan-sessions" element={<AllGrowthPlan />} />
+         <Route path="/growth-plan-new" element={<NewGrowthPlan />} />
+        <Route path="/growth-plan-offer" element={<GrowthOffer />} />
+         <Route path="/growth-plan-payment" element={<growthPaymentPage />} />
+         <Route path="/interview-sessions" element={<AllInterviews />} />
+        <Route path="/interview-new" element={<NewInterview />} />
+        <Route path="/interview-offer" element={<InterviewOffer />} />
+         <Route path="/interview-payment" element={<PaymentPage />} />
+         <Route path="/coaching-hub-sessions" element={<AllcoachingHubs />} />
+        <Route path="/coaching-hub-new" element={<CoachingHubs />} />
+         <Route path="/hub-offer" element={<HubOffer />} />
+         <Route path="/hub-payment" element={<hubPaymentPage />} />
+         <Route path="/skill-analysis-sessions" element={<AdviceSessions />} />
+        <Route path="/skill-analysis-new" element={<NewAdvice />} />
+        <Route path="/skill-analysis-offer" element={<AdviceOffer />} />
+        <Route path="/skill-analysis-payment" element={<PaymentPageadvice />} />
+        <Route path="/performance" element={<MyPerformance />} />
+        <Route path="/chat" element={<MainMessage />} />
+        <Route path="/project" element={<Project />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/account-settings" element={<AccountSettings />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/notification-settings" element={<NotificationSettings />} />
+        <Route path="/billings-payment" element={<BillingsandPayment />} />
+         <Route path="/profile" element={<MyProfile />} />
+         <Route path="/ai-result" element={<AIindv4 />} />
+        <Route path="/offers" element={<Offers />} />
+         <Route path="/interview" element={<Interview />} />
+         <Route path="/growth-plan" element={<GrowthPlan />} />
+         <Route path="/skill-analysis" element={<Advice />} />
+         <Route path="/hubs" element={<AllHubs />} />
+         <Route path="/scenario-project" element={<Scenario />} />
+        <Route path="/chats" element={<MainExpertMessage />} />
+         <Route path="/expert-profile" element={<Profile />} />
+        <Route path="/withdrawal" element={<Withdrawal />} />
+        <Route path="/experts-notifications" element={<MyNotifications />} />
+        <Route path="/account-setup" element={<AccountSetup />} />
+        <Route path="/password-setup" element={<Password />} />
+        <Route path="/notification-setup" element={<NotificationSetup />} />
+        <Route path="/earnings" element={<Earnings />} />
+        <Route path="/all-hubs" element={<MyHubs />} />
+      </Routes>
+    </Router>
   );
 };
-
-
 
 export default App;

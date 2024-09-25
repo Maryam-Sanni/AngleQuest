@@ -1,6 +1,6 @@
   import React, { useState, useEffect } from 'react';
   import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Modal } from 'react-native';
-  import { useNavigation } from '@react-navigation/native';
+  import { useNavigate } from 'react-router-dom';
   import DateTimePickerModal from "../components/DateTimePickerModal";
   import { useFonts } from "expo-font";
   import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@
   import { format } from 'date-fns';
 
   function MyComponent({ onClose }) {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDateTime, setSelectedDateTime] = useState(null);
 
@@ -173,9 +173,9 @@
 
           // Navigate based on the subscription status
           if (subscribed === 'Yes') {
-            navigation.navigate('Interview Sessions');
+            navigate('/interview-sessions');
           } else {
-            navigation.navigate('Interview Offer');
+            navigate('/interview-offer');
           }
 
           onClose(); // Close the form/modal

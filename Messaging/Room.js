@@ -5,7 +5,7 @@ import {
   Image,
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
+  Platform, SafeAreaView,
 } from "react-native";
 import { GiftedChat, Bubble, Send, InputToolbar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -260,6 +260,7 @@ const Room = ({ activeRoom }) => {
   );
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -295,6 +296,7 @@ const Room = ({ activeRoom }) => {
         </View>
       </View>
     </KeyboardAvoidingView>
+       </SafeAreaView>
   );
 };
 

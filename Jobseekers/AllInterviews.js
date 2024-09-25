@@ -5,7 +5,7 @@ import Sidebar from '../components/sidebar';
 import InterviewSchedule from '../components/InterviewSchJob';
 import InterviewFeedback from '../components/InterviewFdbackJob';
 import OpenModal from '../Jobseekers/PickInterviewer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import CustomPercentageChart from '../components/PercentageChart';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 function MyComponent() { 
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
   const [meetingData, setMeetingData] = useState({ date: '', time: '' });
   const [lastCandidateLink, setLastCandidateLink] = useState(null);

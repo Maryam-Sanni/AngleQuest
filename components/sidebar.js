@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useNavigation, useNavigationState } from '@react-navigation/native';
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function MyComponent() {
-  const navigation = useNavigation(); // Initialize navigation
+  const navigate = useNavigate();
+   const location = useLocation();
   const [clickedItem, setClickedItem] = useState(null);
-  const [hoveredItem, setHoveredItem] = useState(null); // Declare hoveredItem state
-  const [showMenu, setShowMenu] = useState(true); // State to toggle between menu and collapsed component
+  const [hoveredItem, setHoveredItem] = useState(null); 
+  const [showMenu, setShowMenu] = useState(true);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
 
@@ -149,59 +149,53 @@ function MyComponent() {
       // Navigate to respective screens based on menu item clicked
       switch(item.label) {
         case "Home":
-          navigation.navigate('Home');
+         navigate('/home-individuals');
           break;
         case "Courses":
-          navigation.navigate('Join Courses');
+         navigate('/join-courses');
           break;
         case "Growth Plan":
           const isgrowthPlanDataFilled = await checkgrowthPlanData();
           if (isgrowthPlanDataFilled) {
-            navigation.navigate('Growth Plan Sessions');
+             navigate('/growth-plan-sessions');
           } else {
-            navigation.navigate('New Growth Plan');
+             navigate('/growth-plan-new');
           }
           break;
           case "Interview":
           const isInterviewDataFilled = await checkInterviewData();
           if (isInterviewDataFilled) {
-            navigation.navigate('Interview Sessions');
-          } else {
-            navigation.navigate('New Interview');
-          }
-          break;
-        case "Sessions":
-          navigation.navigate('Sessions');
+               navigate('/interview-sessions');
+            } else {
+               navigate('/interview-new');
+            }
           break;
         case "Skills Analysis":
           const isSkillAnalysisDataFilled = await checkSkillAnalysisData();
           if (isSkillAnalysisDataFilled) {
-            navigation.navigate('Advice Sessions');
-          } else {
-            navigation.navigate('Advice Sessions');
-          }
+             navigate('/skill-analysis-sessions');
+            } else {
+               navigate('/skill-analysis-new');
+            }
           break;
           case "Hubs":
           const isHubsDataFilled = await checkHubData();
           if (isHubsDataFilled) {
-            navigation.navigate('Coaching Hub Sessions');
-          } else {
-            navigation.navigate('Coaching Hubs');
-          }
+             navigate('/coaching-hub-sessions');
+            } else {
+               navigate('/coaching-hub-new');
+            }
           break;
           case "Performance":
-          navigation.navigate('My Performance');
+          navigate('/performance');
           break;
-          case "AngleQuest AI":
-            navigation.navigate('AI Result');
-            break;
         case "Chats":
-          navigation.navigate('Chat');
+          navigate('/chat');
           break;
         default:
           break;
           case "Scenario Project":
-            navigation.navigate('Project');
+            navigate('/project');
             break;
       }
     }
@@ -210,13 +204,13 @@ function MyComponent() {
   const handleLogout = () => {
     // Handle logout action here
     console.log("Logout clicked");
-    navigation.navigate('Sign in to AngleQuest'); // Navigate to the sign-in page
+    navigate('/welcome'); // Navigate to the sign-in page
     setClickedItem(null);
   };
 
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
-    navigation.navigate('My Profile');
+    navigate('/profile');
   };
 
   useEffect(() => {
@@ -241,33 +235,27 @@ function MyComponent() {
 
   const { t } = useTranslation()
 
-  const navigationState = useNavigationState((state) => state);
-
   useEffect(() => {
-
-    const routeName = navigationState?.routes[navigationState.index]?.name;
+    const currentPath = location.pathname; // Get the full path
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
-        case "Home": return routeName === 'Home';
-        case "Courses": return ['My Courses', 'Join Courses'].includes(routeName);
-          case "Growth Plan":
-          return ['New Growth Plan', 'Growth Plan Sessions'].includes(routeName);
-          case "Interview":
-          return ['New Interview', 'Interview Sessions'].includes(routeName);
-        case "Scenario Project": return routeName === 'Project';
-        case "Skills Analysis":
-        return ['Use AI', 'Use CV', 'Use Questionnaire', 'Advice Sessions', 'AI Result'].includes(routeName);
-          case "Hubs":
-          return ['Coaching Hubs', 'Coaching Hub Sessions'].includes(routeName);
-        case "Performance": return routeName === 'My Performance';
-        case "Chats": return routeName === 'Chat';
+        case "Home": return currentPath === '/home-individuals';
+        case "Courses": return ['/my-courses', '/join-courses'].includes(currentPath);
+        case "Growth Plan": return ['/growth-plan-new', '/growth-plan-sessions'].includes(currentPath);
+        case "Interview": return ['/interview-new', '/interview-sessions'].includes(currentPath);
+        case "Scenario Project": return currentPath === '/project';
+        case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result'].includes(currentPath);
+        case "Hubs": return ['/coaching-hub-new', '/coaching-hub-sessions'].includes(currentPath);
+        case "Performance": return currentPath === '/performance';
+        case "Chats": return currentPath === '/chat';
         default: return false;
       }
     });
+
     if (matchedItem) {
       setClickedItem(matchedItem);
     }
-  }, [navigationState]);
+  }, [location, menuItems]);
 
   return (
     <View style={[styles.container, !showMenu && styles.containerExpanded]}>

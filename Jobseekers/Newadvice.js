@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
+   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
 
@@ -131,7 +131,7 @@ function MyComponent({ onClose }) {
       );
 
       if (MeetingResponse.status !== 200) {
-        navigation.navigate('Advice Offer');
+        navigate('/skill-analysis-offer');
         onClose();
         return;
       }
@@ -173,9 +173,9 @@ function MyComponent({ onClose }) {
 
             // Navigate based on the subscription status
             if (subscribed === 'Yes') {
-              navigation.navigate('Advice Sessions');
+              navigate('/skill-analysis-sessions');
             } else {
-              navigation.navigate('Advice Offer');
+              navigate('/skill-analysis-offer');
             }
 
                   onClose(); // Close the form/modal

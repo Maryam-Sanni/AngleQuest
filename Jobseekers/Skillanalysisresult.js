@@ -11,7 +11,6 @@
     ActivityIndicator
   } from "react-native";
   import { AntDesign } from "@expo/vector-icons";
-  import { useNavigation } from "@react-navigation/native";
   import { useTranslation } from "react-i18next";
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import axios from 'axios';
@@ -24,7 +23,6 @@
   import BackGArrow from "../assets/BackarrowG.jpeg";
 
   const MyComponent = () => {
-    const navigation = useNavigation();
     const [profileImage, setProfileImage] = useState(null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [alertVisible, setAlertVisible] = useState(false);

@@ -5,7 +5,6 @@ import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledAdvice from '../components/ScheduledAdvice';
 import CompletedAdvice from '../components/CompletedAdvice';
-import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../Experts/AdviceProfile';
 import OpenModal2 from '../Experts/EditAdviceProfile';
 import {useFonts} from "expo-font"
@@ -26,7 +25,6 @@ const data = [
 const colors = ['#FF4040', '#CD5B45', '#FF7F50', '#F08080', '#F88379', '#FFE4E1', '#FFE4E1',];
 
 function MyComponent() {
-    const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
    const [targetDate, setTargetDate] = useState(''); 
     const [role, setSkillsAnalysisRole] = useState('');
@@ -183,13 +181,6 @@ function MyComponent() {
       })
   
     const {t}=useTranslation()
-
-  const reloadHomeExperts = () => {
-    navigation.navigate('anglequest');
-    setTimeout(() => {
-      navigation.navigate('Advice');
-    }, 2000); // Delay of 3 seconds (3000 milliseconds)
-  };
   
   return (
     <ImageBackground
@@ -204,12 +195,7 @@ function MyComponent() {
         <View style={{ marginLeft: 270, }}>
         <View style={styles.header}>
           
-          <TouchableOpacity onPress={reloadHomeExperts}>
-            <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
-              style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
-            />
-          </TouchableOpacity>  
+         
           <TouchableHighlight
                                 
                                 underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}

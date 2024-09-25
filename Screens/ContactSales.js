@@ -7,7 +7,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
 import Footer from "../components/Footer";
 import MainButtons from "../LandingPage/MainButton";
@@ -58,7 +58,7 @@ const Input = ({ label, req, val, onChangeText, keyboardType, multiline }) => {
   );
 };
 const MyComponent = () => {
-  const navigation = useNavigation(); // Navigation object
+  const navigate = useNavigate();
   const [ModalVisible, setModalVisible] = useState(false);
 
   const handleOpenPress = () => {

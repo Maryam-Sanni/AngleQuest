@@ -10,7 +10,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import Topbar from "../components/topbar";
 import Sidebar from "../components/sidebar";
 import OpenModal from "../Jobseekers/Pickyourhub";
@@ -27,7 +27,7 @@ function MyComponent() {
   const [scaleAnimations] = useState(
     [...Array(8)].map(() => new Animated.Value(1)),
   );
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const [cardData, setCardData] = useState({ JoinedCourses: [] });
   const [isPressed, setIsPressed] = useState(Array(4).fill(false));
@@ -58,12 +58,8 @@ function MyComponent() {
     setIsSaved(!isSaved);
   };
 
-  const goToHubs = () => {
-    navigation.navigate("Coaching Hub Sessions");
-  };
-
   const goToCourse= () => {
-    navigation.navigate("Join Courses");
+   navigate("/join-courses");
   };
 
   const joinCourse = async () => {
@@ -799,10 +795,10 @@ const styles = StyleSheet.create({
     height: 400, 
     width: '100%',
     alignSelf: 'center',
+    justifyContent: 'center',
     overflow: 'hidden',
     padding: 20,
-    borderBottomLeftRadius: 30,
-    borderTopRightRadius: 30,
+   borderRadius: 30,
     shadowColor: 'darkgreen', 
       shadowOffset: {
         width: 0, 
@@ -817,7 +813,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: '30%', 
-    marginTop: 20,
     padding: 20,
     backgroundColor: 'white', 
     borderRadius: 10,

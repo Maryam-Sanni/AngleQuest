@@ -1,6 +1,6 @@
 import React, { useState,  useEffect, useContext } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { BlurView } from 'expo-blur';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
@@ -34,7 +34,7 @@ const HomePage = () => {
   const [conversations, setConversations] = useState([]);
   const [token, setToken] = useState(null);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
-  const navigation = useNavigation();
+   const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState(null);
   const [totalBal, setTotalBal] = useState(null);
    const [NewPay, setNewPayer] = useState(null);
@@ -140,7 +140,7 @@ const HomePage = () => {
   const handleSelectRoom = (room) => {
     console.log('Selected Room:', room);
     // Navigate to Room screen, passing room details as parameters
-    navigation.navigate('Chats', { activeRoom: room });
+    navigate('/chats', { activeRoom: room });
   };
 
   
@@ -182,27 +182,27 @@ const HomePage = () => {
   };
 
   const goToMessages = () => {
-    navigation.navigate('Chats');
+    navigate('/chats');
   };
 
   const goToManageHubs = () => {
-    navigation.navigate('Manage Hubs');
+    navigate('/hubs');
   };
  
   const goToWithdrawal = () => {
-    navigation.navigate('Withdrawal');
+  navigate('/withdrawal');
   };
 
   const goToInterview = () => {
-    navigation.navigate('Interview');
+    navigate('/interview');
   };
 
   const goToAdvice = () => {
-    navigation.navigate('Advice');
+    navigate('/skill-analysis');
   };
  
   const goToGrowth = () => {
-    navigation.navigate('Growth Plan');
+  navigate('/growth-plan');
   };
   
   const handleOpenPress2 = () => {

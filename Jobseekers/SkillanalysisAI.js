@@ -12,7 +12,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import Animated, {
   FadeIn,
@@ -32,7 +32,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const MyComponent = ({ onClose }) => {
-  const navigation = useNavigation();
+   const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [document, setDocument] = useState(null);
@@ -69,7 +69,7 @@ const MyComponent = ({ onClose }) => {
           const data = await response.json();
 
           if (data.status === "success" && data.form_filled) {
-            navigation.navigate("Advice Sessions");
+            navigate("/skill-analysis-sessions");
           }
         }
       } catch (error) {
@@ -129,7 +129,7 @@ const MyComponent = ({ onClose }) => {
       if (response.status === 200) {
         Alert.alert("Success", "CV uploaded successfully.");
         console.log(response.data);
-        navigation.navigate('AI Result');
+        navigate('/ai-result');
         onClose();
       } else {
         alert(
@@ -232,12 +232,12 @@ const MyComponent = ({ onClose }) => {
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
         console.log("Submit Response:", data);
-        navigation.navigate('AI Result');
+        navigate('/ai-result');
         onClose();
         // Optionally, you can also check for specific success conditions in the response data
         if (data && data.json && data.json.analysis) {
           Alert.alert("Success", "Your responses have been submitted successfully.");
-          navigation.navigate('AI Result');
+          navigate('/ai-result');
           onClose();
         } else {
           Alert.alert("Submission Failed", data.message || "Unable to submit responses.");

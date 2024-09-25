@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
+   const navigate = useNavigate();
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   
@@ -41,7 +41,7 @@ function MyComponent({ onClose }) {
   const apiUrl = process.env.REACT_APP_API_URL;
   
   const gotoCV = () => {
-      navigation.navigate('Growth Offer');
+      navigate('/growth-plan-offer');
   };
 
   useEffect(() => {
@@ -197,9 +197,9 @@ function MyComponent({ onClose }) {
 
         // Navigate based on the subscription status
         if (subscribed === 'Yes') {
-          navigation.navigate('Growth Plan Sessions');
+          navigate('/growth-plan-sessions');
         } else {
-          navigation.navigate('Growth Offer');
+          navigate('/growth-plan-offer');
         }
 
               onClose(); // Close the form/modal

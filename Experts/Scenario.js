@@ -12,13 +12,11 @@ import {
 } from "react-native";
 import Topbar from "../components/expertstopbar";
 import Sidebar from "../components/expertssidebar";
-import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { useFonts } from "expo-font";
 import OpenModal from "../Experts/NewProject";
 
 function MyComponent() {
-  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
   const [fontsLoaded] = useFonts({

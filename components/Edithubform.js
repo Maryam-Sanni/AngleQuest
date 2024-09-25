@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList  } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -105,7 +105,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 };
 
 const CreateCoachingHubForm = ({ onClose }) => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [from, setStartTime] = useState('12:00');
   const [to, setEndTime] = useState('12:00');
   const [alertVisible, setAlertVisible] = useState(false);

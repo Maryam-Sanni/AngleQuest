@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TopBar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import RoomList from './RoomList';
@@ -19,6 +20,7 @@ const ChatScopeUI = () => {
   };
 
   return (
+    <SafeAreaProvider> 
     <View style={{ flex: 1 }}>
       <TopBar />
       <View style={styles.container}>
@@ -38,6 +40,7 @@ const ChatScopeUI = () => {
         <Room activeRoom={activeRoom} />
       </View>
     </View>
+    </SafeAreaProvider>
   );
 };
 

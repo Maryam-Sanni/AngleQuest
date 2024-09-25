@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigation, useNavigationState } from '@react-navigation/native';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CollapsedComponent from "./expertscollapsed"; // Import your collapsed component
 import {useFonts} from "expo-font"
@@ -13,7 +13,8 @@ function MyComponent() {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState(''); 
 
-  const navigation = useNavigation(); // Get navigation object
+  const navigate = useNavigate(); // Get navigation object
+   const location = useLocation();
 
   const handleItemHover = (item) => {
     setHoveredItem(item);
@@ -27,28 +28,28 @@ function MyComponent() {
       // Navigate to respective screens based on menu item clicked
       switch(item.label) {
         case "Home":
-          navigation.navigate('Home - Experts');
+          navigate('/home-experts');
           break;
         case "Preferences":
-          navigation.navigate('Offers');
+         navigate('/home-experts');
           break;
         case "Interview":
-          navigation.navigate('Interview');
+          navigate('/interview');
           break;
           case "Growth Plan":
-          navigation.navigate('Growth Plan');
+       navigate('/growth-plan');
           break;
         case "Skills Analysis":
-          navigation.navigate('Advice');
+       navigate('/skill-analysis');
           break;
         case "Hubs":
-          navigation.navigate('Manage Hubs');
+       navigate('/hubs');
           break;
           case "Scenario Project":
-            navigation.navigate('Scenario Project');
+          navigate('/scenario-project');
             break;
         case "Chats":
-          navigation.navigate('Chats');
+        navigate('/chats');
           break;
         default:
           break;
@@ -59,13 +60,13 @@ function MyComponent() {
   const handleLogout = () => {
     // Handle logout action here
     console.log("Logout clicked");
-    navigation.navigate('Sign in to AngleQuest'); // Navigate to the sign-in page
+  navigate('/welcome'); // Navigate to the sign-in page
     setClickedItem(null);
   };
 
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
-    navigation.navigate('Profile');
+   navigate('/expert-profile');
   };
 
   useEffect(() => {
@@ -93,28 +94,26 @@ function MyComponent() {
   })
   const { t } = useTranslation()
 
-  const navigationState = useNavigationState((state) => state);
-
   useEffect(() => {
-    
-    const routeName = navigationState?.routes[navigationState.index]?.name;
+    const currentPath = location.pathname; // Get the full path
     const matchedItem = menuItems.find(item => {
       switch(item.label) {
-        case "Home": return routeName === 'Home - Experts';
-        case "Preferences": return routeName === 'Offers';
-        case "Interview": return routeName === 'Interview';
-        case "Growth Plan": return routeName === 'Growth Plan';
-        case "Skills Analysis": return routeName === 'Advice';
-        case "Scenario Project": return routeName === 'Scenario Project';
-        case "Hubs": return routeName === 'Manage Hubs';
-        case "Chats": return routeName === 'Chats';
+        case "Home": return currentPath === '/home-experts';
+         case "Preferences": return currentPath === '/home-experts';
+           case "Interview": return currentPath === '/interview';
+           case "Growth Plan": return currentPath === '/growth-plan';
+           case "Skills Analysis": return currentPath === '/skill-analysis';
+           case "Scenario Project": return currentPath === '/scenario-project';
+           case "Hubs": return currentPath === '/hubs';
+        case "Chats": return currentPath === '/chats';
         default: return false;
       }
     });
+
     if (matchedItem) {
       setClickedItem(matchedItem);
     }
-  }, [navigationState]);
+  }, [location, menuItems]);
 
   return (
     <View style={[styles.container, !showMenu && { width: 80 }]}>

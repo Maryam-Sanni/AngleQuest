@@ -7,7 +7,6 @@ import AwaitingFeedbacks from '../components/AwaitingFeedbacks';
 import CompletedFeedbacks from '../components/CompletedFeedbacks';
 import OpenModal from '../Experts/InterviewProfile'; 
 import OpenModal2 from '../Experts/EditInterviewProfile'; 
-import { useNavigation } from '@react-navigation/native';
 import { CommonActions } from '@react-navigation/native';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
@@ -15,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 function MyComponent() { 
-    const navigation = useNavigation();
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
    const [targetDate, setTargetDate] = useState(''); 
     const [role, setInterviewRole] = useState('');
@@ -160,13 +158,6 @@ function MyComponent() {
 
 const {t}=useTranslation()
 
-  const reloadHomeExperts = () => {
-    navigation.navigate('anglequest');
-    setTimeout(() => {
-      navigation.navigate('Interview');
-    }, 2000); // Delay of 3 seconds (3000 milliseconds)
-  };
-
     return (
       <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -179,12 +170,7 @@ const {t}=useTranslation()
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
                     <View style={{ marginLeft: 270 }}>
                     <View style={styles.header}>
-                      <TouchableOpacity onPress={reloadHomeExperts}>
-                        <Image
-                          source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
-                          style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
-                        />
-                      </TouchableOpacity>  
+                      
           <TouchableHighlight
                                 
                                 underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}

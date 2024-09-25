@@ -3,14 +3,14 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, 
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
   import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
   const App = () => {
-      const navigation = useNavigation();
+     const navigate = useNavigate();
      const [token, setToken] = useState("");
     const [coach, setCoach] = useState('');
 
@@ -38,7 +38,7 @@ import { useTranslation } from 'react-i18next';
     }, []);
 
     const goToPlans = () => {
-        navigation.navigate('Advice Payment');
+        navigate('/skill-analysis-payment');
       };
       const [fontsLoaded]=useFonts({
         'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),

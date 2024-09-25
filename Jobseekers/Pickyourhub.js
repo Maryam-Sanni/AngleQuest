@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Animated, TouchableOpacity, StyleSheet, Modal, Picker, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import OpenModal from '../Jobseekers/Moreabouthub';
 import OpenModal3 from '../Jobseekers/PaymentDetails';
 import OpenSchedule2 from '../components/JProfile';
@@ -12,7 +12,7 @@ import axios from 'axios';
  
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState([...Array(12)].map(() => new Animated.Value(1)));
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
@@ -90,7 +90,7 @@ const handleOpenPress3 = async () => {
     }
 
     if (subscriptionStatus === 'Yes') {
-      navigation.navigate('Coaching Hub Sessions');
+      navigate('/coaching-hub-sessions');
       onClose();
     } else {
       setModalVisible3(true);

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ScrollView, ActivityIndicator, TextInput
 } from "react-native";
-import { CommonActions, useNavigation } from "@react-navigation/native";
 import Top from "../components/HomeTop";
 import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
@@ -19,10 +18,10 @@ import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from "react-native-vector-icons/Ionicons"; 
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-  const navigation = useNavigation(); // Navigation object
+   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +30,7 @@ const SignIn = () => {
   const maskedPassword = passwordVisible ? password : '*'.repeat(password.length);
   
   const handleSignUp = () => {
-    navigation.dispatch(CommonActions.navigate("Sign Up2"));
+ navigate("/sign-up");
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -95,9 +94,9 @@ const SignIn = () => {
 
         // Navigate based on user role (regardless of whether balance was successfully sent)
         if (role === 'expert') {
-          navigation.navigate('Home - Experts');
+          navigate('/home-experts');
         } else if (role === 'individual') {
-          navigation.navigate('Home');
+          navigate('/home-individuals');
         } else {
           alert('Unknown user role');
         }

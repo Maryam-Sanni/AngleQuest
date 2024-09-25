@@ -16,13 +16,13 @@ import Sidebar from "../components/sidebar";
 import PastSessions from "../components/PastSessions";
 import HubsAssignments from "../components/HubsAssignments";
 import OpenModal from "../Jobseekers/Pickyourhub";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function MyComponent() {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
     const [hubs, setHubs] = useState([]);
     const [selectedHub, setSelectedHub] = useState(null);
@@ -68,19 +68,19 @@ function MyComponent() {
                     setHubs([]);
                     setSelectedHub(null);
                     // Redirect to Coaching Hubs page if no hubs are available
-                    navigation.navigate('Coaching Hubs'); // Make sure 'CoachingHubsPage' matches your route name
+                    navigate('/coaching-hub-new'); // Make sure 'CoachingHubsPage' matches your route name
                 }
             } catch (error) {
                 console.error('Error fetching hubs:', error);
                 setHubs([]);
                 setSelectedHub(null);
                 // Redirect to Coaching Hubs page on error as well
-                navigation.navigate('Coaching Hubs'); // Make sure 'CoachingHubsPage' matches your route name
+                navigate('/coaching-hub-new'); // Make sure 'CoachingHubsPage' matches your route name
             }
         };
 
         fetchHubs();
-    }, [navigation]);
+    }, [navigate]);
 
     const [fontsLoaded] = useFonts({
         "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -123,7 +123,7 @@ function MyComponent() {
                                 >
                                     {t("All Joined Hubs")}:
                                 </Text>
-                                {hubs.slice(0, 5).map((hub, index) => {
+                                {hubs.map((hub, index) => {
                                     const isSelected =
                                         hub.id === selectedHub?.id;
 

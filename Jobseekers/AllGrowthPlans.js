@@ -6,14 +6,14 @@ import GrowthPlantype from '../components/growthplantype';
 import Scheduledgrowth from '../components/Scheduledgrowth';
 import GrowthPlanreview from '../components/gpexpertreview';
 import OpenModal from '../Jobseekers/Pickyourcoach';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 function MyComponent() { 
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
    const [meetingData, setMeetingData] = useState({ date: '', time: '' })
   const [lastCandidateLink, setLastCandidateLink] = useState(null);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import OpenModal from '../components/Createhubform';
@@ -12,7 +12,7 @@ import axios from 'axios';
 
 function MyComponent() {
   const [scaleAnimations] = useState([...Array(8)].map(() => new Animated.Value(1)));
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
   const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
   const [isSecondHubsHovered, setIsSecondHubsHovered] = useState(false);
@@ -60,11 +60,11 @@ function MyComponent() {
   };
 
   const goToMyHubs = () => {
-    navigation.navigate('All Hubs');
+    navigate('/all-hubs');
   };
 
   const goToHubs = () => {
-    navigation.navigate('Manage Hubs');
+  navigate('/hubs');
   };
 
   const handleOpenPress = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, TextInput, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback, Text, FlatList } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SettingsModal from './SettingsExpert';
 import OpenModal from '../Experts/TourGuide';
@@ -42,7 +42,7 @@ const MyComponent = () => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
-  const navigation = useNavigation(); // Initialize navigation
+   const navigate = useNavigate(); // Initialize navigation
   const { i18n, t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -76,7 +76,7 @@ const MyComponent = () => {
   const handleIconPress = (index) => {
     setSelectedIconIndex(index);
     if (index === 0) {
-      navigation.navigate('My Notifications'); // Replace 'Notifications' with your actual route name
+    navigate('/experts-notifications'); // Replace 'Notifications' with your actual route name
     } else if (index === 1) {
       setShowSettingsModal(true);
     }

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
 import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
@@ -26,7 +26,7 @@ import axios from "axios";
 import { CheckBox } from "react-native";
 
 const SignUp = () => {
-  const navigation = useNavigation(); // Navigation object
+   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [firstName, setFName] = useState("");
@@ -39,14 +39,16 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [signUpOption, setSignUpOption] = useState(0);
   const handleSignIn = () => {
-    navigation.dispatch(CommonActions.navigate("Sign In2"));
+    navigate("/sign-in"); // Navigate to the Sign In page
   };
+
   const handleGoBack = () => {
     if (signUpOption > 0) {
       setSignUpOption(0);
-      //navigation.dispatch(CommonActions.navigate("Sign In2"));
+      // If you want to navigate to the Sign In page again
+
     } else {
-      navigation.dispatch(CommonActions.goBack());
+      navigate(-1); // Go back to the previous page
     }
   };
 

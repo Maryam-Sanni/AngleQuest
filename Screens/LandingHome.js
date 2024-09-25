@@ -10,7 +10,7 @@ import {
   ImageBackground, Dimensions,
   Pressable,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
 import OpenModal from "../LandingPage/Collectinfo";
 //import Footer from "./Footer";
@@ -296,11 +296,12 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
     </TouchableOpacity>
   );
 };
+
 const SpecialBtn = ({ text, height, width, bgColor }) => {
-   const navigation = useNavigation();
+  const navigate = useNavigate();
    const [isHovered, setIsHovered] = useState(false);
   const handleSignUp = () => {
-    navigation.navigate("Sign Up2");
+    navigate('/sign-up'); 
   };
   
   return (
@@ -333,7 +334,7 @@ const SpecialBtn = ({ text, height, width, bgColor }) => {
   );
 };
 const MyComponent = () => {
-  const navigation = useNavigation(); // Navigation object
+   const navigate = useNavigate(); // Navigation object
   const [ModalVisible, setModalVisible] = useState(false);
   const scrollRef = useRef(null);
   const videoRef = useRef(null);
@@ -388,7 +389,7 @@ const MyComponent = () => {
   };
 
   const handlecontact = () => {
-    navigation.navigate("ContactSales");
+    navigate('/contact-sales'); 
   };
   
   return (
@@ -1200,7 +1201,7 @@ const MyComponent = () => {
             {<NoCreditSection />}
           </View>
           {/*  Footer */}
-          <Footer bgColor={"white"}/>
+          <Footer bgColor={"#084427"} />
         </View>
 
         <Modal

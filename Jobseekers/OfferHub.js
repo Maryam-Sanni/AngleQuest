@@ -3,15 +3,15 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, 
 import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import { BlurView } from 'expo-blur';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 
 const App = () => {
-    const navigation = useNavigation();
+  const navigate = useNavigate();
 
     const goToPlans = () => {
-        navigation.navigate('Hubs Payment');
+        navigate('/hub-payment');
       };
       const [fontsLoaded]=useFonts({
         'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),

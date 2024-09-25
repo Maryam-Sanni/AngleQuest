@@ -5,14 +5,14 @@ import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import CompletedAdvice from '../components/CompletedAdvSess';
 import OpenModal from '../Jobseekers/SkillanalysisAI';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 function MyComponent() { 
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
   const [meetingData, setMeetingData] = useState({ date: '', time: '' })
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
@@ -185,7 +185,7 @@ function MyComponent() {
   };
 
   const gotoresult = () => {
-    navigation.navigate('AI Result');
+    navigate('/ai-result');
     onClose();
   };
   

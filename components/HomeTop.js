@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { useTranslation } from "react-i18next";
 import ProductsPopup from "./Modal";
 import SolutionsPopup from "../LandingPage/SolutionsPopup";
 import MorePopup from "../LandingPage/MorePopup";
 import MainButtons from "../LandingPage/MainButton";
 import HButton from "./HButton";
+import { useNavigate } from 'react-router-dom';
 
 const PickerItem = ({ label, icon, onPress }) => (
   <TouchableOpacity style={styles.pickerItem} onPress={onPress}>
@@ -18,7 +17,7 @@ const PickerItem = ({ label, icon, onPress }) => (
 );
 
 const MyComponent = ({ value, tint, intensity }) => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
   const { i18n, t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false); // For handling the modal visibility
@@ -54,22 +53,19 @@ const MyComponent = ({ value, tint, intensity }) => {
   };
 
   const handleLogin = () => {
-    navigation.dispatch(CommonActions.navigate("Sign In2"));
+     navigate('/sign-in');
   };
-  const handleNav = (item) => {
-    console.log(item);
-    setActiveIndex(item);
-    if (item === 2) {
-      navigation.dispatch(CommonActions.navigate("ContactSales"));
-    }
+
+  const handleContact = () => {
+     navigate('/contact-sales');
   };
 
   const navigateToSignUp = () => {
-    navigation.navigate("Sign Up2");
+    navigate("/sign-up");
   };
 
   const handlebackPress = () => {
-    navigation.navigate("Welcome");
+    navigate("/welcome");
   };
   
   const languages = [
@@ -137,7 +133,7 @@ const MyComponent = ({ value, tint, intensity }) => {
             title={"Contact Sales"}
             outlined={activeIndex !== 2 ? true : false}
             gradient={activeIndex === 2 ? true : false}
-            onPress={() => handleNav(2)}
+            onPress={handleContact}
             fontSize={16}
             borderRadius={8}
             width={170}

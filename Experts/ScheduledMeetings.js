@@ -5,12 +5,12 @@ import { format } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 
 const defaultAvatar = require("../assets/account.png");
 
 const ScheduledMeetingsTable = () => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const ScheduledMeetingsTable = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   
   const openUser = (userId) => {
-    navigation.navigate('Messaging', { userId });
+    navigate('/chats', { userId });
   };
 
   const fetchData = async () => {

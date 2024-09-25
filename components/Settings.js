@@ -1,29 +1,29 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
 const Settings = ({ onClose }) => {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
 
     const goToAccountSettings = () => {
-        navigation.navigate('Account Settings');
+        navigate('/account-settings');
         onClose();
       };
     
       const goToResetPassword = () => {
-        navigation.navigate('Reset Password');
+        navigate('/reset-password');
         onClose();
       };
     
       const goToNotificationSettings = () => {
-        navigation.navigate('Notification Settings');
+        navigate('/notification-settings');
         onClose();
       };
     
       const goToBillingsAndPayment = () => {
-        navigation.navigate('Billings and Payment');
+        navigate('/billings-payment');
         onClose();
       };
       const [fontsLoaded]=useFonts({

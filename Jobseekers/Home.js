@@ -1,6 +1,6 @@
 import React, { useState,  useEffect, useContext } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, TextInput, FlatList  } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import Topbar from '../components/topbar';
@@ -39,7 +39,7 @@ const HomePage = () => {
   const [modalVisible4, setModalVisible4] = useState(false);
   const [custommodalVisible, setCustomModalVisible] = useState(false);
   const [helpmodalVisible, sethelpModalVisible] = useState(false);
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [token, setToken] = useState(null);
   const [first_name, setFirstName] = useState('');
@@ -106,7 +106,7 @@ const HomePage = () => {
   const handleSelectRoom = (room) => {
     console.log('Selected Room:', room);
     // Navigate to Room screen, passing room details as parameters
-    navigation.navigate('Chat', { activeRoom: room });
+    navigate('/chat', { activeRoom: room });
   };
   
  useEffect(() => {
@@ -134,28 +134,21 @@ const HomePage = () => {
     retrieveData();
   }, []);
 
-  const openUser = (userId) => {
-    navigation.navigate('Messages', { userId });
-  };
   
   const goToGrowth = () => {
-    navigation.navigate('Growth Plan Sessions');
+    navigate('/growth-plan-sessions');
   };
 
   const goToHubs = () => {
-    navigation.navigate('Coaching Hub Sessions');
+     navigate('/coaching-hub-sessions');
   };
 
   const goToInterview = () => {
-    navigation.navigate('Interview Sessions');
+     navigate('/interview-sessions');
   };
 
   const goToAdvice = () => {
-    navigation.navigate('Advice Sessions');
-  };
-
-  const gotoAI = () => {
-    navigation.navigate('Use AI');
+    navigate('/skill-analysis-sessions');
   };
  
   const handleOpenPress2 = () => {

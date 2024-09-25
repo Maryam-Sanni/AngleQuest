@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
-import { useNavigation } from '@react-navigation/native';
 import OpenModal from '../components/Createhubform';
 import OpenModal2 from '../components/Edithubform';
 import ConfirmationPopup from '../Experts/OtherHubs';
@@ -14,9 +13,10 @@ import {useFonts} from "expo-font"
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScheduledMeet from '../Experts/ScheduledMeetings';
+import { useNavigate } from 'react-router-dom';
 
 function MyComponent() {
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
     const [isFirstHubsHovered, setIsFirstHubsHovered] = useState(false);
     const [modalVisible4, setModalVisible4] = useState(false);
@@ -29,7 +29,7 @@ function MyComponent() {
   const apiUrl = process.env.REACT_APP_API_URL;
   
       const goToMyHubs = () => {
-        navigation.navigate('All Hubs');
+        navigate('/all-Hubs');
       };
 
       const handleOthersPress = () => {
@@ -103,13 +103,7 @@ const {t}=useTranslation()
 
     loadFormData();
   }, []);
- 
-  const reloadHomeExperts = () => {
-    navigation.navigate('anglequest');
-    setTimeout(() => {
-      navigation.navigate('Manage Hubs');
-    }, 2000); // Delay of 3 seconds (3000 milliseconds)
-  };
+
 
   
   return (
@@ -124,12 +118,7 @@ const {t}=useTranslation()
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={{ marginLeft: 270 }}>
             <View style={styles.header}>
-              <TouchableOpacity onPress={reloadHomeExperts}>
-                <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=14296&format=png&color=000000' }}
-                  style={{width: 18, height: 18, marginTop: 5, marginLeft: 30 }}
-                />
-              </TouchableOpacity>  
+              
               <TouchableOpacity
             underlayColor={isFirstHubsHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsFirstHubsHovered(true)}

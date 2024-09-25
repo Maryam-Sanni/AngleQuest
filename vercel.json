@@ -1,7 +1,8 @@
 {
-  "public": "dist",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "functions": {
+    "api/server.js": {
+      "runtime": "nodejs14.x"
+    }
+  },
+  "public": "dist"
 }
-
