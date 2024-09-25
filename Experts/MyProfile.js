@@ -481,7 +481,7 @@ export default function Profile() {
            <View style={{ marginTop: 20, marginRight: 30 }}>
              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
-                 {t('What do you do at')} {preferredRole}?
+                 {t('What part of')} {preferredRole}  {t('do you specialize in')}?
                </Text>
               
              </View>

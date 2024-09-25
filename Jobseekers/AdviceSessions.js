@@ -230,7 +230,7 @@ function MyComponent() {
                   </View>
      </TouchableOpacity>
                       <TouchableOpacity onPress={gotoresult}>
-                        <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                        <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
                           <View style={{ flexDirection: "row" }}>
                             <Image
                               source={{
@@ -238,7 +238,7 @@ function MyComponent() {
                               }}
                               style={{ width: 20, height: 20, marginRight: 10 }}
                             />
-                                        <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("AngleQuest AI")}</Text>
+                                        <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("My AI Skill Gap Analysis")}</Text>
                           </View>
                                       </View>
                          </TouchableOpacity>

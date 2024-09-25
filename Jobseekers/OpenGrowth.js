@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [data, setData] = useState(null);
@@ -121,7 +121,7 @@ function MyComponent({ onClose }) {
       if (response.status === 201) {
         console.log('Growth Plan session updated successfully:', response.data);
         // Optionally, show a success message or navigate to another screen
-        navigation.navigate('Growth Plan Sessions');
+        navigate('/growth-plan-sessions');
       } else {
         console.error('Failed to update the Growth Plan session:', response.data);
       }

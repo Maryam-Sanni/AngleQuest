@@ -551,7 +551,7 @@ onMouseLeave={() => setIsHovered12(false)}
           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 30, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Hub Chats</Text>
           </View>
             <FlatList
-              data={conversations.slice(0, 5)}
+              data={conversations.slice(0, 4)}
               keyExtractor={(item) => item?.room?.id.toString()}
               renderItem={({ item }) => (
                  <View style={{backgroundColor: '#A2BE95', padding: 10, marginTop: 10, marginLeft: 10, marginRight: 10, borderRadius: 5}}>

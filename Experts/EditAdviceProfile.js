@@ -18,7 +18,7 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
 
   const [role, setSkillsAnalysisRole] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('category');
         const [level, setlevel] = useState('');
         const [rate, setrate] = useState('');
         const [available_days, setavailable_days] = useState('');

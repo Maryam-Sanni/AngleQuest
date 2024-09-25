@@ -263,7 +263,10 @@ function MyComponent({ onClose }) {
       const category = data.category ? data.category.toLowerCase() : '';
       const searchTerm = search ? search.toLowerCase() : '';
 
-      return fullName.includes(searchTerm) || category.includes(searchTerm);
+    return (
+        (fullName.includes(searchTerm) || category.includes(searchTerm)) &&
+        (selectedCategory === '' || category.includes(selectedCategory.toLowerCase()))
+      );
     });
 
     if (filteredData.length === 0) {

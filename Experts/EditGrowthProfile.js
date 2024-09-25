@@ -17,7 +17,7 @@ function MyComponent({ onClose }) {
   const { t } = useTranslation();
 
   const [role, setRole] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('category');
   const [level, setLevel] = useState('');
   const [rate, setRate] = useState('');
   const [availableDays, setAvailableDays] = useState('');

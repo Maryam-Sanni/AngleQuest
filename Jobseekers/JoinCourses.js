@@ -652,7 +652,7 @@ paddingHorizontal: 5,
                           >
                               <View style={styles.cardContainer}>
                                 <View style={styles.textContainer}>
-                                  <Text style={styles.headingText}>{t("All Courses")}</Text>
+                                  <Text style={styles.headingText}>{t("All Knowledge Sharing Sessions")}</Text>
                                   <Text style={styles.subHeadingText}>
                                     {t("Register to have access to weekly knowledge sharing sessions")}
                                   </Text>
@@ -664,7 +664,7 @@ paddingHorizontal: 5,
                                   onMouseEnter={() => setIsHovered(true)}
                                   onMouseLeave={() => setIsHovered(false)}
                                 >
-                                  <Text style={styles.buttonTextplus}>View My Courses</Text>
+                                  <Text style={styles.buttonTextplus}>View My Sessions</Text>
                                 </TouchableOpacity>
                               </View>
                             </View>
@@ -883,7 +883,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   cardContainer: {
-    width: '30%', 
+    width: '40%', 
     padding: 20,
     backgroundColor: 'white', 
     borderRadius: 10,

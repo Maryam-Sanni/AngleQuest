@@ -1,5 +1,6 @@
 import { StyleSheet, Image, View, TextInput, Pressable } from "react-native";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -8,11 +9,17 @@ import Row from "./Row";
 
 const Footer = ({ bgColor }) => {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
   const [changeBg, setChangeBg] = useState(bgColor ? bgColor : "#E0F8EC");
 
   const handleBG = (val) => {
     setChangeBg(val);
   };
+
+  const goToExpert= () => {
+  navigate("/sign-up");
+  };
+  
   const FooterList = ({
     title,
     item1,

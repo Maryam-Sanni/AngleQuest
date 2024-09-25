@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 
 function MyComponent({ onClose }) {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [data, setData] = useState(null);
@@ -117,7 +117,7 @@ function MyComponent({ onClose }) {
 
       if (response.status === 200) {
         console.log('Skill Analysis session updated successfully:', response.data);
-        navigation.navigate('Advice Sessions');
+     navigate('/skill-analysis-sessions');
       } else {
         console.error('Failed to update the skill analysis session:', response.data);
       }

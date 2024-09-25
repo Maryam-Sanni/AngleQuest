@@ -283,7 +283,7 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
           <Image
             style={{
               position: "absolute",
-              bottom: -30,
+              bottom: -50,
               right: 0,
               width: 265,
               height: 180,
@@ -302,6 +302,10 @@ const SpecialBtn = ({ text, height, width, bgColor }) => {
    const [isHovered, setIsHovered] = useState(false);
   const handleSignUp = () => {
     navigate('/sign-up'); 
+  };
+
+  const gotocontact= () => {
+  navigate("/contact-sales");
   };
   
   return (
@@ -389,7 +393,11 @@ const MyComponent = () => {
   };
 
   const handlecontact = () => {
-    navigate('/contact-sales'); 
+    navigate('/sign-up'); 
+  };
+
+  const gotocontact= () => {
+  navigate("/contact-sales");
   };
   
   return (
@@ -464,7 +472,7 @@ const MyComponent = () => {
                       height: 74,
                       gap: 10,
                       justifyContent: "space-between",
-                      width: 700,
+                      width: 500,
                     }}
                   >
                     <Text
@@ -478,11 +486,12 @@ const MyComponent = () => {
                     </Text>
                     <Row style={{ alignItems: "center", gap: 20 }}>
                       <SpecialBtn text={"Individual"} />
-                      <SpecialBtn text={"Expert"} />
+                      
                       <SpecialBtn text={"Business"} />
                     </Row>
                   </Row>
                 </BlurView>
+                <TouchableOpacity onPress={gotocontact}>
                 <MainButtons
                   title="Book a demo now"
                   height={74}
@@ -492,6 +501,7 @@ const MyComponent = () => {
                   gradient
                   borderRadius={10}
                 />
+              </TouchableOpacity>
               </Row>
             </View>
           </View>
@@ -781,6 +791,7 @@ const MyComponent = () => {
                       style={styles.innerimage}
                     />
                     <View style={{ marginTop: 50, }}>
+                       <TouchableOpacity onPress={handlecontact}>
                       <MainButtons
                         gradient
                         title={"Get Started"}
@@ -792,6 +803,7 @@ const MyComponent = () => {
                           />
                         }
                       />
+                       </TouchableOpacity>
                     </View>
                   </View>
                   <View style={[styles.bigwhiteBox2, { alignItems: "center" }]}>
@@ -847,6 +859,7 @@ const MyComponent = () => {
                       style={styles.innerimage}
                     />
                     <View style={{ marginTop: 50 }}>
+                       <TouchableOpacity onPress={handlecontact}>
                       <MainButtons
                         gradient
                         title={"Get Started"}
@@ -858,6 +871,7 @@ const MyComponent = () => {
                           />
                         }
                       />
+                       </TouchableOpacity>
                     </View>
                   </View>
                 </View>
@@ -1099,6 +1113,7 @@ const MyComponent = () => {
                     </View>
                   </Row>
                   <View style={{ marginLeft: 30 }}>
+                     <TouchableOpacity onPress={handlecontact}>
                     <MainButtons
                       width={180}
                       gradient={true}
@@ -1111,6 +1126,7 @@ const MyComponent = () => {
                       />
                       }
                     />
+                     </TouchableOpacity>
                   </View>
                 </View>
                 <View style={{ width: "65%" }}>
