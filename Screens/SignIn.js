@@ -200,7 +200,7 @@ const SignIn = () => {
 
                       <View style={{ position: 'relative' }}>
                         <TextInput
-                          value={maskedPassword}
+                          value={password}
                           onChangeText={setPassword}
                           secureTextEntry={!passwordVisible} 
                           placeholder="Password"

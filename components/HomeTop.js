@@ -139,6 +139,7 @@ const MyComponent = ({ value, tint, intensity }) => {
             width={170}
             bgColor={""}
           />
+           <TouchableOpacity onPress={navigateToSignUp}>
           <MainButtons
             title={"Get Started"}
             borderRadius={8}
@@ -156,6 +157,7 @@ const MyComponent = ({ value, tint, intensity }) => {
               style={{ width: 15, height: 15 }}
             />}
           />
+           </TouchableOpacity>
         </View>
       </BlurView>
       {/* {showMenu&&<View>

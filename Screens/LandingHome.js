@@ -31,10 +31,6 @@ import { Video } from "expo-av";
 import { BlurView } from "expo-blur";
 import Footer from "../components/Footer";
 
-//import Carousel from "react-native-reanimated-carousel";
-//import MainFooter from "./MainFooter";
-//import DesignedFooter from "./DesignedFooter";
-
 const cardSliderData = [
   {
     id: 1,
@@ -123,7 +119,11 @@ const BigLableButton = ({ title, img, subTitle, desc }) => {
         width={"100%"}
         gradient={true}
         title={"Get Started"}
-        icon={<AntDesign name="arrowright" size={18} color="white" />}
+        borderRadius={5}
+        icon={<Image
+          source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+          style={{ width: 18, height: 18 }}
+        />}
       />
     </LinearGradient>
   );
@@ -346,8 +346,9 @@ const MyComponent = () => {
     setModalVisible(true);
   };
 
-
   const { width: screenWidth } = Dimensions.get('window');
+
+  const fadeWidth = 60;
   
   const colorList = [
     { offset: "0%", color: "#231557", opacity: "1" },
@@ -360,6 +361,7 @@ const MyComponent = () => {
     onClose();
   };
   const SliderBtn = ({ left, onPress }) => {
+    
     return (
       <TouchableOpacity
         style={{
@@ -376,14 +378,14 @@ const MyComponent = () => {
       >
         {left ? (
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=CCCCCC' }}
+          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=000000' }}
           style={{ width: 50, height: 50 }}
         />
         ) : (
         <TouchableOpacity
-         onPress={() => scrollRef.current?.scrollTo({ x: 400, animated: true })}>
+         onPress={() => scrollRef.current?.scrollTo({ x: 500, animated: true })}>
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=CCCCCC' }}
+          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=000000' }}
           style={{ width: 50, height: 50 }}
         />
         </TouchableOpacity>
@@ -587,13 +589,27 @@ const MyComponent = () => {
                   left={false}
                   onPress={() =>
                     scrollRef.current?.scrollTo({
-                      x: 300,
+                      x: 500,
                       y: 0,
                       animated: true,
                     })
                   }
                 />
-
+                <View style={{ position: 'relative', width: '100%' }}>
+                  {/* Left Fade */}
+                  <LinearGradient
+                    colors={['#ffffff', 'transparent']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: fadeWidth,
+                      zIndex: 200,
+                    }}
+                  />               
                 <ScrollView
                   horizontal
                   ref={scrollRef}
@@ -620,6 +636,21 @@ const MyComponent = () => {
                     />
                   ))}
                 </ScrollView>
+                  {/* Right Fade */}
+                    <LinearGradient
+                      colors={['transparent', '#ffffff']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: fadeWidth,
+                        zIndex: 200,
+                      }}
+                    />
+                  </View>
               </View>
 
               <View style={{ marginTop: 40 }}>

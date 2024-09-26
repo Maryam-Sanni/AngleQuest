@@ -646,7 +646,7 @@ paddingHorizontal: 5,
                     
                         <View style={styles.headerContainer}>
                           <ImageBackground
-                             source={require('../assets/TG1.png')}
+                             source={require('../assets/TG4.png')}
                             style={styles.imageBackground}
                             resizeMode="cover"
                           >

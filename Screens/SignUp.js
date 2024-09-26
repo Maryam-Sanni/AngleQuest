@@ -86,7 +86,7 @@ const SignUp = () => {
       );
 
       console.log("Signup success:", response.data);
-      navigate("Verify mail", { userEmail: email }); // Navigate and pass email as parameter
+      navigate("/verify-mail", { userEmail: email }); // Navigate and pass email as parameter
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Signup failed. Please try again.");
@@ -121,7 +121,7 @@ const SignUp = () => {
       });
 
       console.log('Signup success:', response.data);
-      navigate('Verify mail', { userEmail: email }); // Navigate and pass email as parameter
+      navigate('/verify-mail', { userEmail: email }); // Navigate and pass email as parameter
     } catch (error) {
       console.error('Signup failed:', error);
       alert('Signup failed. Please try again.');

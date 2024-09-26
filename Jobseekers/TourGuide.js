@@ -41,7 +41,7 @@ function MyComponent({ onClose }) {
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
                <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 30 }}>Hello There, Welcome to AngleQuest</Text>
               <Image
-                source={require('../assets/coursehead.png')}
+                source={require('../assets/TG5.png')}
                 style={{
                   width: 1000,
                   height: 300,

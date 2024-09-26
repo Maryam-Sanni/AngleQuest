@@ -197,6 +197,8 @@ const App = () => {
         <Route path="/notification-setup" element={<NotificationSetup />} />
         <Route path="/earnings" element={<Earnings />} />
         <Route path="/all-hubs" element={<MyHubs />} />
+         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify-mail" element={<Verifymail />} />
       </Routes>
     </Router>
   );

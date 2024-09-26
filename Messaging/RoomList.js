@@ -208,8 +208,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        width: '30%',
-        height: 600,
+        position: 'absolute',
+        left: 260,
+        top: 250,
+        height: 500,
         backgroundColor: '#fff',
         borderRadius: 10,
         padding: 20,
@@ -224,6 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
+        marginRight: 30
     },
     avatar: {
         width: 40,
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
                 color: '#3F5637',
                 fontWeight: 'bold',
                 fontFamily:"Roboto-Light",
-                  marginLeft: 240
+                  marginLeft: 100
               },
 });
 

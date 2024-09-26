@@ -37,7 +37,7 @@ const HomePage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
-  const [custommodalVisible, setCustomModalVisible] = useState(false);
+  const [customModalVisible, setCustomModalVisible] = useState(false);
   const [helpmodalVisible, sethelpModalVisible] = useState(false);
   const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
@@ -109,10 +109,19 @@ const HomePage = () => {
     navigate('/chat', { activeRoom: room });
   };
   
- useEffect(() => {
-    // Show the CustomModal when the component mounts
-    setCustomModalVisible(true);
+
+  useEffect(() => {
+    const modalShown = localStorage.getItem('modalShown');
+    if (!modalShown) {
+      // If the modal hasn't been shown, show the modal
+      setCustomModalVisible(true);
+      localStorage.setItem('modalShown', 'true');
+    } else {
+      // If modal has been shown before, ensure modalVisible is false
+      setCustomModalVisible(false);
+    }
   }, []);
+  
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -615,7 +624,11 @@ onMouseLeave={() => setIsHovered12(false)}
       
     
     <SuggestionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
-    <CustomModal visible={custommodalVisible} onClose={() => setCustomModalVisible(false)} />
+    {customModalVisible && (
+      <CustomModal 
+        onClose={() => setCustomModalVisible(false)} 
+      />
+    )}
     <HelpModal visible={helpmodalVisible} onClose={() => sethelpModalVisible(false)} />
     <Modal
         animationType="slide"

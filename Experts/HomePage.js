@@ -33,7 +33,7 @@ const HomePage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [token, setToken] = useState(null);
-  const [custommodalVisible, setCustomModalVisible] = useState(false);
+  const [customModalVisible, setCustomModalVisible] = useState(false);
    const navigate = useNavigate();
   const [totalBalance, setTotalBalance] = useState(null);
   const [totalBal, setTotalBal] = useState(null);
@@ -142,14 +142,18 @@ const HomePage = () => {
     // Navigate to Room screen, passing room details as parameters
     navigate('/chats', { activeRoom: room });
   };
-
-  
-
        
   
   useEffect(() => {
-    // Show the CustomModal when the component mounts
-    setCustomModalVisible(true);
+    const modalShown = localStorage.getItem('modalShown');
+    if (!modalShown) {
+      // If the modal hasn't been shown, show the modal
+      setCustomModalVisible(true);
+      localStorage.setItem('modalShown', 'true');
+    } else {
+      // If modal has been shown before, ensure modalVisible is false
+      setCustomModalVisible(false);
+    }
   }, []);
 
   
@@ -679,7 +683,11 @@ onMouseLeave={() => setIsHovered12(false)}
       </View>
  
     </View>
-    <CustomModal visible={custommodalVisible} onClose={() => handleCloseModal()} />
+        {customModalVisible && (
+          <CustomModal 
+            onClose={() => setCustomModalVisible(false)} 
+          />
+        )}
         </ScrollView>
       </View>
       
