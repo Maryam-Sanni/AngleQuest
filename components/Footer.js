@@ -16,8 +16,8 @@ const Footer = ({ bgColor }) => {
     setChangeBg(val);
   };
 
-  const goToExpert= () => {
-  navigate("/sign-up");
+  const handleSignUp = (option) => {
+    navigate('/sign-up', { state: { signUpOption: option } });
   };
   
   const FooterList = ({
@@ -118,6 +118,10 @@ const Footer = ({ bgColor }) => {
                 item2={"Experts"}
                 item3={"Businesses"}
                 item4={"Pricing"}
+                onPress1={() => handleSignUp(1)} // Individual
+                onPress2={() => handleSignUp(2)} // Experts
+                onPress3={() => handleSignUp(3)} // Businesses (if needed)
+                onPress4={() => handleSignUp(4)} // Pricing (if needed)
               />
               <FooterList
                 title={"Information"}

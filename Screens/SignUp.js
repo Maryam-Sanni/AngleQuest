@@ -23,7 +23,7 @@ import InputField from "../components/InputField";
 import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
 import axios from "axios";
-import { CheckBox } from "react-native";
+import { useLocation } from 'react-router-dom';
 
 const SignUp = () => {
    const navigate = useNavigate();
@@ -37,7 +37,17 @@ const SignUp = () => {
    const [loading, setLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState("");
-  const [signUpOption, setSignUpOption] = useState(0);
+   const location = useLocation();
+  const { signUpOption: routeSignUpOption } = location.state || { signUpOption: 0 }; // Get from location
+  const [signUpOption, setSignUpOption] = useState(routeSignUpOption); // Initialize state
+
+  // Optionally, if you want to sync state when route changes
+  useEffect(() => {
+    if (routeSignUpOption) {
+      setSignUpOption(routeSignUpOption);
+    }
+  }, [routeSignUpOption]);
+  
   const handleSignIn = () => {
     navigate("/sign-in"); // Navigate to the Sign In page
   };

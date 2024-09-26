@@ -297,20 +297,13 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
   );
 };
 
-const SpecialBtn = ({ text, height, width, bgColor }) => {
+const SpecialBtn = ({ text, onPress,  height, width, bgColor }) => {
   const navigate = useNavigate();
    const [isHovered, setIsHovered] = useState(false);
-  const handleSignUp = () => {
-    navigate('/sign-up'); 
-  };
-
-  const gotocontact= () => {
-  navigate("/contact-sales");
-  };
   
   return (
-      <Pressable
-        onPress={handleSignUp}
+        <Pressable
+          onPress={onPress} 
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         style={{
@@ -337,6 +330,7 @@ const SpecialBtn = ({ text, height, width, bgColor }) => {
     </Pressable>
   );
 };
+
 const MyComponent = () => {
    const navigate = useNavigate(); // Navigation object
   const [ModalVisible, setModalVisible] = useState(false);
@@ -400,6 +394,14 @@ const MyComponent = () => {
 
   const gotocontact= () => {
   navigate("/contact-sales");
+  };
+
+  const handleIndividualSignUp = () => {
+    navigate('/sign-up', { state: { signUpOption: 1 } });
+  };
+
+  const handleBusinessSignUp = () => {
+    navigate('/sign-up', { state: { signUpOption: 3 } });
   };
   
   return (
@@ -487,9 +489,8 @@ const MyComponent = () => {
                       Get started as:
                     </Text>
                     <Row style={{ alignItems: "center", gap: 20 }}>
-                      <SpecialBtn text={"Individual"} />
-                      
-                      <SpecialBtn text={"Business"} />
+                      <SpecialBtn text={"Individual"} onPress={handleIndividualSignUp} />
+                      <SpecialBtn text={"Business"} onPress={handleBusinessSignUp} />
                     </Row>
                   </Row>
                 </BlurView>
