@@ -162,7 +162,7 @@ const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
-  style={{ height: '120%', width: '100%',flex: 1}}
+  style={{ height: '100%', width: '100%',flex: 1}}
 >
     <View style={{ flex: 1 }}>
       <Topbar />

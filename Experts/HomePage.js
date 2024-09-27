@@ -349,7 +349,7 @@ const {t}=useTranslation()
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
-  style={{ height: '120%', width: '100%',flex: 1}}
+  style={{ height: '100%', width: '100%',flex: 1 }}
 >
   <View style={{ flex: 1 }}>
     <Topbar /> 
@@ -357,7 +357,7 @@ const {t}=useTranslation()
       <Sidebar />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500}}>
            <View style={styles.container}>
-           <View style={{flexDirection: 'row' }}>
+           <View style={{flexDirection: 'row', marginBottom: 20}}>
            <Image
         source={{
           uri:
@@ -370,9 +370,6 @@ const {t}=useTranslation()
         <Text style={styles.circleText}>12</Text>
         </View>
       </View>
-      <TouchableOpacity>
-      <Text style={{color: '#63EC55', fontSize: 14, textDecoration: 'underline', marginTop: -5, marginLeft: 50, marginBottom: 30,fontFamily:"Roboto-Light"}}>{t("Share your profile on Linkedln")}</Text>
-      </TouchableOpacity>
       <View style={styles.mainContent}>
       <View style={styles.messageBox}>
       <BlurView intensity={50} style={styles.blurBackground}>
@@ -410,9 +407,6 @@ const {t}=useTranslation()
                  </TouchableOpacity>
             )}
                 />
-     
-          <Text style={{color: 'white', fontSize: 13, marginTop: 10, textDecoration: 'underline', marginLeft: 140,fontFamily:"Roboto-Light"}}>{t("see more")}</Text>
-          <View style={{ borderBottomWidth: 2, borderBottomColor: 'white', marginTop: 10, marginLeft: 20, marginRight: 20 }} />
           
          
  
@@ -777,7 +771,7 @@ const styles = StyleSheet.create({
 },
 messageBox: {
   width: 220,
-  height: 700,
+  height: 600,
   backgroundColor: 'rgba(125,125,125,0.3)',
     borderRadius: 20,
   marginRight: 15, 
@@ -834,7 +828,7 @@ whiteBox: {
   touchablechat: {
     padding: 8,
     paddingHorizontal: 20,
-    marginTop: 60,
+      marginBottom: 20,
     marginLeft: 30,
     marginRight: 30,
     backgroundColor: 'rgba(200,200,125,0.3)',

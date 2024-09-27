@@ -31,7 +31,7 @@ function MyComponent() {
           navigate('/home-experts');
           break;
         case "Preferences":
-         navigate('/home-experts');
+         navigate('/preferences');
           break;
         case "Interview":
           navigate('/interview');
@@ -105,6 +105,7 @@ function MyComponent() {
            case "Skills Analysis": return currentPath === '/skill-analysis';
            case "Scenario Project": return currentPath === '/scenario-project';
            case "Hubs": return currentPath === '/hubs';
+          case "Preferences": return currentPath === '/preferences';
         case "Chats": return currentPath === '/chats';
         default: return false;
       }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduled';
+import OpenSchedule3 from '../Experts/InterviewResponse';
 import OpenUser from '../Experts/OpenUserprofile';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +12,7 @@ import axios from 'axios';
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
@@ -49,6 +51,24 @@ const ScheduledMeetingsTable = () => {
   };
 
 
+  const handleOpenPress3 = async (meeting) => {
+    try {
+      // Save the selected meeting data to AsyncStorage
+      await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
+      console.log('Selected meeting saved:', meeting);
+
+      // Set the selected meeting in state to pass it to the modal
+      setSelectedMeeting(meeting);
+      setModalVisible3(true);
+    } catch (error) {
+      console.error('Failed to save selected meeting to AsyncStorage', error);
+    }
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+  };
+  
   useEffect(() => {
     const loadFormData = async () => {
       try {
@@ -183,6 +203,11 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Give Analysis</Text>
+               </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Start Meeting</Text>
                </View>
             </TouchableOpacity>
@@ -217,6 +242,11 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.linkText}>{t("Open")}</Text>
                    </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleOpenPress3(meeting)}>
+                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.linkText}>{t("Give Analysis")}</Text>
+                   </View>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={handleJoinPress}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Start Meeting")}</Text>
@@ -246,6 +276,16 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.modalContent}>
               <OpenUser onClose={() => handleCloseModal2()} />
             </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible3}
+          onRequestClose={handleCloseModal}
+        >
+          <View style={styles.modalContent}>
+            <OpenSchedule3 onClose={handleCloseModal3} meeting={selectedMeeting} />
+          </View>
         </Modal>
       </BlurView>
     </View>

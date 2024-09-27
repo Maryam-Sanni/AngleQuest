@@ -20,7 +20,7 @@ const ScheduledMeetingsTable = () => {
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
-
+ 
   useEffect(() => {
     const loadFormData = async () => {
       try {
@@ -39,10 +39,17 @@ const ScheduledMeetingsTable = () => {
         if (response.status === 200) {
           const data = response.data.allGrowthPlan;
 
-          // Filter meetings based on expert_id
-          const filteredMeetings = data.filter(meeting => 
-            meeting.expertid === storedExpertId && meeting.completed !== "Yes"
-          );
+          // Log to debug the values
+          console.log('Data from API:', data);
+
+          // Filter meetings based on expert_id and completed status
+          const filteredMeetings = data.filter(meeting => {
+            console.log(`Meeting completed: ${meeting.completed}, expertid: ${meeting.expertid}`);
+            return meeting.expertid === storedExpertId && meeting.completed !== "Yes";
+          });
+
+          console.log('Filtered Meetings:', filteredMeetings);
+
           setMeetings(filteredMeetings);
 
           // Save all growth plans to AsyncStorage
@@ -61,7 +68,14 @@ const ScheduledMeetingsTable = () => {
     };
 
     loadFormData();
+
+    // Polling every 30 seconds (30000 milliseconds)
+    const intervalId = setInterval(loadFormData, 5000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
+
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {

@@ -108,6 +108,7 @@ function MyComponent({ onClose }) {
         expert_name: `${firstName} ${lastName}`,
         growthplan_id: String(data?.id),
         rating: rating,
+        completed: completed,
         review: reviewStatus,
         title: data?.title,
         role: data?.role,

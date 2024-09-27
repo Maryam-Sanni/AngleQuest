@@ -7,7 +7,7 @@ import OpenModal4 from '../components/Createhubform';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 
 function MyComponent({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
@@ -18,7 +18,7 @@ function MyComponent({ onClose }) {
   const [interviewStatus, setinterviewStatus] = useState('Pending');
   const [SkillAnalysisStatus, setSkillAnalysisStatus] = useState('Pending')
   const [NewHubStatus, setNewHubStatus] = useState('Pending');
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -187,7 +187,7 @@ function MyComponent({ onClose }) {
   };
 
   const goToGrowth = () => {
-    navigation.navigate('Profile');
+    navigate('/profile');
     onClose();
   };
   

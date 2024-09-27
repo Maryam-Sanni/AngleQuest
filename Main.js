@@ -182,7 +182,7 @@ const App = () => {
         <Route path="/billings-payment" element={<BillingsandPayment />} />
          <Route path="/profile" element={<MyProfile />} />
          <Route path="/ai-result" element={<AIindv4 />} />
-        <Route path="/offers" element={<Offers />} />
+        <Route path="/preferences" element={<Offers />} />
          <Route path="/interview" element={<Interview />} />
          <Route path="/growth-plan" element={<GrowthPlan />} />
          <Route path="/skill-analysis" element={<Advice />} />

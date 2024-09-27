@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import OpenModal from '../Experts/Viewbids';
 import { BlurView } from 'expo-blur';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
   
 function MyComponent() {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
     const [isBidHovered, setIsBidHovered] = useState(false);
     const [isOfferHovered, setIsOfferHovered] = useState(false);
     
     const goToOffers= () => {
-        navigation.navigate('Offers');
+     navigate('/offers');
       };
 
       const goToBids = () => {
-        navigation.navigate('Bids');
+      navigate('/bids');
       };
 
       
@@ -44,21 +44,10 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Offers")}</Text>
+                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Preferences")}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToBids}
-            underlayColor={isBidHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsBidHovered(true)}
-            onMouseLeave={() => setIsBidHovered(false)} >
-              <View style={styles.item}>
-              <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Bids")}</Text>
-              </View>
-            </TouchableOpacity>
+            
             </View>
 
             <ScheduledMeetingsTable />
@@ -94,16 +83,16 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.table}>
     <View style={styles.row}>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("User Type")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Number of Candidates")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Name")}</Text>
         </View>
         <View style={styles.cell}>
         <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Field")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Start Date")}</Text>
+        <Text style={{fontWeight: '600', fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Description")}</Text>
         </View>
         <View style={styles.cell}>
           <Text style={{color: "white", fontSize: 14,fontFamily:"Roboto-Light"}}> </Text>
@@ -116,17 +105,17 @@ const ScheduledMeetingsTable = () => {
           <View style={styles.cell2}>
           <View style={{flexDirection: 'row'}}>
           <Image source={require('../assets/asml.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>ASML</Text>
+            <Text style={styles.cellText}>Preference</Text>
           </View>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
+            <Text style={styles.cellText}>is</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
+            <Text style={styles.cellText}>coming</Text>
           </View>
           <View style={styles.cell2}>
-            <Text style={styles.cellText}>July 2024</Text>
+            <Text style={styles.cellText}>soon</Text>
           </View>
           <TouchableOpacity style={styles.cell2}>
           <Text style={styles.open}>{t("Download NDA")}</Text>
@@ -135,213 +124,15 @@ const ScheduledMeetingsTable = () => {
           <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/tmc.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>TMC</Text>
-          </View>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>August 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell2}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/rvl.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>RVL</Text>
-          </View>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>July 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/mtn.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>MTN</Text>
-          </View>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>August 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.cell2}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/dangote.jpeg')} style={styles.userimage} />
-            <Text style={styles.cellText}>DANGOTE</Text>
-          </View>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>July 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-         <View style={styles.row}>
-          <View style={styles.cell}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/awl.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>AWL</Text>
-          </View>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>August 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
- <View style={styles.row}>
-          <View style={styles.cell2}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/tesla.jpeg')} style={styles.userimage} />
-            <Text style={styles.cellText}>TESLA</Text>
-          </View>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>July 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14,fontFamily:"Roboto-Light"}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-<View style={styles.row}>
-          <View style={styles.cell}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/tmc.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>TMC</Text>
-          </View>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>August 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-<View style={styles.row}>
-          <View style={styles.cell2}>
-          <View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/rvl.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>RVL</Text>
-          </View>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>SAP FI</Text>
-          </View>
-          <View style={styles.cell2}>
-            <Text style={styles.cellText}>July 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell2}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell2} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-<View style={styles.cell}>
-<View style={{flexDirection: 'row'}}>
-          <Image source={require('../assets/awl.png')} style={styles.userimage} />
-            <Text style={styles.cellText}>TMC</Text>
-          </View>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>3 {t("Candidates")}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>Power Platform</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.cellText}>August 2024</Text>
-          </View>
-          <TouchableOpacity style={styles.cell}>
-          <Text style={styles.open}>{t("Download NDA")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cell} onPress={handleOpenPress}>
-          <Text style={{color: "#206C00", fontSize: 14}}>{t("Bid")}</Text>
-          </TouchableOpacity>
-        </View>
+        
+         
+         
+       
+        
+
+
+
+        
         <Modal
         animationType="slide"
         transparent={true}

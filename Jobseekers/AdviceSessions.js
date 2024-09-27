@@ -204,7 +204,7 @@ function MyComponent() {
     return (
       <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
+  style={{ height: '100%', width: '100%',flex: 1}}
 >
         <View style={{ flex: 1 }}>
             <Topbar />
@@ -242,6 +242,11 @@ function MyComponent() {
                           </View>
                                       </View>
                          </TouchableOpacity>
+                        <TouchableOpacity>
+                          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                                          <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Expert Roadmap")}</Text>
+                                        </View>
+                           </TouchableOpacity>
                       </View>
                       
      <View style={styles.container}>
