@@ -131,6 +131,9 @@ import AIScreen from "./Screens/AIscreen";
 import Welcome from "./Screens/LandingHome";
 import SignIn2 from "./Screens/SignIn";
 import SignUp2 from "./Screens/SignUp";
+import Individual from "./Screens/Individual";
+import Community from "./Screens/Community";
+import Business from "./Screens/Business";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -199,6 +202,9 @@ const App = () => {
         <Route path="/all-hubs" element={<MyHubs />} />
          <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-mail" element={<Verifymail />} />
+        <Route path="/individual" element={<Individual />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/business" element={<Business />} />
       </Routes>
     </Router>
   );

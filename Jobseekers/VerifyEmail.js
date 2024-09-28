@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
+import { useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 
 const ProgressBar = () => {
@@ -31,16 +32,10 @@ const SixBoxesInput = () => {
 };
 
 const VerificationContent = ({ userEmail }) => {
-  const navigation = useNavigation();
-
-  const handleVerify = () => {
-    // Perform verification logic here
-    // Navigate to next page
-    navigation.navigate('NextPage'); // Replace 'NextPage' with your target page
-  };
+  const navigate = useNavigate();
 
   const handleChangeEmail = () => {
-    navigation.navigate('SignUp'); // Navigate to sign-up page
+   navigate('/sign-up'); // Navigate to sign-up page
   };
 
   const handleOpenEmailClient = () => {
@@ -97,7 +92,7 @@ const VerificationContent = ({ userEmail }) => {
 };
 
 const SignUpPage = () => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const route = useRoute();
   const { userEmail } = route.params;
 

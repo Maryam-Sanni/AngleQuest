@@ -38,6 +38,7 @@ const cardSliderData = [
     text: "New Skills Acquisition",
     personImg: require("../assets/person1.png"),
     cardImg: require("../assets/card1.png"),
+    navigationTarget: "/individual",
   },
   {
     id: 2,
@@ -45,6 +46,7 @@ const cardSliderData = [
     text: "Support a New Employee",
     personImg: require("../assets/person2.png"),
     cardImg: require("../assets/card2.png"),
+    navigationTarget: "/business",
   },
   {
     id: 3,
@@ -52,6 +54,7 @@ const cardSliderData = [
     text: "Cross Community Learning",
     personImg: require("../assets/person3.png"),
     cardImg: require("../assets/card3.png"),
+    navigationTarget: "/community",
   },
   {
     id: 4,
@@ -59,6 +62,7 @@ const cardSliderData = [
     text: "Boost Under- performers",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card4.png"),
+    navigationTarget: "/business",
   },
   {
     id: 5,
@@ -66,6 +70,7 @@ const cardSliderData = [
     text: "Career          Mentoring",
     personImg: require("../assets/person5.png"),
     cardImg: require("../assets/card5.png"),
+    navigationTarget: "/individual",
   },
   {
     id: 6,
@@ -73,6 +78,7 @@ const cardSliderData = [
     text: "Organizational Knowledge",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
+    navigationTarget: "/individual",
   },
   {
     id: 7,
@@ -80,6 +86,7 @@ const cardSliderData = [
     text: "Team Knowledge management",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
+    navigationTarget: "/business",
   },
   {
     id: 8,
@@ -87,6 +94,7 @@ const cardSliderData = [
     text: "Skill Gap         Analysis",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
+    navigationTarget: "/community",
   },
 ];
 
@@ -178,7 +186,10 @@ const DottedImage = ({ style }) => {
     />
   );
 };
-const CardItem = ({ title, cardImg, personImg, bgColor }) => {
+
+const CardItem = ({ title, cardImg, personImg, bgColor, navigationTarget }) => {
+  const navigate = useNavigate();
+  
   const [active, setActive] = useState(false);
   const RowItem = ({ text }) => {
     return (
@@ -195,7 +206,11 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
 
   
   return (
-      <TouchableOpacity
+    <TouchableOpacity 
+      onPress={() => {
+        console.log("Card clicked", navigationTarget);  // Log the click event and target
+        navigate(navigationTarget);  // Navigate to the specified target
+      }}
         style={{
           width: 320,
           backgroundColor: bgColor ? bgColor : "white",
@@ -252,6 +267,7 @@ const CardItem = ({ title, cardImg, personImg, bgColor }) => {
             textColor={"white"}
             bgColor={bgColor}
             title="Get Started"
+            navigationTarget={navigationTarget}
           />
         </BlurView>
       )}
@@ -634,6 +650,7 @@ const MyComponent = () => {
                       personImg={item?.personImg}
                       cardImg={item?.cardImg}
                        style={{ width: screenWidth }}
+                      navigationTarget={item.navigationTarget}
                     />
                   ))}
                 </ScrollView>
