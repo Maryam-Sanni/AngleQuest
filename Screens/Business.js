@@ -28,6 +28,7 @@ import DottedImage from "../components/DottedImage";
 import SidededCard from "../components/SidedCard";
 import SimpleBtn from "../components/SimpleBtn";
 import SwitcherComponent from "../components/SwitcherComponent";
+import { useNavigate } from 'react-router-dom';
 
 const BtnText = ({ img, text, onPress, textSize }) => {
   return (
@@ -77,13 +78,11 @@ const BigCard = ({ img, title, desc, full }) => {
             style={{ width: 436 }}
             title={title}
             textSize={24}
-            textFamily={"Poppins-SemiBold"}
           />
           <Title
             style={{ width: 436 }}
             title={desc}
             textSize={20}
-            textFamily={"Poppins-Regular"}
           />
         </View>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -118,8 +117,8 @@ const BigCard = ({ img, title, desc, full }) => {
           elevation: 10,
         }}
       >
-        <Title title={title} textSize={24} textFamily={"Poppins-SemiBold"} />
-        <Title title={desc} textSize={20} textFamily={"Poppins-Regular"} />
+        <Title title={title} textSize={24} />
+        <Title title={desc} textSize={20} />
         <Image
           source={img}
           style={{
@@ -135,6 +134,7 @@ const BigCard = ({ img, title, desc, full }) => {
 };
 const Business = () => {
   const [ModalVisible, setModalVisible] = useState(false);
+  const navigate = useNavigate();
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -144,6 +144,10 @@ const Business = () => {
     onClose();
   };
 
+  const handleBusinessSignUp = () => {
+    navigate('/sign-up', { state: { signUpOption: 3 } });
+  };
+  
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -158,7 +162,6 @@ const Business = () => {
                   textSize={14}
                   textWeight={"300"}
                   title={"Business"}
-                  textFamily={"Poppins-Regular"}
                   center
                 />
                 <MainTitle
@@ -173,16 +176,13 @@ const Business = () => {
                   textSize={16}
                   textWeight={"400"}
                   title={
-                    "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI."
+                    "Empower service teams to deliver exceptional support experiences faster with smart automations that leverage the power of AI."
                   }
-                  textFamily={"Poppins-Regular"}
-                  center
                 />
                 <Title
                   textSize={16}
                   textWeight={"400"}
                   title="What would you like to manage?"
-                  textFamily={"Poppins-Regular"}
                   center
                 />
 
@@ -215,6 +215,7 @@ const Business = () => {
                 </Row>
 
                 <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity onPress={handleBusinessSignUp}>
                   <MainButtons
                     gradient
                     title={"Get Started"}
@@ -225,6 +226,7 @@ const Business = () => {
                       <AntDesign name="arrowright" size={16} color="#ffff" />
                     }
                   />
+                  </TouchableOpacity>
                 </View>
                 <View
                   style={{
@@ -270,7 +272,6 @@ const Business = () => {
                   // textColor={"white"}
                   textSize={32}
                   center
-                  textFamily={"Poppins-SemiBold"}
                   style={{ width: 666 }}
                   title={`Out-of-the box solutions for a variety of service use cases`}
                 />
@@ -318,6 +319,7 @@ const Business = () => {
                 />
               </Row>
               <View style={{ alignItems: "center" }}>
+                <TouchableOpacity onPress={handleBusinessSignUp}>
                 <MainButtons
                   gradient
                   title={"Get Started"}
@@ -326,6 +328,7 @@ const Business = () => {
                   width={170}
                   icon={<AntDesign name="arrowright" size={16} color="#ffff" />}
                 />
+                </TouchableOpacity>
               </View>
             </View>
           </SectionContainer>
@@ -336,7 +339,6 @@ const Business = () => {
                   // textColor={"white"}
                   textSize={32}
                   center
-                  textFamily={"Poppins-SemiBold"}
                   style={{ width: 666 }}
                   title={
                     "Fast-track service operations from A to Z with AngleQuest AI"
@@ -422,14 +424,12 @@ const Business = () => {
             <View style={{ width: 1400, gap: 40 }}>
               <View style={{ gap: 20 }}>
                 <Title
-                  textFamily={"Poppins-SemiBold"}
                   textSize={40}
                   //center
                   style={{ width: 618 }}
                   title="One platform for enterprise service management"
                 />
                 <Title
-                  textFamily={"Poppins-Regular"}
                   textSize={20}
                   // center
                   style={{ width: 820 }}
@@ -460,20 +460,20 @@ const Business = () => {
                   <Text
                     style={{
                       fontSize: 20,
-                      fontFamily: "Poppins-SemiBold",
                       textAlign: "center",
                       color: "white",
                       marginVertical: 30,
                     }}
                   >
                     Kylie J
-                    <Text style={{ fontFamily: "Poppins-Regular" }}>
+                    <Text style={{ }}>
                       | Manager (Operations), Protozisk Ltd.
                     </Text>
                   </Text>
                 </View>
               </View>
             </View>
+        
           </SectionContainer>
           {/**INtegrate */}
           <SectionContainer>
@@ -489,7 +489,6 @@ const Business = () => {
                 <View style={{ gap: 30, width: "40%" }}>
                   <Title
                     textSize={40}
-                    textFamily={"Poppins-SemiBold"}
                     title={"Integrate AngleQuest with over 50 apps"}
                   />
                   <Title

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity, ImageBackground, TextInput, } from 'react-native';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
@@ -55,6 +55,9 @@ export default function Profile() {
   const [special, setSpecial] = useState('');
    const [years, setYears] = useState('');
   const [totalBalance, setTotalBalance] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const textInputRef = useRef(null);
+  const textInputRef2 = useRef(null);
 
   useEffect(() => {
     // Function to fetch balance data with token from AsyncStorage
@@ -209,29 +212,6 @@ export default function Profile() {
     setCertifications(newCertifications);
   };
 
-  const [otherExperiences, setOtherExperiences] = useState([
-    'Technical Writing',
-    'Research and Development',
-    'Quality Assurance/Quality Control (QA/QC)',
-    'Client Relationship Management',
-    'Communication skills',
-    'Feasibility Studies',
-    'Risk Management'
-  ]);
-  const [otherExperiencesModalVisible, setOtherExperiencesModalVisible] = useState(false);
-
-  const handleOpenOtherExperiences = () => {
-    setOtherExperiencesModalVisible(true);
-  };
-
-  const handleCloseOtherExperiencesModal = () => {
-    setOtherExperiencesModalVisible(false);
-  };
-
-  const handleSaveOtherExperiences = (newOtherExperiences) => {
-    setOtherExperiences(newOtherExperiences);
-  };
-
   const [preferredRoles, setPreferredRoles] = useState([
     'Microsoft Azure',
   ]);
@@ -292,6 +272,19 @@ export default function Profile() {
     } catch (error) {
       console.error('Save Error:', error);
       alert('Failed to save. Please try again.');
+    }
+  };
+
+  // Function to focus on TextInput
+  const handleFocus = () => {
+    if (textInputRef.current) {
+      textInputRef.current.focus(); // Step 2: Focus the TextInput
+    }
+  };
+
+  const handleFocus2 = () => {
+    if (textInputRef2.current) {
+      textInputRef2.current.focus(); // Step 2: Focus the TextInput
     }
   };
   
@@ -483,15 +476,22 @@ export default function Profile() {
                <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
                  {t('What part of')} {preferredRole}  {t('do you specialize in')}?
                </Text>
-              
+               <TouchableOpacity onPress={handleFocus}>
+                 <Image
+                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                   style={{ width: 20, height: 20 }}
+                   resizeMode="cover"
+                 />
+               </TouchableOpacity>
              </View>
              <View style={{ marginRight: 50 }}>
                <View style={styles.container}>
                  <View style={styles.row}>
                    <TextInput
-                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start', borderWidth: 1, borderColor: '#206C00' }]}
-                     placeholder="Type here Example: Microsoft Azure"
-                     placeholderTextColor="black"
+                     ref={textInputRef} 
+                     style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'flex-start', borderWidth: 1, borderColor: '#206C00', width: 180 }]}
+                     placeholder="Example: Microsoft Azure"
+                     placeholderTextColor="grey"
                      value={special}
                      onChangeText={setSpecial}
                    />
@@ -506,15 +506,22 @@ export default function Profile() {
                <Text style={{ fontSize: 18, textAlign: 'justify', fontWeight: '500', color: '#206C00', fontFamily: 'Roboto-Light' }}>
                  {t('How many years of experience do you have in')} {special}?
                </Text>
-
+               <TouchableOpacity onPress={handleFocus2}>
+                  <Image
+                    source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6326875147d814303309b6b133e12c983f42b31e7c4e6b223f7fbc169c262b88?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                    style={{ width: 20, height: 20 }}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
              </View>
              <View style={{ marginRight: 50 }}>
                <View style={styles.container}>
                  <View style={styles.row}>
                    <TextInput
+                     ref={textInputRef2}
                      style={[styles.text, { backgroundColor: '#d3f9d8', fontFamily: 'Roboto-Light', textAlign: 'center', borderWidth: 1, borderColor: '#206C00',  fontSize: 16, width: 50 }]}
                      placeholder="2"
-                     placeholderTextColor="black"
+                     placeholderTextColor="grey"
                      value={years}
                      onChangeText={setYears}
                    />

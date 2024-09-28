@@ -8,6 +8,14 @@
         "index": 3341
       }
     ],
+    "Screens/Individual.js": [
+      {
+        "id": "f4f5584d-ce1a-4e7b-a9c5-1b9289dbff8f",
+        "line": 232,
+        "version": 14,
+        "index": 8621
+      }
+    ],
     "components/ChatScreen.js": [
       {
         "id": "7ffb62a6-7979-460f-9b05-c01d506e23d6",

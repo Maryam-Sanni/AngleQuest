@@ -31,19 +31,17 @@ const SidededCard = ({
       <View style={{ gap: 14, width: 600 }}>
         {community && (
           <Title
-            textFamily={"Poppins-Regular"}
             textSize={20}
             title={"Cross Community Learning"}
             textColor={"#135837"}
           />
         )}
         <Title
-          textFamily={"Poppins-SemiBold"}
           textSize={30}
           style={{ marginBottom: 10 }}
           title={title}
         />
-        <Title textFamily={"Poppins-Regular"} textSize={24} title={desc} />
+        <Title textSize={24} title={desc} />
         {!community && <SimpleBtn title={"Start Now"} />}
       </View>
     </View>

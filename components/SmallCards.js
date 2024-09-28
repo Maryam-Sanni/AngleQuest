@@ -55,13 +55,11 @@ const SmallCards = ({
           <Title
             title={title}
             textSize={14}
-            textFamily={"Poppins-SemiBold"}
             center
           />
           <Title
             title={desc}
             textSize={10}
-            textFamily={"Poppins-Regular"}
             center
           />
         </View>

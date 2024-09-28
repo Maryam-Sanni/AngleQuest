@@ -26,9 +26,11 @@ import ImageBtn from "../components/ImageBtn";
 import DottedImage from "../components/DottedImage";
 import SmallCards from "../components/SmallCards";
 import MainTitle from "../components/MainTitle";
+import { useNavigate } from 'react-router-dom';
 
 const Individual = () => {
   const [ModalVisible, setModalVisible] = useState(false);
+   const navigate = useNavigate();
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -38,6 +40,10 @@ const Individual = () => {
     onClose();
   };
 
+  const handleIndividualSignUp = () => {
+    navigate('/sign-up', { state: { signUpOption: 1 } });
+  };
+  
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -52,7 +58,6 @@ const Individual = () => {
                   textSize={14}
                   textWeight={"300"}
                   title={"Individual"}
-                  textFamily={"Poppins-Regular"}
                   center
                 />
                 <MainTitle
@@ -66,7 +71,6 @@ const Individual = () => {
                   title={
                     "Focus on what matters most with this free to use AngleQuest AI"
                   }
-                  textFamily={"Poppins-Regular"}
                   center
                 />
 
@@ -92,6 +96,7 @@ const Individual = () => {
                 </Row>
 
                 <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity onPress={handleIndividualSignUp}>
                   <MainButtons
                     gradient
                     title={"Get Started"}
@@ -100,6 +105,7 @@ const Individual = () => {
                       <AntDesign name="arrowright" size={10} color="#ffff" />
                     }
                   />
+                  </TouchableOpacity>
                 </View>
 
                 <View
@@ -188,7 +194,6 @@ const Individual = () => {
                     imageStyle={{ width: "100%", height: "100%" }}
                   >
                     <Title
-                      textFamily={"Poppins-SemiBold"}
                       textSize={24}
                       center
                       style={{ width: 510, marginTop: 40 }}
@@ -202,7 +207,6 @@ const Individual = () => {
           <SectionContainer>
             <View style={{ width: 1400, gap: 70, paddingHorizontal: 100 }}>
               <Title
-                textFamily={"Poppins-SemiBold"}
                 textSize={32}
                 center
                 style={{ width: 666, alignSelf: "center" }}
@@ -233,19 +237,18 @@ const Individual = () => {
             <View style={{ width: 1400, gap: 40 }}>
               <View style={{ gap: 10, alignItems: "center" }}>
                 <Title
-                  textFamily={"Poppins-SemiBold"}
                   textSize={32}
                   center
                   style={{ width: 666, alignSelf: "center" }}
-                  title="Try AngleQuest today"
+                  title="Try anglequest today"
                 />
                 <Title
-                  textFamily={"Poppins-Regular"}
                   textSize={16}
                   center
                   style={{ width: 666, alignSelf: "center" }}
                   title="14-day free trial | No credit card needed"
                 />
+                <TouchableOpacity onPress={handleIndividualSignUp}>
                 <MainButtons
                   gradient
                   title={"Get Started"}
@@ -253,6 +256,7 @@ const Individual = () => {
                   icon={<AntDesign name="arrowright" size={10} color="#ffff" />}
                   style={{ marginTop: 30 }}
                 />
+                </TouchableOpacity>
               </View>
               <View
                 style={{
@@ -280,14 +284,13 @@ const Individual = () => {
                   <Text
                     style={{
                       fontSize: 20,
-                      fontFamily: "Poppins-SemiBold",
                       textAlign: "center",
                       color: "white",
                       marginVertical: 30,
                     }}
                   >
                     Kylie J
-                    <Text style={{ fontFamily: "Poppins-Regular" }}>
+                    <Text style={{  }}>
                       | Manager (Operations), Protozisk Ltd.
                     </Text>
                   </Text>
@@ -310,7 +313,6 @@ const Individual = () => {
                 <View style={{ gap: 30, width: "40%" }}>
                   <Title
                     textSize={40}
-                    textFamily={"Poppins-SemiBold"}
                     title={"Integrate AngleQuest with over 50 apps"}
                   />
                   <Title

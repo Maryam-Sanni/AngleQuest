@@ -38,14 +38,12 @@ const CardItem = ({ onHover, title, desc, img, img1, bgColor, active }) => {
             style={{ width: 360 }}
             textSize={24}
             textColor={bgColor ? "white" : "black"}
-            textFamily={"Poppins-SemiBold"}
           />
           <Title
             title={desc}
             textColor={bgColor ? "white" : "black"}
             style={{ width: 381 }}
             textSize={16}
-            textFamily={"Poppins-Regular"}
           />
         </View>
       </Pressable>
@@ -71,7 +69,6 @@ const CardItem = ({ onHover, title, desc, img, img1, bgColor, active }) => {
         style={{ width: 164 }}
         textColor={bgColor ? "white" : "black"}
         title={title}
-        textFamily={"Poppins-SemiBold"}
       />
     </Pressable>
   );

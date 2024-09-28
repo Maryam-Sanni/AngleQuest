@@ -17,14 +17,14 @@ const Checkedbutton = ({ text, unchecked }) => {
         }}
       >
         <Ionicons name="square-outline" size={20} color={"#A2EEC9"} />
-        <Title textSize={14} textFamily={"Poppins-Regular"} title={text} />
+        <Title textSize={14} title={text} />
       </Row>
     );
   } else {
     return (
       <Row style={{ gap: 12 }}>
         <AntDesign name="checkcircle" size={16} color={"#135837"} />
-        <Title textSize={14} textFamily={"Poppins-Regular"} title={text} />
+        <Title textSize={14} title={text} />
       </Row>
     );
   }

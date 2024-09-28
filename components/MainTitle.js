@@ -7,7 +7,6 @@ const MainTitle = ({ width, title, secondTitle, thirdTitle, forthTitle }) => {
       style={{
         marginVertical: 20,
         width: width ? width : 666,
-        fontFamily: "Poppins-Bold",
         fontSize: 40,
         fontWeight: "700",
         alignSelf: "center",

@@ -30,9 +30,11 @@ import philips from "../assets/philips.png";
 import alix from "../assets/alix.png";
 import MainTitle from "../components/MainTitle";
 import SmallCards from "../components/SmallCards";
+import { useNavigate } from 'react-router-dom';
 
 const Community = () => {
   const [ModalVisible, setModalVisible] = useState(false);
+   const navigate = useNavigate();
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -42,6 +44,10 @@ const Community = () => {
     onClose();
   };
 
+  const handleIndividualSignUp = () => {
+    navigate('/sign-up', { state: { signUpOption: 1 } });
+  };
+  
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -56,7 +62,6 @@ const Community = () => {
                   textSize={14}
                   textWeight={"300"}
                   title={"Community"}
-                  textFamily={"Poppins-Regular"}
                   center
                 />
                 <MainTitle
@@ -70,7 +75,6 @@ const Community = () => {
                   title={
                     "Focus on what matters most with this free to use AngleQuest AI"
                   }
-                  textFamily={"Poppins-Regular"}
                   center
                 />
 
@@ -96,6 +100,7 @@ const Community = () => {
                 </Row>
 
                 <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity onPress={handleIndividualSignUp}>
                   <MainButtons
                     gradient
                     title={"Get Started"}
@@ -104,6 +109,7 @@ const Community = () => {
                       <AntDesign name="arrowright" size={10} color="#ffff" />
                     }
                   />
+                  </TouchableOpacity>
                 </View>
 
                 <View
@@ -192,7 +198,6 @@ const Community = () => {
                     imageStyle={{ width: "100%", height: "100%" }}
                   >
                     <Title
-                      textFamily={"Poppins-SemiBold"}
                       textSize={24}
                       center
                       style={{ width: 510, marginTop: 40 }}
@@ -206,7 +211,6 @@ const Community = () => {
           <SectionContainer>
             <View style={{ width: 1400, gap: 70, paddingHorizontal: 100 }}>
               <Title
-                textFamily={"Poppins-SemiBold"}
                 textSize={32}
                 center
                 style={{ width: 666, alignSelf: "center" }}
@@ -243,17 +247,16 @@ const Community = () => {
             >
               <View style={{ width: 810, gap: 20, alignItems: "center" }}>
                 <Title
-                  textFamily={"Poppins-SemiBold"}
                   center
                   textSize={32}
                   title="Make decisions with confidence"
                 />
                 <Title
-                  textFamily={"Poppins-Regular"}
                   center
                   textSize={20}
                   title="Ready to see how monday.com improves alignment across teams?"
                 />
+                <TouchableOpacity onPress={handleIndividualSignUp}>
                 <MainButtons
                   gradient
                   title={"Get Started"}
@@ -262,6 +265,7 @@ const Community = () => {
                   width={170}
                   icon={<AntDesign name="arrowright" size={18} color="#ffff" />}
                 />
+                </TouchableOpacity>
               </View>
             </View>
           </SectionContainer>
@@ -321,7 +325,6 @@ const Community = () => {
                 >
                   <Title
                     textSize={40}
-                    textFamily={"Poppins-Bold"}
                     textWeight={"700"}
                     style={{ width: 335 }}
                     title={"Why customers love using AngleQuest"}
@@ -346,14 +349,13 @@ const Community = () => {
                   <Text
                     style={{
                       fontSize: 16,
-                      fontFamily: "Poppins-SemiBold",
                       //  textAlign: "center",
                       color: "white",
                       marginVertical: 10,
                     }}
                   >
                     Kylie J
-                    <Text style={{ fontFamily: "Poppins-Regular" }}>
+                    <Text style={{ }}>
                       | Manager (Operations), Protozisk Ltd.
                     </Text>
                   </Text>
@@ -396,20 +398,19 @@ const Community = () => {
                   >
                     <Title
                       textSize={30}
-                      textFamily={"Poppins-SemiBold"}
                       textWeight={"700"}
                       title={`Learn more About AngleQuest`}
                     />
                     <Title
                       textSize={20}
                       textWeight={"400"}
-                      textFamily={"Poppins-Regular"}
                       title={`Instantly send emails when due dates arrive, and receive real-time updates when tasks are completed — so your team is always aligned.`}
                     />
                   </View>
                 </View>
               </Row>
               <View style={{ alignItems: "center", marginTop: 20 }}>
+                <TouchableOpacity onPress={handleIndividualSignUp}>
                 <MainButtons
                   gradient
                   title={"Get Started"}
@@ -418,6 +419,7 @@ const Community = () => {
                   width={170}
                   icon={<AntDesign name="arrowright" size={18} color="#ffff" />}
                 />
+                </TouchableOpacity>
               </View>
             </View>
           </SectionContainer>
