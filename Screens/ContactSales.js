@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import Footer from "../components/Footer";
 import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
@@ -60,6 +61,18 @@ const Input = ({ label, req, val, onChangeText, keyboardType, multiline }) => {
 const MyComponent = () => {
   const navigate = useNavigate();
   const [ModalVisible, setModalVisible] = useState(false);
+  const [topPosition, setTopPosition] = useState(20); 
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -105,9 +118,16 @@ const MyComponent = () => {
   const [manage, setManage] = useState("");
   const [help, setHelp] = useState("");
   return (
-    <View style={{ flex: 1 }}>
-      <Top value={2} intensity={100} tint={"light"} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, }}>
+          <Top2 tint={"dark"} />
+              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                <Top value={3} intensity={100} />
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                onScroll={handleScroll}  // Attach scroll listener
+                scrollEventThrottle={16} // Frequency of scroll events
+              >
         <View style={styles.container}>
           {/**professional AngleQuest */}
           <View

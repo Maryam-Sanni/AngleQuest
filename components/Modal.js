@@ -126,7 +126,7 @@ const ProductsMenu = ({ visible, onClose }) => {
             width: 1400,
             // marginHorizontal: 50,
             //   marginTop: 50,
-            height: 480,
+            height: 400,
             //  flex: 1,
           }}
         >
@@ -144,13 +144,14 @@ const ProductsMenu = ({ visible, onClose }) => {
               // elevation: 10,
             }}
           >
+            
             <NavButtons
-              text={"Business"}
+              text={"Individual"}
               onPress={() => setActiveIndex(1)}
               active={activeIndex === 1 ? true : false}
             />
             <NavButtons
-              text={"Individual"}
+              text={"Business"}
               onPress={() => setActiveIndex(2)}
               active={activeIndex === 2 ? true : false}
             />
@@ -162,90 +163,36 @@ const ProductsMenu = ({ visible, onClose }) => {
           </View>
           {activeIndex === 1 ? (
             <View style={{ margin: 50 }}>
-              <Row style={{ justifyContent: "space-between" }}>
-                <SelectedItem
-                  onPress={() => setActiveItem(1)}
-                  active={activeItem === 1 ? true : false}
-                  desc="Simplify onboarding with tailored resources and training to help new employees integrate quickly."
-                  title="New Hire Support"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(2)}
-                  active={activeItem === 2 ? true : false}
-                  desc="Targeted training and expert support to improve employee performance."
-                  title="Boost Under-performance"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(3)}
-                  active={activeItem === 3 ? true : false}
-                  desc="Intensive mentorship program to quickly enhance employee skill and productivity."
-                  title="Rapid Upskilling"
-                />
-              </Row>
-              <Row style={{ justifyContent: "space-between" }}>
-                <SelectedItem
-                  onPress={() => setActiveItem(4)}
-                  active={activeItem === 4 ? true : false}
-                  desc="An environment tailored to help you learn a new skill even if you have zero prequisite knowledge."
-                  title="New Skill Acquisition"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(5)}
-                  active={activeItem === 5 ? true : false}
-                  desc="Specialized training and mentorship to elevate junior employees to senior roles."
-                  title="Junior to Senior Boost"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(6)}
-                  active={activeItem === 6 ? true : false}
-                  desc="Accelerated career progression with structured mentorship and advanced training for senior employees."
-                  title="Senior to Architect Boost"
-                />
-              </Row>
+              <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>AngleQuest Team Impact</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Boost Under-performance</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Rapid Upskilling</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>New Skill Acquisition</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Junior to Senior Boost</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Senior to Architect Boost</Text>
+              
             </View>
           ) : activeIndex === 2 ? (
+          <View style={{ margin: 50 }}>
+            <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>New Hire Support</Text>
+             <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Boost Under-performance</Text>
+             <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Rapid Upskilling</Text>
+             <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>New Skill Acquisition</Text>
+             <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Junior to Senior Boost</Text>
+             <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Senior to Architect Boost</Text>
+
+          </View>
+
+          ) : activeIndex === 3 ? (
             <View style={{ margin: 50 }}>
-              <Row style={{}}>
-                <SelectedItem
-                  onPress={() => setActiveItem(7)}
-                  active={activeItem === 7 ? true : false}
-                  desc="Measuring and analyzing the domain knowledge and billable work of your team members."
-                  title="AngleQuest Team Impact"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(8)}
-                  active={activeItem === 8 ? true : false}
-                  desc="Targeted training and expert support to improve employee performance."
-                  title="Boost Under-performance"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(9)}
-                  active={activeItem === 9 ? true : false}
-                  desc="Intensive mentorship program to quickly enhance employee skill and productivity."
-                  title="Rapid Upskilling"
-                />
-              </Row>
-              <Row style={{ justifyContent: "space-between" }}>
-                <SelectedItem
-                  onPress={() => setActiveItem(10)}
-                  active={activeItem === 10 ? true : false}
-                  desc="An environment tailored to help you learn a new skill even if you have zero prequisite knowledge."
-                  title="New Skill Acquisition"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(11)}
-                  active={activeItem === 11 ? true : false}
-                  desc="Career development platform optimized with resources to explore career paths, set goals and track professional development."
-                  title="Junior to Senior Boost"
-                />
-                <SelectedItem
-                  onPress={() => setActiveItem(12)}
-                  active={activeItem === 12 ? true : false}
-                  desc="Accelerated career progression with structured mentorship and advanced training for senior employees."
-                  title="Senior to Architect Boost"
-                />
-              </Row>
+              <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>New Hire Support</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Boost Under-performance</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Rapid Upskilling</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>New Skill Acquisition</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Junior to Senior Boost</Text>
+               <Text style={{fontWeight: "500", marginTop: 10, fontSize: 18}}>Senior to Architect Boost</Text>
+
             </View>
+          
           ) : null}
         </Row>
         {/* 

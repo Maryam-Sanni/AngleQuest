@@ -11,6 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
 import Title from "../components/Title";
@@ -40,6 +41,18 @@ const SignUp = () => {
    const location = useLocation();
   const { signUpOption: routeSignUpOption } = location.state || { signUpOption: 0 }; // Get from location
   const [signUpOption, setSignUpOption] = useState(routeSignUpOption); // Initialize state
+  const [topPosition, setTopPosition] = useState(20); 
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
 
   // Optionally, if you want to sync state when route changes
   useEffect(() => {
@@ -141,9 +154,16 @@ const SignUp = () => {
   };
   
   return (
-    <View style={{ flex: 1 }}>
-      <Top value={3} intensity={100} tint={"light"} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, }}>
+          <Top2 tint={"dark"} />
+              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                <Top value={3} intensity={100} />
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                onScroll={handleScroll}  // Attach scroll listener
+                scrollEventThrottle={16} // Frequency of scroll events
+              >
         <View style={styles.container}>
           <View
             style={{

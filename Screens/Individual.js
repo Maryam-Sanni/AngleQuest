@@ -11,6 +11,7 @@ import {
   ImageBackground,
 } from "react-native";
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import OpenModal from "../LandingPage/Collectinfo";
 //import Footer from "./Footer";
 import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
@@ -26,11 +27,28 @@ import ImageBtn from "../components/ImageBtn";
 import DottedImage from "../components/DottedImage";
 import SmallCards from "../components/SmallCards";
 import MainTitle from "../components/MainTitle";
+import CertificateSection from "../Screens/CertificatesSection";
+import NoCreditSection from "../LandingPage/IndividualAdv";
+import NextStep from "../LandingPage/NextStep";
+import Reviews from "../LandingPage/Reviews";
+import VideoFooter from "../LandingPage/VideoFooter";
 import { useNavigate } from 'react-router-dom';
 
 const Individual = () => {
   const [ModalVisible, setModalVisible] = useState(false);
    const navigate = useNavigate();
+  const [topPosition, setTopPosition] = useState(20); 
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -45,21 +63,23 @@ const Individual = () => {
   };
   
   return (
-    <View style={{ flex: 1, position: "relative" }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, }}>
+          <Top2 tint={"dark"} />
+              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                <Top value={3} intensity={100} />
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                onScroll={handleScroll}  // Attach scroll listener
+                scrollEventThrottle={16} // Frequency of scroll events
+              >
         <View style={styles.container}>
-          <Top value={3} intensity={100} tint={"dark"} />
 
           {/**Individual */}
           <SectionContainer>
             <View style={{ width: 1400 }}>
-              <View style={{ gap: 10 }}>
-                <Title
-                  textSize={14}
-                  textWeight={"300"}
-                  title={"Individual"}
-                  center
-                />
+              <View style={{ gap: 10, marginTop: 50 }}>
+                
                 <MainTitle
                   title={"Discover how efficient you can be with"}
                   secondTitle={"AngleQuest AI"}
@@ -179,59 +199,17 @@ const Individual = () => {
                     }
                   />
 
-                  <ImageBackground
-                    source={require("../assets/blurrybg.png")}
-                    style={{
-                      width: "120%",
-                      height: 262,
-                      zIndex: 3,
-                      position: "absolute",
-                      left: 0,
-                      bottom: 20,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    imageStyle={{ width: "100%", height: "100%" }}
-                  >
-                    <Title
-                      textSize={24}
-                      center
-                      style={{ width: 510, marginTop: 40 }}
-                      title="Explore even more artificial intelligence that AngleQuest has to offer"
-                    />
-                  </ImageBackground>
+               
+                  
+                  
                 </View>
               </View>
             </View>
           </SectionContainer>
-          <SectionContainer>
-            <View style={{ width: 1400, gap: 70, paddingHorizontal: 100 }}>
-              <Title
-                textSize={32}
-                center
-                style={{ width: 666, alignSelf: "center" }}
-                title="Explore even more requests that AngleQuest AI has to offer"
-              />
-              <SidededCard
-                img={require("../assets/inHouse.png")}
-                title="Stay up-to-date"
-                desc="Instantly send emails when due dates arrive, and receive real-time updates when tasks are completed — so your team is always aligned."
-              />
-              <SidededCard
-                reverse
-                width={403}
-                height={360}
-                img={require("../assets/act21.png")}
-                title="Stay up-to-date"
-                desc="Leave repetitive work behind. Avoid unnecessary meetings, lengthy email chains, and more by setting up customizable automations within minutes."
-              />
-              <SidededCard
-                img={require("../assets/consult.png")}
-                title="Make use of our AI your own way"
-                desc="Leave repetitive work behind. Avoid unnecessary meetings, lengthy email chains, and more by setting up customizable automations within minutes."
-              />
-            </View>
-          </SectionContainer>
+           {<CertificateSection />}
+
+           {<NoCreditSection />}
+                   
 
           <SectionContainer>
             <View style={{ width: 1400, gap: 40 }}>
@@ -258,167 +236,15 @@ const Individual = () => {
                 />
                 </TouchableOpacity>
               </View>
-              <View
-                style={{
-                  backgroundColor: "#135837",
-                  width: "100%",
-
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: 40,
-                  gap: 30,
-                  marginVertical: 40,
-                }}
-              >
-                <Image
-                  style={{ marginTop: -80, width: 80, height: 80 }}
-                  source={require("../assets/holes.png")}
-                />
-                <View style={{ width: 666, alignItems: "center" }}>
-                  <Title
-                    textColor={"white"}
-                    textSize={36}
-                    center
-                    title={`We increased our project capacity significantly in a few months thanks to the 40,000+ human actions we save each month with automations.`}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      textAlign: "center",
-                      color: "white",
-                      marginVertical: 30,
-                    }}
-                  >
-                    Kylie J
-                    <Text style={{  }}>
-                      | Manager (Operations), Protozisk Ltd.
-                    </Text>
-                  </Text>
-                </View>
-              </View>
+             
+              {<Reviews />}
             </View>
           </SectionContainer>
-          {/**INtegrate */}
-          <SectionContainer>
-            <View
-              style={{
-                width: 1400,
-                position: "relative",
-                paddingVertical: 40,
-              }}
-            >
-              <DottedImage style={{ top: -20, left: -20 }} />{/*
-              <DottedImage down style={{ bottom: -20, right: -20 }} />*/}
-              <Row style={{}}>
-                <View style={{ gap: 30, width: "40%" }}>
-                  <Title
-                    textSize={40}
-                    title={"Integrate AngleQuest with over 50 apps"}
-                  />
-                  <Title
-                    textSize={20}
-                    textWeight={"400"}
-                    title={
-                      "AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on AngleQuest Integrated Apps"
-                    }
-                  />
-                  <Row style={{ gap: 10, alignItems: "center", marginTop: 10 }}>
-                    <Title
-                      title={"Learn more"}
-                      textSize={16}
-                      textColor={"#135837"}
-                    />
 
-                    <AntDesign name="arrowright" size={18} color="#135837" />
-                  </Row>
-                </View>
-                <View style={{ width: "60%", gap: 20 }}>
-                  <Row
-                    style={{
-                      justifyContent: "flex-end",
-                      gap: 20,
-                      width: "100%",
-                    }}
-                  >
-                    <ImageBtn
-                      width={150}
-                      height={38}
-                      img={require("../assets/slackImg.png")}
-                    />
-                  </Row>
-                  <Row
-                    style={{
-                      justifyContent: "flex-end",
-                      gap: 20,
-                      width: "100%",
-                    }}
-                  >
-                    <ImageBtn
-                      width={100}
-                      height={50}
-                      img={require("../assets/bobImg.png")}
-                    />
-                    <ImageBtn
-                      width={100}
-                      height={50}
-                      img={require("../assets/sapImg.png")}
-                    />
-                  </Row>
-                  <Row
-                    style={{
-                      justifyContent: "flex-end",
-                      gap: 20,
-                      width: "100%",
-                    }}
-                  >
-                    <ImageBtn
-                      width={100}
-                      height={30}
-                      img={require("../assets/clickUpImg.png")}
-                    />
-                    <ImageBtn
-                      width={113}
-                      height={27}
-                      img={require("../assets/calendlyImg.png")}
-                    />
-                    <ImageBtn
-                      width={50}
-                      height={50}
-                      img={require("../assets/microsoftImg.png")}
-                    />
-                  </Row>
-                  <Row
-                    style={{
-                      justifyContent: "flex-end",
-                      gap: 20,
-                      width: "100%",
-                    }}
-                  >
-                    <ImageBtn
-                      width={150}
-                      height={30}
-                      img={require("../assets/mondayImg.png")}
-                    />
-                    <ImageBtn
-                      width={100}
-                      height={30}
-                      img={require("../assets/servicenowImg.png")}
-                    />
-                    <ImageBtn
-                      width={60}
-                      height={60}
-                      img={require("../assets/googleCalendarImg.png")}
-                    />
-                    <ImageBtn
-                      width={117}
-                      height={30}
-                      img={require("../assets/linkedInImg.png")}
-                    />
-                  </Row>
-                </View>
-              </Row>
-            </View>
-          </SectionContainer>
+          {<NextStep />}
+          
+
+           {<VideoFooter />}
           {/*  Footer */}
           <Footer />
         </View>

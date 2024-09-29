@@ -190,7 +190,7 @@ const Footer = ({ bgColor }) => {
                   style={{ maxWidth: 364, lineHeight: 21 }}
                   textColor={"white"}
                   title={
-                    "Hello fam, would you like to get emails regarding our products and services, updates and changes? Subscribe to our Newsletter. "
+                    "Hey there! Want to stay updated on our latest products, services, and news? Subscribe to our newsletter for all the updates and announcements!"
                   }
                 />
               </View>

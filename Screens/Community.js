@@ -11,6 +11,7 @@ import {
   ImageBackground,
 } from "react-native";
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import OpenModal from "../LandingPage/Collectinfo";
 //import Footer from "./Footer";
 import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
@@ -35,6 +36,18 @@ import { useNavigate } from 'react-router-dom';
 const Community = () => {
   const [ModalVisible, setModalVisible] = useState(false);
    const navigate = useNavigate();
+  const [topPosition, setTopPosition] = useState(20); 
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -49,21 +62,23 @@ const Community = () => {
   };
   
   return (
-    <View style={{ flex: 1, position: "relative" }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, }}>
+          <Top2 tint={"dark"} />
+              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                <Top value={3} intensity={100} />
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                onScroll={handleScroll}  // Attach scroll listener
+                scrollEventThrottle={16} // Frequency of scroll events
+              >
         <View style={styles.container}>
-          <Top value={3} intensity={100} tint={"dark"} />
 
           {/**Individual */}
           <SectionContainer>
             <View style={{ width: 1400 }}>
               <View style={{ gap: 10 }}>
-                <Title
-                  textSize={14}
-                  textWeight={"300"}
-                  title={"Community"}
-                  center
-                />
+                
                 <MainTitle
                   title={"Discover how efficient you can be with"}
                   secondTitle={"AngleQuest AI"}

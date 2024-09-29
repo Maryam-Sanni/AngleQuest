@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   hText: {
     fontSize: 18,
     marginRight: 5,
-    color: 'white',
+    color: 'black',
     fontWeight: 500,
   },
   arrowdown: {

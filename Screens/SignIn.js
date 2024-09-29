@@ -8,6 +8,7 @@ import {
   ScrollView, ActivityIndicator, TextInput
 } from "react-native";
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
 import Title from "../components/Title";
@@ -28,6 +29,18 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const maskedPassword = passwordVisible ? password : '*'.repeat(password.length);
+  const [topPosition, setTopPosition] = useState(20); 
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
   
   const handleSignUp = () => {
  navigate("/sign-up");
@@ -112,9 +125,16 @@ const SignIn = () => {
   };
   
   return (
-    <View style={{ flex: 1 }}>
-      <Top value={3} intensity={100} tint={"light"} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={{ flex: 1, }}>
+          <Top2 tint={"dark"} />
+              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                <Top value={3} intensity={100} />
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                onScroll={handleScroll}  // Attach scroll listener
+                scrollEventThrottle={16} // Frequency of scroll events
+              >
         <View style={styles.container}>
           {/**professional AngleQuest */}
           <View
@@ -134,6 +154,7 @@ const SignIn = () => {
                   // paddingVertical: 60,
                   paddingHorizontal: 140,
                   gap: 50,
+                  marginTop: 50,
                 }}
               >
                 <View>

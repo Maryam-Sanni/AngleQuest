@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,27 @@ const MyComponent = ({ value, tint, intensity }) => {
   const [showSolutionsPopup, setShowSolutionsPopup] = useState(false);
   const [showMorePopup, setShowMorePopup] = useState(false);
   const [activeIndex, setActiveIndex] = useState(value);
+  const [topPosition, setTopPosition] = useState(45);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check how far the page has been scrolled
+      if (window.scrollY > 50) {
+        setTopPosition(0); // Move the top bar to the very top
+      } else {
+        setTopPosition(45); // Keep the top bar in its initial position
+      }
+    };
+
+    // Add the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  
   const handleProductsHover = () => {
   //  setShowMenu(true);
     setShowProductsPopup(true);
@@ -99,7 +119,7 @@ const MyComponent = ({ value, tint, intensity }) => {
   );
 
   return (
-    <View style={styles.container}>
+     <View style={[styles.container, { top: topPosition }]}>
       <BlurView
         intensity={intensity ? intensity : 100}
         tint={tint}
@@ -116,7 +136,7 @@ const MyComponent = ({ value, tint, intensity }) => {
           </TouchableOpacity>
           <HButton //onPress={handleProductsHover}
             title={"Products"}
-            textColor={"white"}
+            textColor={"black"}
             dropdown
             onPress={handleProductsHover}
           />
@@ -181,20 +201,17 @@ const MyComponent = ({ value, tint, intensity }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-     backgroundColor: "rgba(0, 0, 0, 0.8)",
-    width: 1400,
-    alignSelf: "center",
-    borderRadius: 12,
+marginTop: -20,
+    backgroundColor: "#F6F6F6",
+    transition: "top 0.1s ease", 
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 17,
+    padding: 10,
     justifyContent: "space-between",
     alignItems: "center",
-    height: 83,
-    borderRadius: 12,
+    height: 75,
   },
   right: {
     flexDirection: "row",

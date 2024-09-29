@@ -12,11 +12,13 @@ import {
 } from "react-native";
 import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
 import OpenModal from "../LandingPage/Collectinfo";
 //import Footer from "./Footer";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import MainButtons from "../LandingPage/MainButton";
-import NoCreditSection from "../LandingPage/NoCreditSection";
+import NoCreditSection from "../LandingPage/HomeFooter";
+import BoxSection from "../LandingPage/BoxSection";
 import { LinearGradient } from "expo-linear-gradient";
 import Title from "../components/Title";
 import Row from "../components/Row";
@@ -76,7 +78,7 @@ const cardSliderData = [
     id: 6,
     color: "#292929",
     text: "Organizational Knowledge",
-    personImg: require("../assets/person4.png"),
+    personImg: require("../assets/success.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/individual",
   },
@@ -215,7 +217,6 @@ const CardItem = ({ title, cardImg, personImg, bgColor, navigationTarget }) => {
           width: 320,
           backgroundColor: bgColor ? bgColor : "white",
           height: 400,
-
           position: "relative",
           borderRadius: 20,
         }}
@@ -285,7 +286,7 @@ const CardItem = ({ title, cardImg, personImg, bgColor, navigationTarget }) => {
           textColor={bgColor ? "white" : "black"}
           textWeight={"700"}
         />
-        <View style={{ alignItems: "flex-end", marginTop: -45 }}>
+        <View style={{ alignItems: "flex-end", marginTop: -55 }}>
           <Image
             style={{
               width: 197,
@@ -352,6 +353,20 @@ const MyComponent = () => {
   const [ModalVisible, setModalVisible] = useState(false);
   const scrollRef = useRef(null);
   const videoRef = useRef(null);
+  const [topPosition, setTopPosition] = useState(20); 
+  
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
+    } else {
+      setTopPosition(20); 
+    }
+  };
+
+
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -377,29 +392,23 @@ const MyComponent = () => {
         style={{
           position: "absolute",
           top: 190,
-          left: left && 10,
-          right: !left && 10,
+          left: left ? 0 : undefined,   // Only apply `left` if `left` is true
+          right: !left ? 10 : undefined, // Only apply `right` if `left` is false
           alignItems: "center",
           justifyContent: "center",
           padding: 10,
           zIndex: 200,
         }}
-        onPress={() => scrollRef.current?.scrollTo({ x: -200, animated: true })}
+        onPress={onPress} // Use the appropriate handler for scrolling
       >
-        {left ? (
         <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=99284&format=png&color=000000' }}
+          source={{
+            uri: left
+              ? 'https://img.icons8.com/?size=100&id=99284&format=png&color=000000'
+              : 'https://img.icons8.com/?size=100&id=100007&format=png&color=000000',
+          }}
           style={{ width: 50, height: 50 }}
         />
-        ) : (
-        <TouchableOpacity
-         onPress={() => scrollRef.current?.scrollTo({ x: 500, animated: true })}>
-        <Image
-          source={{ uri: 'https://img.icons8.com/?size=100&id=100007&format=png&color=000000' }}
-          style={{ width: 50, height: 50 }}
-        />
-        </TouchableOpacity>
-        )}
       </TouchableOpacity>
     );
   };
@@ -419,41 +428,62 @@ const MyComponent = () => {
   const handleBusinessSignUp = () => {
     navigate('/sign-up', { state: { signUpOption: 3 } });
   };
+
+  const handleScrollLeft = () => {
+    scrollRef.current?.scrollTo({
+      x: -300, // Adjust as needed
+      y: 0,
+      animated: true,
+    });
+    setScrollPosition((prev) => Math.max(prev - 300, -300)); // Update scroll position state
+  };
+
+  // Function to handle right scroll
+  const handleScrollRight = () => {
+    scrollRef.current?.scrollTo({
+      x: 2000, // Adjust as needed
+      y: 0,
+      animated: true,
+    });
+    setScrollPosition((prev) => prev + 500); // Update scroll position state
+  };
   
   return (
-    <View style={{ flex: 1, position: "relative" }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+    <View style={{ flex: 1, }}>
+      <Top2 />
+          <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+            <Top value={3} intensity={100} />
+          </View>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            onScroll={handleScroll}  // Attach scroll listener
+            scrollEventThrottle={16} // Frequency of scroll events
+          >
         <View style={styles.container}>
-          <Video
-            resizeMode="cover"
-            videoStyle={{ width: "100%", height: 1024 }} // Can be a URL or a local file.
-            source={require("../assets/background.mp4")}
-            ref={videoRef}
-            isLooping
-            shouldPlay
-            isMuted
+          <Image
+            source={require("../assets/HomeTop.png")} 
             style={styles.backgroundVideo}
           />
-          <Top value={3} intensity={100} />
+          
           <View
             style={{
-              marginVertical: 40,
-              width: "100%",
-              paddingHorizontal: 100,
-              backgroundColor: "#fffff",
-              position: "relative",
-              height: 1024,
+              paddingVertical: 40,
+              width: "58.2%",
+              paddingHorizontal: 50,
+               backgroundColor: "rgba(0, 0, 0, 0.3)",
+              height: 650,
               alignItems: "center",
+              alignSelf: 'flex-start'
             }}
           >
-            <View style={{ width: 1400, height: "30%" }}></View>
-            <View style={{ width: 1400, height: "70%" }}>
+            <View style={{ width: "100%", height: "30%" }}></View>
+            <View style={{ width: "100%", height: "70%" }}>
               <Text
                 style={{
-                  color: "#fff",
+                  color: "black",
                   fontSize: 55,
                   fontWeight: "500",
-                  marginTop: 130,
+                  marginTop: 20,
                   maxWidth: 852,
                 }}
               >
@@ -463,14 +493,13 @@ const MyComponent = () => {
               <Text
                 style={{
                   marginTop: 30,
-                  color: "#fff",
+                  color: "black",
                   fontSize: 24,
                   fontWeight: "400",
                   maxWidth: 646,
                 }}
               >
-                Designed for individuals, teams, recruiters and enterprise who
-                wants to support their talents to succeed in the career.
+                Empower your growth and bridge the knowledge gap with expert guidance. We support your personal development, drive innovation, and foster a culture of knowledge sharing.
               </Text>
               <Row style={{ gap: 20, alignItems: "center", marginTop: 30 }}>
                 <BlurView
@@ -502,7 +531,7 @@ const MyComponent = () => {
                         fontWeight: "400",
                       }}
                     >
-                      Get started as:
+                      Get started:
                     </Text>
                     <Row style={{ alignItems: "center", gap: 20 }}>
                       <SpecialBtn text={"Individual"} onPress={handleIndividualSignUp} />
@@ -512,7 +541,7 @@ const MyComponent = () => {
                 </BlurView>
                 <TouchableOpacity onPress={gotocontact}>
                 <MainButtons
-                  title="Book a demo now"
+                  title="Book a demo"
                   height={74}
                   width={200}
                   fontSize={18}
@@ -531,22 +560,17 @@ const MyComponent = () => {
               marginVertical: 20,
               width: "100%",
               paddingLeft: 10,
-              marginTop: -70,
+              marginTop: 70,
               backgroundColor: "#fffff",
               position: "relative",
             }}
           >
             <View style={{ width: "100%" }}>
-              <View style={{ gap: 10, paddingHorizontal: 70 }}>
-                <Title
-                  textSize={28}
-                  textWeight={"700"}
-                  title={"Supercharge your growth"}
-                />
+              <View style={{ gap: 10, paddingHorizontal: 70, marginTop: 20 }}>
                 <Title
                   textSize={22}
                   title={
-                    "We know how important your work is to you, we made it our life’s work to support you."
+                    "Your success is our priority, and we've made it our mission to provide the tools, guidance, and expertise you need to excel."
                   }
                 />
                 <Row style={{ gap: 10 }}>
@@ -591,27 +615,8 @@ const MyComponent = () => {
                   )}
                 />
                     */}
-                <SliderBtn
-                  left={true}
-                  onPress={() =>
-                    scrollRef.current?.scrollTo({
-                      x: -300,
-                      y: 0,
-
-                      animated: true,
-                    })
-                  }
-                />
-                <SliderBtn
-                  left={false}
-                  onPress={() =>
-                    scrollRef.current?.scrollTo({
-                      x: 500,
-                      y: 0,
-                      animated: true,
-                    })
-                  }
-                />
+                <SliderBtn left={true} onPress={handleScrollLeft} />
+                <SliderBtn left={false} onPress={handleScrollRight} />
                 <View style={{ position: 'relative', width: '100%' }}>
                   {/* Left Fade */}
                   <LinearGradient
@@ -677,7 +682,7 @@ const MyComponent = () => {
                   center={true}
                   textWeight={"400"}
                   title={
-                    "Trusted by top professionals from startups to enterprises"
+                    "Organizations worldwide, from startups to industry leaders, trust and rely on our expertise"
                   }
                 />
               </View>
@@ -693,14 +698,7 @@ const MyComponent = () => {
                   marginBottom: 20,
                   backgroundColor: "white",
                   width: "100%",
-                  shadowColor: "rgba(200, 200, 200, 0.8)",
-                  shadowOffset: {
-                    width: 0,
-                    height: 10,
-                  },
-                  shadowOpacity: 0.4,
-                  shadowRadius: 5,
-                  elevation: 10,
+                  boxShadow: '0px 20px 40px rgba(85, 107, 47, 0.5)',
                 }}
               >
             <Image source={alix} />
@@ -710,58 +708,138 @@ const MyComponent = () => {
             <Image source={deliotte} />
             <Image source={blueforte} />
                </View>
-       
-
-          {/**professional AngleQuest */}
+          
+          <Image
+            source={require("../assets/Frame 251.png")}
+            style={styles.landingimage}
+          />
+          
+          
           <View
             style={{
-              backgroundColor: "#f5f5f5",
-              paddingVertical: 20,
-              paddingHorizontal: 160,
-              gap: 40,
+              marginVertical: -15,
+              width: "100%",
+              paddingHorizontal: 0,
+              backgroundColor: "#135837",
+              justifyContent: "center",
+              alignItems: "center",
               position: "relative",
             }}
           >
-            <View
+         
+          <View
               style={{
-                width: "100%",
-                height: "100%",
-                justifyContent: "center",
+                width: 1400,
+                // marginHorizontal: 50,
                 alignItems: "center",
-                position: "absolute",
-              }}
-            >
-              <Image
-                source={require("../assets/shadowCircle.png")}
-                style={{ marginRight: 20 }}
-              />
-            </View>
-            <View
-              style={{
-                backgroundColor: "transparent",
-                padding: 10,
-                alignSelf: "stretch",
-                justifyContent: "center",
+                marginVertical: 40,
               }}
             >
               <Text
                 style={{
-                  fontSize: 40,
-                  textAlign: "center",
-                  fontWeight: "700",
-                  marginTop: 100,
-                  marginBottom: -80,
-                  color: "#135837",
+                  fontSize: 36,
+                  marginTop: 30,
+                  fontWeight: "600",
+                  marginBottom: 10,
+                  color: "white",
                 }}
               >
-                A Toolkit to Boost Professionals & Teams Performance
+                Your Vision to excel in your career is our Mission!
               </Text>
-              <Image
-                source={require("../assets/landingco1.gif")}
-                style={styles.landingimage}
-              />
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: 20,
+                  fontWeight: "400",
+                  marginBottom: 10,
+                  color: "white",
+                  maxWidth: 793,
+                }}
+              >
+                We partner with you to achieve your personal best, offering the tools, expertise, guidance, and strategies needed to make it a reality.
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginVertical: 40,
+                  gap: 20,
+                  width: "100%",
+                }}
+              >
+                <View style={{ width: "30%" }}>
+                  <Row style={{ gap: 40 }}>
+                    <View
+                      style={{
+                        width: 3,
+                        height: 650,
+                        backgroundColor: "white",
+                      }}
+                    />
+                    <View style={{ gap: 20 }}>
+                      <SlideButton
+                        title={"Transitioning into Tech"}
+                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
+                        item2={"Personalized Growth Roadmap"}
+                        item3={"Domain Expert Led Gap Analysis"}
+                        item4={"And more..."}
+                      />
+                      <SlideButton
+                        title={"Transitioning into Tech"}
+                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
+                        item2={"Personalized Growth Roadmap"}
+                        item3={"Domain Expert Led Gap Analysis"}
+                        item4={"And more..."}
+                      />
+                      <SlideButton
+                        title={"Transitioning into Tech"}
+                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
+                        item2={"Personalized Growth Roadmap"}
+                        item3={"Domain Expert Led Gap Analysis"}
+                        item4={"And more..."}
+                      />
+                    </View>
+                  </Row>
+                  <View style={{ marginLeft: 30 }}>
+                     <TouchableOpacity onPress={handlecontact}>
+                    <MainButtons
+                      width={180}
+                      gradient={true}
+                      title={"Get Started"}
+                      borderRadius={5}
+                      icon={
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                        style={{ width: 18, height: 18 }}
+                      />
+                      }
+                    />
+                     </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{ width: "65%" }}>
+                  <Image
+                    source={require("../assets/imagine.png")}
+                    style={{ height: 555, width: "100%" }}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "600",
+                      marginTop: 30,
+                      color: "white",
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Do it with a concise plan and the strategic leverage of
+                    AngleQuest
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
+          
+          
           {/**consult & inhouse section */}
           <View
             style={{
@@ -791,7 +869,7 @@ const MyComponent = () => {
                   <View style={[styles.bigwhiteBox2, { alignItems: "center", marginRight: 10 }]}>
                     <View style={{ marginTop: 10, alignItems: "center" }}>
                       <Image
-                        source={require("../assets/40.png")}
+                        source={require("../assets/45.png")}
                         style={styles.recommended4}
                       />
                       <View style={{ alignItems: "center" }}>
@@ -802,10 +880,12 @@ const MyComponent = () => {
                             marginLeft: 10,
                           }}
                         >
-                          Consulting Firms
+                          Individual
                         </Text>
                         <Text
                           style={{
+                            textAlign: "center",
+                              height: 30,
                             fontSize: 14,
                             color: "grey",
                             marginTop: 5,
@@ -813,19 +893,20 @@ const MyComponent = () => {
                             width: 280,
                           }}
                         >
-                          Keep your team sharpened and prepared
+                          Why do it alone when you can achieve more together?
                         </Text>
                       </View>
                     </View>
                     <Text
                       style={{
+                         height: 70,
                         textAlign: "center",
                         fontSize: 20,
                         fontWeight: "bold",
                         marginTop: 30,
                       }}
                     >
-                      Optimize team readiness and ensure consistent performance
+                      Enhance your personal growth journey with our expert support and guidance
                     </Text>
                     <View
                       style={{
@@ -839,7 +920,7 @@ const MyComponent = () => {
                       source={require("../assets/consult.png")}
                       style={styles.innerimage}
                     />
-                    <View style={{ marginTop: 50, }}>
+                    <View style={{ marginTop: 20, }}>
                        <TouchableOpacity onPress={handlecontact}>
                       <MainButtons
                         gradient
@@ -855,10 +936,10 @@ const MyComponent = () => {
                        </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={[styles.bigwhiteBox2, { alignItems: "center" }]}>
+                  <View style={[styles.bigwhiteBox2, { alignItems: "center", marginRight: 10 }]}>
                     <View style={{ marginTop: 10, alignItems: "center" }}>
                       <Image
-                        source={require("../assets/39.png")}
+                        source={require("../assets/45.png")}
                         style={styles.recommended4}
                       />
                       <View style={{ alignItems: "center" }}>
@@ -869,10 +950,12 @@ const MyComponent = () => {
                             marginLeft: 10,
                           }}
                         >
-                          In-house Teams
+                          Cooporate
                         </Text>
                         <Text
                           style={{
+                            textAlign: "center",
+                            height: 30,
                             fontSize: 14,
                             color: "grey",
                             marginTop: 5,
@@ -880,20 +963,20 @@ const MyComponent = () => {
                             width: 280,
                           }}
                         >
-                          Back your team to succeed
+                          Back your team to succeed with needed expertise
                         </Text>
                       </View>
                     </View>
                     <Text
                       style={{
+                         height: 70,
                         textAlign: "center",
                         fontSize: 20,
                         fontWeight: "bold",
                         marginTop: 30,
                       }}
                     >
-                      Transform your team with a tool that guarantees their
-                      growth and improved productivity
+                      Equip your workforce with the expertise they need for growth
                     </Text>
                     <View
                       style={{
@@ -904,10 +987,10 @@ const MyComponent = () => {
                     />
 
                     <Image
-                      source={require("../assets/inHouse.png")}
+                      source={require("../assets/consult.png")}
                       style={styles.innerimage}
                     />
-                    <View style={{ marginTop: 50 }}>
+                    <View style={{ marginTop: 20, }}>
                        <TouchableOpacity onPress={handlecontact}>
                       <MainButtons
                         gradient
@@ -922,6 +1005,76 @@ const MyComponent = () => {
                       />
                        </TouchableOpacity>
                     </View>
+                  </View>
+                    <View style={[styles.bigwhiteBox2, { alignItems: "center", marginRight: 10 }]}>
+                      <View style={{ marginTop: 10, alignItems: "center" }}>
+                        <Image
+                          source={require("../assets/45.png")}
+                          style={styles.recommended4}
+                        />
+                        <View style={{ alignItems: "center" }}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              fontWeight: "bold",
+                              marginLeft: 10,
+                            }}
+                          >
+                            Community
+                          </Text>
+                          <Text
+                            style={{
+                              textAlign: "center",
+                                height: 30,
+                              fontSize: 14,
+                              color: "grey",
+                              marginTop: 5,
+                              marginLeft: 10,
+                              width: 280,
+                            }}
+                          >
+                             Unlock the Skills of Tomorrow, Today
+                          </Text>
+                        </View>
+                      </View>
+                      <Text
+                        style={{
+                           height: 70,
+                          textAlign: "center",
+                          fontSize: 20,
+                          fontWeight: "bold",
+                          marginTop: 30,
+                        }}
+                      >
+                        Foster Knowledge Sharing and Elevate Expertise Within Your Community
+                      </Text>
+                      <View
+                        style={{
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#CCC",
+                          marginTop: 10,
+                        }}
+                      />
+
+                      <Image
+                        source={require("../assets/consult.png")}
+                        style={styles.innerimage}
+                      />
+                      <View style={{ marginTop: 20, }}>
+                         <TouchableOpacity onPress={handlecontact}>
+                        <MainButtons
+                          gradient
+                          title={"Get Started"}
+                          borderRadius={5}
+                          icon={
+                            <Image
+                              source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                              style={{ width: 15, height: 15 }}
+                            />
+                          }
+                        />
+                         </TouchableOpacity>
+                      </View>
                   </View>
                 </View>
               </View>
@@ -937,7 +1090,7 @@ const MyComponent = () => {
               backgroundColor: "#fffff",
               position: "relative",
               alignItems: "center",
-              marginTop: -130
+              marginTop: -180
             }}
           >
             <DottedImage style={{ top: -20, left: -20, filter: 'blur(4px)' }} />
@@ -948,9 +1101,10 @@ const MyComponent = () => {
               }}
             >
               <Row style={{}}>
-                <View style={{ gap: 30, width: "30%" }}>
-                  <Text style={{ fontWeight: '600', fontSize: 40}}>Integrate anglequest with over 50 apps</Text>
-                  <Text style={{ fontWeight: '400', fontSize: 20}}>AngleQuest works seamlessly with your favorite apps, or find the right app for your needs on anglequest Integrated Apps</Text>
+                <View style={{ gap: 30, width: "40%" , marginTop: -80 }}>
+                  <Text style={{ fontWeight: '500', fontSize: 40}}>Stay on anglequest while seamlessly accessing all your other applications
+</Text>
+                  <Text style={{ fontWeight: '400', fontSize: 20}}>Our platform integrates seamlessly with your favorite tools, allowing you to find and connect the right apps to meet your specific needs</Text>
                 
                   <Row style={{ gap: 10, alignItems: "center", marginTop: 10 }}>
                     <Title
@@ -1054,207 +1208,22 @@ const MyComponent = () => {
             </View>
           </View>
           {/** */}
-          <View
-            style={{
-              marginVertical: 40,
-              width: "100%",
-              paddingHorizontal: 100,
-              backgroundColor: "#548A76",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
-            <Image
-              source={require("../assets/imagineShadesR.png")}
-              style={{
-                width: 573,
-                height: 573,
-                position: "absolute",
-                left: -200,
-                top: -286,
-              }}
-            />
-            <Image
-              source={require("../assets/imagineShadesL.png")}
-              style={{
-                width: 400,
-                height: 400,
-                borderRadius: 200,
-                position: "absolute",
-                right: -200,
-                top: -286,
-              }}
-            />
 
-            <View
-              style={{
-                width: 1400,
-                // marginHorizontal: 50,
-                alignItems: "center",
-                marginVertical: 40,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 36,
-                  marginTop: 80,
-                  fontWeight: "600",
-                  marginBottom: 10,
-                  color: "white",
-                }}
-              >
-                Imagine a new vision for your career
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "400",
-                  marginBottom: 30,
-                  color: "white",
-                  maxWidth: 793,
-                }}
-              >
-                We will partner with you to reach your next personal best as we
-                provide all the tools, knowledge, experience, hand-holding and
-                strategies to accomplish it!
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginVertical: 40,
-                  gap: 20,
-                  width: "100%",
-                }}
-              >
-                <View style={{ width: "30%" }}>
-                  <Row style={{ gap: 40 }}>
-                    <View
-                      style={{
-                        width: 3,
-                        height: 650,
-                        backgroundColor: "white",
-                      }}
-                    />
-                    <View style={{ gap: 20 }}>
-                      <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
-                      />
-                      <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
-                      />
-                      <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
-                      />
-                    </View>
-                  </Row>
-                  <View style={{ marginLeft: 30 }}>
-                     <TouchableOpacity onPress={handlecontact}>
-                    <MainButtons
-                      width={180}
-                      gradient={true}
-                      title={"Get Started"}
-                      borderRadius={5}
-                      icon={
-                      <Image
-                        source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
-                        style={{ width: 18, height: 18 }}
-                      />
-                      }
-                    />
-                     </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{ width: "65%" }}>
-                  <Image
-                    source={require("../assets/imagine.png")}
-                    style={{ height: 555, width: "100%" }}
-                  />
-                  <Text
-                    style={{
-                      fontWeight: "600",
-                      marginTop: 30,
-                      color: "white",
-                      fontSize: 20,
-                      textAlign: "center",
-                    }}
-                  >
-                    Do it with a concise plan and the strategic leverage of
-                    AngleQuest
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          {/** back your employees to succeed with anglequest */}
+          
+
+
+           
+          
           <View
             style={{
+              //  backgroundColor: "#135837",
+              width: "100%",
               alignItems: "center",
-              marginVertical: 40,
-              width: 1400,
             }}
           >
-            <Text
-              style={{
-                fontSize: 36,
-                marginTop: 80,
-                fontWeight: "700",
-                marginBottom: 10,
-              }}
-            >
-              End-to-end Product to run your team’s growth
-            </Text>
-            <Text
-              style={{
-                fontSize: 28,
-                fontWeight: "400",
-                marginBottom: 30,
-              }}
-            >
-              Tailored for every member of your team
-            </Text>
-            <View
-              style={{
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-                marginVertical: 40,
-                width: "100%",
-              }}
-            >
-              <BigLableButton
-                title={"New Employee Booster"}
-                img={require("../assets/newEmployee.png")}
-                subTitle={"Unlock potentials"}
-                desc="Have you ever wondered the best way to support new employee to maximize their talent?"
-              />
-              <BigLableButton
-                title={"Existing Employee Upskilling"}
-                img={require("../assets/existingEmployee.png")}
-                subTitle={"Empower your outliers"}
-                desc="Ignite employees' quest for growth by simplifying the process to attain new height using AngleQuest"
-              />
-              <BigLableButton
-                title={"New Employee Booster"}
-                img={require("../assets/boostUnder.png")}
-                subTitle={"Groom reource for peak performance"}
-                desc="Incubate in-house talent to maturity to reach their peak-performance and efficiency"
-              />
-            </View>
+            {<BoxSection />}
           </View>
+          
           {/**No credit section */}
           <View
             style={{
@@ -1266,7 +1235,7 @@ const MyComponent = () => {
             {<NoCreditSection />}
           </View>
           {/*  Footer */}
-          <Footer bgColor={"#084427"} />
+          <Footer bgColor={"#F5F5F5"} />
         </View>
 
         <Modal
@@ -1311,6 +1280,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    width: "100%"
   },
   buttonplus: {
     backgroundColor: "#135837",
@@ -1338,7 +1308,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   landingimage: {
-    width: 1125,
+    width: 1300,
     height: 675,
     alignSelf: "center",
       boxShadow: '0px 10px 20px rgba(255, 255, 255, 0.7)',
@@ -1351,8 +1321,8 @@ const styles = StyleSheet.create({
   },
   innerimage: {
     marginTop: 20,
-    width: 446,
-    height: 277,
+    width: 360,
+    height: 200,
     //objectFit: "contain",
   },
   indivimage: {
@@ -1405,11 +1375,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   bigwhiteBox2: {
-  width: 580,
-    height: 650,
+  width: 400,
+    height: 550,
     backgroundColor: "white",
     marginTop: 50,
-    marginRight: 40,
+    marginVertical: 40,
     padding: 20,
     borderRadius: 5,
     
