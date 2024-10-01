@@ -11,9 +11,9 @@
     "Screens/Individual.js": [
       {
         "id": "f4f5584d-ce1a-4e7b-a9c5-1b9289dbff8f",
-        "line": 254,
-        "version": 83,
-        "index": 9413
+        "line": 217,
+        "version": 248,
+        "index": 7582
       }
     ],
     "components/ChatScreen.js": [

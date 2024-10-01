@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigate } from 'react-router-dom';
-import { useRoute } from '@react-navigation/native';
-import { useFonts } from "expo-font"
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useFonts } from 'expo-font';
 
 const ProgressBar = () => {
   return null; // Progress bar removed
@@ -34,14 +33,26 @@ const SixBoxesInput = () => {
 const VerificationContent = ({ userEmail }) => {
   const navigate = useNavigate();
 
-
   const handleChangeEmail = () => {
-  navigate('/signup'); // Navigate to sign-up page
+    navigate('/sign-up', { state: { signUpOption: 2 } });
   };
 
+  const handleOpenEmailClient = () => {
+    const gmailInboxUrl = 'https://mail.google.com/mail/u/0/#inbox';
+
+    // Directly open Gmail inbox
+    window.location.href = gmailInboxUrl;
+  };
+
+
   const [fontsLoaded] = useFonts({
-    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
-  })
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.verificationContent}>
       <Image
@@ -50,17 +61,17 @@ const VerificationContent = ({ userEmail }) => {
       />
       <Text style={styles.title}>Welcome to AngleQuest 👋</Text>
       <Text style={styles.text}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
-      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address.</Text>
-      <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes.</Text>
-      <TouchableOpacity style={styles.button} onPress={handleVerify}>
-        <Text style={styles.buttonText}>Verify your email</Text>
+      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address. </Text>
+      <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes. If you do not see it you may need to check your spam folders</Text>
+      <TouchableOpacity style={styles.button} onPress={handleOpenEmailClient}>
+        <Text style={styles.buttonText}>Open Inbox</Text>
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: 'coral', marginBottom: 10, fontFamily: "Roboto-Light" }}>Resend code</Text>
+        <TouchableOpacity>
+          <Text style={styles.resendText}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
-          <Text style={{ fontSize: 13, marginLeft: 50, color: 'coral', fontWeight: '600', fontFamily: "Roboto-Light" }}>Change email</Text>
+          <Text style={styles.changeEmailText}>Change email</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -69,8 +80,9 @@ const VerificationContent = ({ userEmail }) => {
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const route = useRoute();
-  const { userEmail } = route.params;
+  const location = useLocation();
+
+  const { userEmail } = location.state || { userEmail: '' };
 
   return (
     <View style={styles.container}>
@@ -117,21 +129,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: -10,
     marginBottom: 20,
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
   },
   text: {
-    width: 500,
+    width: '100%',
     marginVertical: 5,
     fontSize: 12,
-    fontFamily: "Roboto-Light",
-    marginLeft: 50,
-    marginRight: 50
+    fontFamily: 'Roboto-Light',
+    textAlign: 'center',
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -164,7 +175,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: "Roboto-Light"
+    fontFamily: 'Roboto-Light',
+  },
+  resendText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: 'coral',
+    marginBottom: 10,
+    fontFamily: 'Roboto-Light',
+  },
+  changeEmailText: {
+    fontSize: 13,
+    marginLeft: 50,
+    color: 'coral',
+    fontWeight: '600',
+    fontFamily: 'Roboto-Light',
   },
 });
 

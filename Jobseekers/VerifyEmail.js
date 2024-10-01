@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
-import { useNavigate } from 'react-router-dom';
-import { useRoute } from '@react-navigation/native';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 
 const ProgressBar = () => {
@@ -35,28 +34,16 @@ const VerificationContent = ({ userEmail }) => {
   const navigate = useNavigate();
 
   const handleChangeEmail = () => {
-   navigate('/sign-up'); // Navigate to sign-up page
+    navigate('/sign-up', { state: { signUpOption: 1 } });
   };
 
   const handleOpenEmailClient = () => {
-    const subject = 'Verify your email';
-    const body = 'Please click the link below to verify your email:\n\n[verification link]';
-    const mailtoUrl = `mailto:${userEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const gmailInboxUrl = 'https://mail.google.com/mail/u/0/#inbox';
 
-    if (Platform.OS === 'web') {
-      window.location.href = mailtoUrl;
-    } else {
-      Linking.canOpenURL(mailtoUrl)
-        .then((supported) => {
-          if (!supported) {
-            Alert.alert('Email client is not available');
-          } else {
-            return Linking.openURL(mailtoUrl);
-          }
-        })
-        .catch((err) => console.error('Failed to open email client:', err));
-    }
+    // Directly open Gmail inbox
+    window.location.href = gmailInboxUrl;
   };
+
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
@@ -74,13 +61,13 @@ const VerificationContent = ({ userEmail }) => {
       />
       <Text style={styles.title}>Welcome to AngleQuest 👋</Text>
       <Text style={styles.text}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
-      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address.</Text>
-      <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes.</Text>
+      <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address. </Text>
+      <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes. If you do not see it you may need to check your spam folders</Text>
       <TouchableOpacity style={styles.button} onPress={handleOpenEmailClient}>
-        <Text style={styles.buttonText}>Open Email Client</Text>
+        <Text style={styles.buttonText}>Open Inbox</Text>
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={handleOpenEmailClient}>
+        <TouchableOpacity>
           <Text style={styles.resendText}>Resend code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
@@ -93,8 +80,9 @@ const VerificationContent = ({ userEmail }) => {
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const route = useRoute();
-  const { userEmail } = route.params;
+  const location = useLocation();
+
+  const { userEmail } = location.state || { userEmail: '' };
 
   return (
     <View style={styles.container}>

@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     width: "100%",
     alignItems: 'center',
+    marginTop: -100
   },
   heading: {
     fontSize: 32,

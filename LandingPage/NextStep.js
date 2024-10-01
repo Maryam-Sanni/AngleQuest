@@ -6,7 +6,7 @@ const WincAcademyFooter = () => {
   return (
     <View style={styles.footerContainer}>
       <Image
-        source={require('../assets/AddManager.png')}
+        source={require('../assets/Unlock.jpg')}
         style={styles.imageBack}
       />
       <View style ={{flexDirection: 'column', width: '50%', marginLeft: '5%'}}>

@@ -324,15 +324,14 @@ const SpecialBtn = ({ text, onPress,  height, width, bgColor }) => {
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         style={{
-          backgroundColor: isHovered
-            ? 'linear-gradient(90deg, #135837, #29BE77)' 
-            : bgColor || "#00000033",
+          backgroundColor:
+            'linear-gradient(90deg, #135837, #29BE77)',
           width: width || 144,
           height: height || 54,
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 8,
-          background: isHovered ? 'linear-gradient(90deg, #135837, #29BE77)' : (bgColor || "#00000033"),
+          background: isHovered ? 'lightgreen' : (bgColor || 'linear-gradient(90deg, #135837, #29BE77)'),
         }}
       >
       <Text
@@ -461,17 +460,16 @@ const MyComponent = () => {
           >
         <View style={styles.container}>
           <Image
-            source={require("../assets/HomeTop.png")} 
+            source={require("../assets/Heading.png")} 
             style={styles.backgroundVideo}
           />
           
           <View
             style={{
               paddingVertical: 40,
-              width: "58.2%",
+              width: "53.5%",
               paddingHorizontal: 50,
-               backgroundColor: "rgba(0, 0, 0, 0.3)",
-              height: 650,
+              height: 700,
               alignItems: "center",
               alignSelf: 'flex-start'
             }}
@@ -481,14 +479,14 @@ const MyComponent = () => {
               <Text
                 style={{
                   color: "black",
-                  fontSize: 55,
+                  fontSize: 45,
                   fontWeight: "500",
                   marginTop: 20,
                   maxWidth: 852,
                 }}
               >
                 Peak Performers Have a Team Working On Their{" "}
-                <Text style={{ color: "#29BE77" }}>Growth</Text>, Do You?{" "}
+                <Text style={{ color: "darkgreen" }}>Growth</Text>, Do You?{" "}
               </Text>
               <Text
                 style={{
@@ -499,7 +497,7 @@ const MyComponent = () => {
                   maxWidth: 646,
                 }}
               >
-                Empower your growth and bridge the knowledge gap with expert guidance. We support your personal development, drive innovation, and foster a culture of knowledge sharing.
+                We provide - technical on the job support, handholding during career transitioning, and software's to drive employees growth through knowledge collaboration
               </Text>
               <Row style={{ gap: 20, alignItems: "center", marginTop: 30 }}>
                 <BlurView
@@ -512,7 +510,7 @@ const MyComponent = () => {
                     borderWidth: 1,
                     borderColor: "white",
                     paddingHorizontal: 20,
-                    maxWidth: 740,
+                    maxWidth: 500,
                   }}
                 >
                   <Row
@@ -526,30 +524,19 @@ const MyComponent = () => {
                   >
                     <Text
                       style={{
-                        color: "#fff",
+                        color: "darkgreen",
                         fontSize: 20,
                         fontWeight: "400",
                       }}
                     >
-                      Get started:
+                      For:
                     </Text>
-                    <Row style={{ alignItems: "center", gap: 20 }}>
-                      <SpecialBtn text={"Individual"} onPress={handleIndividualSignUp} />
-                      <SpecialBtn text={"Business"} onPress={handleBusinessSignUp} />
+                    <Row style={{ alignItems: "center", gap: 10, marginRight: 40 }}>
+                      <SpecialBtn text={"Individuals"} onPress={handleIndividualSignUp} />
+                      <SpecialBtn text={"Businesses"} onPress={handleBusinessSignUp} />
                     </Row>
                   </Row>
                 </BlurView>
-                <TouchableOpacity onPress={gotocontact}>
-                <MainButtons
-                  title="Book a demo"
-                  height={74}
-                  width={200}
-                  fontSize={18}
-                  center
-                  gradient
-                  borderRadius={10}
-                />
-              </TouchableOpacity>
               </Row>
             </View>
           </View>
@@ -720,7 +707,7 @@ const MyComponent = () => {
               marginVertical: -15,
               width: "100%",
               paddingHorizontal: 0,
-              backgroundColor: "#135837",
+              backgroundColor: "#012B07",
               justifyContent: "center",
               alignItems: "center",
               position: "relative",
@@ -742,6 +729,7 @@ const MyComponent = () => {
                   fontWeight: "600",
                   marginBottom: 10,
                   color: "white",
+                  marginLeft: 350
                 }}
               >
                 Your Vision to excel in your career is our Mission!
@@ -753,7 +741,8 @@ const MyComponent = () => {
                   fontWeight: "400",
                   marginBottom: 10,
                   color: "white",
-                  maxWidth: 793,
+                  maxWidth: 700,
+                  marginLeft: 350
                 }}
               >
                 We partner with you to achieve your personal best, offering the tools, expertise, guidance, and strategies needed to make it a reality.
@@ -778,25 +767,25 @@ const MyComponent = () => {
                     />
                     <View style={{ gap: 20 }}>
                       <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
+                        title={"Excel in your role"}
+                        item1={"There is no such thing as difficulty,"}
+                        item2={"only challenges waiting to be overcome."}
+                        item3={"Overcome difficult tasks Upskill, Grow, and"}
+                        item4={"Thrive with Support from Industry Experts."}
                       />
                       <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
+                        title={"Bigger and Brighter Goals"}
+                        item1={"Aim for the moon, and even if you miss,"}
+                        item2={"We're dedicated to helping you set ambitious"}
+                        item3={"goals and working with you every step"}
+                        item4={"of the way to achieve your career aspirations. "}
                       />
                       <SlideButton
-                        title={"Transitioning into Tech"}
-                        item1={"AngleQuest AI & Domain Expert Gap Analysis"}
-                        item2={"Personalized Growth Roadmap"}
-                        item3={"Domain Expert Led Gap Analysis"}
-                        item4={"And more..."}
+                        title={"Transition to your dream role effortlessly"}
+                        item1={"Seamlessly transition into your new role"}
+                        item2={"with expert guidance and tailored"}
+                        item3={"support, ensuring a smooth and"}
+                        item4={"confident start."}
                       />
                     </View>
                   </Row>
@@ -906,7 +895,7 @@ const MyComponent = () => {
                         marginTop: 30,
                       }}
                     >
-                      Enhance your personal growth journey with our expert support and guidance
+                      Ease into your job role and enhance your career growth with our expert support and guidance
                     </Text>
                     <View
                       style={{
@@ -1101,7 +1090,7 @@ const MyComponent = () => {
               }}
             >
               <Row style={{}}>
-                <View style={{ gap: 30, width: "40%" , marginTop: -80 }}>
+                <View style={{ gap: 30, width: "40%" , marginTop: -50 }}>
                   <Text style={{ fontWeight: '500', fontSize: 40}}>Stay on anglequest while seamlessly accessing all your other applications
 </Text>
                   <Text style={{ fontWeight: '400', fontSize: 20}}>Our platform integrates seamlessly with your favorite tools, allowing you to find and connect the right apps to meet your specific needs</Text>
@@ -1280,7 +1269,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    width: "100%"
+    width: "100%",
+    height: 750,
   },
   buttonplus: {
     backgroundColor: "#135837",

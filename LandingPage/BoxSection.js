@@ -53,7 +53,7 @@ const MySection = () => {
    return (
       <View style={styles.sectionContainer}>
          <Image
-            source={require('../assets/createPfp.png')}
+            source={require('../assets/Unlock.jpg')}
             style={styles.imageBack}
          />
          <View style={{ flexDirection: 'column' }}>
@@ -71,7 +71,7 @@ const MySection = () => {
                      <View style={{ flexDirection: 'row', marginTop: 40 }}>
                         <Text style={styles.boxLText}>Learn More</Text>
                         <Image
-                           source={{ uri: 'https://img.icons8.com/?size=100&id=59811&format=png&color=206C00' }}
+                           source={{ uri: 'https://img.icons8.com/?size=100&id=76&format=png&color=206C00' }}
                            style={{ width: 20, height: 20, marginLeft: 5 }}
                         />
                      </View>
@@ -88,15 +88,6 @@ const MySection = () => {
                   <Text style={[styles.arrow, visibleBoxIndex + boxesPerPage >= boxes.length && styles.disabledArrow]}>{'>'}</Text>
                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.button}>
-               <LinearGradient
-                  colors={['#135837', '#29BE77']} // Gradient colors (green shades)
-                  style={styles.gradient}
-               >
-                  <Text style={styles.buttonText}>Get Started</Text>
-               </LinearGradient>
-            </TouchableOpacity>
          </View>
       </View>
    );
@@ -109,6 +100,7 @@ const styles = StyleSheet.create({
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center'
    },
    heading: {
       fontSize: 32,
@@ -142,6 +134,7 @@ const styles = StyleSheet.create({
    boxsubText: {
       fontSize: 16,
       marginTop: 20,
+      height: 150
    },
    boxLText: {
       fontSize: 18,
@@ -177,12 +170,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
    },
    imageBack: {
-      width: 700,
-      height: 700,
-      marginRight: '5%',
-      marginLeft: -50,
-      marginTop: -50,
-      marginBottom: -50,
+      width: 500,
+      height: 500,
+      marginRight: 50
    },
 });
 

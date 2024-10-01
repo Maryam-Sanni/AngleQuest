@@ -177,7 +177,7 @@ const Business = () => {
           {/**Individual */}
           <SectionContainer>
             <View style={{ width: 1400 }}>
-              <View style={{ gap: 10 }}>
+              <View style={{ gap: 10, marginTop: 50}}>
                 
                 <MainTitle
                   width={735}

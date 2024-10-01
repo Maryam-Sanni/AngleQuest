@@ -6,7 +6,6 @@ const WincAcademyFooter = () => {
   return (
     <View style={styles.footerContainer}>
       <View style ={{flexDirection: 'column', width: '50%', marginLeft: '5%'}}>
-         <Text style={{marginBottom: 20, color: "white"}}>ANGLEQUEST ADVANTAGE</Text>
       <Text style={styles.heading}>ANGLEQUEST AI</Text>
       <Text style={styles.description}>
         Upload your CV and let our AI guide you to your next career milestone. By analyzing your experience, skills, and goals, our AI recommends personalized career paths, helping you identify the best opportunities for growth and advancement.
@@ -16,7 +15,13 @@ const WincAcademyFooter = () => {
             colors={['#135837', '#29BE77']} // Gradient colors (green shades)
             style={styles.gradient}
           >
+            <View style={{flexDirection: 'row'}}>
             <Text style={styles.buttonText}>Sign Up Now</Text>
+            <Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+              style={{ width: 18, height: 18, marginLeft: 10, marginTop: 3 }}
+            />
+            </View>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
   footerContainer: {
     padding: 50,
      width: "100%",
-    backgroundColor: '#135837',
+    backgroundColor: '#012B07',
     alignItems: 'center', 
     flexDirection: 'row',
     height: 600,
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'flex-start', // Center the description text
     color: 'white',
-    marginBottom: 20, // Spacing between description and button
+    marginBottom: 50, // Spacing between description and button
     width: 600,
   },
   button: {

@@ -15,12 +15,18 @@ const WincAcademyFooter = () => {
             colors={['#135837', '#29BE77']} // Gradient colors (green shades)
             style={styles.gradient}
           >
-            <Text style={styles.buttonText}>Sign Up Now</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.buttonText}>Sign Up Now</Text>
+              <Image
+                 source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                 style={{ width: 18, height: 18, marginLeft: 7, marginTop: 2}}
+               />
+              </View>
           </LinearGradient>
         </TouchableOpacity>
       </View>
       <Image
-        source={require('../assets/AddManager.png')}
+        source={require('../assets/Unsure.jpeg')}
         style={styles.imageBack}
       />
     </View>
@@ -31,7 +37,7 @@ const styles = StyleSheet.create({
   footerContainer: {
     padding: 50,
      width: "100%",
-    backgroundColor: '#135837',
+    backgroundColor: '#012B07',
     alignItems: 'center', 
     flexDirection: 'row',
     height: 700,
@@ -48,11 +54,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'flex-start', // Center the description text
     color: 'white',
-    marginBottom: 20, // Spacing between description and button
+    marginBottom: 50, // Spacing between description and button
     width: 600,
   },
   button: {
     width: 200, // Set button width
+    marginTop: 20
   },
   gradient: {
     padding: 10,
