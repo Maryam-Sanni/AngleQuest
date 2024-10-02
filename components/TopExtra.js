@@ -49,7 +49,7 @@ const MyComponent = () => {
             onMouseLeave={() => setHovered(null)}
           >
             <Text style={[styles.text, (hovered === 'individual' || activeButton === 'individual') && styles.hoveredText]}>
-             For Individuals
+             For Individual
             </Text>
           </TouchableOpacity>
 
@@ -59,7 +59,7 @@ const MyComponent = () => {
             onMouseLeave={() => setHovered(null)}
           >
             <Text style={[styles.text, (hovered === 'business' || activeButton === 'business') && styles.hoveredText]}>
-             For Businesses
+             For Business
             </Text>
           </TouchableOpacity>
 
@@ -69,7 +69,7 @@ const MyComponent = () => {
             onMouseLeave={() => setHovered(null)}
           >
             <Text style={[styles.text, (hovered === 'community' || activeButton === 'community') && styles.hoveredText]}>
-             For Communities
+             For Community
             </Text>
           </TouchableOpacity>
         </View>
@@ -83,11 +83,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
     backgroundColor: "black",
-    height: 50,
+    height: 70,
   },
   blurView: {
-  padding: 5,
-    height: 50,
+    height: 70,
     width: "100%",
   },
   header: {

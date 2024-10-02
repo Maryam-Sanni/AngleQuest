@@ -19,10 +19,10 @@ const SmallCards = ({
     <View
       style={{
         width: 300,
-        height: front ? 200 : 400,
+        height: front ? 300 : 350,
         paddingHorizontal: 30,
         paddingVertical: 20,
-        backgroundColor: front ? "transparent" : "#FEFABB",
+        backgroundColor: front ? "transparent" : "#37754F",
         zIndex: front ? 2 : 1,
         position: "absolute",
         top: top,
@@ -32,7 +32,7 @@ const SmallCards = ({
     >
       <View
         style={{
-          backgroundColor: "#fff",
+          backgroundColor: "#F5F5F5",
           padding: 16,
           gap: 16,
           borderRadius: 4,
@@ -54,12 +54,13 @@ const SmallCards = ({
           )}
           <Title
             title={title}
-            textSize={14}
+            textSize={16}
+            fontWeight={600}
             center
           />
           <Title
             title={desc}
-            textSize={10}
+            textSize={14}
             center
           />
         </View>
@@ -72,12 +73,12 @@ const SmallCards = ({
         />
         <MainButtons
           title={"Start Now"}
-          bgColor={"#fff"}
+          bgColor={"#F5F5F5"}
           width={"100%"}
           onPress={onPress}
           textColor={"#135837"}
           style={{ padding: 8 }}
-          icon={<AntDesign name="arrowright" size={10} color="#135837" />}
+          icon={<AntDesign name="arrowright" size={14} color="#135837" />}
         />
       </View>
     </View>

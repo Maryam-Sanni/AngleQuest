@@ -81,7 +81,7 @@ const Community = () => {
                 
                 <MainTitle
                   title={"Discover how efficient you can be with"}
-                  secondTitle={"AngleQuest AI"}
+                  secondTitle={"AngleQuest"}
                 />
 
                 <Title
@@ -198,27 +198,6 @@ const Community = () => {
                     }
                   />
 
-                  <ImageBackground
-                    source={require("../assets/blurrybg.png")}
-                    style={{
-                      width: "120%",
-                      height: 262,
-                      zIndex: 3,
-                      position: "absolute",
-                      left: 0,
-                      bottom: 20,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    imageStyle={{ width: "100%", height: "100%" }}
-                  >
-                    <Title
-                      textSize={24}
-                      center
-                      style={{ width: 510, marginTop: 40 }}
-                      title="Explore even more artificial intelligence that AngleQuest has to offer"
-                    />
-                  </ImageBackground>
                 </View>
               </View>
             </View>

@@ -109,7 +109,7 @@ const SignUp = () => {
       );
 
       console.log("Signup success:", response.data);
-      navigate("/verify-mail", { userEmail: email }); // Navigate and pass email as parameter
+      navigate("/verify-email", { userEmail: email }); 
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Signup failed. Please try again.");

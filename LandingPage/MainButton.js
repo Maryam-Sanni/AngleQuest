@@ -51,7 +51,6 @@ const MainButtons = ({
           style={[
             styles.hText,
             {
-              fontFamily: fontFamily ? fontFamily : "Poppins-Regular",
               fontSize: fontSize ? fontSize : 14,
               color: textColor ? textColor : outlined ? "black" : "#ffff",
             },

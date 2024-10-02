@@ -255,7 +255,7 @@ const Footer = ({ bgColor }) => {
               </Pressable>
             </Row>
           </Row>
-          <Row style={{ gap: 10 }}>
+          <Row style={{ gap: 10, marginTop: -60 }}>
             <Image
               source={{
                 uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
@@ -268,20 +268,7 @@ const Footer = ({ bgColor }) => {
               title={"AngleQuest"}
               textColor={changeBg === "#084427" ? "white" : "black"}
             />
-            {/* <Row style={{ alignSelf: "flex-end", gap: 20, justifySelf: "end" }}>
-              <Pressable
-                onPress={() => handleBG("#ffff")}
-                style={[styles.socialIcon, { backgroundColor: "#ffff" }]}
-              ></Pressable>
-              <Pressable
-                onPress={() => handleBG("#E0F8EC")}
-                style={[styles.socialIcon, { backgroundColor: "#E0F8EC" }]}
-              ></Pressable>
-              <Pressable
-                onPress={() => handleBG("#084427")}
-                style={[styles.socialIcon, { backgroundColor: "#084427" }]}
-              ></Pressable>
-            </Row> */}
+           
           </Row>
         </View>
       </View>

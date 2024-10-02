@@ -81,22 +81,6 @@ const MostPopularCertificates = () => {
             />
             <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
               <Image
-                source={{ uri: 'https://img.icons8.com/?size=100&id=123603&format=png&color=000000' }}
-                style={{ width: 20, height: 20, marginRight: 5 }}
-              />
-              <Text style={{ fontSize: 14 }}>Front-end Development</Text>
-            </View>
-            <Text style={styles.cardTitle}>React & React Native</Text>
-            <Text style={styles.cardDescription}>Develop applications using React for cross-platform compatibility.</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Image
-              source={require("../assets/TG5.png")}
-              style={styles.cardImage}
-            />
-            <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>
-              <Image
                 source={{ uri: 'https://img.icons8.com/?size=100&id=22989&format=png&color=000000' }}
                 style={{ width: 20, height: 20, marginRight: 5 }}
               />
@@ -104,22 +88,6 @@ const MostPopularCertificates = () => {
             </View>
             <Text style={styles.cardTitle}>Microsoft Power Platform</Text>
             <Text style={styles.cardDescription}>Build and automate applications, workflows, and analytics with ease.</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Image
-              source={require("../assets/TG5.png")}
-              style={styles.cardImage}
-            />
-            <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>    
-                <Image
-                   source={{ uri: 'https://img.icons8.com/?size=100&id=17949&format=png&color=000000' }}
-                   style={{ width: 20, height: 20, marginRight: 5 }}
-                />
-              <Text style={{fontSize: 14}}>Google</Text>
-             </View>
-            <Text style={styles.cardTitle}>Google Data Analytics</Text>
-            <Text style={styles.cardDescription}>Gain insights from data using analytical tools and techniques effectively.</Text>
           </View>
 
           <View style={styles.card}>
@@ -137,22 +105,6 @@ const MostPopularCertificates = () => {
             <Text style={styles.cardTitle}>
               SAP Production Planning</Text>
             <Text style={styles.cardDescription}>Optimize production processes and manage resources for efficient manufacturing.</Text>
-          </View>
-          
-          <View style={styles.card}>
-            <Image
-              source={require("../assets/TG5.png")}
-              style={styles.cardImage}
-            />
-            <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5 }}>    
-                <Image
-                   source={{ uri: 'https://img.icons8.com/?size=100&id=zfHRZ6i1Wg0U&format=png&color=000000' }}
-                   style={{ width: 20, height: 20, marginRight: 5 }}
-                />
-              <Text style={{fontSize: 14}}>UI/UX</Text>
-             </View>
-            <Text style={styles.cardTitle}>Figma</Text>
-            <Text style={styles.cardDescription}>Design user interfaces collaboratively with a powerful cloud-based tool.</Text>
           </View>
           
           <View style={styles.card}>

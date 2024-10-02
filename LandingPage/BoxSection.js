@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 
 const MySection = () => {
    const [visibleBoxIndex, setVisibleBoxIndex] = useState(0);
@@ -9,27 +8,27 @@ const MySection = () => {
    const boxes = [
       {
         title: "AngleQuest AI",
-        description: "AI powered personalised growth plan, domain expert led gap analysis, study maps, courses and certifications."
+        description: "Ignite your quest for growth by simplifying the process to attain new height using AngleQuest AI"
       },
       {
         title: "Skill Gap Analysis",
-        description: "We assess the gap between your current skill set and the skills needed to excel in your role or meet your organization's objectives."
+        description: "We assess the gap between your current skill set and the skills needed to excel in your career"
       },
       {
         title: "Growth Plan",
-        description: "We help identify areas for improvement and provide targeted training to close gaps and boost performance."
+        description: "We help identify areas for improvement and provide targeted training to close gaps and boost performance"
       },
       {
-        title: "Join a Hub",
-        description: "Connect with like-minded individuals and gain access to a network of peers and experts who share the same goals."
+        title: "Join a Coaching           Hub",
+        description: "Connect with like-minded individuals and gain access to a network of peers and experts who share the same goals"
       },
       {
         title: "Scenario Based Project",
-        description: "Gain practical experience by working on real-world projects and immerse yourself in the simulated job environment."
+        description: "Gain practical experience by working on real-world projects and immerse yourself in the simulated job environment"
       },
       {
         title: "Exam & Interview Preparation",
-        description: "Receive guidance from experts in your field to help you prepare for upcoming interviews or exams."
+        description: "Receive guidance from experts in your field to help you prepare for upcoming interviews or exams"
       }
     ];
 
@@ -57,13 +56,17 @@ const MySection = () => {
             style={styles.imageBack}
          />
          <View style={{ flexDirection: 'column' }}>
-            <Text style={styles.heading}>Unlock Your Potential with Precision Growth Solutions</Text>
+            <Text style={styles.heading}>Unlock Your Potential</Text>
             <Text style={styles.subheading}>
-               Empower your career or team with Skill Gap Analysis, personalized Growth Plans, and a comprehensive Hub for continuous development. Tailored to individuals and businesses seeking measurable success.
+               At AngleQuest, we are dedicated to helping professionals unlocking their potential by providing top-tier tools and expert guidance to deliver value, impart knowledge, and drive you towards having a fulfilled career
             </Text>
 
+            <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={handlePrevious} disabled={visibleBoxIndex === 0}>
+               <Text style={[styles.arrow, visibleBoxIndex === 0 && styles.disabledArrow]}>{'<'}</Text>
+            </TouchableOpacity>
             <View style={styles.boxContainer}>
-               {/* Render the current 3 boxes */}
+               {/* Render only 3 boxes */}
                {currentBoxes.map((box, index) => (
                   <View key={index} style={styles.box}>
                      <Text style={styles.boxText}>{box.title}</Text>
@@ -77,17 +80,13 @@ const MySection = () => {
                      </View>
                   </View>
                ))}
-            </View>
-
-            {/* Previous and Next arrows */}
-            <View style={styles.arrowContainer}>
-               <TouchableOpacity onPress={handlePrevious} disabled={visibleBoxIndex === 0}>
-                  <Text style={[styles.arrow, visibleBoxIndex === 0 && styles.disabledArrow]}>{'<'}</Text>
-               </TouchableOpacity>
                <TouchableOpacity onPress={handleNext} disabled={visibleBoxIndex + boxesPerPage >= boxes.length}>
                   <Text style={[styles.arrow, visibleBoxIndex + boxesPerPage >= boxes.length && styles.disabledArrow]}>{'>'}</Text>
                </TouchableOpacity>
             </View>
+              
+            </View>
+           
          </View>
       </View>
    );
@@ -96,32 +95,37 @@ const MySection = () => {
 const styles = StyleSheet.create({
    sectionContainer: {
       padding: 50,
-      backgroundColor: '#f0f0f0', // Optional background color for the section
+      backgroundColor: '#F0F0F0', // Optional background color for the section
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      marginTop: 50
    },
    heading: {
       fontSize: 32,
       fontWeight: '600',
       marginBottom: 10,
+      textAlign: 'center'
    },
    subheading: {
       fontSize: 18,
       marginBottom: 20,
       width: 600,
+      textAlign: 'center',
+      alignSelf: 'center'
    },
    boxContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between', // Ensures boxes are spaced apart
+      justifyContent: 'space-between', 
+      marginTop: 10
    },
    box: {
       marginHorizontal: 10,
       backgroundColor: 'white',
       padding: 20,
       borderRadius: 10,
-      width: 250,
+      width: 230,
       height: 250,
       borderColor: 'black',
       borderWidth: 0.5,
@@ -148,10 +152,11 @@ const styles = StyleSheet.create({
       marginTop: 20,
    },
    arrow: {
-      fontSize: 24,
+      fontSize: 25,
       color: '#206C00',
       marginHorizontal: 20,
       fontWeight: 'bold',
+      marginTop: 100
    },
    disabledArrow: {
       color: '#cccccc', // Greyed out color when disabled

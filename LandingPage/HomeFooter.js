@@ -37,10 +37,10 @@ const styles = StyleSheet.create({
   footerContainer: {
     padding: 50,
      width: "100%",
-    backgroundColor: '#012B07',
+    backgroundColor: '#003B24',
     alignItems: 'center', 
     flexDirection: 'row',
-    height: 700,
+    height: 600,
   },
   heading: {
     fontSize: 34,
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   imageBack: {
-  width: 700,
-     height: 700,
+  width: 600,
+     height: 600,
     position: 'absolute',
      right: 0,
      marginLeft: 50,

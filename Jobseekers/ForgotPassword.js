@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import Top from '../components/top';
 import { useFonts } from 'expo-font';
@@ -11,6 +11,10 @@ const ResetPasswordForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  // Refs for input fields
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -41,13 +45,14 @@ const ResetPasswordForm = () => {
   }
 
   return (
-    <View style={{ height: '90%' }}>
+    <View style={{ flex: 1}}>
       <Top />
       <View style={styles.container}>
         <Text style={styles.title}>Reset Your Password</Text>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>{t("Email")}</Text>
           <TextInput
+            ref={emailRef} // Example ref usage
             style={styles.input}
             placeholder="Enter your email"
             onChangeText={setEmail}
@@ -57,6 +62,7 @@ const ResetPasswordForm = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.label}>{t("New Password")}</Text>
           <TextInput
+            ref={passwordRef} // Example ref usage
             style={styles.input}
             secureTextEntry={true}
             placeholder="********"
@@ -87,17 +93,16 @@ const ResetPasswordForm = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
-    marginLeft: 200,
-    marginRight: 200
+    padding: 100
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
     color: "black",
     marginBottom: 30,
@@ -108,7 +113,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#000",
     fontWeight: "500",
     marginTop: 10,
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light"
   },
   passwordHint: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#777",
     marginBottom: 10,
     textAlign: "center",

@@ -140,31 +140,37 @@ const MyComponent = ({ value, tint, intensity }) => {
             dropdown
             onPress={handleProductsHover}
           />
+          <View style={{marginLeft: -15}}>
           <HButton
             title={"AngleQuest AI"}
           />
+        </View>
           <HButton // onPress={handleAIPress}
             title={"About Us"}
           />
         </View>
         <View style={styles.right}>
-          <HButton title={"Log In"} onPress={handleLogin} />
+          <HButton title={"Log In"} onPress={handleLogin} 
+            />
           <MainButtons
             title={"Contact Sales"}
             outlined={activeIndex !== 2 ? true : false}
             gradient={activeIndex === 2 ? true : false}
             onPress={handleContact}
             fontSize={16}
-            borderRadius={8}
-            width={170}
+            borderRadius={10}
+            fontWeight={700}
+            width={140}
             bgColor={""}
+            
           />
            <TouchableOpacity onPress={navigateToSignUp}>
           <MainButtons
             title={"Get Started"}
-            borderRadius={8}
             fontSize={16}
-            width={170}
+            borderRadius={10}
+            fontWeight={700}
+            width={140}
             bgColor={""}
             outlined={activeIndex !== 3 ? true : false}
             gradient={activeIndex === 3 ? true : false}

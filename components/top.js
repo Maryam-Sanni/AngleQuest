@@ -1,24 +1,24 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 
 const MyComponent = () => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const handleXPress = () => {
-    navigation.navigate('Join Recruitangle'); // Navigate to 'JoinAs' page
+navigate('/welcome'); // Navigate to 'JoinAs' page
   };
 
   return ( 
     <View style={{backgroundColor: '#F8F8F8', }}>
-            <View style={styles.header}>
+            <TouchableOpacity style={styles.header} onPress={() => navigate('/welcome')}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
           <Text style={styles.headerText}>AngleQuest</Text>
        
-        </View>
+        </TouchableOpacity>
     </View>
   );
 };

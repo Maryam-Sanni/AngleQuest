@@ -14,11 +14,11 @@ import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
 import Top2 from "../components/TopExtra";
 import OpenModal from "../LandingPage/Collectinfo";
-//import Footer from "./Footer";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import MainButtons from "../LandingPage/MainButton";
 import NoCreditSection from "../LandingPage/HomeFooter";
 import BoxSection from "../LandingPage/BoxSection";
+import LineBox from "../LandingPage/Linebox";
 import { LinearGradient } from "expo-linear-gradient";
 import Title from "../components/Title";
 import Row from "../components/Row";
@@ -29,7 +29,6 @@ import blueforte from "../assets/blueforte.png";
 import deliotte from "../assets/deliotte.png";
 import philips from "../assets/philips.png";
 import alix from "../assets/alix.png";
-import { Video } from "expo-av";
 import { BlurView } from "expo-blur";
 import Footer from "../components/Footer";
 
@@ -41,6 +40,10 @@ const cardSliderData = [
     personImg: require("../assets/person1.png"),
     cardImg: require("../assets/card1.png"),
     navigationTarget: "/individual",
+    rowItem1: "Acquire a new skill to enter a new domain",
+    rowItem2: "Gain practical knowledge",
+     rowItem3: "Achieve mastery through hands-on practice",
+     rowItem4: "Engage in real-world workplace scenarios"
   },
   {
     id: 2,
@@ -49,6 +52,10 @@ const cardSliderData = [
     personImg: require("../assets/person2.png"),
     cardImg: require("../assets/card2.png"),
     navigationTarget: "/business",
+    rowItem1: "Get essential guidance for a smooth transition",
+    rowItem2: "Use resources that aid in your integration",
+     rowItem3: "Receive support to boost your confidence",
+     rowItem4: "Achieve a successful adjustment to your new role"
   },
   {
     id: 3,
@@ -57,6 +64,10 @@ const cardSliderData = [
     personImg: require("../assets/person3.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/community",
+    rowItem1: "Interest based discovery & Partner Integration",
+    rowItem2: "⁠Drive symphony of connections and growth",
+     rowItem3: "⁠Cross-Pollination Cultivator",
+     rowItem4: "⁠Grow in your community knowledge"
   },
   {
     id: 4,
@@ -65,6 +76,10 @@ const cardSliderData = [
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card4.png"),
     navigationTarget: "/business",
+    rowItem1: "Boost employee retention",
+    rowItem2: "Help struggling employees gain proficiency",
+     rowItem3: "Enhance overall job satisfaction",
+     rowItem4: "Foster a culture of growth and development"
   },
   {
     id: 5,
@@ -73,6 +88,10 @@ const cardSliderData = [
     personImg: require("../assets/person5.png"),
     cardImg: require("../assets/card5.png"),
     navigationTarget: "/individual",
+    rowItem1: "Connect with an expert for questions and support",
+    rowItem2: "Get one-on-one performance assessments",
+     rowItem3: "Receive insights before manager meetings",
+     rowItem4: "Improve your role with tailored guidance"
   },
   {
     id: 6,
@@ -81,6 +100,10 @@ const cardSliderData = [
     personImg: require("../assets/success.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/individual",
+    rowItem1: "Friction-free knowledge sharing",
+    rowItem2: "⁠Eliminate Knowledge Silos",
+     rowItem3: "Drive Interest-based knowledge sharing",
+     rowItem4: "Timely knowledge of with industry release and updates"
   },
   {
     id: 7,
@@ -89,6 +112,10 @@ const cardSliderData = [
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/business",
+    rowItem1: "Facilitate knowledge sharing within teams",
+    rowItem2: "Strengthen team cohesion and understanding of tasks",
+     rowItem3: "Stay informed about new features and releases",
+     rowItem4: "Keep the team updated on industry trends"
   },
   {
     id: 8,
@@ -97,6 +124,10 @@ const cardSliderData = [
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/community",
+    rowItem1: "Identify skill gaps with Angle Quest AI",
+    rowItem2: "Match with an expert for personalized growth planning",
+     rowItem3: "Focus on key areas with a prioritized plan",
+     rowItem4: "Align efforts with personal and career goals"
   },
 ];
 
@@ -139,19 +170,16 @@ const BigLableButton = ({ title, img, subTitle, desc }) => {
   );
 };
 
-const SlideButton = ({ title, item1, item2, item3, item4 }) => {
+const SlideButton = ({ title, item, item2, item3, item4 }) => {
   return (
-    <TouchableOpacity style={{ gap: 20 }}>
+    <TouchableOpacity style={{ gap: 20, width: 350 }}>
       <Title
-        textSize={20}
+        textSize={16}
         textColor={"#C6ff64"}
         title={title}
       />
-      <View style={{ gap: 16, paddingLeft: 16 }}>
-        <Title textSize={16} textColor={"white"} title={item1} />
-        <Title textSize={16} textColor={"white"} title={item2} />
-        <Title textSize={16} textColor={"white"} title={item3} />
-        <Title textSize={16} textColor={"white"} title={item4} />
+      <View style={{ gap: 20, marginBottom: 10 }}>
+        <Title textSize={16} textColor={"white"} title={item} />
       </View>
     </TouchableOpacity>
   );
@@ -189,7 +217,7 @@ const DottedImage = ({ style }) => {
   );
 };
 
-const CardItem = ({ title, cardImg, personImg, bgColor, navigationTarget }) => {
+const CardItem = ({ title, cardImg, rowItem1, rowItem2, rowItem3, rowItem4, personImg, bgColor, navigationTarget }) => {
   const navigate = useNavigate();
   
   const [active, setActive] = useState(false);
@@ -258,10 +286,10 @@ const CardItem = ({ title, cardImg, personImg, bgColor, navigationTarget }) => {
             />
           </View>
           <View style={{ gap: 8, marginVertical: 40 }}>
-            <RowItem text={"Project Management"} />
-            <RowItem text={"Task Management"} />
-            <RowItem text={"Resource Management"} />
-            <RowItem text={"Portfolio Management"} />
+            <RowItem text={rowItem1}/>
+            <RowItem text={rowItem2}/>
+            <RowItem text={rowItem3}/>
+            <RowItem text={rowItem4}/>
           </View>
           <MainButtons
             borderRadius={20}
@@ -331,7 +359,7 @@ const SpecialBtn = ({ text, onPress,  height, width, bgColor }) => {
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 8,
-          background: isHovered ? 'lightgreen' : (bgColor || 'linear-gradient(90deg, #135837, #29BE77)'),
+          background: isHovered ? 'green' : (bgColor || 'linear-gradient(90deg, #135837, #29BE77)'),
         }}
       >
       <Text
@@ -479,25 +507,26 @@ const MyComponent = () => {
               <Text
                 style={{
                   color: "black",
-                  fontSize: 45,
+                  fontSize: 40,
                   fontWeight: "500",
                   marginTop: 20,
-                  maxWidth: 852,
+                  maxWidth: 650,
+                  fontFamily: 'arial'
                 }}
               >
-                Peak Performers Have a Team Working On Their{" "}
-                <Text style={{ color: "darkgreen" }}>Growth</Text>, Do You?{" "}
+                Top Performers Have a Team Working On Their{" "}
+                <Text style={{ color: "darkgreen"}}>Growth</Text>, Do You?{" "}
               </Text>
               <Text
                 style={{
                   marginTop: 30,
                   color: "black",
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: "400",
                   maxWidth: 646,
                 }}
               >
-                We provide - technical on the job support, handholding during career transitioning, and software's to drive employees growth through knowledge collaboration
+                Accelerate growth with our dedicated on-the-job support, career transition guidance, and tailored knowledge sharing collaboration
               </Text>
               <Row style={{ gap: 20, alignItems: "center", marginTop: 30 }}>
                 <BlurView
@@ -519,21 +548,14 @@ const MyComponent = () => {
                       height: 74,
                       gap: 10,
                       justifyContent: "space-between",
-                      width: 500,
+                      width: 460,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: "darkgreen",
-                        fontSize: 20,
-                        fontWeight: "400",
-                      }}
-                    >
-                      For:
-                    </Text>
+                    
                     <Row style={{ alignItems: "center", gap: 10, marginRight: 40 }}>
-                      <SpecialBtn text={"Individuals"} onPress={handleIndividualSignUp} />
-                      <SpecialBtn text={"Businesses"} onPress={handleBusinessSignUp} />
+                      <SpecialBtn text={"Individual"} onPress={handleIndividualSignUp} />
+                      <SpecialBtn text={"Business"} onPress={handleBusinessSignUp} />
+                      <SpecialBtn text={"Community"} onPress={handleIndividualSignUp} />
                     </Row>
                   </Row>
                 </BlurView>
@@ -639,6 +661,10 @@ const MyComponent = () => {
                       key={item?.id}
                       bgColor={item?.color}
                       title={item?.text}
+                     rowItem1={item?.rowItem1}
+                       rowItem2={item?.rowItem2}
+                      rowItem3={item?.rowItem3}
+                      rowItem4={item?.rowItem4}
                       personImg={item?.personImg}
                       cardImg={item?.cardImg}
                        style={{ width: screenWidth }}
@@ -669,7 +695,7 @@ const MyComponent = () => {
                   center={true}
                   textWeight={"400"}
                   title={
-                    "Organizations worldwide, from startups to industry leaders, trust and rely on our expertise"
+                    "Leading professionals globally work more efficiently with expert guidance from anglequest ensuring they never get stuck"
                   }
                 />
               </View>
@@ -695,22 +721,19 @@ const MyComponent = () => {
             <Image source={deliotte} />
             <Image source={blueforte} />
                </View>
-          
-          <Image
-            source={require("../assets/Frame 251.png")}
-            style={styles.landingimage}
-          />
-          
+
+           {<LineBox />}
           
           <View
             style={{
               marginVertical: -15,
               width: "100%",
               paddingHorizontal: 0,
-              backgroundColor: "#012B07",
+              backgroundColor: "#37754F",
               justifyContent: "center",
               alignItems: "center",
               position: "relative",
+              marginTop: 50
             }}
           >
          
@@ -757,42 +780,34 @@ const MyComponent = () => {
                 }}
               >
                 <View style={{ width: "30%" }}>
-                  <Row style={{ gap: 40 }}>
+                  <Row style={{ gap: 40, marginTop: -50 }}>
                     <View
                       style={{
                         width: 3,
-                        height: 650,
+                        height: 500,
                         backgroundColor: "white",
+                        marginLeft: 70
                       }}
                     />
                     <View style={{ gap: 20 }}>
                       <SlideButton
-                        title={"Excel in your role"}
-                        item1={"There is no such thing as difficulty,"}
-                        item2={"only challenges waiting to be overcome."}
-                        item3={"Overcome difficult tasks Upskill, Grow, and"}
-                        item4={"Thrive with Support from Industry Experts."}
+                        title={"Boost retention by assisting low performing employee in daily tasks"}
+                        item={"Learn new skills and gain practical knowledge for a new domain"}
                       />
                       <SlideButton
                         title={"Bigger and Brighter Goals"}
-                        item1={"Aim for the moon, and even if you miss,"}
-                        item2={"We're dedicated to helping you set ambitious"}
-                        item3={"goals and working with you every step"}
-                        item4={"of the way to achieve your career aspirations. "}
+                        item={"Find the guidance, resources, and support needed for a smooth transition into your new role."}
                       />
                       <SlideButton
                         title={"Transition to your dream role effortlessly"}
-                        item1={"Seamlessly transition into your new role"}
-                        item2={"with expert guidance and tailored"}
-                        item3={"support, ensuring a smooth and"}
-                        item4={"confident start."}
+                        item={"Seamlessly transition into your new role with expert guidance and tailored"}
                       />
                     </View>
                   </Row>
-                  <View style={{ marginLeft: 30 }}>
+                  <View style={{ marginLeft: 100, marginTop: -50 }}>
                      <TouchableOpacity onPress={handlecontact}>
                     <MainButtons
-                      width={180}
+                      width={150}
                       gradient={true}
                       title={"Get Started"}
                       borderRadius={5}
@@ -806,10 +821,10 @@ const MyComponent = () => {
                      </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ width: "65%" }}>
+                <View style={{ width: "65%", marginLeft: 60}}>
                   <Image
                     source={require("../assets/imagine.png")}
-                    style={{ height: 555, width: "100%" }}
+                    style={{ height: 500, width: "90%" }}
                   />
                   <Text
                     style={{
@@ -965,7 +980,7 @@ const MyComponent = () => {
                         marginTop: 30,
                       }}
                     >
-                      Equip your workforce with the expertise they need for growth
+                      Equip your workforce with the expertise they need to excel
                     </Text>
                     <View
                       style={{
@@ -1035,7 +1050,7 @@ const MyComponent = () => {
                           marginTop: 30,
                         }}
                       >
-                        Foster Knowledge Sharing and Elevate Expertise Within Your Community
+                        Foster Knowledge Sharing and Elevate Expertise Within Teams and Community
                       </Text>
                       <View
                         style={{
@@ -1073,7 +1088,7 @@ const MyComponent = () => {
           {/**INtegrate */}
           <View
             style={{
-              marginVertical: 40,
+              marginVertical: 30,
               width: "100%",
               paddingHorizontal: 100,
               backgroundColor: "#fffff",
@@ -1085,15 +1100,15 @@ const MyComponent = () => {
             <DottedImage style={{ top: -20, left: -20, filter: 'blur(4px)' }} />
             <View
               style={{
-                width: 1400,
-                paddingVertical: 40,
+                width: 1200,
+                paddingVertical: 20,
               }}
             >
               <Row style={{}}>
-                <View style={{ gap: 30, width: "40%" , marginTop: -50 }}>
-                  <Text style={{ fontWeight: '500', fontSize: 40}}>Stay on anglequest while seamlessly accessing all your other applications
+                <View style={{ gap: 30, width: "45%" , marginTop: -50 }}>
+                  <Text style={{ fontWeight: '500', fontSize: 40}}>Integrate your favorite apps with anglequest to gain insights from your daily tasks
 </Text>
-                  <Text style={{ fontWeight: '400', fontSize: 20}}>Our platform integrates seamlessly with your favorite tools, allowing you to find and connect the right apps to meet your specific needs</Text>
+                  <Text style={{ fontWeight: '400', fontSize: 20}}>Our platform seamlessly connects with your go-to tools, maximizing value from your daily tasks</Text>
                 
                   <Row style={{ gap: 10, alignItems: "center", marginTop: 10 }}>
                     <Title
@@ -1108,13 +1123,13 @@ const MyComponent = () => {
                     />
                   </Row>
                 </View>
-                <View style={{ width: "60%", gap: 20, }}>
+                <View style={{ width: "55%", gap: 20, }}>
                   <Row
                     style={{
                       justifyContent: "flex-end",
                       gap: 20,
                       width: "100%",
-                      marginTop: 50 
+                      marginTop: 80 
                     }}
                   >
                     <ImageBtn

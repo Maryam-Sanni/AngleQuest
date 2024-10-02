@@ -59,21 +59,21 @@ const styles = StyleSheet.create({
     padding: 20,
     marginHorizontal: 10,
     alignItems: 'center',
-    width: 250, // Card width
+    width: 350, // Card width
   },
   profileImageContainer: {
-    width: 160,  // Width of the circular background
-    height: 160, // Height of the circular background
-    borderRadius: 80, // Half of the width/height to make it circular
+    width: 190,  // Width of the circular background
+    height: 190, // Height of the circular background
+    borderRadius: 100, // Half of the width/height to make it circular
     backgroundColor: 'white', // Black circular background
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75, // Circular image
+    width: 180,
+    height: 180,
+    borderRadius: 100, // Circular image
   },
   userName: {
     fontSize: 18,

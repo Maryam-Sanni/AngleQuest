@@ -61,7 +61,7 @@ const Individual = () => {
   const handleIndividualSignUp = () => {
     navigate('/sign-up', { state: { signUpOption: 1 } });
   };
-  
+
   return (
         <View style={{ flex: 1, }}>
           <Top2 tint={"dark"} />
@@ -79,10 +79,10 @@ const Individual = () => {
           <SectionContainer>
             <View style={{ width: 1400 }}>
               <View style={{ gap: 10, marginTop: 50 }}>
-                
+
                 <MainTitle
                   title={"Discover how efficient you can be with"}
-                  secondTitle={"AngleQuest AI"}
+                  secondTitle={"AngleQuest"}
                 />
 
                 <Title
@@ -154,7 +154,7 @@ const Individual = () => {
                   <SmallCards
                     front
                     top={60}
-                    left={50}
+                    left={40}
                     title={"Junior to Senior Boost"}
                     desc={
                       "Career development platform optimized with resources for individuals"
@@ -169,7 +169,7 @@ const Individual = () => {
                     left={500}
                     title={"Skill Gap Analysis"}
                     desc={
-                      "Evaluate user’s current skills compared to new roles, stating areas for improvement"
+                      "Evaluate your current skills and compare to industry averages and your personal goals"
                     }
                     icon={
                       <AntDesign name="rocket1" size={24} color="#50F988" />
@@ -180,7 +180,7 @@ const Individual = () => {
                     right={170}
                     title={"Networking and Mentorship"}
                     desc={
-                      "Connect users with potential mentors in their field to guide career development"
+                      "Get paired with industry experts who would guide and serve as a point of contact for career questions or concerns"
                     }
                     icon={
                       <MaterialIcons name="people" size={24} color="#F95053" />
@@ -189,19 +189,19 @@ const Individual = () => {
                   <SmallCards
                     front
                     top={60}
-                    right={-50}
+                    right={-60}
                     title={"Rapid Upskilling"}
                     desc={
-                      "Intensive mentorship program to enhance individual’s skill & productivity"
+                      "Practice makes perfection! Get hands-on and real-world scenarios practice"
                     }
                     icon={
                       <AntDesign name="poweroff" size={24} color="#F95053" />
                     }
                   />
 
-               
-                  
-                  
+
+
+
                 </View>
               </View>
             </View>
@@ -209,7 +209,7 @@ const Individual = () => {
            {<CertificateSection />}
 
            {<NoCreditSection />}
-                   
+
 
           <SectionContainer>
             <View style={{ width: 1400, gap: 40 }}>
@@ -236,13 +236,13 @@ const Individual = () => {
                 />
                 </TouchableOpacity>
               </View>
-             
+
               {<Reviews />}
             </View>
           </SectionContainer>
 
           {<NextStep />}
-          
+
 
            {<VideoFooter />}
           {/*  Footer */}

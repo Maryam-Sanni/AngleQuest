@@ -26,7 +26,7 @@ const WincAcademyFooter = () => {
         </TouchableOpacity>
       </View>
       <Image
-        source={require('../assets/AddManager.png')}
+        source={require('../assets/AI.jpg')}
         style={styles.imageBack}
       />
     </View>

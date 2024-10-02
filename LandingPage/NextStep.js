@@ -16,7 +16,7 @@ const WincAcademyFooter = () => {
       </Text>
         <TouchableOpacity style={styles.button}>
           <LinearGradient
-            colors={['#135837', '#29BE77']} // Gradient colors (green shades)
+            colors={['#135837', '#29BE77']}
             style={styles.gradient}
           >
             <Text style={styles.buttonText}>Sign Up Now</Text>
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   imageBack: {
-  width: 400,
-     height: 400,
+  width: 500,
+     height: 500,
      marginRight: 50,
     marginLeft: 100
     },
