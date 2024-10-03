@@ -335,7 +335,7 @@ const HomePage = () => {
           <View style={{flexDirection: 'row' }}>
           <Text style={styles.touchableTextchat}>{t("Skill Analysis")}</Text>
           <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>2</Text>
+        <Text style={styles.messageCountText}>0</Text>
         </View>
         </View>
         </TouchableOpacity>
@@ -350,7 +350,7 @@ const HomePage = () => {
          <View style={{flexDirection: 'row' }}>
           <Text style={styles.touchableTextchat}>{t("Growth Plan")}</Text>
           <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>5</Text>
+        <Text style={styles.messageCountText}>0</Text>
         </View>
         </View>
         </TouchableOpacity>
@@ -365,7 +365,7 @@ const HomePage = () => {
             <View style={{flexDirection: 'row' }}>
             <Text style={styles.touchableTextchat}>{t("Hubs")}</Text>
             <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>3</Text>
+        <Text style={styles.messageCountText}>0</Text>
         </View>
         </View>
           </TouchableOpacity>
@@ -380,7 +380,7 @@ const HomePage = () => {
           <View style={{flexDirection: 'row' }}>
           <Text style={styles.touchableTextchat}>{t("Scenario Project")}</Text>
           <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>1</Text>
+        <Text style={styles.messageCountText}>0</Text>
         </View>
         </View>
         </TouchableOpacity>
@@ -396,7 +396,7 @@ const HomePage = () => {
            <View style={{flexDirection: 'row' }}>
             <Text style={styles.touchableTextchat}>{t("Interview")}</Text>
             <View style={styles.messageCount}>
-        <Text style={styles.messageCountText}>7</Text>
+        <Text style={styles.messageCountText}>0</Text>
         </View>
         </View>
           </TouchableOpacity>

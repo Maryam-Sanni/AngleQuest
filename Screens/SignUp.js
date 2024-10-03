@@ -109,7 +109,7 @@ const SignUp = () => {
       );
 
       console.log("Signup success:", response.data);
-      navigate("/verify-email", { userEmail: email }); 
+      navigate("/verify-email", { state: { userEmail: email } });
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Signup failed. Please try again.");
@@ -144,7 +144,7 @@ const SignUp = () => {
       });
 
       console.log('Signup success:', response.data);
-      navigate('/verify-mail', { userEmail: email }); // Navigate and pass email as parameter
+      navigate("/verify-mail", { state: { userEmail: email } });
     } catch (error) {
       console.error('Signup failed:', error);
       alert('Signup failed. Please try again.');
@@ -330,11 +330,15 @@ const SignUp = () => {
                       />
 
                       <InputField
-                        keyboardType="text"
+                        keyboardType="default"
                         val={password}
                         placeholder="Password"
                         onChangeText={setPassword}
+                        secureTextEntry={true} 
                       />
+                      <Text style={{ fontSize: 12, marginTop: -5 }}>
+                        Password must be at least 8 characters long
+                      </Text>
                       <TouchableOpacity   onPress={() => {
                           setAgree1(!agree1); 
                     toggleCheckbox();   
@@ -497,11 +501,15 @@ const SignUp = () => {
                       />
 
                       <InputField
-                        keyboardType="text"
+                        keyboardType="default"
                         val={password}
                         placeholder="Password"
                         onChangeText={setPassword}
+                        secureTextEntry={true} 
                       />
+                      <Text style={{ fontSize: 12, marginTop: -5 }}>
+                        Password must be at least 8 characters long
+                      </Text>
                       <TouchableOpacity   onPress={() => {
                         setAgree1(!agree1); 
                       toggleCheckbox();   
@@ -664,11 +672,15 @@ const SignUp = () => {
                       />
 
                       <InputField
-                        keyboardType="text"
+                        keyboardType="default"
                         val={password}
                         placeholder="Password"
                         onChangeText={setPassword}
+                        secureTextEntry={true} 
                       />
+                      <Text style={{ fontSize: 12, marginTop: -5 }}>
+                        Password must be at least 8 characters long
+                      </Text>
                       <TouchableOpacity onPress={() => setAgree1(!agree1)}>
                         <Row style={{ gap: 10 }}>
                           {agree1 ? (

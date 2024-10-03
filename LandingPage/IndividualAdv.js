@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const WincAcademyFooter = () => {
   return (
     <View style={styles.footerContainer}>
-      <View style ={{flexDirection: 'column', width: '50%', marginLeft: '5%'}}>
+      <View style ={{flexDirection: 'column'}}>
       <Text style={styles.heading}>ANGLEQUEST AI</Text>
       <Text style={styles.description}>
         Upload your CV and let our AI guide you to your next career milestone. By analyzing your experience, skills, and goals, our AI recommends personalized career paths, helping you identify the best opportunities for growth and advancement.
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
      width: "100%",
     backgroundColor: '#012B07',
     alignItems: 'center', 
+    justifyContent: 'center',
     flexDirection: 'row',
     height: 600,
   },
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   imageBack: {
   width: 500,
      height: 500,
-     marginLeft: 50,
+     marginLeft: 100,
     },
 });
 

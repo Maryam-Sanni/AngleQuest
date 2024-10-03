@@ -9,7 +9,7 @@ const WincAcademyFooter = () => {
         source={require('../assets/Unlock.jpg')}
         style={styles.imageBack}
       />
-      <View style ={{flexDirection: 'column', width: '50%', marginLeft: '5%'}}>
+      <View style ={{flexDirection: 'column'}}>
       <Text style={styles.heading}>Take the next step towards personal and professional goals with anglequest</Text>
       <Text style={styles.description}>
         Begin your journey with anglequest today!
@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
   imageBack: {
   width: 500,
      height: 500,
-     marginRight: 50,
-    marginLeft: 100
+     marginRight: 100,
     },
 });
 

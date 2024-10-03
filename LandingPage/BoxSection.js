@@ -19,7 +19,7 @@ const MySection = () => {
         description: "We help identify areas for improvement and provide targeted training to close gaps and boost performance"
       },
       {
-        title: "Join a Coaching           Hub",
+        title: "Join a Coaching Hub",
         description: "Connect with like-minded individuals and gain access to a network of peers and experts who share the same goals"
       },
       {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       padding: 20,
       borderRadius: 10,
-      width: 230,
+      width: 250,
       height: 250,
       borderColor: 'black',
       borderWidth: 0.5,

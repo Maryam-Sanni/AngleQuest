@@ -30,12 +30,21 @@ const SixBoxesInput = () => {
   );
 };
 
-const VerificationContent = ({ userEmail }) => {
-  const navigate = useNavigate();
+  const VerificationContent = () => {
+    const location = useLocation();  // Get location to access state
+    const navigate = useNavigate();
+
+    // Retrieve userEmail from location.state
+    const { userEmail } = location.state || { userEmail: '' };
+
 
   const handleChangeEmail = () => {
     navigate('/sign-up', { state: { signUpOption: 2 } });
   };
+
+    const handleSignIn = () => {
+      navigate("/sign-in"); // Navigate to the Sign In page
+    };
 
   const handleOpenEmailClient = () => {
     const gmailInboxUrl = 'https://mail.google.com/mail/u/0/#inbox';
@@ -43,7 +52,6 @@ const VerificationContent = ({ userEmail }) => {
     // Directly open Gmail inbox
     window.location.href = gmailInboxUrl;
   };
-
 
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
@@ -60,7 +68,7 @@ const VerificationContent = ({ userEmail }) => {
         style={styles.logo}
       />
       <Text style={styles.title}>Welcome to AngleQuest 👋</Text>
-      <Text style={styles.text}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
+      <Text style={styles.text1}>A verification mail has been sent to <Text style={styles.email}>{userEmail}</Text> </Text>
       <Text style={styles.text}>Before we dive into all the amazing things you'll accomplish with us, please confirm your email address. </Text>
       <Text style={styles.text}>It's quick and easy, you should get a mail in 3 minutes. If you do not see it you may need to check your spam folders</Text>
       <TouchableOpacity style={styles.button} onPress={handleOpenEmailClient}>
@@ -72,6 +80,9 @@ const VerificationContent = ({ userEmail }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={handleChangeEmail}>
           <Text style={styles.changeEmailText}>Change email</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSignIn}>
+          <Text style={styles.changeEmailText}>Sign in</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -125,24 +136,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     marginTop: -10,
     marginBottom: 20,
-    fontFamily: 'Roboto-Light',
   },
   text: {
     width: '100%',
     marginVertical: 5,
-    fontSize: 12,
-    fontFamily: 'Roboto-Light',
+    fontSize: 16,
     textAlign: 'center',
+  },
+  text1: {
+    width: '100%',
+    marginVertical: 5,
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 30
   },
   email: {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 10,
-    fontFamily: 'Roboto-Light',
   },
   buttonsContainer: {
     flexDirection: 'row',

@@ -9,24 +9,24 @@ const LineBoxWithText = () => {
       imageUrl: 'https://img.icons8.com/?size=100&id=38192&format=png&color=000000',
     },
     {
-      text: 'Microsoft CE',
-      imageUrl: 'https://img.icons8.com/?size=100&id=TdZTMv5DI6kp&format=png&color=000000',
+      text: 'Microsoft Dynamics 365 CE',
+      imageUrl: 'https://cloudcti.nl/sites/default/files/styles/logo/public/externals/8265a353c2552505948a221154fb73ce.png',
     },
     {
       text: 'Microsoft Business Central',
-      imageUrl: 'https://img.icons8.com/?size=100&id=TdZTMv5DI6kp&format=png&color=000000',
+      imageUrl: 'https://play-lh.googleusercontent.com/sCuVNpMVCpDReWX5KK7CSqccS6_S2B4DGgt1hW2xNP724kDdKH_KKGN0PxkFwgKBYa0',
     },
     {
-      text: ' MS Power Platform',
+      text: ' Microsoft Power Platform',
       imageUrl: 'https://img.icons8.com/?size=100&id=jXuZmZPUKCPS&format=png&color=000000',
     },
     {
       text: 'Scrum',
-      imageUrl: 'https://img.icons8.com/?size=100&id=oBQdUqMEZHS9&format=png&color=000000',
+      imageUrl: 'https://wac-cdn.atlassian.com/dam/jcr:7af87fb7-1d9d-40de-910b-852ad8fe1825/scrum@2x.png',
     },
     {
       text: 'Microsoft F&O',
-      imageUrl: 'https://img.icons8.com/?size=100&id=TdZTMv5DI6kp&format=png&color=000000',
+      imageUrl: 'https://cdn6.aptoide.com/imgs/d/5/6/d56f311244d74f989eb7b7494442d6fd_icon.png',
     },
     {
       text: 'Microsoft Azure',

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Video } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const VideoBackgroundSection = () => {
   const videoRef = useRef(null);
@@ -23,8 +24,13 @@ const VideoBackgroundSection = () => {
           Every step is carefully designed with your achievement in mind.
 </Text>
 
-        <Pressable style={styles.button} onPress={() => alert('Button Pressed!')}>
+        <Pressable style={styles.button} >
+          <LinearGradient
+            colors={['#135837', '#29BE77']}
+            style={styles.gradient}
+          >
           <Text style={styles.buttonText}>Sign up</Text>
+             </LinearGradient>
         </Pressable>
       </View>
     </View>
@@ -69,15 +75,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    backgroundColor: '#135837',
-    padding: 15,
+    width: 200, 
+  },
+  gradient: {
+    padding: 10,
     borderRadius: 5,
-    width: 150
+    alignItems: 'center',
   },
   buttonText: {
+    color: 'white',
     fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
   },
 });
 
