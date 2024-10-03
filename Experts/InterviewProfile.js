@@ -244,7 +244,7 @@ function MyComponent({ onClose }) {
           </View>
 
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Questions")}</Text>
+            <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Guide")}</Text>
             <TouchableOpacity 
               style={[styles.buttonplus, questions.length >= MAX_QUESTIONS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
               onPress={addQuestion}

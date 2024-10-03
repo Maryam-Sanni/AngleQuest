@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   container: {
-    height: 1000,
+    height: 1100,
     backgroundColor: "#f7fff4",
     borderRadius: 20,
     padding: 20,
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   glassBox: {
-    height: 1050,
+    height: 1150,
     backgroundColor: "rgba(225,255,212,0.3)",
     borderRadius: 20,
     marginTop: 30,
@@ -646,12 +646,13 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "transaparent",
-    borderRadius: 10,
+    borderRadius: 5,
     borderColor: "coral",
     borderWidth: 1,
     padding: 10,
     alignItems: "center",
     marginVertical: 30,
+    marginTop: 50
   },
   buttonText: {
     color: "white",

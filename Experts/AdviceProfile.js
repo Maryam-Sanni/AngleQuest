@@ -242,7 +242,7 @@ function MyComponent({ onClose }) {
           </View>
 
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Topics")}</Text>
+            <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Guide")}</Text>
             <TouchableOpacity
               style={[styles.buttonplus, topics.length >= MAX_TOPICS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
               onPress={addTopic}

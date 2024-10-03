@@ -6,9 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
 
+const MAX_RESPONSE= 10;
 
 function MyComponent({ onClose }) {
   const [guides, setGuides] = useState([]);
+  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '' })));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [remark, setRemark] = useState('');
@@ -19,6 +21,7 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
    const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -99,6 +102,31 @@ newGuides[index] = { ...newGuides[index], [field]: value };
 setGuides(newGuides);
 };
 
+  const addResponse = () => {
+    if (response.length < MAX_RESPONSE) {
+      setResponse([...response, { response: '', percentage: '' }]);
+    }
+  };
+
+  const updateResponse = (index, key, value) => {
+    const newResponse = [...response];
+    newResponse[index][key] = value;
+    setResponse(newResponse);
+  };
+
+  const deleteResponse = (index) => {
+    const newResponse = response.filter((_, i) => i !== index);
+    setResponse(newResponse);
+  };
+
+  const handlePressIn = () => {
+    setIsPressed(true);
+  };
+
+  const handlePressOut = () => {
+    setIsPressed(false);
+  };
+  
   const handlePress = async () => {
     if (!remark || !guides || !rating ) {
       setAlertMessage(t('Please fill all fields'));
@@ -282,6 +310,55 @@ setGuides(newGuides);
 
     </TouchableOpacity>
   </View>
+
+  <View style={{ flexDirection: 'row' }}>
+     <View style={{ flexDirection: 'column' }}>
+      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, }}>{t("Create Personalised Roadmap")}</Text>
+     <Text style={{ marginLeft: 50, fontSize: 12, marginTop: 5, fontStyle: 'italic' }}>{t("(Insert maximum of 10)")}</Text>
+     </View>
+      <TouchableOpacity
+        style={[styles.buttonplus, response.length >= MAX_RESPONSE && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
+        onPress={addResponse}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={response.length >= MAX_RESPONSE}
+      >
+        <Text style={styles.buttonTextplus}>+</Text>
+      </TouchableOpacity>
+    </View>
+
+    <View style={styles.container}>
+      {response.map((response, index) => (
+        <View key={index} style={styles.row}>
+          <View style={[styles.cell, { flex: 0.5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
+          </View>
+          <View style={[styles.cell, { flex: 2 }]}>
+            <TextInput
+              placeholder={t("Title")}
+              placeholderTextColor="grey"
+              style={styles.input}
+              value={response.response}
+              onChangeText={text => updateResponse(index, 'response', text)}
+            />
+          </View>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <TextInput
+              placeholder={t("Description")}
+              placeholderTextColor="grey"
+              style={styles.input}
+              value={response.response}
+              onChangeText={text => updateResponse(index, 'response', text)}
+            />
+          </View>
+
+          <TouchableOpacity onPress={() => deleteResponse(index)} style={styles.deleteButton}>
+            <Text style={{color: 'red', fontSize: 18, fontWeight: 600}}>✕</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+    </View>
+  
 <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
                 <TextInput
@@ -450,7 +527,39 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F5637',
     fontFamily:"Roboto-Light"
-  }
+  },
+  buttonDue: {
+    borderWidth: 2,
+    borderColor: 'coral',
+    padding: 10,
+    marginLeft: 50,
+    paddingHorizontal: 20,
+    marginTop: 15,
+  },
+  buttonTextDue: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  },
+  buttonplus: {
+    backgroundColor: 'coral',
+    padding: 5,
+    marginLeft: 500,
+    width: 100,
+    paddingHorizontal: 20,
+    marginTop: 50,
+    marginBottom: 10
+  },
+  buttonTextplus: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  },
+  buttonplusDisabled: {
+    backgroundColor: 'red',
+  },
 });
 
 export default MyComponent;

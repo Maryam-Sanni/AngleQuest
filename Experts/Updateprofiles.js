@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import OpenModal from './Growthplanprofile'; // Import your Growth Plan Profile modal
+import OpenModal from './Growthplanprofile';
+import OpenModal1 from './BioProfile';
+import OpenModal2 from './InterviewProfile';
+import OpenModal3 from './AdviceProfile';
+import OpenModal4 from '../components/Createhubform';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = ({ onClose }) => {
@@ -9,10 +13,10 @@ const ProfilePage = ({ onClose }) => {
 
   const sections = [
     { id: 1, title: "Personal Information" },
-    { id: 2, title: "Growth Plan Profile" },
-    { id: 3, title: "Interview Profile" },
-    { id: 4, title: "Skill Analysis Profile" },
-    { id: 5, title: "Create Hub" },
+    { id: 2, title: "Growth Plan Guide" },
+    { id: 3, title: "Interview Guide" },
+    { id: 4, title: "Skill Analysis Guide" },
+    { id: 5, title: "Create a new Hub" },
   ];
 
   const handleSectionClick = (section) => {
@@ -29,30 +33,69 @@ const ProfilePage = ({ onClose }) => {
         {sections.map((section) => (
           <TouchableOpacity
             key={section.id}
-            style={styles.sidebarItem}
+            style={[
+              styles.sidebarItem,
+              activeSection === section.title && styles.activeSidebarItem, // Apply active style
+            ]}
             onPress={() => handleSectionClick(section.title)}
           >
-            <Text style={styles.sidebarText}>{section.title}</Text>
+            <Text
+              style={[
+                styles.sidebarText,
+                activeSection === section.title && styles.activeSidebarText, // Apply active text style
+              ]}
+            >
+              {section.title}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
 
       <View style={styles.content}>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: 'red', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+          <Text
+            style={{
+              fontSize: 18,
+              color: 'red',
+              fontWeight: 'bold',
+              fontFamily: "Roboto-Light",
+            }}
+          >
             ✕
           </Text>
         </TouchableOpacity>
-        {activeSection === "Growth Plan Profile" ? (
-          // Render the GrowthPlanProfile pop-up component
+        
+{activeSection === "Growth Plan Guide" && (
           <View style={styles.modalContainer}>
             <OpenModal />
           </View>
-        ) : activeSection ? (
-          <Text style={styles.contentText}>
-            {`You clicked on ${activeSection}`}
-          </Text>
-        ) : (
+        )}
+
+        {activeSection === "Interview Guide" && (
+          <View style={styles.modalContainer}>
+            <OpenModal2 />
+          </View>
+        )}
+
+        {activeSection === "Skill Analysis Guide" && (
+          <View style={styles.modalContainer}>
+            <OpenModal3 />
+          </View>
+        )}
+
+        {activeSection === "Create a new Hub" && (
+          <View style={styles.modalContainer}>
+            <OpenModal4 />
+          </View>
+        )}
+
+        {activeSection === "Personal Information" && (
+  <View style={styles.modalContainer}>
+    <OpenModal1 />
+  </View>
+        )}
+
+        {!activeSection && (
           <Text style={styles.contentText}>
             Click on any section to display the content here.
           </Text>
@@ -64,7 +107,7 @@ const ProfilePage = ({ onClose }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 1250,
+    width: 1230,
     marginTop: 100,
     flex: 1,
     flexDirection: 'row',
@@ -82,9 +125,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
+  activeSidebarItem: {
+    backgroundColor: '#206C00', 
+  },
   sidebarText: {
     fontSize: 16,
     color: '#333',
+    marginLeft: 10
+  },
+  activeSidebarText: {
+    color: '#fff', 
+    fontWeight: '600', 
   },
   content: {
     flex: 1,
@@ -99,12 +150,12 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 20,
+    top: 10,
     right: 20,
   },
   modalContainer: {
     position: 'absolute',
-    top: 0,
+    top: 30,
     right: 0,
     width: '100%',
     height: '100%',

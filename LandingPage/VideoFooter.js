@@ -2,9 +2,15 @@ import React, { useRef } from "react";
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigate } from "react-router-dom";
 
 const VideoBackgroundSection = () => {
   const videoRef = useRef(null);
+  const navigate = useNavigate();
+
+  const handleIndividualSignUp = () => {
+    navigate("/sign-up", { state: { signUpOption: 1 } });
+  };
   
   return (
     <View style={styles.container}>
@@ -24,7 +30,7 @@ const VideoBackgroundSection = () => {
           Every step is carefully designed with your achievement in mind.
 </Text>
 
-        <Pressable style={styles.button} >
+        <Pressable style={styles.button} onPress={handleIndividualSignUp}>
           <LinearGradient
             colors={['#135837', '#29BE77']}
             style={styles.gradient}

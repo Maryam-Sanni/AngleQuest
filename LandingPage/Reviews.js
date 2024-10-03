@@ -6,19 +6,19 @@ const reviewsData = [
     id: 1,
     name: "Alice Smith",
     review: "After graduating with a bachelor's degree in accounting, I started my career in the banking sector but soon felt unfulfilled. This platform helped me successfully transition into my dream role, and today, I'm a certified SAP Finance Consultant. I now love both my work and my life.",
-    image: require("../assets/laptopGuy.png"),
+    image: require("../assets/Review2.png"),
   },
   {
     id: 2,
     name: "John Raymond",
     review: "I never had the chance to pursue a higher education and spent years working in low-paying jobs. Deep down, I knew I was capable of more but felt lost on how to begin. This platform gave me the support and direction I needed, walking me through every step of the journey. Today, I'm proud to say I'm a certified Business Analyst, and my career has taken a completely new, fulfilling path.",
-    image: require("../assets/TG5.png"),
+    image: require("../assets/Review1.png"),
   },
   {
     id: 3,
     name: "Patricia Emmanuel",
     review: "When I started my new job, it wasn’t what I expected—the processes were far more complex and unfamiliar than what I was used to. I needed help to succeed in my role. Thanks to this platform, I worked closely with a dedicated expert who guided me every step of the way. With support from experts and scenario projects, I was able to perform confidently without losing the excitement of my new job.",
-    image: require("../assets/laptopGuy.png"),
+    image: require("../assets/Review3.png"),
   },
 ];
 

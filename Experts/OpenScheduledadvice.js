@@ -570,18 +570,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: "Roboto-Light"
   },
-  buttonsave: {
-    backgroundColor: 'coral',
-    padding: 5,
-    marginLeft: 750,
-    width: 100,
-    paddingHorizontal: 20,
-    marginTop: 30
-  },
-  buttonTextsave: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
+  buttonplusDisabled: {
+    backgroundColor: 'red',
   },
 });
 

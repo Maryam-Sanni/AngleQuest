@@ -1,8 +1,15 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigate } from "react-router-dom";
 
 const WincAcademyFooter = () => {
+  const navigate = useNavigate();
+
+  const handleIndividualSignUp = () => {
+    navigate("/sign-up", { state: { signUpOption: 1 } });
+  };
+  
   return (
     <View style={styles.footerContainer}>
       <Image
@@ -14,12 +21,12 @@ const WincAcademyFooter = () => {
       <Text style={styles.description}>
         Begin your journey with anglequest today!
       </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleIndividualSignUp}>
           <LinearGradient
             colors={['#135837', '#29BE77']}
             style={styles.gradient}
           >
-            <Text style={styles.buttonText}>Sign Up Now</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

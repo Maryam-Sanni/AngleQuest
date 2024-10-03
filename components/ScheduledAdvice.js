@@ -193,12 +193,7 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Open</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Give Analysis</Text>
+              <Text style={{color: 'white'}}>Give Feedback</Text>
                </View>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -237,12 +232,7 @@ const ScheduledMeetingsTable = () => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Open")}</Text>
-                   </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleOpenPress2(meeting)}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Give Analysis")}</Text>
+                  <Text style={styles.linkText}>{t("Give Feedback")}</Text>
                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleJoinPress}>
