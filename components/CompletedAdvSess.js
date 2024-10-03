@@ -99,7 +99,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t('Completed Skill Analysis')}</Text>
+        <Text style={styles.title}>{t('Completed Session')}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             {/* Table Headers */}

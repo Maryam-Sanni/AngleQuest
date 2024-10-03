@@ -13,7 +13,7 @@ import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
 import Title from "../components/Title";
 import google from "../assets/google.png";
-import loginImg from "../assets/loginImg.png";
+import loginImg from "../assets/LogIn.jpg";
 import InputField from "../components/InputField";
 import PeopleComponent from "../components/PeopleComponent";
 import Footer from "../components/Footer";
@@ -160,7 +160,7 @@ const SignIn = () => {
                 <View>
                   <Image
                     source={loginImg}
-                    style={{ width: 620, height: 620 }}
+                    style={{ width: 620, height: 620, borderRadius: 10 }}
                   />
                 </View>
                 <View
@@ -235,7 +235,7 @@ const SignIn = () => {
                             source={{
                               uri: passwordVisible
                                 ? 'https://img.icons8.com/?size=100&id=60022&format=png&color=000000' 
-                                : 'https://img.icons8.com/?size=100&id=121537&format=png&color=000000' 
+                                : 'https://img.icons8.com/?size=100&id=3PEmEecIkSOo&format=png&color=000000' 
                             }}
                             style={{width: 20, height: 20}}
                           />
@@ -251,7 +251,7 @@ const SignIn = () => {
                           textAlign: "right",
                         }}
                       >
-                        Forget Password
+                        Forgot Password
                       </Text>
                       </TouchableOpacity>
                     

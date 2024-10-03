@@ -25,6 +25,7 @@ function MyComponent() {
   const [targetLevel, setTargetLevel] = useState("Medior");
   const [expert, setExpert] = useState(" ");
   const [description, setDescription] = useState(" ");
+  
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -210,19 +211,11 @@ function MyComponent() {
             <Topbar />
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 <Sidebar />
+              
+                               
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-                    <View style={{ marginLeft: 270 }}>
-                    <View style={styles.header}>
-            <TouchableOpacity>
-              <View style={styles.item}>
-                <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55' }}
-                  style={styles.image}
-                />
-                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14,  marginTop: 5 }}>{t("Skill Analysis")}</Text>
-                </View>
-            </TouchableOpacity>
-            </View>
+                   
+                    <View style={{marginLeft: 270}}>
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
@@ -231,15 +224,9 @@ function MyComponent() {
      </TouchableOpacity>
                       <TouchableOpacity onPress={gotoresult}>
                         <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
-                          <View style={{ flexDirection: "row" }}>
-                            <Image
-                              source={{
-                                uri: "https://img.icons8.com/?size=100&id=h8DSzvl0ktMY&format=png&color=FFFFFF",
-                              }}
-                              style={{ width: 20, height: 20, marginRight: 10 }}
-                            />
-                                        <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("My AI Skill Gap Analysis")}</Text>
-                          </View>
+                          
+                                        <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("AI Analysis")}</Text>
+                       
                                       </View>
                          </TouchableOpacity>
                         <TouchableOpacity>
@@ -252,9 +239,9 @@ function MyComponent() {
      <View style={styles.container}>
       <View style={styles.box}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Meeting")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{selectedDate}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{selectedTime}</Text>
+      <Text style={{ fontSize: 18, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Meeting")}</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{selectedDate}</Text>
+    <Text style={{ fontSize: 14, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{selectedTime}</Text>
     <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
           <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
           </TouchableOpacity>
@@ -262,7 +249,7 @@ function MyComponent() {
            </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{role}</Text>
+        <Text style = {{fontSize: 18, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{role}</Text>
         <View style={{flexDirection: 'row'}}>
            <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light" }}>{type}</Text>
            <Image source={require('../assets/traffic-sign.png')} style={styles.boximage}  />
@@ -270,18 +257,19 @@ function MyComponent() {
      </View>
 
       <View style={styles.box}> 
-      <Text style = {{fontSize: 16, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
-      <Text style = {{fontSize: 12, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{description}</Text>
+      <Text style = {{fontSize: 18, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
+      <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{description}</Text>
       </View>
       
       <View style={styles.box}>
-        <View style={{flexDirection: 'row' }}>
+
         <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 40, height: 40, aspectRatio: 1, }}
             />
-            <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")}</Text>
-          <Text style = {{fontSize: 12, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{expert}</Text>
+        <View style={{flexDirection: 'row' }}>
+            <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")}</Text>
+          <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{expert}</Text>
             </View>
     </View>
     </View>
@@ -299,10 +287,10 @@ function MyComponent() {
                        
                         <ScheduledAdvice />
                         <CompletedAdvice />
-                    </View>
+                   </View>
                 </ScrollView>
-            </View>
-        </View>
+                 </View>
+                  </View>
         </ImageBackground>
     );
 }

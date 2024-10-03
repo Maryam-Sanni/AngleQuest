@@ -277,7 +277,7 @@ function MyComponent({ onClose }) {
                 }}
               >
                 <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
-                  {t("Skill Analysis")}
+                  {t("Select")}
                 </Text>
               </TouchableOpacity>
               
@@ -306,7 +306,7 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
                   style={styles.logo}
                 />
-                <Text style={styles.headerText}>{t("Skill Analysis")}</Text>
+                <Text style={styles.headerText}>{t("Select an expert")}</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                   <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>✕</Text>
                 </TouchableOpacity>
@@ -314,7 +314,6 @@ function MyComponent({ onClose }) {
               <View style={{ alignItems: 'flex-start', marginLeft: 40 }}>
                 <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Recommended Experts for your personalised skill gap analysis")}</Text>
                 <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Choose an expert for a personalised skill gap analysis session")}</Text>
-                <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <Picker
                     selectedValue={selectedCategory}
@@ -344,7 +343,7 @@ function MyComponent({ onClose }) {
                 {renderCards()}
               </View>
               <TouchableOpacity onPress={handlesubmitandpost} style={styles.buttonplus}>
-                <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
+                <Text style={styles.buttonTextplus}>{t("Proceed")}</Text>
               </TouchableOpacity>
             </View>
      

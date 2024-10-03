@@ -202,10 +202,7 @@ function MyComponent() {
   };
 
   const handleLogout = () => {
-    // Handle logout action here
-    console.log("Logout clicked");
-    navigate('/welcome'); // Navigate to the sign-in page
-    setClickedItem(null);
+    navigate('/sign-in');
   };
 
   const handleProfileClick = () => {

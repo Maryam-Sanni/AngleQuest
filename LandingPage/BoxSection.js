@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
    arrow: {
       fontSize: 25,
       color: '#206C00',
-      marginHorizontal: 20,
+      marginHorizontal: 15,
       fontWeight: 'bold',
       marginTop: 100
    },
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
    imageBack: {
       width: 500,
       height: 500,
-      marginRight: 50
+      marginRight: 30
    },
 });
 

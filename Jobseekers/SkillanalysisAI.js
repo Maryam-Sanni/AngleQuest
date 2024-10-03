@@ -285,7 +285,11 @@ const MyComponent = ({ onClose }) => {
 
   const { t } = useTranslation();
 
-  const DropDown = ({ title, subTitle, onPress, bgColor, textColor }) => {
+  const DropDown = ({ title, subTitle, onPress, bgColor, textColor, isOpen }) => {
+    const arrowIcon = isOpen
+      ? 'https://img.icons8.com/ios-filled/50/000000/chevron-up.png' 
+      : 'https://img.icons8.com/ios-filled/50/000000/chevron-down.png'; 
+
     return (
       <TouchableOpacity
         onPress={onPress}
@@ -298,12 +302,14 @@ const MyComponent = ({ onClose }) => {
           </Text>
         </View>
         <Image
-          source={down}
+          source={{ uri: arrowIcon }} 
           style={{ width: 20, height: 20, objectFit: "contain" }}
         />
       </TouchableOpacity>
     );
   };
+
+  
   const [openCV, setOpenCV] = useState(false);
   const [openQues, setOpenQues] = useState(false);
   const [switched, setSwitched] = useState(false);
@@ -432,7 +438,7 @@ const MyComponent = ({ onClose }) => {
               style={styles.logo}
             />
             <Text style={styles.headerText}>
-              {t("Use AngleQuest AI to analyse your skills")}
+              {t("Analyse your skills with AngleQuest AI")}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text
@@ -462,14 +468,13 @@ const MyComponent = ({ onClose }) => {
               <View style={styles.titleWrapper}>
                 <Image style={styles.image} source={BotIMG} />
                 <View style={{ flex: 1, gap: 8 }}>
-                  <Text style={styles.title}>Hello I am AngleQuest AI</Text>
+                  <Text style={styles.title}>Hello 👋</Text>
+                  <Text style={styles.title2}>I am AngleQuest AI</Text>
                   <Text style={styles.subTitle}>
-                    Upload your CV and choose the next level in your career that
-                    you want to reach...
+                    Please upload your CV and select the next career level you aim you attain
                   </Text>
                   <Text style={styles.subTitle}>
-                    I'll conduct a personalized skill gap analysis, growth plan,
-                    timeline and references to help you get started!
+                    This will enable me to create a personalized skill gap analysis, growth plan, expected timeline for your growth and references to gear you to a smooth start
                   </Text>
                 </View>
               </View>
@@ -478,6 +483,7 @@ const MyComponent = ({ onClose }) => {
                 bgColor={openQues ? "#D9D9D9" : "#6A8F6D"}
                 textColor={openQues ? "#777676" : "white"}
                 subTitle={"Get a personalized skill gap analysis in 2 minutes"}
+                 isOpen={openCV}
                 onPress={handleCV}
               />
 
@@ -547,6 +553,7 @@ const MyComponent = ({ onClose }) => {
                   onPress={handleQuestionaire}
                   bgColor={openQues ? "#6A8F6D" : "#6A8F6D"}
                   textColor={openQues ? "white" : "white"}
+                  isOpen={openQues}
                 />
               )}
           {openQues && (
@@ -597,7 +604,7 @@ const MyComponent = ({ onClose }) => {
                         <Switch
                           value={switchStates[index] || false}
                           onValueChange={() => toggleSwitch(index)}
-                          trackColor={{ false: "#767577", true: "#4CAF50" }} 
+                          trackColor={{ false: "#767577", true: "coral" }} 
                           thumbColor={switchStates[index] ? "#fff" : "#fff"}
                           style={styles.switch}
                         />
@@ -662,10 +669,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "700",
+    marginTop: -5
+  },
+  title2: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginTop: -5,
+    marginBottom: 10
   },
   subTitle: {
     fontFamily: "Roboto-light",
-    fontSize: 11,
+    fontSize: 14,
   },
   dropDown: {
     borderRadius: 20,
@@ -778,6 +792,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    height: 500
   },
   loadingText: {
     color: 'green',

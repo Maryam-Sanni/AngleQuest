@@ -234,7 +234,7 @@ function MyComponent({ onClose }) {
                 disabled={interviewStatus === 'Done'}
               >
                 <Text style={[styles.buttonTextplus, interviewStatus === 'Done' && styles.buttonTextDone]}>
-                  {interviewStatus === 'Done' ? t("Profile Created") : t("Create Interview Profile")}
+                  {interviewStatus === 'Done' ? t("✅ ") : t("Create Your Profile")}
                 </Text>
               </TouchableOpacity>
               <View style={styles.input}>
@@ -249,7 +249,7 @@ function MyComponent({ onClose }) {
                 disabled={interviewStatus === 'Done'}
               >
                 <Text style={[styles.buttonTextplus, interviewStatus === 'Done' && styles.buttonTextDone]}>
-                  {interviewStatus === 'Done' ? t("Profile Created") : t("Create Interview Profile")}
+                  {interviewStatus === 'Done' ? t("✅ ") : t("Create Growth Plan Profile")}
                 </Text>
               </TouchableOpacity>
 
@@ -264,7 +264,7 @@ function MyComponent({ onClose }) {
                 disabled={interviewStatus === 'Done'}
               >
                 <Text style={[styles.buttonTextplus, interviewStatus === 'Done' && styles.buttonTextDone]}>
-                  {interviewStatus === 'Done' ? t("Profile Created") : t("Create Interview Profile")}
+                  {interviewStatus === 'Done' ? t("✅") : t("Create Interview Profile")}
                 </Text>
               </TouchableOpacity>
 
@@ -279,7 +279,7 @@ function MyComponent({ onClose }) {
                 disabled={SkillAnalysisStatus === 'Done'}
               >
                 <Text style={[styles.buttonTextplus, SkillAnalysisStatus === 'Done' && styles.buttonTextDone]}>
-                  {SkillAnalysisStatus === 'Done' ? t("Profile Created") : t("Create Skill Analysis Profile")}
+                  {SkillAnalysisStatus === 'Done' ? t("✅") : t("Create Skill Analysis Profile")}
                 </Text>
               </TouchableOpacity>
 
@@ -294,7 +294,7 @@ function MyComponent({ onClose }) {
                 disabled={NewHubStatus === 'Done'}
               >
                 <Text style={[styles.buttonTextplus, NewHubStatus === 'Done' && styles.buttonTextDone]}>
-                  {NewHubStatus === 'Done' ? t("Profile Created") : t("Create a Learning Hub")}
+                  {NewHubStatus === 'Done' ? t("✅") : t("Create a Learning Hub")}
                 </Text>
               </TouchableOpacity>
 

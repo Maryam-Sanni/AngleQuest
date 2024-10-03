@@ -352,7 +352,7 @@ function MyComponent({ onClose }) {
                 }}
               >
                 <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
-                  {t("Interview")}
+                  {t("Select")}
                 </Text>
               </TouchableOpacity>
               
@@ -388,7 +388,6 @@ function MyComponent({ onClose }) {
               </View>
               <View style={{ alignItems: 'flex-start', marginLeft: 40 }}>
                 <Text style={{ fontSize: 16, color: "black", fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an Expert to Interview you")}</Text>
-                <Text style={{ fontSize: 14, color: "black", marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <Picker
                     selectedValue={selectedCategory}
@@ -423,7 +422,7 @@ function MyComponent({ onClose }) {
                 {renderCards()}
               </View>
               <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
+                <Text style={styles.buttonTextplus}>{t("Proceed")}</Text>
               </TouchableOpacity>
             </View>
        

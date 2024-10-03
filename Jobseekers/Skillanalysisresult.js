@@ -36,6 +36,7 @@
     const [activeIndex, setActiveIndex] = useState(3);
     const [apiData, setApiData] = useState(null);
     const [loading, setLoading] = useState(true);
+    
 
     const apiUrl = process.env.REACT_APP_API_URL;
     
@@ -482,7 +483,7 @@
                           style={[
                             styles.button,
                             {
-                              width: 200,
+                              width: 300,
                               backgroundColor: "coral",
                               shadowColor: "#000000",
                               shadowOffset: {
@@ -496,7 +497,7 @@
                           ]}
                           onPress={handleOpenPress}
                         >
-                          <Text style={styles.buttonText}>Next</Text>
+                          <Text style={styles.buttonText}>Proceed to select an expert</Text>
                         </TouchableOpacity>
                       </View>
                     </View>

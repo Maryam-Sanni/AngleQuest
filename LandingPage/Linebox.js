@@ -5,7 +5,7 @@ const LineBoxWithText = () => {
   // Array to store different data for each box
   const boxData = [
     {
-      text: 'SAP FICO',
+      text: 'SAP',
       imageUrl: 'https://img.icons8.com/?size=100&id=38192&format=png&color=000000',
     },
     {
@@ -31,10 +31,6 @@ const LineBoxWithText = () => {
     {
       text: 'Microsoft Azure',
       imageUrl: 'https://img.icons8.com/?size=100&id=VLKafOkk3sBX&format=png&color=000000',
-    },
-    {
-      text: 'SAP Production Planning',
-      imageUrl: 'https://img.icons8.com/?size=100&id=38192&format=png&color=000000',
     },
   ];
 
