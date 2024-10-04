@@ -10,7 +10,7 @@ const MAX_RESPONSE= 10;
 
 function MyComponent({ onClose }) {
   const [guides, setGuides] = useState([]);
-  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '' })));
+  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '', title: '' })));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [remark, setRemark] = useState('');
@@ -338,11 +338,11 @@ setGuides(newGuides);
               placeholder={t("Title")}
               placeholderTextColor="grey"
               style={styles.input}
-              value={response.response}
-              onChangeText={text => updateResponse(index, 'response', text)}
+              value={response.title}
+              onChangeText={text => updateResponse(index, 'title', text)}
             />
-          </View>
-          <View style={[styles.cell, { flex: 5 }]}>
+            </View>
+            <View style={[styles.cell, { flex: 5 }]}>
             <TextInput
               placeholder={t("Description")}
               placeholderTextColor="grey"

@@ -90,7 +90,7 @@ const ProfileUpdate = () => {
           {profileImage ? (
             <Image source={{ uri: profileImage }} style={styles.profileImage} />
           ) : (
-            <Text style={styles.uploadText}>Upload Image</Text>
+            <Text style={styles.uploadText}>Click to Upload Image</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -219,21 +219,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   imageUploadButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 100,
+  width: 100,
+    height: 100, 
+    borderRadius: 50, 
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
+    borderColor: '#CCC',
+    alignSelf: 'flex-start',
     backgroundColor: '#f9f9f9',
   },
   profileImage: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5,
+    width: 100,
+    height: 100, 
+    borderRadius: 50, 
+    borderWidth: 1,
+    borderColor: '#CCC',
+    alignSelf: 'flex-start'
   },
   uploadText: {
     color: '#666',
+    fontSize: 12,
+    marginTop: 40, 
+    marginLeft: 10
   },
   submitButton: {
     backgroundColor: 'coral',

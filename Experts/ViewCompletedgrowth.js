@@ -19,10 +19,11 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
    const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
-  const rated = 3;
+  const [rated, setRated] = useState(0);
 
   const getRatingText = (rated) => {
     switch (rated) {
+      case 0: return 'No Rating Yet';
       case 1: return 'Very Dissatisfied';
       case 2: return 'Dissatisfied';
       case 3: return 'Somewhat Dissatisfied';
@@ -33,7 +34,7 @@ function MyComponent({ onClose }) {
       case 8: return 'Very Satisfied';
       case 9: return 'Extremely Satisfied';
       case 10: return 'Completely Satisfied';
-      default: return 'No Rating';
+      default: return 'No Rating Yet';
     }
   };
 
@@ -55,7 +56,8 @@ function MyComponent({ onClose }) {
         const retrievedData = await AsyncStorage.getItem('selectedMeeting');
         if (retrievedData) {
           const parsedData = JSON.parse(retrievedData);
-          setData(parsedData); // Update the state with the retrieved data
+          setData(parsedData); 
+          setRated(parseInt(parsedData.rating_figure, 10)); // Update the state with the retrieved data
         } else {
           console.log('No data found in AsyncStorage.');
         }
