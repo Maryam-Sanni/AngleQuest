@@ -21,41 +21,39 @@ function MyComponent() {
   };
 
   const handleItemClick = (item) => {
-    if (item === menuItems[0]) {
-      setShowMenu(false); // Hide the menu if the first menu item is clicked
-    } else {
-      setClickedItem(clickedItem === item ? null : item);
-      // Navigate to respective screens based on menu item clicked
-      switch(item.label) {
-        case "Home":
-          navigate('/home-experts');
-          break;
-        case "Preferences":
-         navigate('/preferences');
-          break;
-        case "Interview":
-          navigate('/interview');
-          break;
-          case "Growth Plan":
-       navigate('/growth-plan');
-          break;
-        case "Skills Analysis":
-       navigate('/skill-analysis');
-          break;
-        case "Hubs":
-       navigate('/hubs');
-          break;
-          case "Scenario Project":
-          navigate('/scenario-project');
-            break;
-        case "Chats":
+    setClickedItem(clickedItem === item ? null : item);
+
+    // Navigate to respective screens based on the menu item clicked
+    switch (item.label) {
+      case "Home":
+        navigate('/home-experts');
+        break;
+      case "Preferences":
+        navigate('/preferences');
+        break;
+      case "Interview":
+        navigate('/interview');
+        break;
+      case "Growth Plan":
+        navigate('/growth-plan');
+        break;
+      case "Skills Analysis":
+        navigate('/skill-analysis');
+        break;
+      case "Hubs":
+        navigate('/hubs');
+        break;
+      case "Scenario Project":
+        navigate('/scenario-project');
+        break;
+      case "Chats":
         navigate('/chats');
-          break;
-        default:
-          break;
-      }
+        break;
+      default:
+        break;
     }
   };
+
 
   const handleLogout = () => {
     navigate('/sign-in');

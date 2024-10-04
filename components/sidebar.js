@@ -142,9 +142,7 @@ function MyComponent() {
   };
 
   const handleItemClick = async (item) => {
-    if (item === menuItems[0]) {
-      setShowMenu(false); // Directly set showMenu to false if the first menu item is clicked
-    } else {
+    
       setClickedItem(clickedItem === item ? null : item);
       // Navigate to respective screens based on menu item clicked
       switch(item.label) {
@@ -197,7 +195,6 @@ function MyComponent() {
           case "Scenario Project":
             navigate('/project');
             break;
-      }
     }
   };
 

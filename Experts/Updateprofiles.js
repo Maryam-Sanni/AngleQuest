@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const ProfilePage = ({ onClose }) => {
   const [activeSection, setActiveSection] = useState(null);
   const navigate = useNavigate();
+  
 
   const sections = [
     { id: 1, title: "Personal Information" },
@@ -22,11 +23,7 @@ const ProfilePage = ({ onClose }) => {
   const handleSectionClick = (section) => {
     setActiveSection(section);
   };
-
-  const onCe = () => {
-    navigate("/home-experts");
-  };
-
+ 
   return (
     <View style={styles.container}>
       <View style={styles.sidebar}>
@@ -96,9 +93,9 @@ const ProfilePage = ({ onClose }) => {
         )}
 
         {!activeSection && (
-          <Text style={styles.contentText}>
-            Click on any section to display the content here.
-          </Text>
+  <View style={styles.modalContainer}>
+    <OpenModal1 />
+  </View>
         )}
       </View>
     </View>

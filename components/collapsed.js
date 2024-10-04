@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from "./sidebar"; 
 
 function MyComponent() {
-  const navigation = useNavigation(); // Initialize navigation
+   const navigate = useNavigate();
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -19,11 +19,11 @@ function MyComponent() {
     switch (item) {
       case menuItems[1]:
         // Navigate to HomePage
-        navigation.navigate('Home');
+      navigate('Home');
         break;
       case menuItems[2]:
         // Navigate to Dashboard
-        navigation.navigate('Join Courses');
+      navigate('Join Courses');
         break;
       case menuItems[3]:
         // Navigate to Experts

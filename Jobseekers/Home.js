@@ -849,7 +849,7 @@ const HomePage = () => {
       {conversations.length === 0 ? (
           <TextInput
             style={styles.chatInput}
-            placeholder="Start a conversation, say something to an expert"
+            placeholder="Start a conversation"
             placeholderTextColor="grey"
           />
       ) : (
@@ -1418,7 +1418,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
-    marginBottom: 200,
+    marginBottom: 400,
     backgroundColor: 'white'
   },
 });

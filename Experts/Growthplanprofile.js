@@ -20,7 +20,6 @@ function MyComponent({ onClose }) {
   const [role, setGrowthRole] = useState('');
   const [category, setCategory] = useState('');
   const [level, setlevel] = useState('');
-  const [rate, setrate] = useState('');
   const [available_days, setavailable_days] = useState('');
   const [available_times, setavailable_times] = useState('');
   const [guides, setGuides] = useState([
@@ -31,6 +30,17 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isPressed, setIsPressed] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [rate, setRate] = useState('$0'); // Initial value includes $
+
+  const handleRateChange = (text) => {
+    // Remove non-numeric characters except for the decimal point
+    const numericValue = text.replace(/[^0-9.]/g, '');
+
+    // If the input is not empty, set the state with the `$` at the start
+    if (numericValue || numericValue === '') {
+      setRate(`$${numericValue}`);
+    }
+  };
 
 
   const handleConfirm = ({ selectedDays, startTime, endTime }) => {
@@ -99,7 +109,6 @@ function MyComponent({ onClose }) {
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
-    onClose();
   };
 
   const handlePressIn = () => {
@@ -110,10 +119,6 @@ function MyComponent({ onClose }) {
     setIsPressed(false);
   };
 
-  if (!isVisible) {
-    return null; // Return null to unmount the parent component
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -123,7 +128,7 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={styles.logo}
             />
-            <Text style={styles.headerText}>{t("Create Growth Plan Profile")}</Text>
+            <Text style={styles.headerText}>{t("Create Growth Plan Guide")}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
@@ -131,10 +136,11 @@ function MyComponent({ onClose }) {
               </Text>
             </TouchableOpacity>
           </View>
+          
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
-            <TouchableOpacity style={styles.buttonDue} >
-              <Text style={styles.buttonTextDue}>{role}</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonDue}>
+              <Text style={styles.buttonTextDue}>Please fill all fields</Text>
+            </View>
           </View>
 
           <View style={styles.container}>
@@ -197,11 +203,10 @@ function MyComponent({ onClose }) {
               </View>
               <View style={styles.cell}>
                 <TextInput
-                  placeholder="$50"
-                  placeholderTextColor="grey"
                   style={styles.input}
                   value={rate}
-                  onChangeText={text => setrate(text)}
+                  onChangeText={handleRateChange}
+                  keyboardType="numeric" // Numeric keyboard input
                 />
               </View>
             </View>
@@ -240,8 +245,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Guide")}</Text>
+          
+            <View style={{ flexDirection: 'row', marginTop: 30 }}>
+              <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
+              
             <TouchableOpacity 
               style={[styles.buttonplus, guides.length >= MAX_GUIDES && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
               onPress={addGuide}
@@ -253,10 +260,12 @@ function MyComponent({ onClose }) {
             </TouchableOpacity>
           </View>
 
+          <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
+          
           <View style={styles.container}>
             {guides.map((guide, index) => (
               <View key={index} style={styles.row}>
-                <View style={[styles.cell, { flex: 2 }]}>
+                <View style={[styles.cell, { flex: 1 }]}>
                   <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(`Guide`)} {index + 1}</Text>
                 </View>
                 <View style={[styles.cell, { flex: 5 }]}>
@@ -268,7 +277,7 @@ function MyComponent({ onClose }) {
                     onChangeText={text => updateGuide(index, 'guide', text)}
                   />
                 </View>
-                <View style={[styles.cell, { flex: 2 }]}>
+                <View style={[styles.cell, { flex: 1 }]}>
                   <Picker
                     selectedValue={guide.percentage}
                     style={styles.picker}
@@ -287,7 +296,7 @@ function MyComponent({ onClose }) {
                   </Picker>
                 </View>
                 <TouchableOpacity onPress={() => deleteGuide(index)} style={styles.deleteButton}>
-                  <Text style={{color: 'red', fontSize: 18, fontWeight: 600}}>✕</Text>
+                  <Text style={{color: 'grey', fontSize: 18, fontWeight: 600}}>✕</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -375,7 +384,7 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"
   },
   buttonplus: {
-    backgroundColor: 'coral', 
+    backgroundColor: 'grey', 
     padding: 5,
     marginLeft: 585, 
     width: 100,
