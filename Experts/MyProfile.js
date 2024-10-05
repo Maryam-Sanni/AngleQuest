@@ -115,8 +115,8 @@ export default function Profile() {
 
         if (data.status === 'success' && data.profile) {
           setAbout(data.profile.about);
-          setPreferredLocation(data.profile.location);
-          setPreferredRoles(data.profile.category);
+          setPreferredLocations(data.profile.location);
+          setPreferredRole(data.profile.category);
           setSpecial(data.profile.specialization);
           setYears(data.profile.years_experience);
         }
@@ -172,9 +172,7 @@ export default function Profile() {
     setSkills(newSkills);
   };
 
-  const [preferredLocations, setPreferredLocations] = useState([
-    'United States',
-  ]);
+   const [preferredLocations, setPreferredLocations] = useState('');
 
   const [preferredLocationsModalVisible, setPreferredLocationsModalVisible] = useState(false);
 
@@ -216,7 +214,7 @@ export default function Profile() {
     'Microsoft Azure',
   ]);
   
-  const [preferredRole, setPreferredRole] = useState('Microsoft'); // Default role
+  const [preferredRole, setPreferredRole] = useState('Microsoft');
   const [preferredRolesModalVisible, setPreferredRolesModalVisible] = useState(false);
 
   const handleOpenPreferredRoles = () => {
@@ -429,10 +427,8 @@ export default function Profile() {
                     <View style={{ marginRight: 50 }}>
         <View style={styles.container}>
           <View style={styles.row}>
-          {preferredLocations.map((location, index) => (
-              <Text key={index} style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Roboto-Light"
-              }]}>{location}</Text>
-            ))}
+              <Text style={[styles.text, { backgroundColor: '#d3f9d8',    fontFamily:"Roboto-Light"
+              }]}>{preferredLocations}</Text>
           </View>
         </View>
       </View>

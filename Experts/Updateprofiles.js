@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import OpenModal from './Growthplanprofile';
+import OpenModal from './Growth-plan-guide';
 import OpenModal1 from './BioProfile';
-import OpenModal2 from './InterviewProfile';
-import OpenModal3 from './AdviceProfile';
-import OpenModal4 from '../components/Createhubform';
+import OpenModal2 from './Interview-guide';
+import OpenModal3 from './Skill-analysis-guide';
+import OpenModal4 from '../components/Create-hub';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = ({ onClose }) => {

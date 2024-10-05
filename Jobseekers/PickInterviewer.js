@@ -170,9 +170,9 @@ function MyComponent({ onClose }) {
             <TouchableOpacity
               style={{
                 borderWidth: 1,
-                borderColor: '#206C00',
+                borderColor: '#d3f9d8',
                 borderRadius: 5,
-                backgroundColor: '#F0FFF9',
+                backgroundColor: '#d3f9d8',
                 paddingHorizontal: 20,
                 paddingVertical: 10,
                 marginLeft: 10,
@@ -180,7 +180,7 @@ function MyComponent({ onClose }) {
                 justifyContent: 'center',
               }}
             >
-          <Text style={{ color: "#206C00", textAlign: 'center', fontSize: 12 }}>
+          <Text style={{ color: "#d3f9d8", textAlign: 'center', fontSize: 12 }}>
             {t("Interview")}
           </Text>
           </TouchableOpacity>
@@ -302,7 +302,7 @@ function MyComponent({ onClose }) {
             backgroundColor: "#d3f9d8",
           }}
         >
-          <TouchableOpacity onPress={handleOpenPress2} onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
+          <TouchableOpacity onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
             <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                 <Image
@@ -341,9 +341,9 @@ function MyComponent({ onClose }) {
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
-                  borderColor: '#206C00',
+                  borderColor: '#d3f9d8',
                   borderRadius: 5,
-                  backgroundColor: '#F0FFF9',
+                  backgroundColor: '#d3f9d8',
                   paddingHorizontal: 20,
                   paddingVertical: 10,
                   marginLeft: 10,
@@ -351,7 +351,7 @@ function MyComponent({ onClose }) {
                   justifyContent: 'center',
                 }}
               >
-                <Text style={{ color: "#206C00", alignText: 'center', fontSize: 12 }}>
+                <Text style={{ color: "#d3f9d8", alignText: 'center', fontSize: 12 }}>
                   {t("Select")}
                 </Text>
               </TouchableOpacity>

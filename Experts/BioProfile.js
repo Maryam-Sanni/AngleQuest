@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Picker } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
-import * as ImagePicker from 'expo-image-picker';
 
 const ProfileUpdate = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [aboutMe, setAboutMe] = useState('');
-  const [technicalSkills, setTechnicalSkills] = useState('');
-  const [certifications, setCertifications] = useState('');
+  const [technicalSkills, setTechnicalSkills] = useState(['']); 
+  const [certifications, setCertifications] = useState(['']);
   const [location, setLocation] = useState('');
   const [role, setRole] = useState('');
   const [specialization, setSpecialization] = useState('');
@@ -50,8 +49,8 @@ const ProfileUpdate = () => {
       // Prepare data for API request
       const data = {
         about: aboutMe,
-        skills: technicalSkills.split(',').map(skill => skill.trim()), // Convert skills to array
-        certifications: certifications.split(',').map(cert => cert.trim()), // Convert certifications to array
+        skills: technicalSkills,
+        certifications: certifications,
         location: location,
         category: specialization, // Use specialization as string
         specialization: role,
@@ -77,7 +76,71 @@ const ProfileUpdate = () => {
     }
   };
 
+  const handleAddSkill = () => {
+    setTechnicalSkills([...technicalSkills, '']);
+  };
 
+  const handleRemoveSkill = (index) => {
+    const newSkills = technicalSkills.filter((_, idx) => idx !== index);
+    setTechnicalSkills(newSkills);
+  };
+
+  const handleSkillChange = (value, index) => {
+    const newSkills = technicalSkills.map((skill, idx) => (idx === index ? value : skill));
+    setTechnicalSkills(newSkills);
+  };
+
+  const handleAddCertification = () => {
+    setCertifications([...certifications, '']);
+  };
+
+  const handleRemoveCertification = (index) => {
+    const newCertifications = certifications.filter((_, idx) => idx !== index);
+    setCertifications(newCertifications);
+  };
+
+  const handleCertificationChange = (value, index) => {
+    const newCertifications = certifications.map((cert, idx) => (idx === index ? value : cert));
+    setCertifications(newCertifications);
+  };
+  
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+
+        // Make API request with token in headers
+        const response = await fetch(`${apiUrl}/api/expert/get-expert-profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success' && data.profile) {
+          setAboutMe(data.profile.about);
+          setLocation(data.profile.location);
+          setRole(data.profile.specialization);
+          setSpecialization(data.profile.category);
+          setYearsOfExperience(data.profile.years_experience);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 ,}}>
@@ -101,6 +164,7 @@ const ProfileUpdate = () => {
         <TextInput
           style={styles.input}
           placeholder="Tell us about yourself"
+          placeholderTextColor={'grey'}
           multiline
           value={aboutMe}
           onChangeText={setAboutMe}
@@ -133,6 +197,7 @@ const ProfileUpdate = () => {
           <TextInput
             style={styles.input}
             placeholder="Enter your role"
+            placeholderTextColor={'grey'}
             value={role}
             onChangeText={setRole}
           />
@@ -144,6 +209,7 @@ const ProfileUpdate = () => {
         <TextInput
           style={styles.input}
           placeholder="Enter your years of experience"
+          placeholderTextColor={'grey'}
           value={yearsOfExperience}
           onChangeText={setYearsOfExperience}
           keyboardType="numeric"
@@ -153,24 +219,52 @@ const ProfileUpdate = () => {
         {/* Technical Skills */}
         <View style={styles.field}>
           <Text style={styles.label}>Technical Skills</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="List your technical skills"
-            value={technicalSkills}
-            onChangeText={setTechnicalSkills}
-          />
+          {technicalSkills.map((skill, index) => (
+            <View key={index} style={styles.inputGroup}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter a skill"
+                placeholderTextColor={'grey'}
+                value={skill}
+                onChangeText={(value) => handleSkillChange(value, index)}
+              />
+              {technicalSkills.length > 1 && (
+                <TouchableOpacity onPress={() => handleRemoveSkill(index)} style={styles.removeButton}>
+                  <Text style={styles.removeButtonText}>remove</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+            
+          <TouchableOpacity onPress={handleAddSkill} style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add Skill</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Certifications */}
         <View style={styles.field}>
           <Text style={styles.label}>Certifications</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your certifications"
-            value={certifications}
-            onChangeText={setCertifications}
-          />
+          {certifications.map((cert, index) => (
+            <View key={index} style={styles.inputGroup}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter a certification"
+                placeholderTextColor={'grey'}
+                value={cert}
+                onChangeText={(value) => handleCertificationChange(value, index)}
+              />
+              {certifications.length > 1 && (
+                <TouchableOpacity onPress={() => handleRemoveCertification(index)} style={styles.removeButton}>
+                  <Text style={styles.removeButtonText}>remove</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+          <TouchableOpacity onPress={handleAddCertification} style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add Certification</Text>
+          </TouchableOpacity>
         </View>
+
 
         {/* Location */}
         <View style={styles.field}>
@@ -178,6 +272,7 @@ const ProfileUpdate = () => {
           <TextInput
             style={styles.input}
             placeholder="Enter your location"
+            placeholderTextColor={'grey'}
             value={location}
             onChangeText={setLocation}
           />
@@ -240,6 +335,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 40, 
     marginLeft: 10
+  },
+  addButtonText: {
+    color: 'green',
+    fontSize: 16,
+  },
+  removeButton: {
+    marginTop: 10,
+    alignSelf: 'flex-end',
+  },
+  removeButtonText: {
+    color: 'grey',
+    fontSize: 16,
+    marginTop: -10
   },
   submitButton: {
     backgroundColor: 'coral',
