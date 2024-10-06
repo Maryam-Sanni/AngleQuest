@@ -148,7 +148,7 @@ const App = () => {
         {/* Redirect to initial route */}
         <Route path="*" element={<Navigate to={initialRoute} />} />
 
-        {/* Define your routes */}
+         <Route path="/" element={<Navigate to="/welcome" />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/join-recruitangle" element={<JoinAs />} />
         <Route path="/ai-screen" element={<AIScreen />} />

@@ -9,7 +9,7 @@ import {
   ImageBackground,
   Modal,
   TextInput,
-  FlatList,
+  FlatList, Linking
 } from "react-native";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/sidebar";
@@ -226,16 +226,19 @@ const HomePage = () => {
         growthPlanData.growthPlan,
         "coach",
         "date_time",
+        "candidate_link"
       );
       const latestInterview = processLatestEntry(
         interviewData.interview,
         "expert_name",
         "date_time",
+        "candidate_link"
       );
       const latestSkillAnalysis = processLatestEntry(
         skillAnalysisData.skillAnalysis,
         "expert_name",
         "date_time",
+        "candidate_link"
       );
 
       // Log the processed latest data for debugging
@@ -617,7 +620,7 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestGrowthPlan.dateTime ||
-                                "No name Available"}
+                                " "}
                             </Text>
                           </View>
                           <View style={{ flexDirection: "row" }}>
@@ -642,15 +645,24 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestGrowthPlan.expertName ||
-                                "No name Available"}
+                                "You are all caught up! You have no pending action"}
                             </Text>
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered10 && styles.touchableOpacityHovered,
+                                isHovered10 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered10(true)}
-                              onMouseLeave={() => setIsHovered10(false)}
+                              onMouseEnter={() => setIsHovered10(true)} 
+                              onMouseLeave={() => setIsHovered10(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestGrowthPlan.candidate_link || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Join")}
@@ -686,7 +698,7 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestSkillAnalysis.dateTime ||
-                                "No name Available"}
+                                " "}
                             </Text>
                           </View>
                           <View style={{ flexDirection: "row" }}>
@@ -712,15 +724,24 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestSkillAnalysis.expertName ||
-                                "No name Available"}
+                                "You are all caught up! You have no pending action"}
                             </Text>
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered11 && styles.touchableOpacityHovered,
+                                isHovered11 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered11(true)}
-                              onMouseLeave={() => setIsHovered11(false)}
+                              onMouseEnter={() => setIsHovered11(true)} 
+                              onMouseLeave={() => setIsHovered11(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestSkillAnalysis.candidate_link || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Join")}
@@ -756,7 +777,7 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestInterview.dateTime ||
-                                "No name Available"}
+                                " "}
                             </Text>
                           </View>
                           <View
@@ -784,15 +805,24 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestInterview.expertName ||
-                                "No name Available"}
+                                "You are all caught up! You have no pending action"}
                             </Text>
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered12 && styles.touchableOpacityHovered,
+                                isHovered12 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered12(true)}
-                              onMouseLeave={() => setIsHovered12(false)}
+                              onMouseEnter={() => setIsHovered12(true)} 
+                              onMouseLeave={() => setIsHovered12(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestInterview.candidate_link || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Join")}

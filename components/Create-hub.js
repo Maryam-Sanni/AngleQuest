@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '80%',
-    paddingHorizontal: 20, // Add some horizontal padding for better layout
+    paddingHorizontal: 5,
   },
   input: {
     height: 40,
@@ -402,10 +402,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   greenBox: {
-    width: 920,
+    width: 820,
     height:850,
     backgroundColor: 'white',
-    marginTop: 40
   },
   buttonContainer: {
     flexDirection: 'row',

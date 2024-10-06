@@ -117,7 +117,7 @@ const ScheduledMeetingsTable = () => {
           return;
         }
 
-        const response = await fetch('https://recruitangle.com/api/jobseeker/meetings/get?type=advice', {
+        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=advice`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -188,17 +188,12 @@ const ScheduledMeetingsTable = () => {
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>AI Analysis</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Give Feedback</Text>
                </View>
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Start</Text>
+              <Text style={{color: 'white'}}>Start Meeting</Text>
                </View>
             </TouchableOpacity>
           </View>
@@ -225,20 +220,25 @@ const ScheduledMeetingsTable = () => {
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{date} {time}</Text>
                 </View>
-                <TouchableOpacity >
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("AI Analysis")}</Text>
-                   </View>
-                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Give Feedback")}</Text>
                    </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleJoinPress}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Start")}</Text>
-                   </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    const meetingLink = meeting.expert_link || 'https://meet.anglequest.com/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1lZDE3MjI0NDQzMzkiLCJqdGkiOiJhaG1lZDE3MjI0NDQzMzkiLCJleHAiOjE3MjgxOTQ0NzUsIm5iZiI6MTcyODA3Mjg3NSwiaWF0IjoxNzI4MDcyODc1LCJpc3MiOiJBUEllNnpUOHdzWmNUaW8iLCJ2aWRlbyI6eyJyb29tSm9pbiI6dHJ1ZSwicm9vbUFkbWluIjp0cnVlLCJyb29tIjoiRXhwZXJ0IENvbnN1bHRhdGlvbiBmb3IgTWFyeWFtIFNhbm5pIn19.CDhAvFpUU8coGzPKXp8zW-qPPD2DaMOuBjFROR1saKg';
+                    if (meetingLink) {
+                      Linking.openURL(meetingLink)
+                        .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                    } else {
+                      console.warn('No valid link available');
+                    }
+                  }}
+                >
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={styles.linkText}>{t("Start Meeting")}</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );

@@ -471,10 +471,7 @@ const MyComponent = ({ onClose }) => {
                   <Text style={styles.title}>Hello 👋</Text>
                   <Text style={styles.title2}>I am AngleQuest AI</Text>
                   <Text style={styles.subTitle}>
-                    Please upload your CV and select the next career level you aim you attain
-                  </Text>
-                  <Text style={styles.subTitle}>
-                    This will enable me to create a personalized skill gap analysis, growth plan, expected timeline for your growth and references to gear you to a smooth start
+                    Please upload your CV or use the questionnaire and specify your next career role and I’ll perform my magic…
                   </Text>
                 </View>
               </View>

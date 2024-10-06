@@ -9,7 +9,7 @@ import {
   ImageBackground,
   Modal,
   FlatList,
-  TextInput
+  TextInput, Linking
 } from "react-native";
 import { useNavigate } from "react-router-dom";
 import { BlurView } from "expo-blur";
@@ -673,7 +673,7 @@ const HomePage = () => {
                             >
                               {" "}
                               {plandata.latestGrowthPlan.dateTime ||
-                                "No pending meetings"}
+                                " "}
                             </Text>
                           </View>
                           <View style={{ flexDirection: "row" }}>
@@ -743,7 +743,7 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestSkillAnalysis.dateTime ||
-                                "No Pending meetings"}
+                                " "}
                             </Text>
                           </View>
                           <View style={{ flexDirection: "row" }}>
@@ -774,10 +774,19 @@ const HomePage = () => {
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered11 && styles.touchableOpacityHovered,
+                                isHovered11 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered11(true)}
-                              onMouseLeave={() => setIsHovered11(false)}
+                              onMouseEnter={() => setIsHovered11(true)} 
+                              onMouseLeave={() => setIsHovered11(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestSkillAnalysis.candidate_link || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Start")}
@@ -813,7 +822,7 @@ const HomePage = () => {
                               }}
                             >
                               {plandata.latestInterview.dateTime ||
-                                "No pending meetings"}
+                                " "}
                             </Text>
                           </View>
                           <View
@@ -995,7 +1004,7 @@ const HomePage = () => {
                         }}
                       >
                         {t("You earned ")} $
-                        {totalBalance !== null ? totalBalance : "N/A"}.00 from{" "}
+                        {totalBalance !== null ? totalBalance : "0"}.00 from{" "}
                         {NewPay || "No name Available"}{" "}
                         {t("Your available balance is")} $
                         {totalBal !== null ? totalBal : "0"}.00

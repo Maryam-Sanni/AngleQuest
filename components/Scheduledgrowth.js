@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenGrowth';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
@@ -153,11 +153,21 @@ useEffect(() => {
                   </View>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity>
-                  <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
-                    <Text style={styles.linkText}>{t("Join")}</Text>
-                  </View>
-                </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  const joinLink = growthPlan.candidate_link || 'https://default-join-link.com';
+                  if (joinLink) {
+                    Linking.openURL(joinLink)
+                      .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                  } else {
+                    console.warn('No valid link available');
+                  }
+                }}
+              >
+                <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
+                  <Text style={styles.linkText}>{t("Join")}</Text>
+                </View>
+              </TouchableOpacity>
               )}
             </View>
           ))}

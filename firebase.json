@@ -2,7 +2,11 @@
   "hosting": {
     "public": "dist",
     "rewrites": [
+      { "source": "/", "destination": "/index.html" },
       { "source": "/**", "destination": "/index.html" }
+    ],
+    "redirects": [
+      { "source": "/", "destination": "/welcome", "type": 301 }
     ]
   }
 }

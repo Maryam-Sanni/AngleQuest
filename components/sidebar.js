@@ -14,6 +14,8 @@ function MyComponent() {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   // Function to check if interview data is filled
   const checkInterviewData = async () => {
     try {
@@ -23,7 +25,7 @@ function MyComponent() {
         return false;
       }
 
-      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-interview', {
+      const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-interview`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -54,7 +56,7 @@ function MyComponent() {
         return false;
       }
 
-      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-skill-analysis', {
+      const response = await fetch(`${apiUrl}api/jobseeker/get-jobseeker-skill-analysis`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -85,7 +87,7 @@ function MyComponent() {
         return false;
       }
 
-      const response = await fetch('https://recruitangle.com/api/jobseeker/get-jobseeker-growthplan', {
+      const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -115,7 +117,7 @@ function MyComponent() {
         return false;
       }
 
-      const response = await fetch('https://recruitangle.com/api/jobseeker/get-all-jobseeker-hubs', {
+      const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -153,36 +155,16 @@ function MyComponent() {
          navigate('/join-courses');
           break;
         case "Growth Plan":
-          const isgrowthPlanDataFilled = await checkgrowthPlanData();
-          if (isgrowthPlanDataFilled) {
              navigate('/growth-plan-sessions');
-          } else {
-             navigate('/growth-plan-new');
-          }
           break;
           case "Interview":
-          const isInterviewDataFilled = await checkInterviewData();
-          if (isInterviewDataFilled) {
                navigate('/interview-sessions');
-            } else {
-               navigate('/interview-new');
-            }
           break;
         case "Skills Analysis":
-          const isSkillAnalysisDataFilled = await checkSkillAnalysisData();
-          if (isSkillAnalysisDataFilled) {
              navigate('/skill-analysis-sessions');
-            } else {
-               navigate('/skill-analysis-new');
-            }
           break;
           case "Hubs":
-          const isHubsDataFilled = await checkHubData();
-          if (isHubsDataFilled) {
              navigate('/coaching-hub-sessions');
-            } else {
-               navigate('/coaching-hub-new');
-            }
           break;
           case "Performance":
           navigate('/performance');

@@ -147,20 +147,21 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     <Modal isVisible={isVisible} onBackdropPress={onCancel}>
       <View style={styles.modalContainer}>
         <Text style={styles.headerText}>{t("What day between")} {availableDays.join(', ')} {StoredTimes} {t("works best for you?")}</Text>
-        <Calendar
-          onDayPress={handleDayPress}
-          markedDates={{
-            [selectedDate]: { selected: true },
-            [today]: {
-              marked: true,
-              dotColor: 'green',
-            },
-          }}
-          minDate={new Date().toISOString().split('T')[0]} // Disable past dates
-          style={styles.calendar}
-          dayComponent={({ date }) => {
-            const isAvailable = isDayAvailable(date.dateString);
-            const isPastDate = new Date(date.dateString) < new Date();
+            <Calendar
+              onDayPress={handleDayPress}
+              markedDates={{
+                [selectedDate]: { selected: true },
+                [today]: {
+                  marked: true,
+                  dotColor: 'green',
+                },
+              }}
+              minDate={new Date().toISOString().split('T')[0]} // Disable past dates
+              style={styles.calendar}
+              dayComponent={({ date }) => {
+                const isAvailable = isDayAvailable(date.dateString);
+                const todayDate = new Date().toISOString().split('T')[0];
+                const isPastDate = new Date(date.dateString) < new Date(todayDate);
 
             return (
               <TouchableOpacity

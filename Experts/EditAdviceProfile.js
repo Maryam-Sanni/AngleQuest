@@ -16,7 +16,7 @@ function MyComponent({ onClose }) {
   })
 
   const {t}=useTranslation()
-
+  
   const [role, setSkillsAnalysisRole] = useState('');
   const [category, setCategory] = useState('category');
         const [level, setlevel] = useState('');
@@ -43,7 +43,7 @@ function MyComponent({ onClose }) {
                   const token = await AsyncStorage.getItem('token');
                   if (!token) throw new Error('No token found');
                   
-                  const response = await axios.get('https://recruitangle.com/api/expert/skillAnalysis/get', {
+                  const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/get`, {
                       headers: { Authorization: `Bearer ${token}` }
                   });
       
