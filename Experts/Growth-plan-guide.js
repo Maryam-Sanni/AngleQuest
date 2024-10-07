@@ -141,13 +141,14 @@ function MyComponent({ onClose }) {
           <View style={styles.container}>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
               </View>
               <View style={styles.cell}>
                 <TextInput
                   placeholder="Junior Platform Developer"
                   placeholderTextColor="grey"
                   style={styles.input}
+                  editable={false}
                   value={role}
                   onChangeText={text => setGrowthRole(text)}
                 />
@@ -155,7 +156,7 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
               </View>
               <View style={styles.cell}>
                 <Picker
@@ -177,7 +178,7 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Candidate Level")}</Text>
               </View>
               <View style={styles.cell}>
                 <Picker
@@ -207,10 +208,28 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Days")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Availability")}</Text>
               </View>
               <View style={styles.cell}>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <TextInput
+                    placeholder="What day and time are you available?"
+                    placeholderTextColor="green"
+                    style={styles.input}
+                    editable={false}
+                    pointerEvents="none" 
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            </View>
+
+          <View style={[styles.container, { marginTop: 50 }]}>
+            <View style={styles.row}>
+              <View style={styles.cell}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Day (s)")}</Text>
+              </View>
+              <View style={styles.cell}>
                   <TextInput
                     placeholder="Mon,Tue,Wed...,Sun"
                     placeholderTextColor="grey"
@@ -219,24 +238,21 @@ function MyComponent({ onClose }) {
                     editable={false} // Prevent manual input
                     pointerEvents="none" // Ensure it behaves like a button
                   />
-                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Times")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Time")}</Text>
               </View>
               <View style={styles.cell}>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <TextInput
                     placeholder="12PM-1PM"
                     placeholderTextColor="grey"
                     style={styles.input}
                     value={available_times}
-                    editable={false} // Prevent manual input
-                    pointerEvents="none" // Ensure it behaves like a button
+                    editable={false}
+                    pointerEvents="none" 
                   />
-                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -244,18 +260,22 @@ function MyComponent({ onClose }) {
             <View style={{ flexDirection: 'row', marginTop: 30 }}>
               <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
 
-            <TouchableOpacity 
-              style={[styles.buttonplus, guides.length >= MAX_GUIDES && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
-              onPress={addGuide}
-              onPressIn={handlePressIn}
-              onPressOut={handlePressOut}
-              disabled={guides.length >= MAX_GUIDES}
-            >
-              <Text style={styles.buttonTextplus}>+</Text>
-            </TouchableOpacity>
+            
           </View>
 
+          <View style={{ flexDirection: 'row'}}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
+
+          <TouchableOpacity 
+            style={[styles.buttonplus, guides.length >= MAX_GUIDES && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
+            onPress={addGuide}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={guides.length >= MAX_GUIDES}
+          >
+            <Text style={styles.buttonTextplus}>+</Text>
+          </TouchableOpacity>
+          </View>
 
           <View style={styles.container}>
             {guides.map((guide, index) => (
@@ -296,6 +316,9 @@ function MyComponent({ onClose }) {
               </View>
             ))}
           </View>
+
+          
+          
           <TouchableOpacity onPress={handleSave} style={styles.buttonsave}>
             <Text style={styles.buttonTextsave}>{t("Save")}</Text>
           </TouchableOpacity>
@@ -381,10 +404,9 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'grey', 
     padding: 5,
-    marginLeft: 585, 
-    width: 100,
+    marginLeft: 90, 
+    width: 70,
     paddingHorizontal: 20,
-    marginTop: 10
   },
   buttonplusPressed: {
     backgroundColor: 'green',
@@ -394,7 +416,7 @@ const styles = StyleSheet.create({
   },
   buttonTextplus: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
   },
   buttonsave: {
@@ -403,7 +425,8 @@ const styles = StyleSheet.create({
     marginLeft: 750, 
     width: 100,
     paddingHorizontal: 20,
-    marginTop: 30
+    marginTop: 100,
+    marginBottom: 50
   },
   buttonTextsave: {
     color: 'white',
@@ -413,7 +436,6 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 920,
-    height:600,
     backgroundColor: 'white',
   },
   input: {

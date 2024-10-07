@@ -12,7 +12,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
     <View style={{flexDirection: 'row'}}>
-    <Text style={styles.title}>{t("Growth Plan Earnings")}</Text>
+    <Text style={styles.title}>{t("Growth Plan Sessions Earnings")}</Text>
     <Text style={{fontSize: 14, fontWeight: '500', marginTop: 30, position: 'absolute', right: 50,fontFamily:"Roboto-Light" }}>{t("Summed earnings")}:$ 150</Text>
 </View>
     <View style={styles.table}>

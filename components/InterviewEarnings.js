@@ -13,7 +13,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
     <View style={{flexDirection: 'row'}}>
-    <Text style={styles.title}>{t("Interview Earnings")}</Text>
+    <Text style={styles.title}>{t("Interview Sessions Earnings")}</Text>
     <Text style={{fontSize: 14, fontWeight: '500', marginTop: 30, position: 'absolute', right: 50,fontFamily:"Roboto-Light" }}>{t("Summed earnings")} :$ 150</Text>
 </View>
     <View style={styles.table}>
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',
-    fontFamily:"Roboto-Light"
   },
   table: {
     marginRight: 200,

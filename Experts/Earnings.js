@@ -61,10 +61,13 @@ function MyComponent() {
 
 
           <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral',fontFamily:"Roboto-Light" }}>{t("Total Earnings")}: $450</Text>
+          <AdviceEarnings />
+          <GrowthPlanEarnings />
+          <InterviewEarnings />
 <HubsEarnings />
-<InterviewEarnings />
-<GrowthPlanEarnings />
-<AdviceEarnings />
+
+
+
 </View>
           
           

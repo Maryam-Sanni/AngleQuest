@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity,  Modal,  Animated, ImageBackground,} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableHighlight, TouchableOpacity,  Modal,  Animated, ImageBackground, Linking} from 'react-native';
 import { FaStar } from 'react-icons/fa';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
@@ -12,15 +12,21 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const colors = [
-  '#4CAF50', // Medium Green
-  '#8BC34A', // Light Green
-  '#C5E1A5', // Pale Green
-  '#388E3C', // Darker Medium Green
-  '#A5D6A7', // Soft Green
-  '#66BB6A', // Fresh Green
-  '#DCE775'  // Lime Green
-];
+const generateGoogleCalendarLink = (title, description, startDate, endDate, location) => {
+  const baseUrl = 'https://calendar.google.com/calendar/render';
+  const formattedStartDate = new Date(startDate).toISOString().replace(/-|:|\.\d+/g, '');
+  const formattedEndDate = new Date(endDate).toISOString().replace(/-|:|\.\d+/g, '');
+
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    details: description,
+    location: location,
+    dates: `${formattedStartDate}/${formattedEndDate}`,
+  });
+
+  return `${baseUrl}?${params.toString()}`;
+};
 
 
 
@@ -36,84 +42,89 @@ function MyComponent() {
   const [text, setText] = useState("How do we calculate ratings?");
 
   const handleTextChange = () => {
-    setText("When you have completed your session, individuals will score the session");
+    if (text === "How do we calculate ratings?") {
+      setText("When you have completed your session, individuals will score the session");
+    } else {
+      setText("How do we calculate ratings?");
+    }
   };
 
+  const exampleMeeting = {
+    title: 'Skill Analysis Session',
+    description: 'Meeting',
+    location: 'Anglequest.com',
+  };
+  
+  const handleAddToCalendar = (dayIndex) => {
+    const eventDate = `2024-10-${String(dayIndex).padStart(2, '0')}T10:00:00`;
+    const endDate = `2024-10-${String(dayIndex).padStart(2, '0')}T11:00:00`;
 
+    const calendarLink = generateGoogleCalendarLink(
+      exampleMeeting.title,
+      exampleMeeting.description,
+      eventDate,
+      endDate,
+      exampleMeeting.location
+    );
+
+    console.log("Generated Calendar Link:", calendarLink); // Debug log
+
+    // Open the link (Google Calendar)
+    Linking.openURL(calendarLink);
+  };
+
+  
   const apiUrl = process.env.REACT_APP_API_URL;
 
 
-  // Helper function to get the start and end of the current week
-  const getCurrentWeekRange = () => {
+  // Helper function to get the start and end of the current month
+  const getCurrentMonthRange = () => {
     const today = new Date();
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())); // Sunday as start
-    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6)); // Saturday as end
-    return { startOfWeek, endOfWeek };
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // last day of the current month
+    return { startOfMonth, endOfMonth };
   };
 
-  // Initialize an object to track meetings for each day of the week
-  const daysOfWeek = {
-    M: 0, // Monday
-    T: 0, // Tuesday
-    W: 0, // Wednesday
-    Th: 0, // Thursday (avoid duplicate key 'T')
-    F: 0, // Friday
-    Sa: 0, // Saturday
-    Su: 0  // Sunday
-  };
+  const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate(); // Get total days in the current month
 
-  const filterMeetingsForExpertThisWeek = (data, expertId) => {
-    const { startOfWeek, endOfWeek } = getCurrentWeekRange();
+  // Initialize an array to track meetings for each day of the month
+  let daysOfMonth = Array.from({ length: getDaysInMonth(new Date().getFullYear(), new Date().getMonth()) }, (_, i) => ({ day: i + 1, count: 0 }));
+
+  const dayAbbreviations = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa'];
+
+
+  const filterMeetingsForExpertThisMonth = (data, expertId) => {
+    const { startOfMonth, endOfMonth } = getCurrentMonthRange();
 
     data.forEach(item => {
       const meetingDate = new Date(item.date_time.split(', ')[1]);
 
-      if (item.expertid === expertId && meetingDate >= startOfWeek && meetingDate <= endOfWeek) {
-        const day = meetingDate.getDay();
+      if (item.expertid === expertId && meetingDate >= startOfMonth && meetingDate <= endOfMonth) {
+        const dayOfMonth = meetingDate.getDate();
+        const dayOfWeek = meetingDate.getDay(); // 0 (Sunday) to 6 (Saturday)
 
-        // Update the daysOfWeek based on the day of the meeting
-        switch (day) {
-          case 0: daysOfWeek['Su']++; break;
-          case 1: daysOfWeek['M']++; break;
-          case 2: daysOfWeek['T']++; break;
-          case 3: daysOfWeek['W']++; break;
-          case 4: daysOfWeek['Th']++; break;
-          case 5: daysOfWeek['F']++; break;
-          case 6: daysOfWeek['Sa']++; break;
-          default: break;
-        }
+        // Increment the meeting count for that day
+        daysOfMonth[dayOfMonth - 1].count++;
+        daysOfMonth[dayOfMonth - 1].dayAbbreviation = dayAbbreviations[dayOfWeek]; // Add day abbreviation
       }
     });
 
-    console.log('Days of Week:', daysOfWeek); // Check if daysOfWeek is being updated correctly
+    console.log('Days of Month:', daysOfMonth);
   };
 
 
   const generateMeetingData = () => {
-    const data = [
-      { date: 'M', score: daysOfWeek['M'] },
-      { date: 'T', score: daysOfWeek['T'] },
-      { date: 'W', score: daysOfWeek['W'] },
-      { date: 'Th', score: daysOfWeek['Th'] },
-      { date: 'F', score: daysOfWeek['F'] },
-      { date: 'Sa', score: daysOfWeek['Sa'] },
-      { date: 'Su', score: daysOfWeek['Su'] }
-    ];
+    // Update the state with the days of the month data for rendering
+    setMeetingData(daysOfMonth); // Now, meetingData will be an array of { day: <number>, count: <number> }
 
-    // Update the state with the data for rendering
-    setMeetingData(data);
-
-    console.log('Meeting Data:', data); // Add this line to see the data structure
+    console.log('Meeting Data:', daysOfMonth); // Check the final structure of the meeting data
   };
-
 
   const fetchSkillAnalysis = async () => {
     try {
-      // Retrieve token and expertId (user_id) from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       const storedExpertId = await AsyncStorage.getItem('user_id');
 
-      // Check if both token and expertId are available
       if (token && storedExpertId) {
         const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
           headers: {
@@ -124,11 +135,8 @@ function MyComponent() {
         const data = await response.json();
 
         if (data.status === 'success') {
-          // Filter meetings for the current expert this week
-          filterMeetingsForExpertThisWeek(data.skillAnalysis, storedExpertId);
-
-          // Generate meeting data based on the days of the week
-          generateMeetingData();
+          filterMeetingsForExpertThisMonth(data.skillAnalysis, storedExpertId); // Filter for the current month
+          generateMeetingData(); // Generate data for all days of the month
         }
       } else {
         console.error('Token or Expert ID missing');
@@ -138,10 +146,12 @@ function MyComponent() {
     }
   };
 
-  // Call the function to fetch and process data
   useEffect(() => {
     fetchSkillAnalysis();
   }, []);
+
+
+
 
 
   useEffect(() => {
@@ -167,8 +177,10 @@ function MyComponent() {
 
           // Calculate total ratings and average rating
           const validRatings = filteredMeetings.filter(meeting => meeting.rating_figure !== null);
-          const totalRatings = validRatings.reduce((acc, meeting) => acc + (Number(meeting.rating_figure) / 2), 0); // Divide by 2 to normalize to a 5-star system
-          const averageRating = validRatings.length > 0 ? (totalRatings / validRatings.length).toFixed(1) : 0;
+
+          // Calculate the total rating directly on a scale of 1 to 5
+          const totalRatings = validRatings.reduce((acc, meeting) => acc + (Number(meeting.rating_figure) || 0), 0);
+          const averageRating = validRatings.length > 0 ? (totalRatings / validRatings.length / 2).toFixed(1) : 0; // Divide by 2 to normalize to a 5-star system
 
           setRatingCount(validRatings.length);
           setAverageRating(averageRating);
@@ -186,6 +198,7 @@ function MyComponent() {
     // Initial data load
     loadFormData();
   }, []);
+
 
 
   
@@ -412,20 +425,52 @@ function MyComponent() {
       </Modal>
 
       <View style={styles.container}>
-      <View style={styles.box}>
-        <Text style={{ marginTop: -10, fontWeight: '600', fontSize: 16}}>This week’s meetings</Text>
-        <View style={styles.barGraphContainer}>
-          {meetingData.map((item, index) => (
-            <View key={index} style={styles.barContainer}>
-              <Animated.View style={[styles.graphBar, { height: barHeights.current[index] || 0, backgroundColor: colors[index] }]} />
-              <View style={styles.scoreDateContainer}>
-                <Text style={styles.graphScore}>{item.score}</Text>
-                <Text style={styles.graphDate}>{item.date}</Text>
+        <View style={styles.box2}>
+          <View style={styles.calendarContainer}>
+            <Text style={{ fontWeight: '600', fontSize: 16, marginTop: -10, marginBottom: 10 }}>
+              Meeting Overview
+            </Text>
+
+            {/* Render day abbreviations */}
+            <View style={styles.monthGrid}>
+              <View style={styles.dayAbbreviationsRow}>
+                {meetingData.map((item, index) => (
+                  <View key={index} style={styles.dayContainer}>
+                    <Text style={styles.dayName}>{item.dayAbbreviation}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* Render days of the month */}
+              <View style={styles.daysRow}>
+                {Array.from({ length: 31 }, (_, index) => {
+                  const dayIndex = index + 1; // Days from 1 to 31
+                  const meetingCount = meetingData[dayIndex - 1]?.count || 0; // Get count for the day or 0 if no meetings
+
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.dayContainer}
+                      onPress={() => {
+                        if (meetingCount > 0) {
+                          handleAddToCalendar(dayIndex); // Trigger calendar addition if there are meetings
+                        }
+                      }}
+                    >
+                      <Text style={styles.dayNumber}>{dayIndex}</Text> {/* Day of the month */}
+                      <View style={styles.meetingIndicator}>
+                        <Text style={styles.meetingCount}>{meetingCount}</Text> {/* Number of meetings */}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
-          ))}
+          </View>
         </View>
-      </View>
+
+
+
        <View style={styles.box}>
         <View style={{alignItems: 'center', alignContent: 'center',fontFamily:"Roboto-Light"}}>
       <Text style={{ fontSize: 18, fontWeight: '600' }}>{t("Rating")}</Text>
@@ -449,13 +494,15 @@ function MyComponent() {
           </TouchableOpacity>
     </View>
       </View>
-      <View style={styles.box2}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600'}}>{t("You have a new session in:")}</Text>
+      <View style={styles.box}>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600', marginBottom: 5}}>{t("You have a new session in:")}</Text>
          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
-        <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress. Seeing these sessions scheduled prompts you to prepare accordingly and actively participate.")} </Text>
+        <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress.")} </Text>
      </View>
      </View>
 
+          <Text style = {{fontSize: 20, marginTop: 30, color: '#f7fff4', fontWeight: 'bold', marginLeft: 50, marginBottom: -10 }}>{t("Skill Analysis Overview")} </Text>
+          
 <ScheduledAdvice /> 
 <CompletedAdvice />
 </View>
@@ -521,6 +568,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '44%',
     height: 200,
+    overflow: 'scroll',
     borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
     shadowOffset: {
@@ -608,6 +656,50 @@ const styles = StyleSheet.create({
         marginLeft: 350,
         borderRadius: 25, 
       },
+  calendarContainer: {
+    flexDirection: 'column',
+    marginTop: 5,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    maxWidth: '100%',
+    overflow: 'hidden'
+  },
+  monthGrid: {
+    flexDirection: 'column', 
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  dayAbbreviationsRow: {
+    flexDirection: 'row', // Days abbreviation in a row
+    justifyContent: 'space-between', // Space out evenly
+    width: '100%', // Full width for the row
+    marginBottom: 5, // Space below for the counts
+  },
+  daysRow: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  dayContainer: {
+    alignItems: 'center',
+    width: '14%',
+    marginBottom: 10, 
+  },
+  dayName: {
+    fontWeight: 'bold',
+  },
+  dayNumber: {
+    fontSize: 14, 
+fontWeight: 'bold'
+  },
+  meetingCount: {
+    width: 20,
+    height: 20,
+    borderRadius: 15,
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    textAlign: 'center',
+  },
 });
 
 export default MyComponent;

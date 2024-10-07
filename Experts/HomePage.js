@@ -1003,11 +1003,7 @@ const HomePage = () => {
                           fontFamily: "Roboto-Light",
                         }}
                       >
-                        {t("You earned ")} $
-                        {totalBalance !== null ? totalBalance : "0"}.00 from{" "}
-                        {NewPay || "No name Available"}{" "}
-                        {t("Your available balance is")} $
-                        {totalBal !== null ? totalBal : "0"}.00
+                        View your earnings and available balance
                       </Text>
                       <TouchableOpacity
                         onPress={goToWithdrawal}
@@ -1019,7 +1015,7 @@ const HomePage = () => {
                         onMouseLeave={() => setIsHovered15(false)}
                       >
                         <Text style={styles.touchableTextcoach}>
-                          {t("Withdraw Earnings")}
+                          {t("View Earnings")}
                         </Text>
                       </TouchableOpacity>
                     </BlurView>

@@ -144,11 +144,10 @@ const ProfileUpdate = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 ,}}>
-      <Text style={styles.title}>Update Your Profile</Text>
+      <Text style={styles.title}>Personal Profile</Text>
 
       {/* Profile Image */}
       <View style={styles.field}>
-        <Text style={styles.label}>Profile Image</Text>
         <TouchableOpacity onPress={handleImageUpload} style={styles.imageUploadButton}>
           {profileImage ? (
             <Image source={{ uri: profileImage }} style={styles.profileImage} />
@@ -173,7 +172,7 @@ const ProfileUpdate = () => {
 
       {/* Specialization */}
         <View style={styles.field}>
-          <Text style={styles.label}>Specialization</Text>
+          <Text style={styles.label}>Category</Text>
           <Picker
             selectedValue={specialization}
             style={styles.picker}

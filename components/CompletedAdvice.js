@@ -14,6 +14,27 @@ const ScheduledMeetingsTable = () => {
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3; // Number of meetings to display per page
+  const totalPages = Math.ceil(meetings.length / itemsPerPage);
+
+  // Get the current meetings to display based on the page
+  const displayedMeetings = meetings.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -58,11 +79,14 @@ const ScheduledMeetingsTable = () => {
         if (response.status === 200) {
           const data = response.data.skillAnalysis;
 
-          // Filter meetings based on expert_id
-          const filteredMeetings = data.filter(meeting => meeting.user_id === storedExpertId);
+          // Filter and sort meetings by date_time in ascending order (earliest to latest)
+          const filteredMeetings = data
+            .filter(meeting => meeting.user_id === storedExpertId)
+            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time)); // Sort by date
+
           setMeetings(filteredMeetings);
 
-         // Save all growth plans to AsyncStorage
+          // Save all growth plans to AsyncStorage
           try {
             await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
             console.log('All expert skill analysis saved:', data);
@@ -81,46 +105,46 @@ const ScheduledMeetingsTable = () => {
     loadFormData();
 
     // Polling function
-    const pollFeedbacks = () => {
-      const fetchFeedbacks = async () => {
-        try {
-          const token = await AsyncStorage.getItem('token');
-          const storedExpertId = await AsyncStorage.getItem('user_id');
+    const pollFeedbacks = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
 
-          if (!token || !storedExpertId) {
-            console.error('No token or user ID found');
-            return;
-          }
-
-          const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-
-          if (response.status === 200) {
-            const data = response.data.skillAnalysis;
-            const filteredMeetings = data.filter(meeting => meeting.user_id === storedExpertId);
-
-            // Only update if new data is different from current meetings
-            if (JSON.stringify(filteredMeetings) !== JSON.stringify(meetings)) {
-              setMeetings(filteredMeetings);
-
-              // Save updated data to AsyncStorage
-              try {
-                await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
-                console.log('Updated expert skill analysis saved:', data);
-              } catch (error) {
-                console.error('Failed to save updated expert skill analysis to AsyncStorage', error);
-              }
-            }
-          } else {
-            console.error('Failed to fetch data', response);
-          }
-        } catch (error) {
-          console.error('Failed to fetch feedbacks', error);
+        if (!token || !storedExpertId) {
+          console.error('No token or user ID found');
+          return;
         }
-      };
 
-      fetchFeedbacks();
+        const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200) {
+          const data = response.data.skillAnalysis;
+
+          // Filter and sort meetings by date_time in ascending order (earliest to latest)
+          const filteredMeetings = data
+            .filter(meeting => meeting.user_id === storedExpertId)
+            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time)); // Sort by date
+
+          // Only update if new data is different from current meetings
+          if (JSON.stringify(filteredMeetings) !== JSON.stringify(meetings)) {
+            setMeetings(filteredMeetings);
+
+            // Save updated data to AsyncStorage
+            try {
+              await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
+              console.log('Updated expert skill analysis saved:', data);
+            } catch (error) {
+              console.error('Failed to save updated expert skill analysis to AsyncStorage', error);
+            }
+          }
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to fetch feedbacks', error);
+      }
     };
 
     // Set up polling
@@ -129,6 +153,7 @@ const ScheduledMeetingsTable = () => {
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
   }, [meetings]);
+
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -210,7 +235,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Completed Skill Analysis Sessions")}</Text>
+        <Text style={styles.title}>{t("Completed")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
@@ -230,14 +255,9 @@ const ScheduledMeetingsTable = () => {
               <Text style={{color: 'white'}}>Open</Text>
                </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Start Meeting</Text>
-               </View>
-            </TouchableOpacity>
           </View>
 
-          {meetings.map((meeting, index) => {
+          {displayedMeetings.map((meeting, index) => {
             const dateTime = new Date(meeting.updated_at);
             const date = dateTime.toLocaleDateString();
             const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -254,7 +274,7 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.cellText}>{meeting.role}</Text>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{t("Individual Account")}</Text>
+                  <Text style={styles.cellText}>{t("Individual")}</Text>
                 </View>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{formatDateTime(meeting.date)}</Text>
@@ -264,15 +284,19 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.linkText}>{t("Open")}</Text>
                    </View>
                 </TouchableOpacity>
-                <TouchableOpacity >
-                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={{color: 'transparent'}}>{t("Start Meeting")}</Text>
-                  </View>
-                </TouchableOpacity>
               </View>
             );
           })}
-        </View>
+          <View style={styles.paginationContainer}>
+              <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>Previous</Text>
+              </TouchableOpacity>
+              <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+              <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
         <Modal
           animationType="slide"
@@ -363,7 +387,21 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-Light"
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;

@@ -4,13 +4,13 @@ import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import Transactions from '../components/Transactions';
 import OpenModal from '../Experts/OpenWithdraw';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from "react-router-dom";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
  
 function MyComponent() {
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [isBidHovered, setIsBidHovered] = useState(false);
     const [isOfferHovered, setIsOfferHovered] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -24,12 +24,13 @@ function MyComponent() {
     };
 
     const goToOffers= () => {
-        navigation.navigate('Earnings');
+       navigate('/earnings');
       };
 
       const goToBids = () => {
-        navigation.navigate('Withdrawal');
+      navigate('/withdrawal');
       };
+  
       const [fontsLoaded]=useFonts({
         "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
             })

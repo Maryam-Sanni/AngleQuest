@@ -14,6 +14,28 @@ const ScheduledMeetingsTable = () => {
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3; // Number of meetings to display per page
+  const totalPages = Math.ceil(meetings.length / itemsPerPage);
+
+  // Get the current meetings to display based on the page
+  const displayedMeetings = meetings.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -57,6 +79,39 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
+
+  const handleOpenPopup = (meeting) => {
+    setSelectedMeeting(meeting);
+    setPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+  };
+
+  const handleFeedback = async () => {
+    try {
+      // Save the selected meeting data to AsyncStorage
+      await AsyncStorage.setItem('selectedMeeting', JSON.stringify(selectedMeeting));
+      console.log('Selected meeting saved:', selectedMeeting);
+
+      // Open the feedback modal (you can implement this as needed)
+      setModalVisible(true);
+      handleClosePopup();
+    } catch (error) {
+      console.error('Failed to save selected meeting to AsyncStorage', error);
+    }
+  };
+
+  const handleStartMeeting = () => {
+    const meetingLink = selectedMeeting.expert_link || 'https://default.meeting.link';
+    if (meetingLink) {
+      Linking.openURL(meetingLink).catch(err => console.error("Couldn't load page", err));
+    } else {
+      console.warn('No valid link available');
+    }
+    handleClosePopup();
+  };
   
   useEffect(() => {
     const loadFormData = async () => {
@@ -70,41 +125,41 @@ const ScheduledMeetingsTable = () => {
         }
 
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (response.status === 200) {
           const data = response.data.skillAnalysis;
 
           // Filter meetings based on expert_id and completed status
-          const filteredMeetings = data.filter(meeting => 
-            meeting.expertid === storedExpertId && meeting.completed !== "Yes"
-          );
+          const filteredMeetings = data
+            .filter(meeting => 
+              meeting.expertid === storedExpertId && meeting.completed !== "Yes"
+            )
+            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time)); // Sorting by date_time in ascending order
+
           setMeetings(filteredMeetings);
 
-         // Save all growth plans to AsyncStorage
-          try {
-            await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
-            console.log('All expert skill analysis saved:', data);
-          } catch (error) {
-            console.error('Failed to save all expert skill analysis to AsyncStorage', error);
-          }
-          } else {
+          // Save all growth plans to AsyncStorage
+          await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
+          console.log('All expert skill analysis saved:', data);
+        } else {
           console.error('Failed to fetch data', response);
-          }
-          } catch (error) {
-          console.error('Failed to load form data', error);
-          }
-          };
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
 
-      loadFormData();
+    loadFormData();
 
-      // Polling every 30 seconds (30000 milliseconds)
-      const intervalId = setInterval(loadFormData, 5000);
+    // Polling every 30 seconds (30000 milliseconds)
+    const intervalId = setInterval(loadFormData, 5000);
 
-      // Clean up the interval on component unmount
-      return () => clearInterval(intervalId);
-    }, []);
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -171,7 +226,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Scheduled Skill Analysis Meetings")}</Text>
+        <Text style={styles.title}>{t("Scheduled")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
@@ -188,63 +243,75 @@ const ScheduledMeetingsTable = () => {
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Give Feedback</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Start Meeting</Text>
+                <Text style={styles.headerText}>Action</Text>
                </View>
             </TouchableOpacity>
           </View>
 
-          {meetings.map((meeting, index) => {
-            const dateTime = new Date(meeting.date_time);
-            const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  });
+      {displayedMeetings.map((meeting, index) => {
+        const dateTime = new Date(meeting.date_time);
+        const date = dateTime.toLocaleDateString();
+        const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
             return (
-              <View key={index} style={styles.row}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+          <View key={index} style={styles.row}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
                     <Text style={styles.cellText}>{meeting.name}</Text>
                   </View>
                 </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{meeting.role}</Text>
                 </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{t("Individual Account")}</Text>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.cellText}>{t("Individual")}</Text>
                 </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{date} {time}</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Give Feedback")}</Text>
-                   </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    const meetingLink = meeting.expert_link || 'https://meet.anglequest.com/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1lZDE3MjI0NDQzMzkiLCJqdGkiOiJhaG1lZDE3MjI0NDQzMzkiLCJleHAiOjE3MjgxOTQ0NzUsIm5iZiI6MTcyODA3Mjg3NSwiaWF0IjoxNzI4MDcyODc1LCJpc3MiOiJBUEllNnpUOHdzWmNUaW8iLCJ2aWRlbyI6eyJyb29tSm9pbiI6dHJ1ZSwicm9vbUFkbWluIjp0cnVlLCJyb29tIjoiRXhwZXJ0IENvbnN1bHRhdGlvbiBmb3IgTWFyeWFtIFNhbm5pIn19.CDhAvFpUU8coGzPKXp8zW-qPPD2DaMOuBjFROR1saKg';
-                    if (meetingLink) {
-                      Linking.openURL(meetingLink)
-                        .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
-                    } else {
-                      console.warn('No valid link available');
-                    }
-                  }}
-                >
+                <TouchableOpacity onPress={() => handleOpenPopup(meeting)}>
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                    <Text style={styles.linkText}>{t("Start Meeting")}</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -10, color: 'green' }}>...    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
             );
           })}
+        <View style={styles.paginationContainer}>
+            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>Previous</Text>
+            </TouchableOpacity>
+            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>Next</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
+        
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={popupVisible}
+          onRequestClose={handleClosePopup}
+        >
+          <View style={styles.popupContainer}>
+            <View style={styles.popupContent}>
+              <Text style={styles.popupTitle}>{t("Select an Option")}</Text>
+              <TouchableOpacity onPress={handleFeedback}>
+                <Text style={styles.popupOption}>{t("Give Feedback")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleStartMeeting}>
+                <Text style={styles.popupOption}>{t("Start Meeting")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleClosePopup}>
+                <Text style={styles.popupClose}>{t("Close")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        
         <Modal
           animationType="slide"
           transparent={true}
@@ -344,7 +411,49 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-light",
-  }
+  },
+  popupContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  popupContent: {
+    width: '15%',
+    backgroundColor: 'white',
+    padding: 20,
+    position:'absolute',
+    right: 50,
+    top: 600
+  },
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  popupOption: {
+    padding: 10,
+    fontSize: 16,
+  },
+  popupClose: {
+    padding: 10,
+    fontSize: 16,
+    color: 'red',
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;

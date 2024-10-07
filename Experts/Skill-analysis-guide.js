@@ -141,13 +141,14 @@ function MyComponent({ onClose }) {
           <View style={styles.container}>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
               </View>
               <View style={styles.cell}>
                 <TextInput
                   placeholder="Junior Platform Developer"
                   placeholderTextColor="grey"
                   style={styles.input}
+                  editable={false}
                   value={role}
                   onChangeText={text => setSkillsAnalysisRole(text)}
                 />
@@ -155,7 +156,7 @@ function MyComponent({ onClose }) {
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
               </View>
               <View style={styles.cell}>
                 <Picker
@@ -206,6 +207,25 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
+                <View style={styles.cell}>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Availability")}</Text>
+                </View>
+                <View style={styles.cell}>
+                  <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <TextInput
+                      placeholder="What day and time are you available?"
+                      placeholderTextColor="green"
+                      style={styles.input}
+                      editable={false}
+                      pointerEvents="none" 
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </View>
+
+            <View style={[styles.container, { marginTop: 50 }]}>
+            <View style={styles.row}>
               <View style={styles.cell}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Days")}</Text>
               </View>
@@ -245,18 +265,20 @@ function MyComponent({ onClose }) {
             <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
 
 
-            <TouchableOpacity
-              style={[styles.buttonplus, topics.length >= MAX_TOPICS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
-              onPress={addTopic}
-              onPressIn={handlePressIn}
-              onPressOut={handlePressOut}
-              disabled={topics.length >= MAX_TOPICS}
-            >
-              <Text style={styles.buttonTextplus}>+</Text>
-            </TouchableOpacity>
           </View>
 
+          <View style={{ flexDirection: 'row'}}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
+          <TouchableOpacity
+            style={[styles.buttonplus, topics.length >= MAX_TOPICS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
+            onPress={addTopic}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={topics.length >= MAX_TOPICS}
+          >
+            <Text style={styles.buttonTextplus}>+</Text>
+          </TouchableOpacity>
+          </View>
 
           <View style={styles.container}>
             {topics.map((topic, index) => (
@@ -351,12 +373,11 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light"
   },
   buttonplus: {
-    backgroundColor: 'grey',
+    backgroundColor: 'grey', 
     padding: 5,
-    marginLeft: 585,
-    width: 100,
+    marginLeft: 90, 
+    width: 70,
     paddingHorizontal: 20,
-    marginTop: 10
   },
   buttonTextplus: {
     color: 'white',
@@ -379,7 +400,6 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 920,
-    height: 600,
     backgroundColor: 'white',
   },
   input: {
