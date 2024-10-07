@@ -58,6 +58,10 @@ const Individual = () => {
     onClose();
   };
 
+    const handlePricing = () => {
+   navigate("/pricing");
+    };
+  
   const handleIndividualSignUp = () => {
     navigate('/sign-up', { state: { signUpOption: 1 } });
   };
@@ -226,7 +230,7 @@ const Individual = () => {
                   style={{ width: 666, alignSelf: "center" }}
                   title="14-day free trial | No credit card needed"
                 />
-                <TouchableOpacity onPress={handleIndividualSignUp}>
+                <TouchableOpacity onPress={handlePricing}>
                 <MainButtons
                   gradient
                   title={"Get Started"}

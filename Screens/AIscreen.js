@@ -1,34 +1,607 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
   View,
+  Text,
+  ImageBackground,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Switch,
+  Alert,
+  ScrollView,
+  TextInput
 } from "react-native";
-import React, { useState } from "react";
-import Top from "../components/HomeTop";
-import MainFooter from "../LandingPage/MainFooter";
-import AIbgImage from "../assets/AIbg.png";
-import AQBot from "../assets/aq-bot11.png";
-import MainButtons from "../LandingPage/MainButton";
-import { TouchableOpacity } from "react-native";
-import { Switch } from "react-native";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
+import * as DocumentPicker from "expo-document-picker";
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import CircularProgress from "react-native-circular-progress-indicator";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import Questionnaires from "../components/Questionnaire";
+import { BlurView } from "expo-blur";
 
+import Top from "../components/HomeTop";
+import Top2 from "../components/TopExtra";
+import AIbgImage from "../assets/AIbg.png";
+import AQBot from "../assets/aq-bot11.png";
+import BotIMG from "../assets/aq-bot11.png";
+import down from "../assets/icons8-arrow-down-24.png";
+import UploadImg from "../assets/UploadImg.jpeg";
+import MainButtons from "../LandingPage/MainButton";
+import Questionnaires from "../components/Questionnaire";
+import Footer from "../components/Footer";
+import Row from "../components/Row";
+import Title from "../components/Title";
+import { LinearGradient } from "expo-linear-gradient";
+
+const Levels = ({ val }) => {
+  const [levell, setLevell] = useState([]);
+  const [levellOp, setLevellOp] = useState([]);
+  //  console.log("lev, ", val);
+  useEffect(() => {
+    let data = [];
+    for (let i = 0; i < val - 2; i++) {
+      data.push(i);
+    }
+    setLevell(data);
+  }, [val]);
+  useEffect(() => {
+    let data = [];
+    let total = 4 - (val - 2);
+    for (let i = 0; i < total; i++) {
+      data.push(i);
+    }
+    setLevellOp(data);
+  }, [val]);
+
+  return (
+    <Row style={{ gap: 4, justifyContent: "center" }}>
+      {levell?.map((item) => (
+        <View
+          key={item}
+          style={{
+            borderRadius: 10,
+            width: 60,
+            height: 4,
+            backgroundColor: "#135837",
+          }}
+        />
+      ))}
+      {levellOp.map((item) => (
+        <View
+          key={item}
+          style={{
+            borderRadius: 10,
+            width: 60,
+            height: 4,
+            backgroundColor: "#DFE0E0",
+          }}
+        />
+      ))}
+    </Row>
+  );
+};
+const CountryLevels = ({ val, color, title }) => {
+  const [levell, setLevell] = useState([]);
+  useEffect(() => {
+    let data = [];
+    for (let i = 0; i < val; i++) {
+      data.push(i);
+    }
+    setLevell(data);
+  }, []);
+  const [levellOp, setLevellOp] = useState([]);
+  useEffect(() => {
+    let data = [];
+    let total = 12 - val;
+    for (let i = 0; i < total; i++) {
+      data.push(i);
+    }
+    setLevellOp(data);
+  }, []);
+  return (
+    <Row style={{ justifyContent: "space-between" }}>
+      <Title title={title} textSize={12} textFamily={"Poppins-Regular"} />
+      <Row style={{}}>
+        {levell?.map((item) => (
+          <MaterialCommunityIcons
+            key={item}
+            name="human-male"
+            size={16}
+            color={color}
+          />
+        ))}
+        {levellOp?.map((item) => (
+          <MaterialCommunityIcons
+            key={item}
+            name="human-male"
+            size={16}
+            color={"black"}
+          />
+        ))}
+      </Row>
+    </Row>
+  );
+};
+const CirclularLevels = ({ val, color, title, mainVal }) => {
+  return (
+    <View
+      style={{
+        alignSelf: "center",
+        gap: 10,
+      }}
+    >
+      <CircularProgress
+        radius={50}
+        value={val}
+        maxValue={130000}
+        titleColor={"black"}
+        initialValue={0}
+        valuePrefix={"$"}
+        style={{ width: 80, height: 80 }}
+        progressValueStyle={{ fontSize: 16, textAlign: "auto" }}
+        valuePrefixStyle={{
+          fontSize: 16,
+          textAlign: "right",
+          paddingLeft: 136,
+        }}
+        titleFontSize={16}
+        progressValueColor={color}
+        activeStrokeColor={color}
+        inActiveStrokeOpacity={0.5}
+        inActiveStrokeColor={"#F1F1F1"}
+        duration={3000}
+      />
+      <Title
+        textSize={12}
+        center
+        title={title}
+      />
+    </View>
+  );
+};
+const Barz = ({ color1, color2, title, val }) => {
+  return (
+    <View
+      style={{
+        width: 73,
+        alignItems: "center",
+        gap: 16,
+      }}
+    >
+      <Title
+        textSize={10.56}
+        title={`%${val}`}
+        center
+      />
+      <LinearGradient
+        colors={[color1, color2]}
+        style={{
+          width: 10.5,
+          height: 178 * (val / 100),
+          borderRadius: 6.6,
+        }}
+      />
+      <View style={{ height: 48 }}>
+        <Title
+          textSize={7.86}
+          center
+          title={title}
+        />
+      </View>
+    </View>
+  );
+};
+
+const AIResultHeader = ({ title, subTitle, step }) => {
+  return (
+    <View style={{ gap: 16 }}>
+      <Title
+        title={title ? title : "AngleQuest AI Result"}
+        textSize={24}
+        center
+      />
+      <Levels val={step} />
+      <Title
+        title={subTitle}
+        textSize={20}
+        center
+      />
+    </View>
+  );
+};
+
+const Step4Label = ({
+  top,
+  bottom,
+  left,
+  right,
+  width,
+  height,
+  borderTopColor,
+  borderRightColor,
+  borderLeftColor,
+  borderBottomColor,
+  title,
+  link,
+}) => {
+  return (
+    <View
+      style={{
+        borderTopColor: borderTopColor,
+        borderRightColor: borderRightColor,
+        borderLeftColor: borderLeftColor,
+        borderBottomColor: borderBottomColor,
+        borderTopWidth: borderTopColor && 1,
+        borderRightWidth: borderRightColor && 1,
+        borderLeftWidth: borderLeftColor && 1,
+        borderBottomWidth: borderBottomColor && 1,
+        borderStyle: "dashed",
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+        paddingTop: top && 20,
+        paddingBottom: bottom && 20,
+        paddingLeft: right && 20,
+        paddingRight: left && 20,
+        width: width ? width : 360,
+        height: height ? height : 52,
+        gap: 10,
+        position: "absolute",
+      }}
+    >
+      <Title
+        textSize={14}
+        style={{}}
+        title={title}
+      />
+      <Title
+        textColor={"#5268C1"}
+        style={{ width: 293 }}
+        textSize={10}
+        title={link}
+      />
+    </View>
+  );
+};
+const Step4Image = ({ img, top, left, bottom, right }) => {
+  return (
+    <Image
+      style={{
+        position: "absolute",
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+      }}
+      source={img}
+    />
+  );
+};
+const Step5Card = ({
+  title,
+  text1,
+  text2,
+  bgColor,
+  num,
+  top,
+  left,
+  bottom,
+  right,
+}) => {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 20,
+        position: "absolute",
+        top: top,
+        bottom: bottom,
+        left: left,
+        right: right,
+        zIndex: 10,
+      }}
+    >
+      <View
+        style={{
+          borderRadius: 50,
+          width: 32,
+          height: 32,
+          borderWidth: 1,
+          borderColor: bgColor ? bgColor : "red",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <View
+          style={{
+            borderRadius: 50,
+            width: 24,
+            height: 24,
+            borderWidth: 1,
+            borderColor: bgColor ? bgColor : "red",
+            alignItems: "center",
+            justifyContent: "center",
+
+            shadowColor: "#000000",
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.2,
+            shadowRadius: 5.62,
+            elevation: 7,
+          }}
+        >
+          <Title textSize={20.48} title={num} />
+        </View>
+      </View>
+      <View
+        style={{
+          padding: 16,
+          backgroundColor: bgColor ? bgColor : "red",
+          borderRadius: 8,
+          gap: 4,
+          width: 224,
+        }}
+      >
+        <Title textColor={"white"} title={title} />
+        <View
+          style={{
+            backgroundColor: "#f7f7f7",
+            width: "100%",
+            height: 1,
+          }}
+        />
+
+        <Row style={{ gap: 5 }}>
+          <View
+            style={{
+              width: 2.5,
+              height: 2.5,
+              borderRadius: 2.5,
+              backgroundColor: "white",
+            }}
+          />
+          <Title textSize={12} textColor={"white"} title={text1} />
+        </Row>
+        <Row style={{ gap: 5 }}>
+          <View
+            style={{
+              width: 2.5,
+              height: 2.5,
+              borderRadius: 2.5,
+              backgroundColor: "white",
+            }}
+          />
+          <Title textSize={12} textColor={"white"} title={text2} />
+        </Row>
+      </View>
+    </View>
+  );
+};
+const Step5Arrow = ({
+  top,
+  left,
+  bottom,
+  right,
+  arrowType,
+  arrowLeft,
+  arrowTop,
+  arrowRight,
+  arrowBottom,
+  width,
+  height,
+  bt,
+  br,
+  bl,
+  bb,
+}) => {
+  return (
+    <View
+      style={{
+        borderTopColor: "black",
+        borderBottomColor: "black",
+        borderRightColor: "black",
+        borderLeftColor: "black",
+        borderTopWidth: bt && 1,
+        borderRightWidth: br && 1,
+        borderLeftWidth: bl && 1,
+        borderBottomWidth: bb && 1,
+        borderRadius: 8,
+        position: "absolute",
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+        height: height,
+        width: width,
+        zIndex: 0,
+      }}
+    >
+      <AntDesign
+        name={arrowType}
+        size={14}
+        color="black"
+        style={{
+          position: "absolute",
+          bottom: arrowBottom,
+          right: arrowRight,
+          left: arrowLeft,
+          top: arrowTop,
+        }}
+      />
+    </View>
+  );
+};
+const Step6Card = ({
+  bgColor1,
+  bgColor2,
+  text1,
+  text2,
+  title,
+  num,
+  reversed,
+}) => {
+  return (
+    <View
+      style={{
+        flexDirection: reversed ? "row-reverse" : "row",
+        alignItems: "center",
+        marginRight: !reversed && 300,
+        marginLeft: reversed && 300,
+      }}
+    >
+      <LinearGradient
+        colors={[bgColor1, bgColor2]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={{
+          width: 124,
+          height: 124,
+          borderRadius: "50%",
+          alignItems: "center",
+          justifyContent: "center",
+
+          shadowColor: "#000000",
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 5.62,
+          elevation: 7,
+          zIndex: 1,
+        }}
+      >
+        <LinearGradient
+          colors={[bgColor1, bgColor2]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{
+            width: 99.2,
+            height: 99.2,
+            borderRadius: "50%",
+            alignItems: "center",
+            justifyContent: "center",
+
+            shadowColor: "#000000",
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.2,
+            shadowRadius: 5.62,
+            elevation: 7,
+            zIndex: 1,
+          }}
+        >
+          <Title
+            title={num}
+            textSize={40}
+            textColor={"white"}
+          />
+        </LinearGradient>
+      </LinearGradient>
+      <LinearGradient
+        colors={[bgColor1, bgColor2]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={{
+          width: 493,
+          height: 100,
+          borderRadius: 50,
+          justifyContent: "center",
+          marginLeft: !reversed && -40,
+          marginRight: reversed ? -40 : 10,
+          gap: 6,
+          paddingLeft: 50,
+          zIndex: 0,
+        }}
+      >
+        <Title
+          textSize={14}
+          textColor={"white"}
+          title={title}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "flex-start",
+            gap: 8,
+          }}
+        >
+          <AntDesign name="arrowright" size={12} color="white" />
+          <Title
+            textSize={10}
+            textColor={"white"}
+            style={{ width: 282 }}
+            title={text1}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "flex-start",
+            gap: 8,
+          }}
+        >
+          <AntDesign name="arrowright" size={12} color="white" />
+          <Title
+            textSize={10}
+            textColor={"white"}
+            style={{ width: 282 }}
+            title={text2}
+          />
+        </View>
+      </LinearGradient>
+    </View>
+  );
+};
 const AIScreen = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const handleStep = () => {
-    if (step < 3) {
-      setstep(step + 1);
+  const [topPosition, setTopPosition] = useState(20); 
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [document, setDocument] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
+   const [isLoading, setIsLoading] = useState(false);
+
+  const handleScroll = (event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    console.log("Scroll Position Y:", scrollY); 
+
+    if (scrollY > 0) { 
+      setTopPosition(-30); 
     } else {
-      setStep(3);
+      setTopPosition(20); 
+    }
+  };
+  
+  const handleStep = (value) => {
+    setStep(value);
+  };
+  
+  const handleChooseDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*", // You can specify document types like "application/pdf" for PDFs only
+      });
+
+      if (result.type === "success") {
+        setDocument(result);
+      }
+    } catch (error) {
+      console.log("DocumentPicker Error: ", error);
+      Alert.alert("Error", "Failed to select document.");
     }
   };
 
@@ -36,7 +609,7 @@ const AIScreen = () => {
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.dropDown, { backgroundColor: bgColor }]}
+        style={[styles.dropDown, { backgroundColor: bgColor, zIndex: 100 }]}
       >
         <View style={{ gap: 12 }}>
           <Text style={[styles.bigText, { color: textColor }]}>{title}</Text>
@@ -57,6 +630,7 @@ const AIScreen = () => {
   const [specialization, setSpecialization] = useState("");
   const animeHeight = useSharedValue(0);
   const animeHeight2 = useSharedValue(0);
+  const [switchStates, setSwitchStates] = useState([]);
 
   const handleCV = () => {
     setOpenCV(!openCV);
@@ -78,8 +652,15 @@ const AIScreen = () => {
     setOpenCV(false);
   };
 
-  const handleQues = () => {
+  const handleQues = async () => {
+
+    if (!specialization || specialization.trim() === '') {
+      alert("Missing Specialization, include your target role", "Please enter the job title or specialization.");
+      return;
+    }
+
     setSwitched(true);
+    await fetchQuestions(); // Fetch questions when proceeding
   };
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -91,6 +672,14 @@ const AIScreen = () => {
       height: animeHeight2.value,
     };
   });
+
+  const toggleSwitch = (index) => {
+    setSwitchStates(prev => {
+      const newSwitchStates = [...prev];
+      newSwitchStates[index] = !newSwitchStates[index];
+      return newSwitchStates;
+    });
+  };
 
   const [isEnabled1, setIsEnabled1] = useState(false);
   const [isEnabled2, setIsEnabled2] = useState(false);
@@ -115,222 +704,354 @@ const AIScreen = () => {
     setIsEnabled10((previousState) => !previousState);
 
   const handleSubmit = () => {
-    onClose();
-    navigation.navigate("AI Result");
+    navigate("/welcome");
   };
-  return (
-    <View style={{ flex: 1 }}>
-      <Top />
-      <ScrollView style={{ flexGrow: 1, maxHeight: 2000 }}>
-        <ImageBackground
-          source={AIbgImage}
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#0B281A",
-          }}
-        >
-          {step === 1 ? (
-            <View style={styles.aiBody}>
-              <View style={styles.aiContainer}>
-                <Image
-                  style={{ width: 164, height: 160, objectFit: "contain" }}
-                  source={AQBot}
-                />
-                <View style={{ flex: 1, backgroundColor: "#FFFFFF14" }}>
-                  <Text
-                    style={{
-                      fontFamily: "Poppins-SemiBold",
-                      fontSize: 24,
-                      color: "white",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Hello, I am{" "}
-                    <Text
-                      style={{
-                        color: "#7AA666",
-                        fontWeight: "700",
-                        fontFamily: "Poppins-BoldItalic",
-                      }}
-                    >
-                      Angle Quest!
-                    </Text>{" "}
-                    I will conduct a personalized skill gap analysis, growth
-                    plan, timeline and references to help you get started!
-                  </Text>
-                </View>
-                  <MainButtons
-                    fontSize={21}
-                    outlined
-                    textColor={"#135837"}
-                    title={"Get Started"}
-                    borderRadius={10}
-                    width={150}
-                    onPress={handleStep}
-                  />
-              </View>
-            </View>
-          ) : step === 2 ? (
-            <View style={styles.aiBody}>
-              {/*  
-              <View style={styles.aiContainer}>
-              <Image
-                  style={{ width: 268, height: 264, objectFit: "contain" }}
-                  source={AQBot}
-                />
 
-                <View>
-                    */}
-              <View
-                style={{
-                  backgroundColor: "transparent",
-                }}
-              >
-                <View
-                  style={
-                    switched
-                      ? [styles.container, { width: 650 }]
-                      : styles.container
-                  }
+  const handlePress = () => {
+    // Programmatically trigger the file input
+    fileInputRef.current.click();
+  };
+  
+  const handleFileSelect = (event) => {
+    const selectedFile = event.target.files[0]; // Select the first file
+
+    if (selectedFile) {
+      setDocument(selectedFile); // Store the file object in state
+    } else {
+      alert("No file selected. Please choose a file to upload.");
+    }
+  };
+
+  const handleCVUpload = async () => {
+    if (!document) {
+      alert("No Document Selected", "Please select a document to upload.");
+      return;
+    }
+
+    if (!specialization || specialization.trim() === '') {
+      alert("Missing Specialization, include your target role", "Please enter the job title or specialization.");
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Authorization Error", "No token found.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("cv", document);
+      formData.append("job_title", specialization);
+
+      setUploading(true);
+
+      const response = await axios.post(
+         `${apiUrl}/api/jobseeker/analyze-cv`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Alert.alert("Success", "CV uploaded successfully.");
+        console.log(response.data);
+        navigate('/ai-result');
+        onClose();
+      } else {
+        alert(
+          "Upload Failed, please try again",
+          response.data.message || "Unable to upload CV."
+        );
+        console.error(response.data);
+      }
+    } catch (error) {
+      alert("An error occurred while uploading the CV, please try again.", "An error occurred while uploading the CV.");
+      console.error("CV Upload Error:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  const fetchQuestions = async () => {
+    setLoadingQuestions(true); // Start loading
+
+    try {
+      const response = await fetch(
+        "https://ai.recruitangle.com/api/v1/prediction/622858da-03bd-40fc-bf7e-67293dfa70b1",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question: specialization,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log("API Response:", data);
+
+      if (data.json && data.json.questions) {
+        try {
+          const parsedQuestions = JSON.parse(data.json.questions);
+          console.log("Parsed Questions:", parsedQuestions);
+
+          if (Array.isArray(parsedQuestions.questions)) {
+            setQuestions(parsedQuestions.questions);
+          } else {
+            console.error("Questions field is not an array", parsedQuestions);
+          }
+        } catch (parseError) {
+          console.error("Failed to parse questions", parseError);
+        }
+      } else {
+        console.error("Questions field is missing or invalid", data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch questions", error);
+    } finally {
+      setLoadingQuestions(false); // End loading
+    }
+  };
+  
+  return (
+          <View style={{ flex: 1, }}>
+            <Top2 tint={"dark"} />
+                <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
+                  <Top value={3} intensity={100} />
+                </View>
+                <ScrollView
+                  contentContainerStyle={{ flexGrow: 1 }}
+                  onScroll={handleScroll}  // Attach scroll listener
+                  scrollEventThrottle={16} // Frequency of scroll events
                 >
-                  <View style={styles.top}>
-                    {switched && (
-                      <View
+          <View style={styles.container}>
+          <ImageBackground
+            source={AIbgImage}
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#0B281A",
+            }}
+          >
+
+            {step === 1 ? (
+              <View style={styles.aiBody}>
+                <View style={styles.aiContainer}>
+                  <Image
+                    style={{ width: 164, height: 160, objectFit: "contain" }}
+                    source={AQBot}
+                  />
+                  <View style={{ marginTop: 50 }}>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "flex-start" }}
+                    >
+                      <BlurView
+                        //  tint={"systemThinMaterialLight"}
+                        intensity={40}
                         style={{
-                          // padding: 10,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          gap: 30,
+                          width: 550,
+                          height: 220,
+                          borderRadius: 20,
+                          padding: 20,
+                          borderWidth: 1,
+                          borderColor: "#fff",
                         }}
                       >
-                        <Image
-                          style={{
-                            marginTop: 5,
-                            width: 34,
-                            height: 34,
-                            objectFit: "contain",
-                          }}
-                          source={BotIMG}
-                        />
                         <Text
                           style={{
-                            color: "#F5F5F5",
-                            fontFamily: "Poppins-Bold",
-                            fontSize: 16,
+                            fontSize: 24,
+                            color: "white",
+                            fontWeight: "500",
                           }}
                         >
-                          AngleQuest AI Gap Analysis Questionnaire
+                          Hello 👋 I am 
+                          <Text
+                            style={{
+                              color: "#7AA666",
+                              fontWeight: "700",
+                              marginLeft: 5
+                            }}
+                          >
+                          AngleQuest AI!
+                          </Text>{" "}
+                          I will conduct a personalized skill gap analysis,
+                          growth plan, timeline and references to help you get
+                          started!
                         </Text>
-                      </View>
-                    )}
+                      </BlurView>
+                    </View>
+                    <View style={{ alignItems: "flex-end", marginTop: 30 }}>
+                      <TouchableOpacity onPress={() => handleStep(2)}>
+                      <MainButtons
+                        gradient
+                        onPress={() => handleStep(2)}
+                        title={"Get Started"}
+                        borderRadius={8}
+                        fontSize={16}
+                        width={170}
+                        icon={
+                          <AntDesign
+                            name="arrowright"
+                            size={14}
+                            color="#ffff"
+                          />
+                        }
+                      />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  {!switched ? (
-                    <View style={styles.bottom}>
-                      <View style={styles.titleWrapper}>
-                        <Image style={styles.image} source={BotIMG} />
-                        <View style={{ flex: 1, gap: 8 }}>
-                          <Text style={styles.title}>
-                            Hello I am AngleQuest AI
-                          </Text>
-                          <Text style={styles.subTitle}>
-                            Upload your CV and choose the next level in your
-                            career that you want to reach...
-                          </Text>
-                          <Text style={styles.subTitle}>
-                            I'll conduct a personalized skill gap analysis,
-                            growth plan, timeline and references to help you get
-                            started!
+                </View>
+              </View>
+            ) : step === 2 ? (
+              <View style={[styles.aiBody, { minHeight: 1000 }]}>
+                <View
+                  style={{
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <View
+                    style={
+                      switched
+                        ? [styles.container1, { width: 650 }]
+                        : styles.container1
+                    }
+                  >
+                    {switched && (
+                      <View style={styles.top}>
+                        <View
+                          style={{
+                            // padding: 10,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 30,
+                          }}
+                        >
+                          <Image
+                            style={{
+                              marginTop: 5,
+                              width: 34,
+                              height: 34,
+                              objectFit: "contain",
+                            }}
+                            source={BotIMG}
+                          />
+                          <Text
+                            style={{
+                              color: "#F5F5F5",
+                              fontFamily: "Poppins-Bold",
+                              fontSize: 16,
+                            }}
+                          >
+                            AngleQuest AI Gap Analysis Questionnaire
                           </Text>
                         </View>
                       </View>
-                      <DropDown
-                        title={"Use CV"}
-                        bgColor={openQues ? "#D9D9D9" : "#7AA666"}
-                        textColor={openQues ? "#777676" : "white"}
-                        subTitle={
-                          "Get a personalized skill gap analysis in 2 minutes"
-                        }
-                        onPress={handleCV}
-                      />
-
-                      {openCV && (
-                        <Animated.View style={[styles.openCV, animatedStyle]}>
-                          <TouchableOpacity
-                            onPress={handleChooseDocument}
-                            style={{ alignSelf: "center" }}
-                          >
-                            <Image
-                              source={UploadImg}
-                              style={styles.uploadImg}
-                            />
-                            <Text
-                              style={{
-                                paddingVertical: 5,
-                                textAlign: "center",
-                              }}
-                            >
-                              Upload CV
+                    )}
+                    {!switched ? (
+                      <View style={styles.bottom}>
+                        {/*
+                       <View style={styles.titleWrapper}>
+                          <Image style={styles.image} source={BotIMG} />
+                          <View style={{ flex: 1, gap: 8 }}>
+                            <Text style={styles.title}>
+                              Hello I am AngleQuest AI
                             </Text>
-                          </TouchableOpacity>
-                          <Picker
-                            onChange={setSpecialization}
-                            selectedValue={specialization}
-                            onValueChange={(itemValue, itemIndex) =>
-                              setSpecialization(itemValue)
-                            }
-                            style={styles.picker}
-                          >
-                            <Picker.Item
-                              label="Choose Specialization"
-                              value=""
-                            />
-                            <Picker.Item
-                              label="Microsoft Azure"
-                              value="Microsoft Azure"
-                            />
-                            <Picker.Item
-                              label="Java Engineering"
-                              value="Java Engineering"
-                            />
-                            <Picker.Item label="SAP FI" value="SAP FI" />
-                            <Picker.Item
-                              label="Microsoft Azure"
-                              value="Microsoft Azure"
-                            />
-                            <Picker.Item label="Dev Ops" value="Dev Ops" />
-                            <Picker.Item
-                              label="Frontend Development"
-                              value="Frontend Development"
-                            />
-                            <Picker.Item
-                              label="Backend Development"
-                              value="Backend Development"
-                            />
-                            <Picker.Item
-                              label="Fullstack Development"
-                              value="Fullstack Development"
-                            />
-                            <Picker.Item
-                              label="Data Analysis"
-                              value="Data Analysis"
-                            />
-                            <Picker.Item
-                              label="UI/UX Design"
-                              value="UI/UX Design"
-                            />
-                          </Picker>
+                            <Text style={styles.subTitle}>
+                              Upload your CV and choose the next level in your
+                              career that you want to reach...
+                            </Text>
+                            <Text style={styles.subTitle}>
+                              I'll conduct a personalized skill gap analysis,
+                              growth plan, timeline and references to help you
+                              get started!
+                            </Text>
+                          </View>
+                        </View>
+                        */}
+                        <DropDown
+                          title={"Use CV"}
+                          bgColor={"#7AA666"}
+                          textColor={"white"}
+                          subTitle={
+                            "Get a personalized skill gap analysis in 2 minutes"
+                          }
+                          onPress={handleCV}
+                        />
 
-                          <TouchableOpacity
-                            onPress={handleSubmit}
-                            style={styles.button}
-                          >
-                            <Text style={styles.buttonText}>Submit</Text>
-                          </TouchableOpacity>
-                        </Animated.View>
-                      )}
-                      {/*openCV && (  )*/}
-                      {!openCV && (
+                        {openCV && (
+                          <Animated.View style={[styles.openCV, animatedStyle]}>
+                            <TouchableOpacity
+                               onPress={handlePress}
+                              style={{ alignSelf: "center" }}
+                            >
+                              <Image
+                                source={UploadImg}
+                                style={styles.uploadImg}
+                              />
+                              <Text
+                                style={{
+                                  paddingVertical: 5,
+                                  textAlign: "center",
+                                }}
+                              >
+                                Upload CV
+                              </Text>
+
+                              {/* Hidden File Input */}
+                              <input
+                                type="file"
+                                accept="application/pdf,application/msword"
+                                onChange={handleFileSelect}
+                                ref={fileInputRef} // Connect the ref to the input
+                                style={{ display: "none" }} // Hide the input
+                              />
+                            </TouchableOpacity>
+                            {document && (
+                              <View style={{ marginLeft: 20 }}>
+                                <Text>Document Name: {document.name}</Text>
+                                <Text>Document Size: {document.size} bytes</Text>
+                              </View>
+                            )}
+
+                            <TextInput
+                              style={styles.picker}
+                              placeholder="What is your target career role?"
+                              value={specialization}
+                              onChangeText={setSpecialization}
+                            />
+
+                            <View style={[styles.loadingContainer, { display: uploading ? 'flex' : 'none' }]}>
+                              <Text style={styles.loadingText}>Analyzing CV, Please wait...</Text>
+                              <Image 
+                                source={require('../assets/loading.gif')}
+                                style={styles.loadingGif} 
+                              />
+                            </View>
+
+                            <View style={{ alignItems: "center" }}>
+                              <TouchableOpacity                                  onPress={() => handleStep(3)}>
+                              <MainButtons
+                                gradient
+                                onPress={() => handleStep(3)}
+                                title={"Submit"}
+                                borderRadius={8}
+                                fontSize={16}
+                                width={170}
+                              />
+                              </TouchableOpacity>
+                            </View>
+                          </Animated.View>
+                        )}
+                        {/*openCV && (  )*/}
+                        {/*!openCV && (
+                        )*/}
                         <DropDown
                           title={"Use Questionnaire"}
                           subTitle={
@@ -338,182 +1059,967 @@ const AIScreen = () => {
                           }
                           onPress={handleQuestionaire}
                         />
-                      )}
-                      {openQues && (
-                        <Animated.View style={[styles.openCV, animatedStyle2]}>
-                          <Picker
-                            selectedValue={specialization}
-                            onValueChange={(itemValue, itemIndex) =>
-                              setSpecialization(itemValue)
-                            }
-                            style={styles.picker}
+                        {openQues && (
+                          <Animated.View
+                            style={[styles.openCV, animatedStyle2]}
                           >
-                            <Picker.Item
-                              label="Choose Specialization"
-                              value=""
+                            <TextInput
+                              style={styles.picker}
+                              placeholder="What is your target career role?"
+                              value={specialization}
+                              onChangeText={setSpecialization}
                             />
-                            <Picker.Item
-                              label="Microsoft Azure"
-                              value="Microsoft Azure"
-                            />
-                            <Picker.Item
-                              label="Java Engineering"
-                              value="Java Engineering"
-                            />
-                            <Picker.Item label="SAP FI" value="SAP FI" />
-                            <Picker.Item
-                              label="Microsoft Azure"
-                              value="Microsoft Azure"
-                            />
-                            <Picker.Item label="Dev Ops" value="Dev Ops" />
-                            <Picker.Item
-                              label="Frontend Development"
-                              value="Frontend Development"
-                            />
-                            <Picker.Item
-                              label="Backend Development"
-                              value="Backend Development"
-                            />
-                            <Picker.Item
-                              label="Fullstack Development"
-                              value="Fullstack Development"
-                            />
-                            <Picker.Item
-                              label="Data Analysis"
-                              value="Data Analysis"
-                            />
-                            <Picker.Item
-                              label="UI/UX Design"
-                              value="UI/UX Design"
-                            />
-                          </Picker>
 
-                          <TouchableOpacity
-                            style={styles.button}
-                            onPress={handleQues}
-                          >
-                            <Text style={styles.buttonText}>Proceed</Text>
-                          </TouchableOpacity>
-                        </Animated.View>
-                      )}
-                    </View>
-                  ) : (
-                    <View style={styles.bottom}>
+                            <View style={{ alignItems: "center" }}>
+                              <TouchableOpacity  onPress={handleQues}>
+                              <MainButtons
+                                gradient
+                                onPress={handleQues}
+                                title={"Proceed"}
+                                borderRadius={8}
+                                fontSize={16}
+                                width={170}
+                              />
+                              </TouchableOpacity>
+                            </View>
+                          </Animated.View>
+                        )}
+                      </View>
+                    ) : (
                       <View
-                        style={{
-                          height: "100%",
-                          gap: 15,
-                          justifyContent: "space-between",
-                        }}
+                        style={[
+                          styles.bottom,
+                          {
+                            backgroundColor: "white",
+                          },
+                        ]}
                       >
-                        <ScrollView
-                          showsVerticalScrollIndicator={false}
-                          contentContainerStyle={{
-                            // paddingVertical: 10,
-                            height: 400,
-                            gap: 12,
-                            marginVertical: 10,
-                            marginHorizontal: 10,
+                        <View
+                          style={{
+                            height: "99%",
+                            gap: 15,
+                            justifyContent: "space-between",
+                            backgroundColor: "white",
                           }}
                         >
-                          <Questionnaires
-                            isEnabled={isEnabled1}
-                            toggleSwitch={toggleSwitch1}
-                            question={
-                              "1. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled2}
-                            toggleSwitch={toggleSwitch2}
-                            question={
-                              "2. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled3}
-                            toggleSwitch={toggleSwitch3}
-                            question={
-                              "3. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled4}
-                            toggleSwitch={toggleSwitch4}
-                            question={
-                              "4. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled5}
-                            toggleSwitch={toggleSwitch5}
-                            question={
-                              "5. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled6}
-                            toggleSwitch={toggleSwitch6}
-                            question={
-                              "6. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled7}
-                            toggleSwitch={toggleSwitch7}
-                            question={
-                              "7. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled8}
-                            toggleSwitch={toggleSwitch8}
-                            question={
-                              "8. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled9}
-                            toggleSwitch={toggleSwitch9}
-                            question={
-                              "9. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                          <Questionnaires
-                            isEnabled={isEnabled10}
-                            toggleSwitch={toggleSwitch10}
-                            question={
-                              "10. I’ll conduct a personalized skill gap analysis, growth plan, timeline, and references to help you get started!"
-                            }
-                          />
-                        </ScrollView>
+                          <View
+                            style={{
+                              gap: 12,
+                              marginVertical: 10,
+                              backgroundColor: "#fff",
+                            }}
+                          >
+                            {loadingQuestions ? (
+                              <View style={styles.loadingContainer}>
+                                <Text style={styles.loadingText}>Compiling questions, Please wait...</Text>
+                                <Image 
+                                  source={require('../assets/loading.gif')}
+                                  style={styles.loadingGif} 
+                                />
+                              </View>
+                            ) : (
+                              <ScrollView
+                                showsVerticalScrollIndicator={false}
+                                contentContainerStyle={{
+                                  height: 480,
+                                  gap: 12,
+                                  marginVertical: 10,
+                                  marginHorizontal: 10,
+                                }}
+                              >
+                                {questions.map((question, index) => (
+                                  <View key={index} style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>{`${index + 1}. ${question.question}`}</Text>
+                                    <Switch
+                                      value={switchStates[index] || false}
+                                      onValueChange={() => toggleSwitch(index)}
+                                      trackColor={{ false: "#767577", true: "coral" }} 
+                                      thumbColor={switchStates[index] ? "#fff" : "#fff"}
+                                      style={styles.switch}
+                                    />
+                                    <Text style={styles.answerText}>{switchStates[index] ? "Yes" : "No"}</Text>
+                                  </View>
+                                ))}
 
-                        <TouchableOpacity
-                          style={[
-                            styles.button,
-                            {
-                              paddingVertical: 10,
-                              width: 100,
-                              alignSelf: "flex-end",
+                              </ScrollView>
+                            )}
+                          </View>
+
+                          <Row
+                            style={{
+                              justifyContent: "space-between",
                               marginBottom: 20,
-                            },
-                          ]}
-                          onPress={handleSubmit}
-                        >
-                          <Text style={styles.buttonText}>Submit</Text>
-                        </TouchableOpacity>
+                            }}
+                          >
+                             <TouchableOpacity                                                               onPress={() => setSwitched(false)}>
+                            <MainButtons
+                              onPress={() => setSwitched(false)}
+                              title={"Back"}
+                              borderRadius={8}
+                              fontSize={16}
+                              bgColor={"white"}
+                              textColor={"black"}
+                            />
+                             </TouchableOpacity>
+                            <TouchableOpacity                onPress={() => handleStep(3)}>
+                            <MainButtons
+                              gradient
+                              onPress={() => handleStep(3)}
+                              title={"Submit"}
+                              borderRadius={8}
+                              fontSize={16}
+                            />
+                            </TouchableOpacity>
+                          </Row>
+                        </View>
                       </View>
-                    </View>
-                  )}
+                    )}
+                  </View>
                 </View>
               </View>
-              {/*  </View>
+            ) : step === 3 ? (
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 50 }]}>
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
+                    style={[
+                      styles.container1,
+                      { width: 1075, borderRadius: 20 },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.bottom,
+                        { backgroundColor: "white", borderRadius: 20 },
+                      ]}
+                    >
+                      <View
+                        style={{
+                          height: "99%",
+                          gap: 15,
+                          justifyContent: "space-between",
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                            gap: 20,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <AIResultHeader
+                            step={step}
+                            subTitle={
+                              "Certifications & Courses | Certification to obtain"
+                            }
+                          />
+
+                          <Row style={{ width: "100%", gap: 20 }}>
+                            <View
+                              style={[
+                                styles.step3Wrapper,
+                                {
+                                  backgroundColor: "#f5f5f5",
+                                  width: "60%",
+                                  height: 340,
+                                },
+                              ]}
+                            >
+                              <Title
+                                textFamily={"Poppins-SemiBold"}
+                                textSize={16}
+                                title={"Courses & Certification"}
+                              />
+                              <View
+                                style={{
+                                  alignItems: "flex-end",
+                                  height: "100%",
+                                  paddingBottom: 20,
+                                  flexDirection: "row",
+                                  gap: 6,
+                                }}
+                              >
+                                <Barz
+                                  color1="#DE7423"
+                                  color2="#DD963336"
+                                  val={50}
+                                  title={
+                                    "Google UX Design Professional Certificate (Coursera)"
+                                  }
+                                />
+                                <Barz
+                                  color1="#D3336B"
+                                  color2="#DD333336"
+                                  val={65}
+                                  title={"Interaction Design Foundation (IDF)"}
+                                />
+                                <Barz
+                                  color1="#6EA84F"
+                                  color2="#6EA84F36"
+                                  val={60}
+                                  title={"Udacity - UX Nanodegree"}
+                                />
+                                <Barz
+                                  color1="#D33336"
+                                  color2="#D3333636"
+                                  val={45}
+                                  title={
+                                    "NN/g UX Certification (Nielsen Norman Group)"
+                                  }
+                                />
+                                <Barz
+                                  color1="#4E33D3"
+                                  color2="#4E33D336"
+                                  val={70}
+                                  title={
+                                    "Coursera - User Experience Research and Design (Universiyy of Michigan)"
+                                  }
+                                />
+                                <Barz
+                                  color1="#094A2B"
+                                  color2="#094A2B36"
+                                  val={55}
+                                  title={"Springboard - UI/UX Design Bootcamp"}
+                                />
+                                <Barz
+                                  color1="#6E1D1A"
+                                  color2="#6E1D1A36"
+                                  val={95}
+                                  title={"CareerFoundry - UI Design Program"}
+                                />
+                              </View>
+                            </View>
+                            <View
+                              style={[
+                                styles.step3Wrapper,
+                                {
+                                  backgroundColor: "#ECFBF4",
+                                  width: "37%",
+                                  height: 340,
+                                  gap: 20,
+                                },
+                              ]}
+                            >
+                              <Title
+                                textFamily={"Poppins-SemiBold"}
+                                textSize={16}
+                                title={
+                                  "Countries with the highest hire rate for UI/UX Designers"
+                                }
+                              />
+
+                              <View style={{ gap: 20 }}>
+                                <CountryLevels
+                                  val={10}
+                                  color={"#FF0289"}
+                                  title={"United States"}
+                                />
+                                <CountryLevels
+                                  val={8}
+                                  color={"#F9AD50"}
+                                  title={"Netherland"}
+                                />
+                                <CountryLevels
+                                  val={9}
+                                  color={"#85A947"}
+                                  title={"Switzerland"}
+                                />
+                                <CountryLevels
+                                  val={6}
+                                  color={"#C750F9"}
+                                  title={"Germany"}
+                                />
+                                <CountryLevels
+                                  val={8}
+                                  color={"#FF3D00"}
+                                  title={"United Kingdom"}
+                                />
+                                <CountryLevels
+                                  val={5}
+                                  color={"#0AE8F0"}
+                                  title={"Canada"}
+                                />
+                              </View>
+                            </View>
+                          </Row>
+                          <View
+                            style={[
+                              styles.step3Wrapper,
+                              {
+                                backgroundColor: "#f5f5f5",
+                                width: "100%",
+                                height: 210,
+                                gap: 20,
+                              },
+                            ]}
+                          >
+                            <Title
+                              textFamily={"Poppins-SemiBold"}
+                              textSize={16}
+                              title={
+                                "Highest Paying Countries for UI/UX Designers"
+                              }
+                            />
+                            <Row style={{ justifyContent: "space-around" }}>
+                              <CirclularLevels
+                                val={115000}
+                                color={"#FF0289"}
+                                title={"United States"}
+                              />
+                              <CirclularLevels
+                                val={90000}
+                                color={"#FF3D00"}
+                                title={"United Kingdom"}
+                              />
+                              <CirclularLevels
+                                val={100000}
+                                color={"#85A947"}
+                                title={"Switzerland"}
+                              />
+                              <CirclularLevels
+                                val={86000}
+                                color={"#C750F9"}
+                                title={"Germany"}
+                              />
+                              <CirclularLevels
+                                val={75000}
+                                color={"#0AE8F0"}
+                                title={"Canada"}
+                              />
+                              <CirclularLevels
+                                val={80000}
+                                color={"#F9AD50"}
+                                title={"Netherland"}
+                              />
+                            </Row>
+                          </View>
+                        </View>
+
+                        <Row
+                          style={{
+                            justifyContent: "center",
+                            gap: 50,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <MainButtons
+                            title={"Download pdf"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                            icon={
+                              <AntDesign
+                                name="download"
+                                size={20}
+                                color="#135837"
+                              />
+                            }
+                            bgColor={"white"}
+                            textColor={"#135837"}
+                          />
+                          <TouchableOpacity                onPress={() => handleStep(4)}>
+                          <MainButtons
+                            gradient
+                            onPress={() => handleStep(4)}
+                            title={"Next"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                          />
+                          </TouchableOpacity>
+                        </Row>
+                      </View>
+                    </View>
+                  </View>
+                </View>
               </View>
-              */}
-            </View>
-          ) : null}
-          {/* <MainFooter />*/}
-        </ImageBackground>
+            ) : step === 4 ? (
+              <View style={[styles.aiBody, { minHeight: 900 }]}>
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
+                    style={[
+                      styles.container1,
+                      { width: 1075, borderRadius: 20 },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.bottom,
+                        { backgroundColor: "white", borderRadius: 20 },
+                      ]}
+                    >
+                      <View
+                        style={{
+                          height: "99%",
+                          gap: 15,
+                          justifyContent: "space-between",
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                            gap: 20,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <AIResultHeader
+                            step={step}
+                            subTitle={
+                              "Learning References | How to learn your goals"
+                            }
+                          />
+                          <View style={{ position: "relative" }}>
+                            <Image
+                              source={require("../assets/step4.png")}
+                              style={{ height: 526, width: 526 }}
+                            />
+
+                            <Step4Image
+                              top={85}
+                              left={188}
+                              img={require("../assets/udemy.png")}
+                            />
+                            <Step4Label
+                              title={
+                                "Google UX Design Professional Certificate "
+                              }
+                              link="https://www.coursera.org/professional-certificates/google-ux-design "
+                              borderTopColor="#78CB57"
+                              borderRightColor="#78CB57"
+                              top={4}
+                              left={-148}
+                              paddingTop={20}
+                              width={360}
+                              height={52}
+                            />
+                            <Step4Image
+                              left={69}
+                              bottom={270}
+                              img={require("../assets/youtube.png")}
+                            />
+                            <Step4Label
+                              title={
+                                "Google UX Design Professional Certificate "
+                              }
+                              link="https://www.coursera.org/professional-certificates/google-ux-design "
+                              borderBottomColor="#7E62B4"
+                              borderRightColor="#7E62B4"
+                              bottom={130}
+                              left={-208}
+                              paddingBottom={20}
+                              width={302}
+                              height={100}
+                            />
+                            <Step4Image
+                              left={182}
+                              bottom={110}
+                              img={require("../assets/udacity.png")}
+                            />
+                            <Step4Label
+                              title={
+                                "Google UX Design Professional Certificate "
+                              }
+                              link="https://www.coursera.org/professional-certificates/google-ux-design "
+                              borderBottomColor="#5583A5"
+                              borderRightColor="#5583A5"
+                              bottom={-5}
+                              left={-116}
+                              paddingBottom={20}
+                              width={317}
+                              height={70}
+                            />
+
+                            <Step4Image
+                              right={100}
+                              top={149}
+                              img={require("../assets/coursera.png")}
+                            />
+                            <Step4Label
+                              title={
+                                "Google UX Design Professional Certificate "
+                              }
+                              link="https://www.coursera.org/professional-certificates/google-ux-design "
+                              borderTopColor="#4058AD"
+                              borderLeftColor="#4058AD"
+                              top={38}
+                              right={-203}
+                              paddingTop={20}
+                              width={317}
+                              height={70}
+                            />
+                            <Step4Image
+                              right={100}
+                              bottom={149}
+                              img={require("../assets/udemy.png")}
+                            />
+                            <Step4Label
+                              title={
+                                "Google UX Design Professional Certificate "
+                              }
+                              link="https://www.coursera.org/professional-certificates/google-ux-design "
+                              borderBottomColor="#F36064"
+                              borderLeftColor="#F36064"
+                              bottom={53}
+                              right={-180}
+                              paddingTop={20}
+                              width={317}
+                              height={70}
+                            />
+                          </View>
+                        </View>
+
+                        <Row
+                          style={{
+                            justifyContent: "center",
+                            gap: 50,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <MainButtons
+                            title={"Download pdf"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                            icon={
+                              <AntDesign
+                                name="download"
+                                size={20}
+                                color="#135837"
+                              />
+                            }
+                            bgColor={"white"}
+                            textColor={"#135837"}
+                          />
+                          <TouchableOpacity                onPress={() => handleStep(5)}>
+                          <MainButtons
+                            gradient
+                            onPress={() => handleStep(5)}
+                            title={"Next"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                          />
+                          </TouchableOpacity>
+                        </Row>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : step === 5 ? (
+              <View style={[styles.aiBody, { minHeight: 900 }]}>
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
+                    style={[
+                      styles.container1,
+                      { width: 1075, borderRadius: 20 },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.bottom,
+                        { backgroundColor: "white", borderRadius: 20 },
+                      ]}
+                    >
+                      <View
+                        style={{
+                          height: "99%",
+                          gap: 15,
+                          justifyContent: "space-between",
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                            gap: 20,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <AIResultHeader
+                            step={step}
+                            subTitle={"Study Road Map | What to begin from"}
+                          />
+                          <View
+                            style={{ position: "relative", minHeight: 525 }}
+                          >
+                            <Step5Card
+                              bgColor={"#5679EE"}
+                              num={"1"}
+                              title={"Understand the Basics"}
+                              text1={"Learn key difference"}
+                              text2={"What is UI/UX Design?"}
+                              top={10}
+                              left={-500}
+                            />
+                            {/** arrow 1 */}
+                            <Step5Arrow
+                              top={60}
+                              left={-236}
+                              height={105}
+                              width={80}
+                              bt
+                              br
+                              arrowBottom={11}
+                              arrowRight={-7}
+                              arrowType={"caretdown"}
+                            />
+
+                            <Step5Card
+                              bgColor={"#17A398"}
+                              num={"2"}
+                              title={"Learn Key Design Principles"}
+                              text1={"Master color theory"}
+                              text2={"Fonts, layout, alignment e.t.c."}
+                              top={150}
+                              left={-275}
+                            />
+                            {/** arrow 2 */}
+                            <Step5Arrow
+                              top={200}
+                              left={-245}
+                              height={95}
+                              width={80}
+                              bt
+                              bl
+                              arrowBottom={7}
+                              arrowLeft={-8}
+                              arrowType={"caretdown"}
+                            />
+                            <Step5Card
+                              bgColor={"#FFC107"}
+                              num={"3"}
+                              title={"Master Design Tools"}
+                              text1={"Figma, Sketch, Adobe XD"}
+                              text2={"Tutorials, resources & plugins"}
+                              top={285}
+                              left={-375}
+                            />
+                            {/** arrow 3 */}
+                            <Step5Arrow
+                              bottom={86}
+                              left={-350}
+                              height={95}
+                              width={80}
+                              bt
+                              bl
+                              arrowBottom={7}
+                              arrowLeft={-8}
+                              arrowType={"caretdown"}
+                            />
+                            <Step5Card
+                              bgColor={"#FF6F61"}
+                              num={"4"}
+                              title={"Build a Strong Portfolio"}
+                              text1={"Showcase your work"}
+                              text2={"Emphasize on key skills"}
+                              bottom={-10}
+                              left={-500}
+                            />
+                            {/** arrow 4 */}
+                            <Step5Arrow
+                              bottom={-45}
+                              left={-236}
+                              height={95}
+                              width={123}
+                              bt
+                              arrowTop={-8}
+                              arrowRight={3}
+                              arrowType={"caretright"}
+                            />
+                            <Step5Card
+                              bgColor={"#2ECC71"}
+                              num={"5"}
+                              title={"Gain Practical Experience"}
+                              text1={"Internships and freelancing"}
+                              text2={"Volunteer & design challenge"}
+                              bottom={10}
+                              left={-170}
+                            />
+                            {/** arrow 5 */}
+                            <Step5Arrow
+                              bottom={-45}
+                              right={-181}
+                              height={95}
+                              width={123}
+                              bt
+                              arrowTop={-8}
+                              arrowRight={3}
+                              arrowType={"caretright"}
+                            />
+                            <Step5Card
+                              bgColor={"#C19682"}
+                              num={"6"}
+                              title={"Conduct User Research"}
+                              text1={"Interviews & Surveys"}
+                              text2={"User personas"}
+                              bottom={0}
+                              right={-400}
+                            />
+                            {/** arrow 6 */}
+                            <Step5Arrow
+                              bottom={100}
+                              right={-300}
+                              height={95}
+                              width={123}
+                              br
+                              bt
+                              arrowTop={-7}
+                              arrowRight={14}
+                              arrowType={"caretleft"}
+                            />
+                            <Step5Card
+                              bgColor={"#B4CBDB"}
+                              num={"7"}
+                              title={"Stay Updated with Trends"}
+                              text1={"Design blogs & articles"}
+                              text2={"Workshops & Conferences"}
+                              top={285}
+                              right={-275}
+                            />
+                            {/** arrow 7 */}
+                            <Step5Arrow
+                              bottom={210}
+                              right={-300}
+                              height={95}
+                              width={123}
+                              bl
+                              bt
+                              arrowTop={-8}
+                              arrowRight={80}
+                              arrowType={"caretright"}
+                            />
+                            <Step5Card
+                              bgColor={"#CDDCD0"}
+                              num={"8"}
+                              title={"Connect and Network"}
+                              text1={"Seek mentorship"}
+                              text2={"Join design communities"}
+                              right={-442}
+                              top={165}
+                            />
+                            {/** arrow 8 */}
+                            <Step5Arrow
+                              top={100}
+                              right={-350}
+                              height={95}
+                              width={23}
+                              br
+                              bt
+                              arrowTop={11}
+                              arrowRight={-8}
+                              arrowType={"caretup"}
+                            />
+                            <Step5Card
+                              bgColor={"#40E0CD"}
+                              num={"9"}
+                              title={"Develop Soft Skills"}
+                              text1={"Communication skills"}
+                              text2={"Problem-solving abilities"}
+                              top={10}
+                              right={-500}
+                            />
+                            {/** arrow 9 */}
+                            <Step5Arrow
+                              top={68}
+                              right={-280}
+                              height={30}
+                              width={123}
+                              br
+                              bt
+                              arrowTop={-7}
+                              arrowRight={97}
+                              arrowType={"caretleft"}
+                            />
+                            <Step5Card
+                              bgColor={"#B284BE"}
+                              num={"10"}
+                              title={"Continuous Learning"}
+                              text1={"Online courses & Certs"}
+                              text2={"Read design thinking books"}
+                              top={30}
+                              right={-170}
+                            />
+                            <Step4Image
+                              bottom={130}
+                              img={require("../assets/collaborationArt.png")}
+                              right={-470}
+                            />
+                          </View>
+                        </View>
+
+                        <Row
+                          style={{
+                            justifyContent: "center",
+                            gap: 50,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <MainButtons
+                            title={"Download pdf"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                            icon={
+                              <AntDesign
+                                name="download"
+                                size={20}
+                                color="#135837"
+                              />
+                            }
+                            bgColor={"white"}
+                            textColor={"#135837"}
+                          />
+                          <TouchableOpacity                onPress={() => handleStep(6)}>
+                          <MainButtons
+                            gradient
+                            onPress={() => handleStep(6)}
+                            title={"Next"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                          />
+                          </TouchableOpacity>
+                        </Row>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : step === 6 ? (
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 100 }]}>
+                <View style={{ backgroundColor: "transparent" }}>
+                  <View
+                    style={[
+                      styles.container1,
+                      { width: 1075, borderRadius: 20 },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.bottom,
+                        { backgroundColor: "white", borderRadius: 20 },
+                      ]}
+                    >
+                      <View
+                        style={{
+                          height: "99%",
+                          gap: 15,
+                          justifyContent: "space-between",
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                            gap: 20,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <AIResultHeader
+                            step={step}
+                            subTitle={
+                              "Knowledge Gaps | Things that you need to learn"
+                            }
+                          />
+                          <View style={{ position: "relative", gap: 40 }}>
+                            <Step6Card
+                              bgColor1="#135837"
+                              bgColor2={"#29BE77"}
+                              num={"01"}
+                              title={
+                                "Google UX Design Professional Certificate (Coursera)"
+                              }
+                              text1={
+                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
+                              }
+                              text2={"Duration: 6 months (self-paced)."}
+                            />
+                            <Step6Card
+                              reversed
+                              bgColor1="#1C4A8A"
+                              bgColor2={"#3197DA"}
+                              num={"02"}
+                              title={"Interaction Design Foundation (IDF)"}
+                              text1={
+                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
+                              }
+                              text2={"Duration: Depends on the course."}
+                            />
+                            <Step6Card
+                              bgColor1="#8F1987"
+                              bgColor2={"#DF2783"}
+                              num={"03"}
+                              title={"Udacity - UX Nanodegree"}
+                              text1={
+                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
+                              }
+                              text2={"Duration: 6 months (self-paced)."}
+                            />
+                            <Step6Card
+                              reversed
+                              bgColor1="#13E3D2"
+                              bgColor2={"#0E7B75"}
+                              num={"04"}
+                              title={"Interaction Design Foundation (IDF)"}
+                              text1={
+                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
+                              }
+                              text2={"Duration: Depends on the course."}
+                            />
+                          </View>
+                        </View>
+
+                        <Row
+                          style={{
+                            justifyContent: "center",
+                            gap: 50,
+                            marginBottom: 20,
+                          }}
+                        >
+                          <MainButtons
+                            title={"Download pdf"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                            icon={
+                              <AntDesign
+                                name="download"
+                                size={20}
+                                color="#135837"
+                              />
+                            }
+                            bgColor={"white"}
+                            textColor={"#135837"}
+                          />
+                          <MainButtons
+                            gradient
+                            onPress={handleSubmit}
+                            title={"Download All Result"}
+                            borderRadius={8}
+                            center
+                            fontSize={16}
+                            width={226}
+                          />
+                        </Row>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : null}
+            {/* <MainFooter />*/}
+            <Footer />
+          </ImageBackground>
+        </View>
       </ScrollView>
     </View>
   );
@@ -533,11 +2039,24 @@ const styles = StyleSheet.create({
     width: 750,
     minHeight: 400,
   },
-  container: {
-    width: 595,
-    minHeight: 555,
+  step3Wrapper: {
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
   },
-
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    position: "relative",
+  },
   top: {
     height: 48,
     backgroundColor: "#7AA666",
@@ -565,6 +2084,10 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: "Poppins-Regular",
     fontSize: 11,
+  },
+  container1: {
+    width: 595,
+    minHeight: 555,
   },
   dropDown: {
     borderRadius: 20,
@@ -602,10 +2125,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.05,
     elevation: 4,
     marginTop: -50,
+    backgroundColor: "#fff",
+    zIndex: 10,
   },
   uploadImg: {
-    width: 135,
-    height: 135,
+    width: 105,
+    height: 105,
   },
   picker: {
     height: 40,
@@ -617,6 +2142,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 50,
     borderRadius: 12,
+    padding: 10
   },
   button: {
     alignSelf: "center",
@@ -647,5 +2173,36 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: "center",
     flexDirection: "row",
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 500
+  },
+  loadingText: {
+    color: 'green',
+    marginBottom: 10, 
+  },
+  questionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginBottom: 10, 
+  },
+  questionText: {
+    fontSize: 14,
+    flex: 1, 
+    marginRight: 10, 
+  },
+  answerText: {
+    fontSize: 12,
+    marginLeft: 10, 
+  },
+  switch: {
+    color: 'green'
+  },
+  loadingGif: {
+    width: 100, 
+    height: 100, 
+    resizeMode: 'contain', 
   },
 });

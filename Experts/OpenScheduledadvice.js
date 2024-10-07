@@ -318,7 +318,7 @@ function MyComponent({ onClose }) {
 
   <View style={{ flexDirection: 'row' }}>
      <View style={{ flexDirection: 'column' }}>
-      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, }}>{t("Create Personalised Roadmap")}</Text>
+      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, }}>{t("Share perceieved knowledge gap")}</Text>
      <Text style={{ marginLeft: 50, fontSize: 12, marginTop: 5, fontStyle: 'italic' }}>{t("(Insert maximum of 10)")}</Text>
      </View>
       <TouchableOpacity

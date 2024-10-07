@@ -8,11 +8,19 @@
         "index": 3341
       }
     ],
+    "Screens/AIscreen.js": [
+      {
+        "id": "17b33c47-9cb2-4b4e-a7fd-9e982e4d3b1b",
+        "line": 1181,
+        "version": 299,
+        "index": 36564
+      }
+    ],
     "Screens/Individual.js": [
       {
         "id": "f4f5584d-ce1a-4e7b-a9c5-1b9289dbff8f",
         "line": 1,
-        "version": 346,
+        "version": 369,
         "index": 0
       }
     ],

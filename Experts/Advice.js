@@ -12,27 +12,182 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const data = [
-  { date: 'M', score: 10 },
-{ date: 'T', score: 15 },
-{ date: 'W', score: 8 },
-{ date: 'T', score: 18 },
-{ date: 'F', score: 4 },
-{ date: 'S', score: 6 },
-{ date: 'S', score: 1 }
+const colors = [
+  '#4CAF50', // Medium Green
+  '#8BC34A', // Light Green
+  '#C5E1A5', // Pale Green
+  '#388E3C', // Darker Medium Green
+  '#A5D6A7', // Soft Green
+  '#66BB6A', // Fresh Green
+  '#DCE775'  // Lime Green
 ];
 
-const colors = ['#FF4040', '#CD5B45', '#FF7F50', '#F08080', '#F88379', '#FFE4E1', '#FFE4E1',];
+
 
 function MyComponent() {
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
+  const [meetingData, setMeetingData] = useState([]);
    const [targetDate, setTargetDate] = useState(''); 
     const [role, setSkillsAnalysisRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
-    const barHeights = useRef(data.map(() => new Animated.Value(0))).current;
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [text, setText] = useState("How do we calculate ratings?");
+
+  const handleTextChange = () => {
+    setText("When you have completed your session, individuals will score the session");
+  };
+
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+
+  // Helper function to get the start and end of the current week
+  const getCurrentWeekRange = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())); // Sunday as start
+    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6)); // Saturday as end
+    return { startOfWeek, endOfWeek };
+  };
+
+  // Initialize an object to track meetings for each day of the week
+  const daysOfWeek = {
+    M: 0, // Monday
+    T: 0, // Tuesday
+    W: 0, // Wednesday
+    Th: 0, // Thursday (avoid duplicate key 'T')
+    F: 0, // Friday
+    Sa: 0, // Saturday
+    Su: 0  // Sunday
+  };
+
+  const filterMeetingsForExpertThisWeek = (data, expertId) => {
+    const { startOfWeek, endOfWeek } = getCurrentWeekRange();
+
+    data.forEach(item => {
+      const meetingDate = new Date(item.date_time.split(', ')[1]);
+
+      if (item.expertid === expertId && meetingDate >= startOfWeek && meetingDate <= endOfWeek) {
+        const day = meetingDate.getDay();
+
+        // Update the daysOfWeek based on the day of the meeting
+        switch (day) {
+          case 0: daysOfWeek['Su']++; break;
+          case 1: daysOfWeek['M']++; break;
+          case 2: daysOfWeek['T']++; break;
+          case 3: daysOfWeek['W']++; break;
+          case 4: daysOfWeek['Th']++; break;
+          case 5: daysOfWeek['F']++; break;
+          case 6: daysOfWeek['Sa']++; break;
+          default: break;
+        }
+      }
+    });
+
+    console.log('Days of Week:', daysOfWeek); // Check if daysOfWeek is being updated correctly
+  };
+
+
+  const generateMeetingData = () => {
+    const data = [
+      { date: 'M', score: daysOfWeek['M'] },
+      { date: 'T', score: daysOfWeek['T'] },
+      { date: 'W', score: daysOfWeek['W'] },
+      { date: 'Th', score: daysOfWeek['Th'] },
+      { date: 'F', score: daysOfWeek['F'] },
+      { date: 'Sa', score: daysOfWeek['Sa'] },
+      { date: 'Su', score: daysOfWeek['Su'] }
+    ];
+
+    // Update the state with the data for rendering
+    setMeetingData(data);
+
+    console.log('Meeting Data:', data); // Add this line to see the data structure
+  };
+
+
+  const fetchSkillAnalysis = async () => {
+    try {
+      // Retrieve token and expertId (user_id) from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      const storedExpertId = await AsyncStorage.getItem('user_id');
+
+      // Check if both token and expertId are available
+      if (token && storedExpertId) {
+        const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          // Filter meetings for the current expert this week
+          filterMeetingsForExpertThisWeek(data.skillAnalysis, storedExpertId);
+
+          // Generate meeting data based on the days of the week
+          generateMeetingData();
+        }
+      } else {
+        console.error('Token or Expert ID missing');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  // Call the function to fetch and process data
+  useEffect(() => {
+    fetchSkillAnalysis();
+  }, []);
+
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
+
+        if (!token || !storedExpertId) {
+          console.error('No token or user ID found');
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200) {
+          const data = response.data.skillAnalysis;
+
+          // Filter meetings based on expert_id
+          const filteredMeetings = data.filter(meeting => meeting.user_id === storedExpertId);
+
+          // Calculate total ratings and average rating
+          const validRatings = filteredMeetings.filter(meeting => meeting.rating_figure !== null);
+          const totalRatings = validRatings.reduce((acc, meeting) => acc + (Number(meeting.rating_figure) / 2), 0); // Divide by 2 to normalize to a 5-star system
+          const averageRating = validRatings.length > 0 ? (totalRatings / validRatings.length).toFixed(1) : 0;
+
+          setRatingCount(validRatings.length);
+          setAverageRating(averageRating);
+
+          // Save all growth plans to AsyncStorage
+          await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    // Initial data load
+    loadFormData();
+  }, []);
+
+
   
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -124,16 +279,27 @@ function MyComponent() {
     );
   });
 
+  const barHeights = useRef([]);
 
   useEffect(() => {
-    const animations = data.map((item, index) => Animated.timing(barHeights[index], {
-      toValue: item.score * 7,
-      duration: 1000,
-      useNativeDriver: false,
-    }));
+    if (meetingData.length > 0) {
+      // Initialize bar heights based on meetingData
+      barHeights.current = meetingData.map(() => new Animated.Value(0));
 
-    Animated.stagger(100, animations).start();
-  }, []);
+      // Run animations
+      const animations = meetingData.map((item, index) =>
+        Animated.timing(barHeights.current[index], {
+          toValue: Math.max(item.score * 10, 1), // Ensure a minimum height
+          duration: 1000,
+          useNativeDriver: false,
+        })
+      );
+
+      Animated.stagger(100, animations).start();
+    }
+  }, [meetingData]);
+
+
 
   useEffect(() => {
     const loadFormData = async () => {
@@ -247,36 +413,44 @@ function MyComponent() {
 
       <View style={styles.container}>
       <View style={styles.box}>
+        <Text style={{ marginTop: -10, fontWeight: '600', fontSize: 16}}>This week’s meetings</Text>
         <View style={styles.barGraphContainer}>
-          {data.map((item, index) => (
+          {meetingData.map((item, index) => (
             <View key={index} style={styles.barContainer}>
-              <Animated.View style={[styles.graphBar, { height: barHeights[index], backgroundColor: colors[index] }]} />
+              <Animated.View style={[styles.graphBar, { height: barHeights.current[index] || 0, backgroundColor: colors[index] }]} />
               <View style={styles.scoreDateContainer}>
                 <Text style={styles.graphScore}>{item.score}</Text>
                 <Text style={styles.graphDate}>{item.date}</Text>
               </View>
             </View>
           ))}
-          
         </View>
-        
       </View>
        <View style={styles.box}>
         <View style={{alignItems: 'center', alignContent: 'center',fontFamily:"Roboto-Light"}}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Rating")}</Text>
-       <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15,fontFamily:"Roboto-Light" }}>{t("40 candidates reviews")}</Text>
+      <Text style={{ fontSize: 18, fontWeight: '600' }}>{t("Rating")}</Text>
+       <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15,fontFamily:"Roboto-Light" }}>{ratingCount} candidates reviews</Text>
     <View style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(225,225,212,0.3)', width: 200, alignItems: 'center', marginTop: 10 }}>
-    <View style={{ flexDirection: 'row'}}>
-                    <Text style={{ fontSize: 18, color: "black", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /><FaStar color="gold" /></Text> <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black"}}> 4.7 out of 5 </Text>
-                    </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{ fontSize: 18, color: "black", fontWeight: '600', fontFamily: "Roboto-Light" }}>
+          {[...Array(5)].map((_, i) => (
+            <FaStar key={i} color={i < Math.round(averageRating) ? "gold" : "lightgrey"} />
+          ))}
+        </Text>
+        <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black" }}>
+          {averageRating} out of 5
+        </Text>
+      </View>
                   </View>
-      <TouchableOpacity>
-     <Text style={{ fontSize: 12, color: 'darkgrey', marginTop: 30,fontFamily:"Roboto-Light" }}>{t("How do we calculate ratings?")}</Text>
-     </TouchableOpacity>
+          <TouchableOpacity onPress={handleTextChange}>
+            <Text style={{ fontSize: 12, marginTop: 30, fontFamily: "Roboto-Light" }}>
+              {text}
+            </Text>
+          </TouchableOpacity>
     </View>
       </View>
       <View style={styles.box2}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("You have a new session in:")}</Text>
+        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600'}}>{t("You have a new session in:")}</Text>
          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
         <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress. Seeing these sessions scheduled prompts you to prepare accordingly and actively participate.")} </Text>
      </View>
@@ -386,7 +560,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     width: 200,
     height: 80,
-    marginTop: 60,
+    marginTop: 40,
     marginRight: 20,
     marginBottom: -10,
     paddingHorizontal: 10,

@@ -76,6 +76,10 @@ const MyComponent = ({ value, tint, intensity }) => {
      navigate('/sign-in');
   };
 
+  const handleAI= () => {
+     navigate('/anglequest-ai');
+  };
+  
   const handleContact = () => {
      navigate('/contact-sales');
   };
@@ -143,6 +147,7 @@ const MyComponent = ({ value, tint, intensity }) => {
           <View style={{marginLeft: -15}}>
           <HButton
             title={"AngleQuest AI"}
+            onPress={handleAI}
           />
         </View>
           <HButton // onPress={handleAIPress}

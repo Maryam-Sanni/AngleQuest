@@ -296,10 +296,7 @@ function MyComponent({ onClose }) {
           </View>
 
   <View style={styles.ratingContainer}>
-    <Text style={styles.ratetitle}>{t("Rating")} <Image
-      source={{ uri: 'https://img.icons8.com/?size=100&id=60003&format=png&color=206C00' }}
-      style={{width: 20, height: 20, marginLeft: 5, marginTop: 5 }}
-    /></Text>
+    <Text style={styles.ratetitle}>{t("Rating")} </Text>
     <View style={styles.raterow}>
       <Text style={styles.ratetext}>You were rated {getRatingText(rated)} by {data?.level} </Text>
     </View>

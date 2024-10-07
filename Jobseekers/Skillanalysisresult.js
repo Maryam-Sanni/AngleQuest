@@ -79,10 +79,6 @@
     }, []);
 
 
-
-
-
-
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
