@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenInterviewbook';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
@@ -113,7 +113,7 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Join</Text>
+              <Text style={{color: 'white'}}>Join Meeting</Text>
                </View>
             </TouchableOpacity>
           </View>
@@ -141,9 +141,19 @@ const ScheduledMeetingsTable = () => {
                   <Text style={styles.linkText}>{t("Update")}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity >
+              <TouchableOpacity
+                onPress={() => {
+                  const meetingLink = interview.candidate_link || 'https://anglequest.com';
+                  if (meetingLink) {
+                    Linking.openURL(meetingLink)
+                      .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                  } else {
+                    console.warn('No valid link available');
+                  }
+                }}
+              >
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t("Join")}</Text>
+                  <Text style={styles.linkText}>{t("Join Meeting")}</Text>
                 </View>
               </TouchableOpacity>
             </View>

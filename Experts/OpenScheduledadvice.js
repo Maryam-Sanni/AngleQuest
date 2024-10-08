@@ -369,7 +369,7 @@ function MyComponent({ onClose }) {
 
 
   
-  <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
+  <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback")}</Text>
                 <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
                   <TextInput
                     style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
@@ -381,12 +381,12 @@ function MyComponent({ onClose }) {
                   />
                   </View>
 
-    <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Rating")}</Text>
+    <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Remark")}</Text>
 
   <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.cell}>
-            <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
+            <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Move candidate to the next level?")}</Text>
           </View>
           <View style={styles.cell}>
           <Picker
@@ -394,10 +394,8 @@ function MyComponent({ onClose }) {
              style={styles.picker}
              onValueChange={(itemValue) => setRating(itemValue)}
   >
-            <Picker.Item label="Replan" value="Replan" />
-            <Picker.Item label="Fair" value="Fair" />
-            <Picker.Item label="Good" value="Good" />
-            <Picker.Item label="Brilliant" value="Brilliant" />
+            <Picker.Item label="Yes" value="Yes" />
+            <Picker.Item label="No" value="No" />
   </Picker>
           </View>
           </View>

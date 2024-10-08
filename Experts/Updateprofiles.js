@@ -14,10 +14,10 @@ const ProfilePage = ({ onClose }) => {
 
   const sections = [
     { id: 1, title: "Personal Information" },
-    { id: 2, title: "Growth Plan Guide" },
-    { id: 3, title: "Interview Guide" },
-    { id: 4, title: "Skill Analysis Guide" },
-    { id: 5, title: "Create a new Hub" },
+    { id: 2, title: "Skill Analysis Guide" },
+    { id: 3, title: "Growth Plan Guide" },
+    { id: 4, title: "Create a new Hub" },
+    { id: 5, title: " Interview Guide" },
   ];
 
   const handleSectionClick = (section) => {

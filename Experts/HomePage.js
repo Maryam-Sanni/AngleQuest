@@ -550,7 +550,7 @@ const HomePage = () => {
                           fontFamily: "Roboto-Light",
                         }}
                       >
-                        {t("Activities")}
+                        {t("Quick links")}
                       </Text>
                       <View style={{ flexDirection: "row" }}>
                         <View style={styles.greenwhitebox2}>
@@ -561,16 +561,16 @@ const HomePage = () => {
                             }}
                           >
                             <TouchableOpacity
-                              onPress={goToManageHubs}
+                              onPress={goToAdvice}
                               style={[
                                 styles.touchablerate,
-                                isHovered5 && styles.touchableOpacityHovered,
+                                isHovered8 && styles.touchableOpacityHovered,
                               ]}
-                              onMouseEnter={() => setIsHovered5(true)}
-                              onMouseLeave={() => setIsHovered5(false)}
+                              onMouseEnter={() => setIsHovered8(true)}
+                              onMouseLeave={() => setIsHovered8(false)}
                             >
                               <Text style={styles.touchableTextrate}>
-                                {t("Hubs")}
+                                {t("Skills Analysis")}
                               </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -587,6 +587,19 @@ const HomePage = () => {
                               </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
+                              onPress={goToManageHubs}
+                              style={[
+                                styles.touchablerate,
+                                isHovered5 && styles.touchableOpacityHovered,
+                              ]}
+                              onMouseEnter={() => setIsHovered5(true)}
+                              onMouseLeave={() => setIsHovered5(false)}
+                            >
+                              <Text style={styles.touchableTextrate}>
+                                {t("Hubs")}
+                              </Text>
+                            </TouchableOpacity>  
+                            <TouchableOpacity
                               onPress={goToInterview}
                               style={[
                                 styles.touchablerate,
@@ -599,19 +612,7 @@ const HomePage = () => {
                                 {t("Interview")}
                               </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                              onPress={goToAdvice}
-                              style={[
-                                styles.touchablerate,
-                                isHovered8 && styles.touchableOpacityHovered,
-                              ]}
-                              onMouseEnter={() => setIsHovered8(true)}
-                              onMouseLeave={() => setIsHovered8(false)}
-                            >
-                              <Text style={styles.touchableTextrate}>
-                                {t("Skills Analysis")}
-                              </Text>
-                            </TouchableOpacity>
+                           
                           </View>
                         </View>
                       </View>

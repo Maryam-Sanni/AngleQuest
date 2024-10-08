@@ -110,6 +110,7 @@ function MyComponent({ onClose }) {
         rating: rating,
         completed: completed,
         review: reviewStatus,
+        expertid: data?.expertid,
         title: data?.title,
         role: data?.role,
         date: data?.date_time,

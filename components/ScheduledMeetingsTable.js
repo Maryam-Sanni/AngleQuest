@@ -236,11 +236,21 @@ const ScheduledMeetingsTable = () => {
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Give Feedback")}</Text>
                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleJoinPress}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Start Meeting")}</Text>
-                   </View>
+                </TouchableOpacity> 
+                <TouchableOpacity
+                  onPress={() => {
+                    const meetingLink = meeting.expert_link || 'https://default-meeting-link.com';
+                    if (meetingLink) {
+                      Linking.openURL(meetingLink)
+                        .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                    } else {
+                      console.warn('No valid link available');
+                    }
+                  }}
+                >
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={styles.linkText}>{t("Start Meeting")}</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );

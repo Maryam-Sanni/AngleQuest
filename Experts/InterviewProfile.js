@@ -171,13 +171,8 @@ function MyComponent({ onClose }) {
                 >
                   <Picker.Item label={t('SAP')} value="SAP" />
                   <Picker.Item label={t('Microsoft')} value="Microsoft" />
-                  <Picker.Item label={t('Salesforce')} value="Salesforce" />
-                  <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
-                  <Picker.Item label={t('Backend Development')} value="Backend Development" />
-                  <Picker.Item label={t('UI/UX')} value="UI/UX" />
-                  <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-                  <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-                  <Picker.Item label={t('Management')} value="Management" />
+                  <Picker.Item label={t('Scrum')} value="Scrum" />
+                  <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
                 </Picker>
               </View>
             </View>
@@ -191,10 +186,9 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                   onValueChange={(itemValue) => setLevel(itemValue)}
                 >
-                  <Picker.Item label={t('Junior')} value="Junior" />
-                  <Picker.Item label={t('Medior')} value="Medior" />
-                  <Picker.Item label={t('Senior')} value="Senior" />
-                  <Picker.Item label={t('Professional')} value="Professional" />
+                  <Picker.Item label={t('Beginner')} value="Beginner" />
+                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
+                  <Picker.Item label={t('Advanced')} value="Advanced" />
                 </Picker>
               </View>
             </View>

@@ -144,7 +144,7 @@ const ScheduledMeetingsTable = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    const meetingLink = analysis.candidate_link || 'https://meet.anglequest.com/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5uaTE3MjI0NDM4MTgiLCJqdGkiOiJzYW5uaTE3MjI0NDM4MTgiLCJleHAiOjE3MjgxOTQ0NzUsIm5iZiI6MTcyODA3Mjg3NSwiaWF0IjoxNzI4MDcyODc1LCJpc3MiOiJBUEllNnpUOHdzWmNUaW8iLCJ2aWRlbyI6eyJyb29tSm9pbiI6dHJ1ZSwicm9vbSI6IkV4cGVydCBDb25zdWx0YXRpb24gZm9yIE1hcnlhbSBTYW5uaSJ9fQ.VrQR_tAxlCngwzT4x9tgUb80T5e_PwuYVUMj2kj_fhI';
+                    const meetingLink = analysis.candidate_link || 'https://anglequest.com';
                     if (meetingLink) {
                       Linking.openURL(meetingLink)
                         .catch(err => console.error("Couldn't load page", err)); // Handle potential errors

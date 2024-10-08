@@ -180,19 +180,14 @@ const ProfileUpdate = () => {
           >
             <Picker.Item label={t('SAP')} value="SAP" />
             <Picker.Item label={t('Microsoft')} value="Microsoft" />
-            <Picker.Item label={t('Salesforce')} value="Salesforce" />
-            <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
-            <Picker.Item label={t('Backend Development')} value="Backend Development" />
-            <Picker.Item label={t('UI/UX')} value="UI/UX" />
-            <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-            <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-            <Picker.Item label={t('Management')} value="Management" />
+            <Picker.Item label={t('Scrum')} value="Scrum" />
+            <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
           </Picker>
         </View>
 
         {/* Role */}
         <View style={styles.field}>
-          <Text style={styles.label}>{t('What part of')} {specialization}  {t('do you specialize in')}?</Text>
+          <Text style={styles.label}>Specialization</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter your role"
