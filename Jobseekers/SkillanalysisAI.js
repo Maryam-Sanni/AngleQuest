@@ -468,8 +468,7 @@ const MyComponent = ({ onClose }) => {
               <View style={styles.titleWrapper}>
                 <Image style={styles.image} source={BotIMG} />
                 <View style={{ flex: 1, gap: 8 }}>
-                  <Text style={styles.title}>Hello 👋</Text>
-                  <Text style={styles.title2}>I am AngleQuest AI</Text>
+                  <Text style={styles.title}>Hello 👋 I am AngleQuest AI</Text>
                   <Text style={styles.subTitle}>
                     Please upload your CV or use the questionnaire and specify your next career role and I’ll perform my magic…
                   </Text>

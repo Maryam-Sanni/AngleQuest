@@ -54,7 +54,7 @@ const ProfileUpdate = () => {
   const [loading, setLoading] = useState('');
   const [role, setRole] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
-  const [specialization, setSpecialization] = useState('SAP');
+  const [specialization, setSpecialization] = useState(' ');
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSelectVisible, setSelectVisible] = useState(false);
   const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); // Local state for selected roles
@@ -110,26 +110,68 @@ const ProfileUpdate = () => {
         return;
       }
 
-      // Prepare data for API request
-      const data = {
-        about: aboutMe,
-        skills: technicalSkills,
-        certifications: certifications,
-        location: location,
-        category: specialization, 
-        specialization: selectedRoles,
-        years_experience: yearsOfExperience
-      };
+      // Ensure technicalSkills and certifications are arrays
+      if (!Array.isArray(technicalSkills) || technicalSkills.length > 7) {
+        alert('Skills must be an array and should not exceed 7 items.');
+        return;
+      }
 
-      const response = await axios.post(`${apiUrl}/api/expert/update-profile`, data, {
+      if (!Array.isArray(certifications) || certifications.length > 7) {
+        alert('Certifications must be an array and should not exceed 7 items.');
+        return;
+      }
+
+      // Create a new FormData object
+      const formData = new FormData();
+
+      // Append each field to the FormData
+      formData.append('about', aboutMe);
+
+      // Check if there's an image to upload
+      let imageUrl = null;
+      if (profileImage && typeof profileImage !== 'string') {
+        // Upload image to Cloudinary
+        const uploadResponse = await uploadToCloudinary(profileImage);
+        imageUrl = uploadResponse?.secure_url; // Get the image URL from Cloudinary response
+      } else if (typeof profileImage === 'string') {
+        // If profileImage is a URL string, use it directly
+        imageUrl = profileImage;
+      }
+
+      // Append the image URL if it's available
+      if (imageUrl) {
+        formData.append('image_url', imageUrl);
+      }
+
+      // Append arrays (technicalSkills and certifications) as separate values
+      technicalSkills.forEach((skill, index) => {
+        formData.append(`skills[${index}]`, skill);
+      });
+
+      certifications.forEach((cert, index) => {
+        formData.append(`certifications[${index}]`, cert);
+      });
+
+      formData.append('location', location);
+      formData.append('category', specialization);
+
+      // Append roles
+      currentSelectedRoles.forEach((role, index) => {
+        formData.append(`specialization[${index}]`, role);
+      });
+
+      formData.append('years_experience', yearsOfExperience);
+
+      // Send the request using axios
+      const response = await axios.post(`${apiUrl}/api/expert/update-profile`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
 
       if (response.status === 200) {
-        console.log('Save Days Response:', response.data);
+        console.log('Save Response:', response.data);
         alert('Your Profile has been successfully saved.');
       } else {
         alert('Failed to save. Please try again.');
@@ -139,6 +181,23 @@ const ProfileUpdate = () => {
       alert('Failed to save. Please try again.');
     }
   };
+
+  // Function to upload image to Cloudinary
+  const uploadToCloudinary = async (image) => {
+    const data = new FormData();
+    data.append('file', {
+      uri: image.uri,
+      name: image.fileName || 'profileImage.jpg',
+      type: image.type || 'image/jpeg',
+    });
+    data.append('upload_preset', 'YOUR_UPLOAD_PRESET'); // Replace with your Cloudinary upload preset
+
+    const response = await axios.post('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', data);
+    return response.data; // Return the response which includes the image URL
+  };
+
+
+
 
   const handleAddSkill = () => {
     setTechnicalSkills([...technicalSkills, '']);
@@ -191,7 +250,7 @@ const ProfileUpdate = () => {
         if (data.status === 'success' && data.profile) {
           setAboutMe(data.profile.about);
           setLocation(data.profile.location);
-          setRole(data.profile.specialization);
+          setCurrentSelectedRoles(data.profile.specialization.join(', '));
           setSpecialization(data.profile.category);
           setYearsOfExperience(data.profile.years_experience);
         }
@@ -238,6 +297,7 @@ const ProfileUpdate = () => {
           <Text style={styles.label}>Category</Text>
           <Picker
             selectedValue={specialization}
+            value={specialization}
             style={styles.picker}
             onValueChange={(itemValue) => setSpecialization(itemValue)}
           >
@@ -286,7 +346,6 @@ const ProfileUpdate = () => {
           placeholderTextColor={'grey'}
           value={yearsOfExperience}
           onChangeText={setYearsOfExperience}
-          keyboardType="numeric"
         />
       </View>
 

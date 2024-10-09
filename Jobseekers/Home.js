@@ -157,8 +157,8 @@ const HomePage = () => {
     navigate("/growth-plan-sessions");
   };
 
-  const goToHubs = () => {
-    navigate("/coaching-hub-sessions");
+  const goToAI = () => {
+    navigate("/ai-result");
   };
 
   const goToInterview = () => {
@@ -390,7 +390,7 @@ const HomePage = () => {
                       }}
                     >
                       {t(
-                        "I set a goal to become a senior power platform developer by thoroughly understanding the platform with my coach.",
+                        "",
                       )}
                     </Text>
                     <Text
@@ -403,10 +403,10 @@ const HomePage = () => {
                         fontFamily: "Roboto-Light",
                       }}
                     >
-                      {t("Activities")}
+                      {t("Quick Links")}
                     </Text>
                     <TouchableOpacity
-                      onPress={goToAdvice}
+                      onPress={goToAI}
                       style={[
                         styles.touchablechat,
                         isHovered4 && styles.touchableOpacityHovered,
@@ -416,15 +416,13 @@ const HomePage = () => {
                     >
                       <View style={{ flexDirection: "row" }}>
                         <Text style={styles.touchableTextchat}>
-                          {t("Skill Analysis")}
+                          {t("AI Analysis")}
                         </Text>
-                        <View style={styles.messageCount}>
-                          <Text style={styles.messageCountText}>0</Text>
-                        </View>
+                        
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={goToGrowth}
+                      onPress={goToAdvice}
                       style={[
                         styles.touchablechat,
                         isHovered3 && styles.touchableOpacityHovered,
@@ -434,15 +432,13 @@ const HomePage = () => {
                     >
                       <View style={{ flexDirection: "row" }}>
                         <Text style={styles.touchableTextchat}>
-                          {t("Growth Plan")}
+                          {t("Expert Roadmap")}
                         </Text>
-                        <View style={styles.messageCount}>
-                          <Text style={styles.messageCountText}>0</Text>
-                        </View>
+                       
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={goToHubs}
+                      onPress={goToAdvice}
                       style={[
                         styles.touchablechat,
                         isHovered1 && styles.touchableOpacityHovered,
@@ -452,14 +448,13 @@ const HomePage = () => {
                     >
                       <View style={{ flexDirection: "row" }}>
                         <Text style={styles.touchableTextchat}>
-                          {t("Hubs")}
+                          {t("Update Skill Analysis")}
                         </Text>
-                        <View style={styles.messageCount}>
-                          <Text style={styles.messageCountText}>0</Text>
-                        </View>
+                       
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity
+                       onPress={goToGrowth}
                       style={[
                         styles.touchablechat,
                         isHovered6 && styles.touchableOpacityHovered,
@@ -469,32 +464,13 @@ const HomePage = () => {
                     >
                       <View style={{ flexDirection: "row" }}>
                         <Text style={styles.touchableTextchat}>
-                          {t("Scenario Project")}
+                          {t("Update Growth Plan")}
                         </Text>
-                        <View style={styles.messageCount}>
-                          <Text style={styles.messageCountText}>0</Text>
-                        </View>
+                        
                       </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                      onPress={goToInterview}
-                      style={[
-                        styles.touchablechat,
-                        isHovered5 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered5(true)}
-                      onMouseLeave={() => setIsHovered5(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Interview")}
-                        </Text>
-                        <View style={styles.messageCount}>
-                          <Text style={styles.messageCountText}>0</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
+                    
                   </BlurView>
                 </View>
                 <View style={styles.sideColumn}>
