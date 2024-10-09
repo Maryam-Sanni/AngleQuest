@@ -1,8 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Picker } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Picker, CheckBox, FlatList } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import MultiSelect from 'react-native-multiple-select';
+
+
+const specializationRoles = {
+  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
+  Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer'],
+  Scrum: ['Scrum'],
+  'Business Analysis': ['Business Analysis'],
+};
+
+const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
+  const toggleSelection = (id) => {
+    if (selectedItems.includes(id)) {
+      onSelectedItemsChange(selectedItems.filter(item => item !== id));
+    } else {
+      onSelectedItemsChange([...selectedItems, id]);
+    }
+  };
+
+  return (
+<View style={styles.container2}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              value={selectedItems.includes(item.id)}
+              onValueChange={() => toggleSelection(item.id)}
+              tintColors={{ true: 'green', false: 'gray' }} // Checkbox colors: green when checked, gray when unchecked
+              style={styles.checkbox} // Optional styles for the checkbox
+            />
+            <Text style={selectedItems.includes(item.id) ? styles.selectedText : styles.unselectedText}>
+              {item.name}
+            </Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+};
 
 const ProfileUpdate = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -10,9 +51,32 @@ const ProfileUpdate = () => {
   const [technicalSkills, setTechnicalSkills] = useState(['']); 
   const [certifications, setCertifications] = useState(['']);
   const [location, setLocation] = useState('');
+  const [loading, setLoading] = useState('');
   const [role, setRole] = useState('');
-  const [specialization, setSpecialization] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
+  const [specialization, setSpecialization] = useState('SAP');
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [isSelectVisible, setSelectVisible] = useState(false);
+  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); // Local state for selected roles
+
+  // Effect to clear selected roles when specialization changes
+  useEffect(() => {
+    setCurrentSelectedRoles([]); // Clear roles
+  }, [specialization]);
+
+  // Function to handle click on the input box
+  const handleInputClick = () => {
+    setSelectVisible(prevState => !prevState); // Toggle visibility
+  };
+
+  // Update the selected roles and close the select when a change happens
+  const handleSelectedItemsChange = (items) => {
+    setCurrentSelectedRoles(items);
+    onSelectedItemsChange(items); // Call the parent function to update
+    setSelectVisible(false); // Close the select after selection
+  };
+
+
 
   const { t } = useTranslation();
   
@@ -52,8 +116,8 @@ const ProfileUpdate = () => {
         skills: technicalSkills,
         certifications: certifications,
         location: location,
-        category: specialization, // Use specialization as string
-        specialization: role,
+        category: specialization, 
+        specialization: selectedRoles,
         years_experience: yearsOfExperience
       };
 
@@ -143,8 +207,7 @@ const ProfileUpdate = () => {
   
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 ,}}>
-      <Text style={styles.title}>Personal Profile</Text>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500, paddingLeft: 20}}>
 
       {/* Profile Image */}
       <View style={styles.field}>
@@ -152,7 +215,7 @@ const ProfileUpdate = () => {
           {profileImage ? (
             <Image source={{ uri: profileImage }} style={styles.profileImage} />
           ) : (
-            <Text style={styles.uploadText}>Click to Upload Image</Text>
+            <Text style={styles.uploadText}>Upload Photo</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -178,24 +241,41 @@ const ProfileUpdate = () => {
             style={styles.picker}
             onValueChange={(itemValue) => setSpecialization(itemValue)}
           >
-            <Picker.Item label={t('SAP')} value="SAP" />
-            <Picker.Item label={t('Microsoft')} value="Microsoft" />
-            <Picker.Item label={t('Scrum')} value="Scrum" />
-            <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
+            {Object.keys(specializationRoles).map((spec) => (
+              <Picker.Item key={spec} label={spec} value={spec} />
+            ))}
           </Picker>
         </View>
 
-        {/* Role */}
+        {/* Role Selection */}
         <View style={styles.field}>
           <Text style={styles.label}>Specialization</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your role"
-            placeholderTextColor={'grey'}
-            value={role}
-            onChangeText={setRole}
-          />
+
+          {/* Clickable TextInput */}
+          <TouchableOpacity onPress={handleInputClick} style={styles.inputContainer}>
+            <TextInput
+              style={styles.input2}
+              value={currentSelectedRoles.join(', ') || 'Select specialization...'} // Display selected roles or placeholder
+              editable={false} // Make it non-editable
+            />
+            {/* Down arrow icon from Icons8 */}
+            <Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=39942&format=png&color=000000' }} // Use the provided icon link
+              style={styles.arrowIcon}
+            />
+          </TouchableOpacity>
+
+          {/* Conditionally render CustomMultiSelect */}
+          {isSelectVisible && specialization && specializationRoles[specialization] && (
+            <CustomMultiSelect
+              items={specializationRoles[specialization].map(role => ({ id: role, name: role }))}
+              selectedItems={currentSelectedRoles}
+              onSelectedItemsChange={handleSelectedItemsChange} // Update selected roles
+            />
+          )}
         </View>
+
+      
         
       {/* Years of Experience */}
       <View style={styles.field}>
@@ -298,6 +378,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
+    marginLeft: 5
   },
   input: {
     borderWidth: 1,
@@ -315,6 +396,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     alignSelf: 'flex-start',
     backgroundColor: '#f9f9f9',
+    marginBottom: 20
   },
   profileImage: {
     width: 100,
@@ -328,11 +410,13 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 12,
     marginTop: 40, 
-    marginLeft: 10
+    marginLeft: 10,
+    textAlign: 'center'
   },
   addButtonText: {
     color: 'green',
-    fontSize: 16,
+    fontSize: 14,
+    marginLeft: 10
   },
   removeButton: {
     marginTop: 10,
@@ -348,17 +432,69 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
     borderRadius: 5,
+    width: 200
   },
   submitButtonText: {
     color: '#fff',
     fontSize: 18,
   },
   picker: {
-    height: 50,
+    height: 40,
     width: '100%',
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
+    paddingLeft: 5
+  },
+  multiSelect: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+  },
+  container2: {
+    backgroundColor: '#F5F5F5', // Background color of the FlatList
+    borderColor: '#ccc', // Border color
+    borderWidth: 1, 
+    borderBottomRadius: 5,
+    padding: 5,
+  },
+  checkboxContainer: {
+    flexDirection: 'row', // Align checkbox and text in a row
+    alignItems: 'center', // Center them vertically
+    marginVertical: 5, 
+    marginTop: 7,
+    marginLeft: 10
+  },
+  checkbox: {
+    color: 'green', 
+    backgroundColor: 'green'
+  },
+  selectedText: {
+    color: 'green', // Text color for selected items
+    marginLeft: 10
+  },
+  unselectedText: {
+    color: 'black', // Default text color
+    marginLeft: 10
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+  },
+  input2: {
+    flex: 1,
+    fontSize: 16,
+    paddingRight: 30, // Add padding to prevent text overlapping with the arrow
+  },
+  arrowIcon: {
+    width: 10, // Set the desired width
+    height: 10, // Set the desired height
+    marginLeft: 10, // Space between input and icon
   },
 });
 

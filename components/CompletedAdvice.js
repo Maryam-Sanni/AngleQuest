@@ -289,11 +289,11 @@ const ScheduledMeetingsTable = () => {
           })}
           <View style={styles.paginationContainer}>
               <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>Previous</Text>
+                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
               </TouchableOpacity>
               <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
               <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>Next</Text>
+                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -393,6 +393,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
   },
   button: {
     fontSize: 18,

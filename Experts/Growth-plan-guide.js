@@ -219,6 +219,11 @@ function MyComponent({ onClose }) {
             </View>
 
           <View style={[styles.container, { marginTop: 50 }]}>
+            <DaysTimePickerModal
+              isVisible={isModalVisible}
+              onConfirm={handleConfirm}
+              onCancel={() => setModalVisible(false)}
+            />
             <View style={styles.row}>
               <View style={styles.cell}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Day (s)")}</Text>
@@ -324,11 +329,7 @@ function MyComponent({ onClose }) {
         message={alertMessage}
         onConfirm={hideAlert}
       />
-      <DaysTimePickerModal
-        isVisible={isModalVisible}
-        onConfirm={handleConfirm}
-        onCancel={() => setModalVisible(false)}
-      />
+      
     </View>
   );
 }

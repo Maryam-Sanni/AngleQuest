@@ -280,11 +280,11 @@ const ScheduledMeetingsTable = () => {
           })}
         <View style={styles.paginationContainer}>
             <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>Previous</Text>
+              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
             </TouchableOpacity>
             <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
             <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>Next</Text>
+              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -298,15 +298,35 @@ const ScheduledMeetingsTable = () => {
         >
           <View style={styles.popupContainer}>
             <View style={styles.popupContent}>
-              <Text style={styles.popupTitle}>{t("Select an Option")}</Text>
-              <TouchableOpacity onPress={handleFeedback}>
+              <View style={{flexDirection: 'row'}}>
+              <Text style={styles.popupTitle}>{t("Select")}</Text>
+              <TouchableOpacity onPress={handleClosePopup} style={styles.closeButton}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontFamily: "Roboto-Light",
+                    marginLeft: 80
+                  }}
+                >
+                  ✕
+                </Text>
+              </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={styles.popupOptionContainer} onPress={handleFeedback}>
+                <Image 
+                  source={require('../assets/TextFeed.jpeg')} 
+                  style={styles.icon}
+                />
                 <Text style={styles.popupOption}>{t("Give Feedback")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleStartMeeting}>
+              <TouchableOpacity style={styles.popupOptionContainer} onPress={handleStartMeeting}>
+                <Image 
+                  source={require('../assets/VidFeed.jpeg')} 
+                  style={styles.icon}
+                />
                 <Text style={styles.popupOption}>{t("Start Meeting")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleClosePopup}>
-                <Text style={styles.popupClose}>{t("Close")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -363,6 +383,7 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: "90%",
+    position: 'relative',
     marginBottom: 20,
     marginLeft: 50,
     backgroundColor: 'rgba(225,225,212,0.3)',
@@ -416,24 +437,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'none', 
   },
   popupContent: {
-    width: '15%',
-    backgroundColor: 'white',
-    padding: 20,
-    position:'absolute',
+    width: 170,
+    backgroundColor: '#F8F8F8', // Pastel green color
+    padding: 10,
+    position: 'absolute', // Change to absolute positioning
     right: 50,
-    top: 600
-  },
+    top: '50%', // Center vertically
+    transform: 'translateY(-50%)', // Adjust to truly center
+    borderWidth: 2, // Add border width
+    borderColor: '#135837', // Border color (same as your other styles)
+    borderRadius: 10, // Optional: add some rounding to the corners
+    },
   popupTitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   popupOption: {
-    padding: 10,
-    fontSize: 16,
+    padding: 5,
+    fontSize: 13,
   },
   popupClose: {
     padding: 10,
@@ -445,6 +470,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
   },
   button: {
     fontSize: 18,
@@ -453,6 +480,16 @@ const styles = StyleSheet.create({
   disabledButton: {
     fontSize: 18,
     color: 'gray',
+  },
+  popupOptionContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginBottom: 10, 
+  },
+  icon: {
+    width: 15, 
+    height: 15,
+    marginRight: 10,
   },
 });
 

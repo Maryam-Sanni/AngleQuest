@@ -32,7 +32,7 @@ const generateGoogleCalendarLink = (title, description, startDate, endDate, loca
 
 function MyComponent() {
     const [isInterviewHovered, setIsInterviewHovered] = useState(true);
-  const [meetingData, setMeetingData] = useState([]);
+  const [meetingData, setMeetingData] = useState({ date: '', time: '', expert_link: '' });
    const [targetDate, setTargetDate] = useState(''); 
     const [role, setSkillsAnalysisRole] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -41,6 +41,7 @@ function MyComponent() {
   const [ratingCount, setRatingCount] = useState(0);
   const [text, setText] = useState("How do we calculate ratings?");
 
+  
   const handleTextChange = () => {
     if (text === "How do we calculate ratings?") {
       setText("When you have completed your session, individuals will score the session");
@@ -55,23 +56,45 @@ function MyComponent() {
     location: 'Anglequest.com',
   };
   
-  const handleAddToCalendar = (dayIndex) => {
-    const eventDate = `2024-10-${String(dayIndex).padStart(2, '0')}T10:00:00`;
-    const endDate = `2024-10-${String(dayIndex).padStart(2, '0')}T11:00:00`;
+  const handleAddToCalendarPress = () => {
+    console.log('Meeting Data:', meetingData); // Log to see the current meeting data
 
-    const calendarLink = generateGoogleCalendarLink(
-      exampleMeeting.title,
-      exampleMeeting.description,
-      eventDate,
-      endDate,
-      exampleMeeting.location
-    );
+    const title = 'Next Meeting with Expert';
+    const description = 'Discussion with your expert regarding skill analysis';
 
-    console.log("Generated Calendar Link:", calendarLink); // Debug log
+    // Ensure meetingData.date and meetingData.time are valid
+    if (!meetingData.date || !meetingData.time) {
+      console.error('date or time is undefined or invalid');
+      return;
+    }
 
-    // Open the link (Google Calendar)
-    Linking.openURL(calendarLink);
+    // Format the date from 'DD/MM/YYYY' to 'YYYY-MM-DD'
+    const [day, month, year] = meetingData.date.split('/');
+    const formattedDate = `${year}-${month}-${day}`; // Convert to 'YYYY-MM-DD'
+
+    // Combine formatted date and time into a single datetime string
+    const dateTimeString = `${formattedDate} ${meetingData.time}`;
+
+    // Create a Date object from the combined string
+    const startDate = new Date(dateTimeString);
+
+    // Check if the startDate is valid
+    if (isNaN(startDate.getTime())) {
+      console.error('Invalid date format:', dateTimeString);
+      return;
+    }
+
+    // Assuming the meeting lasts 1 hour
+    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+
+    const googleCalendarLink = generateGoogleCalendarLink(title, description, startDate, endDate, 'Online Meeting');
+
+    // Open the Google Calendar link
+    Linking.openURL(googleCalendarLink).catch(err => console.error('Failed to open URL:', err));
   };
+
+
+
 
   
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -120,34 +143,94 @@ function MyComponent() {
     console.log('Meeting Data:', daysOfMonth); // Check the final structure of the meeting data
   };
 
-  const fetchSkillAnalysis = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const storedExpertId = await AsyncStorage.getItem('user_id');
+  useEffect(() => {
+    const fetchNextMeeting = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
 
-      if (token && storedExpertId) {
+        if (!token || !storedExpertId) {
+          console.error('No token or expert ID found');
+          return;
+        }
+
         const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            'Authorization': `Bearer ${token}`
+          }
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
 
         if (data.status === 'success') {
-          filterMeetingsForExpertThisMonth(data.skillAnalysis, storedExpertId); // Filter for the current month
-          generateMeetingData(); // Generate data for all days of the month
-        }
-      } else {
-        console.error('Token or Expert ID missing');
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+          const skillAnalysis = data.skillAnalysis;
 
-  useEffect(() => {
-    fetchSkillAnalysis();
+          // Filter the meetings for this expert and future dates
+          const matchingMeetings = skillAnalysis.filter(
+            meeting => meeting.expertid === storedExpertId
+          );
+
+          if (matchingMeetings.length > 0) {
+            // Get today's date
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to the start of the day
+
+            // Filter only future meetings including today
+            const futureMeetings = matchingMeetings.filter(meeting => {
+              // Parse the meeting date
+              const meetingDate = new Date(meeting.date_time);
+              return !isNaN(meetingDate.getTime()) && meetingDate >= today; // Ensure it's a valid date
+            });
+
+            if (futureMeetings.length > 0) {
+              // Sort the future meetings by date (ascending)
+              const sortedMeetings = futureMeetings.sort(
+                (a, b) => new Date(a.date_time) - new Date(b.date_time)
+              );
+
+              // Get the closest upcoming meeting
+              const nextMeeting = sortedMeetings[0];
+
+              // Validate the date_time before using it
+              if (!nextMeeting.date_time) {
+                console.error('nextMeeting.date_time is undefined');
+                return;
+              }
+
+              // Convert the dateTimeString into a valid Date object
+              const meetingDateTime = new Date(nextMeeting.date_time);
+
+              if (isNaN(meetingDateTime.getTime())) {
+                console.error('Invalid date format:', nextMeeting.date_time);
+                return;
+              }
+
+              // Extract the date and time parts in the desired format
+              const options = { year: 'numeric', month: 'short', day: 'numeric' };
+              const formattedDate = meetingDateTime.toLocaleDateString('en-US', options); // e.g., "Oct 26, 2024"
+              const formattedTime = meetingDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }); // e.g., "01:00 PM"
+
+              // Update the state with the next meeting's date, time, and expert link
+              setMeetingData({ date: formattedDate, time: formattedTime, expert_link: nextMeeting.expert_link });
+            } else {
+              console.error('No future meetings found');
+            }
+          } else {
+            console.error('No matching meetings found for this expert ID');
+          }
+        } else {
+          console.error('Failed to fetch skill analysis:', data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch skill analysis:', error);
+      }
+    };
+
+    fetchNextMeeting();
   }, []);
 
 
@@ -238,7 +321,7 @@ function MyComponent() {
             const sortedMeetings = matchingMeetings.sort(
               (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
-
+          
             // Set the target date to the date scheduled of the latest meeting
             setTargetDate(sortedMeetings[0].date_scheduled);
           } else {
@@ -312,7 +395,13 @@ function MyComponent() {
     }
   }, [meetingData]);
 
-
+  const handleJoinPress = () => {
+    if (meetingData.expert_link) {
+      Linking.openURL(meetingData.expert_link);
+    } else {
+      console.error('No expert link available');
+    }
+  };
 
   useEffect(() => {
     const loadFormData = async () => {
@@ -372,25 +461,7 @@ function MyComponent() {
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, }}>
-        <View style={styles.header}>
-          
-         
-          <TouchableHighlight
-                                
-                                underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
-                                onMouseEnter={() => setIsInterviewHovered(false)}
-                                onMouseLeave={() => setIsInterviewHovered(false)}>
-                                <View style={styles.item}>
-                                <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "No update yet"}</Text>
-                                </View>
-                            </TouchableHighlight>
-
-            
-                        </View>
+        
                         <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
@@ -425,46 +496,35 @@ function MyComponent() {
       </Modal>
 
       <View style={styles.container}>
-        <View style={styles.box2}>
-          <View style={styles.calendarContainer}>
-            <Text style={{ fontWeight: '600', fontSize: 16, marginTop: -10, marginBottom: 10 }}>
-              Meeting Overview
+        <View style={styles.box}>
+          <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+            <Text style={{ fontSize: 20, color: "black", fontWeight: '600', textAlign: 'center'}}>
+              {t("Next Session")}
             </Text>
+            <Text style={{ fontSize: 13, marginTop: 10, fontFamily: "Roboto-Light", textAlign: 'center' }}>
+              {meetingData.date || 'N/A'}
+            </Text>
+            <Text style={{ fontSize: 13, marginTop: 5, fontWeight: '500', fontFamily: "Roboto-Light", textAlign: 'center' }}>
+              {meetingData.time || 'N/A'}
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
+              <TouchableOpacity 
+                style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, borderRadius: 5, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} 
+                onPress={handleJoinPress}
+              >
+                <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>
+                  {t("Join Now")}
+                </Text>
+              </TouchableOpacity>
 
-            {/* Render day abbreviations */}
-            <View style={styles.monthGrid}>
-              <View style={styles.dayAbbreviationsRow}>
-                {meetingData.map((item, index) => (
-                  <View key={index} style={styles.dayContainer}>
-                    <Text style={styles.dayName}>{item.dayAbbreviation}</Text>
-                  </View>
-                ))}
-              </View>
-
-              {/* Render days of the month */}
-              <View style={styles.daysRow}>
-                {Array.from({ length: 31 }, (_, index) => {
-                  const dayIndex = index + 1; // Days from 1 to 31
-                  const meetingCount = meetingData[dayIndex - 1]?.count || 0; // Get count for the day or 0 if no meetings
-
-                  return (
-                    <TouchableOpacity
-                      key={index}
-                      style={styles.dayContainer}
-                      onPress={() => {
-                        if (meetingCount > 0) {
-                          handleAddToCalendar(dayIndex); // Trigger calendar addition if there are meetings
-                        }
-                      }}
-                    >
-                      <Text style={styles.dayNumber}>{dayIndex}</Text> {/* Day of the month */}
-                      <View style={styles.meetingIndicator}>
-                        <Text style={styles.meetingCount}>{meetingCount}</Text> {/* Number of meetings */}
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+              <TouchableOpacity 
+                style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, borderRadius: 5, borderWidth: 2, borderColor: '#206C00'}} 
+                onPress={handleAddToCalendarPress}
+              >
+                <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>
+                  {t("Add to Calendar")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -494,11 +554,7 @@ function MyComponent() {
           </TouchableOpacity>
     </View>
       </View>
-      <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: '600', marginBottom: 5}}>{t("You have a new session in:")}</Text>
-         <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
-        <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress.")} </Text>
-     </View>
+      
      </View>
 
           <Text style = {{fontSize: 20, marginTop: 30, color: '#f7fff4', fontWeight: 'bold', marginLeft: 50, marginBottom: -10 }}>{t("Skill Analysis Overview")} </Text>
@@ -554,7 +610,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   marginTop: 50,
   maxWidth: '90%',
@@ -587,6 +642,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '25%',
     height: 200,
+    marginRight: 20,
     borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
     shadowColor: '#000',
     shadowOffset: {

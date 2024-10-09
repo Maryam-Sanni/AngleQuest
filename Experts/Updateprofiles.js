@@ -17,7 +17,7 @@ const ProfilePage = ({ onClose }) => {
     { id: 2, title: "Skill Analysis Guide" },
     { id: 3, title: "Growth Plan Guide" },
     { id: 4, title: "Create a new Hub" },
-    { id: 5, title: " Interview Guide" },
+    { id: 5, title: "Interview Guide" },
   ];
 
   const handleSectionClick = (section) => {
