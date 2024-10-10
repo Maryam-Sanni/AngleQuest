@@ -54,10 +54,10 @@ const ProfileUpdate = () => {
   const [loading, setLoading] = useState('');
   const [role, setRole] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
-  const [category, setCategory] = useState(' ');
+  const [specialization, setSpecialization] = useState(' ');
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSelectVisible, setSelectVisible] = useState(false);
-  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); // Local state for selected roles
+  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); 
 
   // Effect to clear selected roles when specialization changes
   useEffect(() => {
@@ -92,16 +92,16 @@ const ProfileUpdate = () => {
       if (file) {
         const reader = new FileReader();
         reader.onload = () => {
-          setProfileImage(reader.result); // Set image URL as base64 string
+          setProfileImage(reader.result); // Set base64 image
         };
-        reader.readAsDataURL(file); // Read file as base64
+        reader.readAsDataURL(file); // Read file as base64 string
       }
     };
 
     input.click(); // Trigger the file picker dialog
   };
 
-
+  
   const handleSaveall = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -110,33 +110,23 @@ const ProfileUpdate = () => {
         return;
       }
 
-      // Ensure technicalSkills and certifications are arrays
-      if (!Array.isArray(technicalSkills) || technicalSkills.length > 7) {
-        alert('Skills must be an array and should not exceed 7 items.');
-        return;
-      }
-
-      if (!Array.isArray(certifications) || certifications.length > 7) {
-        alert('Certifications must be an array and should not exceed 7 items.');
-        return;
-      }
-
       // Create a new FormData object
       const formData = new FormData();
-
-      // Append each field to the FormData
       formData.append('about', aboutMe);
 
-      // Append image (if available and it's not a string)
-      if (profileImage && typeof profileImage !== 'string') {
-        formData.append('image', {
-          uri: profileImage.uri,
-          name: profileImage.fileName || 'profileImage.jpg',
-          type: profileImage.type || 'image/jpeg',
-        });
+      // Convert base64 to Blob if profileImage is a base64 string
+      if (profileImage && typeof profileImage === 'string') {
+        // Convert base64 string to Blob
+        const blob = await fetch(profileImage).then(res => res.blob());
+
+        // Append the image blob directly to FormData with proper name and type
+        formData.append('image', blob, 'profileImage.jpg');
+      } else {
+        alert('Please upload a valid image.');
+        return;
       }
 
-      // Append arrays (technicalSkills and certifications) as separate values
+      // Append other fields to FormData
       technicalSkills.forEach((skill, index) => {
         formData.append(`skills[${index}]`, skill);
       });
@@ -146,9 +136,8 @@ const ProfileUpdate = () => {
       });
 
       formData.append('location', location);
-      formData.append('category', category);
+      formData.append('category', specialization);
 
-      // Append roles
       currentSelectedRoles.forEach((role, index) => {
         formData.append(`specialization[${index}]`, role);
       });
@@ -170,12 +159,10 @@ const ProfileUpdate = () => {
         alert('Failed to save. Please try again.');
       }
     } catch (error) {
-      console.error('Save Error:', error);
+      console.error('Save Error:', error.response ? error.response.data : error);
       alert('Failed to save. Please try again.');
     }
   };
-
-
 
 
 
@@ -230,8 +217,9 @@ const ProfileUpdate = () => {
         if (data.status === 'success' && data.profile) {
           setAboutMe(data.profile.about);
           setLocation(data.profile.location);
-          setCurrentSelectedRoles(data.profile.specialization);
-          setCategory(data.profile.category);
+          setProfileImage(data.profile.image_url);
+          setSelectedRoles(data.profile.specialization);
+          setSpecialization(data.profile.category);
           setYearsOfExperience(data.profile.years_experience);
         }
       } catch (error) {
@@ -276,10 +264,10 @@ const ProfileUpdate = () => {
         <View style={styles.field}>
           <Text style={styles.label}>Category</Text>
           <Picker
-            selectedValue={category}
-            value={category}
+            selectedValue={specialization}
+            value={specialization}
             style={styles.picker}
-            onValueChange={(itemValue) => setCategory(itemValue)}
+            onValueChange={(itemValue) => setSpecialization(itemValue)}
           >
             {Object.keys(specializationRoles).map((spec) => (
               <Picker.Item key={spec} label={spec} value={spec} />
@@ -295,25 +283,31 @@ const ProfileUpdate = () => {
           <TouchableOpacity onPress={handleInputClick} style={styles.inputContainer}>
             <TextInput
               style={styles.input2}
-              value={currentSelectedRoles.join(', ') || 'Select specialization...'} // Display selected roles or placeholder
+              value={
+                currentSelectedRoles.length > 0
+                  ? currentSelectedRoles.join(', ')
+                  : selectedRoles.length > 0
+                  ? selectedRoles.join(', ')
+                  : 'Select specialization...'}
               editable={false} // Make it non-editable
             />
-            {/* Down arrow icon from Icons8 */}
+         
             <Image
               source={{ uri: 'https://img.icons8.com/?size=100&id=39942&format=png&color=000000' }} // Use the provided icon link
               style={styles.arrowIcon}
             />
           </TouchableOpacity>
-
+          
           {/* Conditionally render CustomMultiSelect */}
           {isSelectVisible && specialization && specializationRoles[specialization] && (
             <CustomMultiSelect
-              items={specializationRoles[specialization].map(role => ({ id: role, name: role }))}
+              items={specializationRoles[specialization].map((role) => ({ id: role, name: role }))}
               selectedItems={currentSelectedRoles}
               onSelectedItemsChange={handleSelectedItemsChange} // Update selected roles
             />
           )}
         </View>
+
 
       
         
