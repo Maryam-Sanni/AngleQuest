@@ -50,6 +50,8 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
   };
 
+  const combinedValue = `${Array.isArray(available_days) ? available_days.join(', ') : ''}, ${available_times}`;
+  
   const handleSave = async () => {
     if (!role || !level || !rate || !available_days || !available_times) {
       setAlertMessage(t('Please fill all fields'));
@@ -142,10 +144,10 @@ function MyComponent({ onClose }) {
 
           <View style={styles.container}>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   placeholder="Junior Platform Developer"
                   placeholderTextColor="grey"
@@ -157,10 +159,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={category}
                   style={styles.picker}
@@ -174,10 +176,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Candidate Level")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={level}
                   style={styles.picker}
@@ -190,10 +192,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   style={styles.input}
                   value={rate}
@@ -203,54 +205,29 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-                <View style={styles.cell}>
-                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Availability")}</Text>
-                </View>
-                <View style={styles.cell}>
-                  <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <TextInput
-                      placeholder="What day and time are you available?"
-                      placeholderTextColor="green"
-                      style={styles.input}
-                      editable={false}
-                      pointerEvents="none" 
-                    />
-                  </TouchableOpacity>
-                </View>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>
               </View>
+              <View style={[styles.cell, { flex: 2}]}>
+                <TextInput
+                  placeholder="Mon, Tue, Wed..., Sun / 12PM-1PM"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={combinedValue}
+                  editable={false} // Prevent manual input
+                  pointerEvents="none" // Ensure it behaves like a button
+                />
+              </View>
+            </View>
               </View>
 
-            <View style={[styles.container, { marginTop: 50 }]}>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Days")}</Text>
-              </View>
-              <View style={styles.cell}>
-                  <TextInput
-                    placeholder="Mon,Tue,Wed...,Sun"
-                    placeholderTextColor="grey"
-                    style={styles.input}
-                    value={available_days}
-                    editable={false} // Prevent manual input
-                    pointerEvents="none" // Ensure it behaves like a button
-                  />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Times")}</Text>
-              </View>
-              <View style={styles.cell}>
-                  <TextInput
-                    placeholder="12PM-1PM"
-                    placeholderTextColor="grey"
-                    style={styles.input}
-                    value={available_times}
-                    editable={false} // Prevent manual input
-                    pointerEvents="none" // Ensure it behaves like a button
-                  />
-              </View>
-            </View>
+          <View style={[styles.container, { marginTop: 50, borderRadius: 20, backgroundColor: '#F5F5F5' }]}>
+            <DaysTimePickerModal
+              isVisible={isModalVisible}
+              onConfirm={handleConfirm}
+              onCancel={() => setModalVisible(false)}
+            />
+
           </View>
 
             <View style={{ flexDirection: 'row', marginTop: 30 }}>
@@ -261,36 +238,28 @@ function MyComponent({ onClose }) {
 
           <View style={{ flexDirection: 'row', marginTop: 30 }}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
-          <TouchableOpacity 
-            style={[styles.buttonplus, questions.length >= MAX_QUESTIONS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
-            onPress={addQuestion}
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            disabled={questions.length >= MAX_QUESTIONS}
-          >
-            <Text style={styles.buttonTextplus}>+</Text>
-          </TouchableOpacity>
+         
           </View>
 
-          <View style={styles.container}>
+          <View style={styles.container2}>
             {questions.map((question, index) => (
               <View key={index} style={styles.row}>
-                <View style={[styles.cell, { flex: 1 }]}>
-                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(`Question`)} {index + 1}</Text>
+                 <View style={[styles.cell2, { flex: 0.3, marginTop: 5 }]}>
+                  <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
                 </View>
-                <View style={[styles.cell, { flex: 5 }]}>
+                 <View style={[styles.cell2, { flex: 5 }]}>
                   <TextInput
-                    placeholder={t("Question description")}
+                    placeholder={t(" ")}
                     placeholderTextColor="grey"
-                    style={styles.input}
+                    style={styles.input2}
                     value={question.question}
                     onChangeText={text => updateQuestion(index, 'question', text)}
                   />
                 </View>
-                <View style={[styles.cell, { flex: 1 }]}>
+                 <View style={[styles.cell2, { flex: 0.5 }]}>
                   <Picker
                     selectedValue={question.percentage}
-                    style={styles.picker}
+                    style={styles.picker2}
                     onValueChange={(itemValue) => updateQuestion(index, 'percentage', itemValue)}
                   >
                     <Picker.Item label="10%" value="10" />
@@ -312,6 +281,16 @@ function MyComponent({ onClose }) {
                     ))}
                     </View>
 
+          <TouchableOpacity 
+            style={[styles.buttonplus, questions.length >= MAX_QUESTIONS && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
+            onPress={addQuestion}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={questions.length >= MAX_QUESTIONS}
+          >
+            <Text style={styles.buttonTextplus}>Add Item</Text>
+          </TouchableOpacity>
+          
                     <TouchableOpacity onPress={handleSave} style={styles.buttonsave}>
                     <Text style={styles.buttonTextsave}>{t("Save")}</Text>
                     </TouchableOpacity>
@@ -323,152 +302,157 @@ function MyComponent({ onClose }) {
                     message={alertMessage}
                     onConfirm={hideAlert}
                     />
-      <DaysTimePickerModal
-        isVisible={isModalVisible}
-        onConfirm={handleConfirm}
-        onCancel={() => setModalVisible(false)}
-      />
+     
                     </View>
                     );
                     }
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    marginRight: 70,
+    marginTop: 10,
+    marginLeft: 50
+  },
+  container2: {
+    flexDirection: 'column',
+    marginRight: 70,
+    marginTop: 10,
+    marginLeft: 50
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  cell: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    padding: 5,
+  },
+  cell3: {
+    flex: 1,
+    padding: 5,
+  },
+  cell2: {
+    flex: 1,
+    padding: 5,
+    borderBottomWidth: 0.5, 
+    borderBottomColor: '#CCC',
+    marginTop: 5
+  },
+  input2: {
+    fontFamily: "Roboto-Light",
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "#CCC"
+  },
+  picker2: {
+    height: 30,
+    width: '100%',
+    backgroundColor: 'white',
+    borderColor: '#CCC',
+    borderWidth: 1,
+    color: 'black',
+  },
+  deleteButton: {
+marginTop: 10
+  },
+  buttonDue: {
+    marginLeft: 50,
+    marginTop: 5,
+  },
+  buttonTextDue: {
+    color: 'black',
+    fontSize: 12,
+    fontFamily: "Roboto-Light",
+    fontStyle: 'italic'
+  },
+  buttonplus: {
+    backgroundColor: 'white', 
+    padding: 10,
+    marginLeft: 100, 
+    width: 80,
+    marginTop: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black'
+  },
+  buttonTextplus: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  },
+  buttonsave: {
+    backgroundColor: 'coral',
+    padding: 5,
+    marginLeft: 730,
+    width: 80,
+      padding: 10,
+    paddingHorizontal: 20,
+    marginTop: -35,
+    borderRadius: 5,
+    marginBottom: 50
+  },
+  buttonTextsave: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  greenBox: {
+    width: 880,
+    backgroundColor: 'white',
+  },
+  input: {
+    fontFamily: "Roboto-Light",
+    paddingLeft: 5
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 30,
+    right: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  picker: {
+    height: 20,
+    width: '100%',
+    backgroundColor: 'white',
+    borderColor: 'white',
+    borderWidth: 1,
+    color: 'black',
+    fontSize: 14,
+  },
+  buttonplusPressed: {
+    backgroundColor: 'green',
+  },
+  buttonplusDisabled: {
+    backgroundColor: 'red',
+  },
+  placeholderText: {
+    color: 'grey',
+    fontSize: 12, // Adjust size as needed
+    position: 'absolute',
+    left: 10,
+    top: 15, // Adjust position as needed
+  },
+});
 
-                    const styles = StyleSheet.create({
-                    container: {
-                    flexDirection: 'column',
-                    borderWidth: 1,
-                    borderColor: '#CCC',
-                    marginRight: 70, 
-                    marginTop: 10, 
-                    marginLeft: 50 
-                    },
-                    row: {
-                    flexDirection: 'row',
-                    },
-                    cell: {
-                    flex: 1,
-                    borderWidth: 1,
-                    borderColor: '#CCC',
-                    padding: 5,
-                    },
-                    buttonDue: {
-                    borderWidth: 2,
-                    borderColor: 'coral',
-                    padding: 10,
-                    marginLeft: 50,
-                    paddingHorizontal: 20,
-                    marginTop: 15,
-                    },
-                    buttonTextDue: {
-                    color: 'black',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    fontFamily: "Roboto-Light"
-                    },
-                    buttonAcc: {
-                    borderWidth: 2,
-                    borderColor: '#CCC',
-                    padding: 10,
-                    marginTop: 15,
-                    marginLeft: 30, 
-                    paddingHorizontal: 20,
-                    },
-                    buttonTextAcc: {
-                    color: 'grey',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    fontFamily: "Roboto-Light"
-                    },
-                    buttonNew: {
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    borderColor: 'coral',
-                    padding: 5,
-                    marginLeft: 50, 
-                    width: 100,
-                    paddingHorizontal: 20,
-                    marginTop: 10
-                    },
-                    buttonTextNew: {
-                    color: 'coral',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    fontFamily: "Roboto-Light",
-                    },
-                      buttonplus: {
-                        backgroundColor: 'grey', 
-                        padding: 5,
-                        marginLeft: 90, 
-                        width: 70,
-                        paddingHorizontal: 20,
-                      },
-                    buttonTextplus: {
-                    color: 'white',
-                    fontSize: 16,
-                    textAlign: 'center',
-                    fontFamily: "Roboto-Light"
-                    },
-                      buttonsave: {
-                        backgroundColor: 'coral',
-                        padding: 5,
-                        marginLeft: 750, 
-                        width: 100,
-                        paddingHorizontal: 20,
-                        marginTop: 100,
-                        marginBottom: 50
-                      },
-                      buttonTextsave: {
-                        color: 'white',
-                        fontSize: 14,
-                        textAlign: 'center',
-                        fontFamily:"Roboto-Light"
-                      },
-                    greenBox: {
-                    width: 920,
-                    backgroundColor: 'white',
-                    },
-                    input: {
-                    borderWidth: 1,
-                    borderColor: 'black',
-                    },
-                    picker: {
-                    height: 20,
-                    width: '100%',
-                    backgroundColor: '#F8F8F8',
-                    borderColor: 'black',
-                    borderWidth: 1, 
-                    color: 'grey',
-                    fontSize: 14
-                    },
-                    closeButton: {
-                    position: 'absolute',
-                    top: 20,
-                    right: 20,
-                    },
-                    header: {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: 10,
-                    backgroundColor: 'white',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#CCC',
-                    marginBottom: 20
-                    },
-                    logo: {
-                    width: 40,
-                    height: 40,
-                    marginRight: 10
-                    },
-                    headerText: {
-                    fontSize: 22,
-                    fontWeight: 'bold',
-                    },
-                    buttonplusPressed: {
-                    backgroundColor: 'green',
-                    },
-                    buttonplusDisabled: {
-                    backgroundColor: 'red',
-                    },
-                    });
-
-                    export default MyComponent;
-
+export default MyComponent;

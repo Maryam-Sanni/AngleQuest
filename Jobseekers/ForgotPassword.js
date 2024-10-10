@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Top from '../components/top';
 import { useFonts } from 'expo-font';
 import { useTranslation } from "react-i18next";
@@ -7,31 +7,42 @@ import axios from 'axios';
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [emailSent, setEmailSent] = useState(false); // To track if email has been sent
   const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Refs for input fields
   const emailRef = useRef();
-  const passwordRef = useRef();
 
   const handleResetPassword = async () => {
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
-      const response = await axios.post('https://recruitangle.com/api/forgot-password', {
-        email,
-        new_password: newPassword,
+      await axios.post(`${apiUrl}/api/forgot-password`, {
+        email,  // Only sending the email
       });
-      setSuccess("Password reset successfully");
+      setSuccess("Password reset link sent to your email. Please check your inbox.");
       setError(null);
+      setEmailSent(true); // Set email sent status to true
+
+      // Show alert on success
+      Alert.alert(
+        "Password Reset",
+        "A password reset link has been sent to your email.",
+        [{ text: "OK" }]
+      );
     } catch (error) {
-      setError(error.response ? error.response.data.message : "An error occurred");
+      const errorMessage = error.response?.data?.errors?.email?.[0] || "An error occurred. Please try again.";
+      setError(errorMessage);
       setSuccess(null);
+      setEmailSent(false); // In case of error, reset the email sent status
+
+      // Show alert with specific error message
+      Alert.alert(
+        "Error",
+        errorMessage,
+        [{ text: "OK" }]
+      );
     }
   };
 
@@ -49,57 +60,42 @@ const ResetPasswordForm = () => {
       <Top />
       <View style={styles.container}>
         <Text style={styles.title}>Reset Your Password</Text>
+
+        {success && <Text style={styles.successText}>{success}</Text>}
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
         <View style={styles.inputContainer}>
           <Text style={styles.label}>{t("Email")}</Text>
           <TextInput
-            ref={emailRef} // Example ref usage
+            ref={emailRef}
             style={styles.input}
             placeholder="Enter your email"
             onChangeText={setEmail}
             value={email}
+            editable={!emailSent} // Disable input if email is sent
           />
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>{t("New Password")}</Text>
-          <TextInput
-            ref={passwordRef} // Example ref usage
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="********"
-            onChangeText={setNewPassword}
-            value={newPassword}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>{t("Confirm Password")}</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="********"
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-          />
-        </View>
-        <Text style={styles.passwordHint}>
-          {t("Password must contain at least 8 characters. Combine uppercase, lowercase and numbers.")}
-        </Text>
-        {error && <Text style={styles.errorText}>{error}</Text>}
-        {success && <Text style={styles.successText}>{success}</Text>}
-        <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-          <Text style={styles.buttonText}>{t("Reset Password")}</Text>
+
+        <TouchableOpacity 
+          style={[styles.button, emailSent && styles.buttonSuccess]} // Conditional styling
+          onPress={handleResetPassword}
+          disabled={emailSent} // Disable button if email is sent
+        >
+          <Text style={styles.buttonText}>
+            {emailSent ? "Email Sent" : t("Reset Password")} {/* Change button text */}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 100
+    padding: 400
   },
   title: {
     fontSize: 24,
@@ -128,9 +124,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: "Roboto-Light"
   },
-  passwordHint: {
+  successText: {
     fontSize: 14,
-    color: "#777",
+    color: "green",
     marginBottom: 10,
     textAlign: "center",
     fontFamily: "Roboto-Light"
@@ -141,12 +137,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  successText: {
-    fontSize: 12,
-    color: "green",
-    marginBottom: 10,
-    textAlign: "center",
-  },
   button: {
     backgroundColor: "coral",
     borderRadius: 5,
@@ -154,6 +144,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 10,
+  },
+  buttonSuccess: {
+    backgroundColor: "green", // Button color when email is sent
   },
   buttonText: {
     color: "#fff",

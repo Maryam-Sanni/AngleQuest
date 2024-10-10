@@ -54,7 +54,7 @@ const ProfileUpdate = () => {
   const [loading, setLoading] = useState('');
   const [role, setRole] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
-  const [specialization, setSpecialization] = useState(' ');
+  const [category, setCategory] = useState(' ');
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSelectVisible, setSelectVisible] = useState(false);
   const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); // Local state for selected roles
@@ -127,20 +127,13 @@ const ProfileUpdate = () => {
       // Append each field to the FormData
       formData.append('about', aboutMe);
 
-      // Check if there's an image to upload
-      let imageUrl = null;
+      // Append image (if available and it's not a string)
       if (profileImage && typeof profileImage !== 'string') {
-        // Upload image to Cloudinary
-        const uploadResponse = await uploadToCloudinary(profileImage);
-        imageUrl = uploadResponse?.secure_url; // Get the image URL from Cloudinary response
-      } else if (typeof profileImage === 'string') {
-        // If profileImage is a URL string, use it directly
-        imageUrl = profileImage;
-      }
-
-      // Append the image URL if it's available
-      if (imageUrl) {
-        formData.append('image_url', imageUrl);
+        formData.append('image', {
+          uri: profileImage.uri,
+          name: profileImage.fileName || 'profileImage.jpg',
+          type: profileImage.type || 'image/jpeg',
+        });
       }
 
       // Append arrays (technicalSkills and certifications) as separate values
@@ -153,7 +146,7 @@ const ProfileUpdate = () => {
       });
 
       formData.append('location', location);
-      formData.append('category', specialization);
+      formData.append('category', category);
 
       // Append roles
       currentSelectedRoles.forEach((role, index) => {
@@ -182,19 +175,6 @@ const ProfileUpdate = () => {
     }
   };
 
-  // Function to upload image to Cloudinary
-  const uploadToCloudinary = async (image) => {
-    const data = new FormData();
-    data.append('file', {
-      uri: image.uri,
-      name: image.fileName || 'profileImage.jpg',
-      type: image.type || 'image/jpeg',
-    });
-    data.append('upload_preset', 'YOUR_UPLOAD_PRESET'); // Replace with your Cloudinary upload preset
-
-    const response = await axios.post('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', data);
-    return response.data; // Return the response which includes the image URL
-  };
 
 
 
@@ -250,8 +230,8 @@ const ProfileUpdate = () => {
         if (data.status === 'success' && data.profile) {
           setAboutMe(data.profile.about);
           setLocation(data.profile.location);
-          setCurrentSelectedRoles(data.profile.specialization.join(', '));
-          setSpecialization(data.profile.category);
+          setCurrentSelectedRoles(data.profile.specialization);
+          setCategory(data.profile.category);
           setYearsOfExperience(data.profile.years_experience);
         }
       } catch (error) {
@@ -296,10 +276,10 @@ const ProfileUpdate = () => {
         <View style={styles.field}>
           <Text style={styles.label}>Category</Text>
           <Picker
-            selectedValue={specialization}
-            value={specialization}
+            selectedValue={category}
+            value={category}
             style={styles.picker}
-            onValueChange={(itemValue) => setSpecialization(itemValue)}
+            onValueChange={(itemValue) => setCategory(itemValue)}
           >
             {Object.keys(specializationRoles).map((spec) => (
               <Picker.Item key={spec} label={spec} value={spec} />

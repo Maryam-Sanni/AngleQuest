@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Switch } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 
 function MyComponent() {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(false);
 
   const toggleTwoFactorAuth = () => {

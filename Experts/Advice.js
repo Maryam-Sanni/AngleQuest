@@ -461,17 +461,37 @@ function MyComponent() {
         <Sidebar />
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, }}>
-        
-                        <TouchableOpacity onPress={handleOpenPress2}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
-                  </View>
-     </TouchableOpacity>
+
+          <View style={styles.header}>
+
+
+            <TouchableHighlight
+
+                                  underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
+                                  onMouseEnter={() => setIsInterviewHovered(false)}
+                                  onMouseLeave={() => setIsInterviewHovered(false)}>
+                                  <View style={styles.item}>
+                                  <Image
+          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+          style={styles.image}
+          />
+                                      <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "No update yet"}</Text>
+                                  </View>
+                              </TouchableHighlight>
+
+                          </View>
+                          <TouchableOpacity onPress={handleOpenPress2}>
+          <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+                      <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
+                    </View>
+          </TouchableOpacity>
+                    
           <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
+          
 
  <Modal
         animationType="slide"
@@ -554,9 +574,16 @@ function MyComponent() {
           </TouchableOpacity>
     </View>
       </View>
-      
+        <View style={styles.box2}>
+          <Text style = {{fontSize: 14, color: 'black', fontWeight: '600', marginBottom: 5}}>{t("You have a new session in:")}</Text>
+           <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
+          <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress.")} </Text>
+        </View>
      </View>
 
+          
+  
+          
           <Text style = {{fontSize: 20, marginTop: 30, color: '#f7fff4', fontWeight: 'bold', marginLeft: 50, marginBottom: -10 }}>{t("Skill Analysis Overview")} </Text>
           
 <ScheduledAdvice /> 

@@ -135,6 +135,7 @@ import Individual from "./Screens/Individual";
 import Community from "./Screens/Community";
 import Business from "./Screens/Business";
 import Pricing from "./Screens/Pricing";
+import Reset from './components/ResetPassword';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -181,7 +182,7 @@ const App = () => {
         <Route path="/project" element={<Project />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/account-settings" element={<AccountSettings />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/change-password" element={<ResetPassword />} />
          <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/notification-settings" element={<NotificationSettings />} />
         <Route path="/billings-payment" element={<BillingsandPayment />} />
@@ -208,6 +209,7 @@ const App = () => {
         <Route path="/community" element={<Community />} />
         <Route path="/business" element={<Business />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/reset-password" element={<Reset  />} />
       </Routes>
     </Router>
   );

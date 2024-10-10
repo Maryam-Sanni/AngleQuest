@@ -37,6 +37,7 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
   };
 
+  
         useEffect(() => {
           const loadFormData = async () => {
               try {
@@ -247,16 +248,19 @@ function MyComponent({ onClose }) {
       </View>
     </View>
 
+          <View style={[styles.container, { marginTop: 50, borderRadius: 20, backgroundColor: '#F5F5F5' }]}>
+            <DaysTimePickerModal
+              isVisible={isModalVisible}
+              onConfirm={handleConfirm}
+              onCancel={() => setModalVisible(false)}
+            />
+
+          </View>
+          
            <View style={{ flexDirection: 'row' }}>
           <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 20, fontFamily: "Roboto-Light" }}>{t("My Scoring Topics")}</Text>
 
-          <TouchableOpacity
-            style={styles.buttonplus}
-            onPress={addNewTopic}
-            disabled={topics.length >= MAX_TOPICS}
-          >
-            <Text style={styles.buttonTextplus}>+</Text>
-          </TouchableOpacity>
+         
            </View>
           
           <View style={styles.container}>
@@ -301,8 +305,16 @@ function MyComponent({ onClose }) {
 
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={styles.buttonplus}
+            onPress={addNewTopic}
+            disabled={topics.length >= MAX_TOPICS}
+          >
+            <Text style={styles.buttonTextplus}>Add Item</Text>
+          </TouchableOpacity>
+          
 <TouchableOpacity onPress={handleSave} style={styles.buttonsave} >
-      <Text style={styles.buttonTextsave}>{t("Save")} Changes</Text>
+      <Text style={styles.buttonTextsave}>{t("Save Changes")}</Text>
     </TouchableOpacity>
 
 
@@ -316,11 +328,7 @@ function MyComponent({ onClose }) {
   message={alertMessage}
   onConfirm={hideAlert}
 />
-      <DaysTimePickerModal
-        isVisible={isModalVisible}
-        onConfirm={handleConfirm}
-        onCancel={() => setModalVisible(false)}
-      />
+      
 </View>
 
 );
@@ -389,34 +397,31 @@ const styles = StyleSheet.create({
     fontFamily:"Roboto-Light"
   },
   buttonplus: {
-     backgroundColor: 'coral',
-     padding: 5,
-     marginLeft: 585, 
-     width: 100,
-     paddingHorizontal: 20,
-     marginTop: 30
+    backgroundColor: 'white', 
+    padding: 10,
+    marginLeft: 100, 
+    width: 80,
+    marginTop: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black'
+  },
+  buttonTextplus: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
   },
   buttonsave: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 700, 
+    marginLeft: 700,
     width: 150,
+      padding: 10,
     paddingHorizontal: 20,
-    marginTop: 30
-  },
-  buttonTextplus: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily:"Roboto-Light"
-  },
-   buttonsave: {
-     backgroundColor: 'coral',
-     padding: 5,
-     marginLeft: 700, 
-     width: 150,
-     paddingHorizontal: 20,
-     marginTop: 30
+    marginTop: -35,
+    borderRadius: 5,
+    marginBottom: 50
   },
   buttonTextsave: {
     color: 'white',
@@ -425,8 +430,7 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 920,
-    height:600,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
   },
   input: {
     outline: 'black',

@@ -378,36 +378,38 @@ fontSize: 12,
 fontFamily: "Roboto-Light",
 fontStyle: 'italic'
 },
-buttonplus: {
-backgroundColor: 'white', 
-padding: 10,
-marginLeft: 50, 
-width: 100,
-marginTop: 20,
-paddingHorizontal: 20,
-borderWidth: 1,
-borderColor: 'black'
-},
-buttonTextplus: {
-color: 'black',
-fontSize: 14,
-textAlign: 'center',
-fontFamily: "Roboto-Light"
-},
-buttonsave: {
-backgroundColor: 'coral',
-padding: 5,
-marginLeft: 750,
-width: 100,
-paddingHorizontal: 20,
-marginTop: 30,
-marginBottom: 50
-},
-buttonTextsave: {
-color: 'white',
-fontSize: 14,
-textAlign: 'center',
-},
+  buttonplus: {
+    backgroundColor: 'white', 
+    padding: 10,
+    marginLeft: 100, 
+    width: 80,
+    marginTop: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black'
+  },
+  buttonTextplus: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light"
+  },
+  buttonsave: {
+    backgroundColor: 'coral',
+    padding: 5,
+    marginLeft: 730,
+    width: 80,
+      padding: 10,
+    paddingHorizontal: 20,
+    marginTop: -35,
+    borderRadius: 5,
+    marginBottom: 50
+  },
+  buttonTextsave: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+  },
 greenBox: {
 width: 920,
 backgroundColor: 'white',

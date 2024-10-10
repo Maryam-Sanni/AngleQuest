@@ -13,7 +13,7 @@ const Settings = ({ onClose }) => {
       };
     
       const goToResetPassword = () => {
-        navigate('/assword');
+        navigate('/change-password');
         onClose();
       };
     
