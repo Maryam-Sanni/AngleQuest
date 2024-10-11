@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, CheckBox, TextInput, Modal, Image, ScrollView, Picker } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
@@ -28,9 +28,14 @@ function MyComponent({ onClose }) {
 
   const { t } = useTranslation();
 
-  const [role, setSkillsAnalysisRole] = useState('');
+  const [role, setSkillsAnalysisRole] = useState('expert');
    const [category, setCategory] = useState('');
-  const [level, setLevel] = useState('');
+  const [location, setLocation] = useState('');
+  const [yearsOfExperience, setYearsOfExperience] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedRole, setSelectedRole] = useState('');
+  const [level, setLevel] = useState('Beginner');
   const [availableDays, setAvailableDays] = useState('');
   const [availableTimes, setAvailableTimes] = useState('');
   const [topics, setTopics] = useState([{ topic: '', percentage: '' }]);
@@ -63,9 +68,42 @@ function MyComponent({ onClose }) {
   // Ensure availableDays is an array before calling join
   const combinedValue = `${Array.isArray(availableDays) ? availableDays.join(', ') : ''}, ${availableTimes}`;
 
+
+  const getProfileData = async () => {
+    try {
+      const storedLocation = await AsyncStorage.getItem('location');
+      const storedCategory = await AsyncStorage.getItem('category');
+      const storedYearsOfExperience = await AsyncStorage.getItem('yearsOfExperience');
+      const storedProfileImage = await AsyncStorage.getItem('profileImage');
+      const storedRoles = await AsyncStorage.getItem('currentSelectedRoles');
+      const parsedRoles = storedRoles ? JSON.parse(storedRoles) : [];
+
+      // Set the state with retrieved data
+      if (storedLocation) setLocation(storedLocation);
+      if (storedCategory) setCategory(storedCategory);
+      if (storedYearsOfExperience) setYearsOfExperience(storedYearsOfExperience);
+
+      // Convert storedProfileImage to Blob
+      if (storedProfileImage && typeof storedProfileImage === 'string') {
+        const blob = await fetch(storedProfileImage).then((res) => res.blob());
+        setProfileImage(URL.createObjectURL(blob));  // Convert the blob to a URL to use in <Image> component
+      }
+
+      setSelectedRoles(parsedRoles);  // Set roles, parsing the JSON string
+    } catch (error) {
+      console.error('Error retrieving data from AsyncStorage:', error);
+    }
+  };
+
+  // useEffect to load the profile data when the component mounts
+  useEffect(() => {
+    getProfileData();
+  }, []);
+
+
   
   const handleSave = async () => {
-    if (!role || !level || !rate || !availableDays || !availableTimes) {
+    if ( !level || !rate || !availableDays || !availableTimes) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
       return;
@@ -76,6 +114,9 @@ function MyComponent({ onClose }) {
         role,
         level,
         rate,
+        specialization: selectedRole,
+        years_experience: yearsOfExperience,
+        location,
         available_days: availableDays,
         available_times: availableTimes,
         category,
@@ -161,29 +202,29 @@ function MyComponent({ onClose }) {
               </View>
                <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
-                  placeholder="SAP"
+                  placeholder="Category"
                   placeholderTextColor="black"
                   style={styles.input}
                   editable={false}
-                  value={role}
-                  onChangeText={text => setSkillsAnalysisRole(text)}
+                  value={category}
                 />
               </View>
             </View>
             <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
+              <View style={[styles.cell, { flex: 1 }]}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                  Specialization
+                </Text>
               </View>
-              <View style={[styles.cell, { flex: 2}]}>
+              <View style={[styles.cell, { flex: 2 }]}>
                 <Picker
-                  selectedValue={category}
+                  selectedValue={selectedRole}  // Use the selected value state
                   style={styles.picker}
-                  onValueChange={(itemValue) => setCategory(itemValue)}
+                  onValueChange={(itemValue) => setSelectedRole(itemValue)}  // Update selected role when changed
                 >
-                  <Picker.Item label={t('SAP FI')} value="SAP" />
-                  <Picker.Item label={t('Microsoft')} value="Microsoft" />
-                  <Picker.Item label={t('Scrum')} value="Scrum" />
-                  <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
+                  {selectedRoles.map((role, index) => (
+                    <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item
+                  ))}
                 </Picker>
               </View>
             </View>

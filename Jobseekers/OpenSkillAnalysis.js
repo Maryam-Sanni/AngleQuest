@@ -86,7 +86,7 @@ function MyComponent({ onClose }) {
           starting_level: startingLevel,
           target_level: targetLevel,
           status: status,
-          date_time: data?.date_time,
+          date_time: selectedDateTime,
           expert_name: data?.expert_name,
           expert_available_days: data?.expert_available_days,
           expert_available_time: data?.expert_available_time,
@@ -303,6 +303,16 @@ navigate('/skill-analysis-sessions');
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
               </View>
               <View style={styles.cell}>
+                <TouchableOpacity
+                  style={styles.dateTimeButton}
+                  onPress={() => setIsModalVisible(true)}
+                >
+                  <Text style={{ fontFamily: "Roboto-Light", color: 'blue', textDecorationLine: 'underline' }}>
+                    {selectedDateTime
+                      ? selectedDateTime.toLocaleString()
+                      : t("Select Date and Time")}
+                  </Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.dateTimeButton}
                   onPress={() => setIsModalVisible(true)}

@@ -122,6 +122,7 @@ import mobileAI from './MobileLanding.js/AI';
 import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
 import Project from './Jobseekers/Scenario Project';
+import ExpertAnalysis from './Jobseekers/ExpertAnalysis';
 import Scenario from './Experts/Scenario';
 import MainMessage from './Messaging/ChatScopeUI';
 import MainExpertMessage from './Messaging/ExpertsChatScopeUI';
@@ -210,6 +211,7 @@ const App = () => {
         <Route path="/business" element={<Business />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/reset-password" element={<Reset  />} />
+         <Route path="/expert-analysis" element={<ExpertAnalysis  />} />
       </Routes>
     </Router>
   );

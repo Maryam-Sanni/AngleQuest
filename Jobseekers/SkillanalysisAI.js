@@ -600,7 +600,7 @@ const MyComponent = ({ onClose }) => {
                         <Switch
                           value={switchStates[index] || false}
                           onValueChange={() => toggleSwitch(index)}
-                          trackColor={{ false: "#767577", true: "coral" }} 
+                          trackColor={{ false: "#767577", true: "lightgreen" }} 
                           thumbColor={switchStates[index] ? "#fff" : "#fff"}
                           style={styles.switch}
                         />

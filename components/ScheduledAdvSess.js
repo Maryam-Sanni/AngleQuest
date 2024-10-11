@@ -35,18 +35,18 @@ const ScheduledMeetingsTable = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
-  useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
+    useEffect(() => {
+      const loadFormData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          if (!token) {
+            console.error('No token found');
+            return;
+          }
 
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+          const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-skill-analysis`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
           if (response.status === 200) {
             let data = response.data.skillAnalysis || [];
@@ -54,20 +54,24 @@ const ScheduledMeetingsTable = () => {
             // Filter out entries where completed is "Yes"
             data = data.filter(item => item.completed !== "Yes");
 
+            // Sort the data by date_time in ascending order (earliest first)
+            data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
+
             setSkillAnalysisData(data);
-          try {
-            await AsyncStorage.setItem('allSkillAnalysisData', JSON.stringify(data));
-            console.log('All data saved:', data);
-          } catch (error) {
-            console.error('Failed to save all data to AsyncStorage', error);
+
+            try {
+              await AsyncStorage.setItem('allSkillAnalysisData', JSON.stringify(data));
+              console.log('All data saved:', data);
+            } catch (error) {
+              console.error('Failed to save all data to AsyncStorage', error);
+            }
+          } else {
+            console.error('Failed to fetch data', response);
           }
-        } else {
-          console.error('Failed to fetch data', response);
+        } catch (error) {
+          console.error('Failed to load form data', error);
         }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
+      };
 
     // Initial data load
     loadFormData();
@@ -147,48 +151,59 @@ const ScheduledMeetingsTable = () => {
             });
 
       
-            return (
-              <View key={index} style={styles.row}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{analysis.expert_name}</Text>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{analysis.role}</Text>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{analysis.starting_level}</Text>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{new Date(analysis.date_time).toLocaleDateString()} {new Date(analysis.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
-                </View>
+          return (
+            <View key={index} style={styles.row}>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{analysis.expert_name}</Text>
+              </View>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{analysis.role}</Text>
+              </View>
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                <Text style={styles.cellText}>{analysis.starting_level}</Text>
+              </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={{ backgroundColor: '#FFDAB9', padding: 3, borderRadius: 5, color: 'brown' }}>
+                  <Text style={styles.cellText}>
+                    {new Date(analysis.date_time).toLocaleDateString()} {new Date(analysis.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                  </Text>
+              </View>
+
+              {/* Check if the meeting is scheduled or expired */}
+              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                {new Date(analysis.date_time) < new Date() ? (
+                  <Text style={{ backgroundColor: '#FFDAB9', padding: 3, borderRadius: 5, color: 'brown', width: 80, textAlign: 'center' }}>
+                    Expired
+                  </Text>
+                ) : (
+                  <Text style={{ backgroundColor: 'lightgreen', padding: 3, borderRadius: 5, color: 'green', width: 80, textAlign: 'center'  }}>
                     Scheduled
                   </Text>
-                </View>
-                <TouchableOpacity onPress={() => handleOpenPress(analysis)}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Update")}</Text>
-                   </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    const meetingLink = analysis.candidate_link || 'https://anglequest.com';
-                    if (meetingLink) {
-                      Linking.openURL(meetingLink)
-                        .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
-                    } else {
-                      console.warn('No valid link available');
-                    }
-                  }}
-                >
-                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                    <Text style={styles.linkText}>{t("Join Meeting")}</Text>
-                  </View>
-                </TouchableOpacity>
+                )}
               </View>
-            );
-          })}
+
+              <TouchableOpacity onPress={() => handleOpenPress(analysis)}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.linkText}>{t("Update")}</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  const meetingLink = analysis.candidate_link || 'https://anglequest.com';
+                  if (meetingLink) {
+                    Linking.openURL(meetingLink)
+                      .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                  } else {
+                    console.warn('No valid link available');
+                  }
+                }}
+              >
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.linkText}>{t("Join Meeting")}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+       })}
         
         <View style={styles.paginationContainer}>
           <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
@@ -259,16 +274,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'none',
     padding: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cell2: {
     flex: 1,
     backgroundColor: 'white', 
     padding: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cellText: {
-    textAlign: 'flex-start',
+    textAlign: 'center',
     fontFamily: "Roboto-Light"
   },
   headerText: {

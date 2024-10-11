@@ -282,8 +282,6 @@ function MyComponent() {
     loadFormData();
   }, []);
 
-
-
   
   useEffect(() => {
     const fetchLastCreatedMeeting = async () => {
@@ -465,19 +463,7 @@ function MyComponent() {
           <View style={styles.header}>
 
 
-            <TouchableHighlight
-
-                                  underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
-                                  onMouseEnter={() => setIsInterviewHovered(false)}
-                                  onMouseLeave={() => setIsInterviewHovered(false)}>
-                                  <View style={styles.item}>
-                                  <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d82dc6c35b436a4ac93edec3cb47de416b168131f8e3deb5c4898437d416d25f?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-          style={styles.image}
-          />
-                                      <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>{role || "No update yet"}</Text>
-                                  </View>
-                              </TouchableHighlight>
+            
 
                           </View>
                           <TouchableOpacity onPress={handleOpenPress2}>
@@ -612,7 +598,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#f7fff4',
-    paddingVertical: 15,
+    paddingVertical: 25,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   }, 

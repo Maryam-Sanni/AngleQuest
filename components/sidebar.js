@@ -220,7 +220,7 @@ function MyComponent() {
         case "Growth Plan": return ['/growth-plan-new', '/growth-plan-sessions'].includes(currentPath);
         case "Interview": return ['/interview-new', '/interview-sessions'].includes(currentPath);
         case "Scenario Project": return currentPath === '/project';
-        case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result'].includes(currentPath);
+        case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result', '/expert-analysis'].includes(currentPath);
         case "Hubs": return ['/coaching-hub-new', '/coaching-hub-sessions'].includes(currentPath);
         case "Performance": return currentPath === '/performance';
         case "Chats": return currentPath === '/chat';

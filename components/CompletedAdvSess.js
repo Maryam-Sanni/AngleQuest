@@ -84,14 +84,37 @@ const ScheduledMeetingsTable = () => {
         const data = await response.json();
 
         if (data.status === 'success') {
-          const filteredSkillanalysis = data.skillAnalysis.filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId);
-          setSkillanalysis(filteredSkillanalysis);
+          // Filter skill analysis for the specific job seeker
+          const filteredSkillAnalysis = data.skillAnalysis.filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId);
+
+          // Sort the filtered skill analysis by date_time
+          filteredSkillAnalysis.sort((a, b) => {
+            const dateA = new Date(a.date_time);
+            const dateB = new Date(b.date_time);
+
+            // Check if both dates are in the same month and year
+            if (dateA.getFullYear() === dateB.getFullYear() && dateA.getMonth() === dateB.getMonth()) {
+              return dateB - dateA; // For the same month, sort by time (newest first)
+            }
+
+            // Prioritize this month (current month) first
+            const isAThisMonth = dateA.getFullYear() === new Date().getFullYear() && dateA.getMonth() === new Date().getMonth();
+            const isBThisMonth = dateB.getFullYear() === new Date().getFullYear() && dateB.getMonth() === new Date().getMonth();
+
+            if (isAThisMonth && !isBThisMonth) return -1; // A is this month, B is not
+            if (!isAThisMonth && isBThisMonth) return 1;  // B is this month, A is not
+
+            // Otherwise, sort by date (most recent first)
+            return dateB - dateA; 
+          });
+
+          setSkillanalysis(filteredSkillAnalysis);
 
           try {
-            await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillanalysis));
-            console.log('Filtered skillanalysis saved:', filteredSkillanalysis);
+            await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillAnalysis));
+            console.log('Filtered skill analysis saved:', filteredSkillAnalysis);
           } catch (error) {
-            console.error('Failed to save filtered skillanalysis to AsyncStorage', error);
+            console.error('Failed to save filtered skill analysis to AsyncStorage', error);
           }
         } else {
           console.error('Failed to fetch data', data);
@@ -103,6 +126,10 @@ const ScheduledMeetingsTable = () => {
       console.error('Failed to load form data', error);
     }
   };
+
+
+
+
 
   useEffect(() => {
     fetchData(); // Initial data load
@@ -134,11 +161,13 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.headerText}>{t('Performance')}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Date')}</Text>
+              <Text style={styles.headerText}>{t('Meeting Date')}</Text>
             </View>   
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Status')}</Text>
-            </View>
+            <TouchableOpacity>
+              <View style={styles.cell2}>
+              <Text style={{color: 'white'}}>Join Meeting Today Now</Text>
+               </View>
+            </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Rate</Text>
@@ -149,11 +178,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={{color: 'white'}}>View</Text>
                </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>View</Text>
-               </View>
-            </TouchableOpacity>
+            
           </View>
 
           {/* Table Rows */}
@@ -172,9 +197,11 @@ const ScheduledMeetingsTable = () => {
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.cellText}>{new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
               </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={{backgroundColor: 'lightgreen', padding: 3, borderRadius: 5, color: 'green'}}>Completed</Text>
-              </View>
+              <TouchableOpacity>
+                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={{color: 'transparent'}}>Join Meeting Today Now</Text>
+                 </View>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => handleOpenPress2(skillanalysis)}>
                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.linkText}>{t('Rate')}</Text>
@@ -185,11 +212,7 @@ const ScheduledMeetingsTable = () => {
                 <Text style={styles.linkText}>{t('View')}</Text>
                  </View>
               </TouchableOpacity>
-              <TouchableOpacity>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                    <Text style={{color: 'transparent'}}>View</Text>
-                 </View>
-              </TouchableOpacity>
+             
             </View>
           ))}
           <View style={styles.paginationContainer}>
@@ -270,16 +293,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'none',
     padding: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cell2: {
     flex: 1,
     backgroundColor: 'white', 
     padding: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cellText: {
-    textAlign: 'flex-start',
+    textAlign: 'center',
     fontFamily: "Roboto-Light"
   },
   headerText: {

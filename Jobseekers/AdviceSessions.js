@@ -192,6 +192,11 @@ function MyComponent() {
     navigate('/ai-result');
     onClose();
   };
+
+  const gotoanalysis = () => {
+    navigate('/expert-analysis');
+    onClose();
+  };
   
     const handleOpenPress = () => {
        setModalVisible(true);
@@ -232,7 +237,7 @@ function MyComponent() {
                        
                                       </View>
                          </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={gotoanalysis}>
                           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
                                           <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Expert Analysis")}</Text>
                                         </View>
@@ -259,7 +264,7 @@ function MyComponent() {
         <View style={{flexDirection: 'row'}}>
           <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5, fontWeight: '500'}}>Goal:
            <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light", marginLeft: 5 }}>{type}</Text></Text>
-           <Image source={require('../assets/traffic-sign.png')} style={styles.boximage}  />
+           
       </View>
      </View>
 
@@ -278,8 +283,8 @@ function MyComponent() {
             <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")}</Text>
           <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{expert}</Text>
             </View>
-        <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5, fontWeight: '500'}}>Available:
-          <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{days} {time}</Text></Text>
+          <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{days}</Text>
+        <Text style = {{fontSize: 14, color: 'black', marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{time}</Text>
     </View>
     </View>
 

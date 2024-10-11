@@ -110,30 +110,31 @@ const ProfileUpdate = () => {
         return;
       }
 
+      // Save data to AsyncStorage
+      await AsyncStorage.setItem('location', location);
+      await AsyncStorage.setItem('category', specialization);
+      await AsyncStorage.setItem('yearsOfExperience', yearsOfExperience.toString());
+
+      // Save roles as a JSON string since AsyncStorage stores strings only
+      await AsyncStorage.setItem('currentSelectedRoles', JSON.stringify(currentSelectedRoles));
+
+      // Save the profile image
+      if (profileImage && typeof profileImage === 'string') {
+        await AsyncStorage.setItem('profileImage', profileImage);  // Assuming this is base64, save it as is
+      } else {
+        alert('Please upload a valid image.');
+        return;
+      }
+
       // Create a new FormData object
       const formData = new FormData();
       formData.append('about', aboutMe);
 
       // Convert base64 to Blob if profileImage is a base64 string
       if (profileImage && typeof profileImage === 'string') {
-        // Convert base64 string to Blob
         const blob = await fetch(profileImage).then(res => res.blob());
-
-        // Append the image blob directly to FormData with proper name and type
         formData.append('image', blob, 'profileImage.jpg');
-      } else {
-        alert('Please upload a valid image.');
-        return;
       }
-
-      // Append other fields to FormData
-      technicalSkills.forEach((skill, index) => {
-        formData.append(`skills[${index}]`, skill);
-      });
-
-      certifications.forEach((cert, index) => {
-        formData.append(`certifications[${index}]`, cert);
-      });
 
       formData.append('location', location);
       formData.append('category', specialization);
@@ -163,6 +164,7 @@ const ProfileUpdate = () => {
       alert('Failed to save. Please try again.');
     }
   };
+
 
 
 
@@ -207,7 +209,7 @@ const ProfileUpdate = () => {
         const response = await fetch(`${apiUrl}/api/expert/get-expert-profile`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Include the token
+            Authorization: `Bearer ${token}`, // Include the token
             'Content-Type': 'application/json',
           },
         });
@@ -215,15 +217,16 @@ const ProfileUpdate = () => {
         const data = await response.json();
 
         if (data.status === 'success' && data.profile) {
-          setAboutMe(data.profile.about);
-          setLocation(data.profile.location);
-          setProfileImage(data.profile.image_url);
-          setSelectedRoles(data.profile.specialization);
-          setSpecialization(data.profile.category);
-          setYearsOfExperience(data.profile.years_experience);
+          // Provide alternatives if certain fields are null or undefined
+          setAboutMe(data.profile.about || 'No description available');
+          setLocation(data.profile.location || 'Location not specified');
+          setProfileImage(data.profile.image_url || 'default');
+          setSelectedRoles(data.profile.specialization?.length > 0 ? data.profile.specialization : ['No roles selected']);
+          setSpecialization(data.profile.category || 'No specialization');
+          setYearsOfExperience(data.profile.years_experience || 'No experience specified');
         }
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error('Error fetching profile:', error);
       } finally {
         setLoading(false);
       }
@@ -231,21 +234,35 @@ const ProfileUpdate = () => {
 
     fetchProfile();
   }, []);
+
   
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500, paddingLeft: 20}}>
 
       {/* Profile Image */}
-      <View style={styles.field}>
-        <TouchableOpacity onPress={handleImageUpload} style={styles.imageUploadButton}>
-          {profileImage ? (
-            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-          ) : (
-            <Text style={styles.uploadText}>Upload Photo</Text>
+        <View style={styles.field}>
+          <TouchableOpacity onPress={handleImageUpload} style={styles.imageUploadButton}>
+            {profileImage && profileImage !== 'default' ? (
+              <Image source={{ uri: profileImage }} style={styles.profileImage} />
+            ) : (
+              <View style={styles.defaultImageContainer}>
+                <Image 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=lgyS725ZKMwY&format=png&color=000000' }} 
+                  style={styles.defaultImage}
+                />
+                <Text style={styles.uploadText}>Upload Photo</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+
+          {profileImage && profileImage !== 'default' && (
+            <TouchableOpacity onPress={() => setProfileImage('default')} style={styles.removeButton}>
+              <Text style={styles.removeButtonText}>Remove Photo</Text>
+            </TouchableOpacity>
           )}
-        </TouchableOpacity>
-      </View>
+        </View>
+
 
       {/* About Me */}
       <View style={styles.field}>
@@ -287,7 +304,7 @@ const ProfileUpdate = () => {
                 currentSelectedRoles.length > 0
                   ? currentSelectedRoles.join(', ')
                   : selectedRoles.length > 0
-                  ? selectedRoles.join(', ')
+                  ? selectedRoles
                   : 'Select specialization...'}
               editable={false} // Make it non-editable
             />
@@ -323,54 +340,7 @@ const ProfileUpdate = () => {
         />
       </View>
 
-        {/* Technical Skills */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Technical Skills</Text>
-          {technicalSkills.map((skill, index) => (
-            <View key={index} style={styles.inputGroup}>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter a skill"
-                placeholderTextColor={'grey'}
-                value={skill}
-                onChangeText={(value) => handleSkillChange(value, index)}
-              />
-              {technicalSkills.length > 1 && (
-                <TouchableOpacity onPress={() => handleRemoveSkill(index)} style={styles.removeButton}>
-                  <Text style={styles.removeButtonText}>remove</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ))}
-            
-          <TouchableOpacity onPress={handleAddSkill} style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add Skill</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Certifications */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Certifications</Text>
-          {certifications.map((cert, index) => (
-            <View key={index} style={styles.inputGroup}>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter a certification"
-                placeholderTextColor={'grey'}
-                value={cert}
-                onChangeText={(value) => handleCertificationChange(value, index)}
-              />
-              {certifications.length > 1 && (
-                <TouchableOpacity onPress={() => handleRemoveCertification(index)} style={styles.removeButton}>
-                  <Text style={styles.removeButtonText}>remove</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ))}
-          <TouchableOpacity onPress={handleAddCertification} style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add Certification</Text>
-          </TouchableOpacity>
-        </View>
+       
 
 
         {/* Location */}

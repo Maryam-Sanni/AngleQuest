@@ -204,7 +204,7 @@ function MyComponent({ onClose }) {
   const { t } = useTranslation();
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginTop: 40 }}>
+    <View style={{ flex: 1, backgroundColor: "white", alignItems: 'center', marginTop: 40 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
           <View style={styles.header}>
@@ -223,10 +223,10 @@ function MyComponent({ onClose }) {
 
           <View style={styles.container}>
             <View style={styles.row}>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Type")}</Text>
               </View>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={type}
                   style={styles.picker}
@@ -241,10 +241,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Role")}</Text>
               </View>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   placeholder={t("Example: SAP FI")}
                   placeholderTextColor="grey"
@@ -255,10 +255,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Tell us why you are taking this step")}</Text>
               </View>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   placeholder={t("Example: ‘Changing to SAP FI because of the direction of the job market’")}
                   placeholderTextColor="grey"
@@ -270,58 +270,53 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Rate your current level")}</Text>
+               <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Current level")}</Text>
               </View>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={startingLevel}
                   style={styles.picker}
                   onValueChange={(itemValue) => setStartingLevel(itemValue)}
                 >
-                   <Picker.Item label={t("Zero")} value="Zero" />
                   <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Junior")} value="Junior" />
+                   <Picker.Item label={t("Junior")} value="Junior" />
                   <Picker.Item label={t("Intermediate")} value="Intermediate" />
-                  <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
-                  <Picker.Item label={t("Manager")} value="Manager" />
-                  <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                  <Picker.Item label={t("Advanced")} value="Advanced" />
                 </Picker>
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Desired target level")}</Text>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Desired career level")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={targetLevel}
                   style={styles.picker}
                   onValueChange={(itemValue) => setTargetLevel(itemValue)}
                 >
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
                   <Picker.Item label={t("Junior")} value="Junior" />
-                  <Picker.Item label={t("Intermediate")} value="Intermediate" />
                   <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                   <Picker.Item label={t("Manager")} value="Manager" />
                   <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                 </Picker>
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Status")}</Text>
               </View>
-              <View style={styles.cell}>
-                <Picker
-                  selectedValue={status}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setStatus(itemValue)}
-                >
-                  <Picker.Item label={t("Active")} value="Active" />
-                </Picker>
+               <View style={[styles.cell, { flex: 2}]}>
+                 <TextInput
+                   placeholder={t("Active")}
+                   placeholderTextColor="grey"
+                   style={styles.input2}
+                   value={status}
+                   onChangeText={setStatus}
+                   editable={false}
+                 />
               </View>
             </View>
            
@@ -330,31 +325,31 @@ function MyComponent({ onClose }) {
             <Text style={{ fontSize: 15, color: 'black',  fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, }}>{expert}'s {t("available days and time")}</Text>
             <View style={styles.container}>
               <View style={styles.row}>
-                <View style={styles.cell}>
+                 <View style={[styles.cell, { flex: 1}]}>
                   <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
                 </View>
-                <View style={styles.cell}>
+                 <View style={[styles.cell, { flex: 2}]}>
                   <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
                     {expert_available_days}
                   </Text>
                 </View>
               </View>
               <View style={styles.row}>
-                <View style={styles.cell}>
+                 <View style={[styles.cell, { flex: 1}]}>
                   <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
                 </View>
-                <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
+                 <View style={[styles.cell, { flex: 2}]}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
                   </Text>
                 </View>
               </View>
             </View>
-           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select day and time for skill analysis session.")}</Text>
+           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 10 }}>{t("Select day and time for skill analysis session.")}  <Text style={{ fontSize: 15, color: 'black', marginTop: 30, marginBottom: -10,}}>{t("(This session will run for 40 minutes)")}</Text></Text> 
           <View style={styles.container}>
             <View style={styles.row}>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
               </View>
-              <View style={styles.cell}>
+               <View style={[styles.cell, { flex: 2}]}>
                 <TouchableOpacity
                   style={styles.dateTimeButton}
                   onPress={() => setIsModalVisible(true)}
@@ -403,8 +398,7 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 920,
-    height: '100%',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
   },
   row: {
     flexDirection: 'row',
@@ -418,10 +412,10 @@ const styles = StyleSheet.create({
   picker: {
     height: 20,
     width: '100%',
-    backgroundColor: '#F8F8F8',
-    borderColor: 'black',
+    backgroundColor: 'white',
+    borderColor: 'white',
     borderWidth: 1,
-    color: 'grey',
+    color: 'black',
     fontSize: 14,
   },
   buttonplus: {
@@ -440,11 +434,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Light',
   },
   input: {
-    borderColor: 'black',
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 5,
+    fontFamily: "Roboto-Light",
+    paddingLeft: 5,
+    fontSize: 14
+  },
+  input2: {
+    fontFamily: "Roboto-Light",
+    paddingLeft: 5,
     fontSize: 14,
+    color: 'grey'
   },
   closeButton: {
     position: 'absolute',
