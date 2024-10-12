@@ -432,21 +432,54 @@ function MyComponent({ onClose }) {
 
   <View style={styles.container}>
         <View style={styles.row}>
-          <View style={styles.cell}>
+           <View style={[styles.cell, { flex: 5}]}>
             <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Move candidate to the next level?")}</Text>
           </View>
-          <View style={styles.cell}>
+           <View style={[styles.cell, { flex: 1}]}>
           <Picker
             selectedValue={data?.rating}
              style={styles.picker}
              onValueChange={(itemValue) => setRating(itemValue)}
   >
+            <Picker.Item label=" " value=" " />
             <Picker.Item label="Yes" value="Yes" />
             <Picker.Item label="No" value="No" />
+           
   </Picker>
           </View>
           </View>
           </View>
+
+   <View style={[styles.container, { marginTop: 10 }]}>
+    <View style={styles.row}>
+       <View style={[styles.cell, { flex: 5}]}>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Are you continuing your growth plan with this candidate?")}</Text>
+      </View>
+       <View style={[styles.cell, { flex: 1}]}>
+      <Picker
+        selectedValue={data?.rating}
+         style={styles.picker}
+         onValueChange={(itemValue) => setRating(itemValue)}
+  >
+        <Picker.Item label=" " value=" " />
+        <Picker.Item label="Yes" value="Yes" />
+        <Picker.Item label="No" value="No" />
+        
+  </Picker>
+      </View>
+      </View>
+      </View>
+
+  <View style={[styles.container, { marginTop: 10 }]}>
+    <View style={styles.row}>
+       <View style={[styles.cell, { flex: 5}]}>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Set date and time for Growth Plan")}</Text>
+      </View>
+       <View style={[styles.cell, { flex: 1}]}>
+         <Text style={{ fontFamily: "Roboto-Light", color: 'blue', textDecorationLine: 'underline', fontStyle: 'italic' }}>Select</Text>
+      </View>
+      </View>
+      </View>
   
    <View style={{flexDirection: 'row'}}>
      <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>
@@ -463,8 +496,12 @@ function MyComponent({ onClose }) {
        </Text>
      </TouchableOpacity>
 
-      <TouchableOpacity style={styles.buttonAcc} onPress={handlePress}>
-        <Text style={styles.buttonTextplus}>{t("Save")}</Text>
+     <TouchableOpacity style={styles.buttonAcc} >
+       <Text style={styles.buttonText}>{t("Save as draft")}</Text>
+     </TouchableOpacity>
+     
+      <TouchableOpacity style={styles.buttonAcc2} onPress={handlePress}>
+        <Text style={styles.buttonText}>{t("Save and send")}</Text>
       </TouchableOpacity>
 
     </View>
@@ -527,16 +564,27 @@ const styles = StyleSheet.create({
     borderColor: 'black'
   },
   buttonAcc: {
-     backgroundColor: 'coral',
+     backgroundColor: '#206C00',
       padding: 10,
       marginTop: 30,
-      marginLeft: 500, 
-      marginRight: 70,
-      width: 100,
+      marginLeft: 350, 
+      marginRight: 10,
+      width: 120,
       paddingHorizontal: 5,
       marginBottom: 20,
       borderRadius: 5
     },
+  buttonAcc2: {
+   backgroundColor: 'coral',
+    padding: 10,
+    marginTop: 30,
+    marginLeft: 20, 
+    marginRight: 70,
+    width: 120,
+    paddingHorizontal: 5,
+    marginBottom: 20,
+    borderRadius: 5
+  },
     buttoncomplete: {
      backgroundColor: 'darkgreen',
       padding: 10,
@@ -548,6 +596,12 @@ const styles = StyleSheet.create({
        width: 150,
     },
   buttonTextplus: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily:"Roboto-Light"
+  },
+  buttonText: {
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
@@ -611,12 +665,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 20,
     marginBottom: 10
-  },
-  buttonTextplus: {
-    color: 'black',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: "Roboto-Light"
   },
   buttonplusDisabled: {
     backgroundColor: 'grey',

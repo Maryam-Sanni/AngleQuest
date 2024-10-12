@@ -41,7 +41,7 @@ import Footer from "../components/Footer";
 import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
- import OpenModal from "./Pickexpertadv";
+ import OpenModal from '../Jobseekers/SkillanalysisAI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -898,6 +898,8 @@ const AIScreen = () => {
     const values = [50, 65, 60, 45, 70, 55, 95]; // Your corresponding values
     return values[index];
   };
+
+  const placeholderHireCountries = ["United Kingdom", "Canada", "USA", "Germany", "Australia", "Netherlands"];
   
   const getValForCountry = (index) => {
     const values = [10, 8, 9, 6, 8, 5]; // Example values for each country
@@ -916,6 +918,8 @@ const AIScreen = () => {
     return colors[index];
   };
 
+  const placeholderCountries = ["Canada", "Netherland", "United Kingdom", "Germany", "Czech Replublic", "Argentina"];
+  
   const getValForCountrys = (index) => {
     const values = [115000, 90000, 100000, 86000, 75000, 80000]; // Example values for each country
     return values[index];
@@ -995,31 +999,36 @@ const AIScreen = () => {
                                         style={{ height: '100%', width: '100%',flex: 1}}
                                         >
                                         
-                                          <View style={styles.header}>
-                                            <View style={{flexDirection: 'row', marginLeft: 300}}>
-                                              <TouchableOpacity style ={styles.touch} onPress={GoToBack}>
+                                         
 
-                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}> {'<'} Back</Text>
-
+                                          <View style={{flexDirection: 'row', marginLeft: 250}}>
+                                            <TouchableOpacity onPress={GoToBack}>
+                                          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'none', width: 50, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 0 }}>
+                                            <Image
+                                              source={{ uri: 'https://img.icons8.com/?size=100&id=99857&format=png&color=FFFFFF' }}
+                                              style={{ width: 30, height: 30, marginTop: -5 }}
+                                            />
+                                          </View>
+                                          </TouchableOpacity>
+                                            <TouchableOpacity onPress={handleOpenPress}>
+                                              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                                              <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ New</Text>
+                                              </View>
                                               </TouchableOpacity>
-                                            <TouchableOpacity style ={styles.touch} onPress={handleOpenPress}>
-                                              
-                                                <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>+ New</Text>
-                                             
-                                            </TouchableOpacity>
-                                              <TouchableOpacity style ={styles.touch}>
+                                          <TouchableOpacity>
+                                            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
 
-                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>AI Analysis</Text>
+                                                            <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>AI Analysis</Text>
 
-                                              </TouchableOpacity>
-                                              <TouchableOpacity style ={styles.touch} onPress={GoToExpert}>
-
-                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>Expert Analysis</Text>
-
-                                              </TouchableOpacity>
-                                            </View>
-                                            </View>
-
+                                                          </View>
+                                             </TouchableOpacity>
+                                            <TouchableOpacity onPress={GoToExpert}>
+                                              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                                                              <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Expert Analysis</Text>
+                                                            </View>
+                                               </TouchableOpacity>
+                                          </View>
+                                          
             {step === 3 ? (
               <View style={styles.aiBody}>
                 <View style={styles.aiContainer}>
@@ -1477,17 +1486,24 @@ const AIScreen = () => {
                                   /><Text>s</Text>
                                     </Text>
                                   <View style={{ gap: 20 }}>
-                                    {apiData.top_countries_hire_rate ? (
+                                    {apiData?.top_countries_hire_rate?.length > 0 ? (
                                       apiData.top_countries_hire_rate.map((country, index) => (
-                                          <CountryLevels
-                                              key={index}
-                                              val={getValForCountry(index)} // Adjust as needed
-                                              color={getColorForCountry(index)} // Adjust as needed
-                                              title={country} // Country title
-                                          />
+                                        <CountryLevels
+                                          key={index}
+                                          val={getValForCountry(index)} // Use actual hire rates for countries
+                                          color={getColorForCountry(index)} // Use actual colors for each country
+                                          title={country} // Use the country name as the title
+                                        />
                                       ))
                                     ) : (
-                                      <div>No data available</div> // Message to display when there's no data
+                                      placeholderHireCountries.map((country, index) => (
+                                        <CountryLevels
+                                          key={index}
+                                          val={getValForCountry(index)} // Placeholder hire rates
+                                          color={getColorForCountry(index)} // Placeholder colors
+                                          title={country} // Placeholder country name
+                                        />
+                                      ))
                                     )}
 
 
@@ -1516,17 +1532,24 @@ const AIScreen = () => {
                                   }
                                 /><Text>s</Text>
                                 </Text><Row style={{ justifyContent: "space-around" }}>
-                                  {apiData.highest_paying_countries ? (
+                                  {apiData?.highest_paying_countries?.length > 0 ? (
                                     apiData.highest_paying_countries.map((country, index) => (
-                                        <CirclularLevels
-                                            key={index}
-                                            val={getValForCountrys(index)} // A function to get the value for each country
-                                            color={getColorForCountrys(index)} // A function to get the color for each country
-                                            title={country} // Use the country name as the title
-                                        />
+                                      <CirclularLevels
+                                        key={index}
+                                        val={getValForCountrys(index)} // Use the actual values for each country
+                                        color={getColorForCountrys(index)} // Use the actual colors for each country
+                                        title={country} // Use the country name as the title
+                                      />
                                     ))
                                   ) : (
-                                    <div>No data available</div> // Message to display when there's no data
+                                    placeholderCountries.map((country, index) => (
+                                      <CirclularLevels
+                                        key={index}
+                                        val={getValForCountrys(index)} // Use placeholder values
+                                        color={getColorForCountrys(index)} // Use placeholder colors
+                                        title={country} // Placeholder country name
+                                      />
+                                    ))
                                   )}
 
 
@@ -1930,7 +1953,7 @@ const AIScreen = () => {
                 </View>
               </View>
             ) : step === 6 ? (
-              <View style={[styles.aiBody, { minHeight: 900, marginTop: 100, marginLeft: 230 }]}>
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 50, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[

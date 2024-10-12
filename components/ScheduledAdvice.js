@@ -331,6 +331,8 @@ const ScheduledMeetingsTable = () => {
             </View>
           </View>
         </Modal>
+
+        
         
         <Modal
           animationType="slide"
@@ -383,7 +385,6 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: "90%",
-    position: 'relative',
     marginBottom: 20,
     marginLeft: 50,
     backgroundColor: 'rgba(225,225,212,0.3)',

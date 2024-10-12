@@ -28,7 +28,7 @@ import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
- import OpenModal from "./Pickexpertadv";
+ import OpenModal from '../Jobseekers/SkillanalysisAI';
 
 const Levels = ({ val }) => {
   const [levell, setLevell] = useState([]);
@@ -227,7 +227,10 @@ const AIScreen = () => {
   const animeHeight = useSharedValue(0);
   const animeHeight2 = useSharedValue(0);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
+  const GoToBack= () => {
+    navigate("/skill-analysis-sessions");
+  };
 
   const handleback = () => {
     navigate("/skill-analysis-sessions");
@@ -258,25 +261,35 @@ const AIScreen = () => {
 
                           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 
-                            <View style={styles.header}>
-                              <View style={{flexDirection: 'row'}}>
+                           
+
+                            <View style={{flexDirection: 'row', marginLeft: 250}}>
+                              <TouchableOpacity onPress={GoToBack}>
+                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'none', width: 50, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 0 }}>
+                                  <Image
+                                    source={{ uri: 'https://img.icons8.com/?size=100&id=99857&format=png&color=FFFFFF' }}
+                                    style={{ width: 30, height: 30, marginTop: -5 }}
+                                  />
+                                </View>
+                                </TouchableOpacity>
                               <TouchableOpacity onPress={handleOpenPress}>
-
-                                  <Text style={{color: '#666', fontWeight: '600', marginLeft: 300, fontSize: 14, marginTop: 5 }}>+ New</Text>
-
-                              </TouchableOpacity>
-                                <TouchableOpacity  onPress={GoToAI}>
-
-                                    <Text style={{color: '#666', fontWeight: '600', marginLeft: 50, fontSize: 14, marginTop: 5 }}>AI Analysis</Text>
-
+                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                                <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ New</Text>
+                                </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                              <TouchableOpacity  onPress={GoToAI}>
+                              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
 
-                                    <Text style={{color: '#666', fontWeight: '600', marginLeft: 50, fontSize: 14, marginTop: 5 }}>Expert Analysis</Text>
+                                              <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>AI Analysis</Text>
 
-                                </TouchableOpacity>
-                              </View>
-                              </View>
+                                            </View>
+                               </TouchableOpacity>
+                              <TouchableOpacity>
+                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                                                <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Expert Analysis</Text>
+                                              </View>
+                                 </TouchableOpacity>
+                            </View>
                             
               <View style={[styles.aiBody, { minHeight: 900, marginTop: 50, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
