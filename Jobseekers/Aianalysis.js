@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Switch,
   Alert,
-  ScrollView,
   ActivityIndicator,
+  ScrollView,
   TextInput
 } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -26,8 +26,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 
-import Top from "../components/HomeTop";
-import Top2 from "../components/TopExtra";
+import Topbar from '../components/topbar';
+import Sidebar from '../components/sidebar';
 import AIbgImage from "../assets/AIbg.png";
 import AQBot from "../assets/aq-bot11.png";
 import BotIMG from "../assets/aq-bot11.png";
@@ -41,6 +41,8 @@ import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
+
 
 const Levels = ({ val }) => {
   const [levell, setLevell] = useState([]);
@@ -567,7 +569,6 @@ const Step6Card = ({
     </View>
   );
 };
-
 const AIScreen = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -578,8 +579,7 @@ const AIScreen = () => {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
    const [isLoading, setIsLoading] = useState(false);
-  const certifications = apiData?.certifications_and_courses || [];
-
+  
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
     console.log("Scroll Position Y:", scrollY); 
@@ -629,10 +629,10 @@ const AIScreen = () => {
       </TouchableOpacity>
     );
   };
-
   const [openCV, setOpenCV] = useState(false);
   const [openQues, setOpenQues] = useState(false);
   const [switched, setSwitched] = useState(false);
+  const [analysisData, setAnalysisData] = useState(null);
   const [apiData, setApiData] = useState(null);
    const [loading, setLoading] = useState(true);
   const [specialization, setSpecialization] = useState("");
@@ -640,6 +640,8 @@ const AIScreen = () => {
   const animeHeight2 = useSharedValue(0);
   const [switchStates, setSwitchStates] = useState([]);
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleCV = () => {
     setOpenCV(!openCV);
     if (openCV) {
@@ -688,25 +690,6 @@ const AIScreen = () => {
       return newSwitchStates;
     });
   };
-
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const [isEnabled2, setIsEnabled2] = useState(false);
-  const [isEnabled3, setIsEnabled3] = useState(false);
-  const [isEnabled4, setIsEnabled4] = useState(false);
-  const [isEnabled5, setIsEnabled5] = useState(false);
-  const [isEnabled6, setIsEnabled6] = useState(false);
-  const [isEnabled7, setIsEnabled7] = useState(false);
-  const [isEnabled8, setIsEnabled8] = useState(false);
-  const [isEnabled9, setIsEnabled9] = useState(false);
-  const [isEnabled10, setIsEnabled10] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-  const toggleSwitch3 = () => setIsEnabled3((previousState) => !previousState);
-  const toggleSwitch4 = () => setIsEnabled4((previousState) => !previousState);
-  const toggleSwitch5 = () => setIsEnabled5((previousState) => !previousState);
-  const toggleSwitch6 = () => setIsEnabled6((previousState) => !previousState);
-  const toggleSwitch7 = () => setIsEnabled7((previousState) => !previousState);
-  const toggleSwitch8 = () => setIsEnabled8((previousState) => !previousState);
   const toggleSwitch9 = () => setIsEnabled9((previousState) => !previousState);
   const toggleSwitch10 = () =>
     setIsEnabled10((previousState) => !previousState);
@@ -714,8 +697,6 @@ const AIScreen = () => {
   const handleSubmit = () => {
     navigate("/welcome");
   };
-
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handlePress = () => {
     // Programmatically trigger the file input
@@ -830,105 +811,6 @@ const AIScreen = () => {
     }
   };
 
-  const [dataFetched, setDataFetched] = useState(false); // Track if data is fetched
-
-  const handleQuestionsResponse = async () => {
-    setIsLoading(true); // Start loading
-
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        throw new Error('No token found');
-      }
-
-      const responses = questions.map((question, index) => ({
-        id: question.id,
-        question: question.question,
-        answer: switchStates[index] ? "yes" : "no",
-      }));
-
-      const formData = new FormData();
-      formData.append(
-        'questions',
-        JSON.stringify({
-          specialization: specialization,
-          questions: JSON.stringify({ questions: responses }),
-        })
-      );
-
-      const response = await axios.post(
-        `${apiUrl}/api/jobseeker/process/questionnaire`,
-        formData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`, 
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      if (response.status >= 200 && response.status < 300) {
-        console.log("Submit Response:", response.data);
-        // Call the useEffect logic to fetch analysis data after successful form submission
-        setDataFetched(true); // Set dataFetched to true to trigger useEffect
-      } else {
-        Alert.alert("Submission Failed", "The request failed with status: " + response.status);
-      }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while submitting your responses.");
-      console.error("Submit Error:", error);
-    } finally {
-      setIsLoading(false); // Reset loading state
-    }
-  };
-
-  // Fetch analysis data in useEffect after successful form submission
-  useEffect(() => {
-    if (dataFetched) {
-      console.log('useEffect triggered');
-      const fetchTokenAndData = async () => {
-        try {
-          const token = await AsyncStorage.getItem('token');
-          console.log('Token:', token); // Verify if token is retrieved
-          if (token) {
-            const response = await axios.get(`${apiUrl}/api/jobseeker/cv/analysis`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            console.log('API Response:', response.data);
-
-            const analysisData = response.data.analysis;
-            let parsedAnalysis = {};
-
-            if (typeof analysisData.analysis === 'string') {
-              parsedAnalysis = JSON.parse(analysisData.analysis);
-            } else {
-              parsedAnalysis = analysisData.analysis;
-            }
-
-            console.log('Parsed Analysis Data:', parsedAnalysis);
-
-            setApiData(parsedAnalysis);
-
-            // Move to step 3 after data is fetched
-            handleStep(3);
-          } else {
-            console.error('Token not found');
-            Alert.alert('Error', 'Authentication token not found. Please log in again.');
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          Alert.alert('Error', 'Failed to fetch analysis data. Please try again later.');
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchTokenAndData();
-    }
-  }, [dataFetched]); // Trigger useEffect when dataFetched is true
-
-
-
   useEffect(() => {
     console.log('useEffect triggered');
     const fetchTokenAndData = async () => {
@@ -968,6 +850,20 @@ const AIScreen = () => {
     fetchTokenAndData();
   }, []);
 
+  
+  // Conditional rendering before the return statement
+  if (loading) {
+    // Render the loading state before the main return using a custom loading GIF
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          source={require('../assets/loading.gif')}  // Reference to your loading GIF
+          style={{ width: 100, height: 100 }}        // Customize the size of the GIF
+        />
+      </View>
+    );
+  }
+
   const getColorForCertification = (index, isSecondColor = false) => {
     const colors = [
       { color1: "#DE7423", color2: "#DD963336" },
@@ -986,7 +882,7 @@ const AIScreen = () => {
     const values = [50, 65, 60, 45, 70, 55, 95]; // Your corresponding values
     return values[index];
   };
-
+  
   const getValForCountry = (index) => {
     const values = [10, 8, 9, 6, 8, 5]; // Example values for each country
     return values[index];
@@ -1021,16 +917,6 @@ const AIScreen = () => {
     return colors[index];
   };
 
-
-  {/* Array of images corresponding to each reference */}
-  const images = [
-    require("../assets/udemy.png"),
-    require("../assets/youtube.png"),
-    require("../assets/udacity.png"),
-    require("../assets/coursera.png"),
-    require("../assets/udemy.png"),
-  ];
-
   const getPositionForLabel = (index) => {
     const positions = [
       {
@@ -1059,6 +945,16 @@ const AIScreen = () => {
     return positions[index % positions.length];
   };
 
+
+  {/* Array of images corresponding to each reference */}
+  const images = [
+    require("../assets/udemy.png"),
+    require("../assets/youtube.png"),
+    require("../assets/udacity.png"),
+    require("../assets/coursera.png"),
+    require("../assets/udemy.png"),
+  ];
+  
   const renderCertificationAndCourses = (data) => {
     return (
       <View style={{ position: "relative" }}>
@@ -1120,29 +1016,24 @@ const AIScreen = () => {
       </View>
     );
   };
-
+  
   return (
-          <View style={{ flex: 1, }}>
-            <Top2 tint={"dark"} />
-                <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
-                  <Top value={3} intensity={100} />
-                </View>
-                <ScrollView
-                  contentContainerStyle={{ flexGrow: 1 }}
-                  onScroll={handleScroll}  // Attach scroll listener
-                  scrollEventThrottle={16} // Frequency of scroll events
-                >
-          <View style={styles.container}>
-          <ImageBackground
-            source={AIbgImage}
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#0B281A",
-            }}
-          >
+                 
+                        <View style={{ flex: 1 }}>
+                            <Topbar />
+                            <View style={{ flexDirection: 'row', flex: 1 }}>
+                                <Sidebar />
+                            
 
-            {step === 1 ? (
+                                <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+                                  
+                                  <View style={styles.container}>
+                                        <ImageBackground
+                                          source={require ('../assets/backgroundimg2.png') }
+                                        style={{ height: '100%', width: '100%',flex: 1}}
+                                        >
+
+            {step === 3 ? (
               <View style={styles.aiBody}>
                 <View style={styles.aiContainer}>
                   <Image
@@ -1348,7 +1239,6 @@ const AIScreen = () => {
                               />
                               </TouchableOpacity>
                             </View>
-
                           </Animated.View>
                         )}
                         {/*openCV && (  )*/}
@@ -1435,7 +1325,7 @@ const AIScreen = () => {
                                     <Switch
                                       value={switchStates[index] || false}
                                       onValueChange={() => toggleSwitch(index)}
-                                      trackColor={{ false: "#767577", true: "lightgreen" }} 
+                                      trackColor={{ false: "#767577", true: "coral" }} 
                                       thumbColor={switchStates[index] ? "#fff" : "#fff"}
                                       style={styles.switch}
                                     />
@@ -1463,17 +1353,14 @@ const AIScreen = () => {
                               textColor={"black"}
                             />
                              </TouchableOpacity>
-                            <TouchableOpacity onPress={handleQuestionsResponse}>
-                              <MainButtons
-                                gradient
-                                title={isLoading ? "Submitting..." : "Submit"} // Change title based on loading state
-                                borderRadius={8}
-                                fontSize={16}
-                                width={170}
-                              />
-                              {isLoading && (
-                                <ActivityIndicator size="small" color="white" style={{ marginTop: -15 }} />
-                              )}
+                            <TouchableOpacity                onPress={() => handleStep(3)}>
+                            <MainButtons
+                              gradient
+                              onPress={() => handleStep(3)}
+                              title={"Submit"}
+                              borderRadius={8}
+                              fontSize={16}
+                            />
                             </TouchableOpacity>
                           </Row>
                         </View>
@@ -1482,8 +1369,8 @@ const AIScreen = () => {
                   </View>
                 </View>
               </View>
-            ) : step === 3 ? (
-              <View style={[styles.aiBody, { minHeight: 900, marginTop: 80 }]}>
+            ) : step === 1 ? (
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 50, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[
@@ -1505,6 +1392,7 @@ const AIScreen = () => {
                           backgroundColor: "white",
                         }}
                       >
+                       
                         <View
                           style={{
                             alignItems: "center",
@@ -1550,35 +1438,37 @@ const AIScreen = () => {
                                 },
                               ]}
                             >
-                              <Title
-                                textFamily={"Poppins-SemiBold"}
-                                textSize={16}
-                                title={"Courses & Certification"}
-                              />
-                              <View
-                                style={{
-                                  alignItems: "flex-end",
-                                  height: "100%",
-                                  paddingBottom: 20,
-                                  flexDirection: "row",
-                                  gap: 6,
-                                }}
-                              >  {apiData.three_months_step_by_step_guide.certifications_and_courses && apiData.three_months_step_by_step_guide.certifications_and_courses.length > 0 ? (
-                                  apiData.three_months_step_by_step_guide.certifications_and_courses.map((course, index) => (
-                                      <Barz
-                                          key={index}
-                                          color1={getColorForCertification(index)}
-                                          color2={getColorForCertification(index, true)}
-                                          val={getValForCertification(index)} // Use the refactored function here
-                                          title={course.certification}
-                                      />
-                                  ))
-                                ) : (
-                                  <div>No data available</div> // Message to display when there's no data
-                                )}
+                        <Title
+                            textFamily={"Poppins-SemiBold"}
+                            textSize={16}
+                            title={"Courses & Certification"}
+                          />
+                          <View
+                            style={{
+                              alignItems: "flex-end",
+                              height: "100%",
+                              paddingBottom: 20,
+                              flexDirection: "row",
+                              gap: 6,
+                            }}
+                          >
+                            {apiData.three_months_step_by_step_guide.certifications_and_courses && apiData.three_months_step_by_step_guide.certifications_and_courses.length > 0 ? (
+                              apiData.three_months_step_by_step_guide.certifications_and_courses.map((course, index) => (
+                                  <Barz
+                                      key={index}
+                                      color1={getColorForCertification(index)}
+                                      color2={getColorForCertification(index, true)}
+                                      val={getValForCertification(index)} // Use the refactored function here
+                                      title={course.certification}
+                                  />
+                              ))
+                            ) : (
+                              <div>No data available</div> // Message to display when there's no data
+                            )}
 
-                              </View>
-                            </View>
+
+                          </View>
+                        </View>
                             <View
                               style={[
                                 styles.step3Wrapper,
@@ -1590,28 +1480,32 @@ const AIScreen = () => {
                                 },
                               ]}
                             >
-                              <Text style={{fontSize: 16}}>Countries with the highest hire rate for |
-                              <Title
-                                textFamily={"Poppins-SemiBold"}
-                                textSize={16}
-                                title={                              
- (apiData.analysis?.current_position?.title || 'No title available')
-                                }
-                              /><Text>s</Text>
-                                </Text>
-                              <View style={{ gap: 20 }}>
-                                {apiData.top_countries_hire_rate ? (
-                                  apiData.top_countries_hire_rate.map((country, index) => (
-                                      <CountryLevels
-                                          key={index}
-                                          val={getValForCountry(index)} // Adjust as needed
-                                          color={getColorForCountry(index)} // Adjust as needed
-                                          title={country} // Country title
-                                      />
-                                  ))
-                                ) : (
-                                  <div>No data available</div> // Message to display when there's no data
-                                )}
+                                <Text style={{fontSize: 16}}>Countries with the highest hire rate for |
+                                  <Title
+                                    textFamily={"Poppins-SemiBold"}
+                                    textSize={16}
+                                    title={                              
+                                (apiData.analysis?.current_position?.title || 'No title available')
+                                    }
+                                  /><Text>s</Text>
+                                    </Text>
+                                  <View style={{ gap: 20 }}>
+                                    {apiData.top_countries_hire_rate ? (
+                                      apiData.top_countries_hire_rate.map((country, index) => (
+                                          <CountryLevels
+                                              key={index}
+                                              val={getValForCountry(index)} // Adjust as needed
+                                              color={getColorForCountry(index)} // Adjust as needed
+                                              title={country} // Country title
+                                          />
+                                      ))
+                                    ) : (
+                                      <div>No data available</div> // Message to display when there's no data
+                                    )}
+
+
+
+                                
                               </View>
                             </View>
                           </Row>
@@ -1626,27 +1520,30 @@ const AIScreen = () => {
                               },
                             ]}
                           >
-                            <Text style={{fontSize: 16}}>Highest Paying countries for | 
-                            <Title
-                              textFamily={"Poppins-SemiBold"}
-                              textSize={16}
-                              title={
-                                (apiData.analysis?.current_position?.title || 'No title available')
-                              }
-                            /><Text>s</Text>
-                            </Text><Row style={{ justifyContent: "space-around" }}>
-                              {apiData.highest_paying_countries ? (
-                                apiData.highest_paying_countries.map((country, index) => (
-                                    <CirclularLevels
-                                        key={index}
-                                        val={getValForCountrys(index)} // A function to get the value for each country
-                                        color={getColorForCountrys(index)} // A function to get the color for each country
-                                        title={country} // Use the country name as the title
-                                    />
-                                ))
-                              ) : (
-                                <div>No data available</div> // Message to display when there's no data
-                              )}
+                              <Text style={{fontSize: 16}}>Highest Paying countries for | 
+                                <Title
+                                  textFamily={"Poppins-SemiBold"}
+                                  textSize={16}
+                                  title={
+                                    (apiData.analysis?.current_position?.title || 'No title available')
+                                  }
+                                /><Text>s</Text>
+                                </Text><Row style={{ justifyContent: "space-around" }}>
+                                  {apiData.highest_paying_countries ? (
+                                    apiData.highest_paying_countries.map((country, index) => (
+                                        <CirclularLevels
+                                            key={index}
+                                            val={getValForCountrys(index)} // A function to get the value for each country
+                                            color={getColorForCountrys(index)} // A function to get the color for each country
+                                            title={country} // Use the country name as the title
+                                        />
+                                    ))
+                                  ) : (
+                                    <div>No data available</div> // Message to display when there's no data
+                                  )}
+
+
+                              
                             </Row>
                           </View>
                         </View>
@@ -1691,8 +1588,10 @@ const AIScreen = () => {
                   </View>
                 </View>
               </View>
+                                         
+                          
             ) : step === 4 ? (
-              <View style={[styles.aiBody, { minHeight: 900 }]}>
+              <View style={[styles.aiBody, { minHeight: 900, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[
@@ -1721,7 +1620,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <AIResultHeader
+                        <AIResultHeader
                             step={step}
                             subTitle={
                               "Learning References | How to learn your goals"
@@ -1752,6 +1651,8 @@ const AIScreen = () => {
                                 </>
                               );
                             })}
+                            
+                           
                           </View>
                         </View>
 
@@ -1796,7 +1697,7 @@ const AIScreen = () => {
                 </View>
               </View>
             ) : step === 5 ? (
-              <View style={[styles.aiBody, { minHeight: 900 }]}>
+              <View style={[styles.aiBody, { minHeight: 900, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[
@@ -1825,224 +1726,224 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                            <AIResultHeader
-                              step={step}
-                              subTitle={"Study Road Map | What to begin from"}
-                            />
-                            <View
-                              style={{ position: "relative", minHeight: 525 }}
-                            >
-                              <>
-                                <Step5Card
-                                  bgColor={"#5679EE"}
-                                  num={"1"}
-                                 title={apiData.six_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} 
-                                  text1={apiData.six_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} 
-                                  top={10}
-                                  left={-500}
-                                />
-                                {/* Arrow 1 */}
-                                <Step5Arrow
-                                  top={60}
-                                  left={-236}
-                                  height={105}
-                                  width={80}
-                                  bt
-                                  br
-                                  arrowBottom={11}
-                                  arrowRight={-7}
-                                  arrowType={"caretdown"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#17A398"}
-                                  num={"2"}
-                                  title={apiData.three_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.three_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  top={150}
-                                  left={-275}
-                                />
-                                {/* Arrow 2 */}
-                                <Step5Arrow
-                                  top={200}
-                                  left={-245}
-                                  height={95}
-                                  width={80}
-                                  bt
-                                  bl
-                                  arrowBottom={7}
-                                  arrowLeft={-8}
-                                  arrowType={"caretdown"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#FFC107"}
-                                  num={"3"}
-                                  title={apiData.nine_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.nine_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  top={285}
-                                  left={-375}
-                                />
-                                {/* Arrow 3 */}
-                                <Step5Arrow
-                                  bottom={86}
-                                  left={-350}
-                                  height={95}
-                                  width={80}
-                                  bt
-                                  bl
-                                  arrowBottom={7}
-                                  arrowLeft={-8}
-                                  arrowType={"caretdown"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#FF6F61"}
-                                  num={"4"}
-                                  title={apiData.six_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.six_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  bottom={-10}
-                                  left={-500}
-                                />
-                                {/* Arrow 4 */}
-                                <Step5Arrow
-                                  bottom={-45}
-                                  left={-236}
-                                  height={95}
-                                  width={123}
-                                  bt
-                                  arrowTop={-8}
-                                  arrowRight={3}
-                                  arrowType={"caretright"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#2ECC71"}
-                                  num={"5"}
-                                  title={apiData.three_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.three_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  bottom={10}
-                                  left={-170}
-                                />
-                                {/* Arrow 5 */}
-                                <Step5Arrow
-                                  bottom={-45}
-                                  right={-181}
-                                  height={95}
-                                  width={123}
-                                  bt
-                                  arrowTop={-8}
-                                  arrowRight={3}
-                                  arrowType={"caretright"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#C19682"}
-                                  num={"6"}
-                                  title={apiData.nine_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.nine_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  bottom={0}
-                                  right={-400}
-                                />
-                                {/* Arrow 6 */}
-                                <Step5Arrow
-                                  bottom={100}
-                                  right={-300}
-                                  height={95}
-                                  width={123}
-                                  br
-                                  bt
-                                  arrowTop={-7}
-                                  arrowRight={14}
-                                  arrowType={"caretleft"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#B4CBDB"}
-                                  num={"7"}
-                                  title={apiData.six_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.six_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  top={285}
-                                  right={-275}
-                                />
-                                {/* Arrow 7 */}
-                                <Step5Arrow
-                                  bottom={210}
-                                  right={-300}
-                                  height={95}
-                                  width={123}
-                                  bl
-                                  bt
-                                  arrowTop={-8}
-                                  arrowRight={80}
-                                  arrowType={"caretright"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#CDDCD0"}
-                                  num={"8"}
-                                  title={apiData.three_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.three_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  right={-442}
-                                  top={165}
-                                />
-                                {/* Arrow 8 */}
-                                <Step5Arrow
-                                  top={100}
-                                  right={-350}
-                                  height={95}
-                                  width={23}
-                                  br
-                                  bt
-                                  arrowTop={11}
-                                  arrowRight={-8}
-                                  arrowType={"caretup"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#40E0CD"}
-                                  num={"9"}
-                                  title={apiData.nine_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.nine_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  top={10}
-                                  right={-500}
-                                />
-                                {/* Arrow 9 */}
-                                <Step5Arrow
-                                  top={68}
-                                  right={-280}
-                                  height={30}
-                                  width={123}
-                                  br
-                                  bt
-                                  arrowTop={-7}
-                                  arrowRight={97}
-                                  arrowType={"caretleft"}
-                                />
-
-                                <Step5Card
-                                  bgColor={"#B284BE"}
-                                  num={"10"}
-                                  title={apiData.three_months_step_by_step_guide.study_road_map[3]?.area || 'No Title Available'} // Fallback if area is not present
-                                  text1={apiData.three_months_step_by_step_guide.study_road_map[3]?.details || 'No Details Available'} // Fallback if details are not present
-
-                                  top={30}
-                                  right={-170}
-                                />
-                              </>
-                              <Step4Image
-                                bottom={130}
-                                img={require("../assets/collaborationArt.png")}
-                                right={-470}
+                        <AIResultHeader
+                            step={step}
+                            subTitle={"Study Road Map | What to begin from"}
+                          />
+                          <View
+                            style={{ position: "relative", minHeight: 525 }}
+                          >
+                            <>
+                              <Step5Card
+                                bgColor={"#5679EE"}
+                                num={"1"}
+                               title={apiData.six_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} 
+                                text1={apiData.six_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} 
+                                top={10}
+                                left={-500}
                               />
+                              {/* Arrow 1 */}
+                              <Step5Arrow
+                                top={60}
+                                left={-236}
+                                height={105}
+                                width={80}
+                                bt
+                                br
+                                arrowBottom={11}
+                                arrowRight={-7}
+                                arrowType={"caretdown"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#17A398"}
+                                num={"2"}
+                                title={apiData.three_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                top={150}
+                                left={-275}
+                              />
+                              {/* Arrow 2 */}
+                              <Step5Arrow
+                                top={200}
+                                left={-245}
+                                height={95}
+                                width={80}
+                                bt
+                                bl
+                                arrowBottom={7}
+                                arrowLeft={-8}
+                                arrowType={"caretdown"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#FFC107"}
+                                num={"3"}
+                                title={apiData.nine_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.nine_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                top={285}
+                                left={-375}
+                              />
+                              {/* Arrow 3 */}
+                              <Step5Arrow
+                                bottom={86}
+                                left={-350}
+                                height={95}
+                                width={80}
+                                bt
+                                bl
+                                arrowBottom={7}
+                                arrowLeft={-8}
+                                arrowType={"caretdown"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#FF6F61"}
+                                num={"4"}
+                                title={apiData.six_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.six_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                bottom={-10}
+                                left={-500}
+                              />
+                              {/* Arrow 4 */}
+                              <Step5Arrow
+                                bottom={-45}
+                                left={-236}
+                                height={95}
+                                width={123}
+                                bt
+                                arrowTop={-8}
+                                arrowRight={3}
+                                arrowType={"caretright"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#2ECC71"}
+                                num={"5"}
+                                title={apiData.three_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                bottom={10}
+                                left={-170}
+                              />
+                              {/* Arrow 5 */}
+                              <Step5Arrow
+                                bottom={-45}
+                                right={-181}
+                                height={95}
+                                width={123}
+                                bt
+                                arrowTop={-8}
+                                arrowRight={3}
+                                arrowType={"caretright"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#C19682"}
+                                num={"6"}
+                                title={apiData.nine_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.nine_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                bottom={0}
+                                right={-400}
+                              />
+                              {/* Arrow 6 */}
+                              <Step5Arrow
+                                bottom={100}
+                                right={-300}
+                                height={95}
+                                width={123}
+                                br
+                                bt
+                                arrowTop={-7}
+                                arrowRight={14}
+                                arrowType={"caretleft"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#B4CBDB"}
+                                num={"7"}
+                                title={apiData.six_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.six_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                top={285}
+                                right={-275}
+                              />
+                              {/* Arrow 7 */}
+                              <Step5Arrow
+                                bottom={210}
+                                right={-300}
+                                height={95}
+                                width={123}
+                                bl
+                                bt
+                                arrowTop={-8}
+                                arrowRight={80}
+                                arrowType={"caretright"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#CDDCD0"}
+                                num={"8"}
+                                title={apiData.three_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                right={-442}
+                                top={165}
+                              />
+                              {/* Arrow 8 */}
+                              <Step5Arrow
+                                top={100}
+                                right={-350}
+                                height={95}
+                                width={23}
+                                br
+                                bt
+                                arrowTop={11}
+                                arrowRight={-8}
+                                arrowType={"caretup"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#40E0CD"}
+                                num={"9"}
+                                title={apiData.nine_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.nine_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                top={10}
+                                right={-500}
+                              />
+                              {/* Arrow 9 */}
+                              <Step5Arrow
+                                top={68}
+                                right={-280}
+                                height={30}
+                                width={123}
+                                br
+                                bt
+                                arrowTop={-7}
+                                arrowRight={97}
+                                arrowType={"caretleft"}
+                              />
+
+                              <Step5Card
+                                bgColor={"#B284BE"}
+                                num={"10"}
+                                title={apiData.three_months_step_by_step_guide.study_road_map[3]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[3]?.details || 'No Details Available'} // Fallback if details are not present
+
+                                top={30}
+                                right={-170}
+                              />
+                            </>
+                            <Step4Image
+                              bottom={130}
+                              img={require("../assets/collaborationArt.png")}
+                              right={-470}
+                            />
                           </View>
                         </View>
 
@@ -2087,7 +1988,7 @@ const AIScreen = () => {
                 </View>
               </View>
             ) : step === 6 ? (
-              <View style={[styles.aiBody, { minHeight: 900, marginTop: 100 }]}>
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 100, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[
@@ -2116,44 +2017,44 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                            <AIResultHeader
-                              step={step}
-                              subTitle={
-                                "Knowledge Gaps | Things that you need to learn"
-                              }
+                          <AIResultHeader
+                            step={step}
+                            subTitle={
+                              "Knowledge Gaps | Things that you need to learn"
+                            }
+                          />
+                          
+                          <View style={{ position: "relative", gap: 40 }}>
+                            <Step6Card
+                              bgColor1="#135837"
+                              bgColor2={"#29BE77"}
+                              num={"01"}
+                              title={apiData.three_months_step_by_step_guide.knowledge_gaps[0]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[0]?.area || 'No Area Available'}
+                              text1={apiData.three_months_step_by_step_guide.knowledge_gaps[0]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[0]?.details || 'No Details Available'}
                             />
-
-                            <View style={{ position: "relative", gap: 40 }}>
-                              <Step6Card
-                                bgColor1="#135837"
-                                bgColor2={"#29BE77"}
-                                num={"01"}
-                                title={apiData.three_months_step_by_step_guide.knowledge_gaps[0]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[0]?.area || 'No Area Available'}
-                                text1={apiData.three_months_step_by_step_guide.knowledge_gaps[0]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[0]?.details || 'No Details Available'}
-                              />
-                              <Step6Card
-                                reversed
-                                bgColor1="#1C4A8A"
-                                bgColor2={"#3197DA"}
-                                num={"02"}
-                                title={apiData.three_months_step_by_step_guide.knowledge_gaps[1]?.area}
-                                text1={apiData.three_months_step_by_step_guide.knowledge_gaps[1]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[1]?.details || 'No Details Available'}
-                              />
-                              <Step6Card
-                                bgColor1="#8F1987"
-                                bgColor2={"#DF2783"}
-                                num={"03"}
-                                title={apiData.three_months_step_by_step_guide.knowledge_gaps[2]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[2]?.area || 'No Area Available'}
-                                text1={apiData.three_months_step_by_step_guide.knowledge_gaps[2]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[2]?.details || 'No Details Available'}
-                              />
-                              <Step6Card
-                                reversed
-                                bgColor1="#13E3D2"
-                                bgColor2={"#0E7B75"}
-                                num={"04"}
-                                title={apiData.three_months_step_by_step_guide.knowledge_gaps[3]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[3]?.area || 'No Area Available'}
-                                text1={apiData.three_months_step_by_step_guide.knowledge_gaps[3]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[3]?.details || 'No Details Available'}
-                              />
+                            <Step6Card
+                              reversed
+                              bgColor1="#1C4A8A"
+                              bgColor2={"#3197DA"}
+                              num={"02"}
+                              title={apiData.three_months_step_by_step_guide.knowledge_gaps[1]?.area}
+                              text1={apiData.three_months_step_by_step_guide.knowledge_gaps[1]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[1]?.details || 'No Details Available'}
+                            />
+                            <Step6Card
+                              bgColor1="#8F1987"
+                              bgColor2={"#DF2783"}
+                              num={"03"}
+                              title={apiData.three_months_step_by_step_guide.knowledge_gaps[2]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[2]?.area || 'No Area Available'}
+                              text1={apiData.three_months_step_by_step_guide.knowledge_gaps[2]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[2]?.details || 'No Details Available'}
+                            />
+                            <Step6Card
+                              reversed
+                              bgColor1="#13E3D2"
+                              bgColor2={"#0E7B75"}
+                              num={"04"}
+                              title={apiData.three_months_step_by_step_guide.knowledge_gaps[3]?.area || apiData.nine_months_step_by_step_guide.knowledge_gaps[3]?.area || 'No Area Available'}
+                              text1={apiData.three_months_step_by_step_guide.knowledge_gaps[3]?.details || apiData.nine_months_step_by_step_guide.knowledge_gaps[3]?.details || 'No Details Available'}
+                            />
                           </View>
                         </View>
 
@@ -2196,12 +2097,16 @@ const AIScreen = () => {
                 </View>
               </View>
             ) : null}
-            {/* <MainFooter />*/}
-            <Footer />
-          </ImageBackground>
+        
+                                           </ImageBackground>
         </View>
+                             
       </ScrollView>
+                                 
     </View>
+                          </View>
+                         
+                        
   );
 };
 

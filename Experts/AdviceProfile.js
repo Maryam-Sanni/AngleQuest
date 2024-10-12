@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Image, ScrollView, Picker } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
@@ -19,58 +19,100 @@ function MyComponent({ onClose }) {
 
   const { t } = useTranslation();
 
-  const [role, setSkillsAnalysisRole] = useState('');
-   const [category, setCategory] = useState('');
-  const [level, setLevel] = useState('');
-  const [availableDays, setAvailableDays] = useState('');
-  const [availableTimes, setAvailableTimes] = useState('');
-  const [topics, setTopics] = useState([{ topic: '', percentage: '' }]);
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
-  const [isPressed, setIsPressed] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [rate, setRate] = useState('$0'); // Initial value includes $
+      const [role, setSkillsAnalysisRole] = useState('expert');
+       const [category, setCategory] = useState('');
+      const [location, setLocation] = useState('');
+      const [yearsOfExperience, setYearsOfExperience] = useState('');
+      const [profileImage, setProfileImage] = useState('');
+      const [selectedRoles, setSelectedRoles] = useState([]);
+      const [selectedRole, setSelectedRole] = useState('');
+      const [level, setLevel] = useState('Beginner');
+      const [availableDays, setAvailableDays] = useState('');
+      const [availableTimes, setAvailableTimes] = useState('');
+      const [topics, setTopics] = useState([{ topic: '', percentage: '' }]);
+      const [alertVisible, setAlertVisible] = useState(false);
+      const [alertMessage, setAlertMessage] = useState('');
+      const [isVisible, setIsVisible] = useState(true);
+      const [isPressed, setIsPressed] = useState(false);
+      const [isModalVisible, setModalVisible] = useState(false);
+      const [rate, setRate] = useState('$0'); // Initial value includes $
 
-  const handleRateChange = (text) => {
-    // Remove non-numeric characters except for the decimal point
-    const numericValue = text.replace(/[^0-9.]/g, '');
+      const handleRateChange = (text) => {
+        // Remove non-numeric characters except for the decimal point
+        const numericValue = text.replace(/[^0-9.]/g, '');
 
-    // If the input is not empty, set the state with the `$` at the start
-    if (numericValue || numericValue === '') {
-      setRate(`$${numericValue}`);
-    }
-  };
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  
-  const handleConfirm = ({ selectedDays, startTime, endTime }) => {
-    // Ensure selectedDays is always an array
-    setAvailableDays(Array.isArray(selectedDays) ? selectedDays : []);
-    setAvailableTimes(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
-    setModalVisible(false);
-  };
-
-  // Ensure availableDays is an array before calling join
-  const combinedValue = `${Array.isArray(availableDays) ? availableDays.join(', ') : ''}, ${availableTimes}`;
-
-  const handleSave = async () => {
-    if (!role || !level || !rate || !availableDays || !availableTimes) {
-      setAlertMessage(t('Please fill all fields'));
-      setAlertVisible(true);
-      return;
-    }
-
-    try {
-      const data = {
-        role,
-        level,
-        rate,
-        available_days: availableDays,
-        available_times: availableTimes,
-        category,
-        topics
+        // If the input is not empty, set the state with the `$` at the start
+        if (numericValue || numericValue === '') {
+          setRate(`$${numericValue}`);
+        }
       };
+
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      const handleConfirm = ({ selectedDays, startTime, endTime }) => {
+        // Ensure selectedDays is always an array
+        setAvailableDays(Array.isArray(selectedDays) ? selectedDays : []);
+        setAvailableTimes(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
+        setModalVisible(false);
+      };
+
+      // Ensure availableDays is an array before calling join
+      const combinedValue = `${Array.isArray(availableDays) ? availableDays.join(', ') : ''}, ${availableTimes}`;
+
+
+      const getProfileData = async () => {
+        try {
+          const storedLocation = await AsyncStorage.getItem('location');
+          const storedCategory = await AsyncStorage.getItem('category');
+          const storedYearsOfExperience = await AsyncStorage.getItem('yearsOfExperience');
+          const storedProfileImage = await AsyncStorage.getItem('profileImage');
+          const storedRoles = await AsyncStorage.getItem('currentSelectedRoles');
+          const parsedRoles = storedRoles ? JSON.parse(storedRoles) : [];
+
+          // Set the state with retrieved data
+          if (storedLocation) setLocation(storedLocation);
+          if (storedCategory) setCategory(storedCategory);
+          if (storedYearsOfExperience) setYearsOfExperience(storedYearsOfExperience);
+
+          // Convert storedProfileImage to Blob
+          if (storedProfileImage && typeof storedProfileImage === 'string') {
+            const blob = await fetch(storedProfileImage).then((res) => res.blob());
+            setProfileImage(URL.createObjectURL(blob));  // Convert the blob to a URL to use in <Image> component
+          }
+
+          setSelectedRoles(parsedRoles);  // Set roles, parsing the JSON string
+        } catch (error) {
+          console.error('Error retrieving data from AsyncStorage:', error);
+        }
+      };
+
+      // useEffect to load the profile data when the component mounts
+      useEffect(() => {
+        getProfileData();
+      }, []);
+
+
+
+      const handleSave = async () => {
+        if ( !level || !rate || !availableDays || !availableTimes) {
+          setAlertMessage(t('Please fill all fields'));
+          setAlertVisible(true);
+          return;
+        }
+
+        try {
+          const data = {
+            role,
+            level,
+            rate,
+            specialization: selectedRole,
+            years_experience: yearsOfExperience,
+            location,
+            available_days: availableDays,
+            available_times: availableTimes,
+            category,
+            topics
+          };
 
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
@@ -148,39 +190,46 @@ function MyComponent({ onClose }) {
   </View>
 </View>
 
-<View style={styles.container}>
-  <View style={styles.row}>
-     <View style={[styles.cell, { flex: 1}]}>
-      <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+  <View style={styles.container}>
+    <View style={styles.row}>
+       <View style={[styles.cell, { flex: 1}]}>
+        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+      </View>
+       <View style={[styles.cell, { flex: 2}]}>
+        <TextInput
+          placeholder="Category"
+          placeholderTextColor="black"
+          style={styles.input}
+          editable={false}
+          value={category || "Update your personal information"}
+        />
+      </View>
     </View>
-     <View style={[styles.cell, { flex: 2}]}>
-      <TextInput
-        placeholder="SAP"
-        placeholderTextColor="black"
-        style={styles.input}
-        editable={false}
-        value={role}
-        onChangeText={text => setSkillsAnalysisRole(text)}
-      />
+    <View style={styles.row}>
+      <View style={[styles.cell, { flex: 1 }]}>
+        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+          Specialization
+        </Text>
+      </View>
+      <View style={[styles.cell, { flex: 2 }]}>
+        <Picker
+          selectedValue={selectedRole}  // Use the selected value state
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedRole(itemValue)}  // Update selected role when changed
+        >
+          {/* Add an alternative option when no roles are selected */}
+          <Picker.Item label="Select a specialization" value="" />
+
+          {selectedRoles.length > 0 ? (
+            selectedRoles.map((role, index) => (
+              <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item
+            ))
+          ) : (
+            <Picker.Item label="Update your personal information" value="no_roles" />  // Fallback when no roles exist
+          )}
+        </Picker>
+      </View>
     </View>
-  </View>
-  <View style={styles.row}>
-    <View style={[styles.cell, { flex: 1}]}>
-      <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
-    </View>
-    <View style={[styles.cell, { flex: 2}]}>
-      <Picker
-        selectedValue={category}
-        style={styles.picker}
-        onValueChange={(itemValue) => setCategory(itemValue)}
-      >
-        <Picker.Item label={t('SAP FI')} value="SAP" />
-        <Picker.Item label={t('Microsoft')} value="Microsoft" />
-        <Picker.Item label={t('Scrum')} value="Scrum" />
-        <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
-      </Picker>
-    </View>
-  </View>
   <View style={styles.row}>
     <View style={[styles.cell, { flex: 1}]}>
       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
@@ -364,7 +413,9 @@ backgroundColor: 'white',
 borderColor: '#CCC',
 borderWidth: 1,
 color: 'black',
+  fontSize: 14,
 },
+  
 deleteButton: {
 marginTop: 10
 },

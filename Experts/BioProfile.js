@@ -118,9 +118,19 @@ const ProfileUpdate = () => {
       // Save roles as a JSON string since AsyncStorage stores strings only
       await AsyncStorage.setItem('currentSelectedRoles', JSON.stringify(currentSelectedRoles));
 
-      // Save the profile image
+      // Convert profile image to base64 and save to AsyncStorage if it's not already a base64 string
       if (profileImage && typeof profileImage === 'string') {
-        await AsyncStorage.setItem('profileImage', profileImage);  // Assuming this is base64, save it as is
+        // Save profileImage as base64 directly in AsyncStorage
+        await AsyncStorage.setItem('profileImage', profileImage);
+      } else if (profileImage) {
+        // If profileImage is a Blob, convert it to base64 first
+        const blob = await fetch(profileImage).then(res => res.blob());
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); // Converts Blob to base64
+        reader.onloadend = async () => {
+          const base64data = reader.result;
+          await AsyncStorage.setItem('profileImage', base64data); // Save base64 string in AsyncStorage
+        };
       } else {
         alert('Please upload a valid image.');
         return;

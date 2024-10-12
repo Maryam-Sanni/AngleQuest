@@ -188,8 +188,9 @@ function MyComponent() {
     }
   };
 
+  
   const gotoresult = () => {
-    navigate('/ai-result');
+    navigate('/ai-analysis');
     onClose();
   };
 

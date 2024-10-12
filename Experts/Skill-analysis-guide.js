@@ -206,7 +206,7 @@ function MyComponent({ onClose }) {
                   placeholderTextColor="black"
                   style={styles.input}
                   editable={false}
-                  value={category}
+                  value={category || "Update your personal information"}
                 />
               </View>
             </View>
@@ -222,12 +222,20 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                   onValueChange={(itemValue) => setSelectedRole(itemValue)}  // Update selected role when changed
                 >
-                  {selectedRoles.map((role, index) => (
-                    <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item
-                  ))}
+                  {/* Add an alternative option when no roles are selected */}
+                  <Picker.Item label="Select a specialization" value="" />
+
+                  {selectedRoles.length > 0 ? (
+                    selectedRoles.map((role, index) => (
+                      <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item
+                    ))
+                  ) : (
+                    <Picker.Item label="Update your personal information" value="no_roles" />  // Fallback when no roles exist
+                  )}
                 </Picker>
               </View>
             </View>
+
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
@@ -411,6 +419,7 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     borderWidth: 1,
     color: 'black',
+    fontSize: 14,
   },
   deleteButton: {
 marginTop: 10
