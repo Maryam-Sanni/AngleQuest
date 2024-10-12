@@ -174,7 +174,7 @@ function MyComponent({ onClose }) {
   const handlePressOut = () => {
     setIsPressed(false);
   };
-
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center' }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -238,7 +238,7 @@ function MyComponent({ onClose }) {
 
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Level")}</Text>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Candidate Starting Level")}</Text>
               </View>
               <View style={[styles.cell, { flex: 2}]}>
                 <Picker

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Switch,
   Alert,
+  Modal,
   ScrollView,
   TextInput
 } from "react-native";
@@ -27,6 +28,7 @@ import MainButtons from "../LandingPage/MainButton";
 import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
+ import OpenModal from "./Pickexpertadv";
 
 const Levels = ({ val }) => {
   const [levell, setLevell] = useState([]);
@@ -224,15 +226,25 @@ const AIScreen = () => {
   const [step, setStep] = useState(1);
   const animeHeight = useSharedValue(0);
   const animeHeight2 = useSharedValue(0);
-
+  const [modalVisible, setModalVisible] = useState(false);
   
 
   const handleback = () => {
     navigate("/skill-analysis-sessions");
   };
 
- 
+  const GoToAI = () => {
+    navigate("/ai-analysis");
+  };
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
   return (
             <ImageBackground
               source={require ('../assets/backgroundimg2.png') }
@@ -246,7 +258,27 @@ const AIScreen = () => {
 
                           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
 
-              <View style={[styles.aiBody, { minHeight: 900, marginTop: 10, marginLeft: 230 }]}>
+                            <View style={styles.header}>
+                              <View style={{flexDirection: 'row'}}>
+                              <TouchableOpacity onPress={handleOpenPress}>
+
+                                  <Text style={{color: '#666', fontWeight: '600', marginLeft: 300, fontSize: 14, marginTop: 5 }}>+ New</Text>
+
+                              </TouchableOpacity>
+                                <TouchableOpacity  onPress={GoToAI}>
+
+                                    <Text style={{color: '#666', fontWeight: '600', marginLeft: 50, fontSize: 14, marginTop: 5 }}>AI Analysis</Text>
+
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+
+                                    <Text style={{color: '#666', fontWeight: '600', marginLeft: 50, fontSize: 14, marginTop: 5 }}>Expert Analysis</Text>
+
+                                </TouchableOpacity>
+                              </View>
+                              </View>
+                            
+              <View style={[styles.aiBody, { minHeight: 900, marginTop: 50, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
                   <View
                     style={[
@@ -403,22 +435,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <MainButtons
-                            title={"Download pdf"}
-                            borderRadius={8}
-                            center
-                            fontSize={16}
-                            width={226}
-                            icon={
-                              <AntDesign
-                                name="download"
-                                size={20}
-                                color="#135837"
-                              />
-                            }
-                            bgColor={"white"}
-                            textColor={"#135837"}
-                          />
+                          
                           
                         </Row>
                       </View>
@@ -427,6 +444,16 @@ const AIScreen = () => {
                 </View>
 
         </View>
+                            <Modal
+                              animationType="slide"
+                              transparent={true}
+                              visible={modalVisible}
+                              onRequestClose={handleCloseModal}
+                            >
+                              <View style={styles.modalContent}>
+                                <OpenModal onClose={() => handleCloseModal()} />
+                              </View>
+                            </Modal>
       </ScrollView>
     </View>
               </View>
@@ -447,6 +474,12 @@ const styles = StyleSheet.create({
     gap: 50,
     width: 750,
     minHeight: 400,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   step3Wrapper: {
     borderRadius: 20,
@@ -613,5 +646,35 @@ const styles = StyleSheet.create({
     width: 100, 
     height: 100, 
     resizeMode: 'contain', 
+  },
+  header: {
+    marginLeft: -60,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(225,225,212,0.3)',
+    backgroundColor: '#f7fff4',
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginRight: 10, 
+  }, 
+  headertext: {
+    marginLeft: 10,
+    fontSize: 14,
+    fontWeight: 'normal',
+    marginTop: 7, 
+    color: 'black'
+  },
+  image: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+    marginLeft: 100,
+  marginTop: 5,
+  tintColor: '#666',
   },
 });

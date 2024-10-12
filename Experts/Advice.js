@@ -463,14 +463,8 @@ function MyComponent() {
           <View style={styles.header}>
 
 
-            
-
                           </View>
-                          <TouchableOpacity onPress={handleOpenPress2}>
-          <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                      <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
-                    </View>
-          </TouchableOpacity>
+                         <View style={{flexDirection: 'row'}}>
                     
           <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
@@ -478,6 +472,12 @@ function MyComponent() {
                   </View>
      </TouchableOpacity>
           
+          <TouchableOpacity onPress={handleOpenPress2}>
+            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
+                            <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
+                          </View>
+             </TouchableOpacity>
+                         </View>
 
  <Modal
         animationType="slide"

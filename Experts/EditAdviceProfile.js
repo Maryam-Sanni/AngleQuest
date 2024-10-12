@@ -18,7 +18,7 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
   
   const [role, setSkillsAnalysisRole] = useState('');
-  const [category, setCategory] = useState('category');
+  const [category, setCategory] = useState('');
         const [level, setlevel] = useState('');
         const [rate, setrate] = useState('');
         const [available_days, setavailable_days] = useState('');
@@ -52,6 +52,7 @@ function MyComponent({ onClose }) {
                       const data = response.data.SkillAnalysis; // Access the SkillAnalysis property
                       setSkillsAnalysisRole(data.role || '');
                       setlevel(data.level || '');
+                    setCategory(data.category || '');
                       setrate(data.rate || '');
                       setavailable_days(data.available_days || '');
                       setavailable_times(data.available_times || '');
@@ -132,7 +133,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Edit Skills Analysis Profile")}</Text>
+          <Text style={styles.headerText}>{t("Edit Skills Analysis Guide")}</Text>
        
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
@@ -142,44 +143,23 @@ function MyComponent({ onClose }) {
         </View> 
                
 
-    <View style={{ flexDirection: "row", marginBottom: 10}}>
-<TouchableOpacity style={styles.buttonDue} >
-      <Text style={styles.buttonTextDue}>{role}</Text>
-    </TouchableOpacity>
-</View>
+   
 
 
 
  <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Role")}</Text>
-        </View>
-        <View style={styles.cell}>
-           <TextInput
-            placeholder="Junior Platform Developer"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={role}
-            onChangeText={text => setSkillsAnalysisRole(text)}
-          />
-        </View>
-      </View>
    <View style={styles.row}>
      <View style={styles.cell}>
        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
      </View>
      <View style={styles.cell}>
-       <Picker
-         selectedValue={category}
-         style={styles.picker}
-         onValueChange={(itemValue) => setCategory(itemValue)}
-       >
-         <Picker.Item label={t('SAP')} value="SAP" />
-         <Picker.Item label={t('Microsoft')} value="Microsoft" />
-         <Picker.Item label={t('Scrum')} value="Scrum" />
-         <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
-       </Picker>
+       <TextInput
+         placeholder="Category"
+         placeholderTextColor="black"
+         style={styles.input}
+         editable={false}
+         value={category || "Update your personal information"}
+       />
      </View>
    </View>
    <View style={styles.row}>
@@ -188,13 +168,13 @@ function MyComponent({ onClose }) {
      </View>
      <View style={styles.cell}>
        <Picker
-         selectedValue={level}
+         selectedValue={level} // Set the selected value from the backend data
          style={styles.picker}
-         onValueChange={(itemValue) => setlevel(itemValue)}
+         onValueChange={(itemValue) => setLevel(itemValue)} // Update state when a new level is selected
        >
-         <Picker.Item label={t('Beginner')} value="Beginner" />
-         <Picker.Item label={t('Intermediate')} value="Intermediate" />
-         <Picker.Item label={t('Advanced')} value="Advanced" />
+         <Picker.Item label="Beginner" value="Beginner" />
+         <Picker.Item label="Intermediate" value="Intermediate" />
+         <Picker.Item label="Advanced" value="Advanced" />
        </Picker>
      </View>
    </View>

@@ -228,7 +228,7 @@ const ProfileUpdate = () => {
 
         if (data.status === 'success' && data.profile) {
           // Provide alternatives if certain fields are null or undefined
-          setAboutMe(data.profile.about || 'No description available');
+          setAboutMe(data.profile.about || 'Write something about yourself');
           setLocation(data.profile.location || 'Location not specified');
           setProfileImage(data.profile.image_url || 'default');
           setSelectedRoles(data.profile.specialization?.length > 0 ? data.profile.specialization : ['No roles selected']);
@@ -279,7 +279,7 @@ const ProfileUpdate = () => {
         <Text style={styles.label}>About Me</Text>
         <TextInput
           style={styles.input}
-          placeholder="Tell us about yourself"
+          placeholder="Write something about yourself"
           placeholderTextColor={'grey'}
           multiline
           value={aboutMe}

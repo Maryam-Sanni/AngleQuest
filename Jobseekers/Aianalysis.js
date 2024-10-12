@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Switch,
   Alert,
+  Modal,
+  Linking,
   ActivityIndicator,
   ScrollView,
   TextInput
@@ -39,6 +41,7 @@ import Footer from "../components/Footer";
 import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
+ import OpenModal from "./Pickexpertadv";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -266,12 +269,16 @@ const Step4Label = ({
         style={{}}
         title={title}
       />
-      <Title
-        textColor={"#5268C1"}
-        style={{ width: 293 }}
-        textSize={10}
-        title={link}
-      />
+      {link && (
+        <TouchableOpacity onPress={() => Linking.openURL(link)}>
+          <Title
+            textColor="#5268C1"
+            style={{ width: 293 }}
+            textSize={10}
+            title={link}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -639,6 +646,7 @@ const AIScreen = () => {
   const animeHeight = useSharedValue(0);
   const animeHeight2 = useSharedValue(0);
   const [switchStates, setSwitchStates] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
    const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -698,6 +706,14 @@ const AIScreen = () => {
     navigate("/welcome");
   };
 
+  const GoToExpert = () => {
+    navigate("/expert-analysis");
+  };
+
+  const GoToBack= () => {
+    navigate("/skill-analysis-sessions");
+  };
+  
   const handlePress = () => {
     // Programmatically trigger the file input
     fileInputRef.current.click();
@@ -955,66 +971,12 @@ const AIScreen = () => {
     require("../assets/udemy.png"),
   ];
   
-  const renderCertificationAndCourses = (data) => {
-    return (
-      <View style={{ position: "relative" }}>
-        {/* For Certification 1 */}
-        <Step4Image
-          top={85}
-          left={188}
-          img={require("../assets/udemy.png")}
-        />
-        <Step4Label
-          title={data.certifications[0].certification}
-          link={data.certifications[0].link}
-          borderTopColor="#78CB57"
-          borderRightColor="#78CB57"
-          top={4}
-          left={-148}
-          paddingTop={20}
-          width={360}
-          height={52}
-        />
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
 
-        {/* For Certification 2 */}
-        <Step4Image
-          left={69}
-          bottom={270}
-          img={require("../assets/youtube.png")}
-        />
-        <Step4Label
-          title={data.certifications[1].certification}
-          link={data.certifications[1].link}
-          borderBottomColor="#7E62B4"
-          borderRightColor="#7E62B4"
-          bottom={130}
-          left={-208}
-          paddingBottom={20}
-          width={302}
-          height={100}
-        />
-
-        {/* For Certification 3 */}
-        <Step4Image
-          left={182}
-          bottom={110}
-          img={require("../assets/udacity.png")}
-        />
-        <Step4Label
-          title={data.certifications[2].certification}
-          link={data.certifications[2].link}
-          borderBottomColor="#5583A5"
-          borderRightColor="#5583A5"
-          bottom={-5}
-          left={-116}
-          paddingBottom={20}
-          width={317}
-          height={70}
-        />
-
-        {/* Add more certifications and courses as needed */}
-      </View>
-    );
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
   
   return (
@@ -1032,6 +994,31 @@ const AIScreen = () => {
                                           source={require ('../assets/backgroundimg2.png') }
                                         style={{ height: '100%', width: '100%',flex: 1}}
                                         >
+                                        
+                                          <View style={styles.header}>
+                                            <View style={{flexDirection: 'row', marginLeft: 300}}>
+                                              <TouchableOpacity style ={styles.touch} onPress={GoToBack}>
+
+                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}> {'<'} Back</Text>
+
+                                              </TouchableOpacity>
+                                            <TouchableOpacity style ={styles.touch} onPress={handleOpenPress}>
+                                              
+                                                <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>+ New</Text>
+                                             
+                                            </TouchableOpacity>
+                                              <TouchableOpacity style ={styles.touch}>
+
+                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>AI Analysis</Text>
+
+                                              </TouchableOpacity>
+                                              <TouchableOpacity style ={styles.touch} onPress={GoToExpert}>
+
+                                                  <Text style={{color: '#666', fontWeight: '600', fontSize: 14, marginTop: 5 }}>Expert Analysis</Text>
+
+                                              </TouchableOpacity>
+                                            </View>
+                                            </View>
 
             {step === 3 ? (
               <View style={styles.aiBody}>
@@ -1555,22 +1542,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <MainButtons
-                            title={"Download pdf"}
-                            borderRadius={8}
-                            center
-                            fontSize={16}
-                            width={226}
-                            icon={
-                              <AntDesign
-                                name="download"
-                                size={20}
-                                color="#135837"
-                              />
-                            }
-                            bgColor={"white"}
-                            textColor={"#135837"}
-                          />
+                          
                           <TouchableOpacity                onPress={() => handleStep(4)}>
                           <MainButtons
                             gradient
@@ -1663,22 +1635,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <MainButtons
-                            title={"Download pdf"}
-                            borderRadius={8}
-                            center
-                            fontSize={16}
-                            width={226}
-                            icon={
-                              <AntDesign
-                                name="download"
-                                size={20}
-                                color="#135837"
-                              />
-                            }
-                            bgColor={"white"}
-                            textColor={"#135837"}
-                          />
+                          
                           <TouchableOpacity                onPress={() => handleStep(5)}>
                           <MainButtons
                             gradient
@@ -1954,22 +1911,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <MainButtons
-                            title={"Download pdf"}
-                            borderRadius={8}
-                            center
-                            fontSize={16}
-                            width={226}
-                            icon={
-                              <AntDesign
-                                name="download"
-                                size={20}
-                                color="#135837"
-                              />
-                            }
-                            bgColor={"white"}
-                            textColor={"#135837"}
-                          />
+                         
                           <TouchableOpacity                onPress={() => handleStep(6)}>
                           <MainButtons
                             gradient
@@ -2065,31 +2007,17 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <MainButtons
-                            title={"Download pdf"}
-                            borderRadius={8}
-                            center
-                            fontSize={16}
-                            width={226}
-                            icon={
-                              <AntDesign
-                                name="download"
-                                size={20}
-                                color="#135837"
-                              />
-                            }
-                            bgColor={"white"}
-                            textColor={"#135837"}
-                          />
+                          <TouchableOpacity onPress={handleOpenPress}>
                           <MainButtons
                             gradient
-                            onPress={handleSubmit}
-                            title={"Download All Result"}
+                            onPress={handleOpenPress}
+                            title={"Proceed to select an expert"}
                             borderRadius={8}
                             center
                             fontSize={16}
-                            width={226}
+                            width={250}
                           />
+                        </TouchableOpacity>
                         </Row>
                       </View>
                     </View>
@@ -2102,6 +2030,16 @@ const AIScreen = () => {
         </View>
                              
       </ScrollView>
+                              <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible}
+                                onRequestClose={handleCloseModal}
+                              >
+                                <View style={styles.modalContent}>
+                                  <OpenModal onClose={() => handleCloseModal()} />
+                                </View>
+                              </Modal>
                                  
     </View>
                           </View>
@@ -2123,6 +2061,12 @@ const styles = StyleSheet.create({
     gap: 50,
     width: 750,
     minHeight: 400,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   step3Wrapper: {
     borderRadius: 20,
@@ -2309,4 +2253,41 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 15,
   },
+                          header: {
+                            marginLeft: -60,
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'flex-start',
+                            paddingVertical: 15,
+                            borderBottomWidth: 1,
+                            borderBottomColor: 'rgba(225,225,212,0.3)',
+                            backgroundColor: '#f7fff4',
+                          },
+                          item: {
+                            flexDirection: 'row',
+                            alignItems: 'flex-start',
+                            marginRight: 10, 
+                          }, 
+                          headertext: {
+                            marginLeft: 10,
+                            fontSize: 14,
+                            fontWeight: 'normal',
+                            marginTop: 7, 
+                            color: 'black'
+                          },
+                          image: {
+                            width: 20,
+                            height: 20,
+                            marginRight: 5,
+                            marginLeft: 100,
+                          marginTop: 5,
+                          tintColor: '#666',
+                          },
+  touch:{
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#666',
+    borderRadius: 5,
+    marginLeft: 30
+  }
 });

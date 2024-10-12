@@ -10,6 +10,7 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Linking,
   TextInput
 } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -264,12 +265,16 @@ const Step4Label = ({
         style={{}}
         title={title}
       />
-      <Title
-        textColor={"#5268C1"}
-        style={{ width: 293 }}
-        textSize={10}
-        title={link}
-      />
+      {link && (
+        <TouchableOpacity onPress={() => Linking.openURL(link)}>
+          <Title
+            textColor="#5268C1"
+            style={{ width: 293 }}
+            textSize={10}
+            title={link}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

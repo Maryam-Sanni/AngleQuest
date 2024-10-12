@@ -4,6 +4,7 @@ import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigate, useLocation } from 'react-router-dom';
+import OpenModal from "../Experts/Updateprofiles";
 
 function MyComponent() {
   const navigate = useNavigate();
@@ -13,7 +14,16 @@ function MyComponent() {
   const [showMenu, setShowMenu] = useState(true);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
   // Function to check if interview data is filled
@@ -325,6 +335,12 @@ const styles = StyleSheet.create({
   containerExpanded: {
     width: 80,
     marginTop: 0
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   contentContainer: {
     padding: 20,

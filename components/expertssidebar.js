@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, Text, Modal, StyleSheet, TouchableOpacity } from "react-native";
 import CollapsedComponent from "./expertscollapsed"; // Import your collapsed component
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OpenModal from "../Experts/Updateprofiles";
 
 function MyComponent() {
   const [clickedItem, setClickedItem] = useState(null);
@@ -12,7 +13,16 @@ function MyComponent() {
   const [showMenu, setShowMenu] = useState(true);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState(''); 
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
   const navigate = useNavigate(); // Get navigation object
    const location = useLocation();
 
@@ -138,7 +148,7 @@ function MyComponent() {
             </TouchableOpacity>
           ))}
           {/* Profile Info */}
-          <TouchableOpacity onPress={handleProfileClick}>
+          <TouchableOpacity onPress={handleOpenPress}>
           <View style={styles.divider} />
           <View style={styles.profileInfo}>
             <Image
@@ -164,9 +174,20 @@ function MyComponent() {
               <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666',fontFamily:"Roboto-Light"  }}>{t("Logout")}</Text>
             </View>
           </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={handleCloseModal}
+          >
+            <View style={styles.modalContent}>
+              <OpenModal onClose={() => handleCloseModal()} />
+            </View>
+          </Modal>
         </View>
       ) : (
         <CollapsedComponent /> 
+      
       )}
     </View>
   );
@@ -196,6 +217,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   contentContainer: {
     padding: 20,
