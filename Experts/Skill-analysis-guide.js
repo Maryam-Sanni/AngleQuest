@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, CheckBox, TextInput, Modal, Image, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, CheckBox, TextInput, Modal, Image, ScrollView, Picker, Button } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,6 +29,8 @@ function MyComponent({ onClose }) {
   const { t } = useTranslation();
 
   const [role, setSkillsAnalysisRole] = useState('expert');
+  const [skillAnalysisGuides, setSkillAnalysisGuides] = useState([]);
+  const [selectedGuideIndex, setSelectedGuideIndex] = useState(0);
    const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
@@ -43,6 +45,7 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [isPressed, setIsPressed] = useState(false);
+  const [pressedButton, setPressedButton] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [rate, setRate] = useState('$0'); // Initial value includes $
 
@@ -101,6 +104,98 @@ function MyComponent({ onClose }) {
   }, []);
 
 
+  useEffect(() => {
+    const loadFormData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/get`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 200) {
+                const fetchedGuides = response.data.SkillAnalysis;
+                const newGuide = {
+                    id: 'new',
+                    role: '',
+                    level: '',
+                    rate: '',
+                    available_days: [],
+                    available_times: '',
+                    category: '',
+                    topics: []
+                };
+
+                setSkillAnalysisGuides([newGuide, ...fetchedGuides]);
+                updateFormFields(0);  // Initialize form with the first guide (New)
+            } else {
+                console.error('Failed to fetch data', response);
+            }
+        } catch (error) {
+            console.error('Failed to load form data', error);
+        }
+    };
+
+    loadFormData();
+  }, []);
+
+  const updateFormFields = (index) => {
+    const guide = skillAnalysisGuides[index];
+    setCategory(guide.category);
+    setSelectedRole(guide.specialization);
+    setLevel(guide.level);
+    setRate(guide.rate);
+    setAvailableDays(guide.available_days);
+    setAvailableTimes(guide.available_times);
+    setTopics(guide.topics);
+  };
+
+  const handleNextGuide = () => {
+    if (selectedGuideIndex < skillAnalysisGuides.length - 1) {
+        const newIndex = selectedGuideIndex + 1;
+        setSelectedGuideIndex(newIndex);
+        updateFormFields(newIndex);
+    }
+  };
+
+  const handlePreviousGuide = () => {
+    if (selectedGuideIndex > 0) {
+        const newIndex = selectedGuideIndex - 1;
+        setSelectedGuideIndex(newIndex);
+        updateFormFields(newIndex);
+    }
+  };
+
+
+  
+  const handleNewGuide = async () => {
+      try {
+          // Fetch the latest category from AsyncStorage
+          const storedCategory = await AsyncStorage.getItem('category');
+        
+          const newGuide = {
+              id: 'new',
+              role: '',
+              level: '',
+              rate: '$0',
+            specialization: '',
+              available_days: [],
+              available_times: '',
+              category: storedCategory || '',
+              topics: []
+          };
+
+          // Update the skill analysis guides state
+          setSkillAnalysisGuides([newGuide, ...skillAnalysisGuides]);
+          setSelectedGuideIndex(0); // Set to the new guide
+          updateFormFields(0); // Initialize form fields with the new guide
+
+      } catch (error) {
+          console.error('Failed to create new guide', error);
+      }
+  };
+  
   
   const handleSave = async () => {
     if ( !level || !rate || !availableDays || !availableTimes) {
@@ -145,6 +240,49 @@ function MyComponent({ onClose }) {
     setAlertVisible(true);
   };
 
+  const handlePut = async () => {
+    if ( !level || !rate || !availableDays || !availableTimes) {
+      setAlertMessage(t('Please fill all fields'));
+      setAlertVisible(true);
+      return;
+    }
+
+    try {
+      const data = {
+        role,
+        level,
+        rate,
+        specialization: selectedRole,
+        years_experience: yearsOfExperience,
+        location,
+        available_days: availableDays,
+        available_times: availableTimes,
+        category,
+        topics
+      };
+
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      const response = await axios.put(
+        `${apiUrl}/api/expert/skillAnalysis/edit`,
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.status === 200) {
+        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
+        setAlertMessage(t('Skill Analysis profile updated successfully'));
+      } else {
+        setAlertMessage(t('Failed to update skill analysis profile'));
+      }
+    } catch (error) {
+      console.error('Error during save:', error); // Log error for debugging
+      setAlertMessage(t('Failed to update skill analysis profile'));
+    }
+    setAlertVisible(true);
+  };
+  
   const addTopic = () => {
     if (topics.length < MAX_TOPICS) {
       setTopics([...topics, { topic: '', percentage: '' }]);
@@ -189,6 +327,31 @@ function MyComponent({ onClose }) {
 
           </View>
 
+          <View style={styles.navigationContainer}>
+              <TouchableOpacity
+                  style={styles.navButton}
+                  onPress={handleNewGuide}
+              >
+                  <Text style={styles.navButtonText}>New</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                  style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
+                  onPress={handlePreviousGuide}
+                  disabled={selectedGuideIndex === 1}
+              >
+                  <Text style={styles.navButtonText}>Previous</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                  style={[styles.navButton, selectedGuideIndex === skillAnalysisGuides.length - 1 && styles.disabledNavButton]}
+                  onPress={handleNextGuide}
+                  disabled={selectedGuideIndex === skillAnalysisGuides.length - 1}
+              >
+                  <Text style={styles.navButtonText}>Next</Text>
+              </TouchableOpacity>
+          </View>
+          
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
               <Text style={styles.buttonTextDue}>Please fill in all fields</Text>
@@ -289,7 +452,7 @@ function MyComponent({ onClose }) {
                 onConfirm={handleConfirm}
                 onCancel={() => setModalVisible(false)}
               />
-             
+              
             </View>
 
           <View style={{ flexDirection: 'row', marginTop: 30 }}>
@@ -355,9 +518,15 @@ function MyComponent({ onClose }) {
             <Text style={styles.buttonTextplus}>Add Item</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={handleSave} style={styles.buttonsave}>
-            <Text style={styles.buttonTextsave}>{t("Save")}</Text>
+          <TouchableOpacity
+            onPress={selectedGuideIndex === 0 ? handleSave : handlePut} // Assuming the new guide is always at index 0
+            style={styles.buttonsave}
+          >
+            <Text style={styles.buttonTextsave}>
+                {selectedGuideIndex === 0 ? t("Save") : t("Update")} {/* Change text based on context */}
+            </Text>
           </TouchableOpacity>
+        
         </View>
       </ScrollView>
       <CustomAlert
@@ -453,8 +622,8 @@ marginTop: 10
   buttonsave: {
     backgroundColor: 'coral',
     padding: 5,
-    marginLeft: 730,
-    width: 80,
+    marginLeft: 720,
+    width: 100,
       padding: 10,
     paddingHorizontal: 20,
     marginTop: -35,
@@ -518,6 +687,25 @@ marginTop: 10
     position: 'absolute',
     left: 10,
     top: 15, // Adjust position as needed
+  },
+  navigationContainer: {
+    flexDirection: 'row',
+    marginLeft: 50,
+    marginBottom: 50
+  },
+  navButton: {
+    backgroundColor: '#CEFAD0',
+    padding: 10,
+    borderRadius: 5,
+    width: 100,
+    marginRight: 20
+  },
+  disabledNavButton: {
+    backgroundColor: '#f5f5f5',
+  },
+  navButtonText: {
+    color: 'black',
+    textAlign: 'center',
   },
 });
 

@@ -1,11 +1,12 @@
 import { useFonts } from 'expo-font';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
 import { MaterialIcons } from '@expo/vector-icons'; 
+import DaysTimePickerModal from "../components/TimePicker 2";
 
 const MAX_RESPONSE= 10;
 
@@ -23,6 +24,9 @@ function MyComponent({ onClose }) {
   const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [availableDays, setAvailableDays] = useState('');
+  const [availableTimes, setAvailableTimes] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -34,6 +38,18 @@ function MyComponent({ onClose }) {
   const handlePressed = () => {
 
     onClose();
+  };
+
+  const handleConfirm = ({ date, startDateTime, endDateTime }) => {
+    // Format the date to your preferred format
+    const formattedDate = new Date(date).toLocaleDateString('en-US'); // You can change this format as needed
+
+    // Update your state with the selected date, start time, and end time
+    setAvailableDays([formattedDate]); // Store the formatted date
+    setAvailableTimes(`${startDateTime.getHours() % 12 || 12}:${String(startDateTime.getMinutes()).padStart(2, '0')} ${startDateTime.getHours() >= 12 ? 'PM' : 'AM'} - ${endDateTime.getHours() % 12 || 12}:${String(endDateTime.getMinutes()).padStart(2, '0')} ${endDateTime.getHours() >= 12 ? 'PM' : 'AM'}`);
+
+    // Close the modal
+    setModalVisible(false);
   };
   
   useEffect(() => {
@@ -473,13 +489,51 @@ function MyComponent({ onClose }) {
   <View style={[styles.container, { marginTop: 10 }]}>
     <View style={styles.row}>
        <View style={[styles.cell, { flex: 5}]}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Set date and time for Growth Plan")}</Text>
+        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Choose the appropriate growth plan profile")}</Text>
       </View>
        <View style={[styles.cell, { flex: 1}]}>
-         <Text style={{ fontFamily: "Roboto-Light", color: 'blue', textDecorationLine: 'underline', fontStyle: 'italic' }}>Select</Text>
+      <Picker
+        selectedValue={data?.rating}
+         style={styles.picker}
+         onValueChange={(itemValue) => setRating(itemValue)}
+  >
+        <Picker.Item label="1" value=" " />
+        <Picker.Item label="2" value="Yes" />
+        <Picker.Item label="3" value="No" />
+
+  </Picker>
       </View>
       </View>
       </View>
+  
+  <View style={[styles.container, { marginTop: 10 }]}>
+    <View style={styles.row}>
+      <View style={[styles.cell, { flex: 5 }]}>
+        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+          {t("Set date and time for Growth Plan")}
+        </Text>
+      </View>
+      <View style={[styles.cell, { flex: 1 }]}>
+        <TouchableOpacity onPress={() => setModalVisible(!isModalVisible)}>
+          <Text style={{ fontFamily: "Roboto-Light", color: 'black', textDecorationLine: 'underline', fontStyle: 'italic' }}>
+            Select: {availableDays} {availableTimes}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+    </View>
+
+    {/* Show the DaysTimePickerModal only when isModalVisible is true */}
+    {isModalVisible && (
+      <View style={[styles.container, { marginTop: 50, borderRadius: 20, backgroundColor: '#F5F5F5' }]}>
+        <DaysTimePickerModal
+          isVisible={isModalVisible} // Control visibility
+          onConfirm={handleConfirm}
+          onCancel={() => setModalVisible(false)}
+        />
+      </View>
+    )}
+
   
    <View style={{flexDirection: 'row'}}>
      <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>

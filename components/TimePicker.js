@@ -71,9 +71,9 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
           <Text style={styles.toText}>{t(" ")}</Text>
           <TimePicker
             label={t("End")}
-            style={styles.label}
             time={endTime}
             onTimeChange={setEndTime}
+            onConfirm={handleConfirm}
           />
         </View>
 
@@ -85,14 +85,23 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={handleConfirm}>
-            <Text style={styles.buttonText}>{t("Save")}</Text>
+            <Text style={styles.buttonText}>{t("Confirm")}</Text>
           </TouchableOpacity>
         </View>
       </View>
   );
 };
 
-const TimePicker = ({ label, time, onTimeChange }) => {
+const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
+  const handleTimeChange = (newTime) => {
+    onTimeChange(newTime);
+    // Call onConfirm if the end time is set (you can modify this condition based on your logic)
+    if (label === "End") {
+      const date = new Date(); // Replace with your actual date input
+      onConfirm({ date, startDateTime: new Date(date.setHours(parseInt(time.hour), parseInt(time.minute), 0)), endDateTime: new Date(date.setHours(parseInt(newTime.hour), parseInt(newTime.minute), 0)) });
+    }
+  };
+
   return (
     <View style={styles.singleTimePicker}>
       <Text style={styles.timeLabel}>{label}</Text>
@@ -100,7 +109,7 @@ const TimePicker = ({ label, time, onTimeChange }) => {
         <Picker
           style={styles.hourPicker}
           selectedValue={time.hour}
-          onValueChange={(hour) => onTimeChange({ ...time, hour })}
+          onValueChange={(hour) => handleTimeChange({ ...time, hour })}
         >
           {generateHours().map((hour, index) => (
             <Picker.Item key={index} label={hour} value={hour} />
@@ -110,7 +119,7 @@ const TimePicker = ({ label, time, onTimeChange }) => {
         <Picker
           style={styles.minutePicker}
           selectedValue={time.minute}
-          onValueChange={(minute) => onTimeChange({ ...time, minute })}
+          onValueChange={(minute) => handleTimeChange({ ...time, minute })}
         >
           {generateMinutes().map((minute, index) => (
             <Picker.Item key={index} label={minute} value={minute} />
@@ -119,7 +128,7 @@ const TimePicker = ({ label, time, onTimeChange }) => {
         <Picker
           style={styles.periodPicker}
           selectedValue={time.period}
-          onValueChange={(period) => onTimeChange({ ...time, period })}
+          onValueChange={(period) => handleTimeChange({ ...time, period })}
         >
           {["AM", "PM"].map((period, index) => (
             <Picker.Item key={index} label={period} value={period} />
@@ -242,7 +251,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'coral',
+    backgroundColor: 'grey',
     borderRadius: 5,
   },
   buttoncancel: {

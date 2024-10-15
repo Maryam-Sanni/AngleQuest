@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, Picker, TouchableOpacity, Linking, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduledadvice';
 import OpenSchedule2 from '../Experts/AdviceResponse';
 import { BlurView } from 'expo-blur';
@@ -15,6 +15,7 @@ const ScheduledMeetingsTable = () => {
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3; // Number of meetings to display per page
   const totalPages = Math.ceil(meetings.length / itemsPerPage);
@@ -37,6 +38,26 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  const [pickerVisible, setPickerVisible] = useState(false);
+
+  const handleOpenPicker = (meeting) => {
+    setSelectedMeeting(meeting);
+    setPickerVisible(true);
+  };
+
+  const handleClosePicker = () => {
+    setPickerVisible(false);
+  };
+
+  const handlePickerValueChange = (value) => {
+    if (value === 'feedback') {
+      handleFeedback(); // Your feedback function
+    } else if (value === 'start') {
+      handleStartMeeting(); // Your start meeting function
+    }
+    handleClosePicker();
+  };
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
   const { t } = useTranslation();
@@ -89,7 +110,7 @@ const ScheduledMeetingsTable = () => {
     setPopupVisible(false);
   };
 
-  const handleFeedback = async () => {
+  const handleFeedback = async (meeting) => {
     try {
       // Save the selected meeting data to AsyncStorage
       await AsyncStorage.setItem('selectedMeeting', JSON.stringify(selectedMeeting));
@@ -97,20 +118,20 @@ const ScheduledMeetingsTable = () => {
 
       // Open the feedback modal (you can implement this as needed)
       setModalVisible(true);
-      handleClosePopup();
+       setSelectedMeeting(meeting);
     } catch (error) {
       console.error('Failed to save selected meeting to AsyncStorage', error);
     }
   };
 
-  const handleStartMeeting = () => {
+  const handleStartMeeting = (meeting) => {
     const meetingLink = selectedMeeting.expert_link || 'https://default.meeting.link';
     if (meetingLink) {
       Linking.openURL(meetingLink).catch(err => console.error("Couldn't load page", err));
     } else {
       console.warn('No valid link available');
     }
-    handleClosePopup();
+     setSelectedMeeting(meeting);
   };
   
   useEffect(() => {
@@ -223,6 +244,23 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  const handlePickerChange = (meeting, itemValue) => {
+    if (itemValue) {
+      const [action] = itemValue.split('|'); // Only split on action
+
+      // Set the selected meeting directly from the argument
+      setSelectedMeeting(meeting);
+
+      // Handle actions based on the picker selection
+      if (action === 'feedback') {
+        handleFeedback(meeting);  // Call the feedback function
+      } else if (action === 'startMeeting') {
+        handleStartMeeting(meeting); // Call the start meeting function
+      }
+    }
+  };
+
+  
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -243,7 +281,7 @@ const ScheduledMeetingsTable = () => {
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-                <Text style={styles.headerText}>Action</Text>
+                <Text style={styles.headerText}>Action </Text>
                </View>
             </TouchableOpacity>
           </View>
@@ -270,11 +308,24 @@ const ScheduledMeetingsTable = () => {
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{date} {time}</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleOpenPopup(meeting)}>
-                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: -10, color: 'green' }}>...    </Text>
-                  </View>
-                </TouchableOpacity>
+            <View>
+              {/* TouchableOpacity to open the Picker */}
+              <TouchableOpacity onPress={() => handleOpenPicker(meeting)}>
+                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Picker
+                    selectedValue={selectedOption}
+                    onValueChange={handlePickerValueChange}
+                    style={styles.picker} // Apply styles here
+                  >
+                    <Picker.Item label="Select" value="Select" />
+                    <Picker.Item label="Give Feedback" value="feedback" />
+                    <Picker.Item label="Start Meeting" value="start" />
+                  </Picker>
+                </View>
+              </TouchableOpacity>
+
+             
+            </View>
               </View>
             );
           })}
@@ -331,8 +382,6 @@ const ScheduledMeetingsTable = () => {
             </View>
           </View>
         </Modal>
-
-        
         
         <Modal
           animationType="slide"
@@ -491,6 +540,13 @@ const styles = StyleSheet.create({
     width: 15, 
     height: 15,
     marginRight: 10,
+  },
+  picker: {
+    height: 30,
+    width: 70,
+    backgroundColor: 'transparent', 
+    color: 'black', // Text color
+    fontSize: 14, // Font size
   },
 });
 

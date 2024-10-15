@@ -4,6 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import MultiSelect from 'react-native-multiple-select';
+import personImage from '../assets/person.png';
 
 
 const specializationRoles = {
@@ -178,6 +179,7 @@ const ProfileUpdate = () => {
 
 
 
+
   const handleAddSkill = () => {
     setTechnicalSkills([...technicalSkills, '']);
   };
@@ -228,12 +230,12 @@ const ProfileUpdate = () => {
 
         if (data.status === 'success' && data.profile) {
           // Provide alternatives if certain fields are null or undefined
-          setAboutMe(data.profile.about || 'Write something about yourself');
-          setLocation(data.profile.location || 'Location not specified');
+          setAboutMe(data.profile.about || ' ');
+          setLocation(data.profile.location || ' ');
           setProfileImage(data.profile.image_url || 'default');
           setSelectedRoles(data.profile.specialization?.length > 0 ? data.profile.specialization : ['No roles selected']);
           setSpecialization(data.profile.category || 'No specialization');
-          setYearsOfExperience(data.profile.years_experience || 'No experience specified');
+          setYearsOfExperience(data.profile.years_experience || ' ');
         }
       } catch (error) {
         console.error('Error fetching profile:', error);

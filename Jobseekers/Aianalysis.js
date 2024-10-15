@@ -42,6 +42,7 @@ import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
  import OpenModal from '../Jobseekers/SkillanalysisAI';
+ import OpenModal2 from '../Jobseekers/Pickexpertadv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -647,6 +648,7 @@ const AIScreen = () => {
   const animeHeight2 = useSharedValue(0);
   const [switchStates, setSwitchStates] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
 
    const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -981,6 +983,14 @@ const AIScreen = () => {
 
   const handleCloseModal = () => {
     setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
   };
   
   return (
@@ -2030,7 +2040,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          <TouchableOpacity onPress={handleOpenPress}>
+                          <TouchableOpacity onPress={handleOpenPress2}>
                           <MainButtons
                             gradient
                             onPress={handleOpenPress}
@@ -2061,6 +2071,16 @@ const AIScreen = () => {
                               >
                                 <View style={styles.modalContent}>
                                   <OpenModal onClose={() => handleCloseModal()} />
+                                </View>
+                              </Modal>
+                              <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible2}
+                                onRequestClose={handleCloseModal2}
+                              >
+                                <View style={styles.modalContent}>
+                                  <OpenModal2 onClose={() => handleCloseModal2()} />
                                 </View>
                               </Modal>
                                  

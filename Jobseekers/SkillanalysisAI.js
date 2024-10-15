@@ -129,7 +129,7 @@ const MyComponent = ({ onClose }) => {
       if (response.status === 200) {
         Alert.alert("Success", "CV uploaded successfully.");
         console.log(response.data);
-        navigate('/ai-result');
+        navigate('/ai-analysis');
         onClose();
       } else {
         alert(
@@ -522,7 +522,7 @@ const MyComponent = ({ onClose }) => {
                   />
 
                   {uploading ? (
-                    <View style={styles.loadingContainer}>
+                    <View style={styles.loadingContainer2}>
                       <Text style={styles.loadingText}>Analyzing CV, Please wait...</Text>
                       <Image 
                         source={require('../assets/loading.gif')}
@@ -789,6 +789,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 500
+  },
+  loadingContainer2: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   loadingText: {
     color: 'green',
