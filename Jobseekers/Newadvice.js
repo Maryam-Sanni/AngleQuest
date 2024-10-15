@@ -120,6 +120,20 @@ function MyComponent({ onClose }) {
       meetingFormData.append('type', meetingtype);
       meetingFormData.append('date_scheduled', formattedDate);
 
+      // Retrieve data from AsyncStorage
+      const aiAnalysisRaw = await AsyncStorage.getItem('ai_analysis');
+      const guideRaw = await AsyncStorage.getItem('selectedUserTopics'); 
+
+      // Parse the data or initialize as empty array
+      const ai_analysis = aiAnalysisRaw ? JSON.parse(aiAnalysisRaw) : [];
+      const guide = guideRaw ? JSON.parse(guideRaw) : [];
+
+      // Debugging: Log the retrieved ai_analysis to check if it's correctly retrieved
+      console.log('Retrieved ai_analysis:', ai_analysis);
+
+      // Ensure ai_analysis contains no more than 4 items
+      const limitedAiAnalysis = ai_analysis.slice(0, 4); // Take first 4 items
+      
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
@@ -140,6 +154,8 @@ function MyComponent({ onClose }) {
       const formData = {
         type,
         role,
+        ai_analysis: limitedAiAnalysis,  // Use limited version of ai_analysis
+        guide,
         description: challenge,
         starting_level: startingLevel,
         target_level: targetLevel,

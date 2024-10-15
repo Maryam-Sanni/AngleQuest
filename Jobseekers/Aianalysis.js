@@ -558,21 +558,7 @@ const Step6Card = ({
             title={text1}
           />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            gap: 8,
-          }}
-        >
-          <AntDesign name="arrowright" size={12} color="white" />
-          <Title
-            textSize={10}
-            textColor={"white"}
-            style={{ width: 282 }}
-            title={text2}
-          />
-        </View>
+       
       </LinearGradient>
     </View>
   );
@@ -852,7 +838,21 @@ const AIScreen = () => {
 
           console.log('Parsed Analysis Data:', parsedAnalysis);
 
-          setApiData(parsedAnalysis);
+          // Add log to see the structure of parsedAnalysis
+          console.log('Checking for knowledge gaps structure:', parsedAnalysis);
+
+          // Check where knowledge_gaps are located and extract details
+          const knowledgeGaps = parsedAnalysis?.three_months_step_by_step_guide?.knowledge_gaps || [];
+          console.log('Knowledge Gaps:', knowledgeGaps);
+
+          const details = knowledgeGaps.map(item => item.details) || [];
+          console.log('Extracted details:', details);
+
+          // Save only the details to AsyncStorage
+          await AsyncStorage.setItem('ai_analysis', JSON.stringify(details));
+          console.log('ai_analysis details saved to AsyncStorage:', details);
+
+          setApiData(parsedAnalysis); // Set the parsed data to state
         } else {
           console.error('Token not found');
           Alert.alert('Error', 'Authentication token not found. Please log in again.');
@@ -867,6 +867,8 @@ const AIScreen = () => {
 
     fetchTokenAndData();
   }, []);
+
+
 
   
   // Conditional rendering before the return statement

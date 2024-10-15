@@ -155,23 +155,32 @@ function MyComponent({ onClose }) {
       const selectedUser = cardData.combinedData[index];
       const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
       const expertid = `${selectedUser.user_id}`;
-      const availabledays = Array.isArray(selectedUser.available_days) ? selectedUser.available_days.join(', ') : selectedUser.available_days; // Ensure it's an array
+      const availabledays = Array.isArray(selectedUser.available_days) ? selectedUser.available_days.join(', ') : selectedUser.available_days;
       const availabletimes = `${selectedUser.available_times}`;
-       const category = `${selectedUser.category}`;
+      const category = `${selectedUser.category}`;
 
+      // Ensure topics are an array, then save them
+      const topics = Array.isArray(selectedUser.topics) ? selectedUser.topics : [];
+
+      // Save all data to AsyncStorage
       await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
       await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
       await AsyncStorage.setItem('selectedUserFullName', fullName); // Save the full name
       await AsyncStorage.setItem('selectedUserExpertid', expertid);
       await AsyncStorage.setItem('selectedUserDays', availabledays);
       await AsyncStorage.setItem('selectedUserTimes', availabletimes);
-       await AsyncStorage.setItem('selectedUserCategory', category);
+      await AsyncStorage.setItem('selectedUserCategory', category);
       await AsyncStorage.setItem('selectedUserLocation', 'location');
 
+      // Save topics to AsyncStorage as a JSON string
+      await AsyncStorage.setItem('selectedUserTopics', JSON.stringify(topics));
+
+      console.log('Data saved successfully');
     } catch (error) {
       console.error('Error saving data to AsyncStorage:', error);
     }
   };
+
 
 
   const renderCards = () => {
@@ -228,29 +237,35 @@ function MyComponent({ onClose }) {
           }}
         >
           <TouchableOpacity onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
-            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+            <View style={{ justifyContent: "center", width: '90%', height: 120, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
                   style={{ width: 50, height: 50, aspectRatio: 1, marginTop: 10, }}
                 />
-                <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', }}>
+                <Text style={{ fontSize: 15, color: "black", fontWeight: 'bold', }}>
                    {data.first_name} {data.last_name} 
                 </Text>
-                <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
+                <Text style={{ fontSize: 13, color: "#206C00", fontWeight: '600', marginBottom: 5 }}>
                   {data.category}
                 </Text>
+                <Text style={{ fontSize: 11, marginBottom: 15, color: "#206C00", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+                   {data.level}
+                 <Text style={{ fontSize: 11, marginLeft: 5, textAlign: 'center', marginBottom: 15, color: "#206C00", }}>
+                    {data.specialization}
+                    </Text> </Text> 
               </View>
             </View>
           </TouchableOpacity>
+          <View style={{height: 120 }}>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18, }}>
             <View style={{ flex: 1, }}>
               <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', justifyContent: "center" }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                  style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5, }}
+                  style={{ width: 12, height: 12, aspectRatio: 1 }}
                 />
-                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>location</Text>
+                <Text style={{ fontSize: 12, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.location}</Text>
               </View>
             </View>
           </View>
@@ -258,10 +273,12 @@ function MyComponent({ onClose }) {
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
              Time: {data.available_times}
           </Text>
-          <Text style={{ fontSize: 14, height: 40, color: "#d3f9d8", textAlign: 'center', fontFamily:"Roboto-Light" }}>
-             {data.user_id}
-          </Text>
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+              {data.years_experience} years of experience
+            </Text>
+          
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TouchableOpacity
                 style={{

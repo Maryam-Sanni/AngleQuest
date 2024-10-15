@@ -11,7 +11,7 @@ import DaysTimePickerModal from "../components/TimePicker 2";
 const MAX_RESPONSE= 10;
 
 function MyComponent({ onClose }) {
-  const [topics, setTopics] = useState([]);
+   const [topics, setTopics] = useState([]);
   const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '', title: '', percentage: ''})));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -21,12 +21,18 @@ function MyComponent({ onClose }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true); 
-  const [data, setData] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [availableDays, setAvailableDays] = useState('');
   const [availableTimes, setAvailableTimes] = useState('');
+  const [data, setData] = useState({
+    ai_analysis: [],
+    guide: [],
+    name: '',
+    role: '',
+    starting_level: '',
+  });
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -284,78 +290,64 @@ function MyComponent({ onClose }) {
      
   <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, marginBottom: -20 }}>{t("AI Analysis")}</Text>
 
-  <View style={[styles.container, {marginBottom: 30}]}>
-    {topics.map((topic, index) => (
-      <View style={styles.row} key={index}>
-        <View style={[styles.cell, { flex: 0.5 }]}>
-          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("")} {index + 1}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("Topic description")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            editable={false} 
-            value={topic.topic}
-            onChangeText={text => handleTopicChange(index, 'topic', text)}
-          />
-        </View>
-        
-      </View>
-    ))}
-    <TouchableOpacity
-      onPress={() => setTopics([...topics, { topic: '', percentage: '0' }])}
-      style={styles.addButton}
-    >
-
-    </TouchableOpacity>
-  </View>
+          <View style={[styles.container, { marginBottom: 30 }]}>
+            {data?.ai_analysis && data.ai_analysis.length > 0 ? (
+              data.ai_analysis.map((analysis, index) => (
+                <View style={styles.row} key={index}>
+                  <View style={[styles.cell, { flex: 0.5 }]}>
+                    <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                      {index + 1}.
+                    </Text>
+                  </View>
+                  <View style={[styles.cell, { flex: 5 }]}>
+                    <TextInput
+                      placeholder={t("AI Analysis Description")}
+                      placeholderTextColor="grey"
+                      style={styles.input}
+                      editable={false}
+                      value={analysis}
+                    />
+                  </View>
+                </View>
+              ))
+            ) : (
+              <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+                not available
+              </Text>
+            )}
+          </View>
   
 
    <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20, marginBottom: -20 }}>{t("Skill Analysis Guide")}</Text>
 
   <View style={styles.container}>
-    {topics.map((topic, index) => (
-      <View style={styles.row} key={index}>
-        <View style={[styles.cell, { flex: 0.5 }]}>
-          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("")} {index + 1}</Text>
+    {data?.guide && data.guide.length > 0 ? (
+      data.guide.map((item, index) => (
+        <View style={styles.row} key={index}>
+          <View style={[styles.cell, { flex: 0.5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{index + 1}.</Text>
+          </View>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <TextInput
+              placeholder={t("Topic description")}
+              placeholderTextColor="grey"
+              style={styles.input}
+              editable={false}
+              value={item.topic}
+            />
+          </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <Text style={{ fontFamily: "Roboto-Light" }}>
+              {item.percentage !== null ? item.percentage : 'Not specified'}%
+            </Text>
+          </View>
         </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("Topic description")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            editable={false} 
-            value={topic.topic}
-            onChangeText={text => handleTopicChange(index, 'topic', text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 1 }]}>
-          <Picker
-            selectedValue={topic.percentage}
-            style={styles.picker}
-            onValueChange={(itemValue) => handleTopicChange(index, 'percentage', itemValue)}
-          >
-            <Picker.Item label="10%" value="10" />
-            <Picker.Item label="20%" value="20" />
-            <Picker.Item label="30%" value="30" />
-            <Picker.Item label="40%" value="40" />
-            <Picker.Item label="50%" value="50" />
-            <Picker.Item label="60%" value="60" />
-            <Picker.Item label="70%" value="70" />
-            <Picker.Item label="80%" value="80" />
-            <Picker.Item label="90%" value="90" />
-            <Picker.Item label="100%" value="100" />
-          </Picker>
-        </View>
-      </View>
-    ))}
-    <TouchableOpacity
-      onPress={() => setTopics([...topics, { topic: '', percentage: '0' }])}
-      style={styles.addButton}
-    >
-
-    </TouchableOpacity>
+      ))
+    ) : (
+      <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+        not available
+      </Text>
+    )}
   </View>
 
 
