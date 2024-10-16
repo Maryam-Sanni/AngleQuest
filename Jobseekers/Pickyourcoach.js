@@ -399,16 +399,11 @@ function MyComponent({ onClose }) {
                     style={styles.picker}
                     onValueChange={(itemValue) => setSelectedCategory(itemValue)}
                   >
-                    <Picker.Item label="All Categories" value="" />
+                  <Picker.Item label="All Categories" value="" />
                     <Picker.Item label="SAP" value="SAP" />
                     <Picker.Item label="Microsoft" value="Microsoft" />
-                    <Picker.Item label="Salesforce" value="Salesforce" />
-                    <Picker.Item label="Frontend Development" value="Frontend Development" />
-                    <Picker.Item label="Backend Development" value="Backend Development" />
-                    <Picker.Item label="UI/UX" value="UI/UX" />
-                    <Picker.Item label="Data Analysis" value="Data Analysis" />
-                    <Picker.Item label="Cloud Computing" value="Cloud Computing" />
-                    <Picker.Item label="Management" value="Management" />
+                    <Picker.Item label="Scrum" value="Scrum" />
+                    <Picker.Item label="Business Analysis" value="Business Analysis" />
                   </Picker>
                   <TextInput
                     placeholder={t("Search")}

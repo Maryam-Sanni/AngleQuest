@@ -22,8 +22,8 @@ function MyComponent({ onClose }) {
   const [how_to_achieve, setHowToAchieve] = useState('');
   const [achieve_the_objective, setNeeds] = useState('');
   const [review_with_coach, setreviewwithcoach] = useState('Biannually');
-  const [starting_level, setStartingLevel] = useState('Zero');
-  const [target_level, setTargetLevel] = useState('Medior');
+  const [starting_level, setStartingLevel] = useState('Beginner');
+  const [target_level, setTargetLevel] = useState('Junior');
   const [end_date, setEndDate] = useState('12 Months');
   const [status, setStatus] = useState('Active');
   const [coach, setCoach] = useState('');
@@ -124,7 +124,7 @@ function MyComponent({ onClose }) {
   const goToPlan = async () => {
     try {
       // Validate the form data before making the API request
-      if ( !role || !title || !result_description || !how_to_achieve ) {
+      if ( !role || !title || !expert_available_days) {
       setAlertMessage(t('Please fill all fields'));
         setAlertVisible(true);
         return;
@@ -157,17 +157,11 @@ function MyComponent({ onClose }) {
       
       // Prepare the data for the API request
       const formData = {
-        type,
         role,
         title,
-        result_description,
-        how_to_achieve,
-        achieve_the_objective,
         starting_level,
-        review_with_coach,
         target_level,
         date_time: selectedDateTime,
-        status,
         feedbacks,
         expert_available_days,
         expert_available_time,
@@ -240,32 +234,15 @@ function MyComponent({ onClose }) {
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: 'Roboto-Light' }}>✕</Text>
             </TouchableOpacity>
           </View>
-          <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 20, marginLeft: 50, fontFamily: 'Roboto-Light' }}>
-            {t('Development Objectives')}
-          </Text>
+        
           <View style={styles.container}>
             {/* Form fields */}
+           
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Type')}</Text>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Goal')}</Text>
               </View>
-              <View style={styles.cell}>
-                <Picker
-                  selectedValue={type}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setSelectedType(itemValue)}
-                >
-                  <Picker.Item label={t('Personal')} value="Personal" />
-                  <Picker.Item label={t('Team')} value="Team" />
-                  <Picker.Item label={t('Organization')} value="Organization" />
-                </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Title')}</Text>
-              </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   placeholder={t('Example: Become SAP FI Medior expert in 6 months')}
                   placeholderTextColor="grey"
@@ -276,10 +253,10 @@ function MyComponent({ onClose }) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Role')}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <TextInput
                   placeholder="Example: SAP FI"
                   placeholderTextColor="grey"
@@ -289,119 +266,51 @@ function MyComponent({ onClose }) {
                 />
               </View>
             </View>
+           
+            
+           
+            
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Result description')}</Text>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>{t("Current level")}</Text>
               </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Example: To be able to find my way around SAP fi...')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={result_description}
-                  onChangeText={setResultDescription}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How to achieve')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Example: To be taught how to troubleshoot, find T\'codes...')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={how_to_achieve}
-                  onChangeText={setHowToAchieve}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('What do you need to achieve the objective?')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Example: Continous training, practice and support')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={achieve_the_objective}
-                  onChangeText={setNeeds}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
-              </View>
-              <View style={styles.cell}>
-              <Text style={{color: 'grey', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>{review_with_coach}</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Rate your current level')}</Text>
-              </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={starting_level}
                   style={styles.picker}
                   onValueChange={(itemValue) => setStartingLevel(itemValue)}
                 >
-                   <Picker.Item label={t("Zero")} value="Zero" />
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Junior")} value="Junior" />
+                <Picker.Item label={t("Beginner")} value="Beginner" />
+                   <Picker.Item label={t("Junior")} value="Junior" />
                   <Picker.Item label={t("Intermediate")} value="Intermediate" />
-                  <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
-                  <Picker.Item label={t("Manager")} value="Manager" />
-                  <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                  <Picker.Item label={t("Advanced")} value="Advanced" />
                 </Picker>
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Desired target level')}</Text>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>{t("Desired career level")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Picker
                   selectedValue={target_level}
                   style={styles.picker}
                   onValueChange={(itemValue) => setTargetLevel(itemValue)}
                 >
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Junior")} value="Junior" />
-                  <Picker.Item label={t("Intermediate")} value="Intermediate" />
+                <Picker.Item label={t("Junior")} value="Junior" />
                   <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                   <Picker.Item label={t("Manager")} value="Manager" />
                   <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                 </Picker>
               </View>
             </View>
+           
             <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Status')}</Text>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Expert Roadmap')}</Text>
               </View>
-              <View style={styles.cell}>
-                <Picker
-                  selectedValue={status}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setStatus(itemValue)}
-                >
-                  <Picker.Item label={t('Active')} value="Active" />
-                </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
-              </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
               </View>
             </View>
@@ -411,20 +320,20 @@ function MyComponent({ onClose }) {
           <Text style={{ fontSize: 15, color: 'black', marginLeft: 50, fontWeight: '500', marginTop: 30, marginBottom: -10, }}>{coach}'s {t("available days and time")}</Text>
           <View style={styles.container}>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Days")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
                   {expert_available_days}
                 </Text>
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>Time</Text>
               </View>
-              <View style={styles.cell}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
+              <View style={[styles.cell, { flex: 2}]}><Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>{expert_available_time}
                 </Text>
               </View>
             </View>
@@ -433,10 +342,10 @@ function MyComponent({ onClose }) {
           <Text style={{ fontSize: 15, color: 'black', fontWeight: '500', marginTop: 30, marginBottom: -10, marginLeft: 50, marginRight: 50 }}>{t("Select day and time for growth plan session.")}</Text>
           <View style={styles.container}>
             <View style={styles.row}>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Date and Time")}</Text>
               </View>
-              <View style={styles.cell}>
+              <View style={[styles.cell, { flex: 2}]}>
                 <TouchableOpacity
                   style={styles.dateTimeButton}
                   onPress={() => setIsModalVisible(true)}
@@ -484,8 +393,8 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 920,
-    height: '100%',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
+    height: 1000
   },
   row: {
     flexDirection: 'row',
@@ -499,10 +408,10 @@ const styles = StyleSheet.create({
   picker: {
     height: 20,
     width: '100%',
-    backgroundColor: '#F8F8F8',
-    borderColor: 'black',
+    backgroundColor: 'white',
+    borderColor: 'white',
     borderWidth: 1,
-    color: 'grey',
+    color: 'black',
     fontSize: 14,
   },
   buttonplus: {
@@ -512,7 +421,7 @@ const styles = StyleSheet.create({
     marginLeft: 750,
     width: 100,
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 50,
   },
   buttonTextplus: {
     color: 'white',
@@ -521,11 +430,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Light',
   },
   input: {
-    borderColor: 'black',
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 5,
+    fontFamily: "Roboto-Light",
+    paddingLeft: 5,
+    fontSize: 14
+  },
+  input2: {
+    fontFamily: "Roboto-Light",
+    paddingLeft: 5,
     fontSize: 14,
+    color: 'grey'
   },
   closeButton: {
     position: 'absolute',

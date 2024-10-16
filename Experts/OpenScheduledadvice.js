@@ -12,11 +12,11 @@ const MAX_RESPONSE= 10;
 
 function MyComponent({ onClose }) {
    const [topics, setTopics] = useState([]);
-  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '', title: '', percentage: ''})));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [completed, setCompleted] = useState('Yes');
   const [remark, setRemark] = useState('');
+  const [draftData, setDraftData] = useState(null);
   const [rating, setRating] = useState('Replan');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
@@ -33,6 +33,26 @@ function MyComponent({ onClose }) {
     role: '',
     starting_level: '',
   });
+  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '', title: '', percentage: '' })));
+  const [items, setItems] = useState([
+    { percentage: "0" }, 
+    { percentage: "10" },
+    { percentage: "20" },
+     { percentage: "30" },
+     { percentage: "40" },
+     { percentage: "50" },
+     { percentage: "60" },
+     { percentage: "70" },
+     { percentage: "80" },
+     { percentage: "90" },
+     { percentage: "100" },
+  ]);
+
+  const handlePercentageChange = (index, value) => {
+    const updatedItems = [...items];
+    updatedItems[index].percentage = value;
+    setItems(updatedItems);
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -127,14 +147,14 @@ function MyComponent({ onClose }) {
 
   const addResponse = () => {
     if (response.length < MAX_RESPONSE) {
-      setResponse([...response, { response: '', percentage: '' }]);
+      setResponse([...response, { response: '', title: '', percentage: '' }]);
     }
   };
 
   const updateResponse = (index, key, value) => {
     const newResponse = [...response];
-    newResponse[index][key] = value;
-    setResponse(newResponse);
+    newResponse[index][key] = value; // Update the specific key
+    setResponse(newResponse); // Update the state
   };
 
   const deleteResponse = (index) => {
@@ -149,6 +169,126 @@ function MyComponent({ onClose }) {
   const handlePressOut = () => {
     setIsPressed(false);
   };
+
+  const fetchDraft = async () => {
+    try {
+      // Retrieve the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+
+      // Check if token is available
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      // Make the GET request to /get-draft
+      const response = await axios.get(`${apiUrl}/api/expert/get-draft`, config);
+
+      // Check if the response contains the expected structure
+      if (response.data && response.data.status === "success" && response.data.Draft) {
+        const drafts = response.data.Draft;
+
+        // Sort drafts by created_at in descending order to get the latest one
+        const lastDraft = drafts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+
+        if (lastDraft) {
+          setDraftData(lastDraft);
+          setRemark(lastDraft.overall_feedback || ''); // Set remark from overall_feedback
+
+          // Map the additional field to the response state format
+          const additionalData = lastDraft.additional || [];
+          const mappedResponses = additionalData.map(item => ({
+            response: item.evaluation || '',
+            title: item.topic || '',
+            percentage: item.score || '', // Assuming you might want to set this later; initialize as needed
+          }));
+
+          setResponse(mappedResponses); // Update the state with the mapped responses
+
+          console.log('Last draft retrieved successfully:', lastDraft);
+        } else {
+          console.warn('No drafts available.');
+        }
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching draft:', error);
+    }
+  };
+
+  // Fetch draft when the component mounts
+  useEffect(() => {
+    fetchDraft();
+  }, []);
+
+
+
+  
+  const createDraft = async () => {
+    const apiEndpoint = `${apiUrl}/api/expert/create-draft`;
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const userId = await AsyncStorage.getItem('user_id');
+
+      if (!token || !userId) {
+        console.error('Token or user_id not found');
+        setAlertMessage('Token or user ID is missing');
+        setAlertVisible(true);
+        return;
+      }
+
+      const currentResponses = response; // Your state variable
+
+      // Check if currentResponses is defined and is an array
+      if (!Array.isArray(currentResponses)) {
+        console.error('Response is not an array');
+        setAlertMessage('Response data is not valid');
+        setAlertVisible(true);
+        return;
+      }
+
+      const payload = {
+        user_id: userId,
+        overall_feedback: remark,
+        additional: currentResponses.map(item => ({
+          topic: item.title,
+          evaluation: item.response,
+          score: item.percentage
+        })),
+        set_date: null
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const apiResponse = await axios.post(apiEndpoint, payload, config);
+      console.log('Draft created successfully:', apiResponse.data);
+
+      // Set alert message for success
+      setAlertMessage('Draft Created Successfully');
+      setAlertVisible(true);
+
+    } catch (error) {
+      console.error('Error creating draft:', error);
+      setAlertMessage('Error creating draft');
+      setAlertVisible(true);
+    }
+  };
+
+
   
   const handlePress = async () => {
     if (!remark || !topics || !rating) {
@@ -163,6 +303,8 @@ function MyComponent({ onClose }) {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
+      const currentResponses = response; // Your state variable
+      
       const payload = {
         jobseeker_id: String(data?.user_id),
         skill_analysis_id: String(data?.id),
@@ -179,6 +321,11 @@ function MyComponent({ onClose }) {
         descriptions: topics.map(topic => ({
           description: topic.topic,
           percentage: topic.percentage,
+        })),
+        expert_analysis: currentResponses.map(item => ({
+          point: item.title,
+          description: item.response,
+          percentage: item.percentage
         })),
       };
 
@@ -337,9 +484,23 @@ function MyComponent({ onClose }) {
             />
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
-            <Text style={{ fontFamily: "Roboto-Light" }}>
-              {item.percentage !== null ? item.percentage : 'Not specified'}%
-            </Text>
+            <Picker
+              selectedValue={item.percentage !== null ? String(item.percentage) : "0"}
+              style={styles.picker}
+              onValueChange={(itemValue) => handlePercentageChange(index, itemValue)}
+            >
+              <Picker.Item label="0%" value="0" />
+              <Picker.Item label="10%" value="10" />
+              <Picker.Item label="20%" value="20" />
+              <Picker.Item label="30%" value="30" />
+              <Picker.Item label="40%" value="40" />
+              <Picker.Item label="50%" value="50" />
+              <Picker.Item label="60%" value="60" />
+              <Picker.Item label="70%" value="70" />
+              <Picker.Item label="80%" value="80" />
+              <Picker.Item label="90%" value="90" />
+              <Picker.Item label="100%" value="100" />
+            </Picker>
           </View>
         </View>
       ))
@@ -429,7 +590,7 @@ function MyComponent({ onClose }) {
                   <TextInput
                     style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
                     placeholder="e.g: Your goals and its description are clear and concise. Well done for that. I am satisfied with this set goals and I am more than happy to work with you to the finish line.  See you in our one-one session where I'll share further tips on how to achieve this feat and above all meet you."
-                    value={data?.remark}
+                    value={remark}
                     placeholderTextColor="grey"
                      multiline={true}
                     onChangeText={text => setRemark(text)}
@@ -542,8 +703,8 @@ function MyComponent({ onClose }) {
        </Text>
      </TouchableOpacity>
 
-     <TouchableOpacity style={styles.buttonAcc} >
-       <Text style={styles.buttonText}>{t("Save as draft")}</Text>
+     <TouchableOpacity style={styles.buttonAcc} onPress={createDraft}>
+       <Text style={styles.buttonText}>Save as draft</Text>
      </TouchableOpacity>
      
       <TouchableOpacity style={styles.buttonAcc2} onPress={handlePress}>

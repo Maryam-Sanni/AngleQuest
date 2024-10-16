@@ -219,11 +219,10 @@ navigate('/skill-analysis-sessions');
                   style={styles.picker}
                   onValueChange={(itemValue) => setStartingLevel(itemValue)}
                 >
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Junior")} value="Junior" />
-                  <Picker.Item label={t("Medior")} value="Medior" />
-                  <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Professional")} value="Professional" />
+                <Picker.Item label={t("Beginner")} value="Beginner" />
+                   <Picker.Item label={t("Junior")} value="Junior" />
+                  <Picker.Item label={t("Intermediate")} value="Intermediate" />
+                  <Picker.Item label={t("Advanced")} value="Advanced" />
                 </Picker>
               </View>
             </View>
@@ -237,11 +236,11 @@ navigate('/skill-analysis-sessions');
                   style={styles.picker}
                   onValueChange={(itemValue) => setTargetLevel(itemValue)}
                 >
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Junior")} value="Junior" />
-                  <Picker.Item label={t("Medior")} value="Medior" />
+                <Picker.Item label={t("Junior")} value="Junior" />
                   <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Professional")} value="Professional" />
+                  <Picker.Item label={t("Manager")} value="Manager" />
+                  <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                  <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                 </Picker>
               </View>
             </View>

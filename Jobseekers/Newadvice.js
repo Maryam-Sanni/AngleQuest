@@ -17,8 +17,8 @@ function MyComponent({ onClose }) {
   const [type, setType] = useState("Optimize Productivity");
   const [role, setRole] = useState("");
   const [challenge, setChallenge] = useState("");
-  const [startingLevel, setStartingLevel] = useState("Zero");
-  const [targetLevel, setTargetLevel] = useState("Medior");
+  const [startingLevel, setStartingLevel] = useState("Beginner");
+  const [targetLevel, setTargetLevel] = useState("Junior");
   const [status, setStatus] = useState("Active");
   const [token, setToken] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
