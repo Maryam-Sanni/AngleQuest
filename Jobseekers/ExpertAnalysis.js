@@ -29,6 +29,8 @@ import Row from "../components/Row";
 import Title from "../components/Title";
 import { LinearGradient } from "expo-linear-gradient";
  import OpenModal from '../Jobseekers/SkillanalysisAI';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const Levels = ({ val }) => {
   const [levell, setLevell] = useState([]);
@@ -227,6 +229,7 @@ const AIScreen = () => {
   const animeHeight = useSharedValue(0);
   const animeHeight2 = useSharedValue(0);
   const [modalVisible, setModalVisible] = useState(false);
+   const [latestSkillAnalysis, setLatestSkillAnalysis] = useState(null);
 
   const GoToBack= () => {
     navigate("/skill-analysis-sessions");
@@ -247,6 +250,51 @@ const AIScreen = () => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const colorSets = [
+    { bgColor1: "#135837", bgColor2: "#29BE77" },
+    { bgColor1: "#1C4A8A", bgColor2: "#3197DA" },
+    { bgColor1: "#8F1987", bgColor2: "#DF2783" },
+    { bgColor1: "#13E3D2", bgColor2: "#0E7B75" },
+  ];
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+        const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
+
+        if (token && storedUserId) {
+          const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
+          });
+
+          const data = response.data; // Get the data from the response
+
+          if (data.status === 'success') {
+            // Filter skill analysis for the specific job seeker and get the latest one
+            const filteredSkillAnalysis = data.skillAnalysis
+              .filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId)
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort by created_at to get the latest
+
+            const latestSkillAnalysis = filteredSkillAnalysis[0]; // Get the latest entry
+            setLatestSkillAnalysis(latestSkillAnalysis); // Store it in state
+          } else {
+            console.log('Failed to fetch skill analysis.');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // Call the fetchData function inside useEffect
+  }, []); // Empty dependency array means this useEffect runs once when the component mounts
+
   
   return (
             <ImageBackground
@@ -327,117 +375,30 @@ const AIScreen = () => {
                             }
                           />
                           <View style={{ position: "relative", gap: 40 }}>
-                            <Step6Card
-                              bgColor1="#135837"
-                              bgColor2={"#29BE77"}
-                              num={"01"}
-                              title={
-                                "Google UX Design Professional Certificate (Coursera)"
-                              }
-                              text1={
-                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
-                              }
-                              text2={"Duration: 6 months (self-paced)."}
-                            />
-                            <Step6Card
-                              reversed
-                              bgColor1="#1C4A8A"
-                              bgColor2={"#3197DA"}
-                              num={"02"}
-                              title={"Interaction Design Foundation (IDF)"}
-                              text1={
-                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
-                              }
-                              text2={"Duration: Depends on the course."}
-                            />
-                            <Step6Card
-                              bgColor1="#8F1987"
-                              bgColor2={"#DF2783"}
-                              num={"03"}
-                              title={"Udacity - UX Nanodegree"}
-                              text1={
-                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
-                              }
-                              text2={"Duration: 6 months (self-paced)."}
-                            />
-                            <Step6Card
-                              reversed
-                              bgColor1="#13E3D2"
-                              bgColor2={"#0E7B75"}
-                              num={"04"}
-                              title={"Interaction Design Foundation (IDF)"}
-                              text1={
-                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
-                              }
-                              text2={"Duration: Depends on the course."}
-                            />
-                            <Step6Card
-                              bgColor1="#135837"
-                              bgColor2={"#29BE77"}
-                              num={"05"}
-                              title={
-                                "Google UX Design Professional Certificate (Coursera)"
-                              }
-                              text1={
-                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
-                              }
-                              text2={"Duration: 6 months (self-paced)."}
-                            />
-                            <Step6Card
-                              reversed
-                              bgColor1="#1C4A8A"
-                              bgColor2={"#3197DA"}
-                              num={"06"}
-                              title={"Interaction Design Foundation (IDF)"}
-                              text1={
-                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
-                              }
-                              text2={"Duration: Depends on the course."}
-                            />
-                            <Step6Card
-                              bgColor1="#8F1987"
-                              bgColor2={"#DF2783"}
-                              num={"07"}
-                              title={"Udacity - UX Nanodegree"}
-                              text1={
-                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
-                              }
-                              text2={"Duration: 6 months (self-paced)."}
-                            />
-                            <Step6Card
-                              reversed
-                              bgColor1="#13E3D2"
-                              bgColor2={"#0E7B75"}
-                              num={"08"}
-                              title={"Interaction Design Foundation (IDF)"}
-                              text1={
-                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
-                              }
-                              text2={"Duration: Depends on the course."}
-                            />
-                            <Step6Card
-                              bgColor1="#135837"
-                              bgColor2={"#29BE77"}
-                              num={"09"}
-                              title={
-                                "Google UX Design Professional Certificate (Coursera)"
-                              }
-                              text1={
-                                "Focus: User-centered design, research, wireframing, prototyping, and usability testing."
-                              }
-                              text2={"Duration: 6 months (self-paced)."}
-                            />
-                            <Step6Card
-                              reversed
-                              bgColor1="#1C4A8A"
-                              bgColor2={"#3197DA"}
-                              num={"10"}
-                              title={"Interaction Design Foundation (IDF)"}
-                              text1={
-                                "Certifications in various topics like UX design, design thinking, usability, and information architecture."
-                              }
-                              text2={"Duration: Depends on the course."}
-                            />
+                            <View>
+                              {latestSkillAnalysis && latestSkillAnalysis.expert_analysis ? (
+                                latestSkillAnalysis.expert_analysis.map((analysis, index) => {
+                                  const colorIndex = index % colorSets.length; // Cycle through color sets
+                                  const isReversed = index % 2 !== 0; // Reverse every second card
+
+                                  return (
+                                    <Step6Card
+                                      key={index}
+                                      reversed={isReversed}
+                                      bgColor1={colorSets[colorIndex].bgColor1}
+                                      bgColor2={colorSets[colorIndex].bgColor2}
+                                      num={`0${index + 1}`}
+                                      title={analysis.point || 'No Title'}
+                                      text1={analysis.description || 'No Description'}
+                                      text2={analysis.percentage ? `${analysis.percentage}%` : 'No Percentage'}
+                                    />
+                                  );
+                                })
+                              ) : (
+                                <Text>Loading...</Text>
+                              )}
+                            </View>
+                            
                           </View>
                         </View>
 

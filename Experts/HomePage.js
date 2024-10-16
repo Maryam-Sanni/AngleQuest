@@ -303,21 +303,25 @@ const HomePage = () => {
       console.log("Filtered Interview Data:", filteredInterview);
       console.log("Filtered Skill Analysis Data:", filteredSkillAnalysis);
 
-      // Process the latest entries
       const latestGrowthPlan = processLatestEntry(
         filteredGrowthPlan,
         "name",
         "date_time",
+        "candidate_link", // Add this field to get the candidate_link
       );
+
       const latestInterview = processLatestEntry(
         filteredInterview,
         "name",
         "date_time",
+        "candidate_link", // Add this field to get the candidate_link
       );
+
       const latestSkillAnalysis = processLatestEntry(
         filteredSkillAnalysis,
         "name",
         "date_time",
+        "candidate_link", // Add this field to get the candidate_link
       );
 
       // Log the processed latest data for debugging
@@ -360,6 +364,7 @@ const HomePage = () => {
     return {
       name: parsedEntries[0][nameField] || "No Name Available", // Default to 'No Name Available' if name is null or undefined
       dateTime: formatDate(parsedEntries[0][dateTimeField].toISOString()),
+      candidateLink: parsedEntries[0][linkField] || "No Link Available",
     };
   };
 
@@ -705,10 +710,19 @@ const HomePage = () => {
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered10 && styles.touchableOpacityHovered,
+                                isHovered11 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered10(true)}
-                              onMouseLeave={() => setIsHovered10(false)}
+                              onMouseEnter={() => setIsHovered10(true)} 
+                              onMouseLeave={() => setIsHovered10(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestGrowthPlan.candidateLink || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Start")}
@@ -780,7 +794,7 @@ const HomePage = () => {
                               onMouseEnter={() => setIsHovered11(true)} 
                               onMouseLeave={() => setIsHovered11(false)} 
                               onPress={() => {
-                                const joinLink = plandata.latestSkillAnalysis.candidate_link || 'https://default-join-link.com'; 
+                                const joinLink = plandata.latestSkillAnalysis.candidateLink || 'https://default-join-link.com'; 
                                 if (joinLink) {
                                   Linking.openURL(joinLink)
                                     .catch(err => console.error("Couldn't load page", err)); 
@@ -855,10 +869,19 @@ const HomePage = () => {
                             <TouchableOpacity
                               style={[
                                 styles.touchablestart,
-                                isHovered12 && styles.touchableOpacityHovered,
+                                isHovered11 && styles.touchableOpacityHovered, 
                               ]}
-                              onMouseEnter={() => setIsHovered12(true)}
-                              onMouseLeave={() => setIsHovered12(false)}
+                              onMouseEnter={() => setIsHovered12(true)} 
+                              onMouseLeave={() => setIsHovered12(false)} 
+                              onPress={() => {
+                                const joinLink = plandata.latestInterview.candidateLink || 'https://default-join-link.com'; 
+                                if (joinLink) {
+                                  Linking.openURL(joinLink)
+                                    .catch(err => console.error("Couldn't load page", err)); 
+                                } else {
+                                  console.warn('No valid link available');
+                                }
+                              }}
                             >
                               <Text style={styles.touchableTextjoinreview}>
                                 {t("Start")}

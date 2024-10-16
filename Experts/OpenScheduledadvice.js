@@ -183,27 +183,30 @@ function MyComponent({ onClose }) {
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // Fixed template string
           'Content-Type': 'application/json',
         },
       };
 
       // Make the GET request to /get-draft
-      const response = await axios.get(`${apiUrl}/api/expert/get-draft`, config);
+      const response = await axios.get(`${apiUrl}/api/expert/get-draft`, config); // Fixed template string
 
       // Check if the response contains the expected structure
       if (response.data && response.data.status === "success" && response.data.Draft) {
         const drafts = response.data.Draft;
 
-        // Sort drafts by created_at in descending order to get the latest one
-        const lastDraft = drafts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+        // Log all drafts for debugging
+        console.log('Drafts retrieved:', drafts);
 
-        if (lastDraft) {
-          setDraftData(lastDraft);
-          setRemark(lastDraft.overall_feedback || ''); // Set remark from overall_feedback
+        // Find a draft where the data_id matches data.id
+        const matchingDraft = drafts.find(draft => String(draft.data_id) === String(data?.id)); // Compare data_id with data?.id
+
+        if (matchingDraft) {
+          setDraftData(matchingDraft);
+          setRemark(matchingDraft.overall_feedback || ''); // Set remark from overall_feedback
 
           // Map the additional field to the response state format
-          const additionalData = lastDraft.additional || [];
+          const additionalData = matchingDraft.additional || [];
           const mappedResponses = additionalData.map(item => ({
             response: item.evaluation || '',
             title: item.topic || '',
@@ -212,9 +215,9 @@ function MyComponent({ onClose }) {
 
           setResponse(mappedResponses); // Update the state with the mapped responses
 
-          console.log('Last draft retrieved successfully:', lastDraft);
+          console.log('Matching draft retrieved successfully:', matchingDraft);
         } else {
-          console.warn('No drafts available.');
+          console.warn('No matching draft with the given data.id.');
         }
       } else {
         console.error('Unexpected response structure:', response.data);
@@ -228,6 +231,8 @@ function MyComponent({ onClose }) {
   useEffect(() => {
     fetchDraft();
   }, []);
+
+
 
 
 
@@ -259,6 +264,8 @@ function MyComponent({ onClose }) {
       const payload = {
         user_id: userId,
         overall_feedback: remark,
+        individual_id: String(data?.user_id),
+          data_id: String(data?.id),
         additional: currentResponses.map(item => ({
           topic: item.title,
           evaluation: item.response,
@@ -288,7 +295,17 @@ function MyComponent({ onClose }) {
     }
   };
 
+  // Transform data.guide into an array of descriptions and percentages
+  const descriptions = data?.guide?.map(item => ({
+    description: item.description,
+    percentage: item.percentage,
+  })) || [];
 
+  const expert_analysis = response.map(item => ({
+    point: item.title,        // Mapping 'title' to 'point'
+    description: item.response, // Mapping 'response' to 'description'
+    percentage: item.percentage // 'percentage' stays the same
+  }));
   
   const handlePress = async () => {
     if (!remark || !topics || !rating) {
@@ -303,7 +320,6 @@ function MyComponent({ onClose }) {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
-      const currentResponses = response; // Your state variable
       
       const payload = {
         jobseeker_id: String(data?.user_id),
@@ -318,17 +334,10 @@ function MyComponent({ onClose }) {
         target_level: data?.target_level,
         date: data?.date_time,
         expert: data?.name,
-        descriptions: topics.map(topic => ({
-          description: topic.topic,
-          percentage: topic.percentage,
-        })),
-        expert_analysis: currentResponses.map(item => ({
-          point: item.title,
-          description: item.response,
-          percentage: item.percentage
-        })),
+        expert_analysis,
+        descriptions
       };
-
+      
       // POST request for feedback
       const response = await axios.post(`${apiUrl}/api/expert/feedback-skillAnalysis`, payload, {
         headers: { Authorization: `Bearer ${token}` },
@@ -476,7 +485,7 @@ function MyComponent({ onClose }) {
           </View>
           <View style={[styles.cell, { flex: 5 }]}>
             <TextInput
-              placeholder={t("Topic description")}
+              placeholder={t("Topic")}
               placeholderTextColor="grey"
               style={styles.input}
               editable={false}
@@ -485,11 +494,9 @@ function MyComponent({ onClose }) {
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
             <Picker
-              selectedValue={item.percentage !== null ? String(item.percentage) : "0"}
-              style={styles.picker}
-              onValueChange={(itemValue) => handlePercentageChange(index, itemValue)}
+              style={styles.picker2}
             >
-              <Picker.Item label="0%" value="0" />
+            <Picker.Item label="Select Score" value="Select Score" />
               <Picker.Item label="10%" value="10" />
               <Picker.Item label="20%" value="20" />
               <Picker.Item label="30%" value="30" />
@@ -878,4 +885,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyComponent; 
+export default MyComponent;       

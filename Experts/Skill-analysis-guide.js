@@ -466,41 +466,41 @@ function MyComponent({ onClose }) {
          
           </View>
 
-          <View style={styles.container2}>
-            {topics.map((topic, index) => (
-                <View key={index} style={styles.row}>
-                  <View style={[styles.cell2, { flex: 0.3, marginTop: 5 }]}>
-                    <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
-                  </View>
-                <View style={[styles.cell2, { flex: 5 }]}>
-                  <TextInput
-                    placeholder={t(" ")}
-                    placeholderTextColor="grey"
-                    style={styles.input2}
-                    value={topic.topic}
-                    onChangeText={text => updateTopic(index, 'topic', text)}
-                  />
-                </View>
-                <View style={[styles.cell2, { flex: 0.5 }]}>
-                  <Picker
-                    selectedValue={topic.percentage}
-                    style={styles.picker2}
-                    onValueChange={(itemValue) => updateTopic(index, 'percentage', itemValue)}
-                  >
-                  <Picker.Item label="Select Score" value="Select Score" />
-                    <Picker.Item label="10%" value="10" />
-                    <Picker.Item label="20%" value="20" />
-                    <Picker.Item label="30%" value="30" />
-                    <Picker.Item label="40%" value="40" />
-                    <Picker.Item label="50%" value="50" />
-                    <Picker.Item label="60%" value="60" />
-                    <Picker.Item label="70%" value="70" />
-                    <Picker.Item label="80%" value="80" />
-                    <Picker.Item label="90%" value="90" />
-                    <Picker.Item label="100%" value="100" />
-                  </Picker>
-          
-                </View>
+                  <View style={styles.container2}>
+                    {topics.map((topic, index) => (
+                        <View key={index} style={styles.row}>
+                          <View style={[styles.cell2, { flex: 0.3, marginTop: 5 }]}>
+                            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
+                          </View>
+                        <View style={[styles.cell2, { flex: 5 }]}>
+                          <TextInput
+                            placeholder={t(" ")}
+                            placeholderTextColor="grey"
+                            style={styles.input2}
+                            value={topic.topic}
+                            onChangeText={text => updateTopic(index, 'topic', text)}
+                          />
+                        </View>
+                        <View style={[styles.cell2, { flex: 0.5 }]}>
+                          <Picker
+                            selectedValue={topic.percentage}
+                            style={styles.picker2}
+                            onValueChange={(itemValue) => updateTopic(index, 'percentage', itemValue)}
+                          >
+                          <Picker.Item label="Select Score" value="Select Score" />
+                            <Picker.Item label="10%" value="10" />
+                            <Picker.Item label="20%" value="20" />
+                            <Picker.Item label="30%" value="30" />
+                            <Picker.Item label="40%" value="40" />
+                            <Picker.Item label="50%" value="50" />
+                            <Picker.Item label="60%" value="60" />
+                            <Picker.Item label="70%" value="70" />
+                            <Picker.Item label="80%" value="80" />
+                            <Picker.Item label="90%" value="90" />
+                            <Picker.Item label="100%" value="100" />
+                          </Picker>
+
+                        </View>
                 <TouchableOpacity onPress={() => deleteTopic(index)} style={styles.deleteButton}>
                   <Text style={{color: 'grey', fontSize: 14, marginTop: 10, fontWeight: 600}}>✕</Text>
                 </TouchableOpacity>
