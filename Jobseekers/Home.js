@@ -256,34 +256,30 @@ const HomePage = () => {
     }
   }
 
-  // Helper function to process and find the latest entry
-  function processLatestEntry(entries, expertNameField, dateTimeField) {
+  const processLatestEntry = (entries, expertNameField, dateTimeField, linkField) => {
     if (!entries || entries.length === 0) return {};
-
-    // Log the raw entries for debugging
-    console.log("Raw Entries:", entries);
 
     // Parse the date_time field to Date objects
     const parsedEntries = entries.map((entry) => ({
-      ...entry,
-      [dateTimeField]: new Date(entry[dateTimeField]),
+        ...entry,
+        [dateTimeField]: new Date(entry[dateTimeField]), // Convert date_time to Date object
     }));
 
-    // Log parsed entries for debugging
-    console.log("Parsed Entries:", parsedEntries);
-
-    // Sort entries by date_time in descending order
+    // Sort entries by date in descending order (most recent first)
     parsedEntries.sort((a, b) => b[dateTimeField] - a[dateTimeField]);
 
     // Log sorted entries for debugging
     console.log("Sorted Entries:", parsedEntries);
 
-    // Return the latest entry's expert name and formatted date_time
+    // Return the latest entry's name, formatted date_time, and expert_link
+    const latestEntry = parsedEntries[0]; // Get the most recent entry
+
     return {
-      expertName: parsedEntries[0][expertNameField],
-      dateTime: formatDate(parsedEntries[0][dateTimeField].toISOString()),
+      expertName: latestEntry ? latestEntry[expertNameField] : "No Name Available",
+        dateTime: latestEntry ? formatDate(latestEntry[dateTimeField].toISOString()) : "No Date Available",
+        expertLink: latestEntry ? latestEntry[linkField] : "No Link Available",
     };
-  }
+};
 
   // Formatting function
   function formatDate(dateString) {

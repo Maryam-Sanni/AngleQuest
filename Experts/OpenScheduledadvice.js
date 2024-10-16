@@ -181,48 +181,52 @@ function MyComponent({ onClose }) {
         return;
       }
 
+      // Extract data_id and individual_id from data
+      const data_id = String(data?.id); 
+      const individual_id = String(data?.user_id);
+
+      // Ensure that both data_id and individual_id are available
+      if (!data_id || !individual_id) {
+        console.error('Missing data_id or individual_id');
+        return;
+      }
+
+      // Prepare request configuration
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`, // Fixed template string
+          Authorization: `Bearer ${token}`, 
           'Content-Type': 'application/json',
         },
       };
 
-      // Make the GET request to /get-draft
-      const response = await axios.get(`${apiUrl}/api/expert/get-draft`, config); // Fixed template string
+      // Make the GET request to /get-draft/{data_id}/{individual_id}
+      const response = await axios.get(`${apiUrl}/api/expert/get-draft/${data_id}/${individual_id}`, config); // Use backticks here too
 
       // Check if the response contains the expected structure
       if (response.data && response.data.status === "success" && response.data.Draft) {
-        const drafts = response.data.Draft;
+        const draft = response.data.Draft;
 
-        // Log all drafts for debugging
-        console.log('Drafts retrieved:', drafts);
+        // Set the retrieved draft data
+        setDraftData(draft);
+        setRemark(draft.overall_feedback || '');
 
-        // Find a draft where the data_id matches data.id
-        const matchingDraft = drafts.find(draft => String(draft.data_id) === String(data?.id)); // Compare data_id with data?.id
+        // Map the additional field to the response state format
+        const additionalData = draft.additional || [];
+        const mappedResponses = additionalData.map(item => ({
+          response: item.evaluation || '',
+          title: item.topic || '',
+          percentage: item.score || '', // Initialize as needed
+        }));
 
-        if (matchingDraft) {
-          setDraftData(matchingDraft);
-          setRemark(matchingDraft.overall_feedback || ''); // Set remark from overall_feedback
+        // Update the state with the mapped responses
+        setResponse(mappedResponses);
 
-          // Map the additional field to the response state format
-          const additionalData = matchingDraft.additional || [];
-          const mappedResponses = additionalData.map(item => ({
-            response: item.evaluation || '',
-            title: item.topic || '',
-            percentage: item.score || '', // Assuming you might want to set this later; initialize as needed
-          }));
-
-          setResponse(mappedResponses); // Update the state with the mapped responses
-
-          console.log('Matching draft retrieved successfully:', matchingDraft);
-        } else {
-          console.warn('No matching draft with the given data.id.');
-        }
+        console.log('Draft retrieved successfully:', draft);
       } else {
-        console.error('Unexpected response structure:', response.data);
+        console.warn('No matching draft with the given data.id or unexpected response structure:', response.data);
       }
     } catch (error) {
+      // Handle other errors (e.g., token issues, missing data, unexpected issues)
       console.error('Error fetching draft:', error);
     }
   };
@@ -231,11 +235,7 @@ function MyComponent({ onClose }) {
   useEffect(() => {
     fetchDraft();
   }, []);
-
-
-
-
-
+  
   
   const createDraft = async () => {
     const apiEndpoint = `${apiUrl}/api/expert/create-draft`;
@@ -710,8 +710,8 @@ function MyComponent({ onClose }) {
        </Text>
      </TouchableOpacity>
 
-     <TouchableOpacity style={styles.buttonAcc} onPress={createDraft}>
-       <Text style={styles.buttonText}>Save as draft</Text>
+     <TouchableOpacity style={styles.buttonAcc}>
+
      </TouchableOpacity>
      
       <TouchableOpacity style={styles.buttonAcc2} onPress={handlePress}>
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
     borderColor: 'black'
   },
   buttonAcc: {
-     backgroundColor: '#206C00',
+     backgroundColor: '#F8F8F8',
       padding: 10,
       marginTop: 30,
       marginLeft: 350, 
