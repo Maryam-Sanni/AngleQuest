@@ -619,27 +619,20 @@ const HomePage = () => {
                               {plandata.latestGrowthPlan.expertName ||
                                 "You are all caught up! You have no pending action"}
                             </Text>
+                            
                             <TouchableOpacity
-                              style={[
-                                styles.touchablestart,
-                                isHovered10 && styles.touchableOpacityHovered, 
-                              ]}
-                              onMouseEnter={() => setIsHovered10(true)} 
-                              onMouseLeave={() => setIsHovered10(false)} 
-                              onPress={() => {
-                                const joinLink = plandata.latestGrowthPlan.candidate_link || 'https://default-join-link.com'; 
-                                if (joinLink) {
-                                  Linking.openURL(joinLink)
-                                    .catch(err => console.error("Couldn't load page", err)); 
-                                } else {
-                                  console.warn('No valid link available');
-                                }
-                              }}
-                            >
-                              <Text style={styles.touchableTextjoinreview}>
-                                {t("Join")}
-                              </Text>
-                            </TouchableOpacity>
+  style={[
+    styles.touchablestart,
+    isHovered10 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
+  ]}
+  onMouseEnter={() => setIsHovered10(true)}
+  onMouseLeave={() => setIsHovered10(false)}
+  onPress={goToGrowth}
+>
+  <Text style={styles.touchableTextjoinreview}>
+    {t("Open")}
+  </Text>
+</TouchableOpacity>
                           </View>
                         </View>
                       </View>
@@ -699,26 +692,18 @@ const HomePage = () => {
                                 "You are all caught up! You have no pending action"}
                             </Text>
                             <TouchableOpacity
-                              style={[
-                                styles.touchablestart,
-                                isHovered11 && styles.touchableOpacityHovered, 
-                              ]}
-                              onMouseEnter={() => setIsHovered11(true)} 
-                              onMouseLeave={() => setIsHovered11(false)} 
-                              onPress={() => {
-                                const joinLink = plandata.latestSkillAnalysis.candidate_link || 'https://default-join-link.com'; 
-                                if (joinLink) {
-                                  Linking.openURL(joinLink)
-                                    .catch(err => console.error("Couldn't load page", err)); 
-                                } else {
-                                  console.warn('No valid link available');
-                                }
-                              }}
-                            >
-                              <Text style={styles.touchableTextjoinreview}>
-                                {t("Join")}
-                              </Text>
-                            </TouchableOpacity>
+  style={[
+    styles.touchablestart,
+    isHovered11 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
+  ]}
+  onMouseEnter={() => setIsHovered11(true)}
+  onMouseLeave={() => setIsHovered11(false)}
+  onPress={goToAdvice}
+>
+  <Text style={styles.touchableTextjoinreview}>
+    {t("Open")}
+  </Text>
+</TouchableOpacity>
                           </View>
                         </View>
                       </View>
@@ -780,26 +765,18 @@ const HomePage = () => {
                                 "You are all caught up! You have no pending action"}
                             </Text>
                             <TouchableOpacity
-                              style={[
-                                styles.touchablestart,
-                                isHovered12 && styles.touchableOpacityHovered, 
-                              ]}
-                              onMouseEnter={() => setIsHovered12(true)} 
-                              onMouseLeave={() => setIsHovered12(false)} 
-                              onPress={() => {
-                                const joinLink = plandata.latestInterview.candidate_link || 'https://default-join-link.com'; 
-                                if (joinLink) {
-                                  Linking.openURL(joinLink)
-                                    .catch(err => console.error("Couldn't load page", err)); 
-                                } else {
-                                  console.warn('No valid link available');
-                                }
-                              }}
-                            >
-                              <Text style={styles.touchableTextjoinreview}>
-                                {t("Join")}
-                              </Text>
-                            </TouchableOpacity>
+  style={[
+    styles.touchablestart,
+    isHovered12 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
+  ]}
+  onMouseEnter={() => setIsHovered12(true)}
+  onMouseLeave={() => setIsHovered12(false)}
+  onPress={goToInterview}
+>
+  <Text style={styles.touchableTextjoinreview}>
+    {t("Open")}
+  </Text>
+</TouchableOpacity>
                           </View>
                         </View>
                       </View>

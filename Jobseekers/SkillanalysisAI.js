@@ -191,21 +191,26 @@ const MyComponent = ({ onClose }) => {
 
   const handleQuestionsResponse = async () => {
     setIsLoading(true); // Start loading
-
+  
     try {
       // Fetch the token from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         throw new Error('No token found');
       }
-
+  
+      // Check if any switch was toggled, if not, default all to "no"
+      const switchStatesWithDefaults = switchStates.length === 0
+        ? questions.map(() => false) // If switchStates is empty, default all to false
+        : switchStates;
+  
       // Prepare the responses in the format required
       const responses = questions.map((question, index) => ({
         id: question.id,
         question: question.question,
-        answer: switchStates[index] ? "yes" : "no",
+        answer: switchStatesWithDefaults[index] ? "yes" : "no", // Use default "no" if switch is off
       }));
-
+  
       // Prepare the form data
       const formData = new FormData();
       formData.append(
@@ -215,7 +220,7 @@ const MyComponent = ({ onClose }) => {
           questions: JSON.stringify({ questions: responses }),
         })
       );
-
+  
       // Make the POST request using Axios
       const response = await axios.post(
         `${apiUrl}/api/jobseeker/process/questionnaire`,
@@ -227,18 +232,18 @@ const MyComponent = ({ onClose }) => {
           },
         }
       );
-
+  
       // Check if response status is OK (200-299)
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
+  
         console.log("Submit Response:", data);
-        navigate('/ai-analysis');
-        onClose();
-        // Optionally, you can also check for specific success conditions in the response data
-        if (data && data.json && data.json.analysis) {
+  
+        // Optionally, you can check for specific success conditions in the response
+        if (data && data.analysis) {
           Alert.alert("Success", "Your responses have been submitted successfully.");
-          navigate('/ai-analysis');
-          onClose();
+          navigate('/ai-analysis'); // Navigate once
+          onClose(); // Close any modal or form if applicable
         } else {
           Alert.alert("Submission Failed", data.message || "Unable to submit responses.");
         }
@@ -247,13 +252,14 @@ const MyComponent = ({ onClose }) => {
         Alert.alert("Submission Failed", "The request failed with status: " + response.status);
       }
     } catch (error) {
+      // Handle request errors and log for better debugging
       Alert.alert("Error", "An error occurred while submitting your responses.");
-      console.error("Submit Error:", error);
+      console.error("Submit Error:", error.response ? error.response.data : error.message);
     } finally {
       // Reset loading state
       setIsLoading(false);
     }
-  };
+  };  
 
 
 

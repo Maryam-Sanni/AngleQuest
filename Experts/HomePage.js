@@ -711,20 +711,10 @@ const HomePage = () => {
   ]}
   onMouseEnter={() => setIsHovered10(true)}
   onMouseLeave={() => setIsHovered10(false)}
-  onPress={() => {
-    // Now using expert_link instead of candidateLink
-    const joinLink = plandata?.latestGrowthPlan?.expert_link || 'https://default-join-link.com'; 
-    console.log("Join Link:", joinLink);  // Log the link for debugging
-    if (joinLink) {
-      Linking.openURL(joinLink)
-        .catch(err => console.error("Couldn't load page", err)); 
-    } else {
-      console.warn('No valid link available');
-    }
-  }}
+  onPress={goToGrowth}
 >
   <Text style={styles.touchableTextjoinreview}>
-    {t("Start")}
+    {t("Open")}
   </Text>
 </TouchableOpacity>
                           </View>
@@ -792,20 +782,10 @@ const HomePage = () => {
   ]}
   onMouseEnter={() => setIsHovered11(true)}
   onMouseLeave={() => setIsHovered11(false)}
-  onPress={() => {
-    // Now using expert_link instead of candidateLink
-    const joinLink = plandata?.latestSkillAnalysis?.expert_link || 'https://default-join-link.com'; 
-    console.log("Join Link:", joinLink);  // Log the link for debugging
-    if (joinLink) {
-      Linking.openURL(joinLink)
-        .catch(err => console.error("Couldn't load page", err)); 
-    } else {
-      console.warn('No valid link available');
-    }
-  }}
+  onPress={goToAdvice}
 >
   <Text style={styles.touchableTextjoinreview}>
-    {t("Start")}
+    {t("Open")}
   </Text>
 </TouchableOpacity>
                           </View>
@@ -874,20 +854,10 @@ const HomePage = () => {
   ]}
   onMouseEnter={() => setIsHovered12(true)}
   onMouseLeave={() => setIsHovered12(false)}
-  onPress={() => {
-    // Now using expert_link instead of candidateLink
-    const joinLink = plandata?.latestInterview?.expert_link || 'https://default-join-link.com'; 
-    console.log("Join Link:", joinLink);  // Log the link for debugging
-    if (joinLink) {
-      Linking.openURL(joinLink)
-        .catch(err => console.error("Couldn't load page", err)); 
-    } else {
-      console.warn('No valid link available');
-    }
-  }}
+  onPress={goToInterview}
 >
   <Text style={styles.touchableTextjoinreview}>
-    {t("Start")}
+    {t("Open")}
   </Text>
 </TouchableOpacity>
                           </View>
