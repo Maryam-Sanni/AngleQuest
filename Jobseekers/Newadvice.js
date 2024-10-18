@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Modal, Alert } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from "expo-font";
@@ -8,11 +8,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
+import OpenModal from '../components/Payment';
 
 function MyComponent({ onClose }) {
    const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [type, setType] = useState("Optimize Productivity");
   const [role, setRole] = useState("");
@@ -34,6 +36,14 @@ function MyComponent({ onClose }) {
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
     const retrieveData = async () => {
@@ -145,8 +155,6 @@ function MyComponent({ onClose }) {
       );
 
       if (MeetingResponse.status !== 200) {
-        navigate('/skill-analysis-offer');
-        onClose();
         return;
       }
       
@@ -189,12 +197,10 @@ function MyComponent({ onClose }) {
 
             // Navigate based on the subscription status
             if (subscribed === 'Yes') {
-              navigate('/skill-analysis-sessions');
+              handleOpenPress();
             } else {
-              navigate('/skill-analysis-sessions');
+              handleOpenPress();
             }
-
-                  onClose(); // Close the form/modal
                 }
               } catch (error) {
                 console.error('Error during save:', error);
@@ -381,7 +387,7 @@ function MyComponent({ onClose }) {
           </View>
           
               <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
-                <Text style={styles.buttonTextplus}>{t("Save")}</Text>
+                <Text style={styles.buttonTextplus}>{t("Save & Create Session")}</Text>
               </TouchableOpacity>
             
           
@@ -399,6 +405,16 @@ function MyComponent({ onClose }) {
         message={alertMessage}
         onConfirm={hideAlert}
       />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
     </View>
   );
 }
@@ -411,6 +427,13 @@ const styles = StyleSheet.create({
     marginRight: 70,
     marginTop: 20,
     marginLeft: 50,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
   },
   greenBox: {
     width: 920,
@@ -438,8 +461,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     borderRadius: 5,
     padding: 5,
-    marginLeft: 750,
-    width: 100,
+    marginLeft: 650,
+    width: 200,
     paddingHorizontal: 20,
     marginTop: 10,
   },

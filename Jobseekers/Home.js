@@ -161,6 +161,10 @@ const HomePage = () => {
     navigate("/ai-result");
   };
 
+  const goTopay = () => {
+    navigate("/billings-payment");
+  };
+
   const goToInterview = () => {
     navigate("/interview-sessions");
   };
@@ -465,7 +469,22 @@ const HomePage = () => {
                         
                       </View>
                     </TouchableOpacity>
-
+                    <TouchableOpacity
+                       onPress={goTopay}
+                      style={[
+                        styles.touchablechat,
+                        isHovered5 && styles.touchableOpacityHovered,
+                      ]}
+                      onMouseEnter={() => setIsHovered5(true)}
+                      onMouseLeave={() => setIsHovered5(false)}
+                    >
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={styles.touchableTextchat}>
+                          {t("Payment Status")}
+                        </Text>
+                        
+                      </View>
+                    </TouchableOpacity>
                     
                   </BlurView>
                 </View>
