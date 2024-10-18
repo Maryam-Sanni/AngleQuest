@@ -35,7 +35,7 @@ function MyComponent({ onClose }) {
       const [isVisible, setIsVisible] = useState(true);
       const [isPressed, setIsPressed] = useState(false);
       const [isModalVisible, setModalVisible] = useState(false);
-      const [rate, setRate] = useState('$0'); // Initial value includes $
+      const [rate, setRate] = useState('$30'); // Initial value includes $
 
       const handleRateChange = (text) => {
         // Remove non-numeric characters except for the decimal point
@@ -246,19 +246,7 @@ function MyComponent({ onClose }) {
       </Picker>
     </View>
   </View>
-  <View style={styles.row}>
-    <View style={[styles.cell, { flex: 1}]}>
-      <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-    </View>
-    <View style={[styles.cell, { flex: 2}]}>
-      <TextInput
-        style={styles.input}
-        value={rate}
-        onChangeText={handleRateChange}
-        keyboardType="numeric" // Numeric keyboard input
-      />
-    </View>
-  </View>
+  
   <View style={styles.row}>
     <View style={[styles.cell, { flex: 1}]}>
       <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>

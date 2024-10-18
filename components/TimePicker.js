@@ -7,7 +7,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [startTime, setStartTime] = useState({ hour: "01", minute: "00", period: "AM" });
-  const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "PM" });
+  const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "AM" });
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -95,11 +95,21 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
   const handleTimeChange = (newTime) => {
     onTimeChange(newTime);
-    // Call onConfirm if the end time is set (you can modify this condition based on your logic)
-    if (label === "End") {
-      const date = new Date(); // Replace with your actual date input
-      onConfirm({ date, startDateTime: new Date(date.setHours(parseInt(time.hour), parseInt(time.minute), 0)), endDateTime: new Date(date.setHours(parseInt(newTime.hour), parseInt(newTime.minute), 0)) });
-    }
+  };
+
+  const handlePeriodChange = (period) => {
+    const newTime = { ...time, period };
+    onTimeChange(newTime);
+    handleConfirm(newTime); // Pass the new time to confirm immediately
+  };
+
+  const handleConfirm = (currentTime) => {
+    const date = new Date(); // Replace with your actual date input
+    onConfirm({
+      date,
+      startDateTime: new Date(date.setHours(parseInt(currentTime.hour), parseInt(currentTime.minute), 0)),
+      endDateTime: new Date(date.setHours(parseInt(currentTime.hour), parseInt(currentTime.minute), 0)),
+    });
   };
 
   return (
@@ -128,13 +138,20 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
         <Picker
           style={styles.periodPicker}
           selectedValue={time.period}
-          onValueChange={(period) => handleTimeChange({ ...time, period })}
+          onValueChange={handlePeriodChange} // Call the new handler for period change
         >
           {["AM", "PM"].map((period, index) => (
             <Picker.Item key={index} label={period} value={period} />
           ))}
         </Picker>
       </View>
+
+      {/* Hidden confirm button */}
+      <TouchableOpacity
+        style={styles.hiddenButton} // Style it to be hidden
+        onPress={() => handleConfirm(time)} // Ensure it uses the latest state
+        accessibilityLabel="Confirm Time Selection"
+      />
     </View>
   );
 };

@@ -111,6 +111,37 @@ const ProfileUpdate = () => {
         return;
       }
 
+       // Check if all fields are filled
+    if (!location) {
+      alert('Location is missing.');
+      return;
+    }
+    
+    if (!specialization) {
+      alert('Category (specialization) is missing.');
+      return;
+    }
+
+    if (!yearsOfExperience) {
+      alert('Years of experience is missing.');
+      return;
+    }
+
+    if (!currentSelectedRoles || currentSelectedRoles.length === 0) {
+      alert('Please select at least one role.');
+      return;
+    }
+
+    if (!aboutMe) {
+      alert('About me section is missing.');
+      return;
+    }
+
+    if (!profileImage) {
+      alert('Profile image is missing.');
+      return;
+    }
+
       // Save data to AsyncStorage
       await AsyncStorage.setItem('location', location);
       await AsyncStorage.setItem('category', specialization);
@@ -168,11 +199,11 @@ const ProfileUpdate = () => {
         console.log('Save Response:', response.data);
         alert('Your Profile has been successfully saved.');
       } else {
-        alert('Failed to save. Please try again.');
+        alert('Failed to save. Please check that all fields are filled.');
       }
     } catch (error) {
       console.error('Save Error:', error.response ? error.response.data : error);
-      alert('Failed to save. Please try again.');
+      alert('Failed to save. Please check that all fields are filled.');
     }
   };
 
@@ -274,7 +305,6 @@ const ProfileUpdate = () => {
             </TouchableOpacity>
           )}
         </View>
-
 
       {/* About Me */}
       <View style={styles.field}>

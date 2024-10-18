@@ -6,29 +6,21 @@ import axios from 'axios';
 const ResetPasswordForm = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
-  // Extract token from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token'); // Extracts the token from the URL
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleResetPassword = async () => {
-    if (!token) {
-      setError("Token is missing or invalid");
-      return;
-    }
-
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
-      const response = await axios.post(`${apiUrl}/api/forgot-password`, {
-        token, // Use the extracted token
+      const response = await axios.post(`${apiUrl}/api/reset-password`, {
+        email,
         new_password: newPassword, // The new password being reset
       });
       setSuccess("Password reset successfully");
@@ -44,6 +36,14 @@ const ResetPasswordForm = () => {
       <Top />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={styles.title}>Reset Your Password</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={setEmail}
+            value={email}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}

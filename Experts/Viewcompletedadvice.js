@@ -220,52 +220,7 @@ function MyComponent({ onClose }) {
     </View>
 
 
-
-   <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20, marginBottom: -20 }}>{t("Skill Analysis Scoring")}</Text>
-
-  <View style={styles.container}>
-    {topics.map((topic, index) => (
-      <View style={styles.row} key={index}>
-        <View style={[styles.cell, { flex: 2 }]}>
-          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Topic")} {index + 1}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("Topic description")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            editable={false} 
-            value={topic.topic}
-            onChangeText={text => handleTopicChange(index, 'topic', text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-          <Picker
-            selectedValue={topic.percentage}
-            style={styles.picker}
-            onValueChange={(itemValue) => handleTopicChange(index, 'percentage', itemValue)}
-          >
-            <Picker.Item label="10%" value="10" />
-            <Picker.Item label="20%" value="20" />
-            <Picker.Item label="30%" value="30" />
-            <Picker.Item label="40%" value="40" />
-            <Picker.Item label="50%" value="50" />
-            <Picker.Item label="60%" value="60" />
-            <Picker.Item label="70%" value="70" />
-            <Picker.Item label="80%" value="80" />
-            <Picker.Item label="90%" value="90" />
-            <Picker.Item label="100%" value="100" />
-          </Picker>
-        </View>
-      </View>
-    ))}
-    <TouchableOpacity
-      onPress={() => setTopics([...topics, { topic: '', percentage: '0' }])}
-      style={styles.addButton}
-    >
-
-    </TouchableOpacity>
-  </View>
+  
   <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
                 <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
                   <TextInput
@@ -278,26 +233,7 @@ function MyComponent({ onClose }) {
                   />
                   </View>
 
-    <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Rating")}</Text>
-
-  <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
-          </View>
-          <View style={styles.cell}>
-          <Picker
-            selectedValue={data?.rating}
-             style={styles.picker}
-             onValueChange={(itemValue) => setRating(itemValue)}
-  >
-            <Picker.Item label="Fair" value="Fair" />
-            <Picker.Item label="Good" value="Good" />
-            <Picker.Item label="Brilliant" value="Brilliant" />
-  </Picker>
-          </View>
-          </View>
-          </View>
+  
 
   <View style={styles.ratingContainer}>
     <Text style={styles.ratetitle}>{t("Rating")} </Text>

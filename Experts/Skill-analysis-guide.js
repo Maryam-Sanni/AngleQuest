@@ -47,7 +47,7 @@ function MyComponent({ onClose }) {
   const [isPressed, setIsPressed] = useState(false);
   const [pressedButton, setPressedButton] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [rate, setRate] = useState('$0'); // Initial value includes $
+  const [rate, setRate] = useState('$30'); // Initial value includes $
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -79,30 +79,68 @@ function MyComponent({ onClose }) {
       const storedYearsOfExperience = await AsyncStorage.getItem('yearsOfExperience');
       const storedProfileImage = await AsyncStorage.getItem('profileImage');
       const storedRoles = await AsyncStorage.getItem('currentSelectedRoles');
+      
+      // Check if storedRoles is not null and valid JSON
       const parsedRoles = storedRoles ? JSON.parse(storedRoles) : [];
-
+  
       // Set the state with retrieved data
       if (storedLocation) setLocation(storedLocation);
       if (storedCategory) setCategory(storedCategory);
       if (storedYearsOfExperience) setYearsOfExperience(storedYearsOfExperience);
-
-      // Convert storedProfileImage to Blob
+  
+      // Convert storedProfileImage to Blob and setProfileImage
       if (storedProfileImage && typeof storedProfileImage === 'string') {
-        const blob = await fetch(storedProfileImage).then((res) => res.blob());
-        setProfileImage(URL.createObjectURL(blob));  // Convert the blob to a URL to use in <Image> component
+        const response = await fetch(storedProfileImage);
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setProfileImage(imageUrl);  // Set the image URL
       }
+  
+      // Set selected roles state
+      if (Array.isArray(parsedRoles)) {
 
-      setSelectedRoles(parsedRoles);  // Set roles, parsing the JSON string
+      } else {
+        console.warn('Parsed roles are not an array:', parsedRoles);
+        setSelectedRoles([]);  // Fallback to an empty array if parsing fails
+      }
+  
     } catch (error) {
       console.error('Error retrieving data from AsyncStorage:', error);
     }
   };
-
+  
   // useEffect to load the profile data when the component mounts
   useEffect(() => {
     getProfileData();
   }, []);
+  
+ /// Function to fetch specialization from the API using token from AsyncStorage
+ const fetchSpecialization = async () => {
+  try {
+    // Retrieve the token from AsyncStorage
+    const token = await AsyncStorage.getItem('token');
 
+    // Make the API request with the token in the headers
+    const response = await axios.get(`${apiUrl}/api/expert/get-expert-profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the request headers
+      },
+    });
+
+    // Check if the response status is success
+    if (response.data.status === "success") {
+      const specialization = response.data.profile.specialization || [];
+      setSelectedRoles(specialization);  // Set the specialization array
+    }
+  } catch (error) {
+    console.error('Error fetching specialization data:', error);
+  }
+};
+
+// useEffect to fetch data when the component mounts
+useEffect(() => {
+  fetchSpecialization();
+}, []);
 
   useEffect(() => {
     const loadFormData = async () => {
@@ -133,7 +171,7 @@ function MyComponent({ onClose }) {
                 console.error('Failed to fetch data', response);
             }
         } catch (error) {
-            console.error('Failed to load form data', error);
+             console.error('Failed to load form data', error);
         }
     };
 
@@ -380,22 +418,22 @@ function MyComponent({ onClose }) {
                 </Text>
               </View>
               <View style={[styles.cell, { flex: 2 }]}>
-                <Picker
-                  selectedValue={selectedRole}  // Use the selected value state
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setSelectedRole(itemValue)}  // Update selected role when changed
-                >
-                  {/* Add an alternative option when no roles are selected */}
-                  <Picker.Item label="Select a specialization" value="" />
+              <Picker
+        selectedValue={selectedRole}  // Use the selected role state
+        style={styles.picker}
+        onValueChange={(itemValue) => setSelectedRole(itemValue)}  // Update selected role when changed
+      >
+        {/* Default option when no role is selected */}
+        <Picker.Item label="Select a specialization" value="" />
 
-                  {selectedRoles.length > 0 ? (
-                    selectedRoles.map((role, index) => (
-                      <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item
-                    ))
-                  ) : (
-                    <Picker.Item label="Update your personal information" value="no_roles" />  // Fallback when no roles exist
-                  )}
-                </Picker>
+        {selectedRoles.length > 0 ? (
+          selectedRoles.map((role, index) => (
+            <Picker.Item key={index} label={role} value={role} />  // Dynamically create Picker.Item for each role
+          ))
+        ) : (
+          <Picker.Item label="No specializations available" value="no_roles" />  // Fallback when no roles exist
+        )}
+      </Picker>
               </View>
             </View>
 
@@ -415,19 +453,7 @@ function MyComponent({ onClose }) {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  style={styles.input}
-                  value={rate}
-                  onChangeText={handleRateChange}
-                  keyboardType="numeric" // Numeric keyboard input
-                />
-              </View>
-            </View>
+           
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>

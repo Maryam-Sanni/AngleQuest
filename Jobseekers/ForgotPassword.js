@@ -59,13 +59,12 @@ const ResetPasswordForm = () => {
     <View style={{ flex: 1}}>
       <Top />
       <View style={styles.container}>
-        <Text style={styles.title}>Reset Your Password</Text>
+        <Text style={styles.title}>Enter your email address to rest your password</Text>
 
         {success && <Text style={styles.successText}>{success}</Text>}
         {error && <Text style={styles.errorText}>{error}</Text>}
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>{t("Email")}</Text>
           <TextInput
             ref={emailRef}
             style={styles.input}
@@ -95,14 +94,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 400
+    padding: 200
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     color: "black",
     marginBottom: 30,
-    fontFamily: "Roboto-Light"
   },
   inputContainer: {
     marginBottom: 10,
@@ -141,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: "coral",
     borderRadius: 5,
     padding: 10,
-    width: "100%",
+    width: 200,
     alignItems: "center",
     marginTop: 10,
   },
