@@ -396,6 +396,8 @@ useEffect(() => {
             </View>
           </View>
 
+          <Text style={{fontSize: 16, fontWeight: '600', marginBottom: 10, marginLeft: 50}}>{level || "Please create"} {selectedRole || ""} profile</Text>
+
           <View style={styles.container}>
             <View style={styles.row}>
                <View style={[styles.cell, { flex: 1}]}>
@@ -621,7 +623,7 @@ marginTop: 10
   },
   buttonDue: {
     marginLeft: 50,
-    marginTop: 5,
+    marginBottom: 20
   },
   buttonTextDue: {
     color: 'black',
@@ -717,7 +719,7 @@ marginTop: 10
   navigationContainer: {
     flexDirection: 'row',
     marginLeft: 50,
-    marginBottom: 50
+    marginBottom: 20
   },
   navButton: {
     backgroundColor: '#CEFAD0',

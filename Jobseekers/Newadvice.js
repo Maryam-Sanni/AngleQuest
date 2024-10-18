@@ -386,7 +386,7 @@ function MyComponent({ onClose }) {
             </View>
           </View>
           
-              <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
+              <TouchableOpacity style={styles.buttonplus} onPress={handleOpenPress}>
                 <Text style={styles.buttonTextplus}>{t("Save & Create Session")}</Text>
               </TouchableOpacity>
             
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     marginLeft: 650,
     width: 200,
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 30,
   },
   buttonTextplus: {
     color: 'white',

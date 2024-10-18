@@ -8,10 +8,10 @@ import personImage from '../assets/person.png';
 
 
 const specializationRoles = {
-  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
-  Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer'],
-  Scrum: ['Scrum'],
   'Business Analysis': ['Business Analysis'],
+  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
+  Scrum: ['Scrum'],
+  Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer', 'Dynamics F&O'],
 };
 
 const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
@@ -55,10 +55,14 @@ const ProfileUpdate = () => {
   const [loading, setLoading] = useState('');
   const [role, setRole] = useState('');
   const [yearsOfExperience, setYearsOfExperience] = useState('');
-  const [specialization, setSpecialization] = useState(' ');
+  const [specialization, setSpecialization] = useState('SAP');
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSelectVisible, setSelectVisible] = useState(false);
-  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(selectedRoles); 
+  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(() => {
+    // Check if selectedRoles is defined and has a property 'SAP'
+    return selectedRoles && selectedRoles['SAP'] ? selectedRoles['SAP'] : []; // Fallback to empty array
+  });
+   
 
   // Effect to clear selected roles when specialization changes
   useEffect(() => {
@@ -305,10 +309,11 @@ const ProfileUpdate = () => {
             </TouchableOpacity>
           )}
         </View>
+        <Text style={{fontSize: 12, marginBottom: 30, marginTop: -15, marginLeft: 20}}>Required*</Text>
 
       {/* About Me */}
       <View style={styles.field}>
-        <Text style={styles.label}>About Me</Text>
+        <Text style={styles.label}>About Me*</Text>
         <TextInput
           style={styles.input}
           placeholder="Write something about yourself"
@@ -321,7 +326,7 @@ const ProfileUpdate = () => {
 
       {/* Specialization */}
         <View style={styles.field}>
-          <Text style={styles.label}>Category</Text>
+          <Text style={styles.label}>Category*</Text>
           <Picker
             selectedValue={specialization}
             value={specialization}
@@ -336,7 +341,7 @@ const ProfileUpdate = () => {
 
         {/* Role Selection */}
         <View style={styles.field}>
-          <Text style={styles.label}>Specialization</Text>
+          <Text style={styles.label}>Specialization*</Text>
 
           {/* Clickable TextInput */}
           <TouchableOpacity onPress={handleInputClick} style={styles.inputContainer}>
@@ -372,7 +377,7 @@ const ProfileUpdate = () => {
         
       {/* Years of Experience */}
       <View style={styles.field}>
-        <Text style={styles.label}>Years of Experience</Text>
+        <Text style={styles.label}>Years of Experience*</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter your years of experience"
@@ -387,7 +392,7 @@ const ProfileUpdate = () => {
 
         {/* Location */}
         <View style={styles.field}>
-          <Text style={styles.label}>Location</Text>
+          <Text style={styles.label}>Location*</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter your location"
@@ -441,7 +446,6 @@ const styles = StyleSheet.create({
     borderColor: '#CCC',
     alignSelf: 'flex-start',
     backgroundColor: '#f9f9f9',
-    marginBottom: 20
   },
   profileImage: {
     width: 100,
