@@ -74,6 +74,7 @@
     "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-config": "^1.5.3",
     "react-native-country-picker-modal": "^2.0.0",
+    "react-native-date-picker": "^5.0.7",
     "react-native-deep-linking": "^2.2.0",
     "react-native-dotenv": "^3.4.11",
     "react-native-elements": "^3.4.3",

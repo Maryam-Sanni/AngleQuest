@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-native-date-picker';
 
 const PaymentComponent = ({ onClose }) => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const PaymentComponent = ({ onClose }) => {
   const [paymentOption, setPaymentOption] = useState('full');
   const [paymentDate1, setPaymentDate1] = useState('');
   const [paymentDate2, setPaymentDate2] = useState('');
-  const [paymentStatus] = useState('pending');
+  const [paymentStatus] = useState('pending');;
 
   const accountDetails = {
     accountNumber: 'NL18REVO2553615475REVONL22',
@@ -68,6 +69,19 @@ const PaymentComponent = ({ onClose }) => {
     }
   };
 
+  const formatDate = (date) => date.toISOString().split('T')[0];
+
+  const today = new Date();
+  const maxDate1 = new Date();
+  maxDate1.setDate(today.getDate() + 30);
+
+  const minDate2 = paymentDate1 ? new Date(paymentDate1) : null;
+  const maxDate2 = minDate2 ? new Date(minDate2) : null;
+  if (maxDate2) {
+    maxDate2.setDate(minDate2.getDate() + 30);
+  }
+
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
@@ -118,11 +132,13 @@ const PaymentComponent = ({ onClose }) => {
               </View>
               <View style={[styles.cell, { flex: 2}]}>
               <View Style ={{flexDirection: 'column'}}>
-              <TextInput
-                style={styles.input}
-                placeholder={t("Date: 2024-01-12")}
+              <input
+                type="date"
                 value={paymentDate1}
-                onChangeText={setPaymentDate1}
+                onChange={(e) => setPaymentDate1(e.target.value)}
+                style={styles.input}
+                min={formatDate(today)}
+                max={formatDate(maxDate1)}
               />
              <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when payment will be made")}</Text>
             </View>
@@ -138,12 +154,14 @@ const PaymentComponent = ({ onClose }) => {
                 </View>
                 <View style={[styles.cell, { flex: 2}]}>
                 <View Style ={{flexDirection: 'column'}}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={t("Date: 2024-01-12")}
-                  value={paymentDate1}
-                  onChangeText={setPaymentDate1}
-                />
+               <input
+               type="date"
+               value={paymentDate1}
+               onChange={(e) => setPaymentDate1(e.target.value)}
+               style={styles.input}
+               min={formatDate(today)}
+               max={formatDate(maxDate1)}
+             />
                 <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when first payment will be made")}</Text>
               </View>
               </View>
@@ -154,11 +172,14 @@ const PaymentComponent = ({ onClose }) => {
                 </View>
                 <View style={[styles.cell, { flex: 2}]}>
                 <View Style ={{flexDirection: 'column'}}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={t("Date: 2024-01-12")}
+                <input
+                  type="date"
                   value={paymentDate2}
-                  onChangeText={setPaymentDate2}
+                  onChange={(e) => setPaymentDate2(e.target.value)}
+                  style={styles.input}
+                  min={minDate2 ? formatDate(minDate2) : ''}
+                  max={maxDate2 ? formatDate(maxDate2) : ''}
+                  disabled={!paymentDate1}
                 />
                <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when second payment will be made")}</Text>
               </View>
