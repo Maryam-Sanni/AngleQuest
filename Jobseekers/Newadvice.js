@@ -386,7 +386,7 @@ function MyComponent({ onClose }) {
             </View>
           </View>
           
-              <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
+              <TouchableOpacity style={styles.buttonplus} onPress={handleOpenPress}>
                 <Text style={styles.buttonTextplus}>{t("Save & Create Session")}</Text>
               </TouchableOpacity>
             

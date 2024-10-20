@@ -10,10 +10,10 @@ const PaymentComponent = ({ onClose }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [paymentOption, setPaymentOption] = useState('full');
+  const [paymentOption, setPaymentOption] = useState('select');
   const [paymentDate1, setPaymentDate1] = useState('');
   const [paymentDate2, setPaymentDate2] = useState('');
-  const [paymentStatus] = useState('pending');;
+  const [paymentStatus] = useState('pending');
 
   const accountDetails = {
     accountNumber: 'NL18REVO2553615475REVONL22',
@@ -117,6 +117,7 @@ const PaymentComponent = ({ onClose }) => {
                 style={styles.picker}
                 onValueChange={(itemValue) => setPaymentOption(itemValue)}
               >
+                <Picker.Item label={t("Select")} value="select" />
                 <Picker.Item label={t("Full Payment")} value="full" />
                 <Picker.Item label={t("Two Installments")} value="installments" />
               </Picker>
@@ -140,7 +141,7 @@ const PaymentComponent = ({ onClose }) => {
                 min={formatDate(today)}
                 max={formatDate(maxDate1)}
               />
-             <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when payment will be made")}</Text>
+             <Text style={{fontSize: 12, fontStyle: 'italic', marginTop: 5}}>{t("Use the calendar to select the date when payment will be made")}</Text>
             </View>
             </View>
             </View>
@@ -162,7 +163,7 @@ const PaymentComponent = ({ onClose }) => {
                min={formatDate(today)}
                max={formatDate(maxDate1)}
              />
-                <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when first payment will be made")}</Text>
+                <Text style={{fontSize: 12, fontStyle: 'italic', marginTop: 5}}>{t("Use the calendar to select the date when first payment will be made")}</Text>
               </View>
               </View>
               </View>
@@ -181,7 +182,7 @@ const PaymentComponent = ({ onClose }) => {
                   max={maxDate2 ? formatDate(maxDate2) : ''}
                   disabled={!paymentDate1}
                 />
-               <Text style={{fontSize: 12, fontStyle: 'italic'}}>{t("Enter the date when second payment will be made")}</Text>
+               <Text style={{fontSize: 12, fontStyle: 'italic', marginTop: 5}}>{t("Use the calendar to select the date when second payment will be made")}</Text>
               </View>
               </View>
               </View>
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     width: 200
   },
   input: {
-    height: 40,
+    height: 30,
     borderColor: '#CCC',
     borderWidth: 0.5,
     paddingLeft: 10,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     borderRadius: 5,
     padding: 10,
-    marginTop: 10,
+    marginTop: 40,
     width: 200,
     alignSelf: 'flex-end',
   },

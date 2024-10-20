@@ -174,23 +174,28 @@ function MyComponent({ onClose }) {
     try {
       // Retrieve the token from AsyncStorage
       const token = await AsyncStorage.getItem('token');
-
+  
       // Check if token is available
       if (!token) {
         console.error('Token not found');
         return;
       }
-
-      // Extract data_id and individual_id from data
-      const data_id = String(data?.id); 
+  
+      // Check if data exists and extract data_id and individual_id
+      if (!data) {
+        console.error('Data object is undefined');
+        return;
+      }
+  
       const individual_id = String(data?.user_id);
-
+      const data_id = String(data?.id);
+  
       // Ensure that both data_id and individual_id are available
       if (!data_id || !individual_id) {
         console.error('Missing data_id or individual_id');
         return;
       }
-
+  
       // Prepare request configuration
       const config = {
         headers: {
@@ -198,43 +203,41 @@ function MyComponent({ onClose }) {
           'Content-Type': 'application/json',
         },
       };
-
+  
       // Make the GET request to /get-draft/{data_id}/{individual_id}
-      const response = await axios.get(`${apiUrl}/api/expert/get-draft/${data_id}/${individual_id}`, config); // Use backticks here too
-
+      const response = await axios.get(`${apiUrl}/api/expert/get-draft/${data_id}/${individual_id}`, config);
+  
       // Check if the response contains the expected structure
       if (response.data && response.data.status === "success" && response.data.Draft) {
         const draft = response.data.Draft;
-
+  
         // Set the retrieved draft data
         setDraftData(draft);
         setRemark(draft.overall_feedback || '');
-
+  
         // Map the additional field to the response state format
         const additionalData = draft.additional || [];
         const mappedResponses = additionalData.map(item => ({
           response: item.evaluation || '',
           title: item.topic || '',
-          percentage: item.score || '', // Initialize as needed
+          percentage: item.score || '',
         }));
-
-        // Update the state with the mapped responses
+  
         setResponse(mappedResponses);
-
+  
         console.log('Draft retrieved successfully:', draft);
       } else {
         console.warn('No matching draft with the given data.id or unexpected response structure:', response.data);
       }
     } catch (error) {
-      // Handle other errors (e.g., token issues, missing data, unexpected issues)
       console.error('Error fetching draft:', error);
     }
   };
-
-  // Fetch draft when the component mounts
+  
   useEffect(() => {
     fetchDraft();
-  }, []);
+  }, [data]);
+  
   
   
   const createDraft = async () => {
@@ -313,14 +316,14 @@ function MyComponent({ onClose }) {
       setAlertVisible(true);
       return;
     }
-
+  
     setIsChecked(!isChecked);
-
+  
     try {
       const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
-
-      
+      const expertid = await AsyncStorage.getItem('user_id'); // Retrieve expertid from AsyncStorage
+      if (!token || !expertid) throw new Error('Token or expert ID not found');
+  
       const payload = {
         jobseeker_id: String(data?.user_id),
         skill_analysis_id: String(data?.id),
@@ -335,29 +338,29 @@ function MyComponent({ onClose }) {
         date: data?.date_time,
         expert: data?.name,
         expert_analysis,
-        descriptions
+        descriptions,
       };
-      
+  
       // POST request for feedback
       const response = await axios.post(`${apiUrl}/api/expert/feedback-skillAnalysis`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       if (response.status === 201 && response.data.status === 'success') {
         console.log('Marked as completed successfully');
-
+  
         // GET current balance
         const balanceResponse = await axios.get(`${apiUrl}/api/expert/get-balance`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+  
         if (balanceResponse.status === 200 && balanceResponse.data && balanceResponse.data.bal) {
           const currentBalance = balanceResponse.data.bal.total_balance !== null 
             ? parseInt(balanceResponse.data.bal.total_balance, 10) 
             : 0; // Default to 0 if total_balance is null
-
+  
           const newBalance = currentBalance + 50; // Add 50 to the current balance
-
+  
           // PUT request to update the balance
           const updateBalanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, {
             total_balance: newBalance,  
@@ -367,16 +370,41 @@ function MyComponent({ onClose }) {
           }, {
             headers: { Authorization: `Bearer ${token}` },
           });
-
+  
           if (updateBalanceResponse.status === 200) {
             console.log('Balance updated successfully');
+  
+            // Second API Call: Create Growth Plan for Jobseeker
+            const formData = {
+              role: data?.role,
+              title: data?.type,
+              starting_level: data?.starting_level,
+              target_level: data?.target_level,
+              date_time: data?.date_time,
+              feedbacks: remark,
+              expert_available_days: availableDays,
+              expert_available_time: availableTimes,
+              coach: `${firstName} ${lastName}`,
+              expertid: expertid, // From AsyncStorage
+              name: data?.name,
+            };
+  
+            const growthPlanResponse = await axios.post(`${apiUrl}/expert/create-growthplan-for-jobseeker/${data?.user_id}`, formData, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+  
+            if (growthPlanResponse.status === 201) {
+              console.log('Growth plan created successfully');
+            } else {
+              console.error('Failed to create growth plan', growthPlanResponse);
+            }
           } else {
             console.error('Failed to update balance', updateBalanceResponse);
           }
         } else {
           console.error('Failed to retrieve current balance', balanceResponse);
         }
-
+  
       } else {
         console.error('Failed to mark as completed', response);
       }
@@ -386,7 +414,7 @@ function MyComponent({ onClose }) {
       onClose();
     }
   };
-
+  
   const hideAlert = () => {
     setAlertVisible(false);
   };
@@ -432,13 +460,20 @@ function MyComponent({ onClose }) {
       </View>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Level")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Candidate Starting Level")}</Text>
         </View>
         <View style={styles.cell}>
           <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.starting_level}</Text>
         </View>
       </View>
-      
+      <View style={styles.row}>
+        <View style={styles.cell}>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Candidate Target Level")}</Text>
+        </View>
+        <View style={styles.cell}>
+          <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.target_level}</Text>
+        </View>
+      </View>
          
       
       
@@ -494,7 +529,7 @@ function MyComponent({ onClose }) {
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
             <Picker
-              style={styles.picker2}
+              style={styles.picker}
             >
             <Picker.Item label="Select Score" value="Select Score" />
               <Picker.Item label="10%" value="10" />
@@ -719,7 +754,7 @@ function MyComponent({ onClose }) {
       </TouchableOpacity>
 
     </View>
-  <Text style={{ marginLeft: 50, color: 'grey', fontWeight: '600', marginBottom: 100, fontStyle: 'italic' }}>{t("When you mark as completed and save you will no longer able to edit or review this section")}</Text>
+  <Text style={{ marginLeft: 50, color: 'grey', fontWeight: '600', marginBottom: 100, fontStyle: 'italic' }}>{t("When you mark as completed then click save and send you will no longer able to edit or review this session")}</Text>
 
 
     </View>

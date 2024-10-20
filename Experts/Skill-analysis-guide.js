@@ -48,6 +48,7 @@ function MyComponent({ onClose }) {
   const [pressedButton, setPressedButton] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [rate, setRate] = useState('$30'); // Initial value includes $
+  const [id, setID] = useState(null);
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -187,6 +188,7 @@ useEffect(() => {
     setAvailableDays(guide.available_days);
     setAvailableTimes(guide.available_times);
     setTopics(guide.topics);
+    setID(guide.id);
   };
 
   const handleNextGuide = () => {
@@ -287,6 +289,7 @@ useEffect(() => {
 
     try {
       const data = {
+        id: id,
         role,
         level,
         rate,
@@ -303,7 +306,7 @@ useEffect(() => {
       if (!token) throw new Error('No token found');
 
       const response = await axios.put(
-        `${apiUrl}/api/expert/skillAnalysis/edit`,
+        `${apiUrl}/api/expert/skillAnalysis/edit/${id}`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -455,7 +458,19 @@ useEffect(() => {
                 </Picker>
               </View>
             </View>
-           
+            <View style={styles.row}>
+              <View style={[styles.cell, { flex: 1}]}>
+                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
+              </View>
+              <View style={[styles.cell, { flex: 2}]}>
+                <TextInput
+                  placeholder="$20"
+                  placeholderTextColor="black"
+                  style={styles.input}
+                  editable={false} // Prevent manual input
+                />
+              </View>
+            </View>
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>

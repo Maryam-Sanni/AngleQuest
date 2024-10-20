@@ -3,19 +3,21 @@ import { View, Text, TouchableOpacity, Picker, StyleSheet, TextInput } from "rea
 import { useTranslation } from 'react-i18next';
 
 const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
-  const [inputDate, setInputDate] = useState(""); // Store user input date
-  const [dayOfWeek, setDayOfWeek] = useState(""); // Day of the week based on input date
+  const [inputDate, setInputDate] = useState('');
+  const [dayOfWeek, setDayOfWeek] = useState('');
   const [startTime, setStartTime] = useState({ hour: "01", minute: "00", period: "AM" });
   const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "PM" });
 
   const { t } = useTranslation();
 
+  // Function to handle date change and extract day of the week
   const handleDateChange = (dateString) => {
-    setInputDate(dateString);
+    setInputDate(dateString); // Update selected date
     const date = new Date(dateString);
-    // Get day of the week (0 = Sunday, 6 = Saturday)
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    setDayOfWeek(days[date.getUTCDay()]); // Update dayOfWeek state
+
+    // Array to map numeric day values to day names
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    setDayOfWeek(days[date.getUTCDay()]); // Update day of week state
   };
 
   const handleConfirm = () => {
@@ -34,7 +36,7 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
       // Pass the date and time to the onConfirm callback
       onConfirm({ date: date.toISOString().split("T")[0], startDateTime, endDateTime });
     } else {
-      alert('Please enter a valid date.');
+      alert('Please select a valid date.');
     }
   };
 
@@ -42,16 +44,23 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     <View style={styles.modalContainer}>
       <Text style={{ marginBottom: 30, fontSize: 20, fontWeight: 'bold' }}>{t("Choose Availability")}</Text>
 
-      <Text style={styles.headerText}>{t("Enter a Date (YYYY-MM-DD)")}</Text>
-      <TextInput
-        style={styles.dateInput}
-        placeholder="YYYY-MM-DD"
-        value={inputDate}
-        onChangeText={handleDateChange}
-      />
+      <Text style={styles.headerText}>{t("Use the calendar to select a Date (YYYY-MM-DD)")}</Text>
+      <input
+          type="date"
+          value={inputDate}
+          onChange={(e) => handleDateChange(e.target.value)} // Call function on date selection
+          style={styles.dateInput}
+          min={new Date().toISOString().split('T')[0]} // Ensure date is not in the past
+        />
+
+<Text style={styles.selectedDateText}>
+        {t("Selected Date:")} {inputDate || t("No date selected")}
+      </Text>
 
       {dayOfWeek ? (
-        <Text style={styles.dayOfWeekText}>{t("Day of the Week:")} {dayOfWeek}</Text>
+        <Text style={styles.dayOfWeekText}>
+          {t("Day of the Week:")} {dayOfWeek}
+        </Text>
       ) : null}
 
       <Text style={styles.headerText}>{t("Time Slot")}</Text>
@@ -70,7 +79,11 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         />
       </View>
 
-     
+      <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleConfirm}>
+            <Text style={styles.buttonText}>{t("Confirm")}</Text>
+          </TouchableOpacity>
+        </View>
     </View>
   );
 };
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: 600,
-    height: 250,
+    height: 350,
   },
   headerText: {
     fontSize: 12,
@@ -226,7 +239,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'coral',
+    backgroundColor: 'grey',
     borderRadius: 5,
   },
   buttonText: {
