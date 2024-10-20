@@ -102,6 +102,33 @@ useEffect(() => {
 
   const { t } = useTranslation();
 
+// Function to format date_time string
+const formatDateTime = (dateTimeString) => {
+  let date, time;
+
+  // Check if the string contains a '|', indicating a non-standard format
+  if (dateTimeString.includes('|')) {
+    // Split the input string into date and time
+    const [datePart, timePart] = dateTimeString.split(' | ');
+
+    // Create a new Date object from the date part
+    date = new Date(datePart);
+    time = timePart.trim(); // Clean up any extra spaces
+  } else {
+    // If it's a proper format, parse directly
+    date = new Date(dateTimeString);
+    time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
+
+  // Format the date to DD/MM/YYYY
+  const formattedDate = `${String(date.getUTCDate()).padStart(2, '0')}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${date.getUTCFullYear()}`;
+
+  // Ensure the time is in the desired format (lowercase)
+  const formattedTime = time.toLowerCase(); // Convert to lowercase
+
+  return `${formattedDate} ${formattedTime}`; // Return the full formatted string
+};
+
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
@@ -113,11 +140,6 @@ useEffect(() => {
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Review")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Review Date")}</Text></View>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Join</Text>
-               </View>
-            </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
               <Text style={{color: 'white'}}>Join</Text>
@@ -141,7 +163,7 @@ useEffect(() => {
               </View>
               <View style={[index % 2 === 0 ? styles.cell : styles.cell2, growthPlan.review === "replan" && styles.replanCell]}>
                 <Text style={styles.cellText}>
-                  {new Date(growthPlan.date).toLocaleDateString()} {new Date(growthPlan.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                <Text style={styles.cellText}>{formatDateTime(growthPlan.date)}</Text>
                 </Text>
               </View>
 
