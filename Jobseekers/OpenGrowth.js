@@ -178,25 +178,10 @@ function MyComponent({ onClose }) {
           </Text>
           <View style={styles.container}>
             {/* Form fields */}
+            
             <View style={styles.row}>
               <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Type')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Picker
-                  selectedValue={type}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setSelectedType(itemValue)}
-                >
-                  <Picker.Item label={t('Personal')} value="Personal" />
-                  <Picker.Item label={t('Team')} value="Team" />
-                  <Picker.Item label={t('Organization')} value="Organization" />
-                </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Title')}</Text>
+                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Goal')}</Text>
               </View>
               <View style={styles.cell}>
                 <TextInput
@@ -222,59 +207,10 @@ function MyComponent({ onClose }) {
                 />
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Result description')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Example: To be able to find my way around SAP fi...')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={result_description}
-                  onChangeText={setResultDescription}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How to achieve')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Example: To be taught how to troubleshoot, find T\'codes...')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={how_to_achieve}
-                  onChangeText={setHowToAchieve}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('What do you need to achieve the objective?')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <TextInput
-                  placeholder={t('Continous training, practice and support')}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 50 }]}
-                  value={achieve_the_objective}
-                  onChangeText={setNeeds}
-                />
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('How often do you want to review with your coach?')}</Text>
-              </View>
-              <View style={styles.cell}>
-              <Text style={{color: 'grey', borderColor: 'black', borderWidth: 1, padding: 5, borderRadius: 5, fontSize: 14,}}>Biannually</Text>
-              </View>
-            </View>
+           
+            
+           
+           
             <View style={styles.row}>
               <View style={styles.cell}>
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Starting Level')}</Text>
@@ -311,31 +247,8 @@ function MyComponent({ onClose }) {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Status')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Picker
-                  selectedValue={status}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setStatus(itemValue)}
-                >
-                  <Picker.Item label={t('Active')} value="Active" />
-                  <Picker.Item label={t('Review')} value="Review" />
-                  <Picker.Item label={t('Replan')} value="Replan" />
-                  <Picker.Item label={t('Completed')} value="Completed" />
-                </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Feedbacks/remarks (from Coach)')}</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
-              </View>
-            </View>
+           
+           
           </View>
 
 

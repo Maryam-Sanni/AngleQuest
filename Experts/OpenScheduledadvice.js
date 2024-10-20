@@ -23,6 +23,8 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
   const [isChecked, setIsChecked] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const [rating1, setRating1] = useState(" ");
+  const [rating2, setRating2] = useState(" ");
   const [isModalVisible, setModalVisible] = useState(false);
   const [availableDays, setAvailableDays] = useState('');
   const [availableTimes, setAvailableTimes] = useState('');
@@ -66,17 +68,34 @@ function MyComponent({ onClose }) {
     onClose();
   };
 
-  const handleConfirm = ({ date, startDateTime, endDateTime }) => {
-    // Format the date to your preferred format
-    const formattedDate = new Date(date).toLocaleDateString('en-US'); // You can change this format as needed
-
-    // Update your state with the selected date, start time, and end time
-    setAvailableDays([formattedDate]); // Store the formatted date
-    setAvailableTimes(`${startDateTime.getHours() % 12 || 12}:${String(startDateTime.getMinutes()).padStart(2, '0')} ${startDateTime.getHours() >= 12 ? 'PM' : 'AM'} - ${endDateTime.getHours() % 12 || 12}:${String(endDateTime.getMinutes()).padStart(2, '0')} ${endDateTime.getHours() >= 12 ? 'PM' : 'AM'}`);
-
+  const handleConfirm = ({ date, startDateTime }) => {
+    // Create a new Date object from the selected date
+    const selectedDate = new Date(date);
+  
+    // Format the date to 'Day, Month Day, Year' (e.g., 'Fri, October 19, 2024')
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = selectedDate.toLocaleDateString('en-US', options); 
+  
+    // Function to format the time in 'hh:mm AM/PM' format
+    const formatTime = (dateTime) => {
+      const hours = dateTime.getHours() % 12 || 12; // Convert 24-hour to 12-hour format
+      const minutes = String(dateTime.getMinutes()).padStart(2, '0'); // Ensure two digits for minutes
+      const period = dateTime.getHours() >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+      return `${hours}:${minutes} ${period}`;
+    };
+  
+    // Format the start time
+    const formattedStartTime = formatTime(startDateTime);
+  
+    // Update state with the selected date and formatted start time
+    setAvailableDays([formattedDate]); // Store the formatted date including the day of the week
+    setAvailableTimes(formattedStartTime); // Store only the start time
+  
     // Close the modal
     setModalVisible(false);
-  };
+  };  
+  
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -375,21 +394,21 @@ function MyComponent({ onClose }) {
             console.log('Balance updated successfully');
   
             // Second API Call: Create Growth Plan for Jobseeker
-            const formData = {
-              role: data?.role,
-              title: data?.type,
-              starting_level: data?.starting_level,
-              target_level: data?.target_level,
-              date_time: data?.date_time,
-              feedbacks: remark,
-              expert_available_days: availableDays,
-              expert_available_time: availableTimes,
-              coach: `${firstName} ${lastName}`,
-              expertid: expertid, // From AsyncStorage
-              name: data?.name,
-            };
+       const formData = {
+  role: data?.role,
+  title: data?.type,
+  starting_level: data?.starting_level,
+  target_level: data?.target_level,
+  date_time: `${availableDays[0]} | ${availableTimes}`, // e.g., "Friday, October 19, 2024 | 10:00 AM - 11:00 AM"
+  feedbacks: remark,
+  expert_available_days: availableDays[0].split(',')[0], // Only the day of the week
+  expert_available_time: availableTimes,
+  coach: `${firstName} ${lastName}`,
+  expertid: expertid, // From AsyncStorage
+  name: data?.name,
+};
   
-            const growthPlanResponse = await axios.post(`${apiUrl}/expert/create-growthplan-for-jobseeker/${data?.user_id}`, formData, {
+            const growthPlanResponse = await axios.post(`${apiUrl}/api/expert/create-growthplan-for-jobseeker/${data?.user_id}`, formData, {
               headers: { Authorization: `Bearer ${token}` },
             });
   
@@ -641,93 +660,105 @@ function MyComponent({ onClose }) {
 
     <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Remark")}</Text>
 
-  <View style={styles.container}>
-        <View style={styles.row}>
-           <View style={[styles.cell, { flex: 5}]}>
-            <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Move candidate to the next level?")}</Text>
-          </View>
-           <View style={[styles.cell, { flex: 1}]}>
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <View style={[styles.cell, { flex: 5 }]}>
+          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+            {t("Move candidate to the next level?")}
+          </Text>
+        </View>
+        <View style={[styles.cell, { flex: 1 }]}>
           <Picker
-            selectedValue={data?.rating}
-             style={styles.picker}
-             onValueChange={(itemValue) => setRating(itemValue)}
-  >
+            selectedValue={rating1}
+            style={styles.picker}
+            onValueChange={(itemValue) => {
+              setRating1(itemValue);
+              setRating2(" "); // Reset the second rating when the first one changes
+            }}
+          >
             <Picker.Item label=" " value=" " />
             <Picker.Item label="Yes" value="Yes" />
             <Picker.Item label="No" value="No" />
-           
-  </Picker>
+          </Picker>
+        </View>
+      </View>
+
+      {/* Show the second question only if the first rating is "Yes" */}
+      {rating1 === "Yes" && (
+        <View style={styles.row}>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+              {t("Are you continuing your growth plan with this candidate?")}
+            </Text>
           </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <Picker
+              selectedValue={rating2}
+              style={styles.picker}
+              onValueChange={(itemValue) => {
+                setRating2(itemValue);
+              }}
+            >
+              <Picker.Item label=" " value=" " />
+              <Picker.Item label="Yes" value="Yes" />
+              <Picker.Item label="No" value="No" />
+            </Picker>
           </View>
+        </View>
+      )}
+
+      {/* Show the third question only if the second rating is "Yes" */}
+      {rating1 === "Yes" && rating2 === "Yes" && (
+        <View style={styles.row}>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+              {t("Choose the appropriate growth plan profile")}
+            </Text>
           </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <Picker
+              selectedValue={data?.rating} // Update according to your needs
+              style={styles.picker}
+              onValueChange={(itemValue) => setRating(itemValue)}
+            >
+              <Picker.Item label="1" value="1" />
+              <Picker.Item label="2" value="2" />
+              <Picker.Item label="3" value="3" />
+            </Picker>
+          </View>
+        </View>
+      )}
 
-   <View style={[styles.container, { marginTop: 10 }]}>
-    <View style={styles.row}>
-       <View style={[styles.cell, { flex: 5}]}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Are you continuing your growth plan with this candidate?")}</Text>
-      </View>
-       <View style={[styles.cell, { flex: 1}]}>
-      <Picker
-        selectedValue={data?.rating}
-         style={styles.picker}
-         onValueChange={(itemValue) => setRating(itemValue)}
-  >
-        <Picker.Item label=" " value=" " />
-        <Picker.Item label="Yes" value="Yes" />
-        <Picker.Item label="No" value="No" />
-        
-  </Picker>
-      </View>
-      </View>
+      {/* Show the date and time selection only if the second rating is "Yes" */}
+      {rating1 === "Yes" && rating2 === "Yes" && (
+        <View style={styles.row}>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+              {t("Set date and time for Growth Plan")}
+            </Text>
+          </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <TouchableOpacity onPress={() => setModalVisible(!isModalVisible)}>
+              <Text style={{ fontFamily: "Roboto-Light", color: 'black', textDecorationLine: 'underline', fontStyle: 'italic' }}>
+                Select: {availableDays} {availableTimes}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       </View>
 
-  <View style={[styles.container, { marginTop: 10 }]}>
-    <View style={styles.row}>
-       <View style={[styles.cell, { flex: 5}]}>
-        <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Choose the appropriate growth plan profile")}</Text>
-      </View>
-       <View style={[styles.cell, { flex: 1}]}>
-      <Picker
-        selectedValue={data?.rating}
-         style={styles.picker}
-         onValueChange={(itemValue) => setRating(itemValue)}
-  >
-        <Picker.Item label="1" value=" " />
-        <Picker.Item label="2" value="Yes" />
-        <Picker.Item label="3" value="No" />
-
-  </Picker>
-      </View>
-      </View>
-      </View>
-  
-  <View style={[styles.container, { marginTop: 10 }]}>
-    <View style={styles.row}>
-      <View style={[styles.cell, { flex: 5 }]}>
-        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
-          {t("Set date and time for Growth Plan")}
-        </Text>
-      </View>
-      <View style={[styles.cell, { flex: 1 }]}>
-        <TouchableOpacity onPress={() => setModalVisible(!isModalVisible)}>
-          <Text style={{ fontFamily: "Roboto-Light", color: 'black', textDecorationLine: 'underline', fontStyle: 'italic' }}>
-            Select: {availableDays} {availableTimes}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    </View>
-
-    {/* Show the DaysTimePickerModal only when isModalVisible is true */}
-    {isModalVisible && (
-      <View style={[styles.container, { marginTop: 50, borderRadius: 20, backgroundColor: '#F5F5F5' }]}>
-        <DaysTimePickerModal
-          isVisible={isModalVisible} // Control visibility
-          onConfirm={handleConfirm}
-          onCancel={() => setModalVisible(false)}
-        />
-      </View>
-    )}
+      {/* Show the DaysTimePickerModal only when isModalVisible is true */}
+      {isModalVisible && (
+        <View style={[styles.container, { marginTop: 50, borderRadius: 20, backgroundColor: '#F5F5F5' }]}>
+          <DaysTimePickerModal
+            isVisible={isModalVisible} // Control visibility
+            onConfirm={handleConfirm}
+            onCancel={() => setModalVisible(false)}
+          />
+        </View>
+      )}
+    
 
   
    <View style={{flexDirection: 'row'}}>

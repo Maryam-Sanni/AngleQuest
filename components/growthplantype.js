@@ -51,6 +51,34 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  // Function to format date_time string
+const formatDateTime = (dateTimeString) => {
+  let date, time;
+
+  // Check if the string contains a '|', indicating a non-standard format
+  if (dateTimeString.includes('|')) {
+    // Split the input string into date and time
+    const [datePart, timePart] = dateTimeString.split(' | ');
+
+    // Create a new Date object from the date part
+    date = new Date(datePart);
+    time = timePart.trim(); // Clean up any extra spaces
+  } else {
+    // If it's a proper format, parse directly
+    date = new Date(dateTimeString);
+    time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
+
+  // Format the date to DD/MM/YYYY
+  const formattedDate = `${String(date.getUTCDate()).padStart(2, '0')}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${date.getUTCFullYear()}`;
+
+  // Ensure the time is in the desired format (lowercase)
+  const formattedTime = time.toLowerCase(); // Convert to lowercase
+
+  return `${formattedDate} ${formattedTime}`; // Return the full formatted string
+};
+
+
   useEffect(() => {
     loadFormData(); // Initial data load
 
@@ -109,9 +137,9 @@ const ScheduledMeetingsTable = () => {
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Type")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Starting Level")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Target Level")}</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>{t("Goal")}</Text></View>
             <View style={styles.cell2}><Text style={styles.headerText}>{t("Meeting Date")}</Text></View>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -129,10 +157,10 @@ const ScheduledMeetingsTable = () => {
       
             <View key={index} style={styles.row}>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.coach}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.type}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.starting_level}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.target_level}</Text></View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.title}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.role}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{new Date(growthPlan.date_time).toLocaleDateString()} {new Date(growthPlan.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text></View>
+               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>  <Text style={styles.cellText}>{formatDateTime(growthPlan.date_time)}</Text></View>
               <TouchableOpacity onPress={() => handleOpenPress (growthPlan)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <Text style={styles.linkText}>{t("Update")}</Text>

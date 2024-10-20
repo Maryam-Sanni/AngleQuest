@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Picker, StyleSheet, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
 import { useTranslation } from 'react-i18next';
 
 const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [inputDate, setInputDate] = useState('');
   const [dayOfWeek, setDayOfWeek] = useState('');
   const [startTime, setStartTime] = useState({ hour: "01", minute: "00", period: "AM" });
-  const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "PM" });
 
   const { t } = useTranslation();
 
@@ -24,17 +23,13 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     // Convert the input date to a valid date format
     const date = new Date(inputDate);
     if (!isNaN(date) && dayOfWeek) {
-      // Construct the full date-time strings for start and end times
+      // Construct the full date-time string for start time
       const startDateTime = new Date(date);
       startDateTime.setHours(parseInt(startTime.hour) + (startTime.period === "PM" ? 12 : 0));
       startDateTime.setMinutes(parseInt(startTime.minute));
 
-      const endDateTime = new Date(date);
-      endDateTime.setHours(parseInt(endTime.hour) + (endTime.period === "PM" ? 12 : 0));
-      endDateTime.setMinutes(parseInt(endTime.minute));
-
       // Pass the date and time to the onConfirm callback
-      onConfirm({ date: date.toISOString().split("T")[0], startDateTime, endDateTime });
+      onConfirm({ date: date.toISOString().split("T")[0], startDateTime });
     } else {
       alert('Please select a valid date.');
     }
@@ -46,14 +41,14 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 
       <Text style={styles.headerText}>{t("Use the calendar to select a Date (YYYY-MM-DD)")}</Text>
       <input
-          type="date"
-          value={inputDate}
-          onChange={(e) => handleDateChange(e.target.value)} // Call function on date selection
-          style={styles.dateInput}
-          min={new Date().toISOString().split('T')[0]} // Ensure date is not in the past
-        />
+        type="date"
+        value={inputDate}
+        onChange={(e) => handleDateChange(e.target.value)} // Call function on date selection
+        style={styles.dateInput}
+        min={new Date().toISOString().split('T')[0]} // Ensure date is not in the past
+      />
 
-<Text style={styles.selectedDateText}>
+      <Text style={styles.selectedDateText}>
         {t("Selected Date:")} {inputDate || t("No date selected")}
       </Text>
 
@@ -70,34 +65,18 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
           time={startTime}
           onTimeChange={setStartTime}
         />
-        <Text style={styles.toText}>{t("to")}</Text>
-        <TimePicker
-          label={t("End")}
-          time={endTime}
-          onTimeChange={setEndTime}
-          onConfirm={handleConfirm}
-        />
       </View>
 
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleConfirm}>
-            <Text style={styles.buttonText}>{t("Confirm")}</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.button} onPress={handleConfirm}>
+          <Text style={styles.buttonText}>{t("Confirm")}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
-  const handleTimeChange = (newTime) => {
-    onTimeChange(newTime);
-    // Call onConfirm if the end time is set (you can modify this condition based on your logic)
-    if (label === "End") {
-      const date = new Date(); // Replace with your actual date input
-      onConfirm({ date, startDateTime: new Date(date.setHours(parseInt(time.hour), parseInt(time.minute), 0)), endDateTime: new Date(date.setHours(parseInt(newTime.hour), parseInt(newTime.minute), 0)) });
-    }
-  };
-
+const TimePicker = ({ label, time, onTimeChange }) => {
   return (
     <View style={styles.singleTimePicker}>
       <Text style={styles.timeLabel}>{label}</Text>
@@ -105,7 +84,7 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
         <Picker
           style={styles.hourPicker}
           selectedValue={time.hour}
-          onValueChange={(hour) => handleTimeChange({ ...time, hour })}
+          onValueChange={(hour) => onTimeChange({ ...time, hour })}
         >
           {generateHours().map((hour, index) => (
             <Picker.Item key={index} label={hour} value={hour} />
@@ -115,7 +94,7 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
         <Picker
           style={styles.minutePicker}
           selectedValue={time.minute}
-          onValueChange={(minute) => handleTimeChange({ ...time, minute })}
+          onValueChange={(minute) => onTimeChange({ ...time, minute })}
         >
           {generateMinutes().map((minute, index) => (
             <Picker.Item key={index} label={minute} value={minute} />
@@ -124,7 +103,7 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
         <Picker
           style={styles.periodPicker}
           selectedValue={time.period}
-          onValueChange={(period) => handleTimeChange({ ...time, period })}
+          onValueChange={(period) => onTimeChange({ ...time, period })}
         >
           {["AM", "PM"].map((period, index) => (
             <Picker.Item key={index} label={period} value={period} />
@@ -134,7 +113,6 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
     </View>
   );
 };
-
 
 const generateHours = () => {
   const hours = [];
@@ -223,10 +201,6 @@ const styles = StyleSheet.create({
   colonText: {
     fontSize: 18,
     marginHorizontal: 5,
-  },
-  toText: {
-    marginHorizontal: 20,
-    fontSize: 16,
   },
   buttonContainer: {
     flexDirection: 'row',
