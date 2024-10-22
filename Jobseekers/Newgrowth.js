@@ -58,6 +58,7 @@ function MyComponent({ onClose }) {
               const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
               const storedUserName = await AsyncStorage.getItem('selectedUserName'); // Retrieve expert_name
 
+
               if (storedFirstName && storedLastName) {
                   // If first_name and last_name are available
                   setCoach(`${storedFirstName} ${storedLastName}`);
@@ -140,6 +141,11 @@ function MyComponent({ onClose }) {
       meetingFormData.append('type', meetingtype);
       meetingFormData.append('date_scheduled', formattedDate);
 
+            // Retrieve data from AsyncStorage
+            const guideRaw = await AsyncStorage.getItem('selectedUserGuides');
+
+            const guide = guideRaw ? JSON.parse(guideRaw) : [];
+
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
@@ -159,6 +165,7 @@ function MyComponent({ onClose }) {
       const formData = {
         role,
         title,
+        guide,
         starting_level,
         target_level,
         date_time: selectedDateTime,
@@ -306,14 +313,7 @@ function MyComponent({ onClose }) {
               </View>
             </View>
            
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Expert Roadmap')}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <Text style={{ color: 'grey', fontFamily: 'Roboto-Light' }}>{feedbacks}</Text>
-              </View>
-            </View>
+            
           </View>
 
 

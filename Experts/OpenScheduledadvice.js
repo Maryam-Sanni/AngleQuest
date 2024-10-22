@@ -16,8 +16,11 @@ function MyComponent({ onClose }) {
   const [lastName, setLastName] = useState('');
   const [completed, setCompleted] = useState('Yes');
   const [remark, setRemark] = useState('');
-  const [draftData, setDraftData] = useState(null);
-  const [rating, setRating] = useState('Replan');
+  const [draftData, setDraftData] = useState(null); 
+   const [rating, setRating] = useState('Replan');
+  const [selectedGuide, setSelectedGuide] = useState(null); // State for selected guide
+  const [combinedOptions, setCombinedOptions] = useState([]); // State for picker options
+  const [guidesToSend, setGuidesToSend] = useState([]); 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('')     
   const [isVisible, setIsVisible] = useState(true); 
@@ -114,7 +117,7 @@ function MyComponent({ onClose }) {
 
     fetchData();
   }, []);
-  
+   
   useEffect(() => {
     const loadFormData = async () => {
       try {
@@ -224,7 +227,7 @@ function MyComponent({ onClose }) {
       };
   
       // Make the GET request to /get-draft/{data_id}/{individual_id}
-      const response = await axios.get(`${apiUrl}/api/expert/get-draft/${data_id}/${individual_id}`, config);
+      const response = await axios.get(`${apiUrl}/api/expert/get-draft/${data_id}`, config);
   
       // Check if the response contains the expected structure
       if (response.data && response.data.status === "success" && response.data.Draft) {
@@ -393,6 +396,9 @@ function MyComponent({ onClose }) {
           if (updateBalanceResponse.status === 200) {
             console.log('Balance updated successfully');
   
+              // Ensure guidesToSend is properly structured for your backend
+              const formattedGuides = guidesToSend.map(guide => guide.guide);
+
             // Second API Call: Create Growth Plan for Jobseeker
        const formData = {
   role: data?.role,
@@ -406,6 +412,7 @@ function MyComponent({ onClose }) {
   coach: `${firstName} ${lastName}`,
   expertid: expertid, // From AsyncStorage
   name: data?.name,
+  guide: formattedGuides 
 };
   
             const growthPlanResponse = await axios.post(`${apiUrl}/api/expert/create-growthplan-for-jobseeker/${data?.user_id}`, formData, {
@@ -434,6 +441,58 @@ function MyComponent({ onClose }) {
     }
   };
   
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get(`${apiUrl}/api/expert/growthplan/get`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          const data = response.data.growthPlan;
+
+          // Combine levels and specializations into picker options
+          const combinedOptions = data.map(item => ({
+            label: `${item.level} ${item.specialization}`,
+            guides: item.guides // Keep the entire guides array for filtering later
+          }));
+
+          setCombinedOptions(combinedOptions); // Set picker options
+
+          // Set initial selected value if there are options
+          if (combinedOptions.length > 0) {
+            setSelectedGuide(combinedOptions[0]); // Set to the first option by default
+            setGuidesToSend(combinedOptions[0].guides); // Set guides for the first option
+          }
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+
+  const handleValueChange = (itemValue) => {
+    const selectedOption = combinedOptions.find(option => option.label === itemValue);
+    setSelectedGuide(selectedOption); // Update the selected guide
+    setGuidesToSend(selectedOption.guides); // Update guides to send based on selection
+
+    // Log the selected guides to the console
+    console.log('Selected guides:', selectedOption.guides);
+    
+    // Save the selected guides to AsyncStorage if needed
+    AsyncStorage.setItem('selectedGuides', JSON.stringify(selectedOption.guides))
+      .then(() => console.log('Guides saved successfully'))
+      .catch(error => console.error('Failed to save guides to AsyncStorage', error));
+  };
+
+
   const hideAlert = () => {
     setAlertVisible(false);
   };
@@ -716,15 +775,15 @@ function MyComponent({ onClose }) {
             </Text>
           </View>
           <View style={[styles.cell, { flex: 1 }]}>
-            <Picker
-              selectedValue={data?.rating} // Update according to your needs
-              style={styles.picker}
-              onValueChange={(itemValue) => setRating(itemValue)}
-            >
-              <Picker.Item label="1" value="1" />
-              <Picker.Item label="2" value="2" />
-              <Picker.Item label="3" value="3" />
-            </Picker>
+          <Picker
+        style={styles.picker}
+        selectedValue={selectedGuide?.label} // Bind to selectedGuide state
+        onValueChange={handleValueChange} // Trigger on value change
+      >
+        {combinedOptions.map((option, index) => (
+          <Picker.Item key={index} label={option.label} value={option.label} />
+        ))}
+      </Picker>
           </View>
         </View>
       )}

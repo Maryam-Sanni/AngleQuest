@@ -48,6 +48,7 @@ function MyComponent({ onClose }) {
   const [pressedButton, setPressedButton] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [rate, setRate] = useState('$30'); // Initial value includes $
+  const [id, setID] = useState(null);
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -149,6 +150,7 @@ function MyComponent({ onClose }) {
     setAvailableDays(guide.available_days);
     setAvailableTimes(guide.available_times);
     setTopics(guide.topics);
+    setID(guide.id);
   };
 
   const handleNextGuide = () => {
@@ -249,6 +251,7 @@ function MyComponent({ onClose }) {
 
     try {
       const data = {
+        id: id,
         role,
         level,
         rate,
@@ -265,7 +268,7 @@ function MyComponent({ onClose }) {
       if (!token) throw new Error('No token found');
 
       const response = await axios.put(
-        `${apiUrl}/api/expert/skillAnalysis/edit`,
+        `${apiUrl}/api/expert/skillAnalysis/edit/${id}`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );

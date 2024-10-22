@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenGrowth';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
@@ -13,6 +13,27 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
   const [growthPlans, setGrowthPlans] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3; // Number of meetings to display per page
+  const totalPages = Math.ceil(growthPlans.length / itemsPerPage);
+
+  // Get the current meetings to display based on the page
+  const displayedMeetings =  growthPlans.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -23,19 +44,16 @@ const ScheduledMeetingsTable = () => {
         console.error('No token found');
         return;
       }
-
+  
       const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
+  
       if (response.status === 200) {
         let data = response.data.growthPlan || [];
-
-        // Filter out entries where completed is "Yes"
-        data = data.filter(plan => plan.completed !== "Yes");
-
+  
         setGrowthPlans(data);
-
+  
         // Save all growth plans to AsyncStorage
         try {
           await AsyncStorage.setItem('allGrowthPlans', JSON.stringify(data));
@@ -44,12 +62,12 @@ const ScheduledMeetingsTable = () => {
           console.error('Failed to save all growth plans to AsyncStorage', error);
         }
       } else {
-        console.error('Failed to fetch data', response);
+        console.error('Failed to fetch data:', response.status, response.data);
       }
     } catch (error) {
       console.error('Failed to load form data', error);
     }
-  };
+  };  
 
   // Function to format date_time string
 const formatDateTime = (dateTimeString) => {
@@ -133,7 +151,7 @@ const formatDateTime = (dateTimeString) => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Growth Plan Sessions in Review")}</Text>
+        <Text style={styles.title}>{t("Scheduled Growth Plan Sessions")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
@@ -148,13 +166,13 @@ const formatDateTime = (dateTimeString) => {
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Update</Text>
+              <Text style={{color: 'white'}}>Join</Text>
                </View>
             </TouchableOpacity>
           </View>
           
-          {growthPlans.map((growthPlan, index) => (
-      
+          {displayedMeetings.map((growthPlan, index) => (
+       
             <View key={index} style={styles.row}>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.coach}</Text></View>
                <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.starting_level}</Text></View>
@@ -166,14 +184,34 @@ const formatDateTime = (dateTimeString) => {
                 <Text style={styles.linkText}>{t("Update")}</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity >
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={{color: 'transparent'}}>{t("Update")}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  const joinLink = growthPlan.candidate_link || 'https://default-join-link.com';
+                  if (joinLink) {
+                    Linking.openURL(joinLink)
+                      .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                  } else {
+                    console.warn('No valid link available');
+                  }
+                }}
+              >
+  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                  <Text style={styles.linkText}>{t("Join")}</Text>
                 </View>
               </TouchableOpacity>
             </View>
           ))}
+    <View style={styles.paginationContainer}>
+          <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+            <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+          </TouchableOpacity>
+          <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+          <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+            <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+          </TouchableOpacity>
         </View>
+          </View>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -273,7 +311,23 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-Light"
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Image } from 'react-native';
-import OpenSchedule from '../Experts/Opengrowthreview';
+import OpenSchedule from '../Experts/OpenScheduledgrowth';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
@@ -13,6 +13,27 @@ const ScheduledMeetingsTable = () => {
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
    const [selectedMeeting, setSelectedMeeting] = useState(null);
+   const [currentPage, setCurrentPage] = useState(0);
+   const itemsPerPage = 3; // Number of meetings to display per page
+   const totalPages = Math.ceil(meetings.length / itemsPerPage);
+ 
+   // Get the current meetings to display based on the page
+   const displayedMeetings = meetings.slice(
+     currentPage * itemsPerPage,
+     (currentPage + 1) * itemsPerPage
+   );
+ 
+   const goToNextPage = () => {
+     if (currentPage < totalPages - 1) {
+       setCurrentPage(currentPage + 1);
+     }
+   };
+ 
+   const goToPreviousPage = () => {
+     if (currentPage > 0) {
+       setCurrentPage(currentPage - 1);
+     }
+   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -216,7 +237,7 @@ console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Growth Plans To Review")}</Text>
+        <Text style={styles.title}>{t("Scheduled Growth Plan Meetings")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
@@ -233,8 +254,8 @@ console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Open</Text>
-               </View>
+              <Text style={{color: 'white'}}>Give Feedback</Text>
+               </View> 
             </TouchableOpacity>
             <TouchableOpacity>
               <View style={styles.cell2}>
@@ -243,7 +264,7 @@ console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
             </TouchableOpacity>
           </View>
 
-          {meetings.map((meeting, index) => {
+          {displayedMeetings.map((meeting, index) => {
             const formattedDateTime = formatDateTime(meeting.date_time);
 
             return (
@@ -265,17 +286,36 @@ console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
                 </View>
                 <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                    <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Open")}</Text>
+                  <Text style={styles.linkText}>{t("Give Feedback")}</Text>
                    </View>
                 </TouchableOpacity>
-                <TouchableOpacity >
+                <TouchableOpacity
+                  onPress={() => {
+                    const meetingLink = meeting.expert_link || 'https://default-meeting-link.com';
+                    if (meetingLink) {
+                      Linking.openURL(meetingLink)
+                        .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
+                    } else {
+                      console.warn('No valid link available');
+                    }
+                  }}
+                >
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={{color: 'transparent'}}>{t("Start Meeting")}</Text>
+                    <Text style={styles.linkText}>{t("Start Meeting")}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
             );
           })}
+           <View style={styles.paginationContainer}>
+              <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+              </TouchableOpacity>
+              <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+              <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+              </TouchableOpacity>
+            </View>
         </View>
 
         <Modal
@@ -367,7 +407,23 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-Light"
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;

@@ -14,6 +14,27 @@ const ScheduledMeetingsTable = () => {
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3; // Number of meetings to display per page
+  const totalPages = Math.ceil(meetings.length / itemsPerPage);
+
+  // Get the current meetings to display based on the page
+  const displayedMeetings = meetings.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -179,7 +200,7 @@ const ScheduledMeetingsTable = () => {
             </TouchableOpacity>
           </View>
 
-           {meetings.map((meeting, index) => {
+           {displayedMeetings.map((meeting, index) => {
             const dateTime = new Date(meeting.updated_at);
             const date = dateTime.toLocaleDateString();
             const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true  });
@@ -214,6 +235,15 @@ const ScheduledMeetingsTable = () => {
               </View>
             );
           })}
+      <View style={styles.paginationContainer}>
+              <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+              </TouchableOpacity>
+              <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+              <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+              </TouchableOpacity>
+            </View>
         </View>
 
         <Modal
@@ -305,7 +335,23 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-Light"
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;

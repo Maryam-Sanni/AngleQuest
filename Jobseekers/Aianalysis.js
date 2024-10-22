@@ -1493,7 +1493,7 @@ const AIScreen = () => {
                                     textFamily={"Poppins-SemiBold"}
                                     textSize={16}
                                     title={                              
-                                (apiData.analysis?.current_position?.title || 'No title available')
+                                (apiData.next_career_stage?.title || 'No title available')
                                     }
                                   /><Text>s</Text>
                                     </Text>
@@ -1540,7 +1540,7 @@ const AIScreen = () => {
                                   textFamily={"Poppins-SemiBold"}
                                   textSize={16}
                                   title={
-                                    (apiData.analysis?.current_position?.title || 'No title available')
+                                    (apiData.next_career_stage?.title || 'No title available')
                                   }
                                 /><Text>s</Text>
                                 </Text><Row style={{ justifyContent: "space-around" }}>

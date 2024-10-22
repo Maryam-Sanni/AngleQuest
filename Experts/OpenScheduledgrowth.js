@@ -265,66 +265,58 @@ setGuides(newGuides);
      
       
  </View>
-  <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20, marginBottom: -10 }}>{t("Growth Plan Scoring")}</Text>
+ <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 30 }}>{t("Skill Analysis Guide")}</Text>
 
-  <View style={styles.container}>
-    {guides.map((guide, index) => (
-      <View style={styles.row} key={index}>
-        <View style={[styles.cell, { flex: 2 }]}>
-          <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Guide")} {index + 1}</Text>
-        </View>
-        <View style={[styles.cell, { flex: 5 }]}>
-          <TextInput
-            placeholder={t("Guide description")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            editable={false} 
-            value={guide.guide}
-            onChangeText={text => handleGuideChange(index, 'guide', text)}
-          />
-        </View>
-        <View style={[styles.cell, { flex: 2 }]}>
-          <Picker
-            selectedValue={guide.percentage}
-            style={styles.picker}
-            onValueChange={(itemValue) => handleGuideChange(index, 'percentage', itemValue)}
-          >
-            <Picker.Item label="10%" value="10" />
-            <Picker.Item label="20%" value="20" />
-            <Picker.Item label="30%" value="30" />
-            <Picker.Item label="40%" value="40" />
-            <Picker.Item label="50%" value="50" />
-            <Picker.Item label="60%" value="60" />
-            <Picker.Item label="70%" value="70" />
-            <Picker.Item label="80%" value="80" />
-            <Picker.Item label="90%" value="90" />
-            <Picker.Item label="100%" value="100" />
-          </Picker>
-        </View>
-      </View>
-    ))}
-    <TouchableOpacity
-      onPress={() => setGuides([...guides, { guide: '', percentage: '0' }])}
-      style={styles.addButton}
-    >
+ <View style={styles.container}>
+  {data?.guide && data.guide.length > 0 ? (
+    data.guide.map((item, index) => {
+      // Determine if the guide is an object or a string
+      const guideContent = typeof item === 'string' ? item : item.guide;
 
-    </TouchableOpacity>
-  </View>
+      return (
+        <View style={styles.row} key={index}>
+          <View style={[styles.cell, { flex: 0.5 }]}>
+            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{index + 1}.</Text>
+          </View>
+          <View style={[styles.cell, { flex: 5 }]}>
+            <TextInput
+              placeholder={t("Topic")}
+              placeholderTextColor="grey"
+              style={styles.input}
+              editable={false}
+              value={guideContent} // Use the derived guide content
+            />
+          </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <Picker style={styles.picker}>
+              <Picker.Item label="Select Score" value="Select Score" />
+              <Picker.Item label="10%" value="10" />
+              <Picker.Item label="20%" value="20" />
+              <Picker.Item label="30%" value="30" />
+              <Picker.Item label="40%" value="40" />
+              <Picker.Item label="50%" value="50" />
+              <Picker.Item label="60%" value="60" />
+              <Picker.Item label="70%" value="70" />
+              <Picker.Item label="80%" value="80" />
+              <Picker.Item label="90%" value="90" />
+              <Picker.Item label="100%" value="100" />
+            </Picker>
+          </View>
+        </View>
+      );
+    })
+  ) : (
+    <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+      not available
+    </Text>
+  )}
+</View>
 
-  <View style={{ flexDirection: 'row' }}>
+<View style={{ flexDirection: 'row' }}>
      <View style={{ flexDirection: 'column' }}>
-      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, }}>{t("Share perceieved knowledge gap")}</Text>
-     <Text style={{ marginLeft: 50, fontSize: 12, marginTop: 5, fontStyle: 'italic' }}>{t("(Insert maximum of 10)")}</Text>
+      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, marginBottom: -10 }}>{t("Additional")}</Text>
      </View>
-      <TouchableOpacity
-        style={[styles.buttonplus, response.length >= MAX_RESPONSE && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
-        onPress={addResponse}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        disabled={response.length >= MAX_RESPONSE}
-      >
-        <Text style={styles.buttonTextplus}>+</Text>
-      </TouchableOpacity>
+      
     </View>
 
     <View style={styles.container}>
@@ -335,29 +327,60 @@ setGuides(newGuides);
           </View>
           <View style={[styles.cell, { flex: 2 }]}>
             <TextInput
-              placeholder={t("Title")}
+              placeholder={t("Topic")}
               placeholderTextColor="grey"
               style={styles.input}
               value={response.title}
               onChangeText={text => updateResponse(index, 'title', text)}
             />
-            </View>
-            <View style={[styles.cell, { flex: 5 }]}>
+          </View>
+          <View style={[styles.cell, { flex: 5 }]}>
             <TextInput
-              placeholder={t("Description")}
+              placeholder={t("Evaluation")}
               placeholderTextColor="grey"
               style={styles.input}
               value={response.response}
               onChangeText={text => updateResponse(index, 'response', text)}
             />
           </View>
+          <View style={[styles.cell, { flex: 1 }]}>
+            <Picker
+              selectedValue={response.percentage}
+              style={styles.picker}
+              onValueChange={(itemValue) => updateResponse(index, 'percentage', itemValue)}
+            >
+              <Picker.Item label="score" value="score" />
+              <Picker.Item label="10%" value="10" />
+              <Picker.Item label="20%" value="20" />
+              <Picker.Item label="30%" value="30" />
+              <Picker.Item label="40%" value="40" />
+              <Picker.Item label="50%" value="50" />
+              <Picker.Item label="60%" value="60" />
+              <Picker.Item label="70%" value="70" />
+              <Picker.Item label="80%" value="80" />
+              <Picker.Item label="90%" value="90" />
+              <Picker.Item label="100%" value="100" />
+            </Picker>
+          </View>
 
-          <TouchableOpacity onPress={() => deleteResponse(index)} style={styles.deleteButton}>
-            <Text style={{color: 'red', fontSize: 18, fontWeight: 600}}>✕</Text>
+          <TouchableOpacity onPress={() => deleteResponse(index)} style={{padding: 5}}>
+            <Text style={{color: 'grey', fontSize: 16, marginTop: 5, fontWeight: 600}}>✕</Text>
           </TouchableOpacity>
         </View>
       ))}
     </View>
+
+  <TouchableOpacity
+    style={[styles.buttonplus, response.length >= MAX_RESPONSE && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
+    onPress={addResponse}
+    onPressIn={handlePressIn}
+    onPressOut={handlePressOut}
+    disabled={response.length >= MAX_RESPONSE}
+  >
+    <Text style={styles.buttonTextplus}>Add More</Text>
+  </TouchableOpacity>
+
+  
   
 <Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
@@ -543,22 +566,25 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light"
   },
   buttonplus: {
-    backgroundColor: 'coral',
+    backgroundColor: 'lightgrey',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
     padding: 5,
-    marginLeft: 500,
-    width: 100,
+    marginLeft: 50,
+    width: 120,
     paddingHorizontal: 20,
-    marginTop: 50,
+    marginTop: 20,
     marginBottom: 10
   },
+  buttonplusDisabled: {
+    backgroundColor: 'grey',
+  },
   buttonTextplus: {
-    color: 'white',
+    color: 'black',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily: "Roboto-Light"
-  },
-  buttonplusDisabled: {
-    backgroundColor: 'red',
+    fontFamily:"Roboto-Light"
   },
 });
 

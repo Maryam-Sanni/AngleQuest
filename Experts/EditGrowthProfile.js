@@ -50,10 +50,10 @@ function MyComponent({ onClose }) {
           const data = response.data.growthPlan;
           setRole(data.role || '');
           setLevel(data.level || '');
-          setRate(data.rate || '');
+          setCategory(data.category || '');
           setAvailableDays(data.available_days || '');
           setAvailableTimes(data.available_times || '');
-          setGuides(data.guides || []);
+          setGuides(data.guides || []); 
         } else {
           console.error('Failed to fetch data', response);
         }

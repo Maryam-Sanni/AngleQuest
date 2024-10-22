@@ -326,21 +326,7 @@ function MyComponent({ onClose }) {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-               <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontFamily: "Roboto-Light" }}>{t("Status")}</Text>
-              </View>
-               <View style={[styles.cell, { flex: 2}]}>
-                 <TextInput
-                   placeholder={t("Active")}
-                   placeholderTextColor="grey"
-                   style={styles.input2}
-                   value={status}
-                   onChangeText={setStatus}
-                   editable={false}
-                 />
-              </View>
-            </View>
+            
            
             </View>
           
@@ -386,7 +372,7 @@ function MyComponent({ onClose }) {
             </View>
           </View>
           
-              <TouchableOpacity style={styles.buttonplus} onPress={handleOpenPress}>
+              <TouchableOpacity style={styles.buttonplus} onPress={goToPlan}>
                 <Text style={styles.buttonTextplus}>{t("Save & Create Session")}</Text>
               </TouchableOpacity>
             

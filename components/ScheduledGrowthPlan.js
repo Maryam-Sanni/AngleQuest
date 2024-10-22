@@ -44,7 +44,7 @@ const ScheduledMeetingsTable = () => {
             // Filter meetings based on expert_id and review status "satisfied"
             const filteredMeetings = data.filter(meeting => 
               meeting.user_id === storedExpertId && meeting.review === "satisfied"
-            );
+            ); 
             setMeetings(filteredMeetings);
 
             // Save all growth plans to AsyncStorage

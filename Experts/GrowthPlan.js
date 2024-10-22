@@ -19,8 +19,68 @@ function MyComponent() {
     const [modalVisible2, setModalVisible2] = useState(false);
     const [role, setGrowthRole] = useState('');
      const [targetDate, setTargetDate] = useState(''); 
+     const [meetings, setMeetings] = useState([]);
+     const [pendingCount, setPendingCount] = useState(0);
+     const [reviewedCount, setReviewedCount] = useState(0);
 
   const apiUrl = process.env.REACT_APP_API_URL;
+  
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const storedExpertId = await AsyncStorage.getItem('user_id');
+  
+        if (!token || !storedExpertId) {
+          console.error('No token or user ID found');
+          return;
+        }
+  
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-all-jobseeker-growthplan`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+  
+        if (response.status === 200) {
+          const data = response.data.allGrowthPlan;
+  
+          // Log to debug the values
+          console.log('Data from API:', data);
+  
+          // Filter meetings based on expert_id
+          const filteredMeetings = data.filter(meeting => meeting.expertid === storedExpertId);
+  
+          // Calculate pending and completed counts
+          const pendingCount = filteredMeetings.filter(meeting => 
+            meeting.completed === null
+          ).length;
+  
+          const completedCount = filteredMeetings.filter(meeting => meeting.completed === "Yes").length;
+  
+          console.log('Pending Count:', pendingCount);
+          console.log('Completed Count:', completedCount);
+  
+          setMeetings(filteredMeetings);
+          setPendingCount(pendingCount); // Update state
+          setReviewedCount(completedCount); // Update state
+  
+          // Save all growth plans to AsyncStorage
+          try {
+            await AsyncStorage.setItem('allExpertsgrowth', JSON.stringify(data));
+            console.log('All expert growth plans saved:', data);
+          } catch (error) {
+            console.error('Failed to save all expert growth plans to AsyncStorage', error);
+          }
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+  
+    loadFormData();
+  }, []);  
+
   
     useEffect(() => {
       const loadFormData = async () => {
@@ -172,52 +232,54 @@ const {t}=useTranslation()
         <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
             
-          <TouchableHighlight
-  underlayColor={isInterviewHovered ? 'transparent' : 'transparent'}
-  onMouseEnter={() => setIsInterviewHovered(true)}
-  onMouseLeave={() => setIsInterviewHovered(false)} // Fixed hover logic
->
-  <View style={styles.item}>
-    <Image
-      source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-      style={styles.image}
-    />
-    <Text style={[styles.headertext, isInterviewHovered && { color: '#666' }]}>
-      {role || "No update yet"}
-    </Text>
-  </View>
-</TouchableHighlight>              
+                     
              
                             
                         </View>
-                        <TouchableOpacity onPress={handleOpenPress2}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
-                  </View>
-     </TouchableOpacity>
-                        <TouchableOpacity onPress={handleOpenPress}>
+                        <View style={{flexDirection: 'row'}}>
+                    
+          <TouchableOpacity onPress={handleOpenPress}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                     <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
                   </View>
      </TouchableOpacity>
+          
+          <TouchableOpacity onPress={handleOpenPress2}>
+            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
+                            <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
+                          </View>
+             </TouchableOpacity>
+                         </View>
 
      <View style={styles.container}>
-      <View style={styles.box}>
-         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Pending Growth Plan Reviews")}</Text>
-         <View style={{flexDirection: 'row'}}>
-         <Image source={require('../assets/icons8-choice.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5,fontFamily:"Roboto-Light" }}>5</Text>
-           </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Candidates are waiting for your review")}</Text>
-      </View>
-      <View style={styles.box}>
-        <Text style = {{fontSize: 12, color: 'grey' ,fontFamily:"Roboto-Light"}}>{t("Plans Reviewed")}</Text>
-        <View style={{flexDirection: 'row'}}>
-         <Image source={require('../assets/icons8-done.gif')} style={styles.boximage}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50',fontFamily:"Roboto-Light"}}>30</Text>
-      </View>
-      <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have reviewed 6 plan(s) this week")}</Text>
-      </View>
+     <View style={styles.box}>
+  <Text style={{ fontSize: 12, color: 'grey', fontFamily: "Roboto-Light" }}>
+    {t("Pending Growth Plan Reviews")}
+  </Text>
+  <View style={{ flexDirection: 'row' }}>
+    <Image source={require('../assets/icons8-choice.gif')} style={styles.boximage} />
+    <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5, fontFamily: "Roboto-Light" }}>
+      {pendingCount} {/* Display pending count here */}
+    </Text>
+  </View>
+  <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10, fontFamily: "Roboto-Light" }}>
+    {t("Candidates are waiting for your review")}
+  </Text>
+</View>
+<View style={styles.box}>
+  <Text style={{ fontSize: 12, color: 'grey', fontFamily: "Roboto-Light" }}>
+    {t("Plans Reviewed")}
+  </Text>
+  <View style={{ flexDirection: 'row' }}>
+    <Image source={require('../assets/icons8-done.gif')} style={styles.boximage} />
+    <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50', fontFamily: "Roboto-Light" }}>
+      {reviewedCount} {/* Display reviewed count here */}
+    </Text>
+  </View>
+  <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10, fontFamily: "Roboto-Light" }}>
+    {t("You have marked")} {reviewedCount} {t("growth plans as completed")}
+  </Text>
+</View>
       <View style={styles.box2}>
         <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Next growth Plan Session in")}</Text>
         <View style={{flexDirection: 'row'}}>
@@ -251,7 +313,6 @@ const {t}=useTranslation()
       </Modal>
 
           <GrowthPlansReview />
-<ScheduledGrowthPlan />
 <CompletedGrowthPlan />
 </View>
           
@@ -276,7 +337,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#f7fff4',
-    paddingVertical: 15,
+    paddingVertical: 25,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },

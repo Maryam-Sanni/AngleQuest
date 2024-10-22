@@ -105,7 +105,7 @@ function MyComponent({ onClose }) {
           marginBottom: 20,
           transform: [{ scale: scaleAnimations[0] }],
         }}
-      >
+      > 
         <TouchableOpacity
           onPress={() => handleCardPress(0)}
           style={{
@@ -124,7 +124,7 @@ function MyComponent({ onClose }) {
             style={{
               justifyContent: "center",
               width: '90%',
-              height: 100,
+              height: 120,
               borderRadius: 5,
               backgroundColor: "#F0FFF9",
               marginHorizontal: 10,
@@ -145,6 +145,11 @@ function MyComponent({ onClose }) {
           <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
             {recommendedExpert.category}
           </Text>
+          <Text style={{ fontSize: 11, marginBottom: 15, color: "#206C00", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+                   {recommendedExpert.level}
+                 <Text style={{ fontSize: 11, marginLeft: 5, textAlign: 'center', marginBottom: 15, color: "#206C00", }}>
+                    {recommendedExpert.specialization}
+                    </Text> </Text> 
           </View>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 18 }}>
@@ -154,16 +159,17 @@ function MyComponent({ onClose }) {
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
               style={{ width: 10, height: 10, marginTop: 5 }}
             />
-            <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2 }}>Location</Text>
+            <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2 }}>{recommendedExpert.location}</Text>
           </View>
           </View>
           </View>
-          <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20 }}>
-            Available: {recommendedExpert.available_days.join(', ')}
+          <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {recommendedExpert.available_days.join(', ')}</Text>
+          <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+             Time: {recommendedExpert.available_times}
           </Text>
-          <Text style={{ fontSize: 14, color: "black", textAlign: 'center' }}>
-            Time: {recommendedExpert.available_times}
-          </Text>
+            <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+              {recommendedExpert.years_experience} years of experience
+            </Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', marginTop: -60 }}>
           <View style={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -238,6 +244,9 @@ function MyComponent({ onClose }) {
               const availabletimes = selectedUser.available_times || 'N/A'; // Handle undefined
              const category = `${selectedUser.category}`;
 
+             // Ensure topics are an array, then save them
+             const guides = Array.isArray(selectedUser.guides) ? selectedUser.guides : [];
+
               // Save the selected user's data to AsyncStorage
               await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name || ' ');
               await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name || ' ');
@@ -246,6 +255,11 @@ function MyComponent({ onClose }) {
               await AsyncStorage.setItem('selectedUserTimes', availabletimes);
               await AsyncStorage.setItem('selectedUserName', expertName); // Save expert_name
             await AsyncStorage.setItem('selectedUserCategory', category);
+            await AsyncStorage.setItem('selectedUserLocation', 'location');
+
+                  // Save topics to AsyncStorage as a JSON string
+      await AsyncStorage.setItem('selectedUserGuides', JSON.stringify(guides));
+
           } else {
               console.error('Selected user is not available');
           }
@@ -308,7 +322,7 @@ function MyComponent({ onClose }) {
           }}
         >
           <TouchableOpacity onPressIn={handleTogglePress} onPressOut={handleTogglePress}>
-            <View style={{ justifyContent: "center", width: '90%', height: 100, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
+            <View style={{ justifyContent: "center", width: '90%', height: 120, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: 15, marginLeft: 10, marginTop: 20, alignItems: 'center', borderWidth: 1, borderColor: '#206C00' }}>
               <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                 <Image
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -317,9 +331,14 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontSize: 14, color: "black", fontWeight: 'bold', }}>
                    {data.first_name} {data.last_name} 
                 </Text>
-                <Text style={{ fontSize: 12, color: "#206C00", marginBottom: 10 }}>
+                <Text style={{ fontSize: 13, color: "#206C00", fontWeight: '600', marginBottom: 5 }}>
                   {data.category}
                 </Text>
+                <Text style={{ fontSize: 11, marginBottom: 15, color: "#206C00", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+                   {data.level}
+                 <Text style={{ fontSize: 11, marginLeft: 5, textAlign: 'center', marginBottom: 15, color: "#206C00", }}>
+                    {data.specialization}
+                    </Text> </Text> 
               </View>
             </View>
           </TouchableOpacity>
@@ -330,7 +349,7 @@ function MyComponent({ onClose }) {
                   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6bba7edcb3f010b92084265108234b625f6a1e57053bb656b44878ce3a0ec09a?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                   style={{ width: 10, height: 10, aspectRatio: 1, marginTop: 5, }}
                 />
-                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>location</Text>
+                <Text style={{ fontSize: 10, color: '#206C00', marginLeft: 4, marginTop: 2, }}>{data.location}</Text>
               </View>
             </View>
           </View>
@@ -338,9 +357,9 @@ function MyComponent({ onClose }) {
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
              Time: {data.available_times}
           </Text>
-          <Text style={{ fontSize: 14, height: 40, color: "#d3f9d8", textAlign: 'center', fontFamily:"Roboto-Light" }}>
-             {data.user_id}
-          </Text>
+            <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
+              {data.years_experience} years of experience
+            </Text>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TouchableOpacity

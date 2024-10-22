@@ -226,7 +226,7 @@ function MyComponent() {
       </Modal>
                        
                         <GrowthPlantype />
-                      <Scheduledgrowth />
+                     
                         <GrowthPlanreview />
                     </View>
                 </ScrollView>
