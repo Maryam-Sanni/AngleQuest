@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
 import DaysTimePickerModal from "../components/TimePicker";
-import { format, parse } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const MAX_GUIDES = 15;
 
@@ -25,6 +24,9 @@ function MyComponent({ onClose }) {
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
+
+      // Get user's timezone
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const { t } = useTranslation();
 
@@ -249,6 +251,7 @@ useEffect(() => {
         role,
         level,
         rate,
+        timezone: userTimezone,
         specialization: selectedRole,
         years_experience: yearsOfExperience,
         location,
@@ -293,6 +296,7 @@ useEffect(() => {
         role,
         level,
         rate,
+        timezone: userTimezone,
         specialization: selectedRole,
         years_experience: yearsOfExperience,
         location,
@@ -497,8 +501,8 @@ useEffect(() => {
               />
               
             </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 30 }}>
+          
+            <View style={{ flexDirection: 'row', marginTop: 30 }}>
             <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
 
 
@@ -669,7 +673,7 @@ marginTop: 10
     width: 100,
       padding: 10,
     paddingHorizontal: 20,
-    marginTop: -35,
+    marginTop: 35,
     borderRadius: 5,
     marginBottom: 50
   },

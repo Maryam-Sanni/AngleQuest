@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert';
 import DaysTimePickerModal from "../components/TimePicker";
-import { format, parse } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const MAX_TOPICS = 15;
 
@@ -27,6 +26,9 @@ function MyComponent({ onClose }) {
   });
 
   const { t } = useTranslation();
+
+        // Get user's timezone
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const [role, setSkillsAnalysisRole] = useState('expert');
   const [skillAnalysisGuides, setSkillAnalysisGuides] = useState([]);
@@ -211,6 +213,7 @@ function MyComponent({ onClose }) {
         role,
         level,
         rate,
+        timezone: userTimezone,
         specialization: selectedRole,
         years_experience: yearsOfExperience,
         location,
@@ -255,6 +258,7 @@ function MyComponent({ onClose }) {
         role,
         level,
         rate,
+        timezone: userTimezone,
         specialization: selectedRole,
         years_experience: yearsOfExperience,
         location,

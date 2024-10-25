@@ -128,10 +128,10 @@ function MyComponent() {
               {data.category}
             </Text>
             <Text style={{ fontSize: 13, color: '#206C00', marginBottom: 10 }}>
-              {data.meeting_day}s
+              {data.meeting_day}
             </Text>
             <Text style={{ fontSize: 13, color: '#206C00', marginBottom: 10 }}>
-             {data.from} - {data.to}
+             {data.from}
             </Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
@@ -145,16 +145,9 @@ function MyComponent() {
             </View>
           </View>
           <Text style={{ fontSize: 12, color: '#888', marginTop: 10, marginLeft: 10, height: 60 }}>
-            {data.coaching_hub_description}
+            Description: {data.coaching_hub_description}
           </Text>
-          <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
-            <Text style={{ fontSize: 12, color: 'black', marginTop: 2, marginRight: 5 }}>
-              Hub Fee
-            </Text>
-            <Text style={{ fontSize: 16, color: 'coral', fontWeight: 'bold' }}>
-              {data.coaching_hub_fee}
-            </Text>
-          </View>
+          
         </View>
       </Animated.View>
     ));

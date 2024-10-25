@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal } from 'react-native';
 import OpenModal from './GradeAssignmentList';
-import DateTimePickerModal from "../components/DateTimePickerModal";
+import DateTimePickerModal from "../components/TimePicker4";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
@@ -14,7 +14,9 @@ function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [ModalVisible, setModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDateTimeModalVisible, setIsDateTimeModalVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
@@ -26,9 +28,14 @@ function MyComponent({ onClose }) {
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
-  const handleConfirmDateTime = (dateTime) => {
-    setSelectedDateTime(dateTime);
-    setIsModalVisible(false);
+  const handleConfirmDateTime = (date, time) => {
+    setSelectedDateTime(date);
+    setSelectedTime(time);
+    setIsDateTimeModalVisible(false);
+  };
+
+  const handleCancelDateTimeModal = () => {
+    setIsDateTimeModalVisible(false);
   };
 
   const handleCancelModal = () => {
@@ -44,6 +51,12 @@ function MyComponent({ onClose }) {
     setModalVisible(false);
     onClose();
   };
+  
+  const formatTime = (time) => {
+    if (!time) return "No time selected";
+    return time; // You can further customize this function if needed
+  };
+
   
   useEffect(() => {
     const loadFormData = async () => {
@@ -167,7 +180,7 @@ function MyComponent({ onClose }) {
   }, [selectedMembers]);
 
   return (
-    <View style={{ marginTop: 40, alignItems: 'center' }}>
+    <View style={{  flex: 1, marginTop: 40, alignItems: 'center' }}>
       <View style={styles.greenBox}>
         <View style={styles.header}>
           <Image
@@ -248,9 +261,16 @@ function MyComponent({ onClose }) {
           <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
             {t("Assignment Due")}
           </Text>
-          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-            <Text style={styles.input}>{t("Selected date and time:")} {selectedDateTime}</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
+  <Text style={styles.input}>
+    <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
+    {selectedDateTime 
+      ? `${selectedDateTime.toDateString()} ${formatTime(selectedTime)}`
+      : t("No date selected")}
+  </Text>
+</TouchableOpacity>
+
+
         </View>
 
         <TouchableOpacity onPress={handleSubmit} style={styles.buttonplus}>
@@ -259,9 +279,9 @@ function MyComponent({ onClose }) {
       </View>
 
       <DateTimePickerModal
-        isVisible={isModalVisible}
+        isVisible={isDateTimeModalVisible}
         onConfirm={handleConfirmDateTime}
-        onCancel={handleCancelModal}
+        onCancel={handleCancelDateTimeModal}
       />
       <Modal
         animationType="slide"

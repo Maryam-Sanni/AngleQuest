@@ -1720,7 +1720,7 @@ const AIScreen = () => {
                         >
                         <AIResultHeader
                             step={step}
-                            subTitle={"Study Road Map | What to begin from"}
+                            subTitle={"Study Road Map | Where to begin from"}
                           />
                           <View
                             style={{ position: "relative", minHeight: 525 }}

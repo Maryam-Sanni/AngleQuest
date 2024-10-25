@@ -276,71 +276,77 @@ function MyComponent({ onClose }) {
 
 </View>
 
-  <View style={{ flexDirection: 'row', marginTop: 30 }}>
-    <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
+  
 
 
-</View>
 
-<View style={{ flexDirection: 'row'}}>
-<Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
+<View style={{ flexDirection: 'row', marginTop: 30 }}>
+            <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 20,}}>{t("My Scoring Guide")}</Text>
 
 
-</View>
+          </View>
 
-<View style={styles.container2}>
-  {guides.map((guide, index) => (
-    <View key={index} style={styles.row}>
-      <View style={[styles.cell2, { flex: 0.3, marginTop: 5 }]}>
-        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
-      </View>
-      <View style={[styles.cell2, { flex: 5 }]}>
-        <TextInput
-          placeholder={t(" ")}
-          placeholderTextColor="grey"
-          style={styles.input2}
-          value={guide.guide}
-          onChangeText={text => updateGuide(index, 'guide', text)}
-        />
-      </View>
-       <View style={[styles.cell2, { flex: 0.5 }]}>
-        <Picker
-          selectedValue={guide.percentage}
-          style={styles.picker2}
-          onValueChange={(itemValue) => updateGuide(index, 'percentage', itemValue)}
-        >
-          <Picker.Item label="10%" value="10" />
-          <Picker.Item label="20%" value="20" />
-          <Picker.Item label="30%" value="30" />
-          <Picker.Item label="40%" value="40" />
-          <Picker.Item label="50%" value="50" />
-          <Picker.Item label="60%" value="60" />
-          <Picker.Item label="70%" value="70" />
-          <Picker.Item label="80%" value="80" />
-          <Picker.Item label="90%" value="90" />
-          <Picker.Item label="100%" value="100" />
-        </Picker>
-      </View>
-      <TouchableOpacity onPress={() => deleteGuide(index)} style={styles.deleteButton}>
-        <Text style={{color: 'grey', fontSize: 18, fontWeight: 600}}>✕</Text>
-      </TouchableOpacity>
-    </View>
-  ))}
-</View>
+          <View style={{ flexDirection: 'row'}}>
+          <Text style={{ marginLeft: 50, fontWeight: '600', marginTop: 5, fontFamily: "Roboto-Light", fontStyle: "italic" }}>{t("Make use of the guide to jot down questions and notes, helping you facilitate the session more effectively")}</Text>
+         
+          </View>
 
-<TouchableOpacity 
-  style={[styles.buttonplus, guides.length >= MAX_GUIDES && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]} 
-  onPress={addGuide}
-  onPressIn={handlePressIn}
-  onPressOut={handlePressOut}
-  disabled={guides.length >= MAX_GUIDES}
->
-  <Text style={styles.buttonTextplus}>Add Item</Text>
-</TouchableOpacity>
+                  <View style={styles.container2}>
+                    {guides.map((guide, index) => (
+                        <View key={index} style={styles.row}>
+                          <View style={[styles.cell2, { flex: 0.3, marginTop: 5 }]}>
+                            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
+                          </View>
+                        <View style={[styles.cell2, { flex: 5 }]}>
+                          <TextInput
+                            placeholder={t(" ")}
+                            placeholderTextColor="grey"
+                            style={styles.input2}
+                            value={guide.guide}
+                            onChangeText={text => updateGuide(index, 'guide', text)}
+                          />
+                        </View>
+                        <View style={[styles.cell2, { flex: 0.5 }]}>
+                          <Picker
+                            selectedValue={guide.percentage}
+                            style={styles.picker2}
+                            onValueChange={(itemValue) => updateGuide(index, 'percentage', itemValue)}
+                          >
+                          <Picker.Item label="Select Score" value="Select Score" />
+                            <Picker.Item label="10%" value="10" />
+                            <Picker.Item label="20%" value="20" />
+                            <Picker.Item label="30%" value="30" />
+                            <Picker.Item label="40%" value="40" />
+                            <Picker.Item label="50%" value="50" />
+                            <Picker.Item label="60%" value="60" />
+                            <Picker.Item label="70%" value="70" />
+                            <Picker.Item label="80%" value="80" />
+                            <Picker.Item label="90%" value="90" />
+                            <Picker.Item label="100%" value="100" />
+                          </Picker>
 
-<TouchableOpacity onPress={handleSave} style={styles.buttonsave}>
+                        </View>
+                <TouchableOpacity onPress={() => deleteGuide(index)} style={styles.deleteButton}>
+                  <Text style={{color: 'grey', fontSize: 14, marginTop: 10, fontWeight: 600}}>✕</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+
+          <TouchableOpacity
+            style={[styles.buttonplus, guides.length >= MAX_GUIDES && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
+            onPress={addGuide}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={guides.length >= MAX_GUIDES}
+          >
+            <Text style={styles.buttonTextplus}>Add Item</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={handleSave} style={styles.buttonsave}>
   <Text style={styles.buttonTextsave}>{t("Save")}</Text>
 </TouchableOpacity>
+
 </View>
 </ScrollView>
 <CustomAlert
@@ -440,7 +446,7 @@ marginLeft: 730,
 width: 80,
 padding: 10,
 paddingHorizontal: 20,
-marginTop: -35,
+marginTop: 35,
 borderRadius: 5,
 marginBottom: 50
 },

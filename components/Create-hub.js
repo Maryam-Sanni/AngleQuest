@@ -1,11 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Picker, TouchableOpacity, ScrollView, Modal, FlatList  } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Picker, Image, TouchableOpacity, ScrollView, Modal, CheckBox, FlatList  } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import CustomAlert from './CustomAlert'; 
+import DaysTimePickerModal from "../components/TimePicker3";
+
+const specializationRoles = {
+  'Business Analysis': ['Business Analysis'],
+  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
+  Scrum: ['Scrum'],
+  Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer', 'Dynamics F&O'],
+};
+
+const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
+  const toggleSelection = (id) => {
+    // Replace the previous selection with the new one
+    if (selectedItems.includes(id)) {
+      onSelectedItemsChange([]); // Clear the selection if clicked again (optional)
+    } else {
+      onSelectedItemsChange([id]); // Only allow one selected item
+    }
+  };
+
+  return (
+    <View style={styles.container2}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              value={selectedItems.includes(item.id)}
+              onValueChange={() => toggleSelection(item.id)}
+              tintColors={{ true: 'green', false: 'gray' }} // Checkbox colors
+              style={styles.checkbox} // Optional styles for the checkbox
+            />
+            <Text style={selectedItems.includes(item.id) ? styles.selectedText : styles.unselectedText}>
+              {item.name}
+            </Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+};
 
 
 const CustomTimePicker = ({ initialValue, onChange }) => {
@@ -108,11 +149,36 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigate = useNavigate();
-  const [from, setStartTime] = useState('12:00');
+  const [from, setStartTime] = useState(' ');
   const [to, setEndTime] = useState('12:00');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true); 
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [isSelectVisible, setSelectVisible] = useState(false);
+  const [currentSelectedRoles, setCurrentSelectedRoles] = useState(() => {
+    // Check if selectedRoles is defined and has a property 'SAP'
+    return selectedRoles && selectedRoles['SAP'] ? selectedRoles['SAP'] : []; // Fallback to empty array
+  });
+   
+
+  // Effect to clear selected roles when specialization changes
+  useEffect(() => {
+    setCurrentSelectedRoles([]); // Clear roles
+  }, [specialization]);
+
+  // Function to handle click on the input box
+  const handleInputClick = () => {
+    setSelectVisible(prevState => !prevState); // Toggle visibility
+  };
+
+  // Update the selected roles and close the select when a change happens
+  const handleSelectedItemsChange = (items) => {
+    setCurrentSelectedRoles(items);
+    onSelectedItemsChange(items); // Call the parent function to update
+    setSelectVisible(false); // Close the select after selection
+  };
+
 
   const handleStartTimeChange = (time) => {
     setStartTime(time);
@@ -128,25 +194,45 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [coaching_hub_name, setGroupName] = useState('');
   const [specialization, setSpecialization] = useState('');
   const [skills, setSkills] = useState('Expert');
-  const [years_experience, setExperience] = useState('2');
+  const [years_experience, setExperience] = useState('5');
+  const [meeting_day, setMeetingDay] = useState(' ');
   const [location, setLocation] = useState('Netherlands');
-  const [coaching_hub_goals, setAddgoals] = useState('');
+  const [coaching_hub_goals, setAddgoals] = useState('Goals');
   const [coaching_hub_description, setGroupDescription] = useState('');
-  const [coaching_hub_limit, setlimit] = useState('');
-  const [meeting_day, setmeeting_day] = useState('Monday');
+  const [coaching_hub_limit, setlimit] = useState('100');
   const [descriptionLength, setDescriptionLength] = useState(0);
+  const [objectiveLength, setObjectiveLength] = useState(0);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
-  const [coaching_hub_fee, setfee] = useState('');
-  const maxDescriptionLength = 85; // Max character limit for description
+  const [level, setLevel] = useState('');
+  const [objectives, setObjectives] = useState('');
+  const [coaching_hub_fee, setfee] = useState('$40 per meeting');
+  const maxDescriptionLength = 200; // Max character limit for description
+  const maxObjectiveLength = 250;// Max character limit for objectives
+  const [availableDays, setAvailableDays] = useState('');
+  const [availableTimes, setAvailableTimes] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
 
    const apiUrl = process.env.REACT_APP_API_URL;
 
+   const handleConfirm = ({ selectedDay, startTime, endTime }) => {
+    // Set the selected day as a single value
+    setAvailableDays(selectedDay);  // No need for array check anymore
+    setAvailableTimes(`${startTime.hour}:${startTime.minute} ${startTime.period} - ${endTime.hour}:${endTime.minute} ${endTime.period}`);
+    setModalVisible(false);
+  };  
 
   const handleDescriptionChange = (text) => {
     if (text.length <= maxDescriptionLength) {
       setGroupDescription(text);
       setDescriptionLength(text.length);
+    }
+  };
+
+  const handleObjectiveChange = (text) => {
+    if (text.length <= maxObjectiveLength) {
+      setObjectives(text);
+      setObjectiveLength(text.length);
     }
   };
 
@@ -196,16 +282,18 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
       const formData = {
         visibility,
-        category,
+        category: specialization,
         coaching_hub_name,
-        specialization,
+        specialization: currentSelectedRoles.join(', '),
         years_experience,
         skills,
         location,
-        meeting_day,
+        level,
+        learningOBJ: objectives,
+        meeting_day: availableDays,
         coaching_hub_description,
-        from,
-        to,
+        from: availableTimes,
+        to: availableTimes,
         coaching_hub_fee,
         coaching_hub_goals,
         coaching_hub_limit,
@@ -255,100 +343,92 @@ const CreateCoachingHubForm = ({ onClose }) => {
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
          <Text style={styles.headerText}>{t("Create New Hub")}</Text>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 25,fontFamily:"Roboto-Light" }}>{t("Visibility")}*</Text>
-        <Picker
-          selectedValue={visibility}
-          style={styles.input}
-          onValueChange={(itemValue, itemIndex) =>
-            setVisibility(itemValue)
-          }> 
-          <Picker.Item label={t("Public")} value="public" />
-          <Picker.Item label={t("Private")} value="private" />
-        </Picker>
+        
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
-          <Picker
-        selectedValue={category}
-        style={styles.picker}
-        onValueChange={(itemValue) => setCategory (itemValue)}
-            > 
-            <Picker.Item label={t('SAP')} value="SAP" />
-            <Picker.Item label={t('Microsoft')} value="Microsoft" />
-            <Picker.Item label={t('Salesforce')} value="Salesforce" />
-            <Picker.Item label={t('Frontend Development')} value="Frontend Development" />
-            <Picker.Item label={t('Backend Development')} value="Backend Development" />
-            <Picker.Item label={t('UI/UX')} value="UI/UX" />
-            <Picker.Item label={t('Data Analysis')} value="Data Analysis" />
-            <Picker.Item label={t('Cloud Computing')} value="Cloud Computing" />
-            <Picker.Item label={t('Management')} value="Management" />
+        <Picker
+            selectedValue={specialization}
+            value={specialization}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSpecialization(itemValue)}
+          >
+            {Object.keys(specializationRoles).map((spec) => (
+              <Picker.Item key={spec} label={spec} value={spec} />
+            ))}
           </Picker>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Specialization")}*</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="What is the specialization of your category? Example: 'Microsoft Azure'"
-          value={specialization}
-          onChangeText={text => setSpecialization(text)}
-        />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Name")}*</Text>
+        {/* Clickable TextInput */}
+        <TouchableOpacity onPress={handleInputClick} style={styles.inputContainer}>
+            <TextInput
+              style={styles.input2}
+              value={
+                currentSelectedRoles.length > 0
+                  ? currentSelectedRoles.join(', ')
+                  : selectedRoles.length > 0
+                  ? selectedRoles
+                  : 'Select specialization...'}
+              editable={false} // Make it non-editable
+            />
+         
+            <Image
+              source={{ uri: 'https://img.icons8.com/?size=100&id=39942&format=png&color=000000' }} // Use the provided icon link
+              style={styles.arrowIcon}
+            />
+          </TouchableOpacity>
+          
+          {/* Conditionally render CustomMultiSelect */}
+          {isSelectVisible && specialization && specializationRoles[specialization] && (
+            <CustomMultiSelect
+              items={specializationRoles[specialization].map((role) => ({ id: role, name: role }))}
+              selectedItems={currentSelectedRoles}
+              onSelectedItemsChange={handleSelectedItemsChange} // Update selected roles
+            />
+          )}
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Name")}*</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter hub name"
           value={coaching_hub_name}
           onChangeText={text => setGroupName(text)}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Description")}* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Overview")}* ({maxDescriptionLength - descriptionLength} characters remaining)</Text>
         <TextInput
-          style={[styles.input, { height: 100 }]}
-          placeholder= {t("Type here...")}
+          style={[styles.input, { height: 120 }]}
+          placeholder= {t("The overview of this training is to...")}
           multiline
           value={coaching_hub_description}
           onChangeText={handleDescriptionChange}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Meeting Day")}*</Text>
-        <Picker
-      selectedValue={meeting_day}
-      style={styles.picker}
-      onValueChange={(itemValue) => setmeeting_day (itemValue)}
-          > 
-          <Picker.Item label="Monday" value="Monday" />
-          <Picker.Item label="Tuesday" value="Tuesday" />
-          <Picker.Item label="Wednesday" value="Wednesday" />
-          <Picker.Item label="Thursday" value="Thursday" />
-          <Picker.Item label="Friday" value="Friday" />
-          <Picker.Item label="Saturday" value="Saturday" />
-          <Picker.Item label="Sunday" value="Sunday" />
-        </Picker>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10 }}>{t("Meeting Time")}*</Text>
-        <View style={styles.timecontainer}>
-      <View style={styles.timeformContainer}>
-        <Text style={styles.timelabel}>{t("From")}</Text>
-        <CustomTimePicker initialValue={from} onChange={handleStartTimeChange} />
-        <Text style={styles.timelabel}>{t("To")}</Text>
-        <CustomTimePicker initialValue={to} onChange={handleEndTimeChange} />
-      </View>
-    </View>
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Fee")}*</Text>
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee")} (per meeting)</Text>
         <TextInput
           style={styles.input}
-          placeholder="$25"
+          placeholder="$40"
           value={coaching_hub_fee}
           onChangeText={text => setfee(text)}
+          editable={false}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Goals (Optional)")} </Text>
+
+<Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Objectives")}* ({maxObjectiveLength - objectiveLength} characters remaining)</Text>
         <TextInput
-          style={[styles.input, { height: 100 }]}
-          placeholder= "Type here..."
+          style={[styles.input, { height: 120 }]}
+          placeholder= {t("At the end of this training...")}
           multiline
-          value={coaching_hub_goals}
-          onChangeText={text => setAddgoals(text)}
+          value={objectives}
+          onChangeText={handleObjectiveChange}
         />
-       <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Learning Hub Limit")}*</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="50"
-          keyboardType="numeric" // Set keyboardType to 'numeric' for number input
-          value={coaching_hub_limit}
-          onChangeText={text => setlimit(text)}
-        />
+
+               <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Level")}*</Text> 
+        <Picker
+                  selectedValue={level}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setLevel(itemValue)}
+                >
+                  <Picker.Item label={t('Beginner')} value="Beginner" />
+                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
+                  <Picker.Item label={t('Advanced')} value="Advanced" />
+                </Picker>
+
+        
+      
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
           onPress={handleSave}
@@ -474,6 +554,62 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 22,
     fontWeight: 'bold',
+    },
+    multiSelect: {
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 5,
+      padding: 10,
+    },
+    container2: {
+      backgroundColor: '#F5F5F5', // Background color of the FlatList
+      borderColor: '#ccc', // Border color
+      borderWidth: 1, 
+      borderBottomRadius: 5,
+      padding: 5,
+    },
+    checkboxContainer: {
+      flexDirection: 'row', // Align checkbox and text in a row
+      alignItems: 'center', // Center them vertically
+      marginVertical: 5, 
+      marginTop: 7,
+      marginLeft: 10
+    },
+    checkbox: {
+      color: 'green', 
+      backgroundColor: 'green'
+    },
+    selectedText: {
+      color: 'green', // Text color for selected items
+      marginLeft: 10
+    },
+    unselectedText: {
+      color: 'black', // Default text color
+      marginLeft: 10
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+      padding: 10,
+      marginTop: 5
+    },
+    arrowIcon: {
+      width: 10, // Set the desired width
+      height: 10, // Set the desired height
+      marginLeft: 10, // Space between input and icon
+    },
+    input2: {
+      flex: 1,
+      fontSize: 16,
+      paddingRight: 30, // Add padding to prevent text overlapping with the arrow
+    },
+    container: {
+      flexDirection: 'column',
+      borderWidth: 1,
+      borderColor: '#CCC',
     },
 });
 

@@ -227,7 +227,7 @@ function MyComponent() {
       switch(item.label) {
         case "Home": return currentPath === '/home-individuals';
         case "Courses": return ['/my-courses', '/join-courses'].includes(currentPath);
-        case "Growth Plan": return ['/growth-plan-new', '/growth-plan-sessions'].includes(currentPath);
+        case "Growth Plan": return ['/growth-plan-new', '/growth-plan-sessions', '/expert-roadmap'].includes(currentPath);
         case "Interview": return ['/interview-new', '/interview-sessions'].includes(currentPath);
         case "Scenario Project": return currentPath === '/project';
         case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result', '/expert-analysis', '/ai-analysis'].includes(currentPath);

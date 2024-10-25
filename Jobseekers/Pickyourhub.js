@@ -22,6 +22,7 @@ function MyComponent({ onClose }) {
   const [isDropdown, setIsDropdown] = useState(false);
   const [isPressed, setIsPressed] = useState(Array(4).fill(false)); // State for tracking button press
   const [cardData, setCardData] = useState({ AllHubs: [] });
+  const [resultCount, setResultCount] = useState(0);
    const [selectedCategory, setSelectedCategory] = useState('');
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [token, setToken] = useState("");
@@ -217,7 +218,36 @@ const handleOpenPress3 = async () => {
     fetchData();
   }, []);
 
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+  
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.status === 200) {
+          const hubs = response.data.AllHubs; // Assuming hubs is an array
+          setResultCount(hubs.length); // Set count based on fetched data
+          // Optionally, fetch full data if needed later
+        } else {
+          console.error('Error fetching data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
       scaleAnimations[index],
@@ -246,7 +276,7 @@ const handleOpenPress3 = async () => {
       <Animated.View
         key={index}
         style={{
-          width: '25%',
+          width: '33%',
           paddingHorizontal: 5,
           marginBottom: 20,
           transform: [{ scale: scaleAnimations[index] }],
@@ -257,8 +287,8 @@ const handleOpenPress3 = async () => {
         <View
           style={{
             width: '95%',
-            height: 300,
-            borderRadius: 5,
+            height: 280,
+            borderRadius: 10,
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
@@ -267,71 +297,46 @@ const handleOpenPress3 = async () => {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            backgroundColor: "#d3f9d8",
+            backgroundColor: "white",
           }}
         >
-          <TouchableOpacity onPress={handleOpenPress2}>
-            <View style={{ justifyContent: "center", alignSelf: 'center', width: '90%', height: 110, borderRadius: 5, backgroundColor: "#F0FFF9", marginRight: "5%", marginLeft: 10, alignItems: 'center', marginTop: 10, borderWidth: 1, borderColor: '#206C00' }}>
-              <View style={{ flexDirection: 'row' }}>
-                <Image
-                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                  style={{ width: 30, height: 30, aspectRatio: 1, marginTop: 20 }}
-                />
-                <Image
-                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                  style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20 }}
-                />
-                <Image
-                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-                  style={{ width: 30, height: 30, aspectRatio: 1, marginLeft: -5, marginTop: 20 }}
-                />
-              </View>
-              <Text style={{ fontSize: 12, color: "black", fontWeight: '600', marginTop: 10 }}>
-                {data.category}
-              </Text>
-              <Text style={{ fontSize: 13, color: "#206C00", marginTop: 5 }}>
-                {data.meeting_day}s
-              </Text>
-              <Text style={{ fontSize: 13, color: "#206C00", marginBottom: 10 }}>
-               {data.from} - {data.to}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={{flexDirection: 'row', marginTop: 20,}}>
+          <View style={{height: 35, width: 8, backgroundColor: '#206C00', borderTopRightRadius: 5, borderBottomRightRadius: 5}}> </View>
+          <Text style={{ fontSize: 14, color: "black", fontWeight: '400', marginLeft: 10, marginTop: -10 }}> {t("Live Session")}<Text style={{ fontSize: 35, color: "black", fontWeight: '400', marginLeft: 5}}>.</Text> Beginner </Text>
+          </View>
           <TouchableOpacity onPress={handleOpenPress}>
             <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
               <View style={{ flex: 1, }}>
-                <Text style={{ fontSize: 16, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
-                <Text style={{ fontSize: 12, color: "black", fontWeight: '400' }}>
-                  {t("Coach")}: {data.expert_name}
+                <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
+                
+                <Text style={{ fontSize: 15, color: "black", fontWeight: '400' }}>
+                  {t("Specialization")}: {data.specialization}
                 </Text>
               </View>
             </View>
 
-            <Text style={{ fontSize: 12, color: "#888", marginTop: 10, marginLeft: 10, height: 60 }}>{data.coaching_hub_description}</Text>
+            <Text style={{ fontSize: 15, color: "#888", marginTop: 10, marginLeft: 10, height: 100 }}>{data.coaching_hub_description}</Text>
 
             
           </TouchableOpacity>
-      <TouchableOpacity
-            onPressIn={() => handleJoinPressIn(index)}
-            onPressOut={handleJoinPressOut}
+      <View
             style={{
-              borderWidth: 1,
-                borderColor: '#206C00',
-                backgroundColor: "#F0FFF9",
-                borderRadius: 5,
-                paddingHorizontal: 50,
+                backgroundColor: "#F5F5F5",
+                borderWidth: 0.5,
+                borderColor: 'grey',
+                borderRadius: 15,
                 paddingVertical: 5,
                 marginTop: 15,
-                width: "90%",
-                alignSelf: "center",
+                width: 150,
                 justifyContent: 'center',
                 marginLeft: 10,
                 marginRight: 10,
-              backgroundColor: isPressed[index] ? 'coral' : '#F0FFF9',
             }}
           >
-         <Text style={{ color: isPressed[index] ? '#fff' : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
-          </TouchableOpacity>
+<Text style={{ fontSize: 12, color: "black", fontWeight: '400', marginLeft: 20 }}>
+                  {t("Expert")}: {data.expert_name}
+                </Text>
+          </View>
         </View>
       </Animated.View>
     ));
@@ -347,12 +352,10 @@ const handleOpenPress3 = async () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
           <View style={styles.header}>
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} // replace with your logo URL
-              style={styles.logo}
-            />
-            <Text style={styles.headerText}>{t("Hubs")}</Text>
-
+              <View style={{flexDirection: 'column'}}>
+            <Text style={styles.headerText}>{t("Hubs Live Sessions")}</Text>
+            <Text style={{ fontSize: 18, color: "grey", textAlign: 'center', marginTop: 10 }}>{t("Engage and learn with experts and peers")}</Text>
+            </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                 ✕
@@ -361,32 +364,51 @@ const handleOpenPress3 = async () => {
           </View>
 
           <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
-            <Text style={{ fontSize: 16, color: "black", alignText: 'flex-start', fontWeight: 'bold', marginTop: 5,fontFamily:"Roboto-Light" }}>{t("Pick an hub you will like to join")}</Text>
-            <Text style={{ fontSize: 14, color: "black", alignText: 'flex-start', marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Use the search or the dropdown to filter")}</Text>
-            <View style={{ flexDirection: 'row', marginTop: 10}}>
+            <View style={{ flexDirection: 'row', marginTop: 10, marginRight: 50}}>
+            <TextInput
+                  placeholder={t("Search")}
+                  style={styles.input}
+                />
+
               <Picker
                 selectedValue={selectedCategory}
                 style={styles.picker}
                 onValueChange={(itemValue) => setSelectedCategory(itemValue)}
               >
-                <Picker.Item label="All Categories" value="" />
-                <Picker.Item label="SAP" value="SAP" />
-                <Picker.Item label="Microsoft" value="Microsoft" />
-                <Picker.Item label="Salesforce" value="Salesforce" />
-                <Picker.Item label="Frontend Development" value="Frontend Development" />
-                <Picker.Item label="Backend Development" value="Backend Development" />
-                <Picker.Item label="UI/UX" value="UI/UX" />
-                <Picker.Item label="Data Analysis" value="Data Analysis" />
-                <Picker.Item label="Cloud Computing" value="Cloud Computing" />
-                <Picker.Item label="Management" value="Management" />
-              </Picker>
+                  <Picker.Item label="Category" value="" />
+                    <Picker.Item label="SAP" value="SAP" />
+                    <Picker.Item label="Microsoft" value="Microsoft" />
+                    <Picker.Item label="Scrum" value="Scrum" />
+                    <Picker.Item label="Business Analysis" value="Business Analysis" />
+                  </Picker>
 
-                <TextInput
-                  placeholder={t("Search")}
-                  style={styles.input}
-                />
+                  <Picker
+                selectedValue={selectedCategory}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                  <Picker.Item label="Level" value="" />
+                    <Picker.Item label="Beginner" value="Beginner" />
+                    <Picker.Item label="Intermediate" value="Intermediate" />
+                    <Picker.Item label="Advanced" value="Advanced" />
+                  </Picker>
+
+                  <Picker
+                selectedValue={selectedCategory}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                  <Picker.Item label="Session Type" value="" />
+                    <Picker.Item label="Beginner" value="Beginner" />
+                    <Picker.Item label="Intermediate" value="Intermediate" />
+                    <Picker.Item label="Junior" value="Junior" />
+                    <Picker.Item label="Senior" value="Senior" />
+                  </Picker>
+
+                
      </View>
           </View>
+          <Text style={{marginLeft: 35, fontSize: 15, color: 'grey', marginTop: 30}}>{resultCount} results found</Text> 
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
             {renderCards()}
           </View>
@@ -468,7 +490,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    justifyContent: 'center',
+    padding: 30,
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
@@ -480,10 +503,9 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#3F5637',
-    fontFamily:"Roboto-Light"
+    textAlign: 'center'
   },
   dropcontainer: {
     justifyContent: 'center',
@@ -496,8 +518,8 @@ const styles = StyleSheet.create({
     width: 500,
   },
   input: {
-    width: "100%",
-    height: 40,
+    width: 200,
+    height: 35,
     borderColor: 'gray',
     borderWidth: 1,
     paddingLeft: 8,
@@ -507,12 +529,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   picker: {
-    width: 700,
-    height: 40,
+    width: 120,
+    height: 35,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    marginRight: 20
+    marginRight: 10
   },
   iconContainer: {
     padding: 8,

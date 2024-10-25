@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput } from 'react-native';
-import DateTimePickerModal from "../components/DateTimeCoach";
+import DateTimePickerModal from "../components/TimePicker4";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
@@ -162,16 +162,24 @@ function MyComponent({ onClose }) {
               multiline
             />
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                {t("Date *")}
-              </Text>
-              <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
-                <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Date: </Text>{selectedDateTime}</Text>
-              </TouchableOpacity>
-              <Text style={{fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10,fontFamily:"Roboto-Light" }}>
-                {t("Time *")}
-              </Text>
-              <Text style={styles.input}><Text style={{fontWeight: '500',fontFamily:"Roboto-Light"}}>Time: </Text> {selectedTime}</Text>
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily:"Roboto-Light" }}>
+  {t("Date *")}
+</Text>
+<TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
+  <Text style={styles.input}>
+    <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
+    {selectedDateTime ? selectedDateTime.toDateString() : t("No date selected")} {/* Format Date here */}
+  </Text>
+</TouchableOpacity>
+
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
+  {t("Time *")}
+</Text>
+<Text style={styles.input}>
+  <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Time: </Text> 
+  {selectedTime || t("No time selected")}
+</Text>
+
             </View>
             <TouchableOpacity onPress={handleSubmit} style={styles.buttonplus}>
               <Text style={styles.buttonTextplus}>{t("Create Meeting")}</Text>

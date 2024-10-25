@@ -128,7 +128,7 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isFirstHubsHovered && { color: '#666' }]}>{coaching_hub_name || "No update yet"}</Text>
+                <Text style={[{marginLeft: 5, color: "#666", fontSize: 16 }, isFirstHubsHovered && { color: '#666' }]}>{coaching_hub_name || "No update yet"}</Text>
               </View>
             </TouchableOpacity>
             
@@ -142,12 +142,12 @@ const {t}=useTranslation()
   source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
   style={styles.image2}
 />
-                <Text style={[{marginLeft: 5, color: "#666" }, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
+                <Text style={[{marginLeft: 5, color: "#666", fontSize: 16 }, isAllHovered && { color: 'coral' }]}>{t("All Hubs")}</Text>
               </View>
             </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={handleOpenPress}>
+            <TouchableOpacity onPress={handleOpenPress2}>
     <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
                     <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Hub")}</Text>
                   </View>
@@ -166,7 +166,7 @@ const {t}=useTranslation()
      </TouchableOpacity>
      <TouchableOpacity onPress={handleOpenPress3}>
     <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Assignment")}</Text>
+                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Assessment")}</Text>
                   </View>
      </TouchableOpacity>
     

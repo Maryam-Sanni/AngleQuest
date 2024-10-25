@@ -9,8 +9,8 @@ import CustomAlert from '../components/CustomAlert';
 const MAX_RESPONSE= 10;
 
 function MyComponent({ onClose }) {
-  const [guides, setGuides] = useState([]);
-  const [response, setResponse] = useState(Array.from({ length: 5 }, () => ({ response: '', title: '' })));
+  const [guides, setGuides] = useState(data?.guide || []);
+  const [response, setResponse] = useState(Array.from({ length: 2 }, () => ({ response: '', title: '' })));
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [remark, setRemark] = useState('');
@@ -136,6 +136,14 @@ setGuides(newGuides);
 
     setIsChecked(!isChecked);
 
+    const descriptions = [];
+response.forEach((item) => {
+  descriptions.push({
+    description: item.title,
+    percentage: item.response,
+  });
+});
+
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
@@ -150,12 +158,9 @@ setGuides(newGuides);
         completed: completed,
         title: data?.title,
         role: data?.role,
-        date: data?.date,
+        date: data?.date_time,
         performance_rating: rating,
-        descriptions: guides.map(guide => ({
-          description: guide.guide,
-          percentage: guide.percentage,
-        })),
+        descriptions: descriptions,
       };
 
       // POST request for feedback
@@ -237,7 +242,7 @@ setGuides(newGuides);
  <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Protegee")}</Text>
+          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Candidate")}</Text>
         </View>
         <View style={styles.cell}>
         <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.coach}</Text>
@@ -265,110 +270,91 @@ setGuides(newGuides);
      
       
  </View>
- <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 30 }}>{t("Skill Analysis Guide")}</Text>
+ 
+ <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 30, marginBottom: -10 }}>{t("Skill Analysis Guide")}</Text>
 
- <View style={styles.container}>
-  {data?.guide && data.guide.length > 0 ? (
-    data.guide.map((item, index) => {
-      // Determine if the guide is an object or a string
-      const guideContent = typeof item === 'string' ? item : item.guide;
+<View style={styles.container}>
+ {data?.guide && data.guide.length > 0 ? (
+   data.guide.map((item, index) => {
+     // Determine if the guide is an object or a string
+     const guideContent = typeof item === 'string' ? item : item.guide;
 
-      return (
-        <View style={styles.row} key={index}>
-          <View style={[styles.cell, { flex: 0.5 }]}>
-            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{index + 1}.</Text>
-          </View>
-          <View style={[styles.cell, { flex: 5 }]}>
-            <TextInput
-              placeholder={t("Topic")}
-              placeholderTextColor="grey"
-              style={styles.input}
-              editable={false}
-              value={guideContent} // Use the derived guide content
-            />
-          </View>
-          <View style={[styles.cell, { flex: 1 }]}>
-            <Picker style={styles.picker}>
-              <Picker.Item label="Select Score" value="Select Score" />
-              <Picker.Item label="10%" value="10" />
-              <Picker.Item label="20%" value="20" />
-              <Picker.Item label="30%" value="30" />
-              <Picker.Item label="40%" value="40" />
-              <Picker.Item label="50%" value="50" />
-              <Picker.Item label="60%" value="60" />
-              <Picker.Item label="70%" value="70" />
-              <Picker.Item label="80%" value="80" />
-              <Picker.Item label="90%" value="90" />
-              <Picker.Item label="100%" value="100" />
-            </Picker>
-          </View>
-        </View>
-      );
-    })
-  ) : (
-    <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
-      not available
-    </Text>
-  )}
+     return (
+       <View style={styles.row} key={index}>
+         <View style={[styles.cell, { flex: 0.5 }]}>
+           <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{index + 1}.</Text>
+         </View>
+         <View style={[styles.cell, { flex: 5 }]}>
+           <TextInput
+             placeholder={t("Topic")}
+             placeholderTextColor="grey"
+             style={styles.input}
+             editable={false}
+             value={guideContent} // Use the derived guide content
+           />
+         </View>
+         <View style={[styles.cell, { flex: 1 }]}>
+           <Picker style={styles.picker}>
+             <Picker.Item label="Select Score" value="Select Score" />
+             <Picker.Item label="10%" value="10" />
+             <Picker.Item label="20%" value="20" />
+             <Picker.Item label="30%" value="30" />
+             <Picker.Item label="40%" value="40" />
+             <Picker.Item label="50%" value="50" />
+             <Picker.Item label="60%" value="60" />
+             <Picker.Item label="70%" value="70" />
+             <Picker.Item label="80%" value="80" />
+             <Picker.Item label="90%" value="90" />
+             <Picker.Item label="100%" value="100" />
+           </Picker>
+         </View>
+       </View>
+     );
+   })
+ ) : (
+   <Text style={{ color: 'grey', fontFamily: "Roboto-Light" }}>
+     not available
+   </Text>
+ )}
 </View>
 
 <View style={{ flexDirection: 'row' }}>
      <View style={{ flexDirection: 'column' }}>
-      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, marginBottom: -10 }}>{t("Additional")}</Text>
+      <Text style={{ marginLeft: 50, fontWeight: 'bold', marginTop: 50, fontSize: 14, marginBottom: -10 }}>{t("Growth Roadmap")}</Text>
      </View>
       
     </View>
 
     <View style={styles.container}>
-      {response.map((response, index) => (
-        <View key={index} style={styles.row}>
-          <View style={[styles.cell, { flex: 0.5 }]}>
-            <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t(``)} {index + 1}</Text>
-          </View>
-          <View style={[styles.cell, { flex: 2 }]}>
-            <TextInput
-              placeholder={t("Topic")}
-              placeholderTextColor="grey"
-              style={styles.input}
-              value={response.title}
-              onChangeText={text => updateResponse(index, 'title', text)}
-            />
-          </View>
-          <View style={[styles.cell, { flex: 5 }]}>
-            <TextInput
-              placeholder={t("Evaluation")}
-              placeholderTextColor="grey"
-              style={styles.input}
-              value={response.response}
-              onChangeText={text => updateResponse(index, 'response', text)}
-            />
-          </View>
-          <View style={[styles.cell, { flex: 1 }]}>
-            <Picker
-              selectedValue={response.percentage}
-              style={styles.picker}
-              onValueChange={(itemValue) => updateResponse(index, 'percentage', itemValue)}
-            >
-              <Picker.Item label="score" value="score" />
-              <Picker.Item label="10%" value="10" />
-              <Picker.Item label="20%" value="20" />
-              <Picker.Item label="30%" value="30" />
-              <Picker.Item label="40%" value="40" />
-              <Picker.Item label="50%" value="50" />
-              <Picker.Item label="60%" value="60" />
-              <Picker.Item label="70%" value="70" />
-              <Picker.Item label="80%" value="80" />
-              <Picker.Item label="90%" value="90" />
-              <Picker.Item label="100%" value="100" />
-            </Picker>
-          </View>
-
-          <TouchableOpacity onPress={() => deleteResponse(index)} style={{padding: 5}}>
-            <Text style={{color: 'grey', fontSize: 16, marginTop: 5, fontWeight: 600}}>✕</Text>
-          </TouchableOpacity>
-        </View>
-      ))}
+  {Array.isArray(response) && response.map((response, index) => (
+    <View key={index} style={styles.row}>
+      <View style={[styles.cell, { flex: 0.5 }]}>
+        <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t('')} {index + 1}</Text>
+      </View>
+      <View style={[styles.cell, { flex: 2 }]}>
+        <TextInput
+          placeholder={t("Topic")}
+          placeholderTextColor="grey"
+          style={styles.input}
+          value={response.title}
+          onChangeText={text => updateResponse(index, 'title', text)}
+        />
+      </View>
+      <View style={[styles.cell, { flex: 5 }]}>
+        <TextInput
+          placeholder={t("Description")}
+          placeholderTextColor="grey"
+          style={styles.input}
+          value={response.response}
+          onChangeText={text => updateResponse(index, 'response', text)}
+        />
+      </View>
+      <TouchableOpacity onPress={() => deleteResponse(index)} style={{ padding: 5 }}>
+        <Text style={{ color: 'grey', fontSize: 16, marginTop: 5, fontWeight: 600 }}>✕</Text>
+      </TouchableOpacity>
     </View>
+  ))}
+</View>
 
   <TouchableOpacity
     style={[styles.buttonplus, response.length >= MAX_RESPONSE && styles.buttonplusDisabled, isPressed && styles.buttonplusPressed]}
@@ -382,7 +368,7 @@ setGuides(newGuides);
 
   
   
-<Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Overall Feedback/Remark")}</Text>
+<Text style={{ marginTop: 30, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Note")}</Text>
               <View style={{ marginLeft: 50, marginRight: 70, marginTop: 5 }}>
                 <TextInput
                   style={{ padding: 6, fontSize: 14, fontWeight: 'normal', color: 'black', borderWidth: 1, outline: 'black', borderColor: 'black', height: 150  }}
@@ -394,25 +380,7 @@ setGuides(newGuides);
                 />
                 </View>
 
-  <Text style={{ marginTop: 30, marginBottom: -15, fontWeight: 'bold', color: 'black', marginLeft: 50  }}> {t("Rating")}</Text>
-<View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Picker
-          selectedValue={data?.rating}
-           style={styles.picker}
-           onValueChange={(itemValue) => setRating(itemValue)}
->
-          <Picker.Item label="Fair" value="Fair" />
-          <Picker.Item label="Good" value="Good" />
-          <Picker.Item label="Brilliant" value="Brilliant" />
-</Picker>
-        </View>
-        </View>
-        </View>
+  
 
   <View style={{flexDirection: 'row'}}>
     <TouchableOpacity style={styles.checkcontainer} onPress={handleToggleCheckbox}>

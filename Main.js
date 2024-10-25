@@ -123,6 +123,7 @@ import GeneralSignin from './components/Signin';
 import BlankScreen from './components/BlankScreen';
 import Project from './Jobseekers/Scenario Project';
 import ExpertAnalysis from './Jobseekers/ExpertAnalysis';
+import ExpertRoadmap from './Jobseekers/ExpertAnalysisG';
 import AiAnalysis from './Jobseekers/Aianalysis';
 import Scenario from './Experts/Scenario';
 import MainMessage from './Messaging/ChatScopeUI';
@@ -214,6 +215,7 @@ const App = () => {
         <Route path="/reset-password" element={<Reset  />} />
          <Route path="/expert-analysis" element={<ExpertAnalysis  />} />
          <Route path="/ai-analysis" element={<AiAnalysis  />} />
+         <Route path="/expert-roadmap" element={<ExpertRoadmap />} />
       </Routes>
     </Router>
   );

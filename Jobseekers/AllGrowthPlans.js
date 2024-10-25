@@ -15,11 +15,88 @@ import axios from 'axios';
 function MyComponent() { 
   const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
-   const [meetingData, setMeetingData] = useState({ date: '', time: '' })
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
+  const [meetings, setMeetings] = useState([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [reviewedCount, setReviewedCount] = useState(0);
+  const [meetingData, setMeetingData] = useState({ date: '', time: '' });
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+  
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+  
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+  
+        if (response.status === 200) {
+          const data = response.data.growthPlan;
+  
+          // Log to debug the values
+          console.log('Data from API:', data);
+  
+          // Calculate pending and completed counts
+          const pendingCount = data.filter(meeting => meeting.completed === null).length;
+          const completedCount = data.filter(meeting => meeting.completed === "Yes").length;
+  
+          console.log('Pending Count:', pendingCount);
+          console.log('Completed Count:', completedCount);
+  
+          setMeetings(data);
+          setPendingCount(pendingCount); // Update state
+          setReviewedCount(completedCount); // Update state
+  
+          // Find the meeting closest to today
+          const today = new Date();
+          const closestMeeting = data
+            .filter(meeting => new Date(meeting.date_time) >= today) // Filter future meetings
+            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time))[0]; // Sort by closest date
+  
+          if (closestMeeting) {
+            // Extract target level and coach from the closest meeting
+            const targetLevel = closestMeeting.target_level;
+            const coach = closestMeeting.coach;
+  
+            // Set additional data
+            setMeetingData({ 
+              date: closestMeeting.date_time, 
+              time: closestMeeting.expert_available_time,
+              targetLevel,    // Set target level
+              coach           // Set coach
+            });
+  
+            console.log('Next Meeting Date:', closestMeeting.date_time);
+            console.log('Next Meeting Target Level:', targetLevel);
+            console.log('Next Meeting Coach:', coach);
+          }
+  
+          // Save all growth plans to AsyncStorage
+          try {
+            await AsyncStorage.setItem('allExpertsgrowth', JSON.stringify(data));
+            console.log('All expert growth plans saved:', data);
+          } catch (error) {
+            console.error('Failed to save all expert growth plans to AsyncStorage', error);
+          }
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+  
+    loadFormData();
+  }, []);
+  
+
   useEffect(() => {
     const fetchMeetingData = async () => {
       try {
@@ -131,6 +208,16 @@ function MyComponent() {
     }
   };
   
+  const gotoresult = () => {
+    navigate('/ai-analysis');
+    onClose();
+  };
+
+  const gotoanalysis = () => {
+    navigate('/expert-roadmap');
+    onClose();
+  };
+
     const [fontsLoaded]=useFonts({
       "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),
         })
@@ -165,54 +252,61 @@ function MyComponent() {
                   </View>
      </TouchableOpacity>
 
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={gotoanalysis}>
                           <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
                                           <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Expert Roadmap")}</Text>
                                         </View>
                            </TouchableOpacity>
                       </View>
-     <View style={styles.container}>
+                      <View style={styles.container}>
       <View style={styles.box}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 14, color: "black", fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Next growth plan session")}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{meetingData.date}</Text>
-    <Text style={{ fontSize: 13, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{meetingData.time}</Text>
-    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 16, color: "black", textAlign: 'center', fontWeight: '600' }}>{t("Next growth plan session")}</Text>
+          <Text style={{ fontSize: 14, color: "grey", marginTop: 10, fontFamily: "Roboto-Light", textAlign: 'center' }}>{meetingData.date}</Text>
+          <TouchableOpacity
+            style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00' }}
+            onPress={handlejoinPress}
+          >
+            <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>{t("Join Now")}</Text>
           </TouchableOpacity>
-          </View>
-           </View>
+        </View>
+      </View>
 
       <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Personal Development")}</Text>
-        <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>1</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Active")}</Text>
-           <Image source={require('../assets/person.png')} style={styles.boximage}  />
-     </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("0 completed in the past")}</Text>
-    
+        <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>{t("Personal Development")}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00', fontFamily: "Roboto-Light" }}>{pendingCount}</Text>
+          <Text style={{ fontSize: 12, marginTop: 10, marginLeft: 10, fontFamily: "Roboto-Light" }}>{t("Active")}</Text>
+          <Image source={require('../assets/person.png')} style={styles.boximage} />
+        </View>
       </View>
-     
-      <View style={styles.box}> 
-      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light" }}>{t("Team Development")}</Text>
-        <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>0</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>{t("Completed")}</Text>
-           <Image source={require('../assets/teamicon.jpg')} style={styles.boximage}  />
-     </View>
-      </View>
-      
+
       <View style={styles.box}>
-      <Text style = {{fontSize: 14, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 10,fontFamily:"Roboto-Light", textAlign: 'center'}}>{t("Organizational Development")}</Text>
-        <View style={{flexDirection: 'row'}}>
-           <Text style = {{fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00',fontFamily:"Roboto-Light" }}>0</Text>
-           <Text style = {{fontSize: 12, marginTop: 10, marginLeft: 10,fontFamily:"Roboto-Light" }}>Completed</Text>
-           <Image source={require('../assets/organization.png')} style={styles.boximage}  />
-     </View>
-     <Text style = {{fontSize: 12, fontWeight: '500', marginTop: 10, color: 'coral',fontFamily:"Roboto-Light" }}>{t("1 replan available")}</Text>
-    </View>
-    </View>
+        <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', marginBottom: 10, textAlign: 'center', }}>{t("Completed Sessions")}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00', fontFamily: "Roboto-Light" }}>{reviewedCount}</Text>
+          <Text style={{ fontSize: 12, marginTop: 10, marginLeft: 10, fontFamily: "Roboto-Light" }}>{t("Completed")}</Text>
+          <Image source={require('../assets/teamicon.jpg')} style={styles.boximage} />
+        </View>
+      </View>
+
+      <View style={styles.box}>
+  <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', marginBottom: 10, textAlign: 'center' }}>
+    Target Level
+  </Text>
+  <View style={{ flexDirection: 'row', alignItems:'center'}}>
+    {/* Dynamically render the target level */}
+    <Text style={{ fontSize: 14, fontWeight: 'bold', marginTop: 5, fontFamily: "Roboto-Light" }}>
+      {meetingData?.targetLevel || 'beginner'}
+    </Text>
+    <Image source={require('../assets/organization.png')} style={styles.boximage} />
+  </View>
+  {/* Dynamically render the coach */}
+  <Text style={{ fontSize: 12, fontWeight: '500', marginTop: 10, color: '#206C00', fontFamily: "Roboto-Light", textAlign: 'center' }}>
+    working with coach {meetingData?.coach || 'Unknown Coach'}
+  </Text>
+</View>
+</View>
 
                         <Modal
         animationType="slide"

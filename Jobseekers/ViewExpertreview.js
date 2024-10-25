@@ -106,42 +106,12 @@ function MyComponent({ onClose }) {
 
   </View>
 
- <View style={{flexDirection: 'row'}}>
-<Text style={{ marginTop: 20, marginBottom: -10, fontWeight: '500', fontSize: 14, color: 'black', marginLeft: 50,fontFamily:"Roboto-Light" }}>{t("Growth Plan Scoring")}</Text>
-<Text style={{marginLeft: 540, marginTop: 20, marginBottom: -15, width: 200, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Uneditable Section")}</Text>
-       </View>
-       <View style={styles.container}>
-         {data?.descriptions?.map((item, index) => (
-           <View style={styles.row} key={index}>
-             <View style={styles.cell}>
-               <Text style={{fontWeight: 'bold', fontFamily: "Roboto-Light"}}>
-                 {t("Guide")} {index + 1}: {item.description}
-               </Text>
-             </View>
-             <View style={styles.cell}>
-               <Text style={{color: 'grey', fontFamily: "Roboto-Light"}}>
-                 {item.percentage}%
-               </Text>
-             </View>
-           </View>
-         ))}
-        </View>
+
 <Text style={{ marginTop: 20, fontWeight: '500', color: 'black', marginLeft: 50, fontSize: 14, marginBottom: 10,fontFamily:"Roboto-Light" }}> {t("Overall Feedback/Remark")}</Text>
               <View style={{ marginTop: 3.5, padding: 6, paddingTop: 8, paddingBottom: 100, backgroundColor: 'none', borderWidth: 2, borderColor: '#CCC', marginLeft: 50, marginRight: 70 }}>
               <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{data?.remark}</Text>
 
                 </View>
-
-<View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.cell}>
-          <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Performance Rating")}</Text>
-        </View>
-        <View style={styles.cell}>
-        <Text style={{color: 'black',fontFamily:"Roboto-Light"}}>{data?.rating}</Text>
-        </View>
-        </View>
-        </View>
 
   <View style={styles.ratingContainer}>
     <Text style={styles.ratetitle}>{t("Rating")} <Image
