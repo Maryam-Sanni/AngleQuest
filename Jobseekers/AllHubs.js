@@ -202,7 +202,7 @@ function MyComponent() {
                                                 fontWeight: "bold",
                                             }}
                                         >
-                                            {t("Hub Meeting")}
+                                            {t("Next Meeting")}
                                         </Text>
                                         <Text
                                             style={{
@@ -359,10 +359,10 @@ function MyComponent() {
                                     />
                                 </View>
                             </Modal>
-
+                            <PastSessions />
                            
                             <HubsAssignments />
-                             <PastSessions />
+                          
                         </View>
                     </ScrollView>
                 </View>

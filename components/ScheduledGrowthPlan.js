@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 
 const ScheduledMeetingsTable = () => {
@@ -168,61 +169,63 @@ const ScheduledMeetingsTable = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
-  
-  // Function to format date_time string
-const formatDateTime = (dateTimeString) => {
-  let date, time;
 
-  // Check if the string contains a '|', indicating a non-standard format
-  if (dateTimeString.includes('|')) {
-    // Split the input string into date and time
-    const [datePart, timePart] = dateTimeString.split(' | ');
+// Function to format date_time string with timezone
+const formatDateTime = (dateTimeString, timezone) => {
+    let date, time;
 
-    // Extract date components from the date part
-    const dateComponents = datePart.trim().split(' '); // ["Tuesday,", "October", "22,", "2024"]
-    
-    // Check if we have the correct number of components
-    if (dateComponents.length === 4) {
-      const monthName = dateComponents[1]; // "October"
-      const day = parseInt(dateComponents[2].replace(',', ''), 10); // "22"
-      const year = parseInt(dateComponents[3], 10); // "2024"
-      
-      // Convert month name to month number
-      const month = new Date(Date.parse(monthName + " 1")).getMonth(); // Get the month index (0-based)
+    // Check if the string contains a '|', indicating a non-standard format
+    if (dateTimeString.includes('|')) {
+        // Split the input string into date and time
+        const [datePart, timePart] = dateTimeString.split(' | ');
 
-      // Create a new Date object using the extracted values
-      date = new Date(year, month, day);
+        // Extract date components from the date part
+        const dateComponents = datePart.trim().split(' '); // e.g., ["Tuesday,", "October", "22,", "2024"]
+
+        // Check if we have the correct number of components
+        if (dateComponents.length === 4) {
+            const monthName = dateComponents[1]; // "October"
+            const day = parseInt(dateComponents[2].replace(',', ''), 10); // "22"
+            const year = parseInt(dateComponents[3], 10); // "2024"
+
+            // Convert month name to month number
+            const month = new Date(Date.parse(monthName + " 1")).getMonth(); // Get the month index (0-based)
+
+            // Create a new Date object using the extracted values
+            date = new Date(year, month, day);
+        } else {
+            console.error("Invalid date format:", datePart);
+            return "Invalid Date"; // Handle invalid date
+        }
+
+        // Trim any extra spaces and set the time
+        time = timePart.trim(); // Clean up any extra spaces
     } else {
-      console.error("Invalid date format:", datePart);
-      return "Invalid Date"; // Handle invalid date
+        // If it's a proper format (assuming YYYY-MM-DDTHH:mm:ss or similar), parse directly
+        date = new Date(dateTimeString);
+        if (isNaN(date.getTime())) {
+            console.error("Invalid date provided:", dateTimeString);
+            return "Invalid Date"; // Handle invalid date
+        }
+        // Format time directly from the Date object
+        time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     }
 
-    // Trim any extra spaces and set the time
-    time = timePart.trim(); // Clean up any extra spaces
-  } else {
-    // If it's a proper format (assuming YYYY-MM-DDTHH:mm:ss or similar), parse directly
-    date = new Date(dateTimeString);
-    if (isNaN(date.getTime())) {
-      console.error("Invalid date provided:", dateTimeString);
-      return "Invalid Date"; // Handle invalid date
-    }
-    // Format time directly from the Date object
-    time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-  }
+    // Combine the date and time for moment
+    const combinedDateTime = `${date.toISOString().split('T')[0]} ${time}`;
 
-  // Format the date to DD/MM/YYYY
-  const formattedDate = `${String(date.getUTCDate()).padStart(2, '0')}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${date.getUTCFullYear()}`;
+    // Use moment to format it according to the timezone
+    const formattedDateTime = moment.tz(combinedDateTime, timezone).format('DD/MM/YYYY h:mm A');
 
-  // Ensure the time is in the desired format (lowercase)
-  const formattedTime = time.toLowerCase(); // Convert to lowercase
-
-  return `${formattedDate} ${formattedTime}`; // Return the full formatted string
+    return formattedDateTime; // Return the full formatted string
 };
 
 // Example usage:
 const inputDateTime1 = "Tuesday, October 22, 2024 | 4:00 PM";
-const formattedDateTime1 = formatDateTime(inputDateTime1);
-console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
+const timezone = "Africa/Lagos"; // Set your timezone here
+const formattedDateTime1 = formatDateTime(inputDateTime1, timezone);
+console.log(formattedDateTime1); // Should output the correctly formatted date and time
+
 
   return (
     <View style={styles.greenBox}>
@@ -255,7 +258,7 @@ console.log(formattedDateTime1); // Should output: "22/10/2024 4:00pm"
           </View>
 
           {meetings.map((meeting, index) => {
-             const formattedDateTime = formatDateTime(meeting.date);
+             const formattedDateTime = formatDateTime(meeting.date_time, meeting.timezone);
 
             return (
               <View key={index} style={styles.row}>

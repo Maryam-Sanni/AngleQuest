@@ -476,18 +476,11 @@ const MyComponent = ({ onClose }) => {
                 <View style={{ flex: 1, gap: 8 }}>
                   <Text style={styles.title}>Hello 👋 I am AngleQuest AI</Text>
                   <Text style={styles.subTitle}>
-                    Please upload your CV or use the questionnaire and specify your next career role and I’ll perform my magic…
+                  Please enter your next career role you are aiming for and fill in the questionnaire as accurately as possible so I can perform my magic…
                   </Text>
                 </View>
               </View>
-              <DropDown
-                title={"Use CV"}
-                bgColor={openQues ? "#D9D9D9" : "#6A8F6D"}
-                textColor={openQues ? "#777676" : "white"}
-                subTitle={"Get a personalized skill gap analysis in 2 minutes"}
-                 isOpen={openCV}
-                onPress={handleCV}
-              />
+             
 
               {openCV && (
                 <Animated.View style={[styles.openCV, animatedStyle]}>

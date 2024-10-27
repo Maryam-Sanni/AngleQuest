@@ -168,19 +168,39 @@ const ScheduledMeetingsTable = () => {
                   </Text>
               </View>
 
-              {/* Check if the meeting is scheduled or expired */}
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                {new Date(analysis.date_time) < new Date() ? (
-                  <Text style={{ backgroundColor: '#FFDAB9', padding: 3, borderRadius: 5, color: 'brown', width: 80, textAlign: 'center' }}>
-                    Expired
-                  </Text>
-                ) : (
-                  <Text style={{ backgroundColor: 'lightgreen', padding: 3, borderRadius: 5, color: 'green', width: 80, textAlign: 'center'  }}>
-                    Scheduled
-                  </Text>
-                )}
-              </View>
-
+              {
+  /* Check if the meeting is scheduled, live ("Now"), or expired */
+}
+<View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+  {(() => {
+    const now = new Date();
+    const meetingTime = new Date(analysis.date_time);
+    const oneHourAfter = new Date(meetingTime.getTime() + 60 * 60 * 1000); // 1 hour after meeting time
+    
+    if (now >= meetingTime && now <= oneHourAfter) {
+      // Show "Now" if within one-hour window
+      return (
+        <Text style={{ backgroundColor: 'lightgreen', padding: 3, borderRadius: 5, color: 'green', width: 80, textAlign: 'center' }}>
+          Now
+        </Text>
+      );
+    } else if (now < meetingTime) {
+      // Show "Scheduled" if before meeting time
+      return (
+        <Text style={{ backgroundColor: '#ADD8E6', padding: 3, borderRadius: 5, color: 'blue', width: 80, textAlign: 'center' }}>
+          Scheduled
+        </Text>
+      );
+    } else {
+      // Show "Expired" if beyond one hour after meeting time
+      return (
+        <Text style={{ backgroundColor: '#FFDAB9', padding: 3, borderRadius: 5, color: 'brown', width: 80, textAlign: 'center' }}>
+          Expired
+        </Text>
+      );
+    }
+  })()}
+</View>
               <TouchableOpacity onPress={() => handleOpenPress(analysis)}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.linkText}>{t("Update")}</Text>

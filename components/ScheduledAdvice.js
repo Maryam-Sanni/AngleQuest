@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -287,9 +288,12 @@ const ScheduledMeetingsTable = () => {
           </View>
 
       {displayedMeetings.map((meeting, index) => {
-        const dateTime = new Date(meeting.date_time);
-        const date = dateTime.toLocaleDateString();
-        const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+// Parse the date_time using the format it’s in, and set the timezone
+const dateTime = moment.tz(meeting.date_time, "dddd, YYYY-MM-DD hh:mm A", meeting.timezone);
+
+// Format the date and time for display
+const date = dateTime.format('L'); // Local date format
+const time = dateTime.format('hh:mm A'); // 12-hour format with AM/PM
 
             return (
           <View key={index} style={styles.row}>

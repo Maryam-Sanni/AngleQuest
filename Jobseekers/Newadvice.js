@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
 import OpenModal from '../components/Payment';
-
+ 
 function MyComponent({ onClose }) {
    const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -33,6 +33,9 @@ function MyComponent({ onClose }) {
    const [meetingtype, setmeetType] = useState("advice");
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+
+      // Get user's timezone
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -113,102 +116,102 @@ function MyComponent({ onClose }) {
 
   const goToPlan = async () => {
     try {
-      // Validate the form data before making the API request
-      if ( !role || !challenge || !targetLevel || !selectedDateTime) {
-      setAlertMessage(t('Please fill all fields'));
-        setAlertVisible(true);
-        return;
-      }
+        // Validate the form data before making the API request
+        if (!role || !challenge || !targetLevel || !selectedDateTime) {
+            setAlertMessage(t('Please fill all fields'));
+            setAlertVisible(true);
+            return;
+        }
 
-      // Format selectedDateTime to Y-m-d H:i:s
-      const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
+        // Format selectedDateTime to Y-m-d H:i:s
+        const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
 
-      const meetingFormData = new FormData();
-      meetingFormData.append('candidate_account_type', candidate);
-      meetingFormData.append('role', role);
-      meetingFormData.append('expert_id', expertid); 
-      meetingFormData.append('type', meetingtype);
-      meetingFormData.append('date_scheduled', formattedDate);
+        const meetingFormData = new FormData();
+        meetingFormData.append('candidate_account_type', candidate);
+        meetingFormData.append('role', role);
+        meetingFormData.append('expert_id', expertid);
+        meetingFormData.append('type', meetingtype);
+        meetingFormData.append('date_scheduled', formattedDate);
 
-      // Retrieve data from AsyncStorage
-      const aiAnalysisRaw = await AsyncStorage.getItem('ai_analysis');
-      const guideRaw = await AsyncStorage.getItem('selectedUserTopics'); 
+        // Retrieve data from AsyncStorage
+        const aiAnalysisRaw = await AsyncStorage.getItem('ai_analysis');
+        const guideRaw = await AsyncStorage.getItem('selectedUserTopics');
 
-      // Parse the data or initialize as empty array
-      const ai_analysis = aiAnalysisRaw ? JSON.parse(aiAnalysisRaw) : [];
-      const guide = guideRaw ? JSON.parse(guideRaw) : [];
+        // Parse the data or initialize as empty array
+        const ai_analysis = aiAnalysisRaw ? JSON.parse(aiAnalysisRaw) : [];
+        const guide = guideRaw ? JSON.parse(guideRaw) : [];
 
-      // Debugging: Log the retrieved ai_analysis to check if it's correctly retrieved
-      console.log('Retrieved ai_analysis:', ai_analysis);
+        // Debugging: Log the retrieved ai_analysis to check if it's correctly retrieved
+        console.log('Retrieved ai_analysis:', ai_analysis);
 
-      // Ensure ai_analysis contains no more than 4 items
-      const limitedAiAnalysis = ai_analysis.slice(0, 4); // Take first 4 items
-      
-      const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
+        // Ensure ai_analysis contains no more than 4 items
+        const limitedAiAnalysis = ai_analysis.slice(0, 4);
 
-      // Post to create-jobseeker-interview endpoint
-      const MeetingResponse = await axios.post(
-        `${apiUrl}/api/jobseeker/meetings/schedule`,
-        meetingFormData,
-        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
-      );
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
 
-      if (MeetingResponse.status !== 200) {
-        return;
-      }
-      
-      // Prepare the data for the API request
-      const formData = {
-        type,
-        role,
-        ai_analysis: limitedAiAnalysis,  // Use limited version of ai_analysis
-        guide,
-        description: challenge,
-        starting_level: startingLevel,
-        target_level: targetLevel,
-        status,
-        date_time: selectedDateTime,
-        expert_available_days,
-        expert_available_time,
-        expert_name: expert,
-        expertid: expertid,
-        name: first_name  + ' ' + last_name
-      };
+        // Post to create-jobseeker-interview endpoint
+        const MeetingResponse = await axios.post(
+            `${apiUrl}/api/jobseeker/meetings/schedule`,
+            meetingFormData,
+            { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
+        );
 
-      // Make the GET request to check the subscription status
-      const subscriptionResponse = await axios.get(
-        `${apiUrl}/api/jobseeker/get-subscription`,
-          { headers: { Authorization: `Bearer ${token}` } }
-      );
+        if (MeetingResponse.status !== 200) {
+            return;
+        }
 
-      // Check if JSSubscriptionStatus exists and if subscribed is "Yes"
-      const subscribed = subscriptionResponse?.data?.JSSubscriptionStatus?.subscribed;
+        // Prepare the data for the API request
+        const formData = {
+            type,
+            role,
+            ai_analysis: limitedAiAnalysis,
+            guide,
+            timezone: userTimezone,
+            description: challenge,
+            starting_level: startingLevel,
+            target_level: targetLevel,
+            status,
+            date_time: selectedDateTime,
+            expert_available_days,
+            expert_available_time,
+            expert_name: expert,
+            expertid: expertid,
+            name: first_name + ' ' + last_name
+        };
 
-          // Save the growth plan regardless of the subscription status
-          const response = await axios.post(
-            `${apiUrl}/api/jobseeker/create-jobseeker-skill-analysis`, 
-            formData, 
+        // Save the growth plan regardless of the subscription status
+        const response = await axios.post(
+            `${apiUrl}/api/jobseeker/create-jobseeker-skill-analysis`,
+            formData,
             { headers: { Authorization: `Bearer ${token}` } }
-          );
+        );
 
-          if (response.status === 201) {
+        if (response.status === 201) {
             await AsyncStorage.setItem('SkillAnalysisFormData', JSON.stringify(formData));
 
-            // Navigate based on the subscription status
-            if (subscribed === 'Yes') {
-              handleOpenPress();
-            } else {
-              handleOpenPress();
-            }
-                }
-              } catch (error) {
-                console.error('Error during save:', error);
-                setAlertMessage('Failed to create Skill Analysis Session');
-                setAlertVisible(true);
-              }
-            };
+            // Check if there is data from get-payment
+            const paymentResponse = await axios.get(
+                `${apiUrl}/api/expert/get-payment`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
 
+            // Debugging: Log the payment response
+            console.log('Payment Response:', paymentResponse.data);
+
+            // Navigate based on the presence of data in get-payment response
+            if (paymentResponse.data && paymentResponse.data.paymentOption && paymentResponse.data.paymentOption.length > 0) {
+                navigate('/skill-analysis-sessions');
+            } else {
+                handleOpenPress();
+            }
+        }
+    } catch (error) {
+        console.error('Error during save:', error);
+        setAlertMessage('Failed to create Skill Analysis Session');
+        setAlertVisible(true);
+    }
+};
     
 
   const hideAlert = () => {

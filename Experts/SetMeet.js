@@ -84,6 +84,7 @@ function MyComponent({ onClose }) {
         meeting_description: description,
         date: selectedDateTime,
         time: selectedTime,
+        hub_id: "23"
       };
   
       const response = await axios.post(`${apiUrl}/api/expert/newhubmeeting/create`, formData, {

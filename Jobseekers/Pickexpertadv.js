@@ -6,6 +6,7 @@ import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 
 function MyComponent({ onClose }) {
@@ -20,6 +21,9 @@ function MyComponent({ onClose }) {
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [cardData, setCardData] = useState({ combinedData: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
+
+    // Get the current user's timezone
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -46,6 +50,8 @@ function MyComponent({ onClose }) {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
+
+
 
   const handlesubmitandpost = async () => {
     try {
@@ -81,13 +87,15 @@ function MyComponent({ onClose }) {
         console.error('Error posting data:', response.statusText);
       }
 
+      const convertedTime = convertToUserTimezone(selectedUser.available_times, selectedUser.timezone);
+
       // Save the selected user's data to AsyncStorage
       await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name);
       await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name);
       await AsyncStorage.setItem('selectedUserFullName', `${selectedUser.first_name} ${selectedUser.last_name}`);
       await AsyncStorage.setItem('selectedUserExpertid', selectedUser.user_id);
       await AsyncStorage.setItem('selectedUserDays', selectedUser.available_days.join(', ')); 
-      await AsyncStorage.setItem('selectedUserTimes', selectedUser.available_times); 
+      await AsyncStorage.setItem('selectedUserTimes', convertedTime);
       await AsyncStorage.setItem('selectedUserCategory', selectedUser.category);
       await AsyncStorage.setItem('selectedUserLocation', 'location');
 
@@ -131,6 +139,20 @@ function MyComponent({ onClose }) {
     fetchData();
   }, []);
 
+  const convertToUserTimezone = (timeRange, originalTimezone) => {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const [startTimeStr, endTimeStr] = timeRange.split(' - ');
+
+    const startTime = moment.tz(startTimeStr, 'hh:mm A', originalTimezone);
+    const endTime = moment.tz(endTimeStr, 'hh:mm A', originalTimezone);
+
+    const startInUserTZ = startTime.clone().tz(userTimezone).format('hh:mm A');
+    const endInUserTZ = endTime.clone().tz(userTimezone).format('hh:mm A [GMT]Z');
+
+    return `${startInUserTZ} - ${endInUserTZ}`;
+};
+
+
   const handleCardAnimation = (index, toValue) => {
     Animated.timing(
       scaleAnimations[index],
@@ -156,7 +178,7 @@ function MyComponent({ onClose }) {
       const fullName = `${selectedUser.first_name} ${selectedUser.last_name}`;
       const expertid = `${selectedUser.user_id}`;
       const availabledays = Array.isArray(selectedUser.available_days) ? selectedUser.available_days.join(', ') : selectedUser.available_days;
-      const availabletimes = `${selectedUser.available_times}`;
+      const availabletimes = convertToUserTimezone(selectedUser.available_times, selectedUser.timezone);
       const category = `${selectedUser.category}`;
 
       // Ensure topics are an array, then save them
@@ -271,8 +293,8 @@ function MyComponent({ onClose }) {
           </View>
           <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {data.available_days.join(', ')}</Text>
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
-             Time: {data.available_times}
-          </Text>
+                        Time: {convertToUserTimezone(data.available_times, data.timezone)}
+                    </Text>
             <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
               {data.years_experience} years of experience
             </Text>

@@ -1,124 +1,148 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, ScrollView } from 'react-native';
+import axios from 'axios';
 
 function MyComponent({ onClose }) {
     const [clickedItem, setClickedItem] = useState(null);
+    const [hubs, setHubs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const apiUrl = process.env.REACT_APP_API_URL;
     
-    const handleItemClick = (item) => {
-        setClickedItem(clickedItem === item ? null : item);
-    };
-
     const [fontsLoaded] = useFonts({
         'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
     });
 
     const { t } = useTranslation();
 
+    useEffect(() => {
+        const fetchHubs = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/api/expert/hubs/get`);
+                setHubs(response.data.hubs);
+            } catch (error) {
+                console.error("Failed to fetch hubs:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHubs();
+    }, []);
+
+    const handleItemClick = (id) => {
+        setClickedItem(clickedItem === id ? null : id);
+    };
+
     if (!fontsLoaded) {
-        return null; // or some loading indicator
+        return <ActivityIndicator size="large" color="#6E9FDF" />;
     }
 
-    const hubs = [
-        { id: 1, name: 'SAP FI', type: t("Public"), members: 108 },
-        { id: 2, name: 'Microsoft Azure', type: t("Public"), members: 16 },
-        { id: 3, name: 'Junior Power Point Development', type: t("Public"), members: 21 },
-        { id: 4, name: 'Senior Power Point Development', type: t("Private"), members: 10 },
-        { id: 5, name: 'Java Programming', type: t("Private"), members: 6 },
-    ];
-
     return (
-        <View style={{ flex: 1, backgroundColor: "#F8F8F8", alignItems: 'center', marginVertical: 100 }}>
-            <View style={styles.greenBox}>
-                <TouchableOpacity onPress={onClose}>
-                    <Text style={styles.closeButton}>✕</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.row}>
-                        <Image
-                            source={{ uri: 'https://img.icons8.com/?size=100&id=74QM1bmauc2y&format=png&color=000000' }}
-                            style={styles.icon}
-                        />
-                        <Text style={styles.hubTitle}>{t("My Hubs")}</Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.separator} />
-                {hubs.map((hub) => (
-                    <TouchableOpacity key={hub.id} onPress={() => handleItemClick(hub.id)}>
-                        <View style={styles.row}>
-                            <Image
-                                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                                style={styles.icon}
-                            />
-                            <Text style={[styles.hubName, clickedItem === hub.id && { color: 'coral' }]}>{hub.name}</Text>
-                            <Text style={[styles.hubDetail, clickedItem === hub.id && { color: 'coral' }]}>- {hub.type}, {hub.members} {t("Members")}</Text>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-                <Text style={styles.note}>{t("Experts can create a maximum of 5 Hubs")}</Text>
-            </View>
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                <Text style={styles.closeText}>✕</Text>
+            </TouchableOpacity>
+            <Text style={styles.title}>{t("My Training Hubs")}</Text>
+            
+            {loading ? (
+                <ActivityIndicator size="large" color="#6E9FDF" />
+            ) : (
+                <ScrollView contentContainerStyle={styles.hubsContainer}>
+                    {hubs.map((hub) => (
+                        <TouchableOpacity key={hub.id} onPress={() => handleItemClick(hub.id)}>
+                            <View style={[styles.hubCard, clickedItem === hub.id && styles.hubCardSelected]}>
+                                <Image
+                                    source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                                    style={styles.icon}
+                                />
+                                <View style={styles.hubInfo}>
+                                    <Text style={styles.hubName}>{hub.name}</Text>
+                                    <Text style={styles.hubDetail}>{t(hub.type)} • {hub.members} {t("Members")}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            )}
+            <Text style={styles.note}>{t("Experts can create a maximum of 5 Hubs")}</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    greenBox: {
-        width: 460,
-        backgroundColor: '#F8F8F8',
-        padding: 20,
-        borderRadius: 10,
+    container: {
+        flex: 1,
+        paddingTop: 40,
+        backgroundColor: "white",
+        alignItems: 'center',
+        marginTop: 100,
+        width: 500,
+        height: 500
     },
     closeButton: {
+        position: 'absolute',
+        top: 30,
+        right: 20,
+    },
+    closeText: {
         fontSize: 18,
-        color: 'grey',
-        alignSelf: 'flex-end',
-        fontWeight: 'bold',
-        marginTop: 20,
-        fontFamily: 'Roboto-Light',
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    icon: {
-        width: 18,
-        height: 18,
-        marginRight: 10,
-    },
-    hubTitle: {
-        fontSize: 16,
         color: 'black',
         fontWeight: 'bold',
-        fontFamily: 'Roboto-Light',
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'black',
+        marginBottom: 15,
+    },
+    hubsContainer: {
+        width: '70%',
+        alignItems: 'center',
+    },
+    hubCard: {
+        flexDirection: 'row',
+        backgroundColor: '#FFFFFF',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginVertical: 6,
+        width: '90%',
+        borderRadius: 8,
+        alignItems: 'center',
+        elevation: 2,
+    },
+    hubCardSelected: {
+        backgroundColor: '#E3F2FD',
+    },
+    icon: {
+        width: 24,
+        height: 24,
+        marginRight: 10,
+    },
+    hubInfo: {
+        flex: 1,
     },
     hubName: {
-        fontSize: 16,
-        color: '#666',
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#333',
         fontFamily: 'Roboto-Light',
     },
     hubDetail: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#666',
         fontStyle: 'italic',
         fontFamily: 'Roboto-Light',
     },
-    separator: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#666',
-        marginVertical: 15,
-    },
     note: {
-        fontSize: 14,
-        color: 'black',
+        fontSize: 12,
+        color: '#555',
         fontWeight: '500',
         fontStyle: 'italic',
-        marginTop: 20,
-        fontFamily: 'Roboto-Light',
+        marginTop: 15,
+        textAlign: 'center',
     },
 });
 

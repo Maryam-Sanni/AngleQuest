@@ -149,7 +149,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigate = useNavigate();
-  const [from, setStartTime] = useState(' ');
+  const [from, setStartTime] = useState('12:00');
   const [to, setEndTime] = useState('12:00');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -289,15 +289,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
         skills,
         location,
         level,
-        learningOBJ: objectives,
-        meeting_day: availableDays,
+        learning_obj: objectives,
+        meeting_day: "day",
         coaching_hub_description,
-        from: availableTimes,
-        to: availableTimes,
+        from: "from",
+        to: "to",
         coaching_hub_fee,
         coaching_hub_goals,
         coaching_hub_limit,
         expert_name: first_name + ' ' + last_name,
+        timezone:"timezone"
       };
 
       const headers = {

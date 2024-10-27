@@ -8,6 +8,7 @@ import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import CustomAlert from '../components/CustomAlert'; 
 
  
 function MyComponent({ onClose }) {
@@ -24,6 +25,8 @@ function MyComponent({ onClose }) {
   const [cardData, setCardData] = useState({ AllHubs: [] });
   const [resultCount, setResultCount] = useState(0);
    const [selectedCategory, setSelectedCategory] = useState('');
+   const [selectedLevel, setSelectedLevel] = useState('');
+   const [searchQuery, setSearchQuery] = useState("");
    const [selectedIndex, setSelectedIndex] = useState(null);
   const [token, setToken] = useState("");
   const [subscriptionStatus, setSubscriptionStatus] = useState(null);
@@ -31,6 +34,8 @@ function MyComponent({ onClose }) {
    const [Sessionsheld, setSessionsheld] = useState('0');
    const [Sessionsmissed, setSessionsmissed] = useState('0');
    const [Confirmed, setSetConfirmed] = useState('No');
+   const [alertVisible, setAlertVisible] = useState(false);
+   const [alertMessage, setAlertMessage] = useState('');
  
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -48,9 +53,33 @@ function MyComponent({ onClose }) {
     setSearch('');
   };
 
-  const handleOpenPress = () => {
-    setModalVisible(true);
+// Update handleOpenPress to accept index
+const handleOpenPress = async (index) => {
+  const selectedHub = cardData.AllHubs[index]; // Store the selected hub's data
+
+  // Save data to AsyncStorage
+  const hubData = {
+    coaching_hub_name: selectedHub.coaching_hub_name,
+    specialization: selectedHub.specialization,
+    level: selectedHub.level,
+    category: selectedHub.category,
+    expert_name: selectedHub.expert_name,
+    user_id: selectedHub.user_id,
+    hub_id: selectedHub.id,
+    learning_obj: selectedHub.learning_obj,
+    coaching_hub_fee: selectedHub.coaching_hub_fee,
+    coaching_hub_description: selectedHub.coaching_hub_description,
+    created_at: selectedHub.created_at,
+    meeting: selectedHub.meeting,
   };
+
+  try {
+    await AsyncStorage.setItem('selectedHubData', JSON.stringify(hubData));
+    setModalVisible(true); // Open the modal after saving
+  } catch (error) {
+    console.error("Error saving data to AsyncStorage: ", error);
+  }
+};
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -102,71 +131,85 @@ const handleOpenPress3 = async () => {
   onClose();
 };
 
-  useEffect(() => {
-    if (!selectedHub) return;
+useEffect(() => {
+  if (!selectedHub) return;
 
-    const createHubAndJoinExpertHub = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
+  const createHubAndJoinExpertHub = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
 
-        // POST to create the hub
-        const createHubResponse = await axios.post(`${apiUrl}/api/jobseeker/create-hub`, {
-          category: selectedHub.category,
-          meeting_day: selectedHub.meeting_day,
-          from: selectedHub.from,
-          to: selectedHub.to,
-          coaching_hub_name: selectedHub.coaching_hub_name,
-          expert_name: selectedHub.expert_name,
-          coaching_hub_description: selectedHub.coaching_hub_description,
-          coaching_hub_fee: selectedHub.coaching_hub_fee,
-          attend: attend
+      // POST to create the hub
+      const createHubResponse = await axios.post(`${apiUrl}/api/jobseeker/create-hub`, {
+        category: selectedHub.category,
+        meeting_day: selectedHub.meeting_day,
+        from: selectedHub.from,
+        to: selectedHub.to,
+        coaching_hub_name: selectedHub.coaching_hub_name,
+        expert_name: selectedHub.expert_name,
+        coaching_hub_description: selectedHub.coaching_hub_description,
+        coaching_hub_fee: selectedHub.coaching_hub_fee,
+        attend: attend
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Alert messages based on status codes for create-hub API
+      if (createHubResponse.status === 200 || createHubResponse.status === 201) {
+        console.log('Hub successfully created');
+        setAlertMessage(t('Hub joined successfully'));
+
+        // Proceed to the second API only if the first was successful
+        const firstName = await AsyncStorage.getItem('first_name');
+        const lastName = await AsyncStorage.getItem('last_name');
+        const jobseekerId = await AsyncStorage.getItem('user_id');
+        const jobseekerName = `${firstName} ${lastName}`;
+
+        // POST to join the expert hub
+        await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
+          jobseeker_name: jobseekerName,
+          jobseeker_id: jobseekerId,
+          expert_id: selectedHub.user_id,
+          hub_id: selectedHub.id, 
+          hub_sessions_held: Sessionsheld,
+          hub_sessions_missed: Sessionsmissed,
+          confirmed_attendance: Confirmed
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (createHubResponse.status === 200) {
-          console.log('Hub successfully created');
+      } else if (createHubResponse.status === 400) {
+        const errorMessage = createHubResponse.data?.message || t('You have already joined this hub');
+        console.warn(errorMessage);
+        setAlertMessage(errorMessage);
 
-          // Get jobseeker details from AsyncStorage
-          const firstName = await AsyncStorage.getItem('first_name');
-          const lastName = await AsyncStorage.getItem('last_name');
-          const jobseekerId = await AsyncStorage.getItem('user_id');
-          const jobseekerName = `${firstName} ${lastName}`;
-
-          // POST to join the expert hub
-          const joinHubResponse = await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
-            jobseeker_name: jobseekerName,
-            jobseeker_id: jobseekerId,
-            expert_id: selectedHub.user_id,
-            hub_id: selectedHub.id, 
-            hub_sessions_held: Sessionsheld,
-            hub_sessions_missed: Sessionsmissed,
-            confirmed_attendance: Confirmed
-          }, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (joinHubResponse.status === 200) {
-            console.log('Successfully joined expert hub');
-            // Handle success (e.g., navigate to a different screen or show a success message)
-          } else {
-            console.error('Error joining expert hub:', joinHubResponse.statusText);
-          }
-        } else {
-          console.error('Error creating hub:', createHubResponse.statusText);
-        }
-      } catch (error) {
-        console.error('Error:', error.response ? error.response.data : error.message);
+      } else if (createHubResponse.status === 500) {
+        console.error('Error creating hub:', createHubResponse.statusText);
+        setAlertMessage(t('Error joining hub'));
       }
-    };
 
-    createHubAndJoinExpertHub();
-  }, [selectedHub]);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error('Error:', errorMessage);
+      setAlertMessage(errorMessage);
+    }
+    setAlertVisible(true);
+  };
 
+  createHubAndJoinExpertHub();
+}, [selectedHub]);
+
+
+
+
+const hideAlert = () => {
+  setAlertVisible(false);
+  setIsVisible(false);
+  onClose();
+};
 
   const handleCloseModal3 = () => {
     setModalVisible3(false);
@@ -261,15 +304,36 @@ const handleOpenPress3 = async () => {
 
   const {t}=useTranslation()
   
-  const handleCardPress = (index) => {
+  const handleCardPress = async (index) => {
     setSelectedIndex(index);
-    setSelectedHub(cardData.AllHubs[index]); // Store the selected hub's data
+    const selectedHub = cardData.AllHubs[index]; // Store the selected hub's data
+    setSelectedHub(selectedHub); 
+  
+    // Save data to AsyncStorage
+    const hubData = {
+      coaching_hub_name: selectedHub.coaching_hub_name,
+      specialization: selectedHub.specialization,
+      level: selectedHub.level,
+      category: selectedHub.category,
+      learning_obj: selectedHub.learning_obj,
+      coaching_hub_description: selectedHub.coaching_hub_description,
+      created_at: selectedHub.created_at,
+      meeting: selectedHub.meeting,
+    };
+  
+    try {
+      await AsyncStorage.setItem('selectedHubData', JSON.stringify(hubData));
+    } catch (error) {
+      console.error("Error saving data to AsyncStorage: ", error);
+    }
   };
 
 
   const renderCards = () => {
     const filteredData = cardData.AllHubs.filter(data => 
-      !selectedCategory || data.category === selectedCategory
+      (!selectedCategory || data.category === selectedCategory) &&
+      (!selectedLevel || data.level === selectedLevel) &&
+      (!searchQuery || data.coaching_hub_description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     return filteredData.map((data, index) => (
@@ -287,7 +351,8 @@ const handleOpenPress3 = async () => {
         <View
           style={{
             width: '95%',
-            height: 280,
+            height: 360,
+            padding: 10,
             borderRadius: 10,
             shadowColor: "#000",
             shadowOffset: {
@@ -301,42 +366,73 @@ const handleOpenPress3 = async () => {
           }}
         >
           <View style={{flexDirection: 'row', marginTop: 20,}}>
-          <View style={{height: 35, width: 8, backgroundColor: '#206C00', borderTopRightRadius: 5, borderBottomRightRadius: 5}}> </View>
-          <Text style={{ fontSize: 14, color: "black", fontWeight: '400', marginLeft: 10, marginTop: -10 }}> {t("Live Session")}<Text style={{ fontSize: 35, color: "black", fontWeight: '400', marginLeft: 5}}>.</Text> Beginner </Text>
+          <View style={{height: 35, width: 8, backgroundColor: '#206C00', borderTopRightRadius: 5, borderBottomRightRadius: 5, marginLeft: -10}}> </View>
+          <Text style={{ fontSize: 14, color: "black", fontWeight: '400', marginLeft: 10, marginTop: -10 }}> {t("Live Session")}<Text style={{ fontSize: 35, color: "black", fontWeight: '400', marginLeft: 5}}>.</Text> {data.level} </Text>
           </View>
-          <TouchableOpacity onPress={handleOpenPress}>
+          <TouchableOpacity onPress={() => handleOpenPress(index)}>
             <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
               <View style={{ flex: 1, }}>
-                <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginTop: 10 }}>{data.coaching_hub_name}</Text>
+                <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginTop: 10,}}>{data.coaching_hub_name}</Text>
                 
-                <Text style={{ fontSize: 15, color: "black", fontWeight: '400' }}>
+                <Text style={{ fontSize: 15, color: "black", fontWeight: '400',}}>
                   {t("Specialization")}: {data.specialization}
+                </Text>
+                <Text style={{ fontSize: 12, color: "black", fontWeight: '400', marginTop: 5}}>
+                  {t("Expert")}: {data.expert_name}
                 </Text>
               </View>
             </View>
 
-            <Text style={{ fontSize: 15, color: "#888", marginTop: 10, marginLeft: 10, height: 100 }}>{data.coaching_hub_description}</Text>
+            <Text
+  style={{
+    fontSize: 15,
+    color: "#888",
+    marginTop: 10,
+    marginLeft: 10,
+    height: 55,             // Fixed height
+    overflow: 'hidden'      // Hides overflowed text
+  }}
+  numberOfLines={3}          // Limits text to 3 lines and adds ellipsis if text overflows
+>
+  {data.coaching_hub_description}
+</Text>
 
             
           </TouchableOpacity>
-      <View
+          <View style={{flexDirection: 'row', marginTop: 15, position: 'absolute', bottom: 15, alignSelf: "center", }}>
+          <TouchableOpacity
+onPress={() => handleOpenPress(index)}
             style={{
-                backgroundColor: "#F5F5F5",
-                borderWidth: 0.5,
-                borderColor: 'grey',
-                borderRadius: 15,
-                paddingVertical: 5,
-                marginTop: 15,
-                width: 150,
-                justifyContent: 'center',
-                marginLeft: 10,
+              backgroundColor: "#F5F5F5",
+              borderWidth: 0.5,
+              borderColor: 'grey',
+                borderRadius: 5,
                 marginRight: 10,
+                width: 120,
+                padding: 5,
+                justifyContent: 'center',
             }}
           >
-<Text style={{ fontSize: 12, color: "black", fontWeight: '400', marginLeft: 20 }}>
-                  {t("Expert")}: {data.expert_name}
-                </Text>
-          </View>
+         <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>View</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPressIn={() => handleJoinPressIn(index)}
+            onPressOut={handleJoinPressOut}
+            style={{
+              backgroundColor: "#F5F5F5",
+              borderWidth: 0.5,
+              borderColor: isPressed[index] ? 'coral' : 'grey',
+                borderRadius: 5,
+                width: 120,
+                padding: 5,
+                justifyContent: 'center',
+              backgroundColor: isPressed[index] ? 'coral' : '#F5F5F5',
+            }}
+          >
+         <Text style={{ color: isPressed[index] ? '#fff' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
+          </TouchableOpacity>
+        </View>
         </View>
       </Animated.View>
     ));
@@ -366,9 +462,12 @@ const handleOpenPress3 = async () => {
           <View style={{ alignItems: 'flex-start', marginLeft: 40, }}>
             <View style={{ flexDirection: 'row', marginTop: 10, marginRight: 50}}>
             <TextInput
-                  placeholder={t("Search")}
-                  style={styles.input}
-                />
+  placeholder={t("Search")}
+  style={styles.input}
+  value={searchQuery}
+  onChangeText={(text) => setSearchQuery(text)}
+/>
+
 
               <Picker
                 selectedValue={selectedCategory}
@@ -383,27 +482,15 @@ const handleOpenPress3 = async () => {
                   </Picker>
 
                   <Picker
-                selectedValue={selectedCategory}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-              >
-                  <Picker.Item label="Level" value="" />
-                    <Picker.Item label="Beginner" value="Beginner" />
-                    <Picker.Item label="Intermediate" value="Intermediate" />
-                    <Picker.Item label="Advanced" value="Advanced" />
-                  </Picker>
-
-                  <Picker
-                selectedValue={selectedCategory}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-              >
-                  <Picker.Item label="Session Type" value="" />
-                    <Picker.Item label="Beginner" value="Beginner" />
-                    <Picker.Item label="Intermediate" value="Intermediate" />
-                    <Picker.Item label="Junior" value="Junior" />
-                    <Picker.Item label="Senior" value="Senior" />
-                  </Picker>
+  selectedValue={selectedLevel}
+  style={styles.picker}
+  onValueChange={(itemValue) => setSelectedLevel(itemValue)}
+>
+  <Picker.Item label="Level" value="" />
+  <Picker.Item label="Beginner" value="Beginner" />
+  <Picker.Item label="Intermediate" value="Intermediate" />
+  <Picker.Item label="Advanced" value="Advanced" />
+</Picker>
 
                 
      </View>
@@ -412,11 +499,14 @@ const handleOpenPress3 = async () => {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
             {renderCards()}
           </View>
-          <TouchableOpacity onPress={handleOpenPress3} style={styles.buttonplus} >
-            <Text style={styles.buttonTextplus}>{t("Continue")}</Text>
-          </TouchableOpacity>
+         
         </View>
-
+        <CustomAlert
+  visible={alertVisible}
+  title={t("Alert")}
+  message={alertMessage}
+  onConfirm={hideAlert}
+/>
         <Modal
           animationType="slide"
           transparent={true}
@@ -518,7 +608,7 @@ const styles = StyleSheet.create({
     width: 500,
   },
   input: {
-    width: 200,
+    width: 300,
     height: 35,
     borderColor: 'gray',
     borderWidth: 1,

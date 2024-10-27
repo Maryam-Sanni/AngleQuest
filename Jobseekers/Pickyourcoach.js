@@ -6,6 +6,7 @@ import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 
 function MyComponent({ onClose }) {
@@ -21,6 +22,9 @@ function MyComponent({ onClose }) {
   const [cardData, setCardData] = useState({ combinedData: [] });
    const [selectedCategory, setSelectedCategory] = useState('');
   const [recommendedExpert, setRecommendedExpert] = useState(null);
+
+      // Get the current user's timezone
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
    const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -47,6 +51,19 @@ function MyComponent({ onClose }) {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
+
+  const convertToUserTimezone = (timeRange, originalTimezone) => {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const [startTimeStr, endTimeStr] = timeRange.split(' - ');
+
+    const startTime = moment.tz(startTimeStr, 'hh:mm A', originalTimezone);
+    const endTime = moment.tz(endTimeStr, 'hh:mm A', originalTimezone);
+
+    const startInUserTZ = startTime.clone().tz(userTimezone).format('hh:mm A');
+    const endInUserTZ = endTime.clone().tz(userTimezone).format('hh:mm A [GMT]Z');
+
+    return `${startInUserTZ} - ${endInUserTZ}`;
+};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -165,7 +182,7 @@ function MyComponent({ onClose }) {
           </View>
           <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {recommendedExpert.available_days.join(', ')}</Text>
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
-             Time: {recommendedExpert.available_times}
+          Time: {convertToUserTimezone(recommendedExpert.available_times, recommendedExpert.timezone)}
           </Text>
             <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
               {recommendedExpert.years_experience} years of experience
@@ -241,18 +258,19 @@ function MyComponent({ onClose }) {
           if (selectedUser) {
               const expertid = `${selectedUser.user_id || 'N/A'}`;
               const availabledays = selectedUser.available_days ? selectedUser.available_days.join(', ') : 'N/A'; // Convert array to string, handle undefined
-              const availabletimes = selectedUser.available_times || 'N/A'; // Handle undefined
+              const availabletimes = convertToUserTimezone(selectedUser.available_times, selectedUser.timezone);
              const category = `${selectedUser.category}`;
 
              // Ensure topics are an array, then save them
              const guides = Array.isArray(selectedUser.guides) ? selectedUser.guides : [];
+             const convertedTime = convertToUserTimezone(selectedUser.available_times, selectedUser.timezone);
 
               // Save the selected user's data to AsyncStorage
               await AsyncStorage.setItem('selectedUserFirstName', selectedUser.first_name || ' ');
               await AsyncStorage.setItem('selectedUserLastName', selectedUser.last_name || ' ');
               await AsyncStorage.setItem('selectedUserExpertid', expertid);
               await AsyncStorage.setItem('selectedUserDays', availabledays);
-              await AsyncStorage.setItem('selectedUserTimes', availabletimes);
+              await AsyncStorage.setItem('selectedUserTimes', convertedTime);
               await AsyncStorage.setItem('selectedUserName', expertName); // Save expert_name
             await AsyncStorage.setItem('selectedUserCategory', category);
             await AsyncStorage.setItem('selectedUserLocation', 'location');
@@ -355,7 +373,7 @@ function MyComponent({ onClose }) {
           </View>
           <Text style={{ fontSize: 14, textAlign: 'center', color: "black", marginTop: 20,fontFamily:"Roboto-Light"  }}> Available: {data.available_days.join(', ')}</Text>
           <Text style={{ fontSize: 14, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
-             Time: {data.available_times}
+          Time: {convertToUserTimezone(data.available_times, data.timezone)}
           </Text>
             <Text style={{ fontSize: 14, marginTop: 5, color: "black", textAlign: 'center', fontFamily:"Roboto-Light" }}>
               {data.years_experience} years of experience

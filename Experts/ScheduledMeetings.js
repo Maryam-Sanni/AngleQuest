@@ -15,6 +15,27 @@ const ScheduledMeetingsTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
    const [hubName, setHubName] = useState('');
+   const [currentPage, setCurrentPage] = useState(0);
+   const itemsPerPage = 3; // Number of meetings to display per page
+   const totalPages = Math.ceil(data.length / itemsPerPage);
+ 
+   // Get the current meetings to display based on the page
+   const displayedMeetings =  data.slice(
+     currentPage * itemsPerPage,
+     (currentPage + 1) * itemsPerPage
+   );
+ 
+   const goToNextPage = () => {
+     if (currentPage < totalPages - 1) {
+       setCurrentPage(currentPage + 1);
+     }
+   };
+ 
+   const goToPreviousPage = () => {
+     if (currentPage > 0) {
+       setCurrentPage(currentPage - 1);
+     }
+   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -127,18 +148,16 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>Manage {hubName || "No update yet"} Hub</Text>
+        <Text style={styles.title}>{hubName || ""} Hub Meeting attendance</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}><Text style={styles.headerText}>Name</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}> </Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Last Seen</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Status</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Attended</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Missed</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>Meeting Date</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>Meeting Time</Text></View>
+            <View style={styles.cell2}><Text style={styles.headerText}>Joined</Text></View>
           </View>
 
-          {data.map((item, index) => (
+          {displayedMeetings.map((item, index) => (
             <View key={item.id} style={styles.row}>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                 <TouchableOpacity onPress={() => openUser(item.id)}>
@@ -148,25 +167,26 @@ const ScheduledMeetingsTable = () => {
                   </View>
                 </TouchableOpacity>
               </View>
-               <TouchableOpacity onPress={() => openUser(item.id)}>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.messageCount}>{item.messageCount}</Text>
-              </View>
-                  </TouchableOpacity>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{item.time}</Text>
+                <Text style={styles.cellText}>24/10/2024</Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{item.message}</Text>
+                <Text style={styles.cellText}>5:00PM</Text>
               </View>
               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{item.attended} Sessions</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{item.missed} Sessions</Text>
+                <Text style={styles.cellText}>5:25PM</Text>
               </View>
             </View>
           ))}
+           <View style={styles.paginationContainer}>
+            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+            </TouchableOpacity>
+            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </BlurView>
     </View>
@@ -266,6 +286,22 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
     BlurView: '100%'
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
   },
 });
 

@@ -4,6 +4,7 @@ import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import OpenModal from '../components/Createhubform';
 import OpenModal2 from '../components/Edithubform';
+import OpenModal7 from '../Experts/OtherHubs';
 import ConfirmationPopup from '../Experts/OtherHubs';
 import OpenModal4 from './SetMeet';
 import OpenModal5 from './Assignment';
@@ -23,6 +24,7 @@ function MyComponent() {
     const [modalVisible5, setModalVisible5] = useState(false);;
     const [modalVisible2, setModalVisible2] = useState(false);
     const [modalVisible3, setModalVisible3] = useState(false);
+    const [modalVisible7, setModalVisible7] = useState(false);
     const [isAllHovered, setIsAllHovered] = useState(false);
     const [coaching_hub_name, setGroupName] = useState('');
 
@@ -73,7 +75,13 @@ function MyComponent() {
       onClose();
     };
 
- 
+    const handleOpenPress7 = () => {
+      setModalVisible7(true);
+    };
+  
+    const handleCloseModal7 = () => {
+      setModalVisible7(false);
+    };
   
 const {t}=useTranslation()
   const [fontsLoaded]=useFonts({
@@ -133,7 +141,7 @@ const {t}=useTranslation()
             </TouchableOpacity>
             
             
-            <TouchableOpacity onPress={goToMyHubs}
+            <TouchableOpacity onPress={handleOpenPress7}
             underlayColor={isAllHovered ? 'transparent' : 'transparent'}
             onMouseEnter={() => setIsAllHovered(true)}
             onMouseLeave={() => setIsAllHovered(false)} >
@@ -223,6 +231,16 @@ const {t}=useTranslation()
         <View style={styles.modalContent}>
           <OpenModal4 onClose={handleCloseModal5} />
         </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible7}
+        onRequestClose={handleCloseModal7}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal7 onClose={() => handleCloseModal7()} />
+          </View>
       </Modal>
             <ScheduledMeetingsTable />
              <ScheduledMeet />

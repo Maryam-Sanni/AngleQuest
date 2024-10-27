@@ -188,6 +188,8 @@ const CreateCoachingHubForm = ({ onClose }) => {
     setEndTime(time);
   };
 
+  const [hubs, setHubs] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [visibility, setVisibility] = useState('public');
   const [category, setCategory] = useState('');
@@ -234,16 +236,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
   
         if (response.status === 200 && response.data.status === 'success') {
           const data = response.data.NewHub;
-          setVisibility(data.visibility || '');
-          setGroupName(data.coaching_hub_name || '');
-          setAddgoals(data.coaching_hub_goals || '');
-          setGroupDescription(data.coaching_hub_description || '');
-          setfee(data.coaching_hub_fee || '');
-          setMeetingDay(data.meeting_day || '');
-          setlimit(data.coaching_hub_limit || '');
-          setAvailableTimes(data.from || '');
-          setSpecialization(data.category || '');
-          setSelectedRoles(data.specialization || '');
+          setHubs(data); // Store the array of hubs
+          if (data.length > 0) {
+            // Set the first hub details
+            setSelectedIndex(0);
+            setHubDetails(data[0]);
+          }
         } else {
           console.error('Failed to fetch data', response);
         }
@@ -251,10 +249,39 @@ const CreateCoachingHubForm = ({ onClose }) => {
         console.error('Failed to load form data', error);
       }
     };
-  
+
     loadFormData();
   }, []);
 
+  const setHubDetails = (hub) => {
+    setVisibility(hub.visibility || '');
+    setGroupName(hub.coaching_hub_name || '');
+    setGroupDescription(hub.coaching_hub_description || '');
+    setObjectives(hub.learning_obj || '');
+    setfee(hub.coaching_hub_fee || '');
+    setMeetingDay(hub.meeting_day || '');
+    setLevel(hub.level || '');
+    setAvailableTimes(hub.from || '');
+    setSpecialization(hub.category || '');
+    setSelectedRoles(hub.specialization || '');
+  };
+
+  const handlePreviousHub = () => {
+    if (selectedIndex > 0) {
+      const newIndex = selectedIndex - 1;
+      setSelectedIndex(newIndex);
+      setHubDetails(hubs[newIndex]);
+    }
+  };
+
+  const handleNextHub = () => {
+    if (selectedIndex < hubs.length - 1) {
+      const newIndex = selectedIndex + 1;
+      setSelectedIndex(newIndex);
+      setHubDetails(hubs[newIndex]);
+    }
+  };
+ 
    const handleConfirm = ({ selectedDay, startTime, endTime }) => {
     // Set the selected day as a single value
     setAvailableDays(selectedDay);  // No need for array check anymore
@@ -370,17 +397,34 @@ const CreateCoachingHubForm = ({ onClose }) => {
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
-
+        
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
-      <View style={{flexDirection: 'row', marginBottom: 30}}>
+      <View style={{flexDirection: 'row', marginBottom: 10, padding: 10, borderBottomColor: '#CCC', borderBottomWidth: 1}}>
          <Text style={styles.headerText}>{t("Edit Hub Details")}</Text>
          <TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'black', marginLeft: 450,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
+            <Text style={{ fontSize: 18, color:'black', marginLeft: 420,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
                             ✕
                         </Text>
                         </TouchableOpacity>
                         </View>
+                        <View style={styles.navigationContainer}>
+        <TouchableOpacity
+          style={[styles.navButton, selectedIndex === 0 && styles.disabledNavButton]}
+          onPress={handlePreviousHub}
+          disabled={selectedIndex === 0}
+        >
+          <Text style={styles.navButtonText}>Previous</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.navButton, selectedIndex === hubs.length - 1 && styles.disabledNavButton]}
+          onPress={handleNextHub}
+          disabled={selectedIndex === hubs.length - 1}
+        >
+          <Text style={styles.navButtonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
             selectedValue={specialization}
@@ -649,6 +693,25 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       borderWidth: 1,
       borderColor: '#CCC',
+    },
+    navigationContainer: {
+      flexDirection: 'row',
+      marginTop: 20,
+      marginBottom: 20
+    },
+    navButton: {
+      backgroundColor: '#CEFAD0',
+      padding: 10,
+      borderRadius: 5,
+      width: 100,
+      marginRight: 20
+    },
+    disabledNavButton: {
+      backgroundColor: '#f5f5f5',
+    },
+    navButtonText: {
+      color: 'black',
+      textAlign: 'center',
     },
 });
 

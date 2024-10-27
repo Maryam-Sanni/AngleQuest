@@ -66,7 +66,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Past Sessions")}</Text>
+        <Text style={styles.title}>{t("Hub Meetings")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
@@ -82,7 +82,7 @@ const ScheduledMeetingsTable = () => {
               <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Time")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Performance Rating")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Presence")}</Text>
             </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
