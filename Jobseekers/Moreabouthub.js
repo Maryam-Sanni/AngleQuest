@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, Linking, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,6 +23,54 @@ function MyComponent({ onClose }) {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const handleJoinMeeting = async (meeting) => {
+    try {
+      // Retrieve necessary information from AsyncStorage
+      const firstName = await AsyncStorage.getItem('first_name');
+      const lastName = await AsyncStorage.getItem('last_name');
+      const jobseekerId = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token'); // Get token for authorization
+
+      const jobseekerName = `${firstName} ${lastName}`;
+
+      // Prepare meeting details for the API call
+      const meetingDetails = {
+        meeting_topic: "Your Meeting Topic",
+        candidate_link: meeting.candidate_link,
+        expert_link: meeting.expert_link,
+        description: meeting.description,
+        meeting_date: meeting.date,
+         hub_id: String(selectedHubData.hub_id), 
+        expert_id: String(selectedHubData.user_id), 
+        jobseeker_name: jobseekerName,
+        jobseeker_id: jobseekerId,
+      };
+
+      // POST to join the meeting
+      const joinMeetingResponse = await axios.post(
+        `${apiUrl}/api/expert/join-meeting`,
+        meetingDetails,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token for authorization
+          },
+        }
+      );
+
+      // Check if joining the meeting was successful
+      if (joinMeetingResponse.status === 201) {
+        setAlertMessage('You have successfully joined the meeting');
+      } else {
+        setAlertMessage('An error occurred')
+      }
+    } catch (error) {
+      console.error(error);
+      setAlertMessage('An error occurred')
+    }
+     setAlertVisible(true);
+  };
+
+  
   const createHubAndJoinExpertHub = async () => {
     setIsPressed(true);
     try {
@@ -63,7 +111,7 @@ function MyComponent({ onClose }) {
           jobseeker_name: jobseekerName,
           jobseeker_id: jobseekerId,
           expert_id: selectedHubData.user_id,
-          hub_id: selectedHubData.id, 
+          hub_id: selectedHubData.hub_id, 
           hub_sessions_held: Sessionsheld,
           hub_sessions_missed: Sessionsmissed,
           confirmed_attendance: Confirmed
@@ -104,7 +152,7 @@ function MyComponent({ onClose }) {
 
     fetchData();
   }, []); // Fetch data on component mount
-
+  
   const getWidthByLevel = (level) => {
     switch (level) {
       case "Beginner":
@@ -220,31 +268,52 @@ function MyComponent({ onClose }) {
           
         </View>
 
-        {/* Live session schedule section */}
         <View style={styles.whiteBox}>
           <Text style={styles.scheduleTitle}>{t("Live Session Schedule")}</Text>
-          <View style={styles.scheduleRow}>
-            <Text style={styles.description}>{t("Introducing interceptors in SAP Commerce Cloud")}</Text>
-            <Text style={styles.time}>{t("Nov 28, 2024, 09:30 - 10:30 GMT+1")}</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>{t("Register")}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.scheduleRow}>
-            <Text style={styles.description}>{t("Webinar: Interceptors in SAP Commerce Cloud")}</Text>
-            <Text style={styles.time}>{t("Feb 6, 2025, 15:00 - 16:00 GMT")}</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>{t("Register")}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.scheduleRow}>
-            <Text style={styles.description}>{t("Webinar: Interceptors in SAP Commerce Cloud")}</Text>
-            <Text style={styles.time}>{t("Mar 18, 2025, 09:30 - 10:30 GMT+1")}</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>{t("Register")}</Text>
-            </TouchableOpacity>
-          </View>
+
+          {/* Check if selectedHubData exists and contains meetings */}
+          {selectedHubData && selectedHubData.meeting &&
+            (typeof selectedHubData.meeting === 'object') && Object.keys(selectedHubData.meeting).length > 0 ? (
+              Object.keys(selectedHubData.meeting).map((key) => {
+                const meeting = selectedHubData.meeting[key]; // Access each meeting by key
+
+                return (
+                  <View key={key} style={styles.scheduleRow}>
+                    <Text style={styles.description}>{meeting.description || "No description available"}</Text>
+                    <Text style={styles.time}>
+                      {meeting.date || "No date available"}
+                    </Text>
+                    
+                     
+
+                    {/* Register button */}
+                    <TouchableOpacity 
+                      style={styles.button} 
+                      onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
+                    >
+                      <Text style={styles.buttonText}>{t("Register")}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={styles.linkbutton} 
+                      onPress={() => Linking.openURL(meeting.candidate_link)}
+                    >
+                      <Text style={styles.linkText}>{t("Join Meeting")}</Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })
+            ) : (
+              <Text>{t("No meetings available.")}</Text> // Fallback if no meetings exist
+            )}
         </View>
+
+
+
+
+
+
+
+
       </ScrollView>
       <CustomAlert
   visible={alertVisible}
@@ -407,7 +476,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     width: 120,
-    marginBottom: 10
+    marginBottom: 10,
+    marginLeft: 100
+  },
+  linkbutton: {
+    borderColor: 'coral',
+    borderWidth: 1,
+    padding: 8,
+    alignItems: 'center',
+    borderRadius: 5,
+    width: 120,
+    marginBottom: 10,
+    marginLeft: 10
+  },
+ linkText: {
+    color: 'coral',
+    fontWeight: 'bold',
   },
   closeButton: {
     position: 'absolute',

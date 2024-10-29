@@ -71,6 +71,7 @@ const handleOpenPress = async (index) => {
     coaching_hub_description: selectedHub.coaching_hub_description,
     created_at: selectedHub.created_at,
     meeting: selectedHub.meeting,
+    meeting_links: selectedHub.meeting_links,
   };
 
   try {
@@ -311,14 +312,19 @@ const hideAlert = () => {
   
     // Save data to AsyncStorage
     const hubData = {
-      coaching_hub_name: selectedHub.coaching_hub_name,
+    coaching_hub_name: selectedHub.coaching_hub_name,
       specialization: selectedHub.specialization,
       level: selectedHub.level,
       category: selectedHub.category,
+      expert_name: selectedHub.expert_name,
+      user_id: selectedHub.user_id,
+      hub_id: selectedHub.id,
       learning_obj: selectedHub.learning_obj,
+      coaching_hub_fee: selectedHub.coaching_hub_fee,
       coaching_hub_description: selectedHub.coaching_hub_description,
       created_at: selectedHub.created_at,
       meeting: selectedHub.meeting,
+      meeting_links: selectedHub.meeting_links,
     };
   
     try {

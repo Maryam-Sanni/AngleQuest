@@ -8,7 +8,8 @@ import {
     Switch,
     Linking,
     TouchableOpacity,
-    Modal,
+    Modal, FlatList,
+ActivityIndicator,
     ImageBackground,
 } from "react-native";
 import Topbar from "../components/topbar";
@@ -20,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import CustomAlert from '../components/CustomAlert'; 
 
 function MyComponent() {
     const navigate = useNavigate();
@@ -27,6 +30,11 @@ function MyComponent() {
     const [hubs, setHubs] = useState([]);
     const [selectedHub, setSelectedHub] = useState(null);
     const [isAttending, setIsAttending] = useState(false);
+      const [isModalVisible, setisModalVisible] = useState(false);
+     const [meetingsData, setMeetingsData] = useState([]);
+    const [loading, setLoading] = useState(false);
+      const [alertMessage, setAlertMessage] = useState('');
+      const [alertVisible, setAlertVisible] = useState(false);
 
      const apiUrl = process.env.REACT_APP_API_URL;
     
@@ -45,6 +53,99 @@ function MyComponent() {
         Linking.openURL("https://meet.anglequest.com");
     };
 
+    const handleHubPress = async () => {
+      try {
+        await AsyncStorage.setItem('hub_name', selectedHub.coaching_hub_name); // Save the coaching hub name
+        setisModalVisible(true); // Show the modal to fetch meeting data
+        fetchMeetingsData(selectedHub.coaching_hub_name); // Fetch meetings data based on selected hub name
+      } catch (error) {
+        console.error("Error saving hub name:", error);
+      }
+    };
+
+    const fetchMeetingsData = async (hubName) => {
+      setLoading(true);
+      try {
+        // Retrieve token from AsyncStorage
+        const token = await AsyncStorage.getItem('token'); // Replace 'token' with your key
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const { AllHubs } = response.data;
+
+        if (hubName) {
+          // Filter using coaching_hub_name
+          const filteredHubs = AllHubs.filter(hub => hub.coaching_hub_name === hubName);
+          setMeetingsData(filteredHubs);
+        }
+      } catch (error) {
+        console.error("Error fetching meeting data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const handleJoinMeeting = async (meeting, hubId, expertId) => {
+      try {
+        // Retrieve necessary information from AsyncStorage
+        const firstName = await AsyncStorage.getItem('first_name');
+        const lastName = await AsyncStorage.getItem('last_name');
+        const jobseekerId = await AsyncStorage.getItem('user_id');
+        const token = await AsyncStorage.getItem('token'); // Get token for authorization
+
+        const jobseekerName = `${firstName} ${lastName}`;
+
+        // Prepare meeting details for the API call
+        const meetingDetails = {
+          meeting_topic: "Your Meeting Topic", // Adjust this to reflect actual meeting topic if available
+          candidate_link: meeting.candidate_link,
+          expert_link: meeting.expert_link,
+          description: meeting.description,
+          meeting_date: meeting.date,
+          hub_id: String(hubId), // Use the passed hubId
+          expert_id: expertId, // Use the passed expertId
+          jobseeker_name: jobseekerName,
+          jobseeker_id: jobseekerId,
+        };
+
+        // POST to join the meeting
+        const joinMeetingResponse = await axios.post(
+          `${apiUrl}/api/expert/join-meeting`,
+          meetingDetails,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token for authorization
+            },
+          }
+        );
+
+        // Check if joining the meeting was successful
+        if (joinMeetingResponse.status === 201) {
+          setAlertMessage('You have successfully joined the meeting');
+        } else {
+          setAlertMessage('An error occurred while joining the meeting.');
+        }
+      } catch (error) {
+        console.error(error);
+        setAlertMessage('An error occurred while processing your request.');
+      } finally {
+        setAlertVisible(true); // Always show alert, whether success or error
+      }
+    };
+
+
+
+      const handleJoinlink = (link) => {
+        Linking.openURL(link); // Open the meeting link
+      };
+
+      const handleRegister = () => {
+        // Implement your registration logic here
+        console.log("Registration for meeting initiated.");
+      };
+    
     useEffect(() => {
         const fetchHubs = async () => {
             const token = await AsyncStorage.getItem('token');
@@ -87,6 +188,12 @@ function MyComponent() {
     });
     const { t } = useTranslation();
 
+      const hideAlert = () => {
+        setAlertVisible(false);
+        setIsVisible(false);
+        onClose();
+      };
+    
     if (!selectedHub) {
         return null; // Or you can navigate to another screen here if necessary
     }
@@ -202,56 +309,36 @@ function MyComponent() {
                                                 fontWeight: "bold",
                                             }}
                                         >
-                                            {t("Next Meeting")}
+                                            {t("Live Sessions")}
                                         </Text>
+                                
                                         <Text
                                             style={{
                                                 fontSize: 13,
                                                 color: "grey",
-                                                marginTop: 10,
-                                                fontFamily: "Roboto-Light",
-                                            }}
-                                        >
-                                            {selectedHub.meeting_day || 'No Hub Day'}s
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 13,
-                                                color: "grey",
+                                                textAlign: 'center',
                                                 marginTop: 5,
                                                 fontWeight: "500",
                                                 fontFamily: "Roboto-Light",
                                             }}
                                         >
-                                            {selectedHub.from || 'No Hub Yet'} - {" "}
-                                            {selectedHub.to || 'No Hub Yet'}
+                                            {selectedHub.coaching_hub_name|| 'No Hub Yet'}
                                         </Text>
                                         <TouchableOpacity
                                             style={{
-                                                backgroundColor: "none",
-                                                padding: 8,
-                                                paddingHorizontal: 10,
-                                                marginTop: 10,
-                                                borderRadius: 5,
-                                                marginLeft: 10,
-                                                marginRight: 10,
-                                                borderWidth: 2,
-                                                borderColor: "#206C00",
+                                              padding: 8,
+                                              paddingHorizontal: 10,
+                                              marginTop: 10,
+                                              borderRadius: 5,
+                                              marginLeft: 10,
+                                              marginRight: 10,
+                                              borderWidth: 2,
+                                              borderColor: "#206C00",
                                             }}
-                                            onPress={handlejoinPress}
-                                        >
-                                            <Text
-                                                style={{
-                                                    color: "#206C00",
-                                                    textAlign: "center",
-                                                    fontSize: 13,
-                                                    fontWeight: "600",
-                                                    fontFamily: "Roboto-Light",
-                                                }}
-                                            >
-                                                {t("Join Now")}
-                                            </Text>
-                                        </TouchableOpacity>
+                                            onPress={handleHubPress}
+                                          >
+                                            <Text style={{ color: "#206C00", fontWeight: "600" }}>View Meetings</Text>
+                                          </TouchableOpacity>
                                     </View>
                                 </View>
 
@@ -266,7 +353,7 @@ function MyComponent() {
                                             fontFamily: "Roboto-Light",
                                         }}
                                     >
-                                        {selectedHub.coaching_hub_name || 'No Hub Yet'}
+                                        {selectedHub.category || 'No Hub Yet'}
                                     </Text>
                                     <Text
                                         style={{
@@ -367,6 +454,96 @@ function MyComponent() {
                     </ScrollView>
                 </View>
             </View>
+            {/* Modal to show meetings */}
+            <Modal
+              visible={isModalVisible}
+              transparent={true}
+              onRequestClose={() => setisModalVisible(false)}
+            >
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <View style={{ width: '80%', height: '80%', padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
+                  <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>All Sessions</Text>
+
+                  {loading ? (
+                    <ActivityIndicator size="large" color="#206C00" />
+                  ) : meetingsData.length > 0 ? (
+                    <ScrollView style={{ flex: 1 }}>
+                      {meetingsData.map((hub, index) => (
+                        <View key={index} style={{ marginBottom: 20 }}>
+                          <Text style={{ fontWeight: "600", fontSize: 16 }}>{hub.coaching_hub_name}</Text>
+
+                          {hub.meeting && Object.values(hub.meeting).length > 0 ? (
+                            <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginTop: 10 }}>
+                              {/* Table Header */}
+                              <View style={{ flexDirection: 'row', backgroundColor: '#f2f2f2', padding: 10 }}>
+                                <Text style={{ flex: 1, fontWeight: "bold" }}>Description</Text>
+                                <Text style={{ flex: 1, fontWeight: "bold" }}>Date</Text>
+                                <Text style={{ flex: 1, fontWeight: "bold" }}>Time</Text>
+                                <Text style={{ flex: 1, fontWeight: "bold" }}>Actions</Text>
+                              </View>
+
+                              {/* Table Rows */}
+                              {Object.values(hub.meeting).map((meeting, idx) => (
+                                <View key={idx} style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
+                                  <Text style={{ flex: 1 }}>{meeting.description}</Text>
+                                  <Text style={{ flex: 1 }}>{new Date(meeting.date).toLocaleDateString()}</Text>
+                                  <Text style={{ flex: 1 }}>{meeting.time}</Text>
+
+                                  {/* Actions */}
+                                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    {meeting.candidate_link && (
+                                      <TouchableOpacity
+                                        onPress={() => handleJoinlink(meeting.candidate_link)}
+                                        style={{
+                                          backgroundColor: "#206C00",
+                                          padding: 5,
+                                          borderRadius: 5,
+                                            width: 100
+                                        }}
+                                      >
+                                        <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Join</Text>
+                                      </TouchableOpacity>
+                                    )}
+
+                                      <TouchableOpacity
+                                          onPress={() => handleJoinMeeting(meeting, hub.id, hub.user_id)} // Pass hub.id and hub.user_id
+                                          style={{
+                                            backgroundColor: "coral",
+                                            padding: 5,
+                                            borderRadius: 5,
+                                              width: 100
+                                          }}
+                                        >
+                                          <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Register</Text>
+                                        </TouchableOpacity>
+                                  </View>
+                                </View>
+                              ))}
+                            </View>
+                          ) : (
+                            <Text>No meetings available</Text>
+                          )}
+                        </View>
+                      ))}
+                    </ScrollView>
+                  ) : (
+                    <Text>No meetings available</Text>
+                  )}
+
+                  <TouchableOpacity onPress={() => setisModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
+                    <Text style={{ color: 'green' }}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+
+             <CustomAlert
+              visible={alertVisible}
+              title={t("Alert")}
+              message={alertMessage}
+              onConfirm={hideAlert}
+            />
+
         </ImageBackground>
     );
 }

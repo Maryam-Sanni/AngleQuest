@@ -9,25 +9,46 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sessions, setSessions] = useState([]);
-   const [selectedHubsession, setSelectedHubsession] = useState(null);
+  const [selectedHubsession, setSelectedHubsession] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3; // Number of meetings to display per page
+  const totalPages = Math.ceil(sessions.length / itemsPerPage);
+
+  // Get the current meetings to display based on the page
+  const displayedMeetings = sessions.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
-        const response = await fetch(`${apiUrl}/api/jobseeker/get-hub-sessions`, {
+        const token = await AsyncStorage.getItem('token');
+        const response = await fetch(`${apiUrl}/api/expert/get-individual-meeting`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Include token in the Authorization header
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
 
         if (response.ok) {
           const data = await response.json();
-          setSessions(data.HB); // Store the fetched sessions in the state
+          setSessions(data.data); // Update to use 'data' array from API response
         } else {
           console.error('Failed to fetch sessions:', response.status);
           Alert.alert('Error', 'Failed to fetch sessions.');
@@ -51,7 +72,7 @@ const ScheduledMeetingsTable = () => {
     } catch (error) {
       console.error('Failed to save selected hub to AsyncStorage', error);
     }
-    };
+  };
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -66,14 +87,14 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Hub Meetings")}</Text>
+        <Text style={styles.title}>{t("Registered Meetings")}</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Topic")}</Text>
             </View>
             <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14  }}>{t("Description")}</Text>
+              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Description")}</Text>
             </View>
             <View style={styles.cell2}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Date")}</Text>
@@ -81,37 +102,31 @@ const ScheduledMeetingsTable = () => {
             <View style={styles.cell2}>
               <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Time")}</Text>
             </View>
-            <View style={styles.cell2}>
-              <Text style={{ fontWeight: '600', fontSize: 14 }}>{t("Presence")}</Text>
-            </View>
             <TouchableOpacity>
               <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Rating</Text>
-               </View>
+                <Text style={{color: 'white'}}>Join Meeting</Text>
+              </View>
             </TouchableOpacity>
           </View>
 
           {sessions.length > 0 ? (
-            sessions.map((session, index) => (
+      displayedMeetings.map((session, index) => (
               <View key={index} style={styles.row}>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{session.Topic}</Text>
+                  <Text style={styles.cellText}>{session.meeting_topic}</Text>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{session.Description}</Text>
+                  <Text style={styles.cellText}>{session.description}</Text>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{session.meeting_date}</Text>
+                  <Text style={styles.cellText}>{new Date(session.meeting_date).toLocaleDateString()}</Text>
                 </View>
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{session.meeting_time}</Text>
-                </View>
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{session.rating}</Text>
+                  <Text style={styles.cellText}>{new Date(session.meeting_date).toLocaleTimeString()}</Text>
                 </View>
                 <TouchableOpacity onPress={() => handleOpenPress(session)}>
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Rate")}</Text>
+                    <Text style={styles.linkText}>{t("Join Meeting")}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -121,6 +136,15 @@ const ScheduledMeetingsTable = () => {
               <Text style={styles.noDataText}>{t("No sessions available")}</Text>
             </View>
           )}
+          <View style={styles.paginationContainer}>
+            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+            </TouchableOpacity>
+            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <Modal
           animationType="slide"
@@ -159,7 +183,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignContent: 'center',
     justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
+    marginLeft: 50,
+    marginRight: 50
   },
   greenBox: {
     width: "90%",
@@ -196,13 +221,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
   },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
-  },
   blurBackground: {
     flex: 1,
     borderRadius: 20,
@@ -211,7 +229,23 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontSize: 14,
     fontFamily: "Roboto-Light"
-  }
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 50,
+    marginRight: 50
+  },
+  button: {
+    fontSize: 18,
+    color: 'darkgreen',
+  },
+  disabledButton: {
+    fontSize: 18,
+    color: 'gray',
+  },
 });
 
 export default ScheduledMeetingsTable;
