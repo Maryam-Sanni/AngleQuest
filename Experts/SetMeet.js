@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Image, Picker, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import DateTimePickerModal from "../components/TimePicker4";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
+import { CheckBox } from 'react-native-elements';
+import { duration } from 'moment-timezone';
 
 
 function MyComponent({ onClose }) {
@@ -21,9 +23,63 @@ function MyComponent({ onClose }) {
   const [candidate, setCandidate] = useState("expert");
   const [expertid, setExpertid] = useState(" ");
    const [meetingtype, setType] = useState("hub");
+   const [loading, setLoading] = useState(false);
+  const [hubs, setHubs] = useState([]);
+  const [selectedHubId, setSelectedHubId] = useState(null);
+  const [selectedHubs, setSelectedHubs] = useState({});
+  const [duration, setDuration] = useState(1);
+  const [learningObj, setLearningObj] = useState(null);
+  const [materialFiles, setMaterialFiles] = useState([]);
+  const [submitloading, setSubmitLoading] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  const fileInputRef = React.createRef();
+
+const handleFileUpload = () => {
+  fileInputRef.current.click(); // Trigger the file input click
+};
+
+const handleFileChange = (event) => {
+  const files = Array.from(event.target.files);
+  setMaterialFiles(files); // Store the selected files in state
+};
+
+
+  useEffect(() => {
+    const fetchHubs = async () => {
+      setLoading(true);
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setHubs(response.data.NewHub);
+      } catch (error) {
+        console.error("Failed to fetch hubs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHubs();
+  }, []);
   
+  const toggleHubSelection = (id, coaching_hub_name, learning_obj) => {
+    // If the selected hub is already selected, deselect it
+    if (selectedHubId === id) {
+      setSelectedHubId(null);
+      setLearningObj(null);
+    } else {
+      // Select the new hub
+      setSelectedHubId(id);
+      setLearningObj(learning_obj);
+    }
+  };
+
+
   // useEffect to retrieve the expert id from AsyncStorage
   useEffect(() => {
     const getExpertId = async () => {
@@ -51,46 +107,60 @@ function MyComponent({ onClose }) {
   };
 
   const handleSubmit = async () => {
+
+    setSubmitLoading(true);
+
     try {
       const token = await AsyncStorage.getItem('token'); 
       if (!token) {
         alert('No token found');
         return;
       }
-
+  
       const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
-
+      
+      // Prepare the initial meeting data
       const meetingFormData = new FormData();
       meetingFormData.append('candidate_account_type', candidate);
       meetingFormData.append('role', topic);
       meetingFormData.append('expert_id', expertid);
       meetingFormData.append('type', meetingtype);
       meetingFormData.append('date_scheduled', formattedDate);
-
+  
       // Post to create-jobseeker-interview endpoint
       const MeetingResponse = await axios.post(
         `${apiUrl}/api/jobseeker/meetings/schedule`,
         meetingFormData,
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
       );
-
+  
       if (MeetingResponse.status !== 200) {
         onClose();
         return;
       }
-      
-      const formData = {
-        meeting_topic: topic,
-        meeting_description: description,
-        date: selectedDateTime,
-        time: selectedTime,
-        hub_id: "23"
-      };
   
+      const formData = new FormData(); // Create a new FormData object
+  
+      formData.append('meeting_topic', topic);
+      formData.append('meeting_description', description);
+      formData.append('date', selectedDateTime);
+      formData.append('time', selectedTime);
+      formData.append('hub_id', selectedHubId);
+      formData.append('roles', candidate);
+      formData.append('duration', duration);
+      formData.append('learning_obj', learningObj);
+  
+      // Add the material files to the formData
+      materialFiles.forEach((file) => {
+        formData.append('material_hubs', file); // Append each file to material_hubs
+      });
+
+  
+      // Make the second API call
       const response = await axios.post(`${apiUrl}/api/expert/newhubmeeting/create`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data', // Change to multipart/form-data for file uploads
         },
       });
   
@@ -108,13 +178,14 @@ function MyComponent({ onClose }) {
       setAlertMessage(t('Failed to create Meeting'));
     }
     setAlertVisible(true);
+    setSubmitLoading(false);
   };
+  
   
   const hideAlert = () => {
     setAlertVisible(false);
     // Ensure this does not inadvertently close the page
     setIsVisible(false);
-    onClose(); // Ensure this is not closing the page prematurely
   };
 
   const [fontsLoaded]=useFonts({
@@ -125,6 +196,7 @@ function MyComponent({ onClose }) {
 
   return (
         <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={styles.greenBox}>
             <View style={styles.header}>
             <Image
@@ -140,8 +212,40 @@ function MyComponent({ onClose }) {
             </View>
 
             <View style={styles.container}>
-            
-
+            <Text style={{fontSize: 16, marginLeft: 50, marginBottom: 10, fontWeight:'bold'}}>
+  {t("Select a hub for this meeting")}
+</Text>
+            <View style={{marginLeft: 40, marginBottom: 20}}>
+            {loading ? (
+        <ActivityIndicator size="large" color="#206C00" />
+      ) : (
+        <FlatList
+      data={hubs}
+      keyExtractor={(item) => item.id.toString()}
+      horizontal // Display hubs in a row
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={styles.hubContainer}
+          onPress={() => toggleHubSelection(item.id, item.coaching_hub_name, item.learning_obj)}
+        >
+          <View style={styles.hubCard}>
+            <Text style={styles.hubText}>{item.coaching_hub_name}</Text>
+            <CheckBox
+              checked={selectedHubId === item.id} // Only the selected one is checked
+              onPress={() => toggleHubSelection(item.id, item.coaching_hub_name, item.learning_obj)}
+              containerStyle={{
+                backgroundColor: 'transparent', // Make the background transparent
+                borderWidth: 0, // Remove border
+              }}
+              checkedColor="green" // Set checked color to green
+              uncheckedColor="gray" // Set unchecked color to gray (optional)
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+    />
+      )}
+</View>
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
               {t("Meeting Topic *")}
             </Text>
@@ -180,11 +284,45 @@ function MyComponent({ onClose }) {
   <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Time: </Text> 
   {selectedTime || t("No time selected")}
 </Text>
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
+  {t("Duration")}
+</Text>
+<Picker
+        selectedValue={duration}
+        style={styles.input}
+        onValueChange={(itemValue) => setDuration(itemValue)}
+      >
+        {/* Map through numbers 1-5 */}
+        {[1, 2, 3, 4, 5].map((hour) => (
+          <Picker.Item key={hour} label={`${hour} hr`} value={hour} />
+        ))}
+      </Picker>
+
+<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
+  {t("Learning Materials")}
+</Text>
+<TouchableOpacity onPress={handleFileUpload} style={styles.input}>
+  <Text style={{fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Upload Learning Materials:")}</Text>
+</TouchableOpacity>
+<input
+  type="file"
+  onChange={handleFileChange}
+  multiple // Allows multiple files
+  style={{ display: 'none' }} // Hide the input element
+  ref={fileInputRef} // Create a ref to trigger the file input
+/>
 
             </View>
-            <TouchableOpacity onPress={handleSubmit} style={styles.buttonplus}>
-              <Text style={styles.buttonTextplus}>{t("Create Meeting")}</Text>
-            </TouchableOpacity>
+            <TouchableOpacity 
+    onPress={submitloading ? null : handleSubmit} 
+    style={[styles.buttonplus, submitloading && styles.buttonDisabled]} // Add a style for a disabled button
+    disabled={submitloading} // Disable button if submitloading is true
+>
+    <Text style={styles.buttonTextplus}>
+        {submitloading ? t("Loading...") : t("Create Meeting")}
+    </Text>
+</TouchableOpacity>
+
           </View>
        
           <CustomAlert
@@ -199,6 +337,7 @@ function MyComponent({ onClose }) {
         onConfirm={handleConfirmDateTime}
         onCancel={handleCancelDateTimeModal}
       />
+      </ScrollView>
       </View>
     
   );
@@ -218,16 +357,15 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 1000,
-    height: "100%",
     backgroundColor: '#F8F8F8',
   },
   buttonplus: {
     backgroundColor: 'coral',
-    padding: 5,
-    bottom: 10,
+    padding: 10,
+    marginTop: 30,
     width: 150,
-    position: 'absolute',
-    right: 110,
+    marginBottom: 50,
+    marginLeft: 720,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
@@ -277,6 +415,50 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10,
   },
+  hubContainer: {
+    marginHorizontal: 5,
+  },
+  hubCard: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flexDirection: 'row', 
+  },
+  hubText: {
+    fontSize: 14,
+    marginRight: 5, // Space between text and checkbox
+  },
+  selectedHubsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  selectedHubsTitle: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  selectedHubText: {
+    fontSize: 16,
+    color: '#206C00',
+  },
+  fileUploadButton: {
+    backgroundColor: 'coral',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  
+  fileUploadButtonText: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: "Roboto-Light",
+  },
+  buttonDisabled: {
+    backgroundColor: 'gray', // Change to any color you want for the disabled state
+    opacity: 0.5, // Optional: makes the button look faded
+},
 });
 
-export default MyComponent;
+export default MyComponent; 

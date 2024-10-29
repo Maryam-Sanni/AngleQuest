@@ -139,6 +139,8 @@ import Community from "./Screens/Community";
 import Business from "./Screens/Business";
 import Pricing from "./Screens/Pricing";
 import Reset from './components/ResetPassword';
+import Tickets from './Jobseekers/Tickets';
+import AllTickets from './Experts/AllTickets';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -216,6 +218,8 @@ const App = () => {
          <Route path="/expert-analysis" element={<ExpertAnalysis  />} />
          <Route path="/ai-analysis" element={<AiAnalysis  />} />
          <Route path="/expert-roadmap" element={<ExpertRoadmap />} />
+         <Route path="/tickets" element={<Tickets />} />
+         <Route path="/all-tickets" element={<AllTickets />} />
       </Routes>
     </Router>
   );

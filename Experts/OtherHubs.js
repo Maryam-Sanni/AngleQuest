@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, ScrollView } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent({ onClose }) {
     const [clickedItem, setClickedItem] = useState(null);
@@ -10,7 +11,7 @@ function MyComponent({ onClose }) {
     const [loading, setLoading] = useState(true);
 
     const apiUrl = process.env.REACT_APP_API_URL;
-    
+
     const [fontsLoaded] = useFonts({
         'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
     });
@@ -19,9 +20,15 @@ function MyComponent({ onClose }) {
 
     useEffect(() => {
         const fetchHubs = async () => {
+            setLoading(true);
             try {
-                const response = await axios.get(`${apiUrl}/api/expert/hubs/get`);
-                setHubs(response.data.hubs);
+                const token = await AsyncStorage.getItem('token'); // Retrieve token from AsyncStorage
+                const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include token in Authorization header
+                    },
+                });
+                setHubs(response.data.NewHub); // Update to access "NewHub" array from the response
             } catch (error) {
                 console.error("Failed to fetch hubs:", error);
             } finally {
@@ -37,7 +44,7 @@ function MyComponent({ onClose }) {
     };
 
     if (!fontsLoaded) {
-        return <ActivityIndicator size="large" color="#6E9FDF" />;
+        return <ActivityIndicator size="large" color="#206C00" />;
     }
 
     return (
@@ -48,7 +55,7 @@ function MyComponent({ onClose }) {
             <Text style={styles.title}>{t("My Training Hubs")}</Text>
             
             {loading ? (
-                <ActivityIndicator size="large" color="#6E9FDF" />
+                <ActivityIndicator size="large" color="#206C00" />
             ) : (
                 <ScrollView contentContainerStyle={styles.hubsContainer}>
                     {hubs.map((hub) => (
@@ -59,8 +66,11 @@ function MyComponent({ onClose }) {
                                     style={styles.icon}
                                 />
                                 <View style={styles.hubInfo}>
-                                    <Text style={styles.hubName}>{hub.name}</Text>
-                                    <Text style={styles.hubDetail}>{t(hub.type)} • {hub.members} {t("Members")}</Text>
+                                    <Text style={styles.hubName}>{hub.coaching_hub_name}</Text>
+                                    <Text style={styles.hubDetail}>
+                                        {hub.category} • {hub.expert_name} • {hub.coaching_hub_fee}
+                                    </Text>
+                                    <Text style={styles.hubDescription}>{hub.coaching_hub_description}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -78,6 +88,7 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         backgroundColor: "white",
         alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 100,
         width: 500,
         height: 500
@@ -99,8 +110,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     hubsContainer: {
-        width: '70%',
+        width: '80%',
+        marginTop: 30,
         alignItems: 'center',
+        alignSelf: 'center',
     },
     hubCard: {
         flexDirection: 'row',
@@ -109,12 +122,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginVertical: 6,
         width: '90%',
+        alignSelf: 'center',
         borderRadius: 8,
         alignItems: 'center',
         elevation: 2,
     },
     hubCardSelected: {
-        backgroundColor: '#E3F2FD',
+        backgroundColor: '#E0F7E9',
     },
     icon: {
         width: 24,
@@ -135,6 +149,12 @@ const styles = StyleSheet.create({
         color: '#666',
         fontStyle: 'italic',
         fontFamily: 'Roboto-Light',
+    },
+    hubDescription: {
+        fontSize: 12,
+        color: '#444',
+        fontFamily: 'Roboto-Light',
+        marginTop: 4,
     },
     note: {
         fontSize: 12,
