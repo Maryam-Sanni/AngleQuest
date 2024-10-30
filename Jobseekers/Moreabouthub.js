@@ -112,6 +112,7 @@ function MyComponent({ onClose }) {
           jobseeker_name: jobseekerName,
           jobseeker_id: jobseekerId,
           expert_id: selectedHubData.user_id,
+          hub_name: selectedHubData.coaching_hub_name,
           hub_id: selectedHubData.hub_id, 
           hub_sessions_held: Sessionsheld,
           hub_sessions_missed: Sessionsmissed,

@@ -173,6 +173,7 @@ useEffect(() => {
         await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
           jobseeker_name: jobseekerName,
           jobseeker_id: jobseekerId,
+          hub_name: selectedHub.coaching_hub_name,
           expert_id: selectedHub.user_id,
           hub_id: selectedHub.id, 
           hub_sessions_held: Sessionsheld,

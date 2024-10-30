@@ -204,7 +204,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [objectiveLength, setObjectiveLength] = useState(0);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
-  const [level, setLevel] = useState('');
+  const [level, setLevel] = useState('beginner');
   const [objectives, setObjectives] = useState('');
   const [coaching_hub_fee, setfee] = useState('$40 per meeting');
   const maxDescriptionLength = 200; // Max character limit for description
@@ -327,7 +327,6 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
-    onClose();
   };
 
   const [fontsLoaded]=useFonts({
@@ -395,23 +394,17 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={[styles.input, { height: 120 }]}
           placeholder= {t("The overview of this training is to...")}
+          placeholderTextColor="grey"
           multiline
           value={coaching_hub_description}
           onChangeText={handleDescriptionChange}
-        />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee")} (per meeting)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="$40"
-          value={coaching_hub_fee}
-          onChangeText={text => setfee(text)}
-          editable={false}
         />
 
 <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Objectives")}* ({maxObjectiveLength - objectiveLength} characters remaining)</Text>
         <TextInput
           style={[styles.input, { height: 120 }]}
           placeholder= {t("At the end of this training...")}
+           placeholderTextColor="grey"
           multiline
           value={objectives}
           onChangeText={handleObjectiveChange}
@@ -429,7 +422,13 @@ const CreateCoachingHubForm = ({ onClose }) => {
                 </Picker>
 
         
-      
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee (per meeting)")}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="$40"
+          onChangeText={text => setfee(text)}
+          editable={false}
+        />
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
           onPress={handleSave}

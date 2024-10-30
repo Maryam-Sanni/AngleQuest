@@ -348,10 +348,10 @@ const CreateCoachingHubForm = ({ onClose }) => {
         years_experience,
         skills,
         location,
-        meeting_day: availableDays,
+         meeting_day: "day",
         coaching_hub_description,
-        from: availableTimes,
-        to: availableTimes,
+        from: "from",
+        to: "to",
         coaching_hub_fee,
         coaching_hub_goals,
         coaching_hub_limit,
@@ -384,7 +384,6 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
-    onClose();
   };
 
   const [fontsLoaded]=useFonts({
