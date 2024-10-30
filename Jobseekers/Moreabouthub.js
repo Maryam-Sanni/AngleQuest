@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert'; 
+import moment from 'moment-timezone';
 
 function MyComponent({ onClose }) {
   const [fontsLoaded] = useFonts({
@@ -179,7 +180,7 @@ function MyComponent({ onClose }) {
     setIsVisible(false);
     onClose();
   };
-
+  
   return (
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -276,12 +277,14 @@ function MyComponent({ onClose }) {
             (typeof selectedHubData.meeting === 'object') && Object.keys(selectedHubData.meeting).length > 0 ? (
               Object.keys(selectedHubData.meeting).map((key) => {
                 const meeting = selectedHubData.meeting[key]; // Access each meeting by key
-
+                const userTimezone = moment.tz.guess(); // Get the user's timezone
+                const meetingDate = meeting.date ? moment(meeting.date).tz(userTimezone) : null; // Convert the date
+                
                 return (
                   <View key={key} style={styles.scheduleRow}>
                     <Text style={styles.description}>{meeting.description || "No description available"}</Text>
                     <Text style={styles.time}>
-                      {meeting.date || "No date available"}
+                      {meetingDate ? meetingDate.format('LLLL') : "No date available"} {/* Format the date as needed */}
                     </Text>
                     
                      

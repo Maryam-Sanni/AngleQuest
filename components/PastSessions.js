@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Modal, Alert } from 'react-native';
 import OpenSchedule from '../components/RatingHub';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
@@ -124,7 +124,7 @@ const ScheduledMeetingsTable = () => {
                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                   <Text style={styles.cellText}>{new Date(session.meeting_date).toLocaleTimeString()}</Text>
                 </View>
-                <TouchableOpacity onPress={() => handleOpenPress(session)}>
+                <TouchableOpacity onPress={() => Linking.openURL(session.candidate_link)}>
                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
                     <Text style={styles.linkText}>{t("Join Meeting")}</Text>
                   </View>

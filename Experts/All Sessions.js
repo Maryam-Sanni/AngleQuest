@@ -1,5 +1,5 @@
       import React, { useState, useEffect } from 'react';
-      import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
+      import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, Linking } from 'react-native';
       import { useFonts } from 'expo-font';
       import { useTranslation } from 'react-i18next';
       import axios from 'axios';
@@ -16,7 +16,7 @@ import OpenModal from './ConfirmMeetingEnd';
         const handleOpenPress = async (meeting) => {
           setSelectedMeeting(meeting);
           setModalVisible(true);
-
+ 
           try {
             await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
             console.log('Selected meeting saved:', meeting);
@@ -33,6 +33,17 @@ import OpenModal from './ConfirmMeetingEnd';
           'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
         });
         const { t } = useTranslation();
+        
+        const handleOpenLink = async (url) => {
+          if (url) {
+            const supported = await Linking.canOpenURL(url);
+            if (supported) {
+              await Linking.openURL(url);
+            } else {
+              console.log("Can't open the URL:", url);
+            }
+          }
+        };
 
         useEffect(() => {
           const fetchMeetingData = async () => {
@@ -68,7 +79,7 @@ import OpenModal from './ConfirmMeetingEnd';
         }, []);
 
         return (
-          <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
+          <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
             <View style={styles.greenBox}>
               <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
                 <View style={styles.header}>
@@ -87,20 +98,20 @@ import OpenModal from './ConfirmMeetingEnd';
                   <View style={styles.table}>
                     <View style={styles.row}>
                       <View style={styles.cell}>
-                        <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Topic")}</Text>
+                        <Text style={{ fontWeight: '600', fontSize: 16 }}>{t("Topic")}</Text>
                       </View>
                       <View style={styles.cell}>
-                        <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Description")}</Text>
+                        <Text style={{ fontWeight: '600', fontSize: 16 }}>{t("Description")}</Text>
                       </View>
                       <View style={styles.cell}>
-                        <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Meeting Date")}</Text>
+                        <Text style={{ fontWeight: '600', fontSize: 16 }}>{t("Meeting Date")}</Text>
                       </View>
                       <View style={styles.cell}>
-                        <Text style={{ fontWeight: '600', fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Meeting Time")}</Text>
+                        <Text style={{ color: 'white' }}>{t("Join Meet")}</Text>
                       </View>
                       <TouchableOpacity>
                         <View style={styles.cell}>
-                        <Text style={{color: '#F7F7F7'}}>Mark as Completed</Text>
+                        <Text style={{color: 'white'}}>Mark</Text>
                          </View>
                       </TouchableOpacity>
                     </View>
@@ -115,11 +126,13 @@ import OpenModal from './ConfirmMeetingEnd';
                         <View style={styles.cell2}>
                           <Text style={styles.cellText}>{meeting.date}</Text>
                         </View>
-                        <View style={styles.cell2}>
-                          <Text style={styles.cellText}>{meeting.time}</Text>
+                        <View style={styles.coralButton}>
+                          <Text style={{color:'#206C00'}} onPress={() => handleOpenLink(meeting.expert_link)}>
+                            {t("Join Meeting")}
+                          </Text>
                         </View>
-                        <TouchableOpacity styles={styles.cell2} onPress={() => handleOpenPress(meeting)}>
-                          <Text style={styles.linkText}>{t("Mark as Completed")}</Text>
+                        <TouchableOpacity style={styles.linkButton} onPress={() => handleOpenPress(meeting)}>
+                          <Text style={{color:'white'}}>{t("Mark as Completed")}</Text>
                         </TouchableOpacity>
                       </View>
                     ))}
@@ -142,94 +155,107 @@ import OpenModal from './ConfirmMeetingEnd';
       }
 
       const styles = StyleSheet.create({
-        modalContent: {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'rgba(0, 0, 0, 0.1)',
-        },
-        container: {
-          flexDirection: 'column',
-          marginLeft: 50,
-        },
-        greenBox: {
-          width: 1000,
-          height: "100%",
-          backgroundColor: '#F8F8F8',
-        },
-        table: {
-          marginRight: 200,
-          marginTop: 20,
-          marginBottom: 20,
-          alignContent: 'center',
-          justifyContent: 'space-around',
-          marginLeft: 50,
-          marginRight: 50,
-        },
-        open: {
-          color: "coral",
-          fontSize: 14,
-          borderColor: "coral",
-          backgroundColor: '#f7fff4',
-          borderWidth: 2,
-          padding: 5,
-          paddingHorizontal: 15,
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
+    flexDirection: 'column',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  greenBox: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  table: {
+    marginTop: 20,
+  },
+  open: {
+    color: "coral",
+    fontSize: 14,
+    borderColor: "coral",
+    backgroundColor: '#f7fff4',
+    borderWidth: 2,
+    padding: 5,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    fontFamily: "Roboto-Light",
+    textAlign: 'center'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 15,
+    padding: 5,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#3F5637',
+    fontFamily: "Roboto-Light",
+  },
+  row: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderColor: '#EEE',
+  },
+  cell: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+  },
+  cell2: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+  },
+  cellText: {
+    fontSize: 14,
+    fontFamily: "Roboto-Light",
+  },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light",
+    textDecorationLine: 'underline',
+  },
+        linkButton: {
+          backgroundColor: "#206C00",
+          padding: 10,
           borderRadius: 5,
-          fontFamily: "Roboto-Light",
-          textAlign: 'center'
-        },
-        closeButton: {
-          position: 'absolute',
-          top: 20,
-          right: 20,
-        },
-        header: {
-          flexDirection: 'row',
+            width: 150,
           alignItems: 'center',
+          height: 40
+        },
+        coralButton: {
+          borderColor: "#206C00",
+          borderWidth: 1,
           padding: 10,
-          backgroundColor: 'white',
-          borderBottomWidth: 1,
-          borderBottomColor: '#CCC',
-          marginBottom: 5,
-        },
-        logo: {
-          width: 40,
-          height: 40,
-          marginRight: 10,
-        },
-        headerText: {
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: '#3F5637',
-          fontFamily: "Roboto-Light"
-        },
-        row: {
-          flexDirection: 'row',
-        },
-        cell: {
-          flex: 1,
-          borderBottomWidth: 1,
-          borderBottomColor: '#EEE',
-          padding: 10,
+          borderRadius: 5,
+            width: 120,
           alignItems: 'center',
+          height: 40, marginRight: 30
         },
-        cell2: {
-          flex: 1,
-          borderBottomWidth: 1,
-          borderBottomColor: '#EEE',
-          padding: 10,
-          alignItems: 'center',
-          backgroundColor: '#F7F7F7',
-        },
-        cellText: {
-          fontSize: 14,
-          fontFamily: "Roboto-Light"
-        },
-        linkText: {
-          color: "#206C00",
-          fontSize: 14,
-          fontFamily: "Roboto-Light"
-        }
-      });
+});
 
       export default MyComponent;

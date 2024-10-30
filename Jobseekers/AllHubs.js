@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import CustomAlert from '../components/CustomAlert'; 
+import moment from 'moment-timezone';
 
 function MyComponent() {
     const navigate = useNavigate();
@@ -129,11 +130,18 @@ function MyComponent() {
         }
       } catch (error) {
         console.error(error);
-        setAlertMessage('An error occurred while processing your request.');
+
+        // Check for 400 status code in the error response
+        if (error.response && error.response.status === 400) {
+          setAlertMessage('You have already joined this meeting.');
+        } else {
+          setAlertMessage('An error occurred while processing your request.');
+        }
       } finally {
         setAlertVisible(true); // Always show alert, whether success or error
       }
     };
+
 
 
 
@@ -218,82 +226,56 @@ function MyComponent() {
                                     }}
                                     style={styles.image}
                                 />
-                                <Text
-                                    style={{
-                                        color: "#666",
-                                        fontWeight: "600",
-                                        marginLeft: 10,
-                                        fontSize: 14,
-                                        marginTop: 5,
-                                        marginRight: 20,
-                                    }}
-                                >
-                                    {t("All Joined Hubs")}:
-                                </Text>
-                                {hubs.map((hub, index) => {
-                                    const isSelected =
-                                        hub.id === selectedHub?.id;
-
-                                    return (
-                                        <TouchableOpacity
-                                            key={hub.id}
-                                            onPress={() => setSelectedHub(hub)}
+                                <TouchableOpacity onPress={handleOpenPress}>
+                                    
+                                        <Text
+                                            style={{
+                                                fontSize: 15,
+                                                color: "grey",
+                                                alignText: "center",
+                                                fontWeight: "bold",
+                                                fontFamily: "Roboto-Light", marginLeft: 10, marginTop: 5
+                                            }}
                                         >
-                                            <View
+                                            + {t("New")}
+                                        </Text>
+                                  
+                                </TouchableOpacity>
+                            </View>
+<View style={{flexDirection: 'row', marginLeft: 50,}}>
+                            
+                            {hubs.map((hub, index) => {
+                                const isSelected =
+                                    hub.id === selectedHub?.id;
+
+                                return (
+                                    <TouchableOpacity
+                                        key={hub.id}
+                                        onPress={() => setSelectedHub(hub)}
+                                    >
+                                        <View
+                                            style={[
+                                                styles.item,
+                                                isSelected
+                                                    ? styles.selectedItem
+                                                    : styles.unselectedItem,
+                                            ]}
+                                        >
+                                            <Text
                                                 style={[
-                                                    styles.item,
+                                                    styles.hubText,
                                                     isSelected
-                                                        ? styles.selectedItem
-                                                        : styles.unselectedItem,
+                                                        ? styles.selectedText
+                                                        : styles.unselectedText,
                                                 ]}
                                             >
-                                                <Text
-                                                    style={[
-                                                        styles.hubText,
-                                                        isSelected
-                                                            ? styles.selectedText
-                                                            : styles.unselectedText,
-                                                    ]}
-                                                >
-                                                     {hub.coaching_hub_name || 'No hub yet'}
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    );
-                                })}
-                            </View>
-
-                            <TouchableOpacity onPress={handleOpenPress}>
-                                <View
-                                    style={{
-                                        justifyContent: "flex-start",
-                                        paddingHorizontal: 10,
-                                        paddingVertical: 10,
-                                        borderRadius: 5,
-                                        borderColor: "#f7fff4",
-                                        backgroundColor:
-                                            "rgba(211,249,216,0.3)",
-                                        width: 150,
-                                        alignItems: "center",
-                                        marginTop: 20,
-                                        marginLeft: 50,
-                                        borderWidth: 1,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontSize: 13,
-                                            color: "#f7fff4",
-                                            alignText: "center",
-                                            fontWeight: "bold",
-                                            fontFamily: "Roboto-Light",
-                                        }}
-                                    >
-                                        + {t("New")}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-
+                                                 {hub.coaching_hub_name || 'No hub yet'}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                );
+                            })}
+</View>
                             <View style={styles.container}>
                                 <View style={styles.box}>
                                     <View
@@ -454,7 +436,7 @@ function MyComponent() {
                     </ScrollView>
                 </View>
             </View>
-            {/* Modal to show meetings */}
+
             <Modal
               visible={isModalVisible}
               transparent={true}
@@ -463,7 +445,11 @@ function MyComponent() {
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
                 <View style={{ width: '80%', height: '80%', padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
                   <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>All Sessions</Text>
-
+                  <TouchableOpacity onPress={() => setisModalVisible(false)} style={{ position: 'absolute', right: 20 }}>
+                    <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                      ✕
+                    </Text>
+                  </TouchableOpacity>
                   {loading ? (
                     <ActivityIndicator size="large" color="#206C00" />
                   ) : meetingsData.length > 0 ? (
@@ -478,47 +464,50 @@ function MyComponent() {
                               <View style={{ flexDirection: 'row', backgroundColor: '#f2f2f2', padding: 10 }}>
                                 <Text style={{ flex: 1, fontWeight: "bold" }}>Description</Text>
                                 <Text style={{ flex: 1, fontWeight: "bold" }}>Date</Text>
-                                <Text style={{ flex: 1, fontWeight: "bold" }}>Time</Text>
                                 <Text style={{ flex: 1, fontWeight: "bold" }}>Actions</Text>
                               </View>
 
                               {/* Table Rows */}
-                              {Object.values(hub.meeting).map((meeting, idx) => (
-                                <View key={idx} style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
-                                  <Text style={{ flex: 1 }}>{meeting.description}</Text>
-                                  <Text style={{ flex: 1 }}>{new Date(meeting.date).toLocaleDateString()}</Text>
-                                  <Text style={{ flex: 1 }}>{meeting.time}</Text>
+                              {Object.values(hub.meeting).map((meeting, idx) => {
+                                const userTimezone = moment.tz.guess(); // Get the user's timezone
+                                const meetingDate = meeting.date ? moment(meeting.date).tz(userTimezone) : null; // Convert the date
 
-                                  {/* Actions */}
-                                  <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    {meeting.candidate_link && (
-                                      <TouchableOpacity
-                                        onPress={() => handleJoinlink(meeting.candidate_link)}
-                                        style={{
-                                          backgroundColor: "#206C00",
-                                          padding: 5,
-                                          borderRadius: 5,
-                                            width: 100
-                                        }}
-                                      >
-                                        <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Join</Text>
-                                      </TouchableOpacity>
-                                    )}
-
-                                      <TouchableOpacity
-                                          onPress={() => handleJoinMeeting(meeting, hub.id, hub.user_id)} // Pass hub.id and hub.user_id
+                                return (
+                                  <View key={idx} style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
+                                    <Text style={{ flex: 1 }}>{meeting.description}</Text>
+                                    <Text style={{ flex: 1 }}>{meetingDate ? meetingDate.format('LLLL') : "No date available"}</Text>
+                                    {/* Actions */}
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                      {meeting.candidate_link && (
+                                        <TouchableOpacity
+                                          onPress={() => handleJoinlink(meeting.candidate_link)}
                                           style={{
-                                            backgroundColor: "coral",
+                                            backgroundColor: "#206C00",
                                             padding: 5,
                                             borderRadius: 5,
-                                              width: 100
+                                            width: 100
                                           }}
                                         >
-                                          <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Register</Text>
+                                          <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Join</Text>
                                         </TouchableOpacity>
+                                      )}
+
+                                      <TouchableOpacity
+                                        onPress={() => handleJoinMeeting(meeting, hub.id, hub.user_id)} // Pass hub.id and hub.user_id
+                                        style={{
+                                          borderColor: "#206C00",
+                                          borderWidth: 1,
+                                          padding: 5,
+                                          borderRadius: 5,
+                                          width: 100
+                                        }}
+                                      >
+                                        <Text style={{ color: "#206C00", textAlign: "center", fontSize: 12 }}>Register</Text>
+                                      </TouchableOpacity>
+                                    </View>
                                   </View>
-                                </View>
-                              ))}
+                                );
+                              })}
                             </View>
                           ) : (
                             <Text>No meetings available</Text>
@@ -529,13 +518,10 @@ function MyComponent() {
                   ) : (
                     <Text>No meetings available</Text>
                   )}
-
-                  <TouchableOpacity onPress={() => setisModalVisible(false)} style={{ marginTop: 20, alignSelf: 'center' }}>
-                    <Text style={{ color: 'green' }}>Close</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             </Modal>
+
 
              <CustomAlert
               visible={alertVisible}
@@ -563,17 +549,29 @@ const styles = StyleSheet.create({
         marginBottom: 10, // space between items
     },
     selectedItem: {
-        backgroundColor: "#135837",
-        borderColor: "#135837",
-        borderWidth: 2,
-        borderRadius: 5,
+        justifyContent: "flex-start",
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            borderRadius: 5,
+            borderColor: "#135837",
+            backgroundColor:
+                "#135837",
+            alignItems: "center",
+            marginTop: 20,
+            borderWidth: 1,
         marginRight: 20,
     },
     unselectedItem: {
-        backgroundColor: "#fff",
-        borderColor: "#135837",
-        borderWidth: 2,
-        borderRadius: 5,
+        justifyContent: "flex-start",
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            borderRadius: 5,
+            borderColor: "#f7fff4",
+            backgroundColor:
+                "rgba(211,249,216,0.3)",
+            alignItems: "center",
+            marginTop: 20,
+            borderWidth: 1,
         marginRight: 20,
     },
     hubText: {
@@ -585,7 +583,7 @@ const styles = StyleSheet.create({
         color: "#fff", // white text
     },
     unselectedText: {
-        color: "#206C00", // green text
+        color: "#f7fff4", // green text
     },
     hubName: {
         color: "#206C00",

@@ -1,197 +1,154 @@
-import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { format } from 'date-fns';
-import { enGB } from 'date-fns/locale';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { BlurView } from 'expo-blur';
-import { useNavigate } from 'react-router-dom';
+    import React, { useEffect, useState } from 'react';
+    import AsyncStorage from '@react-native-async-storage/async-storage';
+    import axios from 'axios';
+    import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+    import { BlurView } from 'expo-blur';
+    import { useNavigate } from 'react-router-dom';
+    import moment from 'moment-timezone';
 
-const defaultAvatar = require("../assets/account.png");
+    const defaultAvatar = require("../assets/account.png");
 
-const ScheduledMeetingsTable = () => {
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-   const [hubName, setHubName] = useState('');
-   const [currentPage, setCurrentPage] = useState(0);
-   const itemsPerPage = 3; // Number of meetings to display per page
-   const totalPages = Math.ceil(data.length / itemsPerPage);
- 
-   // Get the current meetings to display based on the page
-   const displayedMeetings =  data.slice(
-     currentPage * itemsPerPage,
-     (currentPage + 1) * itemsPerPage
-   );
- 
-   const goToNextPage = () => {
-     if (currentPage < totalPages - 1) {
-       setCurrentPage(currentPage + 1);
-     }
-   };
- 
-   const goToPreviousPage = () => {
-     if (currentPage > 0) {
-       setCurrentPage(currentPage - 1);
-     }
-   };
+    const ScheduledMeetingsTable = () => {
+      const navigate = useNavigate();
+      const [data, setData] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+      const [hubName, setHubName] = useState('');
+      const [currentPage, setCurrentPage] = useState(0);
+      const itemsPerPage = 3;
+      const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-  
-  const openUser = (userId) => {
-    navigate('/chats', { userId });
-  };
-
-  const fetchData = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const response = await axios.get(
-        `${apiUrl}/api/expert/getAllJobSeekers`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const displayedMeetings = data.slice(
+        currentPage * itemsPerPage,
+        (currentPage + 1) * itemsPerPage
       );
 
-      const result = response.data.allJobSeekers || [];
-      const chatDataPromises = result.map(item =>
-        AsyncStorage.getItem(`lastMessage_${item.id}`)
-      );
-      const chatData = await Promise.all(chatDataPromises);
-
-      const formattedData = result.map((item, index) => {
-        const { lastMessage = "No messages", timestamp = new Date().toISOString() } = chatData[index] ? JSON.parse(chatData[index]) : {};
-
-        const messageDate = new Date(timestamp);
-        let timeFormatted = '';
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        if (messageDate >= today) {
-          timeFormatted = format(messageDate, 'h:mm a', { locale: enGB });
-        } else if (messageDate >= yesterday) {
-          timeFormatted = 'Yesterday';
-        } else {
-          timeFormatted = format(messageDate, 'MMM dd, yyyy', { locale: enGB });
+      const goToNextPage = () => {
+        if (currentPage < totalPages - 1) {
+          setCurrentPage(currentPage + 1);
         }
+      };
 
-        return {
-          id: item.id.toString(),
-          name: `${item.first_name} ${item.last_name}`,
-          avatar: item.avatar_url ? { uri: item.avatar_url } : defaultAvatar,
-          message: "Offline",
-          time: timeFormatted,
-          timestamp: messageDate,
-          messageCount: "1", 
-          attended: "0", 
-          missed: "0",  
-          hub: "Hub Members",
+      const goToPreviousPage = () => {
+        if (currentPage > 0) {
+          setCurrentPage(currentPage - 1);
+        }
+      };
+
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      const openUser = (userId) => {
+        navigate('/chats', { state: { userId } });
+      };
+
+      const fetchData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const response = await axios.get(`${apiUrl}/api/expert/get-all-meeting`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const formattedMeetings = response.data.data.map((meeting) => ({
+            id: meeting.id,
+            name: meeting.jobseeker_name,
+            meetingDate: moment(meeting.meeting_date).format('MMMM Do YYYY, h:mm A'),
+            meetingDescription: meeting.description,
+            joinDate: moment(meeting.created_at).format('MMMM Do YYYY, h:mm A'),
+            avatar: defaultAvatar, // Ensure default avatar
+          }));
+
+          setData(formattedMeetings);
+          setLoading(false); // Set loading to false once data is fetched
+        } catch (error) {
+          console.error('Error fetching meetings:', error);
+          setError('Failed to load meetings.');
+          setLoading(false); // Ensure loading is stopped on error as well
+        }
+      };
+
+      useEffect(() => {
+        fetchData();
+      }, []);
+
+      useEffect(() => {
+        const loadFormData = async () => {
+          try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 200 && response.data.status === 'success') {
+              const data = response.data.NewHub;
+              setHubName(data.coaching_hub_name || '');
+            } else {
+              console.error('Failed to fetch hub data');
+            }
+          } catch (error) {
+            console.error('Failed to load form data', error);
+          }
         };
-      });
 
-      formattedData.sort((a, b) => b.timestamp - a.timestamp);
-      setData(formattedData);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      setError("Failed to fetch data");
-      setLoading(false);
-    }
-  };
+        loadFormData();
+      }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) throw new Error('No token found');
-
-        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (response.status === 200 && response.data.status === 'success') {
-          const data = response.data.NewHub;
-          setHubName(data.coaching_hub_name || '');
-        } else {
-          console.error('Failed to fetch data', response);
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
+      if (loading) {
+        return <Text>Loading...</Text>;
       }
-    };
 
-    loadFormData();
-  }, []);
+      if (error) {
+        return <Text>{error}</Text>;
+      }
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+      return (
+        <View style={styles.greenBox}>
+          <BlurView intensity={100} style={styles.blurBackground}>
+            <Text style={styles.title}>{hubName} Hub Meeting attendance</Text>
+            <View style={styles.table}>
+              <View style={styles.row}>
+                <View style={styles.cell2}><Text style={styles.headerText}>Name</Text></View>
+                <View style={styles.cell2}><Text style={styles.headerText}>Meeting Date</Text></View>
+                <View style={styles.cell2}><Text style={styles.headerText}>Description</Text></View>
+                <View style={styles.cell2}><Text style={styles.headerText}>Joined</Text></View>
+              </View>
 
-  if (error) {
-    return <Text>{error}</Text>;
-  }
-
-  return (
-    <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{hubName || ""} Hub Meeting attendance</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell2}><Text style={styles.headerText}>Name</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Meeting Date</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Meeting Time</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>Joined</Text></View>
-          </View>
-
-          {displayedMeetings.map((item, index) => (
-            <View key={item.id} style={styles.row}>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <TouchableOpacity onPress={() => openUser(item.id)}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Image source={item.avatar} style={styles.userimage} />
-                    <Text style={styles.cellTextname}>{item.name}</Text>
+              {displayedMeetings.map((item, index) => (
+                <View key={item.id} style={styles.row}>
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <TouchableOpacity onPress={() => openUser(item.id)}>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Image source={item.avatar || defaultAvatar} style={styles.userimage} />
+                        <Text style={styles.cellTextname}>{item.name}</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={styles.cellText}>{item.meetingDate}</Text>
+                  </View>
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={styles.cellText}>{item.meetingDescription}</Text>
+                  </View>
+                  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
+                    <Text style={styles.cellText}>{item.joinDate}</Text>
+                  </View>
+                </View>
+              ))}
+              <View style={styles.paginationContainer}>
+                <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+                  <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+                </TouchableOpacity>
+                <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+                <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+                  <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
                 </TouchableOpacity>
               </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>24/10/2024</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>5:00PM</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>5:25PM</Text>
-              </View>
             </View>
-          ))}
-           <View style={styles.paginationContainer}>
-            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-            </TouchableOpacity>
-            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
+          </BlurView>
         </View>
-      </BlurView>
-    </View>
-  );
-};
+      );
+    };
 
 const styles = StyleSheet.create({
   title: {
