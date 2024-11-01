@@ -850,7 +850,7 @@ const HomePage = () => {
                           fontFamily: "Roboto-Light",
                         }}
                       >
-                        Hub Chats
+                        Chats  |  
                       </Text>
                        <TouchableOpacity onPress={goToHubs}>
                       <Text
@@ -861,9 +861,10 @@ const HomePage = () => {
                           marginLeft: 10,
                           fontWeight: "bold",
                           fontFamily: "Roboto-Light",
+                          textDecorationLine: 'underline'
                         }}
                       >
-                       |  Hubs
+                      Hubs
                       </Text>
                        </TouchableOpacity>
                     </View>

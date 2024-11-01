@@ -270,54 +270,60 @@ const HubMeeting = () => {
         </View>
 
       {/* Display meetings */}
-      {filteredMeetings.length > 0 ? (
-        <>
-          {filteredMeetings.slice(0, showAll ? filteredMeetings.length : 2).map(meeting => (
-            <View key={meeting.meeting_id} style={styles.meetingContainer}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
-                  }}
-                  style={{width: 150, height: 150, marginTop: 30, marginBottom: 30, marginLeft: 50}}
-                />
-                <View style={{marginLeft: 10}}>
-                  <View style={{flexDirection: 'row', marginTop: -60}}>
-                    <Text style={styles.meetingTime}>Live Session . </Text>
-                    <Text style={styles.meetingTime}>Get Started . </Text>
-                    <Text style={styles.meetingTime}>{meeting.time} . </Text>
-                    <Text style={styles.meetingTime}>{meeting.hubCat}</Text>
+      {activeTab === 'Upcoming' ? (
+          filteredMeetings.length > 0 ? (
+            <>
+              {filteredMeetings.slice(0, showAll ? filteredMeetings.length : 2).map(meeting => (
+                <View key={meeting.meeting_id} style={styles.meetingContainer}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                      }}
+                      style={{width: 150, height: 150, marginTop: 30, marginBottom: 30, marginLeft: 50}}
+                    />
+                    <View style={{marginLeft: 10}}>
+                      <View style={{flexDirection: 'row', marginTop: -60}}>
+                        <Text style={styles.meetingTime}>Live Session . </Text>
+                        <Text style={styles.meetingTime}>Get Started . </Text>
+                        <Text style={styles.meetingTime}>{meeting.time} . </Text>
+                        <Text style={styles.meetingTime}>{meeting.hubCat}</Text>
+                      </View>
+                      <Text style={styles.hubName}>{meeting.description}</Text>
+                      <Text style={styles.meetingDescription}>
+                        Join us for an insightful {meeting.hubSpec} live session! In this event, our expert will discuss {meeting.hubName} sharing valuable insights and best practices. Whether you’re looking to enhance your knowledge or gain new perspectives, this session promises to provide you with the tools and information you need. Don't miss this opportunity to learn from the best!
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={styles.hubName}>{meeting.description}</Text>
-                  <Text style={styles.meetingDescription}>
-                    Join us for an insightful {meeting.hubSpec} live session! In this event, our expert will discuss {meeting.hubName} sharing valuable insights and best practices. Whether you’re looking to enhance your knowledge or gain new perspectives, this session promises to provide you with the tools and information you need. Don't miss this opportunity to learn from the best!
-                  </Text>
+                  <View style={{flexDirection: 'row', marginTop: -30, alignSelf: 'flex-end'}}>
+                    <TouchableOpacity
+                      style={styles.joinButton2}
+                      onPress={() => handleJoinMeeting(meeting)}
+                    >
+                      <Text style={styles.buttonText2}>
+                        {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.joinButton} onPress={() => handleJoinLink(meeting)}>
+                      <Text style={styles.buttonText}>Join Meeting</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-              <View style={{flexDirection: 'row', marginTop: -30, alignSelf: 'flex-end'}}>
-                <TouchableOpacity
-                  style={styles.joinButton2}
-                  onPress={() => handleJoinMeeting(meeting)}
-                >
-                  <Text style={styles.buttonText2}>
-                    {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
-                  </Text>
+              ))}
+              {filteredMeetings.length > 2 && (
+                <TouchableOpacity style={styles.viewAllButton} onPress={toggleShowAll}>
+                  <Text style={{color: '#206C00'}}>{showAll ? 'Show Less' : 'View All'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.joinButton} onPress={() => handleJoinLink(meeting)}>
-                  <Text style={styles.buttonText}>Join Meeting</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
-          {filteredMeetings.length > 2 && (
-            <TouchableOpacity style={styles.viewAllButton} onPress={toggleShowAll}>
-              <Text style={{color: '#206C00'}}>{showAll ? 'Show Less' : 'View All'}</Text>
-            </TouchableOpacity>
-          )}
-        </>
-      ) : (
-        <Text style={styles.noMeetings}>No meetings available for this hub</Text>
-      )}
+              )}
+            </>
+          ) : (
+            <Text style={styles.noMeetings}>No meetings available for this hub</Text>
+          )
+        ) : (
+          <Text style={styles.noMeetings}>
+            {activeTab === 'Past Sessions' ? 'There are no past sessions yet' : 'There are no assessments yet'}
+          </Text>
+        )}
       </View>
       <CustomAlert
         visible={alertVisible}

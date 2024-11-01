@@ -22,10 +22,56 @@ function MyComponent({ onClose }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [hasJoinedHub, setHasJoinedHub] = useState(false);
-
+  const [registrationStatus, setRegistrationStatus] = useState([]);
+   const [hubs, setHubs] = useState([]);
+  
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+
+  // Fetch hubs and check for joining status
+  useEffect(() => {
+    const fetchHubs = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+        if (data.status === 'success' && data.AllJoinedHubs.length > 0) {
+          setHubs(data.AllJoinedHubs);
+
+          // Check if selectedHubData is defined before accessing its properties
+          if (selectedHubData && selectedHubData.coaching_hub_name) {
+            const isJoined = data.AllJoinedHubs.some(hub => hub.coaching_hub_name === selectedHubData.coaching_hub_name);
+            setHasJoinedHub(isJoined); // Set the joined status
+          } else {
+            setHasJoinedHub(false); // If selectedHubData is null, set to false
+          }
+        } else {
+          setHubs([]);
+          setHasJoinedHub(false); // No hubs, so set to false
+        }
+      } catch (error) {
+        console.error('Error fetching hubs:', error);
+        setHubs([]);
+        setHasJoinedHub(false); // Error case, also set to false
+      }
+    };
+
+    fetchHubs();
+  }, [selectedHubData]); // Include selectedHubData as a dependency
+
+
+  
   const handleJoinMeeting = async (meeting) => {
     try {
       // Retrieve necessary information from AsyncStorage
@@ -35,43 +81,64 @@ function MyComponent({ onClose }) {
       const token = await AsyncStorage.getItem('token'); // Get token for authorization
 
       const jobseekerName = `${firstName} ${lastName}`;
+      const meeting_id = String(meeting.meeting_id); // Ensure meeting_id is a string
+      const isRegistered = registrationStatus.includes(meeting_id); // Check registration status
 
       // Prepare meeting details for the API call
       const meetingDetails = {
-        meeting_topic: "Your Meeting Topic",
+        meeting_topic: meeting.hubSpec, // Use the specific topic from the meeting
         candidate_link: meeting.candidate_link,
         expert_link: meeting.expert_link,
         description: meeting.description,
         meeting_date: meeting.date,
-         hub_id: String(selectedHubData.hub_id), 
-        expert_id: String(selectedHubData.user_id), 
+        hub_id: String(selectedHubData.hub_id),
+        expert_id: String(selectedHubData.user_id),
         jobseeker_name: jobseekerName,
         jobseeker_id: jobseekerId,
       };
 
-      // POST to join the meeting
-      const joinMeetingResponse = await axios.post(
-        `${apiUrl}/api/expert/join-meeting`,
-        meetingDetails,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token for authorization
-          },
-        }
-      );
+      // Determine the correct API endpoint based on the registration status
+      const url = `${apiUrl}/api/expert/${isRegistered ? 'leave' : 'join'}-meeting`;
 
-      // Check if joining the meeting was successful
-      if (joinMeetingResponse.status === 201) {
-        setAlertMessage('You have successfully joined the meeting');
+      // POST to join or leave the meeting
+      const response = await axios.post(url, meetingDetails, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token for authorization
+        },
+      });
+
+      // Check if the action was successful
+      if (isRegistered) {
+        // Unregistering from the meeting
+        if (response.status === 200) {
+          setAlertMessage('You have successfully unregistered from the meeting');
+          // Update the registration status locally
+          setRegistrationStatus((prevStatus) => prevStatus.filter((id) => id !== meeting_id));
+        } else {
+          setAlertMessage('An error occurred while unregistering.');
+        }
       } else {
-        setAlertMessage('An error occurred')
+        // Registering for the meeting
+        if (response.status === 201) {
+          setAlertMessage('You have successfully joined the meeting');
+          // Update the registration status locally
+          setRegistrationStatus((prevStatus) => [...prevStatus, meeting_id]);
+        } else {
+          setAlertMessage('An error occurred while joining the meeting.');
+        }
       }
     } catch (error) {
       console.error(error);
-      setAlertMessage('An error occurred')
+      if (error.response?.status === 400) {
+        setAlertMessage('You have already registered/unregistered for this meeting.');
+      } else {
+        setAlertMessage('An error occurred while processing your request.');
+      }
+    } finally {
+      setAlertVisible(true);
     }
-     setAlertVisible(true);
   };
+
 
   
   const createHubAndJoinExpertHub = async () => {
@@ -146,8 +213,51 @@ function MyComponent({ onClose }) {
     }
   };
 
-  const handleJoinLink = async (meeting, hubId) => {
+  const checkRegistration = async () => {
     try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) throw new Error('User is not authenticated.');
+
+      const response = await axios.get(`${apiUrl}/api/expert/get-individual-meeting`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log('API Response:', response.data);
+
+      // Extract meeting IDs from response and convert them to strings
+      const registrations = Array.isArray(response.data)
+        ? response.data.map((meeting) => String(meeting.meeting_id))
+        : response.data.status === 'success' && Array.isArray(response.data.data)
+        ? response.data.data.map((meeting) => String(meeting.meeting_id))
+        : [];
+
+      console.log('Registrations:', registrations); // Log registrations for debugging
+      setRegistrationStatus(registrations); // Store meeting IDs the user is registered for
+    } catch (error) {
+      console.error('Error checking registration:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Call checkRegistration in useEffect
+  useEffect(() => {
+    checkRegistration();
+  }, []);
+
+
+  const handleJoinLink = async (meeting) => {
+    try {
+      // Check if the user is registered for this meeting
+      const meeting_id = String(meeting.meeting_id);
+      if (!registrationStatus.includes(meeting_id)) {
+        setAlertMessage('Please register for this meeting before joining.');
+        setAlertVisible(true); // Move this line directly after setting the alert message
+        return; // Return here to exit if the user isn't registered
+      }
+
       // Get the user token and candidate details from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       const firstName = await AsyncStorage.getItem('first_name');
@@ -158,9 +268,6 @@ function MyComponent({ onClose }) {
         console.error("Token or candidate name missing.");
         return;
       }
-
-      // Meeting ID
-      const meeting_id = String(meeting.meeting_id);
 
       // API request
       const response = await axios.post(
@@ -300,19 +407,18 @@ function MyComponent({ onClose }) {
               )}
               <TouchableOpacity
                 style={{
-                  backgroundColor: hasJoinedHub ? 'grey' : (isPressed ? 'coral' : '#206C00'), // Change color if joined
+                  backgroundColor: hasJoinedHub ? 'lightgreen' : '#206C00',
                   borderRadius: 5,
                   marginRight: 10,
-                  width: 120,
-                  marginTop: 20,
-                  padding: 5,
+                   width: hasJoinedHub ? 300 : 120,
+                  marginTop: 30,
+                  padding: 10,
                   justifyContent: 'center',
                 }}
-                onPress={!hasJoinedHub ? createHubAndJoinExpertHub : null} // Disable press if joined
                 activeOpacity={0.7}
               >
-                <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>
-                  {hasJoinedHub ? "You've already joined this hub" : "Join Hub"}
+                <Text style={{ color: hasJoinedHub ? 'black' : 'white', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>
+                  {hasJoinedHub ? 'You have already joined this hub ✔ ' : 'Join Hub'}
                 </Text>
               </TouchableOpacity>
 
@@ -352,7 +458,9 @@ function MyComponent({ onClose }) {
                         style={styles.button} 
                         onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
                       >
-                        <Text style={styles.buttonText}>{t("Register")}</Text>
+                        <Text style={styles.buttonText}>
+                          {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
+                        </Text>
                       </TouchableOpacity>
                        <View style={styles.cell2}/>
                       <TouchableOpacity 
