@@ -21,6 +21,8 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const [hasJoinedHub, setHasJoinedHub] = useState(false);
+
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -74,6 +76,9 @@ function MyComponent({ onClose }) {
   
   const createHubAndJoinExpertHub = async () => {
     setIsPressed(true);
+    setAlertMessage(''); // Reset alert message before processing
+    setAlertVisible(false); // Hide alert initially
+
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
@@ -96,24 +101,24 @@ function MyComponent({ onClose }) {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Alert messages based on status codes for create-hub API
+      // Check for successful hub creation
       if (createHubResponse.status === 200 || createHubResponse.status === 201) {
         console.log('Hub successfully created');
         setAlertMessage('Hub joined successfully');
+        setAlertVisible(true); // Show alert only if successful
 
-        // Proceed to the second API only if the first was successful
         const firstName = await AsyncStorage.getItem('first_name');
         const lastName = await AsyncStorage.getItem('last_name');
         const jobseekerId = await AsyncStorage.getItem('user_id');
         const jobseekerName = `${firstName} ${lastName}`;
 
         // POST to join the expert hub
-        await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
+        const joinResponse = await axios.post(`${apiUrl}/api/jobseeker/join-expert-hub`, {
           jobseeker_name: jobseekerName,
           jobseeker_id: jobseekerId,
           expert_id: selectedHubData.user_id,
           hub_name: selectedHubData.coaching_hub_name,
-          hub_id: selectedHubData.hub_id, 
+          hub_id: selectedHubData.hub_id,
           hub_sessions_held: Sessionsheld,
           hub_sessions_missed: Sessionsmissed,
           confirmed_attendance: Confirmed
@@ -121,23 +126,67 @@ function MyComponent({ onClose }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-      } else if (createHubResponse.status === 400) {
-        const errorMessage = createHubResponse.data?.message || 'You have already joined this hub';
-        console.warn(errorMessage);
-        setAlertMessage(errorMessage);
+        if (joinResponse.status === 200) {
+          console.log('Successfully joined the expert hub');
+           setAlertMessage("You've sucessfully joined this hub.");
+        } else if (joinResponse.status === 400) {
+          setHasJoinedHub(true);
+        }
 
-      } else if (createHubResponse.status === 500) {
-        console.error('Error creating hub:', createHubResponse.statusText);
+      } else {
         setAlertMessage('Error joining hub');
+        setAlertVisible(true);
       }
 
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       console.error('Error:', errorMessage);
       setAlertMessage(errorMessage);
+      setAlertVisible(true);
     }
+  };
 
-    setAlertVisible(true);
+  const handleJoinLink = async (meeting, hubId) => {
+    try {
+      // Get the user token and candidate details from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      const firstName = await AsyncStorage.getItem('first_name');
+      const lastName = await AsyncStorage.getItem('last_name');
+      const candidateName = `${firstName} ${lastName}`;
+
+      if (!token || !candidateName) {
+        console.error("Token or candidate name missing.");
+        return;
+      }
+
+      // Meeting ID
+      const meeting_id = String(meeting.meeting_id);
+
+      // API request
+      const response = await axios.post(
+        `${apiUrl}/api/expert/join-candidate`,
+        { meeting_id, candidate_name: candidateName },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Check response for success and open the candidate link
+      if (response.data.status === "success" && response.data.candidate_link) {
+        const { candidate_link } = response.data;
+        Linking.openURL(candidate_link); // Open the candidate link
+      } else {
+        alert('Failed to retrieve the meeting link.');
+      }
+    } catch (error) {
+      console.error("Error joining meeting:", error);
+      alert('Failed to join the meeting. Please try again.');
+    }
+  };
+
+  const filterMeetings = (hubName) => {
+    setSelectedHub(hubName);
+    const filtered = meetings.filter(meeting => meeting.hubName === hubName);
+    setFilteredMeetings(filtered);
+    setShowAll(false); // Reset to show only two meetings when a new hub is selected
   };
 
   useEffect(() => {
@@ -249,21 +298,24 @@ function MyComponent({ onClose }) {
 
                 </>
               )}
-               <TouchableOpacity
-      style={{
-        backgroundColor: isPressed ? 'coral' : '#206C00', // Change color based on isPressed
-        borderRadius: 5,
-        marginRight: 10,
-        width: 120,
-        marginTop: 20,
-        padding: 5,
-        justifyContent: 'center',
-      }}
-      onPress={createHubAndJoinExpertHub}
-      activeOpacity={0.7}
-    >
-      <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
-    </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: hasJoinedHub ? 'grey' : (isPressed ? 'coral' : '#206C00'), // Change color if joined
+                  borderRadius: 5,
+                  marginRight: 10,
+                  width: 120,
+                  marginTop: 20,
+                  padding: 5,
+                  justifyContent: 'center',
+                }}
+                onPress={!hasJoinedHub ? createHubAndJoinExpertHub : null} // Disable press if joined
+                activeOpacity={0.7}
+              >
+                <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>
+                  {hasJoinedHub ? "You've already joined this hub" : "Join Hub"}
+                </Text>
+              </TouchableOpacity>
+
             </View>
            
           </View>
@@ -271,44 +323,53 @@ function MyComponent({ onClose }) {
         </View>
 
         <View style={styles.whiteBox}>
-          <Text style={styles.scheduleTitle}>{t("Live Session Schedule")}</Text>
+          <Text style={styles.scheduleTitle}>{t("Knowledge sharing sessions")}</Text>
 
           {/* Check if selectedHubData exists and contains meetings */}
-          {selectedHubData && selectedHubData.meeting &&
-            (typeof selectedHubData.meeting === 'object') && Object.keys(selectedHubData.meeting).length > 0 ? (
-              Object.keys(selectedHubData.meeting).map((key) => {
-                const meeting = selectedHubData.meeting[key]; // Access each meeting by key
-                const userTimezone = moment.tz.guess(); // Get the user's timezone
-                const meetingDate = meeting.date ? moment(meeting.date).tz(userTimezone) : null; // Convert the date
-                
-                return (
-                  <View key={key} style={styles.scheduleRow}>
-                    <Text style={styles.description}>{meeting.description || "No description available"}</Text>
-                    <Text style={styles.time}>
-                      {meetingDate ? meetingDate.format('LLLL') : "No date available"} {/* Format the date as needed */}
-                    </Text>
-                    
-                     
+          <View style={styles.table}>
+            {/* Table Header */}
+            <View style={styles.headerRow}>
+              <Text style={styles.headerText}>{t("Description")}</Text>
+              <Text style={styles.headerText}>{t("Date/Time")}</Text>
+              <Text style={styles.headerText}>{t(" ")}</Text>
+            </View>
 
-                    {/* Register button */}
-                    <TouchableOpacity 
-                      style={styles.button} 
-                      onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
-                    >
-                      <Text style={styles.buttonText}>{t("Register")}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      style={styles.linkbutton} 
-                      onPress={() => Linking.openURL(meeting.candidate_link)}
-                    >
-                      <Text style={styles.linkText}>{t("Join Meeting")}</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })
-            ) : (
-              <Text>{t("No meetings available.")}</Text> // Fallback if no meetings exist
-            )}
+            {selectedHubData && selectedHubData.meeting &&
+              (typeof selectedHubData.meeting === 'object') && Object.keys(selectedHubData.meeting).length > 0 ? (
+                Object.keys(selectedHubData.meeting).map((key) => {
+                  const meeting = selectedHubData.meeting[key]; // Access each meeting by key
+                  const userTimezone = moment.tz.guess(); // Get the user's timezone
+                  const meetingDate = meeting.time ? moment(meeting.time).tz(userTimezone) : null; // Convert the date
+
+                  return (
+                    <View key={key} style={styles.scheduleRow}>
+                      <Text style={styles.cell}>{meeting.description || "No description available"}</Text>
+                      <Text style={styles.cell}>
+                        {meetingDate ? meetingDate.format('LLLL') : "No date available"} {/* Format the date as needed */}
+                      </Text>
+                     
+                      <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
+                      >
+                        <Text style={styles.buttonText}>{t("Register")}</Text>
+                      </TouchableOpacity>
+                       <View style={styles.cell2}/>
+                      <TouchableOpacity 
+                        style={styles.linkbutton} 
+                         onPress={() => handleJoinLink(meeting)}>
+                      
+                        <Text style={styles.linkText}>{t("Join Meeting")}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })
+              ) : (
+                <Text>{t("No meetings available.")}</Text> // Fallback if no meetings exist
+              )}
+          </View>
+
+
         </View>
 
 
@@ -448,23 +509,71 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   whiteBox: {
-    width: '100%',
+    width: '90%',
+    alignSelf: 'center',
     backgroundColor: '#FFF',
     padding: 20,
     marginTop: 20,
   },
   scheduleTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 15,
+  },
+  table: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 5,
+    // iOS shadow properties
+    shadowColor: '#000', // Shadow color
+    shadowOffset: {
+      width: 0, // Horizontal offset
+      height: 2, // Vertical offset
+    },
+    shadowOpacity: 0.25, // Opacity of the shadow
+    shadowRadius: 3.5, // Blur radius
+    // Android shadow property
+    elevation: 5, 
+  },
+  headerRow: {
+    flexDirection: 'row',
+    backgroundColor: 'none', // Light grey for the header
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
   },
   scheduleRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#CCC'
+    borderBottomColor: '#CCC',
+    textAlign: 'center'
+  },
+  cell: {
+    flex: 1, // Ensures the cell takes equal space
+    paddingHorizontal: 10, // Horizontal padding within cells
+    paddingVertical: 20, // Add padding for the row
+    borderRightWidth: 1, // Right border for cell separation
+    borderRightColor: '#CCC', // Color of the right border
+    height: 50,
+    textAlign: 'center'
+  },
+  cell2: {
+    borderRightWidth: 1, // Right border for cell separation
+    borderRightColor: '#CCC', // Color of the right border
+    height: 50
+  },
+  cell3: {
+    borderRightWidth: 1, // Right border for cell separation
+    borderRightColor: '#CCC', // Color of the right border
+    height: 20,
+    padding: 20
+  },
+  headerText: {
+    flex: 2,
+    padding: 10,
+    textAlign: 'center'
   },
   description: {
     flex: 2,
@@ -478,20 +587,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     padding: 8,
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     width: 120,
-    marginBottom: 10,
-    marginLeft: 100
+    marginLeft: 20,
+    marginRight: 20
   },
   linkbutton: {
     borderColor: 'coral',
     borderWidth: 1,
     padding: 8,
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     width: 120,
-    marginBottom: 10,
-    marginLeft: 10
+    marginLeft: 20,
+    marginRight: 20
   },
  linkText: {
     color: 'coral',

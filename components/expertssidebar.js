@@ -126,6 +126,7 @@ function MyComponent() {
       {showMenu ?  (
         <View style={styles.contentContainer}>
           {/* Menu Items */}
+          <View style={{marginTop: 50}}>
           {menuItems.map((menuItem, index) => (
             <TouchableOpacity
               key={index}
@@ -147,6 +148,7 @@ function MyComponent() {
               </View>
             </TouchableOpacity>
           ))}
+          </View>
           {/* Profile Info */}
           <TouchableOpacity onPress={handleOpenPress}>
           <View style={styles.divider} />
@@ -270,9 +272,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     marginLeft: 6,
-    color: "#666",
+    color: "black",
   },
   textActive: {
     color: "coral",

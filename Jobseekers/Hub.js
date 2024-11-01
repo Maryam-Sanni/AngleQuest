@@ -46,28 +46,16 @@ function MyComponent() {
          <View style={styles.glassBox}>
          <View style={styles.pagecontainer}>
           <View style={{ flex: 1, }}>
-          <View style={styles.header}>
-            <TouchableOpacity>
-              <View style={styles.item}>
-                <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light"}}>{t("Hubs")}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleOpenPress} >
-            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
-                  </View>
-                  </TouchableOpacity>
-            </View>
+         
     
 
             <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Hubs")}</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.")}</Text>
+     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 30, marginLeft: 30 }}>{t("About Hubs")}</Text>
+     <Text style={{ fontSize: 16, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("The goal of a hub is to provide practical knowledge that will enable it's members to grow from one level to the next level in their career.")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Join a Hub")}</Text>
+    <View style={{ justifyContent: "center", paddingHorizontal: 15, paddingVertical: 12, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
+                    <Text style={{ fontSize: 15, color: "white", alignText: 'center', fontWeight: '600' }}>{t("Join a Hub")}</Text>
                   </View>
      </TouchableOpacity>
      <Image source={require('../assets/21.png')} style={styles.boximage} />

@@ -172,6 +172,14 @@ const HomePage = () => {
   const goToAdvice = () => {
     navigate("/skill-analysis-sessions");
   };
+  
+  const goToHub = () => {
+    navigate("/coaching-hub-new");
+  };
+
+  const goToHubs = () => {
+    navigate("/coaching-hub-sessions");
+  };
 
   const handleOpenPress2 = () => {
     setModalVisible2(true);
@@ -421,22 +429,7 @@ const HomePage = () => {
                         
                       </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={goToAdvice}
-                      style={[
-                        styles.touchablechat,
-                        isHovered3 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered3(true)}
-                      onMouseLeave={() => setIsHovered3(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Expert Roadmap")}
-                        </Text>
-                       
-                      </View>
-                    </TouchableOpacity>
+                   
                     <TouchableOpacity
                       onPress={goToAdvice}
                       style={[
@@ -467,6 +460,22 @@ const HomePage = () => {
                           {t("Update Growth Plan")}
                         </Text>
                         
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={goToHub}
+                      style={[
+                        styles.touchablechat,
+                        isHovered3 && styles.touchableOpacityHovered,
+                      ]}
+                      onMouseEnter={() => setIsHovered3(true)}
+                      onMouseLeave={() => setIsHovered3(false)}
+                    >
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={styles.touchableTextchat}>
+                          {t("Join a Hub")}
+                        </Text>
+
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -739,7 +748,7 @@ const HomePage = () => {
                                 fontFamily: "Roboto-Light",
                               }}
                             >
-                              {t("Interview Session")}{" "}
+                              {t("Hub Sessions")}{" "}
                             </Text>
                             <Text
                               style={{
@@ -790,7 +799,7 @@ const HomePage = () => {
   ]}
   onMouseEnter={() => setIsHovered12(true)}
   onMouseLeave={() => setIsHovered12(false)}
-  onPress={goToInterview}
+  onPress={goToHubs}
 >
   <Text style={styles.touchableTextjoinreview}>
     {t("Open")}
@@ -843,6 +852,20 @@ const HomePage = () => {
                       >
                         Hub Chats
                       </Text>
+                       <TouchableOpacity onPress={goToHubs}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: "#63EC55",
+                          marginTop: 30,
+                          marginLeft: 10,
+                          fontWeight: "bold",
+                          fontFamily: "Roboto-Light",
+                        }}
+                      >
+                       |  Hubs
+                      </Text>
+                       </TouchableOpacity>
                     </View>
       {conversations.length === 0 ? (
           <TextInput

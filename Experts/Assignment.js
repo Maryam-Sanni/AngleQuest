@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, Image, ScrollView, Modal } from 'react-native';
 import OpenModal from './GradeAssignmentList';
 import DateTimePickerModal from "../components/TimePicker4";
 import { useFonts } from "expo-font";
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import MultiSelect from 'react-native-multiple-select';
 import { api_url, AuthContext } from '../Messaging/AuthProvider';
+import moment from 'moment';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -24,7 +25,9 @@ function MyComponent({ onClose }) {
   const [alertMessage, setAlertMessage] = useState('');     
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hubMembers, setHubMembers] = useState([]);
-  const [coaching_hub_name, setGroupName] = useState('');
+  const [groupName, setGroupName] = useState('');
+   const [meetings, setMeetings] = useState([]);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -57,29 +60,52 @@ function MyComponent({ onClose }) {
     return time; // You can further customize this function if needed
   };
 
+
+  const handleMeetingSelect = (meeting) => {
+      setSelectedMeeting(meeting);
+      console.log(`Selected Meeting: ${meeting.description} on ${meeting.meetingDate}`);
+  };
   
   useEffect(() => {
-    const loadFormData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) throw new Error('No token found');
+      const loadFormData = async () => {
+          try {
+              const token = await AsyncStorage.getItem('token');
+              if (!token) throw new Error('No token found');
 
-        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+              const hubId = await AsyncStorage.getItem('hub_id'); // Retrieve hub_id from AsyncStorage
+              if (!hubId) throw new Error('No hub_id found');
 
-        if (response.status === 200 && response.data.status === 'success') {
-          const data = response.data.NewHub;
-          setGroupName(data.coaching_hub_name || '');
-        } else {
-          console.error('Failed to fetch data', response);
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
+              // Fetch hub data
+              const hubResponse = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+                  headers: { Authorization: `Bearer ${token}` },
+              });
 
-    loadFormData();
+              if (hubResponse.status === 200 && hubResponse.data.status === 'success') {
+                  const hubs = hubResponse.data.NewHub;
+
+                  // Find the selected hub by hub_id
+                  const selectedHub = hubs.find(hub => hub.id.toString() === hubId);
+                  if (selectedHub) {
+                      setGroupName(selectedHub.coaching_hub_name || '');
+
+                      // Set meetings related to the selected hub
+                      const hubMeetings = selectedHub.meeting.map(meeting => ({
+                          id: meeting.meeting_id,
+                          description: meeting.description,
+                          meetingDate: moment(meeting.date).format('MMMM Do YYYY, h:mm A'),
+                      }));
+
+                      setMeetings(hubMeetings);
+                  }
+              } else {
+                  console.error('Failed to fetch hub data', hubResponse);
+              }
+          } catch (error) {
+              console.error('Failed to load form data', error);
+          }
+      };
+
+      loadFormData();
   }, []);
   
   const handleSubmit = async () => {
@@ -98,11 +124,11 @@ function MyComponent({ onClose }) {
 
 
       const formData = {
-        hub_member: selectedNames.join(', '),
-        topic: topic,
+        hub_member: selectedMeeting,
+        topic: "topic",
         description: description,
         assignment_due: selectedDateTime,
-        hub_name: coaching_hub_name,
+        hub_name: groupName,
         assignment_response: "Pending"
       };
 
@@ -126,7 +152,6 @@ function MyComponent({ onClose }) {
 
   const hideAlert = () => {
     setAlertVisible(false);
-    onClose();
   };
 
   const [fontsLoaded] = useFonts({
@@ -180,14 +205,15 @@ function MyComponent({ onClose }) {
   }, [selectedMembers]);
 
   return (
-    <View style={{  flex: 1, marginTop: 40, alignItems: 'center' }}>
+    <View style={{  flex: 1, marginTop: 40, backgroundColor: "#F8F8F8", alignItems: 'center' }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       <View style={styles.greenBox}>
         <View style={styles.header}>
           <Image
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("New Assignment")}</Text>
+          <Text style={styles.headerText}>{t("New Assessment")} for {groupName ? `${groupName}` : 'Loading...'}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
               ✕
@@ -197,58 +223,34 @@ function MyComponent({ onClose }) {
 
         <View style={styles.container}>
           <View style={{ flexDirection: "row", marginBottom: 20 }}>
-            <TouchableOpacity>
-              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "coral", backgroundColor: '#f7fff4', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                <Text style={{ fontSize: 13, color: "coral", textAlign: 'center', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("New Assignment")}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleOpenPress} >
-              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'coral', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                <Text style={{ fontSize: 13, color: "#f7fff4", textAlign: 'center', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Grade Assignment")}</Text>
-              </View>
-            </TouchableOpacity>
+           
           </View>
 
-            <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-              Hub Members
-            </Text>
-            <View style={[styles.multiSelectContainer, isDropdownOpen && styles.multiSelectContainerExpanded]}>
-              <MultiSelect
-                items={hubMembers || []} // Fallback to empty array
-                uniqueKey="id"
-                onSelectedItemsChange={setSelectedMembers}
-                selectedItems={selectedMembers}
-                selectText="Pick Members"
-                searchInputPlaceholderText="Search Members..."
-                styleMainWrapper={styles.multiSelectContainer}
-                styleDropdownMenuSubsection={styles.multiSelectInputGroup}
-                styleListContainer={styles.multiSelectDropdown}
-                itemTextColor='black'
-                selectedItemTextColor='green'
-                displayKey="name"
-                submitButtonText="Save Selection"
-                styleInputGroup={styles.multiSelectSearchInput}
-                styleTextDropdown={styles.multiSelectText}
-                styleTextDropdownSelected={styles.multiSelectText}
-                onToggleList={(isOpen) => setIsDropdownOpen(isOpen)}
-                iconDropdown={{ color: 'black' }}
-                iconSearch={{ color: 'black' }}
-                iconCancel={{ color: 'black' }}
-              />
-          </View>
-
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Topic")}
+          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5, fontFamily: "Roboto-Light" }}>
+            Select a meeting for assesment
           </Text>
-          <TextInput
-            placeholder=" "
-            value={topic}
-            onChangeText={(text) => setTopic(text)}
-            style={styles.input}
-          />
+              {meetings.length > 0 ? (
+                  <FlatList
+                      data={meetings}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={({ item }) => (
+                          <TouchableOpacity
+                              style={[styles.meetingItem, selectedMeeting?.id === item.id && styles.selectedItem]}
+                              onPress={() => handleMeetingSelect(item)}
+                          >
+                              <Text style={styles.meetingDescription}>{item.description}</Text>
+                              <Text style={styles.meetingDate}>{item.meetingDate}</Text>
+                          </TouchableOpacity>
+                      )}
+                  />
+              ) : (
+                  <Text>No meetings available for this hub.</Text>
+              )}
+          
+          
 
           <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Description")}
+            {t("Assessment Description")}
           </Text>
           <TextInput
             placeholder=" "
@@ -259,7 +261,7 @@ function MyComponent({ onClose }) {
           />
 
           <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Assignment Due")}
+            {t("Assessment Due")}
           </Text>
           <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
   <Text style={styles.input}>
@@ -299,6 +301,7 @@ function MyComponent({ onClose }) {
         message={alertMessage}
         onConfirm={hideAlert}
       />
+      </ScrollView>
     </View>
   );
 }
@@ -316,7 +319,6 @@ const styles = StyleSheet.create({
   },
   greenBox: {
     width: 1000,
-    height: "100%",
     backgroundColor: '#F8F8F8',
   },
   picker: {
@@ -332,8 +334,8 @@ const styles = StyleSheet.create({
   },
   buttonplus: {
     backgroundColor: 'coral',
-    padding: 5,
-    marginBottom: 50,
+    padding: 10,
+    marginBottom: 100,
     marginTop: 30,
     width: 100,
     marginLeft: 770,
@@ -371,18 +373,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 5,
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
+    marginBottom: 20,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily: "Roboto-Light"
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
   multiSelectContainer: {
     marginLeft: 25,
@@ -413,6 +414,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     marginLeft: 10
+  },
+  meetingItem: {
+    padding: 15,
+    marginLeft: 50,
+    marginRight: 130,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  selectedItem: {
+    backgroundColor: '#d3f9d8', // Light green background for selected item
+  },
+  meetingDescription: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  meetingDate: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

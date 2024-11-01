@@ -236,18 +236,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
-    marginBottom: 5,
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
+    marginBottom: 20,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#3F5637',
-    fontFamily: "Roboto-Light"
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
   row: {
     flexDirection: 'row',

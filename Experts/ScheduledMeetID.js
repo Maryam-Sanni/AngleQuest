@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
 import { BlurView } from 'expo-blur';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
 
 const defaultAvatar = require("../assets/account.png");
 
-const ScheduledMeetingsTable = () => {
+const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
   const navigate = useNavigate();
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hubName, setHubName] = useState('');
+  const [hubName, setHubName] = useState(coachingHubName || '');  // Default to coachingHubName if passed
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
   const totalPages = Math.ceil(meetings.length / itemsPerPage);
@@ -37,33 +37,79 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
-  const fetchMeetingData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
+  useEffect(() => {
+    if (coachingHubName) {
+      setHubName(coachingHubName);
+    } else {
+      const loadHubData = async () => {
+        try {
+          const storedHubName = await AsyncStorage.getItem('coaching_hub_name');
+          if (storedHubName) {
+            setHubName(storedHubName);
+          }
+        } catch (error) {
+          console.error("Error loading hub name from AsyncStorage", error);
+        }
+      };
+      loadHubData();
+    }
+  }, [coachingHubName]);
+
+  useEffect(() => {
+    const fetchMeetingData = async () => {
+      console.log("Fetching with hubId:", hubId);
+
+      if (!hubId) {
+        console.error('hubId is missing');
+        setLoading(false);
         return;
       }
 
-      const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.status === 200) {
-        const { NewMeeting } = response.data;
-        if (NewMeeting && NewMeeting.length > 0) {
-          setMeetings(NewMeeting);
-          setLoading(false);
-        } else {
-          console.error('No meetings found');
-        }
-      } else {
-        console.error('Failed to fetch meeting data');
+      if (!apiUrl) {
+        console.error('API URL is missing');
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error('Error fetching meeting data:', error);
-    }
-  };
+
+      setLoading(true);
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 200) {
+          const { NewMeeting } = response.data;
+          if (!NewMeeting) {
+            console.error('Unexpected response structure:', response.data);
+            setLoading(false);
+            return;
+          }
+
+          // Ensure hub_id is treated as a string for comparison
+          const filteredMeetings = NewMeeting.filter(meeting => String(meeting.hub_id) === String(hubId));
+          setMeetings(filteredMeetings);
+        } else {
+          console.error('Failed to fetch meeting data');
+        }
+      } catch (error) {
+        console.error('Error fetching meeting data:', error);
+      } finally {
+        setLoading(false);  // Ensure loading stops on both success and error
+      }
+    };
+
+    fetchMeetingData();
+  }, [hubId, apiUrl]);
+
+
+
 
   const handleJoinLink = async (meeting) => {
     try {
@@ -97,35 +143,33 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
-  const handleOpenPress = (meeting) => {
-    // Handle marking as completed here
-  };
-
-  useEffect(() => {
-    fetchMeetingData();
-  }, []);
-
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>{error}</Text>;
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#206C00" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.greenBox}>
       <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>Scheduled Hub Sessions</Text>
+        <Text style={styles.title}>{hubName} Sessions</Text>
         <View style={styles.table}>
           <View style={styles.row}>
             <View style={styles.cell2}>
-            <Text style={styles.headerText}>Topic</Text>
+              <Text style={styles.headerText}>Topic</Text>
             </View>
-             <View style={styles.cell2}>
-            <Text style={styles.headerText}>Description</Text>
-             </View>
-             <View style={styles.cell2}>
-            <Text style={styles.headerText}>Date</Text>
-             </View>
-             <View style={styles.cell2}>
-            <Text style={styles.headerText}>Action</Text>
-             </View>
+            <View style={styles.cell2}>
+              <Text style={styles.headerText}>Description</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={styles.headerText}>Date</Text>
+            </View>
+            <View style={styles.cell2}>
+              <Text style={styles.headerText}>Action</Text>
+            </View>
           </View>
 
           {displayedMeetings.map((meeting, index) => (
@@ -199,61 +243,14 @@ const styles = StyleSheet.create({
   cellText: {
     textAlign: 'flex-start',
   },
-  cellTextname: {
-    textAlign: 'flex-start',
-    width: 200
-  },
-  messageCount: {
-    width: 18,
-    height: 18,
-    borderRadius: 10,
-    alignContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#4CAF50',
+  joinButton: {
+    borderColor: '#206C00',
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
     textAlign: 'center',
-    marginLeft: 70,
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 13
-  },
-  messageCountText: {
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 11
-  },
-  greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 50, 
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
-  },
-  blurBackground: {
-    borderRadius: 20, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-  },
-  userimage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
-  },
-  whiteBox: {
-    width: '20%',
-    height: 150,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: '#f7fff4',
-    borderRadius: 20,
-    marginTop: 50,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
-    BlurView: '100%'
+    color: '#206C00',
+    width: 150
   },
   paginationContainer: {
     flexDirection: 'row',
@@ -271,15 +268,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'gray',
   },
-  joinButton: {
-    borderColor: '#206C00',
+  greenBox: {
+    width: "90%",
+    marginBottom: 20,
+    marginLeft: 50, 
+    backgroundColor: 'rgba(225,225,212,0.3)',
+    marginTop: 50, 
+    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.5)',
     borderWidth: 1,
-    padding: 10,
-    borderRadius: 5,
-    textAlign: 'center',
-    color: '#206C00',
-    width: 150
   },
+  blurBackground: {
+    borderRadius: 20, 
+    backgroundColor: 'rgba(225,225,212,0.3)',
+  }
 });
 
-export default ScheduledMeetingsTable; 
+export default ScheduledMeetingsTable;

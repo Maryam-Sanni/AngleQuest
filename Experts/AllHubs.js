@@ -14,6 +14,7 @@ import {useFonts} from "expo-font"
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScheduledMeet from '../Experts/ScheduledMeetings';
+import ScheduledMeet2 from '../Experts/ScheduledMeetID';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -129,59 +130,18 @@ const {t}=useTranslation()
           <View style={{ marginLeft: 270 }}>
             <View style={styles.header}>
               
-              
-            
-            
-            <TouchableOpacity onPress={handleOpenPress}
-            underlayColor={isAllHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsAllHovered(true)}
-            onMouseLeave={() => setIsAllHovered(false)} >
-              <View style={styles.item}>
-              <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image2}
-/>
-                <Text style={[{marginLeft: 5, color: "#666", fontSize: 16 }, isAllHovered && { color: 'coral' }]}>{t("+ New")}</Text>
-              </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={handleOpenPress}>
+                <View style={{marginLeft: 110, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 130, alignItems: 'center',}}>
+                                <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Create New Hub")}</Text>
+                              </View>
+                 </TouchableOpacity>
+             
+              <TouchableOpacity onPress={handleOpenPress2}>
+                <View style={{ marginLeft: 10, padding: 10,  borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
+                                <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Hub")}</Text>
+                              </View>
+                 </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={handleOpenPress2}>
-    <View style={{ position: 'absolute', right: 80, top: -45, paddingHorizontal: 8, paddingVertical: 10, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Edit Hub")}</Text>
-                  </View>
-     </TouchableOpacity>
-
-     <View style={{ flexDirection: "row", marginLeft: 50}}>
-       {hubs.map((hub) => {
-         const isSelected = hub.id === selectedHub?.id;
-
-         return (
-           <TouchableOpacity
-             key={hub.id}
-             onPress={() => setSelectedHub(hub)}
-           >
-             <View
-               style={[
-                 styles.item,
-                 isSelected ? styles.selectedItem : styles.unselectedItem,
-               ]}
-             >
-               <Text
-                 style={[
-                   styles.hubText,
-                   isSelected ? styles.selectedText : styles.unselectedText,
-                 ]}
-               >
-                 {hub.coaching_hub_name || 'No hub yet'}
-               </Text>
-             </View>
-           </TouchableOpacity>
-         );
-       })}
-           
-    
-     </View>
     
       <Modal
         animationType="slide"
@@ -224,11 +184,30 @@ const {t}=useTranslation()
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
-
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible4}
+              onRequestClose={handleCloseModal4}
+            >
+                <View style={styles.modalContent}>
+                <OpenModal5 onClose={() => handleCloseModal4()} />
+                </View>
+            </Modal>
       
-     
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible5}
+              onRequestClose={handleCloseModal5}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal4 onClose={handleCloseModal5} />
+              </View>
+            </Modal>
+            
             <ScheduledMeetingsTable />
-             <ScheduledMeet />
+             
             
           </View>
         </ScrollView>
@@ -247,7 +226,10 @@ const ScheduledMeetingsTable = () => {
   const [totalHubMembers, setTotalHubMembers] = useState(0);
   const [sessionsHeld, setSessionsHeld] = useState(0);
   const [sessionsMissed, setSessionsMissed] = useState(0);
+  const [hubs, setHubs] = useState([]);
+  const [selectedHub, setSelectedHub] = useState(null);
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
+  const [hubId, setHubId] = useState(null);
   const [meetingData, setMeetingData] = useState({
     date: '',
     time: ''
@@ -261,6 +243,44 @@ const ScheduledMeetingsTable = () => {
     setModalVisible6(false);
     onClose();
   };
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const handleHubPress = async (hub) => {
+    setSelectedHub(hub);
+    setHubId(hub.id); // Set the hubId state
+
+    try {
+      await AsyncStorage.setItem('hub_id', hub.id.toString());
+      await AsyncStorage.setItem('coaching_hub_name', hub.coaching_hub_name || '');
+      console.log(`Hub ID ${hub.id} and Coaching Hub Name ${hub.coaching_hub_name} saved to AsyncStorage`);
+    } catch (error) {
+      console.error("Error saving hub data to AsyncStorage", error);
+    }
+  };
+  
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 200 && response.data.status === 'success') {
+          setHubs(response.data.NewHub || []);
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
   
   useEffect(() => {
     const fetchMeetingData = async () => {
@@ -435,144 +455,197 @@ const ScheduledMeetingsTable = () => {
   const [isHovered4, setIsHovered4] = useState(false);
   
   return ( 
-    <View style={{flex: 1}}>
-    <View style={styles.container}>
-    <View style={styles.whiteBox}>
-    <Text style={{ fontSize: 16, color: "black", fontWeight: '600'}}>{t("Next Meeting Schedule")}</Text>
-      <Text style={{ fontSize: 13, color: "black", marginTop: 10 }}>
-        {moment(meetingData.date).format("DD-MM-YYYY hh:mmA")}
-      </Text>
-      <TouchableOpacity
-        style={{
-          backgroundColor: isHovered ? '#206C00' : 'none',
-          padding: 8,
-          paddingHorizontal: 10,
-          marginTop: 15,
-          borderRadius: 5,
-          marginLeft: 10,
-          marginRight: 10,
-          borderWidth: 2,
-          borderColor: '#206C00',
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onPress={handlejoinPress}
-      >
-        <Text style={{ color: isHovered ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-          {t("Start Session")}
-        </Text>
-      </TouchableOpacity>
-      </View>
+  <View style={{ flex: 1 }}>
+    <Text style={{ fontSize: 16, color: '#f7fff4', marginTop: 20, marginLeft: 50 }}>
+      My Hubs
+    </Text>
 
-      <View style={styles.whiteBox}>
-      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("All Meeting Confirmation")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>{meetingConfirmation}</Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: isHovered2 ? '#206C00' : 'none',
-            padding: 8,
-            paddingHorizontal: 10,
-            marginTop: 15,
-            borderRadius: 5,
-            marginLeft: 10,
-            marginRight: 10,
-            borderWidth: 2,
-            borderColor: '#206C00',
-          }}
-          onMouseEnter={() => setIsHovered2(true)}
-          onMouseLeave={() => setIsHovered2(false)}
-          onPress={handleOpenPress4}
-        >
-          <Text style={{ color: isHovered2 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-            {t("New Meeting")}
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <View style={{ flexDirection: "row", marginLeft: 50, marginTop: -5 }}>
+      {hubs.map((hub) => {
+        const isSelected = hub.id === selectedHub?.id;
 
-      <View style={styles.whiteBox}>
-      <Text style={{ fontSize: 16, color: "black", fontWeight: '500'}}>{t("Total Hub Members")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold'}}>{totalHubMembers}</Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: isHovered3 ? '#206C00' : 'none',
-            padding: 8,
-            paddingHorizontal: 10,
-            marginTop: 15,
-            borderRadius: 5,
-            marginLeft: 10,
-            marginRight: 10,
-            borderWidth: 2,
-            borderColor: '#206C00',
-          }}
-          onMouseEnter={() => setIsHovered3(true)}
-          onMouseLeave={() => setIsHovered3(false)}
-          onPress={handleOpenPress6}
-        >
-          <Text style={{ color: isHovered3 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-            {t("All Sessions")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.whiteBox}>
-      <Text style={{ fontSize: 12, color: "black", fontWeight: '500'}}>{t("Sessions Held")}</Text>
-    <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold'}}>{sessionsHeld}</Text>
-        <TouchableOpacity
-          style={{
-            backgroundColor: isHovered4 ? '#206C00' : 'none',
-            padding: 8,
-            paddingHorizontal: 10,
-            marginTop: 15,
-            borderRadius: 5,
-            marginLeft: 10,
-            marginRight: 10,
-            borderWidth: 2,
-            borderColor: '#206C00',
-          }}
-          onMouseEnter={() => setIsHovered4(true)}
-          onMouseLeave={() => setIsHovered4(false)}
-          onPress={handleOpenPress3}
-        >
-          <Text style={{ color: isHovered4 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-            {t("Assessment")}
-          </Text>
-        </TouchableOpacity>
-        
-      </View>
-
-      </View>
-    
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible6}
-        onRequestClose={handleCloseModal6}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal6 onClose={handleCloseModal6} />
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible5}
-        onRequestClose={handleCloseModal5}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal4 onClose={handleCloseModal5} />
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible4}
-        onRequestClose={handleCloseModal4}
-      >
-          <View style={styles.modalContent}>
-          <OpenModal5 onClose={() => handleCloseModal4()} />
-          </View>
-      </Modal>
+        return (
+          <TouchableOpacity key={hub.id} onPress={() => handleHubPress(hub)} accessibilityRole="button">
+            <View
+              style={[
+                styles.item,
+                isSelected ? styles.selectedItem : styles.unselectedItem,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.hubText,
+                  isSelected ? styles.selectedText : styles.unselectedText,
+                ]}
+              >
+                {hub.coaching_hub_name || 'No hub yet'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
     </View>
+
+    {selectedHub && (
+      <View style={styles.container}>
+        <View style={styles.whiteBox}>
+          <Text style={{ fontSize: 16, color: "black", fontWeight: '600' }}>
+            {t("Next Meeting Schedule")}
+          </Text>
+          <Text style={{ fontSize: 13, color: "black", marginTop: 10 }}>
+            {moment(meetingData.date).format("DD-MM-YYYY hh:mmA")}
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: isHovered ? '#206C00' : 'transparent',
+              padding: 8,
+              paddingHorizontal: 10,
+              marginTop: 15,
+              borderRadius: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              borderWidth: 2,
+              borderColor: '#206C00',
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onPress={handlejoinPress}
+          >
+            <Text style={{ color: isHovered ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
+              {t("Start Session")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.whiteBox}>
+          <Text style={{ fontSize: 16, color: "black", fontWeight: '500' }}>
+            {t("All Meeting Confirmation")}
+          </Text>
+          <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold' }}>
+            {meetingConfirmation}
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: isHovered2 ? '#206C00' : 'transparent',
+              padding: 8,
+              paddingHorizontal: 10,
+              marginTop: 15,
+              borderRadius: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              borderWidth: 2,
+              borderColor: '#206C00',
+            }}
+            onMouseEnter={() => setIsHovered2(true)}
+            onMouseLeave={() => setIsHovered2(false)}
+            onPress={handleOpenPress6}
+          >
+            <Text style={{ color: isHovered2 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
+              {t("View Attendance")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.whiteBox}>
+          <Text style={{ fontSize: 16, color: "black", fontWeight: '500' }}>
+            {t("Total Hub Members")}
+          </Text>
+          <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold' }}>
+            {totalHubMembers}
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: isHovered3 ? '#206C00' : 'transparent',
+              padding: 8,
+              paddingHorizontal: 10,
+              marginTop: 15,
+              borderRadius: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              borderWidth: 2,
+              borderColor: '#206C00',
+            }}
+            onMouseEnter={() => setIsHovered3(true)}
+            onMouseLeave={() => setIsHovered3(false)}
+            onPress={handleOpenPress4}
+          >
+            <Text style={{ color: isHovered3 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
+              {t("New Training Session")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.whiteBox}>
+          <Text style={{ fontSize: 16, color: "black", fontWeight: '500', marginBottom: 5 }}>
+            {t("Hub Assessment")}
+          </Text>
+          <Text style={{ fontSize: 13, marginLeft: 10, marginRight: 10, color: "black", marginBottom: 10, textAlign: 'center' }}>
+            Set new assessment for hub session
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: isHovered4 ? '#206C00' : 'transparent',
+              padding: 8,
+              paddingHorizontal: 10,
+              marginTop: 15,
+              borderRadius: 5,
+              marginLeft: 10,
+              marginRight: 10,
+              borderWidth: 2,
+              borderColor: '#206C00',
+            }}
+            onMouseEnter={() => setIsHovered4(true)}
+            onMouseLeave={() => setIsHovered4(false)}
+            onPress={handleOpenPress3}
+          >
+            <Text style={{ color: isHovered4 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
+              {t("Create New")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )}
+    {selectedHub && ( // Only show the below components if a hub is selected
+    <ScheduledMeet2 hubId={selectedHub.id} coachingHubName={selectedHub.coaching_hub_name} />
+    )}
+
+    {!selectedHub && ( // Show ScheduledMeet when no hub is selected
+        <ScheduledMeet />
+    )}
+    {/* Modals */}
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible6}
+      onRequestClose={handleCloseModal6}
+    >
+      <View style={styles.modalContent}>
+        <OpenModal6 onClose={handleCloseModal6} />
+      </View>
+    </Modal>
+
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible5}
+      onRequestClose={handleCloseModal5}
+    >
+      <View style={styles.modalContent}>
+        <OpenModal4 onClose={handleCloseModal5} />
+      </View>
+    </Modal>
+
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible4}
+      onRequestClose={handleCloseModal4}
+    >
+      <View style={styles.modalContent}>
+        <OpenModal5 onClose={handleCloseModal4} />
+      </View>
+    </Modal>
+  </View>
   );
 }
 

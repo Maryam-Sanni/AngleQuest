@@ -59,16 +59,9 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
         min={new Date().toISOString().split('T')[0]} // Ensure date is not in the past
       />
 
-      <Text style={styles.selectedDateText}>
-        {t("Selected Date:")} {inputDate || t("No date selected")}
-      </Text>
-
-      {dayOfWeek ? (
-        <Text style={styles.dayOfWeekText}>
-          {t("Day of the Week:")} {dayOfWeek}
-        </Text>
-      ) : null}
-
+      
+        <View style={{marginTop: 20}}>
+        </View>
       <Text style={styles.headerText}>{t("Time Slot")}</Text>
       <View style={styles.timePickerContainer}>
         <TimePicker
@@ -77,6 +70,7 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
           onTimeChange={setStartTime}
         />
       </View>
+          
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleConfirm}>

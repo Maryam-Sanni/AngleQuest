@@ -10,7 +10,7 @@ import DaysTimePickerModal from "../components/TimePicker3";
 
 const specializationRoles = {
   'Business Analysis': ['Business Analysis'],
-  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
+  SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
   Scrum: ['Scrum'],
   Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer', 'Dynamics F&O'],
 };
@@ -204,7 +204,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [objectiveLength, setObjectiveLength] = useState(0);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
-  const [level, setLevel] = useState('beginner');
+  const [level, setLevel] = useState('Beginner');
   const [objectives, setObjectives] = useState('');
   const [coaching_hub_fee, setfee] = useState('$40 per meeting');
   const maxDescriptionLength = 200; // Max character limit for description

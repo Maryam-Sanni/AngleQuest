@@ -9,6 +9,7 @@ import CustomAlert from '../components/CustomAlert';
 import { format } from 'date-fns';
 import { CheckBox } from 'react-native-elements';
 import { duration } from 'moment-timezone';
+import moment from 'moment';
 
 
 function MyComponent({ onClose }) {
@@ -31,6 +32,8 @@ function MyComponent({ onClose }) {
   const [learningObj, setLearningObj] = useState(null);
   const [materialFiles, setMaterialFiles] = useState([]);
   const [submitloading, setSubmitLoading] = useState(false);
+  const [hubId, setHubId] = useState('');
+  const [hubName, setHubName] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -44,6 +47,26 @@ const handleFileChange = (event) => {
   const files = Array.from(event.target.files);
   setMaterialFiles(files); // Store the selected files in state
 };
+
+  useEffect(() => {
+      const loadHubData = async () => {
+          try {
+              const storedHubId = await AsyncStorage.getItem('hub_id');
+              const storedHubName = await AsyncStorage.getItem('coaching_hub_name');
+
+              if (storedHubId !== null) {
+                  setHubId(storedHubId);
+              }
+              if (storedHubName !== null) {
+                  setHubName(storedHubName);
+              }
+          } catch (error) {
+              console.error("Error loading hub data from AsyncStorage", error);
+          }
+      };
+
+      loadHubData();
+  }, []);
 
 
   useEffect(() => {
@@ -138,14 +161,16 @@ const handleFileChange = (event) => {
         onClose();
         return;
       }
-  
+
+      const formattedTime = moment(selectedDateTime).format('YYYY-MM-DD HH:mm:ss');
+      
       const formData = new FormData(); // Create a new FormData object
   
       formData.append('meeting_topic', topic);
       formData.append('meeting_description', description);
-      formData.append('date', selectedDateTime);
-      formData.append('time', selectedTime);
-      formData.append('hub_id', selectedHubId);
+      formData.append('date', formattedTime);
+      formData.append('time', selectedDateTime);
+      formData.append('hub_id', hubId);
       formData.append('roles', candidate);
       formData.append('duration', duration);
       formData.append('learning_obj', learningObj);
@@ -203,7 +228,7 @@ const handleFileChange = (event) => {
                 source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>{t("New Hub Meeting")}</Text>
+              <Text style={styles.headerText}>{t("Knowledge Sharing Session")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
                   ✕
@@ -212,40 +237,11 @@ const handleFileChange = (event) => {
             </View>
 
             <View style={styles.container}>
-            <Text style={{fontSize: 16, marginLeft: 50, marginBottom: 10, fontWeight:'bold'}}>
-  {t("Select a hub for this meeting")}
-</Text>
-            <View style={{marginLeft: 40, marginBottom: 20}}>
-            {loading ? (
-        <ActivityIndicator size="large" color="#206C00" />
-      ) : (
-        <FlatList
-      data={hubs}
-      keyExtractor={(item) => item.id.toString()}
-      horizontal // Display hubs in a row
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.hubContainer}
-          onPress={() => toggleHubSelection(item.id, item.coaching_hub_name, item.learning_obj)}
-        >
-          <View style={styles.hubCard}>
-            <Text style={styles.hubText}>{item.coaching_hub_name}</Text>
-            <CheckBox
-              checked={selectedHubId === item.id} // Only the selected one is checked
-              onPress={() => toggleHubSelection(item.id, item.coaching_hub_name, item.learning_obj)}
-              containerStyle={{
-                backgroundColor: 'transparent', // Make the background transparent
-                borderWidth: 0, // Remove border
-              }}
-              checkedColor="green" // Set checked color to green
-              uncheckedColor="gray" // Set unchecked color to gray (optional)
-            />
-          </View>
-        </TouchableOpacity>
-      )}
-    />
-      )}
-</View>
+              <Text style={{ fontSize: 16, marginLeft: 50, marginBottom: 10, fontWeight: 'bold' }}>
+                 {hubName} Session
+              </Text>
+
+            
               <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
               {t("Meeting Topic *")}
             </Text>
@@ -273,7 +269,7 @@ const handleFileChange = (event) => {
 <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
   <Text style={styles.input}>
     <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
-    {selectedDateTime ? selectedDateTime.toDateString() : t("No date selected")} {/* Format Date here */}
+    {selectedDateTime ? selectedDateTime.toDateString() : t("Select Date")} {/* Format Date here */}
   </Text>
 </TouchableOpacity>
 
@@ -282,7 +278,7 @@ const handleFileChange = (event) => {
 </Text>
 <Text style={styles.input}>
   <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Time: </Text> 
-  {selectedTime || t("No time selected")}
+  {selectedTime || t("Select Time")}
 </Text>
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
   {t("Duration")}
@@ -299,7 +295,7 @@ const handleFileChange = (event) => {
       </Picker>
 
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
-  {t("Learning Materials")}
+  {t("Learning Materials: Upload File")}
 </Text>
 <TouchableOpacity onPress={handleFileUpload} style={styles.input}>
   <Text style={{fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Upload Learning Materials:")}</Text>

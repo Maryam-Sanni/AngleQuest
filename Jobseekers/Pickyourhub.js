@@ -184,7 +184,7 @@ useEffect(() => {
         });
 
       } else if (createHubResponse.status === 400) {
-        const errorMessage = createHubResponse.data?.message || t('You have already joined this hub');
+        const errorMessage = createHubResponse.data?.message || t('You have registered for this hub meeting');
         console.warn(errorMessage);
         setAlertMessage(errorMessage);
 
@@ -456,8 +456,8 @@ onPress={() => handleOpenPress(index)}
         <View style={styles.greenBox}>
           <View style={styles.header}>
               <View style={{flexDirection: 'column'}}>
-            <Text style={styles.headerText}>{t("Hubs Live Sessions")}</Text>
-            <Text style={{ fontSize: 18, color: "grey", textAlign: 'center', marginTop: 10 }}>{t("Engage and learn with experts and peers")}</Text>
+            <Text style={styles.headerText}>{t("Hub Live Sessions")}</Text>
+            <Text style={{ fontSize: 18, color: "grey", textAlign: 'center', marginTop: 10 }}>{t("Engage and learn with expert and peers")}</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
