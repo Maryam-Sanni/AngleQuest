@@ -149,7 +149,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
 
 const CreateCoachingHubForm = ({ onClose }) => {
   const navigate = useNavigate();
-  const [from, setStartTime] = useState(' ');
+  const [from, setStartTime] = useState('12:00');
   const [to, setEndTime] = useState('12:00');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -214,6 +214,8 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [availableDays, setAvailableDays] = useState('');
   const [availableTimes, setAvailableTimes] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [hubId, setID] = useState('');
+  
 
   const handleObjectiveChange = (text) => {
     if (text.length <= maxObjectiveLength) {
@@ -255,6 +257,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
   const setHubDetails = (hub) => {
     setVisibility(hub.visibility || '');
+    setID(hub.id|| '');
     setGroupName(hub.coaching_hub_name || '');
     setGroupDescription(hub.coaching_hub_description || '');
     setObjectives(hub.learning_obj || '');
@@ -327,6 +330,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   };
 
   const handleSave = async () => {
+    const id = hubId;
     if (!coaching_hub_name || !coaching_hub_description || !coaching_hub_fee || !meeting_day || !from || !to) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
@@ -344,18 +348,19 @@ const CreateCoachingHubForm = ({ onClose }) => {
         visibility,
         category: specialization,
         coaching_hub_name,
-        specialization: currentSelectedRoles.join(', '),
+        specialization: selectedRoles,
         years_experience,
         skills,
         location,
-         meeting_day: "day",
+        meeting_day,
         coaching_hub_description,
-        from: "from",
-        to: "to",
+        from,
+        to,
+        level,
         coaching_hub_fee,
         coaching_hub_goals,
         coaching_hub_limit,
-        expert_name: first_name + ' ' + last_name,
+        expert_name: `${first_name} ${last_name}`,
       };
 
       const headers = {
@@ -363,23 +368,25 @@ const CreateCoachingHubForm = ({ onClose }) => {
         'Content-Type': 'application/json',
       };
 
-      const response = await axios.post(
-        `${apiUrl}/api/expert/hubs/create`,
+      // Use the ID here to form the URL
+      const response = await axios.put(
+        `${apiUrl}/api/expert/hubs/edit/${id}`, // Dynamically use the hub ID
         formData,
         { headers }
       );
 
-      if (response.status === 201) {
-        setAlertMessage(t('Hub created successfully'));
+      if (response.status === 200) {
+        setAlertMessage(t('Hub updated successfully'));
       } else {
-        setAlertMessage(t('Failed to create Hub'));
+        setAlertMessage(t('Failed to update Hub'));
       }
     } catch (error) {
       console.error('Error during save:', error); // Log error for debugging
-      setAlertMessage(t('Failed to create Hub'));
+      setAlertMessage(t('Failed to update Hub'));
     }
     setAlertVisible(true);
-  };  
+  };
+
 
   const hideAlert = () => {
     setAlertVisible(false);
@@ -474,6 +481,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={[styles.input, { height: 120 }]}
           placeholder= {t("The overview of this training is to...")}
+          placeholderTextColor="grey"
           multiline
           value={coaching_hub_description}
           onChangeText={handleDescriptionChange}
@@ -492,6 +500,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <TextInput
           style={[styles.input, { height: 120 }]}
           placeholder= {t("At the end of this training...")}
+          placeholderTextColor="grey"
           multiline
           value={objectives}
           onChangeText={handleObjectiveChange}

@@ -15,6 +15,9 @@ const HubMeeting = () => {
   const [registrationStatus, setRegistrationStatus] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('Upcoming');
+
+  const tabs = ['Upcoming', 'Past Sessions', 'Assessment'];
   
   useEffect(() => {
     const fetchJoinedHubs = async () => {
@@ -79,32 +82,49 @@ const HubMeeting = () => {
       const lastName = await AsyncStorage.getItem('last_name');
       const jobseekerId = await AsyncStorage.getItem('user_id');
       const jobseekerName = `${firstName} ${lastName}`;
+      const meeting_id = String(meeting.meeting_id);
+      const isRegistered = registrationStatus.includes(meeting_id);
 
       const meetingDetails = {
         meeting_topic: meeting.hubSpec,
         description: meeting.description,
         meeting_date: meeting.date,
         hub_id: String(meeting.hubId),
+        meeting_id,
         expert_id: meeting.expert_id,
         jobseeker_name: jobseekerName,
-        jobseeker_id: meeting.meeting_id,
+        jobseeker_id: jobseekerId,
       };
 
-      const joinMeetingResponse = await axios.post(
-        `${apiUrl}/api/expert/join-meeting`,
-        meetingDetails,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // Determine the correct API endpoint based on the registration status
+      const url = `${apiUrl}/api/expert/${isRegistered ? 'leave' : 'join'}-meeting`;
+      const response = await axios.post(url, meetingDetails, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      if (joinMeetingResponse.status === 201) {
-        setAlertMessage('You have successfully joined the meeting');
+      if (isRegistered) {
+        // Check if unregistration was successful (200 OK)
+        if (response.status === 200) {
+          setAlertMessage('You have successfully unregistered from the meeting');
+          // Update the registration status locally by removing the meeting_id
+          setRegistrationStatus((prevStatus) => prevStatus.filter((id) => id !== meeting_id));
+        } else {
+          setAlertMessage('An error occurred while unregistering from the meeting.');
+        }
       } else {
-        setAlertMessage('An error occurred while joining the meeting.');
+        // Check if registration was successful (201 Created)
+        if (response.status === 201) {
+          setAlertMessage('You have successfully joined the meeting');
+          // Update the registration status locally by adding the meeting_id
+          setRegistrationStatus((prevStatus) => [...prevStatus, meeting_id]);
+        } else {
+          setAlertMessage('An error occurred while joining the meeting.');
+        }
       }
     } catch (error) {
       console.error(error);
       if (error.response?.status === 400) {
-        setAlertMessage('You have already registered for this meeting.');
+        setAlertMessage('You have already registered/unregistered for this meeting.');
       } else {
         setAlertMessage('An error occurred while processing your request.');
       }
@@ -113,32 +133,29 @@ const HubMeeting = () => {
     }
   };
 
+
+
   const checkRegistration = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const jobseekerId = await AsyncStorage.getItem('user_id');
 
-      if (!token || !jobseekerId) throw new Error('User is not authenticated.');
+      if (!token) throw new Error('User is not authenticated.');
 
       const response = await axios.get(`${apiUrl}/api/expert/get-individual-meeting`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { jobseekerId },
       });
 
       console.log('API Response:', response.data);
 
+      // Extract meeting IDs from response and convert them to strings
       const registrations = Array.isArray(response.data)
-        ? response.data
-            .filter(meeting => meeting.hub_id && meeting.hub_id !== 'undefined' && meeting.jobseeker_id === jobseekerId) // Filter based on jobseeker_id
-            .map(meeting => String(meeting.hub_id))  // Convert hub_id to string
-        : response.data.status === "success" && Array.isArray(response.data.data)
-        ? response.data.data
-            .filter(meeting => meeting.hub_id && meeting.hub_id !== 'undefined' && meeting.jobseeker_id === jobseekerId) // Filter based on jobseeker_id
-            .map(meeting => String(meeting.hub_id))  // Convert hub_id to string
+        ? response.data.map((meeting) => String(meeting.meeting_id))
+        : response.data.status === 'success' && Array.isArray(response.data.data)
+        ? response.data.data.map((meeting) => String(meeting.meeting_id))
         : [];
 
       console.log('Registrations:', registrations); // Log registrations for debugging
-      setRegistrationStatus(registrations); // Store hub IDs the user is registered for
+      setRegistrationStatus(registrations); // Store meeting IDs the user is registered for
     } catch (error) {
       console.error('Error checking registration:', error);
       setError(error.message);
@@ -147,15 +164,22 @@ const HubMeeting = () => {
     }
   };
 
+  // Call checkRegistration in useEffect
   useEffect(() => {
     checkRegistration();
   }, []);
 
 
-
-
-  const handleJoinLink = async (meeting, hubId) => {
+  const handleJoinLink = async (meeting) => {
     try {
+      // Check if the user is registered for this meeting
+      const meeting_id = String(meeting.meeting_id);
+      if (!registrationStatus.includes(meeting_id)) {
+        setAlertMessage('Please register for this meeting before joining.');
+        setAlertVisible(true); // Move this line directly after setting the alert message
+        return; // Return here to exit if the user isn't registered
+      }
+
       // Get the user token and candidate details from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       const firstName = await AsyncStorage.getItem('first_name');
@@ -166,9 +190,6 @@ const HubMeeting = () => {
         console.error("Token or candidate name missing.");
         return;
       }
-
-      // Meeting ID
-      const meeting_id = String(meeting.meeting_id);
 
       // API request
       const response = await axios.post(
@@ -189,6 +210,8 @@ const HubMeeting = () => {
       alert('Failed to join the meeting. Please try again.');
     }
   };
+
+
   
   const filterMeetings = (hubName) => {
     setSelectedHub(hubName);
@@ -225,7 +248,26 @@ const HubMeeting = () => {
           ))}
         </View>
       </View>
-      <Text style={{fontSize: 22, color: '#D3D3D3', marginBottom: 30}}>Upcoming</Text>
+
+      <View style={{backgroundColor: 'rgba(211,249,216,0.1)', padding: 50}}>
+        <View style={{ flexDirection: 'row', marginBottom: 30 }}>
+          {tabs.map((tab) => (
+            <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginRight: 10,
+                  color: activeTab === tab ? '#000' : '#D3D3D3', // Active tab is black, inactive is gray
+                  textDecorationLine: activeTab === tab ? 'underline' : 'none', // Underline active tab
+                  backgroundColor: activeTab === tab ? 'transparent' : 'transparent', // White background for active tab
+                  paddingHorizontal: 10, // Adds padding for better UX
+                }}
+              >
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
       {/* Display meetings */}
       {filteredMeetings.length > 0 ? (
@@ -258,7 +300,7 @@ const HubMeeting = () => {
                   onPress={() => handleJoinMeeting(meeting)}
                 >
                   <Text style={styles.buttonText2}>
-                    {registrationStatus.includes(String(meeting.hubId)) ? 'Unregister' : 'Register'}
+                    {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.joinButton} onPress={() => handleJoinLink(meeting)}>
@@ -276,6 +318,7 @@ const HubMeeting = () => {
       ) : (
         <Text style={styles.noMeetings}>No meetings available for this hub</Text>
       )}
+      </View>
       <CustomAlert
         visible={alertVisible}
         title={"Alert"}
@@ -311,7 +354,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 2,
-    marginRight: 50
   },
   hubName: {
     fontSize: 24,
