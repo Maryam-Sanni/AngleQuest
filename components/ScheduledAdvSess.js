@@ -12,14 +12,30 @@ const ScheduledMeetingsTable = () => {
   const [skillAnalysisData, setSkillAnalysisData] = useState([]);
   const [selectedAnalysis, setSelectedAnalysis] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("Scheduled");
   const itemsPerPage = 3; // Number of meetings to display per page
   const totalPages = Math.ceil(skillAnalysisData.length / itemsPerPage);
 
-  // Get the current meetings to display based on the page
-  const displayedMeetings =  skillAnalysisData.slice(
+  // Calculate the current meetings to display based on the page
+  const displayedMeetings = skillAnalysisData.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
+
+  useEffect(() => {
+    // Find the index of the first scheduled meeting
+    const upcomingMeetingIndex = skillAnalysisData.findIndex((meeting) => {
+      const now = new Date();
+      const meetingTime = new Date(meeting.date_time);
+      return meetingTime > now; // Look for meetings scheduled in the future
+    });
+
+    // Calculate the page number for the first scheduled meeting
+    if (upcomingMeetingIndex !== -1) {
+      const initialPage = Math.floor(upcomingMeetingIndex / itemsPerPage);
+      setCurrentPage(initialPage);
+    }
+  }, [skillAnalysisData, itemsPerPage]);
 
   const goToNextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -33,6 +49,19 @@ const ScheduledMeetingsTable = () => {
     }
   };
 
+  const filteredMeetings = displayedMeetings.filter((analysis) => {
+    const now = new Date();
+    const meetingTime = new Date(analysis.date_time);
+    const oneHourAfter = new Date(meetingTime.getTime() + 60 * 60 * 1000);
+
+    if (selectedTab === "Scheduled") {
+      return now < meetingTime || (now >= meetingTime && now <= oneHourAfter);
+    } else if (selectedTab === "Expired") {
+      return now > oneHourAfter;
+    }
+    return true;
+  });
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
     useEffect(() => {
@@ -108,8 +137,17 @@ const ScheduledMeetingsTable = () => {
 
   return (
     <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Scheduled")}</Text>
+        <BlurView intensity={100} style={styles.blurBackground}>
+          <View style={{ flexDirection: 'row', marginLeft: 30,}}>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity onPress={() => setSelectedTab("Scheduled")}>
+                <Text style={selectedTab === "Scheduled" ? styles.title : styles.untitle}>{t("Scheduled")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedTab("Expired")}>
+                <Text style={selectedTab === "Expired" ? styles.title : styles.untitle}>{t("Expired")}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         <View style={styles.table}>
           <View style={styles.row}>
              <View style={{flexDirection: 'row', width: "100%"}}>
@@ -141,14 +179,14 @@ const ScheduledMeetingsTable = () => {
           </View>
           </View>
 
-          {displayedMeetings.map((analysis, index) => {
-            const dateTime = new Date(analysis.date_time);
-            const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
+      {filteredMeetings.map((analysis, index) => {
+        const dateTime = new Date(analysis.date_time);
+        const date = dateTime.toLocaleDateString();
+        const time = dateTime.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
 
       
           return (
@@ -225,15 +263,15 @@ const ScheduledMeetingsTable = () => {
           );
        })}
         
-        <View style={styles.paginationContainer}>
-          <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-            <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-          </TouchableOpacity>
-          <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-          <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-            <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.paginationContainer}>
+            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
+              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+            </TouchableOpacity>
+            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
+            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
+              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
+            </TouchableOpacity>
+          </View>
           </View>
 
         <Modal
@@ -260,8 +298,16 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 30,
-    marginLeft: 50,
+    marginLeft: 20,
     color: "black",
+    fontWeight: 'bold',
+    fontSize: 15,
+    textAlign: 'flex-start',
+  },
+  untitle: {
+    marginTop: 30,
+    marginLeft: 20,
+    color: "darkgrey",
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'flex-start',

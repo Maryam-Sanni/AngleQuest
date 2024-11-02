@@ -449,10 +449,12 @@ const ScheduledMeetingsTable = () => {
     setModalVisible4(false);
   };
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isHovered2, setIsHovered2] = useState(false);
-  const [isHovered3, setIsHovered3] = useState(false);
-  const [isHovered4, setIsHovered4] = useState(false);
+   const [selectedButton, setSelectedButton] = useState('Upcoming');
+
+  const handlePress = (buttonName, action) => {
+    setSelectedButton(buttonName);
+    action();
+  };
   
   return ( 
   <View style={{ flex: 1 }}>
@@ -486,124 +488,42 @@ const ScheduledMeetingsTable = () => {
       })}
     </View>
 
+     <View style={{ backgroundColor: 'rgba(211,249,216,0.1)', padding: 50, marginTop: 50, marginLeft: 50, marginRight: 50, borderRadius: 20}}>
     {selectedHub && (
-      <View style={styles.container}>
-        <View style={styles.whiteBox}>
-          <Text style={{ fontSize: 16, color: "black", fontWeight: '600' }}>
-            {t("Next Meeting Schedule")}
-          </Text>
-          <Text style={{ fontSize: 13, color: "black", marginTop: 10 }}>
-            {moment(meetingData.date).format("DD-MM-YYYY hh:mmA")}
-          </Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: isHovered ? '#206C00' : 'transparent',
-              padding: 8,
-              paddingHorizontal: 10,
-              marginTop: 15,
-              borderRadius: 5,
-              marginLeft: 10,
-              marginRight: 10,
-              borderWidth: 2,
-              borderColor: '#206C00',
-            }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onPress={handlejoinPress}
-          >
-            <Text style={{ color: isHovered ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-              {t("Start Session")}
+        
+        <View style={styles.buttonContainer}>
+          {/* Upcoming - Active by default */}
+          <TouchableOpacity>
+            <Text style={[styles.text, selectedButton === 'Upcoming' && styles.activeText]}>
+              {t("Upcoming")} 
             </Text>
           </TouchableOpacity>
-        </View>
+          
+          <TouchableOpacity onPress={() => handlePress('Training Sessions', handleOpenPress4)}>
+            <Text style={[styles.text, selectedButton === 'Training Sessions' && styles.activeText]}>
+              {t("New Meeting")} 
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('View Attendance', handleOpenPress6)}>
+            <Text style={[styles.text, selectedButton === 'View Attendance' && styles.activeText]}>
+              {t("View Attendance")} 
+            </Text>
+          </TouchableOpacity>
 
-        <View style={styles.whiteBox}>
-          <Text style={{ fontSize: 16, color: "black", fontWeight: '500' }}>
-            {t("All Meeting Confirmation")}
-          </Text>
-          <Text style={{ fontSize: 24, color: "black", marginTop: 5, fontWeight: 'bold' }}>
-            {meetingConfirmation}
-          </Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: isHovered2 ? '#206C00' : 'transparent',
-              padding: 8,
-              paddingHorizontal: 10,
-              marginTop: 15,
-              borderRadius: 5,
-              marginLeft: 10,
-              marginRight: 10,
-              borderWidth: 2,
-              borderColor: '#206C00',
-            }}
-            onMouseEnter={() => setIsHovered2(true)}
-            onMouseLeave={() => setIsHovered2(false)}
-            onPress={handleOpenPress6}
-          >
-            <Text style={{ color: isHovered2 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-              {t("View Attendance")}
-            </Text>
-          </TouchableOpacity>
-        </View>
+          
 
-        <View style={styles.whiteBox}>
-          <Text style={{ fontSize: 16, color: "black", fontWeight: '500' }}>
-            {t("Total Hub Members")}
-          </Text>
-          <Text style={{ fontSize: 24, color: "black", marginTop: 10, fontWeight: 'bold' }}>
-            {totalHubMembers}
-          </Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: isHovered3 ? '#206C00' : 'transparent',
-              padding: 8,
-              paddingHorizontal: 10,
-              marginTop: 15,
-              borderRadius: 5,
-              marginLeft: 10,
-              marginRight: 10,
-              borderWidth: 2,
-              borderColor: '#206C00',
-            }}
-            onMouseEnter={() => setIsHovered3(true)}
-            onMouseLeave={() => setIsHovered3(false)}
-            onPress={handleOpenPress4}
-          >
-            <Text style={{ color: isHovered3 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-              {t("New Training Session")}
+          <TouchableOpacity onPress={() => handlePress('Assessment', handleOpenPress3)}>
+            <Text style={[styles.text, selectedButton === 'Assessment' && styles.activeText]}>
+              {t("Assessment")}
             </Text>
           </TouchableOpacity>
         </View>
+        
 
-        <View style={styles.whiteBox}>
-          <Text style={{ fontSize: 16, color: "black", fontWeight: '500', marginBottom: 5 }}>
-            {t("Hub Assessment")}
-          </Text>
-          <Text style={{ fontSize: 13, marginLeft: 10, marginRight: 10, color: "black", marginBottom: 10, textAlign: 'center' }}>
-            Set new assessment for hub session
-          </Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: isHovered4 ? '#206C00' : 'transparent',
-              padding: 8,
-              paddingHorizontal: 10,
-              marginTop: 15,
-              borderRadius: 5,
-              marginLeft: 10,
-              marginRight: 10,
-              borderWidth: 2,
-              borderColor: '#206C00',
-            }}
-            onMouseEnter={() => setIsHovered4(true)}
-            onMouseLeave={() => setIsHovered4(false)}
-            onPress={handleOpenPress3}
-          >
-            <Text style={{ color: isHovered4 ? 'white' : '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600' }}>
-              {t("Create New")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        
+
+        
+
     )}
     {selectedHub && ( // Only show the below components if a hub is selected
     <ScheduledMeet2 hubId={selectedHub.id} coachingHubName={selectedHub.coaching_hub_name} />
@@ -612,6 +532,7 @@ const ScheduledMeetingsTable = () => {
     {!selectedHub && ( // Show ScheduledMeet when no hub is selected
         <ScheduledMeet />
     )}
+     </View>
     {/* Modals */}
     <Modal
       animationType="slide"
@@ -795,40 +716,58 @@ const styles = StyleSheet.create({
   },
   selectedItem: {
     justifyContent: "flex-start",
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderRadius: 5,
-        borderColor: "#135837",
-        backgroundColor:
-            "#135837",
-        alignItems: "center",
-        marginTop: 20,
-        borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderColor: "#135837",
+    backgroundColor: "#206C00",
+    alignItems: "center",
+    marginTop: 20,
+    borderWidth: 1,
     marginRight: 20,
   },
   unselectedItem: {
     justifyContent: "flex-start",
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderRadius: 5,
-        borderColor: "#f7fff4",
-        backgroundColor:
-            "rgba(211,249,216,0.3)",
-        alignItems: "center",
-        marginTop: 20,
-        borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderColor: "rgba(211,249,216,0.3)",
+    backgroundColor: "rgba(211,249,216,0.3)",
+    alignItems: "center",
+    marginTop: 20,
+    borderWidth: 1,
     marginRight: 20,
-  },
-  hubText: {
-    padding: 5,
-    paddingHorizontal: 15,
-    fontFamily: "Roboto-Light",
   },
   selectedText: {
     color: "#fff", // white text
   },
   unselectedText: {
     color: "#f7fff4", // green text
+  },
+  hubText: {
+    padding: 5,
+    paddingHorizontal: 15,
+    fontFamily: "Roboto-Light",
+  },
+  buttonContainer: {
+    padding: 20,
+    alignItems: 'flex-start',
+    flexDirection: 'row'
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#D3D3D3',
+    marginBottom: 10,
+     padding: 5,
+    marginRight: 20
+  },
+  activeText: {
+    color: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5,
+    borderColor: 'white'
   },
 });
 

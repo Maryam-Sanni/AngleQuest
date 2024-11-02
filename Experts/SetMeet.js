@@ -238,7 +238,7 @@ const handleFileChange = (event) => {
 
             <View style={styles.container}>
               <Text style={{ fontSize: 16, marginLeft: 50, marginBottom: 10, fontWeight: 'bold' }}>
-                 {hubName} Session
+                New {hubName} Meeting
               </Text>
 
             

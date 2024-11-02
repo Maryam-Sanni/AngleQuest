@@ -463,7 +463,7 @@ const HomePage = () => {
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={goToHub}
+                      onPress={goToHubs}
                       style={[
                         styles.touchablechat,
                         isHovered3 && styles.touchableOpacityHovered,

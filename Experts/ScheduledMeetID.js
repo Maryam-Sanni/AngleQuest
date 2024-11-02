@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Linking } from 'react-native';
+import { View, Image, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, Linking } from 'react-native';
 import { BlurView } from 'expo-blur';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
@@ -13,30 +13,26 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hubName, setHubName] = useState(coachingHubName || '');  // Default to coachingHubName if passed
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(meetings.length / itemsPerPage);
-
+  const [hubName, setHubName] = useState(coachingHubName || '');   const [showAllMeetings, setShowAllMeetings] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const displayedMeetings = meetings.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  // Function to generate Google Calendar URL
+  const generateGoogleCalendarUrl = (meeting) => {
+    const startDate = moment(meeting.date).utc().format('YYYYMMDDTHHmmss') + 'Z';
+    const endDate = moment(meeting.end_time).utc().format('YYYYMMDDTHHmmss') + 'Z';
+    const eventTitle = encodeURIComponent(meeting.meeting_topic);
+    const eventDetails = encodeURIComponent(meeting.meeting_description);
+    const eventLocation = encodeURIComponent(meeting.meeting_location || 'Online'); // Default location if none provided
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&dates=${startDate}/${endDate}&details=${eventDetails}&location=${eventLocation}`;
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
+  // Button click handler to open Google Calendar link
+  const handleAddToCalendar = (meeting) => {
+    const googleCalendarUrl = generateGoogleCalendarUrl(meeting);
+    Linking.openURL(googleCalendarUrl).catch(err => console.error('Failed to open URL:', err));
   };
-
+  
   useEffect(() => {
     if (coachingHubName) {
       setHubName(coachingHubName);
@@ -153,135 +149,118 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
   }
 
   return (
-    <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{hubName} Sessions</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>Topic</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>Description</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>Date</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>Action</Text>
+    <View>
+      <ScrollView contentContainerStyle={styles.cardContainer}>
+        {(showAllMeetings ? meetings : meetings.slice(0, 2)).map((meeting) => (
+          <View key={meeting.id} style={styles.meetingContainer}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                }}
+                style={{width: 150, height: 150, marginTop: 30, marginBottom: 30, marginLeft: 50}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <View style={{flexDirection: 'row', marginTop: 20}}>
+                  <Text style={styles.meetingTime}>Live Session . </Text>
+                  <Text style={styles.meetingTime}>Online . </Text>
+                  <Text style={styles.meetingTime}>Get Started</Text>
+                </View>
+                <Text style={styles.hubName}>{meeting.meeting_topic}</Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    marginBottom: 10,
+                  }}
+                >
+                  {moment(meeting.time)
+                    .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
+                    .format('MMMM Do YYYY, h:mm A [( ' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')]')}
+                </Text>
+                <Text style={styles.meetingDescription}>{meeting.meeting_description}</Text>
+                
+                <View style={{flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end'}}>
+                  <TouchableOpacity onPress={() => handleAddToCalendar(meeting)} style={styles.joinButton2}>
+                    <Text style={styles.buttonText2}>Add To Calendar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleJoinLink(meeting)} style={styles.joinButton}>
+                    <Text style={styles.buttonText}>Launch Meeting</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
-
-          {displayedMeetings.map((meeting, index) => (
-            <View key={meeting.id} style={styles.row}>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{meeting.meeting_topic}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{meeting.meeting_description}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{moment(meeting.date).format('MMMM Do YYYY, h:mm A')}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <TouchableOpacity onPress={() => handleJoinLink(meeting)}>
-                  <Text style={styles.joinButton}>Launch Meeting</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
-          <View style={styles.paginationContainer}>
-            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-            </TouchableOpacity>
-            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </BlurView>
+        ))}
+        {!showAllMeetings && meetings.length > 2 && (
+          <TouchableOpacity onPress={() => setShowAllMeetings(true)} style={styles.viewAllButton}>
+            <Text style={styles.viewAllButtonText}>View All</Text>
+          </TouchableOpacity>
+        )}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  title: {
-    marginTop: 20,
-    marginLeft: 50,
-    color: "black",
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'flex-start',
+  cardContainer: {
+    paddingVertical: 20,
   },
-  table: {
-    marginRight: 200,
-    marginTop: 20,
+  meetingContainer: {
     marginBottom: 20,
-    alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50,
-    marginRight: 50
+    padding: 30,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
+  hubName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
-  cell: {
-    flex: 1,
-    backgroundColor: 'none',
-    padding: 10,
-    alignItems: 'flex-start',
+  meetingDescription: {
+    fontSize: 16,
+    width: 700,
+    marginBottom: 4,
   },
-  cell2: {
-    flex: 1,
-    backgroundColor: 'white', 
-    padding: 10,
-    alignItems: 'flex-start',
-  },
-  cellText: {
-    textAlign: 'flex-start',
+  meetingTime: {
+    fontSize: 14,
+    color: '#444',
+    marginBottom: 8,
   },
   joinButton: {
+    backgroundColor: '#206C00',
+    padding: 15,
+    borderRadius: 5,
+  },
+  joinButton2: {
     borderColor: '#206C00',
     borderWidth: 1,
-    padding: 10,
+    padding: 15,
     borderRadius: 5,
+    marginRight: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
     textAlign: 'center',
-    color: '#206C00',
-    width: 150
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  viewAllButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
-    marginLeft: 50,
-    marginRight: 50
+    width: 100,
+    alignSelf: 'center',
   },
-  button: {
-    fontSize: 18,
-    color: 'darkgreen',
+  viewAllButtonText: {
+    color: '#206C00',
+    fontWeight: 'bold',
   },
-  disabledButton: {
-    fontSize: 18,
-    color: 'gray',
-  },
-  greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 50, 
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
-  },
-  blurBackground: {
-    borderRadius: 20, 
-    backgroundColor: 'rgba(225,225,212,0.3)',
-  }
 });
 
 export default ScheduledMeetingsTable;
