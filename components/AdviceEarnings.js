@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, FlatList, TextInput, TouchableOpacity, A
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BarChart } from 'react-native-chart-kit';
+import CustomAlert from '../components/CustomAlert';
 
 const PaymentWithdrawalPage = () => {
   const [activeTab, setActiveTab] = useState('balance'); // Default active tab
@@ -11,42 +12,60 @@ const PaymentWithdrawalPage = () => {
   const [latestPayment, setLatestPayment] = useState(null);
   const [withdrawalAmount, setWithdrawalAmount] = useState('');
   const [withdrawalHistory, setWithdrawalHistory] = useState([]);
-   const [withdrawalDetails, setWithdrawalDetails] = useState(null);
+  const [withdrawalDetails, setWithdrawalDetails] = useState([]);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+   const [error, setError] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
-    // Function to fetch balance data with token from AsyncStorage
-    const fetchBalance = async () => {
-      try {
-        // Retrieve token from AsyncStorage
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          throw new Error("No token found");
-        }
-
-        // Make API request with token in headers
-        const response = await fetch(`${apiUrl}/api/expert/get-balance`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.status === "success" && data.bal) {
-          setBalance(data.bal.total_balance);
-        }
-      } catch (error) {
-        console.error("Error fetching balance:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchBalance();
+    fetchWithdrawalDetails();
   }, []);
+
+  const fetchBalance = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+
+      const response = await fetch(`${apiUrl}/api/expert/get-balance`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (data.status === "success" && data.bal) {
+        setBalance(data.bal.total_balance);
+      }
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+
+  const fetchWithdrawalDetails = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-withdrawal-details`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 200) {
+        setWithdrawalDetails(response.data.WithdrawalDetail || []); // Ensure it's an array
+      } else {
+        console.error('Failed to fetch withdrawal details');
+      }
+    } catch (error) {
+      console.error('Error fetching withdrawal details:', error);
+    }
+  };
   
   const fetchPaymentData = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -80,11 +99,24 @@ const PaymentWithdrawalPage = () => {
 
 
   const handleWithdrawal = async () => {
+    // Check if the withdrawal amount is provided
     if (!withdrawalAmount) {
-      Alert.alert('Please enter an amount to withdraw.');
+      setAlertMessage('Please enter an amount to withdraw');
+      setAlertVisible(true);
       return;
     }
 
+    // Parse the withdrawal amount to a float
+    const amountToWithdraw = parseFloat(withdrawalAmount);
+
+    // Validate if the amount exceeds the balance
+    if (amountToWithdraw > balance) {
+      setAlertMessage('Insufficient balance');
+      setAlertVisible(true);
+      return;
+    }
+
+    // Retrieve the token from AsyncStorage
     const token = await AsyncStorage.getItem('token');
     if (!token) {
       Alert.alert('No token found');
@@ -92,31 +124,40 @@ const PaymentWithdrawalPage = () => {
     }
 
     try {
+      // Make the API request to submit the withdrawal
       const response = await axios.post(
         `${apiUrl}/api/jobseeker/withdrawal-details`,
-        { amount: withdrawalAmount },
+        { amount: amountToWithdraw }, // Use the parsed amount
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      if (response.status === 200) {
-        Alert.alert('Withdrawal request submitted successfully!');
-        setWithdrawalAmount('');
+      // Handle the response based on the status code
+      if (response.status === 201) {
+        setAlertMessage('Withdrawal request submitted successfully');
+        setWithdrawalAmount(''); // Clear the input
         fetchPaymentData(); // Refresh data after withdrawal
       } else {
-        Alert.alert('Failed to submit withdrawal request.');
+        setAlertMessage('Failed to submit withdrawal request.');
       }
     } catch (error) {
       console.error('Error submitting withdrawal request:', error);
-      Alert.alert('An error occurred while submitting your withdrawal request.');
+      setAlertMessage('An error occurred while submitting your withdrawal request.');
     }
+
+    setAlertVisible(true); // Show the alert message
   };
 
   useEffect(() => {
     fetchPaymentData();
   }, []);
 
+  const hideAlert = () => {
+    setAlertVisible(false);
+    setIsVisible(false);
+  };
+  
   const [paymentData, setPaymentData] = useState({
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Months
     datasets: [
@@ -127,7 +168,7 @@ const PaymentWithdrawalPage = () => {
       },
     ],
   });
-  
+
   const renderBalanceSection = () => (
     <View>
       <Text style={styles.balance}>Total Balance: ${balance.toFixed(2)}</Text>
@@ -182,7 +223,7 @@ const PaymentWithdrawalPage = () => {
         <TextInput
           style={styles.input}
           value={withdrawalAmount}
-          onChangeText={setWithdrawalAmount}
+          onChangeText={text => setWithdrawalAmount(text)}
           placeholder="Enter amount in USD"
           keyboardType="numeric"
         />
@@ -242,20 +283,32 @@ const PaymentWithdrawalPage = () => {
       </View>
   );
 
-  const renderWithdrawalHistorySection = () => (
+  const renderWithdrawalItem = ({ item }) => {
+    const { amount, created_at, paid } = item;
+    const formattedDate = new Date(created_at).toLocaleDateString();
+    const paymentStatus = paid === null ? 'Pending' : 'Paid';
+
+    return (
+      <View style={styles.row}>
+        <Text style={styles.cell}>{`$${amount}`}</Text>
+        <Text style={styles.cell}>{formattedDate}</Text>
+        <Text style={styles.cell}>{paymentStatus}</Text>
+      </View>
+    );
+  };
+
+  const renderWithdrawalHistory = () => (
     <View>
-      <Text style={styles.subHeader}>Withdrawal History</Text>
-       <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 10}}>0 withdrawals this month</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Amount</Text>
+        <Text style={styles.headerText}>Date</Text>
+        <Text style={styles.headerText}>Status</Text>
+      </View>
       <FlatList
-        data={withdrawalHistory}
+        data={withdrawalDetails}
+        renderItem={renderWithdrawalItem}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.withdrawalItem}>
-            <Text>Amount: ${item.amount}</Text>
-            <Text>Date: {new Date(item.date).toLocaleDateString()}</Text>
-            <Text>Status: {item.status}</Text>
-          </View>
-        )}
+        ListEmptyComponent={<Text style={styles.emptyText}>No withdrawal history available.</Text>}
       />
     </View>
   );
@@ -284,7 +337,13 @@ const PaymentWithdrawalPage = () => {
       {activeTab === 'balance' && renderBalanceSection()}
       {activeTab === 'payments' && renderPaymentsSection()}
       {activeTab === 'withdrawal' && renderWithdrawalSection()}
-      {activeTab === 'withdrawalHistory' && renderWithdrawalHistorySection()}
+      {activeTab === 'withdrawalHistory' && renderWithdrawalHistory()}
+      <CustomAlert
+        visible={alertVisible}
+        title={'Notification'}
+        message={alertMessage}
+        onConfirm={hideAlert}
+      />
     </ScrollView>
   );
 };
@@ -404,6 +463,36 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 1,
     borderColor: '#ddd',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    flex: 1,
+    textAlign: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#888',
+    marginTop: 20,
   },
 });
 

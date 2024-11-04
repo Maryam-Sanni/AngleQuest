@@ -69,7 +69,7 @@ const {t}=useTranslation()
                         source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
                         style={styles.icon}
                     />
-                    <Text style={styles.accountSettingsText}>{t("Billings & Payment")}</Text>
+                    <Text style={styles.accountSettingsText}>{t("Earnings & Withdrawal")}</Text>
                 </View>
             </TouchableOpacity>
         </View>

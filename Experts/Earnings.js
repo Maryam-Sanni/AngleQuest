@@ -39,7 +39,7 @@ function MyComponent() {
         <View style={{ marginLeft: 270, backgroundColor: 'white'}}>
           <View style={styles.header}>
            
-            <Text style={styles.headertext}>Payment and Withdrawal</Text>
+            <Text style={styles.headertext}>Earnings & Withdrawal</Text>
           </View>
 
 
