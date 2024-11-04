@@ -19,7 +19,7 @@ function MyComponent() {
   const {t}=useTranslation()
 
   return (
-    <View style={{backgroundColor: '#f7fff4', flex: 1}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
     <View style={{ flex: 1 }}>
       <Topbar />
       <View style={{ flexDirection: 'row', flex: 1}}>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 20,
     marginLeft: 230,
-    backgroundColor: '#f7fff4'
+    backgroundColor: 'white'
   },
   sectionContainer: {
     marginBottom: 20,

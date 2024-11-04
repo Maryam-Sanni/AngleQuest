@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableHighlight,
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
+import Expired from '../components/ExpiredSchedlue';
 import CompletedAdvice from '../components/CompletedAdvSess';
 import OpenModal from '../Jobseekers/SkillanalysisAI';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,7 @@ function MyComponent() {
   const [targetLevel, setTargetLevel] = useState("Medior");
   const [expert, setExpert] = useState(" ");
   const [description, setDescription] = useState(" ");
+  const [activeTab, setActiveTab] = useState('Scheduled');
   
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -245,49 +247,43 @@ function MyComponent() {
                            </TouchableOpacity>
                       </View>
                       
-     <View style={styles.container}>
-      <View style={styles.box}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{ fontSize: 18, color: "black", fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Next Meeting")}</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 10,fontFamily:"Roboto-Light"}}>{selectedDate}</Text>
-    <Text style={{ fontSize: 14, color: "grey", marginTop: 5, fontWeight: '500',fontFamily:"Roboto-Light"}}>{selectedTime}</Text>
-    <TouchableOpacity style={{  backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} onPress={handlejoinPress}>
-          <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Join Now")}</Text>
-          </TouchableOpacity>
-          </View>
-           </View>
+                      <View style={styles.container}>
+                        {/* Tab Navigation */}
+                        <View style={styles.tabContainer}>
+                          <TouchableOpacity
+                            style={[styles.tab, activeTab === 'Scheduled' && styles.activeTab]}
+                            onPress={() => setActiveTab('Scheduled')}
+                          >
+                            <Text style={[styles.tabText, activeTab === 'Scheduled' && styles.activeTabText]}>
+                              Scheduled
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[styles.tab, activeTab === 'Expired' && styles.activeTab]} // Update here
+                            onPress={() => setActiveTab('Expired')}
+                          >
+                            <Text style={[styles.tabText, activeTab === 'Expired' && styles.activeTabText]}>
+                              Expired
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[styles.tab, activeTab === 'Completed' && styles.activeTab]}
+                            onPress={() => setActiveTab('Completed')}
+                          >
+                            <Text style={[styles.tabText, activeTab === 'Completed' && styles.activeTabText]}>
+                              Completed
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
 
-      <View style={styles.box}>
-        <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5, fontWeight: '500' }}>Starting Level: 
-        <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{startingLevel}</Text></Text>
-        <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5, fontWeight: '500'}}>Anticipated Level:
-        <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{targetLevel}</Text></Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5, fontWeight: '500'}}>Goal:
-           <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light", marginLeft: 5 }}>{type}</Text></Text>
-           
-      </View>
-     </View>
+                        {/* Conditionally Render Component Based on Active Tab */}
+                        <View style={styles.contentContainer}>
+                          {activeTab === 'Scheduled' && <ScheduledAdvice />}
+                          {activeTab === 'Expired' && <Expired />}  {/* Update here to only show when Expired tab is active */}
+                          {activeTab === 'Completed' && <CompletedAdvice />}
+                        </View>
+                      </View>
 
-      <View style={styles.box}> 
-      <Text style = {{fontSize: 18, color: 'black', fontWeight: 'bold', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light" }}>{t("Description")}</Text>
-      <Text style = {{fontSize: 14, color: 'black',fontFamily:"Roboto-Light", textAlign: 'center' }}>{description}</Text>
-      </View>
-      
-      <View style={styles.box}>
-
-        <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
-              style={{ width: 40, height: 40, aspectRatio: 1, }}
-            />
-        <View style={{flexDirection: 'row' }}>
-            <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{t("Coach")}</Text>
-          <Text style = {{fontSize: 14, color: 'black', marginLeft: 5, marginTop: 10, fontWeight: '500', fontFamily:"Roboto-Light" }}>{expert}</Text>
-            </View>
-          <Text style = {{fontSize: 14, color: 'black', marginTop: 5, marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{days}</Text>
-        <Text style = {{fontSize: 14, color: 'black', marginBottom: 5,fontFamily:"Roboto-Light", marginLeft: 5 }}>{time}</Text>
-    </View>
-    </View>
 
                         <Modal
         animationType="slide"
@@ -299,9 +295,7 @@ function MyComponent() {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
-                       
-                        <ScheduledAdvice />
-                        <CompletedAdvice />
+
                    </View>
                 </ScrollView>
                  </View>
@@ -349,12 +343,10 @@ const styles = StyleSheet.create({
       tintColor: '#666',
     },
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  marginTop: 50,
-  maxWidth: '90%',
-  marginLeft: 50,
+ backgroundColor: "rgba(211,249,216,0.1)", 
+    padding: 50 ,
+    marginTop: 50,
+    marginRight: 50
   },
       box: {
         backgroundColor: '#f7fff4',
@@ -380,6 +372,29 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 25
       },
+  tabContainer: {
+    flexDirection: 'row',
+    marginLeft: 50
+  },
+  tabText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#D3D3D3',
+    marginBottom: 10,
+     padding: 5,
+    marginRight: 20
+  },
+  activeTabText: {
+    color: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5,
+    borderColor: 'white'
+    },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+  },
 });
 
 export default MyComponent;

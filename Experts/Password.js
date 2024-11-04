@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Switch, Alert, TouchableOpacity } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from "../components/expertssidebar";
 import Topbar from "../components/expertstopbar";
 import { useFonts } from 'expo-font';
@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 
 function MyComponent() {
-  const navigation = useNavigation();
+  const navigatie = useNavigate();
   const [twoFactorAuthEnabled, setTwoFactorAuthEnabled] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

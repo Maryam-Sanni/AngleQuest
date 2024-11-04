@@ -21,6 +21,8 @@ function MyComponent() {
   const [reviewedCount, setReviewedCount] = useState(0);
   const [meetingData, setMeetingData] = useState({ date: '', time: '' });
 
+  const [activeTab, setActiveTab] = useState('Scheduled');
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
@@ -259,54 +261,31 @@ function MyComponent() {
                            </TouchableOpacity>
                       </View>
                       <View style={styles.container}>
-      <View style={styles.box}>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 16, color: "black", textAlign: 'center', fontWeight: '600' }}>{t("Next growth plan session")}</Text>
-          <Text style={{ fontSize: 14, color: "grey", marginTop: 10, fontFamily: "Roboto-Light", textAlign: 'center' }}>{meetingData.date}</Text>
-          <TouchableOpacity
-            style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, marginTop: 10, borderRadius: 5, marginLeft: 10, marginRight: 10, borderWidth: 2, borderColor: '#206C00' }}
-            onPress={handlejoinPress}
-          >
-            <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>{t("Join Now")}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+                        {/* Tab Navigation */}
+                        <View style={styles.tabContainer}>
+                          <TouchableOpacity
+                            style={[styles.tab, activeTab === 'Scheduled' && styles.activeTab]}
+                            onPress={() => setActiveTab('Scheduled')}
+                          >
+                            <Text style={[styles.tabText, activeTab === 'Scheduled' && styles.activeTabText]}>
+                              Scheduled
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[styles.tab, activeTab === 'Completed' && styles.activeTab]}
+                            onPress={() => setActiveTab('Completed')}
+                          >
+                            <Text style={[styles.tabText, activeTab === 'Completed' && styles.activeTabText]}>
+                              Completed
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
 
-      <View style={styles.box}>
-        <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>{t("Personal Development")}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00', fontFamily: "Roboto-Light" }}>{pendingCount}</Text>
-          <Text style={{ fontSize: 12, marginTop: 10, marginLeft: 10, fontFamily: "Roboto-Light" }}>{t("Active")}</Text>
-          <Image source={require('../assets/person.png')} style={styles.boximage} />
-        </View>
-      </View>
-
-      <View style={styles.box}>
-        <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', marginBottom: 10, textAlign: 'center', }}>{t("Completed Sessions")}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 5, color: '#206C00', fontFamily: "Roboto-Light" }}>{reviewedCount}</Text>
-          <Text style={{ fontSize: 12, marginTop: 10, marginLeft: 10, fontFamily: "Roboto-Light" }}>{t("Completed")}</Text>
-          <Image source={require('../assets/teamicon.jpg')} style={styles.boximage} />
-        </View>
-      </View>
-
-      <View style={styles.box}>
-  <Text style={{ fontSize: 16, color: 'black', fontWeight: '600', marginBottom: 10, textAlign: 'center' }}>
-    Target Level
-  </Text>
-  <View style={{ flexDirection: 'row', alignItems:'center'}}>
-    {/* Dynamically render the target level */}
-    <Text style={{ fontSize: 14, fontWeight: 'bold', marginTop: 5, fontFamily: "Roboto-Light" }}>
-      {meetingData?.targetLevel || 'beginner'}
-    </Text>
-    <Image source={require('../assets/organization.png')} style={styles.boximage} />
-  </View>
-  {/* Dynamically render the coach */}
-  <Text style={{ fontSize: 12, fontWeight: '500', marginTop: 10, color: '#206C00', fontFamily: "Roboto-Light", textAlign: 'center' }}>
-    working with coach {meetingData?.coach || 'Unknown Coach'}
-  </Text>
-</View>
-</View>
+                        {/* Conditionally Render Component Based on Active Tab */}
+                        <View style={styles.contentContainer}>
+                          {activeTab === 'Scheduled' ?  <GrowthPlantype /> :  <GrowthPlanreview />}
+                        </View>
+                      </View>
 
                         <Modal
         animationType="slide"
@@ -319,9 +298,7 @@ function MyComponent() {
           </View>
       </Modal>
                        
-                        <GrowthPlantype />
-                     
-                        <GrowthPlanreview />
+                       
                     </View>
                 </ScrollView>
             </View>
@@ -369,12 +346,10 @@ const styles = StyleSheet.create({
       tintColor: '#666',
     },
     container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-     marginTop: 50,
-      maxWidth: '90%',
-      marginLeft: 50,
+   backgroundColor: "rgba(211,249,216,0.1)", 
+      padding: 50 ,
+      marginTop: 50,
+      marginRight: 50
       },
       box: {
         backgroundColor: '#f7fff4',
@@ -400,6 +375,29 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         borderRadius: 25
       },
+  tabContainer: {
+    flexDirection: 'row',
+    marginLeft: 50
+  },
+  tabText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#D3D3D3',
+    marginBottom: 10,
+     padding: 5,
+    marginRight: 20
+  },
+  activeTabText: {
+    color: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 5,
+    borderColor: 'white'
+    },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+  },
 });
 
 export default MyComponent;

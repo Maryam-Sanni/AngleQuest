@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
 import OpenSchedule from '../Jobseekers/ViewExpertreview';
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
@@ -13,100 +13,50 @@ const ScheduledMeetingsTable = () => {
   const [userId, setUserId] = useState(null);
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3; // Number of meetings to display per page
-  const totalPages = Math.ceil(growthPlans.length / itemsPerPage);
+  const [showAll, setShowAll] = useState(false);
 
-  // Get the current meetings to display based on the page
-  const displayedMeetings =  growthPlans.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const itemsToShowInitially = 2;
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  const { t } = useTranslation();
+  const [fontsLoaded] = useFonts({
+    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+  });
 
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-   const apiUrl = process.env.REACT_APP_API_URL;
-  
   const handleOpenPress2 = async (growthPlan) => {
     setSelectedGrowthPlan(growthPlan);
     setModalVisible2(true);
-
-    try {
-      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
-      console.log('Selected growth plan saved:', growthPlan);
-    } catch (error) {
-      console.error('Failed to save selected growth plan to AsyncStorage', error);
-    }
+    await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
   };
-
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
-  };
+  
+  const handleCloseModal2 = () => setModalVisible2(false);
 
   const handleOpenPress = async (growthPlan) => {
     setSelectedGrowthPlan(growthPlan);
     setModalVisible(true);
-
-    try {
-      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
-      console.log('Selected growth plan saved:', growthPlan);
-    } catch (error) {
-      console.error('Failed to save selected growth plan to AsyncStorage', error);
-    }
+    await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
   };
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    setSelectedGrowthPlan(null);
-  };
-
-  const [fontsLoaded] = useFonts({
-    'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
-  });
-  const { t } = useTranslation();
+  const handleCloseModal = () => setModalVisible(false);
 
   const fetchData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
-      const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
-
+      const token = await AsyncStorage.getItem('token');
+      const storedUserId = await AsyncStorage.getItem('user_id');
       if (token && storedUserId) {
-        setUserId(storedUserId); // Store user_id in state
+        setUserId(storedUserId);
 
         const response = await fetch(`${apiUrl}/api/expert/growthplan/getAllExpertsGrowthPlanFeedbacks`, {
           method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = await response.json();
         if (data.status === 'success') {
-          // Filter the growth plans based on matching user_id and jobseeker_id
           const filteredGrowthPlans = data.allGrowthPlan.filter(plan => plan.jobseeker_id === storedUserId);
-          setGrowthPlans(filteredGrowthPlans); // Store the filtered data in state
-
-          try {
-            await AsyncStorage.setItem('Growthplanfeedback', JSON.stringify(filteredGrowthPlans)); // Save the filtered growth plans to AsyncStorage
-            console.log('Filtered growth plans saved:', filteredGrowthPlans);
-          } catch (error) {
-            console.error('Failed to save filtered growth plans to AsyncStorage', error);
-          }
-        } else {
-          console.error('Failed to fetch data', response);
+          setGrowthPlans(filteredGrowthPlans);
+          await AsyncStorage.setItem('Growthplanfeedback', JSON.stringify(filteredGrowthPlans));
         }
-      } else {
-        console.error('Token or user ID is missing');
       }
     } catch (error) {
       console.error('Failed to load form data', error);
@@ -114,194 +64,185 @@ const ScheduledMeetingsTable = () => {
   };
 
   useEffect(() => {
-    fetchData(); // Initial data load
-
-    const intervalId = setInterval(fetchData, 5000); // Polling every 5 seconds
-
-    return () => clearInterval(intervalId); // Clear the interval when the component unmounts
+    fetchData();
+    const intervalId = setInterval(fetchData, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
-
+  const displayedGrowthPlans = showAll ? growthPlans : growthPlans.slice(0, itemsToShowInitially);
 
   return (
-    <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Completed Growth Plans")}</Text>
-
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Title")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Role")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Completed")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Performance")}</Text></View>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Rate</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>View</Text>
-               </View>
-            </TouchableOpacity>
-          </View>
-
-          {displayedMeetings.map((plan, index) => (
-            <View key={index} style={styles.row}>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.coach}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.title}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.role}</Text>
-              </View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(plan.updated_at).toLocaleDateString()} {new Date(plan.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{plan.performance_rating}</Text>
-              </View>
-               <TouchableOpacity onPress={() => handleOpenPress2 (plan)}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t('Rate')}</Text>
-                 </View>
-              </TouchableOpacity>
-               <TouchableOpacity onPress={() => handleOpenPress (plan)}>
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t("View")}</Text>
-                </View>
-              </TouchableOpacity>
+          <View style={styles.container}>
+            {growthPlans.length === 0 ? (
+            <View
+              style={{
+                alignContent: "center",
+                justifyContent: "center",
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginLeft: 100,
+                }}
+              />
+              <Text style={styles.noMeetings}>No scheduled meeting have been completed</Text>
             </View>
-          ))}
-            <View style={styles.paginationContainer}>
-          <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-            <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-          </TouchableOpacity>
-          <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-          <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-            <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-          </TouchableOpacity>
-        </View>
-        </View>
+           
+            ) : (
+              <>
+                {displayedGrowthPlans.map((plan, index) => (
+                  <View key={index} style={styles.meetingContainer}>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      <Image
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                        }}
+                        style={{
+                          width: 150,
+                          height: 150,
+                          marginTop: 30,
+                          marginBottom: 30,
+                          marginLeft: 50,
+                        }}
+                      />
+                      <View style={{ flexDirection: "column", width: "75%" }}>
+                        <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                          <Text style={styles.meetingTime}>One-on-One Session . </Text>
+                          <Text style={styles.meetingTime}>Online . </Text>
+                          <Text style={styles.meetingTime}>Completed</Text>
+                        </View>
+                        <Text style={styles.cellText}>{t("Expert")}: {plan.coach}</Text>
+                        <Text style={styles.cellText}>{t("Title")}: {plan.title}</Text>
+                        <Text style={styles.cellText}>{t("Role")}: {plan.role}</Text>
+                        <Text style={styles.cellText}>{t("Completed")}: {new Date(plan.updated_at).toLocaleString()}</Text>
+                        <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
+                          <TouchableOpacity onPress={() => handleOpenPress2(plan)} style={styles.joinButton2}>
+                            <Text style={styles.buttonText2}>{t("Rate")}</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => handleOpenPress(plan)} style={styles.joinButton}>
+                            <Text style={styles.buttonText}>{t("View")}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </>
+            )}
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible2}
-          onRequestClose={handleCloseModal2}
-        >
+            {!showAll && growthPlans.length > itemsToShowInitially && (
+              <TouchableOpacity onPress={() => setShowAll(true)} style={styles.viewAllButton}>
+                <Text style={styles.buttonText2}>{t("View All")}</Text>
+              </TouchableOpacity>
+            )}
+
+        <Modal animationType="slide" transparent={true} visible={modalVisible2} onRequestClose={handleCloseModal2}>
           <View style={styles.modalContent}>
-             <OpenSchedule2 growthPlan={selectedGrowthPlan} onCancel={handleCloseModal2} />
-            </View>
-          </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={handleCloseModal}
-        >
+            <OpenSchedule2 growthPlan={selectedGrowthPlan} onCancel={handleCloseModal2} />
+          </View>
+        </Modal>
+
+        <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
           <View style={styles.modalContent}>
             <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
           </View>
         </Modal>
-      </BlurView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    marginTop: 30,
+    color: "black",
+    fontWeight: 'bold',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  meetingContainer: {
+    marginBottom: 20,
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    marginHorizontal: 20,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  cellText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light",
+    padding: 5,
+  }, 
+  viewAllButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    width: 100,
+    alignSelf: "center",
+    borderColor: "darkgreen",
+    borderWidth: 1,
+  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  title: {
-    marginTop: 30,
-    marginLeft: 50,
-    color: "black",
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'flex-start',
+  joinButton: {
+    backgroundColor: "#206C00",
+    padding: 10,
+    borderRadius: 5,
+    width: 120,
   },
-  table: {
-    flex: 1,
-    marginRight: 200,
-    marginTop: 20,
-    marginBottom: 30,
-    alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
-  },
-  greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30,
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
+  joinButton2: {
+    borderColor: "#206C00",
     borderWidth: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
-  },
-  cell: {
-    flex: 1,
-    backgroundColor: 'none',
     padding: 10,
-    alignItems: 'flex-start',
+    borderRadius: 5,
+    width: 120,
+    marginRight: 20,
   },
-  cell2: {
-    flex: 1,
-    backgroundColor: 'white', 
-    padding: 10,
-    alignItems: 'flex-start',
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  cellText: {
-    textAlign: 'flex-start',
-    fontFamily: "Roboto-Light"
-  },
-  headerText: {
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
-  },
-  blurBackground: {
-    flex: 1,
-    borderRadius: 20,
-  },
-  linkText: {
+  buttonText2: {
     color: "#206C00",
-    fontSize: 14,
-    fontFamily: "Roboto-Light"
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  noMeetings: {
+    fontSize: 18,
+    color: "white",
     marginTop: 20,
-    marginLeft: 50,
-    marginRight: 50
-  },
-  button: {
-    fontSize: 18,
-    color: 'darkgreen',
-  },
-  disabledButton: {
-    fontSize: 18,
-    color: 'gray',
   },
 });
 

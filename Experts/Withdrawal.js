@@ -45,34 +45,10 @@ function MyComponent() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270, backgroundColor: '#11412C'}}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={goToOffers} 
-            underlayColor={isOfferHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsOfferHovered(true)}
-            onMouseLeave={() => setIsOfferHovered(false)}> 
-              <View style={styles.item}>
-                <Image source={require('../assets/earnings.png')} style={styles.image} />
-                <Text style={[styles.headertext, isOfferHovered && { color: 'coral' }]}>{t("Earnings")}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={goToBids}
-            underlayColor={isBidHovered ? 'transparent' : 'transparent'}
-            onMouseEnter={() => setIsBidHovered(true)}
-            onMouseLeave={() => setIsBidHovered(false)} >
-              <View style={styles.item}>
-                <Image source={require('../assets/withdrawal.png')} style={styles.image} />
-                <Text style={[styles.headertext, isBidHovered && { color: 'coral' }]}>{t("Withdrawal")}</Text>
-              </View>
-            </TouchableOpacity>
+          
             
           </View>
-          <TouchableOpacity onPress={handleOpenPress} >
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'rgba(225,225,212,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50,  }}>
-                    <Text style={{ fontSize: 13, color: "black", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Request Withdrawal")}</Text>
-                  </View>
-     </TouchableOpacity>
-
           
-        <Text style={{fontSize: 14, fontWeight: '500', marginTop: 10, position: 'absolute', right: 60, color: 'coral',fontFamily:"Roboto-Light" }}>{t("Total Balance")}: $1180</Text>
  
         <Modal
         animationType="slide"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, CheckBox, StyleSheet, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/expertssidebar';
 import Topbar from '../components/expertstopbar';
 import { useFonts } from 'expo-font';
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 
 function MyComponent() {
-  const navigation = useNavigation();
+  const navigate= useNavigate();
   const [isNewsChecked, setIsNewsChecked] = useState(false);
   const [isTipsChecked, setIsTipsChecked] = useState(false);
   const [isMessagesChecked, setIsMessagesChecked] = useState(false);

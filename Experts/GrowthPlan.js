@@ -22,7 +22,8 @@ function MyComponent() {
      const [meetings, setMeetings] = useState([]);
      const [pendingCount, setPendingCount] = useState(0);
      const [reviewedCount, setReviewedCount] = useState(0);
-
+   const [activeTab, setActiveTab] = useState('Scheduled');
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
   useEffect(() => {
@@ -251,43 +252,34 @@ const {t}=useTranslation()
              </TouchableOpacity>
                          </View>
 
-     <View style={styles.container}>
-     <View style={styles.box}>
-  <Text style={{ fontSize: 12, color: 'grey', fontFamily: "Roboto-Light" }}>
-    {t("Pending Growth Plan Reviews")}
-  </Text>
-  <View style={{ flexDirection: 'row' }}>
-    <Image source={require('../assets/icons8-choice.gif')} style={styles.boximage} />
-    <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'brown', marginTop: 5, fontFamily: "Roboto-Light" }}>
-      {pendingCount} {/* Display pending count here */}
-    </Text>
-  </View>
-  <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10, fontFamily: "Roboto-Light" }}>
-    {t("Candidates are waiting for your review")}
-  </Text>
-</View>
-<View style={styles.box}>
-  <Text style={{ fontSize: 12, color: 'grey', fontFamily: "Roboto-Light" }}>
-    {t("Plans Reviewed")}
-  </Text>
-  <View style={{ flexDirection: 'row' }}>
-    <Image source={require('../assets/icons8-done.gif')} style={styles.boximage} />
-    <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 5, color: '#4CAF50', fontFamily: "Roboto-Light" }}>
-      {reviewedCount} {/* Display reviewed count here */}
-    </Text>
-  </View>
-  <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10, fontFamily: "Roboto-Light" }}>
-    {t("You have marked")} {reviewedCount} {t("growth plans as completed")}
-  </Text>
-</View>
-      <View style={styles.box2}>
-        <Text style = {{fontSize: 12, color: 'grey',fontFamily:"Roboto-Light" }}>{t("Next growth Plan Session in")}</Text>
-        <View style={{flexDirection: 'row'}}>
-         <Image source={require('../assets/icons8-delivery-time.gif')} style={styles.boximage2}  />
-           <Text style = {{fontSize: 24, fontWeight: 'bold', marginTop: 5, color: 'darkgreen',fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
-           </View>
-           <Text style = {{fontSize: 14, fontWeight: '500', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("You have a new session in")} {timerComponents}!</Text>
-      </View>
+          <View style={styles.container}>
+            {/* Tab Navigation */}
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[styles.tab, activeTab === 'Scheduled' && styles.activeTab]}
+                onPress={() => setActiveTab('Scheduled')}
+              >
+                <Text style={[styles.tabText, activeTab === 'Scheduled' && styles.activeTabText]}>
+                  Scheduled
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.tab, activeTab === 'Completed' && styles.activeTab]}
+                onPress={() => setActiveTab('Completed')}
+              >
+                <Text style={[styles.tabText, activeTab === 'Completed' && styles.activeTabText]}>
+                  Completed
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Conditionally Render Component Based on Active Tab */}
+            <View style={styles.contentContainer}>
+              {activeTab === 'Scheduled' ? <GrowthPlansReview />  :  <CompletedGrowthPlan />}
+            </View>
+    
+
+                
     </View>
 
  <Modal
@@ -312,8 +304,7 @@ const {t}=useTranslation()
           </View>
       </Modal>
 
-          <GrowthPlansReview />
-<CompletedGrowthPlan />
+
 </View>
           
           
@@ -361,64 +352,58 @@ const styles = StyleSheet.create({
     marginLeft: 60
   },
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  marginTop: 50,
-  maxWidth: '90%',
-  marginLeft: 50,
-  },
-  box: {
-    backgroundColor: '#f7fff4',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '22%',
-    height: 150,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
+     backgroundColor: "rgba(211,249,216,0.1)", 
+        padding: 50 ,
+        marginTop: 50,
+        marginRight: 50
+        },
+        box: {
+          backgroundColor: '#f7fff4',
+          padding: 20,
+          borderRadius: 20,
+          alignItems: 'center',
+            justifyContent: 'center',
+          width: '22%',
+          height: 150,
+          borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        },
+        boximage: {
+          width: 30,
+          height: 30,
+          marginLeft: 10,
+          borderRadius: 25
+        },
+    tabContainer: {
+      flexDirection: 'row',
+      marginLeft: 50
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  box2: {
-    backgroundColor: '#f7fff4',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '44%',
-    height: 150,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    tabText: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: '#D3D3D3',
+      marginBottom: 10,
+       padding: 5,
+      marginRight: 20
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  boximage: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    left: 150,
-    borderRadius: 25
-  },
-  boximage2: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    left: 350,
-    marginTop:5, 
-    borderRadius: 25
-  },
+    activeTabText: {
+      color: 'white',
+      borderWidth: 1,
+      borderRadius: 10,
+      padding: 5,
+      borderColor: 'white'
+      },
+    contentContainer: {
+      flex: 1,
+      padding: 16,
+    },
 });
 
 export default MyComponent;

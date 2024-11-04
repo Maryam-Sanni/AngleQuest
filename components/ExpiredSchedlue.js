@@ -34,11 +34,13 @@ const ScheduledMeetingsTable = () => {
         if (response.status === 200) {
           let data = response.data.skillAnalysis || [];
           data = data.filter(item => item.completed !== "Yes");
-          data.sort((a, b) => new Date(a.date_time) - new Date(b.date_time));
 
-          // Filter for scheduled meetings (those that haven't expired yet)
+          // Filter for expired meetings
           const now = new Date();
-          data = data.filter(item => new Date(item.date_time) > now); // Keep only scheduled meetings
+          data = data.filter(item => new Date(item.date_time) < now); // Keep only expired meetings
+
+          data.sort((a, b) => new Date(b.date_time) - new Date(a.date_time)); // Sort by date
+
           setSkillAnalysisData(data);
         } else {
           console.error('Failed to fetch data', response);
@@ -52,6 +54,7 @@ const ScheduledMeetingsTable = () => {
     const intervalId = setInterval(loadFormData, 5000);
     return () => clearInterval(intervalId);
   }, []);
+
 
   const handleOpenPress = async (analysis) => {
     setSelectedAnalysis(analysis);
@@ -70,7 +73,7 @@ const ScheduledMeetingsTable = () => {
   const toggleShowAllMeetings = () => {
     setShowAllMeetings(!showAllMeetings);
   };
-  
+
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
@@ -78,7 +81,7 @@ const ScheduledMeetingsTable = () => {
 
   return (
     <View style={styles.container}>
-       
+
 
         <ScrollView>
            {displayedMeetings.map((analysis, index) => (
@@ -110,7 +113,7 @@ const ScheduledMeetingsTable = () => {
                   </View>
               <Text style={styles.cellText}><Text style={styles.label}>{t("Expert")}: </Text>{analysis.expert_name}</Text>
               <Text style={styles.cellText}><Text style={styles.label}>{t("Type")}: </Text>{analysis.type}</Text>
-                  
+
               <Text style={styles.cellText}>
                 <Text style={styles.label}>{t("Meeting Date")}: </Text>
                 {new Date(analysis.date_time).toLocaleDateString()} {new Date(analysis.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}

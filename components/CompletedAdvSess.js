@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OpenSchedule from '../Jobseekers/ViewSkillAnalysis';
 import { BlurView } from 'expo-blur';
@@ -12,131 +12,52 @@ const ScheduledMeetingsTable = () => {
   const [skillanalysiss, setSkillanalysis] = useState([]);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [selectedAnalysis, setSelectedAnalysis] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3; // Number of meetings to display per page
-  const totalPages = Math.ceil(skillanalysiss.length / itemsPerPage);
-
-  // Get the current meetings to display based on the page
-  const displayedMeetings =  skillanalysiss.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const [showAll, setShowAll] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const handleOpenPress2 = async (analysis) => {
     setSelectedAnalysis(analysis);
-    setModalVisible2(true); // Ensure this sets the correct modal visibility
-
-    try {
-      await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
-      console.log('Selected analysis saved:', analysis);
-    } catch (error) {
-      console.error('Failed to save selected analysis to AsyncStorage', error);
-    }
+    setModalVisible2(true);
+    await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
   };
 
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
-  };
-
+  const handleCloseModal2 = () => setModalVisible2(false);
   const handleOpenPress = async (analysis) => {
     setSelectedAnalysis(analysis);
-    setModalVisible(true); // Ensure this sets the correct modal visibility
-
-    try {
-      await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
-      console.log('Selected analysis saved:', analysis);
-    } catch (error) {
-      console.error('Failed to save selected analysis to AsyncStorage', error);
-    }
+    setModalVisible(true);
+    await AsyncStorage.setItem('selectedSkillAnalysis', JSON.stringify(analysis));
   };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
+  const handleCloseModal = () => setModalVisible(false);
 
   const fetchData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
-      const storedUserId = await AsyncStorage.getItem('user_id'); // Retrieve user_id from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      const storedUserId = await AsyncStorage.getItem('user_id');
 
       if (token && storedUserId) {
         const response = await fetch(`${apiUrl}/api/expert/skillAnalysis/getAllExpertsSkillAnalysisFeedbacks`, {
           method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         const data = await response.json();
 
         if (data.status === 'success') {
-          // Filter skill analysis for the specific job seeker
-          const filteredSkillAnalysis = data.skillAnalysis.filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId);
-
-          // Sort the filtered skill analysis by date_time
-          filteredSkillAnalysis.sort((a, b) => {
-            const dateA = new Date(a.date_time);
-            const dateB = new Date(b.date_time);
-
-            // Check if both dates are in the same month and year
-            if (dateA.getFullYear() === dateB.getFullYear() && dateA.getMonth() === dateB.getMonth()) {
-              return dateB - dateA; // For the same month, sort by time (newest first)
-            }
-
-            // Prioritize this month (current month) first
-            const isAThisMonth = dateA.getFullYear() === new Date().getFullYear() && dateA.getMonth() === new Date().getMonth();
-            const isBThisMonth = dateB.getFullYear() === new Date().getFullYear() && dateB.getMonth() === new Date().getMonth();
-
-            if (isAThisMonth && !isBThisMonth) return -1; // A is this month, B is not
-            if (!isAThisMonth && isBThisMonth) return 1;  // B is this month, A is not
-
-            // Otherwise, sort by date (most recent first)
-            return dateB - dateA; 
-          });
+          const filteredSkillAnalysis = data.skillAnalysis
+            .filter(skillanalysis => skillanalysis.jobseeker_id === storedUserId)
+            .sort((a, b) => new Date(b.date_time) - new Date(a.date_time));
 
           setSkillanalysis(filteredSkillAnalysis);
-
-          try {
-            await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillAnalysis));
-            console.log('Filtered skill analysis saved:', filteredSkillAnalysis);
-          } catch (error) {
-            console.error('Failed to save filtered skill analysis to AsyncStorage', error);
-          }
-        } else {
-          console.error('Failed to fetch data', data);
+          await AsyncStorage.setItem('allSkillanalysis', JSON.stringify(filteredSkillAnalysis));
         }
-      } else {
-        console.error('Token or user_id not found in AsyncStorage');
       }
     } catch (error) {
       console.error('Failed to load form data', error);
     }
   };
 
-
-
-
-
   useEffect(() => {
-    fetchData(); // Initial data load
-
-    const intervalId = setInterval(fetchData, 5000); // Poll every 5 seconds
-
-    return () => clearInterval(intervalId); // Clear interval on component unmount
+    fetchData();
   }, []);
 
   const [fontsLoaded] = useFonts({
@@ -144,108 +65,77 @@ const ScheduledMeetingsTable = () => {
   });
   const { t } = useTranslation();
 
+  const displayedMeetings = showAll ? skillanalysiss : skillanalysiss.slice(0, 2);
+
   return (
     <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t('Completed')}</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            {/* Table Headers */}
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Expert')}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Role')}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Performance')}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t('Meeting Date')}</Text>
-            </View>   
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Join Meeting Today Now</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Rate</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>View</Text>
-               </View>
-            </TouchableOpacity>
-            
-          </View>
 
-          {/* Table Rows */}
-          {displayedMeetings.map((skillanalysis, index) => (
-            <View style={styles.row} key={index}>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.expert_name}</Text>
-              </View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.role}</Text>
-              </View>
-              
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{skillanalysis.rating}</Text>
-              </View>
-              <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.cellText}>{new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
-              </View>
-              <TouchableOpacity>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                    <Text style={{color: 'transparent'}}>Join Meeting Today Now</Text>
-                 </View>
+        {displayedMeetings.map((skillanalysis, index) => (
+          <View style={styles.meetingContainer} key={index}>
+            <View
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                }}
+                style={{
+                  width: 150,
+                  height: 150,
+                  marginTop: 30,
+                  marginBottom: 30,
+                  marginLeft: 50,
+                }}
+              />
+              <View
+                style={{ flexDirection: "column", width: "75%" }}
+              >
+                <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                  <Text style={styles.meetingTime}>
+                    One-on-One Session .{" "}
+                  </Text>
+                  <Text style={styles.meetingTime}>Online . </Text>
+                  <Text style={styles.meetingTime}>{skillanalysis.role}</Text>
+                </View>
+            <Text style={styles.cellText}>{t('Expert')}: {skillanalysis.expert_name}</Text>
+            <Text style={styles.cellText}>{t('Type')}: {skillanalysis.types}</Text>
+            <Text style={styles.cellText}>
+              {t('Meeting Date')}: {new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+            </Text>
+
+                <Text style={{ backgroundColor: 'darkgrey', padding: 3, borderRadius: 5, color: 'black', width: 80, textAlign: 'center', marginTop: 5 }}>
+                 Completed
+                </Text> 
+                <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
+              <TouchableOpacity style={styles.joinButton2} onPress={() => handleOpenPress2(skillanalysis)}>
+                <Text style={styles.buttonText2}>{t('Rate')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleOpenPress2(skillanalysis)}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t('Rate')}</Text>
-                 </View>
+              <TouchableOpacity style={styles.joinButton} onPress={() => handleOpenPress(skillanalysis)}>
+                <Text style={styles.buttonText}>{t('View')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleOpenPress(skillanalysis)}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t('View')}</Text>
-                 </View>
-              </TouchableOpacity>
-             
             </View>
-          ))}
-          <View style={styles.paginationContainer}>
-            <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-              <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-            </TouchableOpacity>
-            <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-            <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-              <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-            </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible2}
-          onRequestClose={handleCloseModal2}
-        >
+        ))}
+
+        {!showAll && (
+          <TouchableOpacity style={styles.viewAllButton} onPress={() => setShowAll(true)}>
+            <Text style={styles.buttonText2}>{t('View All')}</Text>
+          </TouchableOpacity>
+        )}
+
+        <Modal animationType="slide" transparent={true} visible={modalVisible2} onRequestClose={handleCloseModal2}>
           <View style={styles.modalContent}>
-             <OpenSchedule2 analysis={selectedAnalysis} onCancel={handleCloseModal2} />
+            <OpenSchedule2 analysis={selectedAnalysis} onCancel={handleCloseModal2} />
           </View>
         </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={handleCloseModal}
-        >
+        <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
           <View style={styles.modalContent}>
-             <OpenSchedule analysis={selectedAnalysis} onClose={handleCloseModal} />
+            <OpenSchedule analysis={selectedAnalysis} onClose={handleCloseModal} />
           </View>
         </Modal>
-      </BlurView>
+
     </View>
   );
 };
@@ -263,93 +153,83 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: 'bold',
     fontSize: 15,
-    textAlign: 'flex-start',
-  },
-  table: {
-    flex: 1,
-    marginRight: 200,
-    marginTop: 20,
-    marginBottom: 30,
-    alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
   },
   greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30,
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
-  },
-  cell: {
-    flex: 1,
-    backgroundColor: 'none',
-    padding: 10,
-    alignItems: 'center',
-  },
-  cell2: {
-    flex: 1,
-    backgroundColor: 'white', 
-    padding: 10,
-    alignItems: 'center',
-  },
-  cellText: {
-    textAlign: 'center',
-    fontFamily: "Roboto-Light"
-  },
-  headerText: {
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
   },
   blurBackground: {
     flex: 1,
     borderRadius: 20,
   },
+  meetingContainer: {
+    marginBottom: 20,
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    marginHorizontal: 20,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  cellText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   linkText: {
     color: "#206C00",
     fontSize: 14,
-    fontFamily: "Roboto-Light"
+    fontFamily: "Roboto-Light",
+    padding: 5,
+  }, 
+  viewAllButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    width: 100,
+    alignSelf: "center",
+    borderColor: "darkgreen",
+    borderWidth: 1,
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginLeft: 50,
-    marginRight: 50
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  button: {
-    fontSize: 18,
-    color: 'darkgreen',
+  joinButton: {
+    backgroundColor: "#206C00",
+    padding: 10,
+    borderRadius: 5,
+    width: 120,
   },
-  disabledButton: {
-    fontSize: 18,
-    color: 'gray',
+  joinButton2: {
+    borderColor: "#206C00",
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    width: 120,
+    marginRight: 20,
   },
-  popupOptionContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    marginBottom: 10, 
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  icon: {
-    width: 15, 
-    height: 15,
-    marginRight: 10,
+  buttonText2: {
+    color: "#206C00",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

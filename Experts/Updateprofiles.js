@@ -5,6 +5,7 @@ import OpenModal1 from './BioProfile';
 import OpenModal2 from './Interview-guide';
 import OpenModal3 from './Skill-analysis-guide';
 import OpenModal4 from '../components/Create-hub';
+import OpenModal5 from './PaymentDetails';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = ({ onClose }) => {
@@ -14,10 +15,11 @@ const ProfilePage = ({ onClose }) => {
 
   const sections = [
     { id: 1, title: "Personal Information" },
-    { id: 2, title: "Skill Analysis Guide" },
-    { id: 3, title: "Growth Plan Guide" },
-    { id: 4, title: "Create a new Hub" },
-    { id: 5, title: "Interview Guide" },
+    { id: 2, title: "Payment Details" },
+    { id: 3, title: "Skill Analysis Guide" },
+    { id: 4, title: "Growth Plan Guide" },
+    { id: 5, title: "Create a new Hub" },
+    { id: 6, title: "Interview Guide" },
   ];
 
   const handleSectionClick = (section) => {
@@ -86,6 +88,12 @@ const ProfilePage = ({ onClose }) => {
           </View>
         )}
 
+        {activeSection === "Payment Details" && (
+          <View style={styles.modalContainer}>
+            <OpenModal5 />
+          </View>
+        )}
+        
         {activeSection === "Personal Information" && (
   <View style={styles.modalContainer}>
     <OpenModal1 />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, Image, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, Image, ScrollView, Picker, Modal } from 'react-native';
 import OpenModal from './GradeAssignmentList';
 import DateTimePickerModal from "../components/TimePicker4";
 import { useFonts } from "expo-font";
@@ -60,10 +60,9 @@ function MyComponent({ onClose }) {
     return time; // You can further customize this function if needed
   };
 
-
-  const handleMeetingSelect = (meeting) => {
-      setSelectedMeeting(meeting);
-      console.log(`Selected Meeting: ${meeting.description} on ${meeting.meetingDate}`);
+  const handleMeetingSelect = (itemValue) => {
+    const selected = meetings.find((meeting) => meeting.id === itemValue);
+    setSelectedMeeting(selected);
   };
   
   useEffect(() => {
@@ -229,23 +228,24 @@ function MyComponent({ onClose }) {
           <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 5, fontFamily: "Roboto-Light" }}>
             Select a meeting for assesment
           </Text>
-              {meetings.length > 0 ? (
-                  <FlatList
-                      data={meetings}
-                      keyExtractor={(item) => item.id.toString()}
-                      renderItem={({ item }) => (
-                          <TouchableOpacity
-                              style={[styles.meetingItem, selectedMeeting?.id === item.id && styles.selectedItem]}
-                              onPress={() => handleMeetingSelect(item)}
-                          >
-                              <Text style={styles.meetingDescription}>{item.description}</Text>
-                              <Text style={styles.meetingDate}>{item.meetingDate}</Text>
-                          </TouchableOpacity>
-                      )}
-                  />
-              ) : (
-                  <Text>No meetings available for this hub.</Text>
-              )}
+          {meetings.length > 0 ? (
+            <Picker
+              selectedValue={selectedMeeting?.id}
+              style={styles.input}
+              onValueChange={(itemValue) => handleMeetingSelect(itemValue)}
+            >
+              <Picker.Item label="Select a meeting" value={null} />
+              {meetings.map((meeting) => (
+                <Picker.Item 
+                  key={meeting.id} 
+                  label={meeting.description || "Untitled Meeting"} 
+                  value={meeting.id} 
+                />
+              ))}
+            </Picker>
+          ) : (
+            <Text style={{ fontWeight: '500', marginLeft: 50, fontSize: 16 }}>No meetings available for this hub.</Text>
+          )}
           
           
 

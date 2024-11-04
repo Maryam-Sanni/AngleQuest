@@ -40,7 +40,7 @@ function MyComponent() {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [text, setText] = useState("How do we calculate ratings?");
-
+   const [activeTab, setActiveTab] = useState('Scheduled');
   
   const handleTextChange = () => {
     if (text === "How do we calculate ratings?") {
@@ -501,79 +501,34 @@ function MyComponent() {
           </View>
       </Modal>
 
-      <View style={styles.container}>
-        <View style={styles.box}>
-          <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
-            <Text style={{ fontSize: 20, color: "black", fontWeight: '600', textAlign: 'center'}}>
-              {t("Next Session")}
-            </Text>
-            <Text style={{ fontSize: 13, marginTop: 10, fontFamily: "Roboto-Light", textAlign: 'center' }}>
-              {meetingData.date || 'N/A'}
-            </Text>
-            <Text style={{ fontSize: 13, marginTop: 5, fontWeight: '500', fontFamily: "Roboto-Light", textAlign: 'center' }}>
-              {meetingData.time || 'N/A'}
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
-              <TouchableOpacity 
-                style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, borderRadius: 5, marginRight: 10, borderWidth: 2, borderColor: '#206C00'}} 
-                onPress={handleJoinPress}
-              >
-                <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>
-                  {t("Join Now")}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={{ backgroundColor: 'none', padding: 8, paddingHorizontal: 10, borderRadius: 5, borderWidth: 2, borderColor: '#206C00'}} 
-                onPress={handleAddToCalendarPress}
-              >
-                <Text style={{ color: '#206C00', textAlign: 'center', fontSize: 13, fontWeight: '600', fontFamily: "Roboto-Light" }}>
-                  {t("Add to Calendar")}
-                </Text>
-              </TouchableOpacity>
-            </View>
+        <View style={styles.container}>
+          {/* Tab Navigation */}
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'Scheduled' && styles.activeTab]}
+              onPress={() => setActiveTab('Scheduled')}
+            >
+              <Text style={[styles.tabText, activeTab === 'Scheduled' && styles.activeTabText]}>
+                Scheduled
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'Completed' && styles.activeTab]}
+              onPress={() => setActiveTab('Completed')}
+            >
+              <Text style={[styles.tabText, activeTab === 'Completed' && styles.activeTabText]}>
+                Completed
+              </Text>
+            </TouchableOpacity>
           </View>
+
+          {/* Conditionally Render Component Based on Active Tab */}
+          <View style={styles.contentContainer}>
+            {activeTab === 'Scheduled' ? <ScheduledAdvice />  :  <CompletedAdvice />}
+          </View>
+          
         </View>
-
-
-
-       <View style={styles.box}>
-        <View style={{alignItems: 'center', alignContent: 'center',fontFamily:"Roboto-Light"}}>
-      <Text style={{ fontSize: 18, fontWeight: '600' }}>{t("Rating")}</Text>
-       <Text style={{ fontSize: 12, marginTop: 5, marginBottom: 15,fontFamily:"Roboto-Light" }}>{ratingCount} candidates reviews</Text>
-    <View style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(225,225,212,0.3)', width: 200, alignItems: 'center', marginTop: 10 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={{ fontSize: 18, color: "black", fontWeight: '600', fontFamily: "Roboto-Light" }}>
-          {[...Array(5)].map((_, i) => (
-            <FaStar key={i} color={i < Math.round(averageRating) ? "gold" : "lightgrey"} />
-          ))}
-        </Text>
-        <Text style={{ fontSize: 12, marginTop: 3, marginLeft: 5, color: "black" }}>
-          {averageRating} out of 5
-        </Text>
-      </View>
-                  </View>
-          <TouchableOpacity onPress={handleTextChange}>
-            <Text style={{ fontSize: 12, marginTop: 30, fontFamily: "Roboto-Light" }}>
-              {text}
-            </Text>
-          </TouchableOpacity>
-    </View>
-      </View>
-        <View style={styles.box2}>
-          <Text style = {{fontSize: 14, color: 'black', fontWeight: '600', marginBottom: 5}}>{t("You have a new session in:")}</Text>
-           <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'coral', marginTop: 5,fontFamily:"Roboto-Light" }}>{timerComponents}</Text>
-          <Text style = {{fontSize: 12, marginTop: 20, color: 'grey',fontFamily:"Roboto-Light" }}>{t("By recording upcoming sessions in your calendar, you hold yourself accountable for candidate's progress.")} </Text>
-        </View>
-     </View>
-
-          
-  
-          
-          <Text style = {{fontSize: 20, marginTop: 30, color: '#f7fff4', fontWeight: 'bold', marginLeft: 50, marginBottom: -10 }}>{t("Skill Analysis Overview")} </Text>
-          
-<ScheduledAdvice /> 
-<CompletedAdvice />
+     
 </View>
           
           
@@ -621,154 +576,59 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 60
   },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  marginTop: 50,
-  maxWidth: '90%',
-  marginLeft: 50,
-  },
-  box2: {
-    backgroundColor: '#f7fff4',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '44%',
-    height: 200,
-    overflow: 'scroll',
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  box: {
-    backgroundColor: '#f7fff4',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '25%',
-    height: 200,
-    marginRight: 20,
-    borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  graphTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  barGraphContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    width: 200,
-    height: 80,
-    marginTop: 40,
-    marginRight: 20,
-    marginBottom: -10,
-    paddingHorizontal: 10,
-    backgroundColor: '#f7fff4',
-    borderRadius: 5,
-    paddingTop: 20,
-    paddingBottom: 10,
-  },
-  barContainer: {
-    alignItems: 'center',
-  },
-  scoreDateContainer: {
-    position: 'absolute',
-    bottom: -30,
-    left: '50%',
-    transform: [{ translateX: -5 }],
-    alignItems: 'center',
-     marginBottom: 10,
-  },
-  graphBar: {
-    width: 20,
-    borderRadius: 2,
-    marginBottom: 10,
-  },
-  graphScore: {
-    fontSize: 10,
-    color: 'lightgrey',
-    fontWeight: '600',
-     marginTop: 10,
-     fontFamily:"Roboto-Light"
-  },
-  graphDate: {
-    fontSize: 12,
-    color: 'grey',
-    fontWeight: 'bold',
-    marginTop: 2,
-   marginBottom: -10,
-   fontFamily:"Roboto-Light"
-  },
-  boximage: {
-        width: 50,
-        height: 50,
-        position: 'absolute',
-        left: '100%',
-        marginLeft: 350,
-        borderRadius: 25, 
-      },
-  calendarContainer: {
-    flexDirection: 'column',
-    marginTop: 5,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    maxWidth: '100%',
-    overflow: 'hidden'
-  },
-  monthGrid: {
-    flexDirection: 'column', 
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  dayAbbreviationsRow: {
-    flexDirection: 'row', // Days abbreviation in a row
-    justifyContent: 'space-between', // Space out evenly
-    width: '100%', // Full width for the row
-    marginBottom: 5, // Space below for the counts
-  },
-  daysRow: {
-    flexDirection: 'row', 
-    flexWrap: 'wrap', 
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  dayContainer: {
-    alignItems: 'center',
-    width: '14%',
-    marginBottom: 10, 
-  },
-  dayName: {
-    fontWeight: 'bold',
-  },
-  dayNumber: {
-    fontSize: 14, 
-fontWeight: 'bold'
-  },
-  meetingCount: {
-    width: 20,
-    height: 20,
-    borderRadius: 15,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    textAlign: 'center',
-  },
+       container: {
+         backgroundColor: "rgba(211,249,216,0.1)", 
+            padding: 50 ,
+            marginTop: 50,
+            marginRight: 50
+            },
+            box: {
+              backgroundColor: '#f7fff4',
+              padding: 20,
+              borderRadius: 20,
+              alignItems: 'center',
+                justifyContent: 'center',
+              width: '22%',
+              height: 150,
+              borderWidth: 2, borderColor: 'rgba(225,225,212,0.3)',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            },
+            boximage: {
+              width: 30,
+              height: 30,
+              marginLeft: 10,
+              borderRadius: 25
+            },
+        tabContainer: {
+          flexDirection: 'row',
+          marginLeft: 50
+        },
+        tabText: {
+          fontSize: 18,
+          fontWeight: '600',
+          color: '#D3D3D3',
+          marginBottom: 10,
+           padding: 5,
+          marginRight: 20
+        },
+        activeTabText: {
+          color: 'white',
+          borderWidth: 1,
+          borderRadius: 10,
+          padding: 5,
+          borderColor: 'white'
+          },
+        contentContainer: {
+          flex: 1,
+          padding: 16,
+        },
 });
 
 export default MyComponent;

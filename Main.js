@@ -189,6 +189,7 @@ const App = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/change-password" element={<ResetPassword />} />
+        <Route path="/password" element={<Password />} />
          <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/notification-settings" element={<NotificationSettings />} />
         <Route path="/billings-payment" element={<BillingsandPayment />} />

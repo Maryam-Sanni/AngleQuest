@@ -152,7 +152,7 @@ response.forEach((item) => {
          jobseeker_id: data?.user_id,
         growth_plan_id: String(data?.id),
         remark: remark,
-        coach: data?.coach,
+        coach: data?.name,
         expert_name: `${firstName} ${lastName}`,
         rating: rating,
         completed: completed,
@@ -245,7 +245,7 @@ response.forEach((item) => {
           <Text style = {{fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Candidate")}</Text>
         </View>
         <View style={styles.cell}>
-        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.coach}</Text>
+        <Text style={{color: 'grey',fontFamily:"Roboto-Light"}}>{data?.name}</Text>
            
         </View>
       </View>

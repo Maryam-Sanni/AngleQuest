@@ -45,7 +45,10 @@ const ScheduledMeetingsTable = () => {
       if (response.status === 200) {
         const { NewMeeting } = response.data;
         if (NewMeeting && NewMeeting.length > 0) {
-          setMeetings(NewMeeting);
+          // Sort NewMeeting by date in ascending order (closest dates first)
+          const sortedMeetings = NewMeeting.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+          setMeetings(sortedMeetings);
           setLoading(false);
         } else {
           console.error('No meetings found');
@@ -57,6 +60,7 @@ const ScheduledMeetingsTable = () => {
       console.error('Error fetching meeting data:', error);
     }
   };
+
 
   const handleJoinLink = async (meeting) => {
     try {
@@ -214,6 +218,11 @@ const styles = StyleSheet.create({
   viewAllButtonText: {
     color: '#206C00',
     fontWeight: 'bold',
+  },
+  buttonText2: {
+    color: "#206C00",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

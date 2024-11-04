@@ -13,31 +13,10 @@ const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastExpertLink, setLastExpertLink] = useState(null);
   const [meetings, setMeetings] = useState([]);
-   const [selectedMeeting, setSelectedMeeting] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3; // Number of meetings to display per page
-  const totalPages = Math.ceil(meetings.length / itemsPerPage);
-
-  // Get the current meetings to display based on the page
-  const displayedMeetings = meetings.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [showAllMeetings, setShowAllMeetings] = useState(false); // State to control "View All" functionality
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
@@ -45,11 +24,7 @@ const ScheduledMeetingsTable = () => {
 
   const handleOpenPress = async (meeting) => {
     try {
-      // Save the selected meeting data to AsyncStorage
       await AsyncStorage.setItem('selectedMeeting', JSON.stringify(meeting));
-      console.log('Selected meeting saved:', meeting);
-
-      // Set the selected meeting in state to pass it to the modal
       setSelectedMeeting(meeting);
       setModalVisible(true);
     } catch (error) {
@@ -78,15 +53,13 @@ const ScheduledMeetingsTable = () => {
 
         if (response.status === 200) {
           const data = response.data.skillAnalysis;
-
-          // Filter and sort meetings by date_time in ascending order (earliest to latest)
           const filteredMeetings = data
             .filter(meeting => meeting.user_id === storedExpertId)
-            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time)); // Sort by date
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Ensure dates are parsed correctly
 
           setMeetings(filteredMeetings);
 
-          // Save all growth plans to AsyncStorage
+          // Save to AsyncStorage
           try {
             await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
             console.log('All expert skill analysis saved:', data);
@@ -101,10 +74,6 @@ const ScheduledMeetingsTable = () => {
       }
     };
 
-    // Initial data load
-    loadFormData();
-
-    // Polling function
     const pollFeedbacks = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
@@ -121,17 +90,13 @@ const ScheduledMeetingsTable = () => {
 
         if (response.status === 200) {
           const data = response.data.skillAnalysis;
-
-          // Filter and sort meetings by date_time in ascending order (earliest to latest)
           const filteredMeetings = data
             .filter(meeting => meeting.user_id === storedExpertId)
-            .sort((a, b) => new Date(a.date_time) - new Date(b.date_time)); // Sort by date
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-          // Only update if new data is different from current meetings
+          // Check if data has changed before updating state and AsyncStorage
           if (JSON.stringify(filteredMeetings) !== JSON.stringify(meetings)) {
             setMeetings(filteredMeetings);
-
-            // Save updated data to AsyncStorage
             try {
               await AsyncStorage.setItem('allExpertsskillanalysis', JSON.stringify(data));
               console.log('Updated expert skill analysis saved:', data);
@@ -147,67 +112,15 @@ const ScheduledMeetingsTable = () => {
       }
     };
 
-    // Set up polling
+    loadFormData();
+
     const intervalId = setInterval(pollFeedbacks, POLLING_INTERVAL);
 
-    // Clean up interval on component unmount
     return () => clearInterval(intervalId);
   }, [meetings]);
 
 
-  useEffect(() => {
-    const fetchLastCreatedMeeting = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const storedExpertId = await AsyncStorage.getItem('user_id');
-
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-
-        const response = await fetch(`${apiUrl}/api/jobseeker/meetings/get?type=advice`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.status === 'success') {
-          const meetings = Object.values(data.meetings);
-
-          // Filter meetings where expert_id matches storedExpertId
-          const matchingMeetings = meetings.filter(
-            meeting => meeting.expert_id === storedExpertId
-          );
-
-          if (matchingMeetings.length > 0) {
-            // Sort the filtered meetings by created_at in descending order
-            const sortedMeetings = matchingMeetings.sort(
-              (a, b) => new Date(b.created_at) - new Date(a.created_at)
-            );
-
-            // Set the lastExpertLink to the expert_link of the latest meeting
-            setLastExpertLink(sortedMeetings[0].expert_link);
-            console.log('Last expert link:', sortedMeetings[0].expert_link); // Debugging
-          } else {
-            console.error('No matching meetings found for this expert ID');
-          }
-        } else {
-          console.error('Failed to fetch meetings:', data.message);
-        }
-      } catch (error) {
-        console.error('Failed to fetch meetings:', error);
-      }
-    };
-
-    fetchLastCreatedMeeting();
-  }, []);
+ 
 
   const handleJoinPress = () => {
     if (lastExpertLink) {
@@ -220,7 +133,7 @@ const ScheduledMeetingsTable = () => {
   const formatDateTime = (dateTimeString) => {
     try {
       const dateTime = new Date(dateTimeString);
-      if (isNaN(dateTime.getTime())) { // Check if date is invalid
+      if (isNaN(dateTime.getTime())) {
         throw new Error('Invalid date');
       }
       const date = dateTime.toLocaleDateString();
@@ -233,71 +146,76 @@ const ScheduledMeetingsTable = () => {
   };
 
   return (
-    <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Completed")}</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Name")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Role")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Account Type")}</Text>
-            </View>
-            <View style={styles.cell2}>
-              <Text style={styles.headerText}>{t("Completed")}</Text>
-            </View>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Open</Text>
-               </View>
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+        {meetings.length === 0 ? (
+      <View
+        style={{
+          alignContent: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+      >
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+          }}
+          style={{
+            width: 50,
+            height: 50,
+            marginLeft: 100,
+          }}
+        />
+          <Text style={styles.noMeetings}>No scheduled meeting has been completed</Text>
+      </View>
+        ) : (
+          <>
+            {meetings.slice(0, showAllMeetings ? meetings.length : 2).map((meeting, index) => (
+              <View key={index} style={styles.meetingContainer}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      marginTop: 30,
+                      marginBottom: 30,
+                      marginLeft: 50,
+                    }}
+                  />
+                  <View style={{ flexDirection: "column", width: "75%" }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                      <Text style={styles.meetingTime}>One-on-One Session . </Text>
+                      <Text style={styles.meetingTime}>Online . </Text>
+                      <Text style={styles.meetingTime}>Completed</Text>
+                    </View>
 
-          {displayedMeetings.map((meeting, index) => {
-            const dateTime = new Date(meeting.updated_at);
-            const date = dateTime.toLocaleDateString();
-            const time = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            return (
-              <View key={index} style={styles.row}>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Image source={require('../assets/useravatar.jpg')} style={styles.image} />
-                    <Text style={styles.cellText}>{meeting.expert}</Text>
+                  <Text style={styles.cellText}>{meeting.expert}</Text>
+                      <Text style={styles.cellText}>{meeting.role}
+                        </Text>
+                    <Text style={styles.cellText}>{formatDateTime(meeting.date)}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
+                  <TouchableOpacity  style={styles.joinButton2} onPress={() => handleOpenPress(meeting)}>
+                      <Text style={styles.buttonText2}>{t("Open")}</Text>
+                  </TouchableOpacity>
+                </View>
                   </View>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{meeting.role}</Text>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{t("Individual")}</Text>
-                </View>
-                 <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.cellText}>{formatDateTime(meeting.date)}</Text>
-                </View>
-                <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
-                   <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Open")}</Text>
-                   </View>
-                </TouchableOpacity>
+                  </View>
+              
+         
               </View>
-            );
-          })}
-          <View style={styles.paginationContainer}>
-              <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-                <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
+            ))}
+            {!showAllMeetings && meetings.length > 2 && (
+              <TouchableOpacity
+                style={styles.viewAllButton}
+                onPress={() => setShowAllMeetings(true)}
+              >
+                <Text style={styles.buttonText2}>{t("View All")}</Text>
               </TouchableOpacity>
-              <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-              <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-                <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
+            )}
+          </>
+        )}
         <Modal
           animationType="slide"
           transparent={true}
@@ -305,104 +223,99 @@ const ScheduledMeetingsTable = () => {
           onRequestClose={handleCloseModal}
         >
           <View style={styles.modalContent}>
-             <OpenSchedule onClose={handleCloseModal} meeting={selectedMeeting} />
+            <OpenSchedule onClose={handleCloseModal} meeting={selectedMeeting} />
           </View>
         </Modal>
-      </BlurView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    marginTop: 30,
+    color: "black",
+    fontWeight: 'bold',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  meetingContainer: {
+    marginBottom: 20,
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    marginHorizontal: 20,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  cellText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light",
+    padding: 5,
+  }, 
+  viewAllButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    width: 100,
+    alignSelf: "center",
+    borderColor: "darkgreen",
+    borderWidth: 1,
+  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  title: {
-    marginTop: 30,
-    marginLeft: 50,
-    color: "black",
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'flex-start',
+  joinButton: {
+    backgroundColor: "#206C00",
+    padding: 10,
+    borderRadius: 5,
+    width: 120,
   },
-  table: {
-    flex: 1,
-    marginRight: 200,
-    marginTop: 20,
-    marginBottom: 30,
-    alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
-  },
-  greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30,
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
+  joinButton2: {
+    borderColor: "#206C00",
     borderWidth: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
-  },
-  cell: {
-    flex: 1,
-    backgroundColor: 'none',
     padding: 10,
-    alignItems: 'flex-start',
+    borderRadius: 5,
+    width: 100,
+    marginRight: 20,
   },
-  cell2: {
-    flex: 1,
-    backgroundColor: 'white', 
-    padding: 10,
-    alignItems: 'flex-start',
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  cellText: {
-    textAlign: 'flex-start',
-    fontFamily: "Roboto-Light"
-  },
-  headerText: {
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
-  },
-  blurBackground: {
-    flex: 1,
-    borderRadius: 20,
-  },
-  linkText: {
+  buttonText2: {
     color: "#206C00",
-    fontSize: 14,
-    fontFamily: "Roboto-Light"
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  noMeetings: {
+    fontSize: 18,
+    color: "white",
     marginTop: 20,
-    marginLeft: 50,
-    marginRight: 50
-  },
-  button: {
-    fontSize: 18,
-    color: 'darkgreen',
-  },
-  disabledButton: {
-    fontSize: 18,
-    color: 'gray',
   },
 });
 

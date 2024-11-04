@@ -70,7 +70,6 @@ const HubMeeting = () => {
           },
         });
 
-        
         const allMeetings = response.data.AllHubs.flatMap((hub) => {
           if (Array.isArray(hub.meeting) && hub.meeting.length > 0) {
             return hub.meeting.map((meeting) => ({
@@ -85,6 +84,9 @@ const HubMeeting = () => {
           return []; // Return an empty array if no meetings are present
         });
 
+        // Sort meetings by time, earliest to latest
+        allMeetings.sort((a, b) => new Date(a.time) - new Date(b.time));
+
         setMeetings(allMeetings.length > 0 ? allMeetings : []); // Set meetings state
         setFilteredMeetings(allMeetings); // Initialize filtered meetings
       } catch (error) {
@@ -94,6 +96,7 @@ const HubMeeting = () => {
 
     fetchMeetings();
   }, [apiUrl]);
+
 
   const handleJoinMeeting = async (meeting) => {
     try {
@@ -341,13 +344,13 @@ const HubMeeting = () => {
                             Live Session .{" "}
                           </Text>
                           <Text style={styles.meetingTime}>Get Started . </Text>
-                          <Text style={styles.meetingTime}>online . </Text>
+                          <Text style={styles.meetingTime}>Online . </Text>
                           <Text style={styles.meetingTime}>
                             {meeting.hubCat}
                           </Text>
                         </View>
                         <Text style={styles.hubName}>
-                          {meeting.description}
+                          {meeting.hubName}
                         </Text>
                         <Text
                           style={{
@@ -362,14 +365,7 @@ const HubMeeting = () => {
                         </Text>
 
                         <Text style={styles.meetingDescription}>
-                          Join us for an insightful {meeting.hubSpec} live
-                          session! In this event, our expert will discuss{" "}
-                          {meeting.hubName} sharing valuable insights and best
-                          practices. Whether you’re looking to enhance your
-                          knowledge or gain new perspectives, this session
-                          promises to provide you with the tools and information
-                          you need. Don't miss this opportunity to learn from
-                          the best!
+                       {meeting.description} 
                         </Text>
                       </View>
                     </View>
@@ -504,7 +500,7 @@ const styles = StyleSheet.create({
   },
   meetingDescription: {
     fontSize: 14,
-    width: 600,
+    width: "100%",
     marginBottom: 4,
   },
   meetingDate: {

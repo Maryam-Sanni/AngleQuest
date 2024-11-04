@@ -90,7 +90,9 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
 
           // Ensure hub_id is treated as a string for comparison
           const filteredMeetings = NewMeeting.filter(meeting => String(meeting.hub_id) === String(hubId));
-          setMeetings(filteredMeetings);
+
+          const sortedMeetings = filteredMeetings.sort((a, b) => new Date(b.date) - new Date(a.date));
+          setMeetings(sortedMeetings);
         } else {
           console.error('Failed to fetch meeting data');
         }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Linking, ScrollView } from 'react-native';
 import OpenSchedule from '../Jobseekers/OpenGrowth';
 import OpenSchedule2 from '../Jobseekers/OpenGrowth';
 import { BlurView } from 'expo-blur';
@@ -10,33 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
   const [selectedGrowthPlan, setSelectedGrowthPlan] = useState(null);
   const [growthPlans, setGrowthPlans] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3; // Number of meetings to display per page
-  const totalPages = Math.ceil(growthPlans.length / itemsPerPage);
-
-  // Get the current meetings to display based on the page
-  const displayedMeetings =  growthPlans.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const [showAll, setShowAll] = useState(false); // State to control "View All"
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const loadFormData = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -44,16 +23,18 @@ const ScheduledMeetingsTable = () => {
         console.error('No token found');
         return;
       }
-  
+
       const response = await axios.get(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-  
+
       if (response.status === 200) {
         let data = response.data.growthPlan || [];
-  
+
+         data.sort((a, b) => new Date(b.date_time) - new Date(a.date_time));
+        
         setGrowthPlans(data);
-  
+
         // Save all growth plans to AsyncStorage
         try {
           await AsyncStorage.setItem('allGrowthPlans', JSON.stringify(data));
@@ -70,7 +51,7 @@ const ScheduledMeetingsTable = () => {
   };  
 
   // Function to format date_time string
-const formatDateTime = (dateTimeString) => {
+  const formatDateTime = (dateTimeString) => {
   let date, time;
 
   // Check if the string contains a '|', indicating a non-standard format
@@ -94,30 +75,25 @@ const formatDateTime = (dateTimeString) => {
   const formattedTime = time.toLowerCase(); // Convert to lowercase
 
   return `${formattedDate} ${formattedTime}`; // Return the full formatted string
-};
+  };
 
 
   useEffect(() => {
     loadFormData(); // Initial data load
 
     // Set up polling
-    const intervalId = setInterval(loadFormData, 5000); // Poll every 30 seconds
+    const intervalId = setInterval(loadFormData, 5000); // Poll every 5 seconds
 
     return () => {
       clearInterval(intervalId); // Clear interval on component unmount
     };
   }, []);
 
-  const handleOpenPress2 = async (growthPlan) => {
+
+  const handleOpenPress = async (growthPlan) => {
     setSelectedGrowthPlan(growthPlan);
     setModalVisible(true);
-
-    try {
-      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
-      console.log('Selected growth plan saved:', growthPlan);
-    } catch (error) {
-      console.error('Failed to save selected growth plan to AsyncStorage', error);
-    }
+    await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
   };
 
   const handleCloseModal = () => {
@@ -125,208 +101,189 @@ const formatDateTime = (dateTimeString) => {
     setSelectedGrowthPlan(null);
   };
 
-  const handleOpenPress = async (growthPlan) => {
-    setSelectedGrowthPlan(growthPlan);
-    setModalVisible(true);
-
-    try {
-      await AsyncStorage.setItem('selectedGrowthPlan', JSON.stringify(growthPlan));
-      console.log('Selected growth plan saved:', growthPlan);
-    } catch (error) {
-      console.error('Failed to save selected growth plan to AsyncStorage', error);
-    }
-  };
-
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
-    setSelectedGrowthPlan(null);
-  };
-
+  
   const [fontsLoaded] = useFonts({
     'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
   });
 
   const { t } = useTranslation();
 
-  return (
-    <View style={styles.greenBox}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-        <Text style={styles.title}>{t("Scheduled Growth Plan Sessions")}</Text>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <View style={styles.cell2}><Text style={styles.headerText }>{t("Expert")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Starting Level")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Target Level")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Goal")}</Text></View>
-            <View style={styles.cell2}><Text style={styles.headerText}>{t("Meeting Date")}</Text></View>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Update</Text>
-               </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.cell2}>
-              <Text style={{color: 'white'}}>Join</Text>
-               </View>
-            </TouchableOpacity>
-          </View>
-          
-          {displayedMeetings.map((growthPlan, index) => (
-       
-            <View key={index} style={styles.row}>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.coach}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.starting_level}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.target_level}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}><Text style={styles.cellText}>{growthPlan.title}</Text></View>
-               <View style={index % 2 === 0 ? styles.cell : styles.cell2}>  <Text style={styles.cellText}>{formatDateTime(growthPlan.date_time)}</Text></View>
-              <TouchableOpacity onPress={() => handleOpenPress (growthPlan)}>
-                <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                <Text style={styles.linkText}>{t("Update")}</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  const joinLink = growthPlan.candidate_link || 'https://default-join-link.com';
-                  if (joinLink) {
-                    Linking.openURL(joinLink)
-                      .catch(err => console.error("Couldn't load page", err)); // Handle potential errors
-                  } else {
-                    console.warn('No valid link available');
-                  }
-                }}
-              >
-  <View style={index % 2 === 0 ? styles.cell : styles.cell2}>
-                  <Text style={styles.linkText}>{t("Join")}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}
-    <View style={styles.paginationContainer}>
-          <TouchableOpacity onPress={goToPreviousPage} disabled={currentPage === 0}>
-            <Text style={currentPage === 0 ? styles.disabledButton : styles.button}>{'<'}</Text>
-          </TouchableOpacity>
-          <Text>{`Page ${currentPage + 1} of ${totalPages}`}</Text>
-          <TouchableOpacity onPress={goToNextPage} disabled={currentPage >= totalPages - 1}>
-            <Text style={currentPage >= totalPages - 1 ? styles.disabledButton : styles.button}>{'>'}</Text>
-          </TouchableOpacity>
-        </View>
-          </View>
+  // Only display two items initially, or all if "View All" is clicked
+  const displayedMeetings = showAll ? growthPlans : growthPlans.slice(0, 2);
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={handleCloseModal}
-        >
-          <View style={styles.modalContent}>
-            <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
-          </View>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible2}
-          onRequestClose={handleCloseModal2}
-        >
-          <View style={styles.modalContent}>
-            <OpenSchedule2 growthPlan={selectedGrowthPlan} onClose={handleCloseModal2} />
-          </View>
-        </Modal>
-      </BlurView>
-    </View>
+  return (
+    <ScrollView style={styles.container}>
+          {growthPlans.length === 0 ? (
+      <View
+        style={{
+          alignContent: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+      >
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+          }}
+          style={{
+            width: 50,
+            height: 50,
+            marginLeft: 100,
+          }}
+        />
+            <Text style={styles.noMeetings}>No new meeting has been scheduled</Text>
+      </View>
+          ) : (
+            <>
+              {displayedMeetings.map((growthPlan, index) => (
+                <View key={index} style={styles.meetingContainer}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                      }}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        marginTop: 30,
+                        marginBottom: 30,
+                        marginLeft: 50,
+                      }}
+                    />
+                    <View style={{ flexDirection: "column", width: "75%" }}>
+                      <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <Text style={styles.meetingTime}>One-on-One Session . </Text>
+                        <Text style={styles.meetingTime}>Online . </Text>
+                        <Text style={styles.meetingTime}>{growthPlan.starting_level} - {growthPlan.target_level}</Text>
+                      </View>
+                      <Text style={styles.cellText}><Text style={styles.headerText}>{t("Expert")}: </Text>{growthPlan.coach}</Text>
+                      <Text style={styles.cellText}><Text style={styles.headerText}>{t("Goal")}: </Text>{growthPlan.title}</Text>
+                      <Text style={styles.cellText}><Text style={styles.headerText}>{t("Meeting Date")}: </Text>{formatDateTime(growthPlan.date_time)}</Text>
+                      <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
+                        <TouchableOpacity onPress={() => handleOpenPress(growthPlan)} style={styles.joinButton2}>
+                          <Text style={styles.buttonText2}>{t("Update")}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const joinLink = growthPlan.candidate_link || 'https://default-join-link.com';
+                            if (joinLink) {
+                              Linking.openURL(joinLink).catch(err => console.error("Couldn't load page", err));
+                            } else {
+                              console.warn('No valid link available');
+                            }
+                          }}
+                          style={styles.joinButton}
+                        >
+                          <Text style={styles.buttonText}>{t("Join Meeting")}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ))}
+              {!showAll && growthPlans.length > 2 && (
+                <TouchableOpacity onPress={() => setShowAll(true)} style={styles.viewAllButton}>
+                  <Text style={styles.buttonText2}>{t("View All")}</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+
+      <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
+        <View style={styles.modalContent}>
+          <OpenSchedule growthPlan={selectedGrowthPlan} onClose={handleCloseModal} />
+        </View>
+      </Modal>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    marginTop: 30,
+    color: "black",
+    fontWeight: 'bold',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  meetingContainer: {
+    marginBottom: 20,
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    marginHorizontal: 20,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  cellText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  linkText: {
+    color: "#206C00",
+    fontSize: 14,
+    fontFamily: "Roboto-Light",
+    padding: 5,
+  }, 
+  viewAllButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    width: 100,
+    alignSelf: "center",
+    borderColor: "darkgreen",
+    borderWidth: 1,
+  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  title: {
-    marginTop: 30,
-    marginLeft: 50,
-    color: "black",
-    fontWeight: 'bold',
-    fontSize: 15,
-    textAlign: 'flex-start',
+  joinButton: {
+    backgroundColor: "#206C00",
+    padding: 10,
+    borderRadius: 5,
+    width: 120,
   },
-  table: {
-    flex: 1,
-    marginRight: 200,
-    marginTop: 20,
-    marginBottom: 30,
-    alignContent: 'center',
-    justifyContent: 'space-around',
-    marginLeft: 50, marginRight: 50
-  },
-  greenBox: {
-    width: "90%",
-    marginBottom: 20,
-    marginLeft: 50,
-    backgroundColor: 'rgba(225,225,212,0.3)',
-    marginTop: 30,
-    borderRadius: 20,
-    borderColor: 'rgba(255,255,255,0.5)',
+  joinButton2: {
+    borderColor: "#206C00",
     borderWidth: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
-  },
-  cell: {
-    flex: 1,
-    backgroundColor: 'none',
     padding: 10,
-    alignItems: 'flex-start',
+    borderRadius: 5,
+    width: 120,
+    marginRight: 20,
   },
-  cell2: {
-    flex: 1,
-    backgroundColor: 'white', 
-    padding: 10,
-    alignItems: 'flex-start',
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  cellText: {
-    textAlign: 'flex-start',
-    fontFamily: "Roboto-Light"
-  },
-  headerText: {
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  image: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginTop: -5,
-    borderRadius: 25
-  },
-  blurBackground: {
-    flex: 1,
-    borderRadius: 20,
-  },
-  linkText: {
+  buttonText2: {
     color: "#206C00",
-    fontSize: 14,
-    fontFamily: "Roboto-Light"
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  noMeetings: {
+    fontSize: 18,
+    color: "white",
     marginTop: 20,
-    marginLeft: 50,
-    marginRight: 50
-  },
-  button: {
-    fontSize: 18,
-    color: 'darkgreen',
-  },
-  disabledButton: {
-    fontSize: 18,
-    color: 'gray',
   },
 });
 

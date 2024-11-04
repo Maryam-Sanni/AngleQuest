@@ -338,11 +338,19 @@ const CreateCoachingHubForm = ({ onClose }) => {
   return (
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={styles.greenBox}>
+          <View style={styles.header}>
+            <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={styles.logo}
+            />
+            <Text style={styles.headerText}>Create New Hub</Text>
 
+
+          </View>
+        <View style={styles.greenBox}>
+          
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
-         <Text style={styles.headerText}>{t("Create New Hub")}</Text>
         
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
@@ -550,6 +558,20 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
   },
   headerText: {
     fontSize: 22,
