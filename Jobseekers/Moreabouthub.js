@@ -39,19 +39,19 @@ function MyComponent({ onClose }) {
       }
 
       try {
-        const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
+        const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-hub`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
 
         const data = await response.json();
-        if (data.status === 'success' && data.AllJoinedHubs.length > 0) {
-          setHubs(data.AllJoinedHubs);
+        if (data.status === 'success' && data.JoinedHubs.length > 0) {
+          setHubs(data.JoinedHubs);
 
           // Check if selectedHubData is defined before accessing its properties
           if (selectedHubData && selectedHubData.coaching_hub_name) {
-            const isJoined = data.AllJoinedHubs.some(hub => hub.coaching_hub_name === selectedHubData.coaching_hub_name);
+            const isJoined = data.JoinedHubs.some(hub => hub.coaching_hub_name === selectedHubData.coaching_hub_name);
             setHasJoinedHub(isJoined); // Set the joined status
           } else {
             setHasJoinedHub(false); // If selectedHubData is null, set to false
@@ -665,7 +665,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 1, // Right border for cell separation
     borderRightColor: '#CCC', // Color of the right border
     height: 50,
-    textAlign: 'center'
+    textAlign: 'center',
+    width: 300,
+    overflow: 'hidden'
   },
   cell2: {
     borderRightWidth: 1, // Right border for cell separation

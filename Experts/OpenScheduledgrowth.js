@@ -181,13 +181,13 @@ response.forEach((item) => {
             ? parseInt(balanceResponse.data.bal.total_balance, 10) 
             : 0; // Default to 0 if total_balance is null
 
-          const newBalance = currentBalance + 50; // Add 50 to the current balance
+          const newBalance = currentBalance + 20; // Add 50 to the current balance
 
           // PUT request to update the balance
           const updateBalanceResponse = await axios.put(`${apiUrl}/api/expert/edit-balance`, {
             total_balance: newBalance, 
             withdrawal: "0",  
-            new_payment: 50,  
+            new_payment: 20,  
             paid_by: data?.coach, 
           }, {
             headers: { Authorization: `Bearer ${token}` },

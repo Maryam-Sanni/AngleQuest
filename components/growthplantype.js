@@ -131,7 +131,7 @@ const ScheduledMeetingsTable = () => {
             marginLeft: 100,
           }}
         />
-            <Text style={styles.noMeetings}>No new meeting has been scheduled</Text>
+            <Text style={styles.noMeetings}>No new meetings scheduled</Text>
       </View>
           ) : (
             <>

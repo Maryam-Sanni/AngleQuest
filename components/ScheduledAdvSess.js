@@ -81,7 +81,28 @@ const ScheduledMeetingsTable = () => {
        
 
         <ScrollView>
-           {displayedMeetings.map((analysis, index) => (
+          {displayedMeetings.length === 0 ? (
+      <View
+        style={{
+          alignContent: "center",
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+      >
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+          }}
+          style={{
+            width: 50,
+            height: 50,
+            marginLeft: 100,
+          }}
+        />
+          <Text style={styles.noMeetings}>No new meetings scheduled</Text>
+      </View>
+          ) : (
+       displayedMeetings.map((analysis, index) => (
             <View key={index} style={styles.meetingContainer}>
               <View
                 style={{ flexDirection: "row", alignItems: "center" }}
@@ -162,7 +183,8 @@ const ScheduledMeetingsTable = () => {
                 </View>
               </View>
             </View>
-          ))}
+           ))
+           )}
 
           {skillAnalysisData.length > 2 && (
             <TouchableOpacity style={styles.viewAllButton} onPress={toggleShowAllMeetings}>
@@ -268,6 +290,11 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  noMeetings: {
+    fontSize: 18,
+    color: "white",
+    marginTop: 20,
   },
 });
 

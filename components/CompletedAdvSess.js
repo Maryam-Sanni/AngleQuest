@@ -67,63 +67,77 @@ const ScheduledMeetingsTable = () => {
 
   const displayedMeetings = showAll ? skillanalysiss : skillanalysiss.slice(0, 2);
 
-  return (
-    <View style={styles.greenBox}>
-
-        {displayedMeetings.map((skillanalysis, index) => (
-          <View style={styles.meetingContainer} key={index}>
-            <View
-              style={{ flexDirection: "row", alignItems: "center" }}
-            >
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
-                }}
-                style={{
-                  width: 150,
-                  height: 150,
-                  marginTop: 30,
-                  marginBottom: 30,
-                  marginLeft: 50,
-                }}
-              />
-              <View
-                style={{ flexDirection: "column", width: "75%" }}
-              >
-                <View style={{ flexDirection: "row", marginBottom: 20 }}>
-                  <Text style={styles.meetingTime}>
-                    One-on-One Session .{" "}
-                  </Text>
-                  <Text style={styles.meetingTime}>Online . </Text>
-                  <Text style={styles.meetingTime}>{skillanalysis.role}</Text>
-                </View>
-            <Text style={styles.cellText}>{t('Expert')}: {skillanalysis.expert_name}</Text>
-            <Text style={styles.cellText}>{t('Type')}: {skillanalysis.types}</Text>
-            <Text style={styles.cellText}>
-              {t('Meeting Date')}: {new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-            </Text>
-
-                <Text style={{ backgroundColor: 'darkgrey', padding: 3, borderRadius: 5, color: 'black', width: 80, textAlign: 'center', marginTop: 5 }}>
-                 Completed
-                </Text> 
-                <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
-              <TouchableOpacity style={styles.joinButton2} onPress={() => handleOpenPress2(skillanalysis)}>
-                <Text style={styles.buttonText2}>{t('Rate')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.joinButton} onPress={() => handleOpenPress(skillanalysis)}>
-                <Text style={styles.buttonText}>{t('View')}</Text>
-              </TouchableOpacity>
-            </View>
-              </View>
-            </View>
+      return (
+        <View style={styles.greenBox}>
+          {skillanalysiss.length === 0 ? (
+          <View
+            style={{
+              alignContent: "center",
+              justifyContent: "center",
+              alignSelf: "center",
+            }}
+          >
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+              }}
+              style={{
+                width: 50,
+                height: 50,
+                marginLeft: 150,
+              }}
+            />
+              <Text style={styles.noMeetings}>No scheduled meeting has been completed</Text>
           </View>
-        ))}
+          ) : (
+            displayedMeetings.map((skillanalysis, index) => (
+              <View style={styles.meetingContainer} key={index}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      marginTop: 30,
+                      marginBottom: 30,
+                      marginLeft: 50,
+                    }}
+                  />
+                  <View style={{ flexDirection: "column", width: "75%" }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                      <Text style={styles.meetingTime}>One-on-One Session . </Text>
+                      <Text style={styles.meetingTime}>Online . </Text>
+                      <Text style={styles.meetingTime}>{skillanalysis.role}</Text>
+                    </View>
+                    <Text style={styles.cellText}>{t('Expert')}: {skillanalysis.expert_name}</Text>
+                    <Text style={styles.cellText}>{t('Type')}: {skillanalysis.types}</Text>
+                    <Text style={styles.cellText}>
+                      {t('Meeting Date')}: {new Date(skillanalysis.updated_at).toLocaleDateString()} {new Date(skillanalysis.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                    </Text>
+                    <Text style={styles.completedLabel}>Completed</Text>
+                    <View style={{ flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end' }}>
+                      <TouchableOpacity style={styles.joinButton2} onPress={() => handleOpenPress2(skillanalysis)}>
+                        <Text style={styles.buttonText2}>{t('Rate')}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.joinButton} onPress={() => handleOpenPress(skillanalysis)}>
+                        <Text style={styles.buttonText}>{t('View')}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ))
+          )}
+          {!showAll && skillanalysiss.length > 2 && (
+            <TouchableOpacity style={styles.viewAllButton} onPress={() => setShowAll(true)}>
+              <Text style={styles.buttonText2}>{t('View All')}</Text>
+            </TouchableOpacity>
+          )}
 
-        {!showAll && (
-          <TouchableOpacity style={styles.viewAllButton} onPress={() => setShowAll(true)}>
-            <Text style={styles.buttonText2}>{t('View All')}</Text>
-          </TouchableOpacity>
-        )}
+          
+
 
         <Modal animationType="slide" transparent={true} visible={modalVisible2} onRequestClose={handleCloseModal2}>
           <View style={styles.modalContent}>
@@ -230,6 +244,11 @@ const styles = StyleSheet.create({
     color: "#206C00",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  noMeetings: {
+    fontSize: 18,
+    color: "white",
+    marginTop: 20,
   },
 });
 

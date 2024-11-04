@@ -199,16 +199,16 @@ function MyComponent() {
             }
 
             try {
-                const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
+                const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-hub`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
 
                 const data = await response.json();
-                if (data.status === 'success' && data.AllJoinedHubs.length > 0) {
-                    setHubs(data.AllJoinedHubs);
-                    setSelectedHub(data.AllJoinedHubs[0]);
+                if (data.status === 'success' && data.JoinedHubs.length > 0) {
+                    setHubs(data.JoinedHubs);
+                    setSelectedHub(data.JoinedHubs[0]);
                 } else {
                     setHubs([]);
                     setSelectedHub(null);

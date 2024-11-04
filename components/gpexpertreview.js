@@ -88,10 +88,10 @@ const ScheduledMeetingsTable = () => {
                 style={{
                   width: 50,
                   height: 50,
-                  marginLeft: 100,
+                  marginLeft: 150,
                 }}
               />
-              <Text style={styles.noMeetings}>No scheduled meeting have been completed</Text>
+              <Text style={styles.noMeetings}>No scheduled meeting has been completed</Text>
             </View>
            
             ) : (
