@@ -9,6 +9,7 @@ import {
   Alert,
   Switch,
   ScrollView,
+  Modal,
   ActivityIndicator
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
@@ -46,7 +47,7 @@ const MyComponent = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const handlePress = () => {
     // Programmatically trigger the file input
     fileInputRef.current.click();
@@ -191,26 +192,26 @@ const MyComponent = ({ onClose }) => {
 
   const handleQuestionsResponse = async () => {
     setIsLoading(true); // Start loading
-  
+
     try {
       // Fetch the token from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         throw new Error('No token found');
       }
-  
+
       // Check if any switch was toggled, if not, default all to "no"
       const switchStatesWithDefaults = switchStates.length === 0
         ? questions.map(() => false) // If switchStates is empty, default all to false
         : switchStates;
-  
+
       // Prepare the responses in the format required
       const responses = questions.map((question, index) => ({
         id: question.id,
         question: question.question,
         answer: switchStatesWithDefaults[index] ? "yes" : "no", // Use default "no" if switch is off
       }));
-  
+
       // Prepare the form data
       const formData = new FormData();
       formData.append(
@@ -220,7 +221,7 @@ const MyComponent = ({ onClose }) => {
           questions: JSON.stringify({ questions: responses }),
         })
       );
-  
+
       // Make the POST request using Axios
       const response = await axios.post(
         `${apiUrl}/api/jobseeker/process/questionnaire`,
@@ -232,13 +233,13 @@ const MyComponent = ({ onClose }) => {
           },
         }
       );
-  
+
       // Check if response status is OK (200-299)
       if (response.status >= 200 && response.status < 300) {
         const data = response.data;
-  
+
         console.log("Submit Response:", data);
-  
+
         // Optionally, you can check for specific success conditions in the response
         if (data && data.analysis) {
           Alert.alert("Success", "Your responses have been submitted successfully.");
@@ -315,7 +316,7 @@ const MyComponent = ({ onClose }) => {
     );
   };
 
-  
+
   const [openCV, setOpenCV] = useState(false);
   const [openQues, setOpenQues] = useState(false);
   const [switched, setSwitched] = useState(false);
@@ -349,7 +350,7 @@ const MyComponent = ({ onClose }) => {
       alert("Missing Specialization, include your target role", "Please enter the job title or specialization.");
       return;
     }
-    
+
     setSwitched(true);
     await fetchQuestions(); // Fetch questions when proceeding
   };
@@ -363,7 +364,7 @@ const MyComponent = ({ onClose }) => {
       height: animeHeight2.value,
     };
   });
-  
+
   const toggleSwitch = (index) => {
     setSwitchStates(prev => {
       const newSwitchStates = [...prev];
@@ -371,8 +372,8 @@ const MyComponent = ({ onClose }) => {
       return newSwitchStates;
     });
   };
-  
- 
+
+
 
   const Questionnaires = ({ question, isEnabled, toggleSwitch }) => {
     return (
@@ -480,7 +481,7 @@ const MyComponent = ({ onClose }) => {
                   </Text>
                 </View>
               </View>
-             
+
 
               {openCV && (
                 <Animated.View style={[styles.openCV, animatedStyle]}>
@@ -618,7 +619,7 @@ const MyComponent = ({ onClose }) => {
                       width: 100,
                       alignSelf: "flex-end",
                       marginBottom: 20,
-                      opacity: isLoading ? 0.6 : 1, // Optionally reduce opacity when loading
+                      opacity: isLoading ? 0.6 : 1,
                     },
                   ]}
                   onPress={handleQuestionsResponse}
@@ -627,6 +628,32 @@ const MyComponent = ({ onClose }) => {
                   <Text style={styles.buttonText}>Submit</Text>
                   {isLoading && <ActivityIndicator size="small" color="white" style={{ marginTop: -15 }} />}
                 </TouchableOpacity>
+
+                {/* Loading Modal */}
+                <Modal
+                  transparent={true}
+                  visible={isLoading}
+                  animationType="fade"
+                  onRequestClose={() => setIsLoading(false)}
+                >
+                  <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
+                      {/* Large Circular Activity Indicator Wrapping GIF */}
+                      <View style={styles.loadingWrapper}>
+                        <ActivityIndicator size={150} color="green" style={styles.circularIndicator} />
+                        <Image 
+                          source={require('../assets/loading.gif')}
+                          style={styles.loadingGif}
+                        />
+                      </View>
+
+                      {/* Loading Text */}
+                      <Text style={styles.loadingText}>
+                        I am analyzing your response and creating a robust report. Relax, it takes only 4 minutes.
+                      </Text>
+                    </View>
+                  </View>
+                </Modal>
               </View>
             </View>
           )}
@@ -796,6 +823,7 @@ const styles = StyleSheet.create({
   loadingText: {
     color: 'green',
     marginBottom: 10, 
+    marginTop: 20,
   },
   questionContainer: {
     flexDirection: 'row',
@@ -818,6 +846,29 @@ const styles = StyleSheet.create({
     width: 100, 
     height: 100, 
     resizeMode: 'contain', 
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    width: 650,
+    height: 700,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loadingWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  circularIndicator: {
+    position: 'absolute',
+    // Adjust positioning as needed to wrap around the GIF
   },
 });
 

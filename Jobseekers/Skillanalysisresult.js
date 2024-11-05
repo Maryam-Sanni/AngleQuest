@@ -42,41 +42,41 @@
     
     useEffect(() => {
       console.log('useEffect triggered');
-      const fetchTokenAndData = async () => {
-        try {
-          const token = await AsyncStorage.getItem('token');
-          console.log('Token:', token); // Verify if token is retrieved
-          if (token) {
-            const response = await axios.get(`${apiUrl}/api/jobseeker/cv/analysis`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            console.log('API Response:', response.data);
 
-            const analysisData = response.data.analysis;
+      const fetchAnalysisFromStorage = async () => {
+        try {
+          const predictionData = await AsyncStorage.getItem('predictionResponse');
+          console.log('Prediction Data:', predictionData); // Verify if prediction data is retrieved
+
+          if (predictionData) {
+            // Parse the JSON stored in AsyncStorage
+            const parsedPredictionData = JSON.parse(predictionData);
+
             let parsedAnalysis = {};
 
-            if (typeof analysisData.analysis === 'string') {
-              parsedAnalysis = JSON.parse(analysisData.analysis);
+            // Check if 'analysis' is a string and parse if necessary
+            if (typeof parsedPredictionData.analysis === 'string') {
+              parsedAnalysis = JSON.parse(parsedPredictionData.analysis);
             } else {
-              parsedAnalysis = analysisData.analysis;
+              parsedAnalysis = parsedPredictionData.analysis;
             }
 
             console.log('Parsed Analysis Data:', parsedAnalysis);
-
-            setApiData(parsedAnalysis);
+            setApiData(parsedAnalysis); // Set your component's state with the parsed data
 
           } else {
-            console.error('Token not found');
+            console.error('Prediction data not found in AsyncStorage');
           }
         } catch (error) {
-          console.error('Error fetching data:', error);
+          console.error('Error fetching data from AsyncStorage:', error);
         } finally {
           setLoading(false);
         }
       };
 
-      fetchTokenAndData();
+      fetchAnalysisFromStorage();
     }, []);
+
 
 
   const toggleExpanded = () => {

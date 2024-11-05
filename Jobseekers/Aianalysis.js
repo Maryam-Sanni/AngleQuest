@@ -558,7 +558,7 @@ const Step6Card = ({
             title={text1}
           />
         </View>
-       
+
       </LinearGradient>
     </View>
   );
@@ -573,7 +573,7 @@ const AIScreen = () => {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
    const [isLoading, setIsLoading] = useState(false);
-  
+
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
     console.log("Scroll Position Y:", scrollY); 
@@ -637,7 +637,7 @@ const AIScreen = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
 
    const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const handleCV = () => {
     setOpenCV(!openCV);
     if (openCV) {
@@ -701,7 +701,7 @@ const AIScreen = () => {
   const GoToBack= () => {
     navigate("/skill-analysis-sessions");
   };
-  
+
   const handlePress = () => {
     // Programmatically trigger the file input
     fileInputRef.current.click();
@@ -870,7 +870,7 @@ const AIScreen = () => {
 
 
 
-  
+
   // Conditional rendering before the return statement
   if (loading) {
     // Render the loading state before the main return using a custom loading GIF
@@ -899,12 +899,12 @@ const AIScreen = () => {
   };
 
   const getValForCertification = (index) => {
-    const values = [50, 65, 60, 45, 70, 55, 95]; // Your corresponding values
+    const values = [95, 70, 65, 60, 58, 50, 42]; // Your corresponding values
     return values[index];
   };
 
   const placeholderHireCountries = ["United Kingdom", "Canada", "USA", "Germany", "Australia", "Netherlands"];
-  
+
   const getValForCountry = (index) => {
     const values = [10, 8, 9, 6, 8, 5]; // Example values for each country
     return values[index];
@@ -923,7 +923,7 @@ const AIScreen = () => {
   };
 
   const placeholderCountries = ["Canada", "Netherland", "United Kingdom", "Germany", "Czech Replublic", "Argentina"];
-  
+
   const getValForCountrys = (index) => {
     const values = [115000, 90000, 100000, 86000, 75000, 80000]; // Example values for each country
     return values[index];
@@ -978,7 +978,7 @@ const AIScreen = () => {
     require("../assets/coursera.png"),
     require("../assets/udemy.png"),
   ];
-  
+
   const handleOpenPress = () => {
     setModalVisible(true);
   };
@@ -994,24 +994,24 @@ const AIScreen = () => {
   const handleCloseModal2 = () => {
     setModalVisible2(false);
   };
-  
+
   return (
-                 
+
                         <View style={{ flex: 1 }}>
                             <Topbar />
                             <View style={{ flexDirection: 'row', flex: 1 }}>
                                 <Sidebar />
-                            
+
 
                                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-                                  
+
                                   <View style={styles.container}>
                                         <ImageBackground
                                           source={require ('../assets/backgroundimg2.png') }
                                         style={{ height: '100%', width: '100%',flex: 1}}
                                         >
-                                        
-                                         
+
+
 
                                           <View style={{flexDirection: 'row', marginLeft: 250}}>
                                             <TouchableOpacity onPress={GoToBack}>
@@ -1040,7 +1040,7 @@ const AIScreen = () => {
                                                             </View>
                                                </TouchableOpacity>
                                           </View>
-                                          
+
             {step === 3 ? (
               <View style={styles.aiBody}>
                 <View style={styles.aiContainer}>
@@ -1400,7 +1400,7 @@ const AIScreen = () => {
                           backgroundColor: "white",
                         }}
                       >
-                       
+
                         <View
                           style={{
                             alignItems: "center",
@@ -1450,7 +1450,8 @@ const AIScreen = () => {
                             textFamily={"Poppins-SemiBold"}
                             textSize={16}
                             title={"Courses & Certification"}
-                          />
+                          /> <Text style={{fontSize: 13, marginTop: 5}}>What { (apiData.next_career_stage?.title || 'No title available')
+                                  }s are studying</Text>
                           <View
                             style={{
                               alignItems: "flex-end",
@@ -1460,19 +1461,20 @@ const AIScreen = () => {
                               gap: 6,
                             }}
                           >
-                            {apiData.three_months_step_by_step_guide.certifications_and_courses && apiData.three_months_step_by_step_guide.certifications_and_courses.length > 0 ? (
-                              apiData.three_months_step_by_step_guide.certifications_and_courses.map((course, index) => (
-                                  <Barz
-                                      key={index}
-                                      color1={getColorForCertification(index)}
-                                      color2={getColorForCertification(index, true)}
-                                      val={getValForCertification(index)} // Use the refactored function here
-                                      title={course.certification}
-                                  />
-                              ))
-                            ) : (
-                              <div>No data available</div> // Message to display when there's no data
-                            )}
+                            {apiData.three_months_step_by_step_guide.certifications_and_courses &&
+                             apiData.three_months_step_by_step_guide.certifications_and_courses.length > 0 ? (
+                               apiData.three_months_step_by_step_guide.certifications_and_courses.map((course, index) => (
+                                 <Barz
+                                   key={index}
+                                   color1={getColorForCertification(index)}
+                                   color2={getColorForCertification(index, true)}
+                                   val={getValForCertification(index)} // Use formatted value here
+                                   title={course.certification}
+                                 />
+                               ))
+                             ) : (
+                               <div>No data available</div> // Message to display when there's no data
+                             )}
 
 
                           </View>
@@ -1520,7 +1522,7 @@ const AIScreen = () => {
 
 
 
-                                
+
                               </View>
                             </View>
                           </Row>
@@ -1565,7 +1567,7 @@ const AIScreen = () => {
                                   )}
 
 
-                              
+
                             </Row>
                           </View>
                         </View>
@@ -1577,7 +1579,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          
+
                           <TouchableOpacity                onPress={() => handleStep(4)}>
                           <MainButtons
                             gradient
@@ -1595,8 +1597,8 @@ const AIScreen = () => {
                   </View>
                 </View>
               </View>
-                                         
-                          
+
+
             ) : step === 4 ? (
               <View style={[styles.aiBody, { minHeight: 900, marginLeft: 230 }]}>
                 <View style={{ backgroundColor: "transparent" }}>
@@ -1658,8 +1660,8 @@ const AIScreen = () => {
                                 </>
                               );
                             })}
-                            
-                           
+
+
                           </View>
                         </View>
 
@@ -1670,7 +1672,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                          
+
                           <TouchableOpacity                onPress={() => handleStep(5)}>
                           <MainButtons
                             gradient
@@ -1946,7 +1948,7 @@ const AIScreen = () => {
                             marginBottom: 20,
                           }}
                         >
-                         
+
                           <TouchableOpacity                onPress={() => handleStep(6)}>
                           <MainButtons
                             gradient
@@ -2000,7 +2002,7 @@ const AIScreen = () => {
                               "Knowledge Gaps | Things that you need to learn"
                             }
                           />
-                          
+
                           <View style={{ position: "relative", gap: 40 }}>
                             <Step6Card
                               bgColor1="#135837"
@@ -2060,10 +2062,10 @@ const AIScreen = () => {
                 </View>
               </View>
             ) : null}
-        
+
                                            </ImageBackground>
         </View>
-                             
+
       </ScrollView>
                               <Modal
                                 animationType="slide"
@@ -2085,11 +2087,11 @@ const AIScreen = () => {
                                   <OpenModal2 onClose={() => handleCloseModal2()} />
                                 </View>
                               </Modal>
-                                 
+
     </View>
                           </View>
-                         
-                        
+
+
   );
 };
 
