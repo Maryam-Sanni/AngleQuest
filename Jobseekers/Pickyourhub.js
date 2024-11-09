@@ -161,7 +161,7 @@ useEffect(() => {
       // Alert messages based on status codes for create-hub API
       if (createHubResponse.status === 200 || createHubResponse.status === 201) {
         console.log('Hub successfully created');
-        setAlertMessage(t('Hub joined successfully'));
+        setAlertMessage(t('Hub joined successfully, proceed to register for meeting by clicking view'));
 
         // Proceed to the second API only if the first was successful
         const firstName = await AsyncStorage.getItem('first_name');
@@ -184,7 +184,7 @@ useEffect(() => {
         });
 
       } else if (createHubResponse.status === 400) {
-        const errorMessage = createHubResponse.data?.message || t('You have registered for this hub meeting');
+        const errorMessage = createHubResponse.data?.message || t('Hub joined successfully, proceed to register for meeting by clicking view');
         console.warn(errorMessage);
         setAlertMessage(errorMessage);
 

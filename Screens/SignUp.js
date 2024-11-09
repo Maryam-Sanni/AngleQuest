@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StyleSheet,
+  StyleSheet, TextInput,
   ScrollView, ActivityIndicator
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -29,6 +29,7 @@ import { useLocation } from 'react-router-dom';
 const SignUp = () => {
    const navigate = useNavigate();
 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [firstName, setFName] = useState("");
   const [lastName, setLName] = useState("");
@@ -323,19 +324,31 @@ const SignUp = () => {
                         placeholder="Last name"
                       />
                       <InputField
-                        keyboardType="email"
+                        keyboardType="email-address"  // Use "email-address" for email input
                         val={email}
-                        onChangeText={setEmail}
-                        placeholder="Email"
+                        onChangeText={(text) => setEmail(text.toLowerCase())}  // Convert text to lowercase
+                        placeholder="email"
                       />
 
-                      <InputField
-                        keyboardType="default"
-                        val={password}
-                        placeholder="Password"
-                        onChangeText={setPassword}
-                        secureTextEntry={true} 
-                      />
+                      <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: 5 }}>
+                          <TextInput
+                              keyboardType="default"
+                              value={password}
+                              placeholder="Password"
+                              onChangeText={setPassword}
+                              secureTextEntry={!isPasswordVisible} // Toggle secure text entry based on state
+                              style={{
+                                  flex: 1,
+                                  padding: 10,
+                                borderRadius: 5
+                              }}
+                          />
+                          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                              <Text style={{ padding: 10 }}>
+                                  {isPasswordVisible ? "Hide" : "Show"}
+                              </Text>
+                          </TouchableOpacity>
+                      </View>
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
@@ -494,19 +507,31 @@ const SignUp = () => {
                         placeholder="Last name"
                       />
                       <InputField
-                        keyboardType="email"
+                        keyboardType="email-address"  // Use "email-address" for email input
                         val={email}
-                        onChangeText={setEmail}
-                        placeholder="Email"
+                        onChangeText={(text) => setEmail(text.toLowerCase())}  // Convert text to lowercase
+                        placeholder="email"
                       />
 
-                      <InputField
-                        keyboardType="default"
-                        val={password}
-                        placeholder="Password"
-                        onChangeText={setPassword}
-                        secureTextEntry={true} 
-                      />
+                      <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: 5 }}>
+                          <TextInput
+                              keyboardType="default"
+                              value={password}
+                              placeholder="Password"
+                              onChangeText={setPassword}
+                              secureTextEntry={!isPasswordVisible} // Toggle secure text entry based on state
+                              style={{
+                                  flex: 1,
+                                  padding: 10,
+                                borderRadius: 5
+                              }}
+                          />
+                          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                              <Text style={{ padding: 10 }}>
+                                  {isPasswordVisible ? "Hide" : "Show"}
+                              </Text>
+                          </TouchableOpacity>
+                      </View>
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
@@ -665,10 +690,10 @@ const SignUp = () => {
                         placeholder="Administrator's name"
                       />
                       <InputField
-                        keyboardType="email"
+                        keyboardType="email-address"  // Use "email-address" for email input
                         val={email}
-                        onChangeText={setEmail}
-                        placeholder="Business email"
+                        onChangeText={(text) => setEmail(text.toLowerCase())}  // Convert text to lowercase
+                        placeholder="email"
                       />
 
                       <InputField

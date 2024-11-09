@@ -36,7 +36,12 @@ function MyComponent() {
     const [loading, setLoading] = useState(false);
       const [alertMessage, setAlertMessage] = useState('');
       const [alertVisible, setAlertVisible] = useState(false);
+    const [visibleHubs, setVisibleHubs] = useState(3); // Initially show 3 hubs
 
+      const showMoreHubs = () => {
+        setVisibleHubs(visibleHubs + 3); // Show 3 more hubs on each click
+      };
+    
      const apiUrl = process.env.REACT_APP_API_URL;
     
     const toggleAttendance = () =>
@@ -304,66 +309,72 @@ function MyComponent() {
                   {loading ? (
                     <ActivityIndicator size="large" color="#206C00" />
                   ) : meetingsData.length > 0 ? (
-                    <ScrollView style={{ flex: 1 }}>
-                      {meetingsData.map((hub, index) => (
-                        <View key={index} style={{ marginBottom: 20 }}>
-                          <Text style={{ fontWeight: "600", fontSize: 16 }}>{hub.coaching_hub_name}</Text>
+                <ScrollView style={{ flex: 1 }}>
+                  {meetingsData.slice(0, visibleHubs).map((hub, index) => (
+                    <View key={index} style={{ marginBottom: 20 }}>
+                      <Text style={{ fontWeight: "600", fontSize: 16 }}>{hub.coaching_hub_name}</Text>
 
-                          {hub.meeting && Object.values(hub.meeting).length > 0 ? (
-                            <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginTop: 10 }}>
-                              {/* Table Header */}
-                              <View style={{ flexDirection: 'row', backgroundColor: '#f2f2f2', padding: 10 }}>
-                                <Text style={{ flex: 1, fontWeight: "bold" }}>Description</Text>
-                                <Text style={{ flex: 1, fontWeight: "bold" }}>Date</Text>
-                                <Text style={{ flex: 1, fontWeight: "bold" }}>Actions</Text>
+                      {hub.meeting && Object.values(hub.meeting).length > 0 ? (
+                        <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginTop: 10 }}>
+                          {/* Table Header */}
+                          <View style={{ flexDirection: 'row', backgroundColor: '#f2f2f2', padding: 10 }}>
+                            <Text style={{ flex: 1, fontWeight: "bold" }}>Description</Text>
+                            <Text style={{ flex: 1, fontWeight: "bold" }}>Date</Text>
+                            <Text style={{ flex: 1, fontWeight: "bold" }}>Actions</Text>
+                          </View>
+
+                          {/* Table Rows */}
+                          {Object.values(hub.meeting).map((meeting, idx) => {
+                            const userTimezone = moment.tz.guess();
+                            const meetingDate = meeting.date ? moment(meeting.date).tz(userTimezone) : null;
+
+                            return (
+                              <View key={idx} style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
+                                <Text style={{ flex: 1 }}>{meeting.description}</Text>
+                                <Text style={{ flex: 1 }}>{meetingDate ? meetingDate.format('LLLL') : "No date available"}</Text>
+                                {/* Actions */}
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                  <TouchableOpacity
+                                    onPress={() => handleJoinLink(meeting)}
+                                    style={{
+                                      backgroundColor: "#206C00",
+                                      padding: 5,
+                                      borderRadius: 5,
+                                      width: 100
+                                    }}
+                                  >
+                                    <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Join</Text>
+                                  </TouchableOpacity>
+
+                                  <TouchableOpacity
+                                    onPress={() => handleJoinMeeting(meeting, hub.id, hub.user_id)}
+                                    style={{
+                                      borderColor: "#206C00",
+                                      borderWidth: 1,
+                                      padding: 5,
+                                      borderRadius: 5,
+                                      width: 100
+                                    }}
+                                  >
+                                    <Text style={{ color: "#206C00", textAlign: "center", fontSize: 12 }}>Register</Text>
+                                  </TouchableOpacity>
+                                </View>
                               </View>
-
-                              {/* Table Rows */}
-                              {Object.values(hub.meeting).map((meeting, idx) => {
-                                const userTimezone = moment.tz.guess(); // Get the user's timezone
-                                const meetingDate = meeting.date ? moment(meeting.date).tz(userTimezone) : null; // Convert the date
-
-                                return (
-                                  <View key={idx} style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
-                                    <Text style={{ flex: 1 }}>{meeting.description}</Text>
-                                    <Text style={{ flex: 1 }}>{meetingDate ? meetingDate.format('LLLL') : "No date available"}</Text>
-                                    {/* Actions */}
-                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <TouchableOpacity
-                                          onPress={() => handleJoinLink(meeting)}
-                                          style={{
-                                            backgroundColor: "#206C00",
-                                            padding: 5,
-                                            borderRadius: 5,
-                                            width: 100
-                                          }}
-                                        >
-                                          <Text style={{ color: "white", textAlign: "center", fontSize: 12 }}>Join</Text>
-                                        </TouchableOpacity>
-
-                                      <TouchableOpacity
-                                        onPress={() => handleJoinMeeting(meeting, hub.id, hub.user_id)} // Pass hub.id and hub.user_id
-                                        style={{
-                                          borderColor: "#206C00",
-                                          borderWidth: 1,
-                                          padding: 5,
-                                          borderRadius: 5,
-                                          width: 100
-                                        }}
-                                      >
-                                        <Text style={{ color: "#206C00", textAlign: "center", fontSize: 12 }}>Register</Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                  </View>
-                                );
-                              })}
-                            </View>
-                          ) : (
-                            <Text>No meetings available</Text>
-                          )}
+                            );
+                          })}
                         </View>
-                      ))}
-                    </ScrollView>
+                      ) : (
+                        <Text>No meetings available</Text>
+                      )}
+                    </View>
+                  ))}
+
+                  {visibleHubs < meetingsData.length && (
+                    <TouchableOpacity onPress={showMoreHubs} style={{ padding: 10, alignItems: 'center' }}>
+                      <Text style={{ color: "#206C00", fontWeight: "bold" }}>Show More</Text>
+                    </TouchableOpacity>
+                  )}
+                </ScrollView>
                   ) : (
                     <Text>No meetings available</Text>
                   )}

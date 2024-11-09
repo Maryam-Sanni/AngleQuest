@@ -550,7 +550,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: '#FFF',
     fontSize: 14,
-    width: 500
+    width: 480,
+    marginRight: 10
   },
   learningObjectivesTitle: {
     marginTop: 14,
@@ -562,7 +563,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: '#FFF',
     fontSize: 14,
-    width: 500
+    width: 480,
+     marginRight: 10
   },
   experienceTitle: {
     marginTop: 20,
@@ -574,10 +576,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
     justifyContent: 'space-between',
+    width: 480,
+     marginRight: 10
   },
   experienceLevel: {
     color: '#FFF',
     fontSize: 14,
+    marginRight: 20
   },
   experienceTitleWrapper: {
     flexDirection: 'row',
@@ -585,13 +590,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   lineWrapper: {
-    width: '100%', // Full width of the container
+    width: '90%', // Full width of the container
     height: 4,
     backgroundColor: '#CCC', // Light grey for the unfilled portion
     marginBottom: 10,
   },
   filledLine: {
-    height: '100%',
+    height: '90%',
     backgroundColor: '#206C00', // Dark green for the filled portion
   },
   rolesTitle: {

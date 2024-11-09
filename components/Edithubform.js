@@ -260,7 +260,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
     setID(hub.id|| '');
     setGroupName(hub.coaching_hub_name || '');
     setGroupDescription(hub.coaching_hub_description || '');
-    setObjectives(hub.learning_obj || '');
+    setObjectives(hub.coaching_hub_goals || '');
     setfee(hub.coaching_hub_fee || '');
     setMeetingDay(hub.meeting_day || '');
     setLevel(hub.level || '');
@@ -470,6 +470,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
               onSelectedItemsChange={handleSelectedItemsChange} // Update selected roles
             />
           )}
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Level")}*</Text> 
+        <Picker
+                  selectedValue={level}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setLevel(itemValue)}
+                >
+                  <Picker.Item label={t('Beginner')} value="Beginner" />
+                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
+                  <Picker.Item label={t('Advanced')} value="Advanced" />
+                </Picker>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Name")}*</Text>
         <TextInput
           style={styles.input}
@@ -506,16 +516,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
           onChangeText={handleObjectiveChange}
         />
 
-               <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Level")}*</Text> 
-        <Picker
-                  selectedValue={level}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setLevel(itemValue)}
-                >
-                  <Picker.Item label={t('Beginner')} value="Beginner" />
-                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
-                  <Picker.Item label={t('Advanced')} value="Advanced" />
-                </Picker>
+               
 
         
       

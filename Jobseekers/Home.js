@@ -17,7 +17,7 @@ import { BlurView } from "expo-blur";
 import Topbar from "../components/topbar";
 import SuggestionModal from "../components/Suggestion";
 import HelpModal from "../components/Help";
-import CustomModal from "../Jobseekers/TourGuide";
+import CustomModal from "../Jobseekers/goalspopup";
 import CustomPercentageChart from "../components/PercentageChart";
 import OpenModal2 from "../Jobseekers/SkillanalysisAI";
 import OpenModal3 from "../Jobseekers/Pickyourcoach";
@@ -132,6 +132,7 @@ const HomePage = () => {
       setCustomModalVisible(false);
     }
   }, []);
+
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -945,18 +946,31 @@ const HomePage = () => {
                     </TouchableOpacity>
                   </View>
                 </View>
+               
               </View>
+             
             </View>
+           
+              
           </ScrollView>
+         
         </View>
 
         <SuggestionModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
         />
-        {customModalVisible && (
-          <CustomModal onClose={() => setCustomModalVisible(false)} />
-        )}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={customModalVisible}
+          onRequestClose={handleCloseModal2}
+        >
+          <View style={styles.modalContent}>
+            <CustomModal onClose={() => setCustomModalVisible(false)} /> />
+          </View>
+        </Modal>
+        
         <HelpModal
           visible={helpmodalVisible}
           onClose={() => sethelpModalVisible(false)}
@@ -1002,7 +1016,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: 10,
   },
   container: {
     alignItems: "center",

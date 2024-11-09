@@ -153,6 +153,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [to, setEndTime] = useState('12:00');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isVisible, setIsVisible] = useState(true); 
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSelectVisible, setSelectVisible] = useState(false);
@@ -293,7 +294,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
         from: "from",
           to: "to",
         coaching_hub_fee,
-        coaching_hub_goals,
+        coaching_hub_goals: objectives,
         coaching_hub_limit,
         expert_name: first_name + ' ' + last_name,
         timezone:"timezone"
@@ -312,19 +313,30 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
       if (response.status === 201) {
         setAlertMessage(t('Hub created successfully'));
+        setIsSuccess(true);  // Mark success
       } else {
         setAlertMessage(t('Failed to create Hub'));
+        setIsSuccess(false); // Mark failure
       }
     } catch (error) {
       console.error('Error during save:', error); // Log error for debugging
       setAlertMessage(t('Failed to create Hub'));
+      setIsSuccess(false); // Mark failure
     }
     setAlertVisible(true);
   };  
 
+  // Modified hideAlert function to handle success/failure logic
   const hideAlert = () => {
+    // Close the alert regardless of success/failure
     setAlertVisible(false);
-    setIsVisible(false);
+
+    // Only perform onClose actions if the meeting creation was successful
+    if (isSuccess) {
+       setAlertVisible(false);
+      setIsVisible(false); 
+      onClose();
+    }
   };
 
   const [fontsLoaded]=useFonts({
@@ -387,6 +399,16 @@ const CreateCoachingHubForm = ({ onClose }) => {
               onSelectedItemsChange={handleSelectedItemsChange} // Update selected roles
             />
           )}
+        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Level")}*</Text> 
+        <Picker
+                  selectedValue={level}
+                  style={styles.picker}
+                  onValueChange={(itemValue) => setLevel(itemValue)}
+                >
+                  <Picker.Item label={t('Beginner')} value="Beginner" />
+                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
+                  <Picker.Item label={t('Advanced')} value="Advanced" />
+                </Picker>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Name")}*</Text>
         <TextInput
           style={styles.input}
@@ -415,16 +437,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
           onChangeText={handleObjectiveChange}
         />
 
-               <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Level")}*</Text> 
-        <Picker
-                  selectedValue={level}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setLevel(itemValue)}
-                >
-                  <Picker.Item label={t('Beginner')} value="Beginner" />
-                  <Picker.Item label={t('Intermediate')} value="Intermediate" />
-                  <Picker.Item label={t('Advanced')} value="Advanced" />
-                </Picker>
+              
 
         
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee (per meeting)")}</Text>

@@ -6,7 +6,7 @@ import CustomAlert from '../components/CustomAlert';
 
 const PaymentDetailsForm = () => {
   const [bankName, setBankName] = useState('');
-  const [sortCode, setSortCode] = useState('');
+  const [sortCode, setSortCode] = useState('Not applicable');
   const [accountNumber, setAccountNumber] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [country, setCountry] = useState('');
@@ -47,12 +47,6 @@ const PaymentDetailsForm = () => {
 
       if (response.status === 201) {
         setAlertMessage('Payment details saved successsfully');
-        // Clear input fields after successful submission
-        setBankName('');
-        setSortCode('');
-        setAccountNumber('');
-        setMobileNumber('');
-        setCountry('');
       } else {
          setAlertMessage('Failed to save payment details');
       }
@@ -87,7 +81,7 @@ const PaymentDetailsForm = () => {
         placeholderTextColor="grey"
       />
 
-      <Text style={styles.label}>Sort Code</Text>
+      <Text style={styles.label}>Sort/Swift Code</Text>
       <TextInput
         style={styles.input}
         value={sortCode}

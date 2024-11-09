@@ -34,6 +34,7 @@ function MyComponent({ onClose }) {
   const [submitloading, setSubmitLoading] = useState(false);
   const [hubId, setHubId] = useState('');
   const [hubName, setHubName] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -130,7 +131,6 @@ const handleFileChange = (event) => {
   };
 
   const handleSubmit = async () => {
-
     setSubmitLoading(true);
 
     try {
@@ -139,9 +139,9 @@ const handleFileChange = (event) => {
         alert('No token found');
         return;
       }
-  
+
       const formattedDate = format(selectedDateTime, "yyyy-MM-dd HH:mm:ss");
-      
+
       // Prepare the initial meeting data
       const meetingFormData = new FormData();
       meetingFormData.append('candidate_account_type', candidate);
@@ -149,23 +149,25 @@ const handleFileChange = (event) => {
       meetingFormData.append('expert_id', expertid);
       meetingFormData.append('type', meetingtype);
       meetingFormData.append('date_scheduled', formattedDate);
-  
+
       // Post to create-jobseeker-interview endpoint
       const MeetingResponse = await axios.post(
         `${apiUrl}/api/jobseeker/meetings/schedule`,
         meetingFormData,
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } }
       );
-  
+
       if (MeetingResponse.status !== 200) {
-        onClose();
-        return;
+        setAlertMessage(t('Failed to create Meeting'));
+        setIsSuccess(false);
+        setAlertVisible(true);
+        return;  // Stop further execution if the first API call fails
       }
 
       const formattedTime = moment(selectedDateTime).format('YYYY-MM-DD HH:mm:ss');
-      
+
       const formData = new FormData(); // Create a new FormData object
-  
+
       formData.append('meeting_topic', topic);
       formData.append('meeting_description', description);
       formData.append('date', formattedTime);
@@ -174,13 +176,12 @@ const handleFileChange = (event) => {
       formData.append('roles', candidate);
       formData.append('duration', duration);
       formData.append('learning_obj', learningObj);
-  
+
       // Add the material files to the formData
       materialFiles.forEach((file) => {
         formData.append('material_hubs', file); // Append each file to material_hubs
       });
 
-  
       // Make the second API call
       const response = await axios.post(`${apiUrl}/api/expert/newhubmeeting/create`, formData, {
         headers: {
@@ -188,29 +189,41 @@ const handleFileChange = (event) => {
           'Content-Type': 'multipart/form-data', // Change to multipart/form-data for file uploads
         },
       });
-  
+
       console.log('Response:', response); // Log the response
       if (response.status === 201) {
         setAlertMessage(t('Meeting created successfully'));
+        setIsSuccess(true);  // Mark success
       } else {
         setAlertMessage(t('Failed to create Meeting'));
+        setIsSuccess(false); // Mark failure
       }
+
     } catch (error) {
       console.error('Error during save:', error); // Log error for debugging
       if (error.response) {
         console.error('Response error data:', error.response.data); // Log server response error
       }
       setAlertMessage(t('Failed to create Meeting'));
+      setIsSuccess(false); // Mark failure
     }
+
+    // Show the alert after the process finishes
     setAlertVisible(true);
     setSubmitLoading(false);
   };
-  
-  
+
+  // Modified hideAlert function to handle success/failure logic
   const hideAlert = () => {
+    // Close the alert regardless of success/failure
     setAlertVisible(false);
-    // Ensure this does not inadvertently close the page
-    setIsVisible(false);
+
+    // Only perform onClose actions if the meeting creation was successful
+    if (isSuccess) {
+       setAlertVisible(false);
+      setIsVisible(false); 
+      onClose();
+    }
   };
 
   const [fontsLoaded]=useFonts({
@@ -294,19 +307,6 @@ const handleFileChange = (event) => {
         ))}
       </Picker>
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
-  {t("Learning Materials: Upload File")}
-</Text>
-<TouchableOpacity onPress={handleFileUpload} style={styles.input}>
-  <Text style={{fontSize: 14, fontFamily: "Roboto-Light" }}>{t("Upload Learning Materials:")}</Text>
-</TouchableOpacity>
-<input
-  type="file"
-  onChange={handleFileChange}
-  multiple // Allows multiple files
-  style={{ display: 'none' }} // Hide the input element
-  ref={fileInputRef} // Create a ref to trigger the file input
-/>
 
             </View>
             <TouchableOpacity 
@@ -321,12 +321,12 @@ const handleFileChange = (event) => {
 
           </View>
        
-          <CustomAlert
-  visible={alertVisible}
-  title={t("Alert")}
-  message={alertMessage}
-  onConfirm={hideAlert}
-/>
+            <CustomAlert
+              visible={alertVisible}
+              title={t("Alert")}
+              message={alertMessage}
+              onConfirm={hideAlert} 
+            />
 
       <DateTimePickerModal
         isVisible={isDateTimeModalVisible}

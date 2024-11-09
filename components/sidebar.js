@@ -273,7 +273,7 @@ function MyComponent() {
             ))}
             </View>
             {/* Profile Info */}
-            <TouchableOpacity onPress={handleProfileClick}>
+            <TouchableOpacity >
               <View style={styles.divider} />
               <View style={styles.profileInfo}>
                 <Image

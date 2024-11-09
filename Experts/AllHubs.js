@@ -32,6 +32,8 @@ function MyComponent() {
   const [hubs, setHubs] = useState([]);
   const [selectedHub, setSelectedHub] = useState(null);
 
+
+  
   const apiUrl = process.env.REACT_APP_API_URL;
   
       const goToMyHubs = () => {
@@ -245,7 +247,15 @@ const ScheduledMeetingsTable = () => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  
+  useEffect(() => {
+    // Set the first hub as the selected hub when the component mounts
+    if (hubs.length > 0) {
+      setSelectedHub(hubs[0]);
+      setHubId(hubs[0].id);  // Set the hubId to the id of the first hub
+    }
+  }, [hubs]);
+  
   const handleHubPress = async (hub) => {
     setSelectedHub(hub);
     setHubId(hub.id); // Set the hubId state
@@ -458,11 +468,13 @@ const ScheduledMeetingsTable = () => {
   
   return ( 
   <View style={{ flex: 1 }}>
-    <Text style={{ fontSize: 16, color: '#f7fff4', marginTop: 20, marginLeft: 50 }}>
-      My Hubs
+     <View style={{ backgroundColor: 'white', padding: 15, marginTop: 20, marginLeft: 50, marginRight: 50 }}>
+    <Text style={{ fontSize: 18, marginLeft: 20, fontWeight: '600', color: 'black' }}>
+      Training Hubs
     </Text>
-
-    <View style={{ flexDirection: "row", marginLeft: 50, marginTop: -5 }}>
+   
+    
+    <View style={{ flexDirection: "row", marginLeft: 20, marginTop: -5 }}>
       {hubs.map((hub) => {
         const isSelected = hub.id === selectedHub?.id;
 
@@ -487,15 +499,15 @@ const ScheduledMeetingsTable = () => {
         );
       })}
     </View>
-
+       </View>
      <View style={{ backgroundColor: 'rgba(211,249,216,0.1)', padding: 50, marginTop: 50, marginLeft: 50, marginRight: 50, borderRadius: 20}}>
     {selectedHub && (
         
         <View style={styles.buttonContainer}>
           {/* Upcoming - Active by default */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Upcoming')}>
             <Text style={[styles.text, selectedButton === 'Upcoming' && styles.activeText]}>
-              {t("Upcoming")} 
+              {t("Upcoming")}
             </Text>
           </TouchableOpacity>
           
@@ -526,7 +538,7 @@ const ScheduledMeetingsTable = () => {
 
     )}
     {selectedHub && ( // Only show the below components if a hub is selected
-    <ScheduledMeet2 hubId={selectedHub.id} coachingHubName={selectedHub.coaching_hub_name} />
+    <ScheduledMeet2 hubId={hubId} coachingHubName={selectedHub.coaching_hub_name} />
     )}
 
     {!selectedHub && ( // Show ScheduledMeet when no hub is selected
@@ -720,7 +732,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     borderColor: "#135837",
-    backgroundColor: "#206C00",
+    backgroundColor: "#135837",
     alignItems: "center",
     marginTop: 20,
     borderWidth: 1,
@@ -742,7 +754,7 @@ const styles = StyleSheet.create({
     color: "#fff", // white text
   },
   unselectedText: {
-    color: "#f7fff4", // green text
+    color: "black", // green text
   },
   hubText: {
     padding: 5,

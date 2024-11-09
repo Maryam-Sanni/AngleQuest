@@ -145,7 +145,6 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#206C00" />
-        <Text>Loading...</Text>
       </View>
     );
   }

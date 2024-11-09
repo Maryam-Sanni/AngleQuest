@@ -98,7 +98,6 @@ const ScheduledMeetingsTable = () => {
     fetchMeetingData();
   }, []);
 
-  if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>{error}</Text>;
   
   return (

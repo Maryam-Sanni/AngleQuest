@@ -29,7 +29,22 @@ const HubMeeting = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("Upcoming");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Move to the previous set of hubs
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  // Move to the next set of hubs
+  const handleNext = () => {
+    if (currentIndex < hubs.length - 3) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+  
   const tabs = ["Upcoming", "Past Sessions", "Assessment"];
 
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -263,8 +278,16 @@ const HubMeeting = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Hub buttons for filtering */}
       <View style={styles.hubButtonsContainer}>
-        <View style={{ flexDirection: "row" }}>
-          {hubs.map((hub) => (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {/* Left Arrow */}
+          {currentIndex > 0 && (
+            <TouchableOpacity onPress={handlePrev} style={styles.arrowButton}>
+              <Text style={styles.arrowText}>←</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Display three hubs based on the current index */}
+          {hubs.slice(currentIndex, currentIndex + 3).map((hub) => (
             <TouchableOpacity
               key={hub.coaching_hub_name}
               style={
@@ -285,8 +308,16 @@ const HubMeeting = () => {
               </Text>
             </TouchableOpacity>
           ))}
+
+          {/* Right Arrow */}
+          {currentIndex < hubs.length - 3 && (
+            <TouchableOpacity onPress={handleNext} style={styles.arrowButton}>
+              <Text style={styles.arrowText}>→</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
+
 
       <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50 }}>
         <View style={{ flexDirection: "row", marginBottom: 30 }}>
@@ -486,6 +517,7 @@ const styles = StyleSheet.create({
   meetingContainer: {
     marginBottom: 20,
     padding: 30,
+     overflow: 'hidden',
     backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#000",
@@ -502,6 +534,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: "100%",
     marginBottom: 4,
+    marginRight: 20,
+    overflow: 'hidden'
   },
   meetingDate: {
     fontSize: 14,
@@ -579,6 +613,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 100,
     alignSelf: "center",
+  },
+  arrowButton: {
+    marginHorizontal: 5, // Adjust space between hubs and arrows
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15
+  },
+  arrowText: {
+    fontSize: 20, // Adjust size as needed
+    color: "white", // Change color to match your theme
   },
 });
 
