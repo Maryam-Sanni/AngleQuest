@@ -74,30 +74,30 @@ function MyComponent({ onClose }) {
               const hubId = await AsyncStorage.getItem('hub_id'); // Retrieve hub_id from AsyncStorage
               if (!hubId) throw new Error('No hub_id found');
 
-              // Fetch hub data
-              const hubResponse = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
+              // Fetch new hub meetings data
+              const hubResponse = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
                   headers: { Authorization: `Bearer ${token}` },
               });
 
               if (hubResponse.status === 200 && hubResponse.data.status === 'success') {
-                  const hubs = hubResponse.data.NewHub;
+                  const meetings = hubResponse.data.NewMeeting;
 
-                  // Find the selected hub by hub_id
-                  const selectedHub = hubs.find(hub => hub.id.toString() === hubId);
-                  if (selectedHub) {
-                      setGroupName(selectedHub.coaching_hub_name || '');
-
-                      // Set meetings related to the selected hub
-                      const hubMeetings = selectedHub.meeting.map(meeting => ({
-                          id: meeting.meeting_id,
-                          description: meeting.description,
+                  // Filter meetings based on the hub_id from AsyncStorage
+                  const hubMeetings = meetings
+                      .filter(meeting => meeting.hub_id.toString() === hubId)
+                      .map(meeting => ({
+                          id: meeting.id,
+                          description: meeting.meeting_topic || "Untitled Meeting",
                           meetingDate: moment(meeting.date).format('MMMM Do YYYY, h:mm A'),
                       }));
 
-                      setMeetings(hubMeetings);
-                  }
+                  setMeetings(hubMeetings);
+
+                  // Set group name, assuming coaching_hub_name is stored in AsyncStorage
+                  const coachingHubName = await AsyncStorage.getItem('coaching_hub_name');
+                  setGroupName(coachingHubName || '');
               } else {
-                  console.error('Failed to fetch hub data', hubResponse);
+                  console.error('Failed to fetch hub meeting data', hubResponse);
               }
           } catch (error) {
               console.error('Failed to load form data', error);
@@ -230,22 +230,25 @@ function MyComponent({ onClose }) {
           </Text>
           {meetings.length > 0 ? (
             <Picker
-              selectedValue={selectedMeeting?.id}
-              style={styles.input}
-              onValueChange={(itemValue) => handleMeetingSelect(itemValue)}
+                selectedValue={selectedMeeting?.id}
+                style={styles.input}
+                onValueChange={(itemValue) => handleMeetingSelect(itemValue)}
             >
-              <Picker.Item label="Select a meeting" value={null} />
-              {meetings.map((meeting) => (
-                <Picker.Item 
-                  key={meeting.id} 
-                  label={meeting.description || "Untitled Meeting"} 
-                  value={meeting.id} 
-                />
-              ))}
+                <Picker.Item label="Select a meeting" value={null} />
+                {meetings.map((meeting) => (
+                    <Picker.Item 
+                        key={meeting.id} 
+                        label={meeting.description} 
+                        value={meeting.id} 
+                    />
+                ))}
             </Picker>
           ) : (
-            <Text style={{ fontWeight: '500', marginLeft: 50, fontSize: 16 }}>No meetings available for this hub.</Text>
+            <Text style={{ fontWeight: '500', marginLeft: 50, fontSize: 16 }}>
+                No meetings available for this hub.
+            </Text>
           )}
+
           
           
 

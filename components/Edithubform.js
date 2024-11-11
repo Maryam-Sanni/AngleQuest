@@ -401,19 +401,20 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
+      <View style={{flexDirection: 'row', marginBottom: 20, marginTop: 30}}>
+         <Text style={styles.headerText}>{t("Edit Hub Details")}</Text>
+         <TouchableOpacity onPress={onClose}>
+            <Text style={{ fontSize: 18, color:'black', marginLeft: 450,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
+                            ✕
+                        </Text>
+                        </TouchableOpacity>
+                        </View>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
         
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
-      <View style={{flexDirection: 'row', marginBottom: 10, padding: 10, borderBottomColor: '#CCC', borderBottomWidth: 1}}>
-         <Text style={styles.headerText}>{t("Edit Hub Details")}</Text>
-         <TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'black', marginLeft: 420,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
-                        </View>
+      
                         <View style={styles.navigationContainer}>
         <TouchableOpacity
           style={[styles.navButton, selectedIndex === 0 && styles.disabledNavButton]}

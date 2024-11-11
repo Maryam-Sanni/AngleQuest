@@ -36,6 +36,8 @@ function MyComponent({ onClose }) {
    const [Confirmed, setSetConfirmed] = useState('No');
    const [alertVisible, setAlertVisible] = useState(false);
    const [alertMessage, setAlertMessage] = useState('');
+  const [isGridView, setIsGridView] = useState(true);
+
  
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -336,13 +338,13 @@ const hideAlert = () => {
   };
 
 
-  const renderCards = () => {
-    const filteredData = cardData.AllHubs.filter(data => 
-      (!selectedCategory || data.category === selectedCategory) &&
-      (!selectedLevel || data.level === selectedLevel) &&
-      (!searchQuery || data.coaching_hub_description.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+  const filteredData = cardData.AllHubs.filter(data => 
+    (!selectedCategory || data.category === selectedCategory) &&
+    (!selectedLevel || data.level === selectedLevel) &&
+    (!searchQuery || data.coaching_hub_description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
+  const renderCards = () => {
     return filteredData.map((data, index) => (
       <Animated.View
         key={index}
@@ -445,6 +447,49 @@ onPress={() => handleOpenPress(index)}
     ));
   };
 
+  const renderList = () => {
+    return filteredData.map((data, index) => (
+      <View
+        key={index}
+        style={{
+          flexDirection: 'column',
+          padding: 10,
+          width: "100%", 
+          borderBottomWidth: 1,
+          borderBottomColor: '#ddd',
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginBottom: 10 }}>{data.coaching_hub_name}</Text>
+          <Text style={{ fontSize: 16, color: "black", fontWeight: '400' }}>{t("Specialization")}: {data.specialization}</Text>
+          <Text style={{ fontSize: 14, color: "black", fontWeight: '400' }}>{t("Expert")}: {data.expert_name}</Text>
+          <Text numberOfLines={3} style={{ color: "#888", width: "90%", fontSize: 14, }}>{data.coaching_hub_description}</Text>
+        </View>
+        <View style={{flexDirection: 'row',  marginTop: 30 }}>
+        <TouchableOpacity onPress={() => handleOpenPress(index)} style={{ borderColor: '#206C00', borderWidth: 1, padding: 5, width: 120, borderRadius: 5 }}>
+          <Text style={{fontWeight: 'bold', color: '#206C00', textAlign: 'center' }}>View</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPressIn={() => handleJoinPressIn(index)}
+          onPressOut={handleJoinPressOut}
+          style={{
+            borderColor: '#206C00',
+            borderWidth: 1,
+            marginLeft: 20,
+              borderRadius: 5,
+              width: 120,
+              padding: 5,
+              justifyContent: 'center',
+          }}
+        >
+        <Text style={{ color : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
+        </TouchableOpacity>
+        </View>
+      </View>
+    ));
+  };
+
+  
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
   })
@@ -499,12 +544,35 @@ onPress={() => handleOpenPress(index)}
   <Picker.Item label="Advanced" value="Advanced" />
 </Picker>
 
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
+                <TouchableOpacity onPress={() => setIsGridView(!isGridView)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {/* Icon for Grid View */}
+                  {isGridView ? (
+                    <>
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=i5awsrw7V2Qr&format=png&color=000000' }}
+                        style={{ width: 20, height: 20, marginRight: 10 }}
+                      />
+                      <Text>Switch to List View</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Image
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=4IbsKb7MVfkT&format=png&color=000000' }}
+                        style={{ width: 20, height: 20, marginRight: 10 }}
+                      />
+                      <Text>Switch to Grid View</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              </View>
+
                 
      </View>
           </View>
           <Text style={{marginLeft: 35, fontSize: 15, color: 'grey', marginTop: 30}}>{resultCount} results found</Text> 
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, marginLeft: 30, marginRight: 30 }}>
-            {renderCards()}
+            {isGridView ? renderCards() : renderList()}
           </View>
          
         </View>

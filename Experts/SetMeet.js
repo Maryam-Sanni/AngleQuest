@@ -213,18 +213,21 @@ const handleFileChange = (event) => {
     setSubmitLoading(false);
   };
 
-  // Modified hideAlert function to handle success/failure logic
   const hideAlert = () => {
     // Close the alert regardless of success/failure
     setAlertVisible(false);
 
-    // Only perform onClose actions if the meeting creation was successful
+    // Only perform onClose actions and refresh the page if the meeting creation was successful
     if (isSuccess) {
-       setAlertVisible(false);
-      setIsVisible(false); 
+      setAlertVisible(false);
+      setIsVisible(false);
       onClose();
+
+      // Refresh the page
+      window.location.reload();
     }
   };
+
 
   const [fontsLoaded]=useFonts({
     "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf"),

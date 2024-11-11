@@ -8,8 +8,9 @@ import personImage from '../assets/person.png';
 
 
 const specializationRoles = {
+  'Select a Category': ['No category selected'],
   'Business Analysis': ['Business Analysis'],
-  SAP: ['SAP FI', 'SAP MM', 'SAP SD'],
+  SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
   Scrum: ['Scrum'],
   Microsoft: ['Dynamics Sales', 'Dynamics Customer Service', 'Dynamics Field Service', 'Dynamics CRM Developer', 'Business Central', 'Power Platform Developer', 'Dynamics F&O'],
 };

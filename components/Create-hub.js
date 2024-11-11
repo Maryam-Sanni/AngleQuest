@@ -9,6 +9,7 @@ import CustomAlert from './CustomAlert';
 import DaysTimePickerModal from "../components/TimePicker3";
 
 const specializationRoles = {
+  'Select a Category': ['No category selected'],
   'Business Analysis': ['Business Analysis'],
   SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
   Scrum: ['Scrum'],

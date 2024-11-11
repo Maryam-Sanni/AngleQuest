@@ -9,6 +9,7 @@ import CustomAlert from './CustomAlert';
 import DaysTimePickerModal from "../components/TimePicker3";
 
 const specializationRoles = {
+  'Select a Category': ['No category selected'],
   'Business Analysis': ['Business Analysis'],
   SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
   Scrum: ['Scrum'],
@@ -326,18 +327,21 @@ const CreateCoachingHubForm = ({ onClose }) => {
     setAlertVisible(true);
   };  
 
-  // Modified hideAlert function to handle success/failure logic
   const hideAlert = () => {
     // Close the alert regardless of success/failure
     setAlertVisible(false);
 
-    // Only perform onClose actions if the meeting creation was successful
+    // Only perform onClose actions and refresh the page if the meeting creation was successful
     if (isSuccess) {
-       setAlertVisible(false);
-      setIsVisible(false); 
+      setAlertVisible(false);
+      setIsVisible(false);
       onClose();
+
+      // Refresh the page
+      window.location.reload();
     }
   };
+
 
   const [fontsLoaded]=useFonts({
     'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
@@ -347,12 +351,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={styles.greenBox}>
-
-    <View style={styles.pageContainer}>
-      <View style={styles.formContainer}>
-      <View style={{flexDirection: 'row', marginBottom: 30}}>
+      <View style={{flexDirection: 'row', marginBottom: 20, marginTop: 30}}>
          <Text style={styles.headerText}>{t("Create New Hub")}</Text>
          <TouchableOpacity onPress={onClose}>
             <Text style={{ fontSize: 18, color:'black', marginLeft: 450,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
@@ -360,6 +359,12 @@ const CreateCoachingHubForm = ({ onClose }) => {
                         </Text>
                         </TouchableOpacity>
                         </View>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+        <View style={styles.greenBox}>
+
+    <View style={styles.pageContainer}>
+      <View style={styles.formContainer}>
+     
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
             selectedValue={specialization}

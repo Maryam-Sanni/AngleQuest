@@ -15,6 +15,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScheduledMeet from '../Experts/ScheduledMeetings';
 import ScheduledMeet2 from '../Experts/ScheduledMeetID';
+import PastSession from '../Experts/PastSession';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -232,6 +233,7 @@ const ScheduledMeetingsTable = () => {
   const [selectedHub, setSelectedHub] = useState(null);
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
   const [hubId, setHubId] = useState(null);
+  const [showPastSession, setShowPastSession] = useState(false);
   const [meetingData, setMeetingData] = useState({
     date: '',
     time: ''
@@ -377,60 +379,7 @@ const ScheduledMeetingsTable = () => {
     fetchLastCreatedMeeting();
   }, []);
 
-  useEffect(() => {
-    const fetchAdditionalData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const userId = await AsyncStorage.getItem('user_id');
-        if (!token || !userId) {
-          console.error('No token or user ID found');
-          return;
-        }
-
-        const response = await fetch('https://recruitangle.com/api/jobseeker/get-all-joined-jobseeker', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.status === 'success') {
-          const meetings = data.allJoinedJobseekers || [];
-
-          // Filter meetings based on the user ID
-          const userMeetings = meetings.filter(meeting => meeting.expert_id === userId);
-
-          // Calculate the data
-          setTotalHubMembers(userMeetings.length);
-
-          // Other calculations based on `userMeetings` can be done here
-          // Example:
-          setSessionsHeld(userMeetings.reduce((acc, meeting) => acc + Number(meeting.hub_sessions_held), 0));
-
-          // Calculate total SessionsMissed
-          setSessionsMissed(userMeetings.reduce((acc, meeting) => acc + Number(meeting.hub_sessions_missed), 0));
-
-          // Calculate total Meeting Confirmations (`Yes`)
-          setMeetingConfirmation(userMeetings.reduce((acc, meeting) => acc + (meeting.confirmed_attendance === 'Yes' ? 1 : 0), 0));
-
-          // Calculate total Yet to Confirm (`No`)
-          setYetToConfirm(userMeetings.reduce((acc, meeting) => acc + (meeting.confirmed_attendance === 'No' ? 1 : 0), 0));
-
-        } else {
-          console.error('Failed to fetch additional data:', data.message);
-        }
-      } catch (error) {
-        console.error('Failed to fetch additional data:', error);
-      }
-    };
-
-    fetchAdditionalData();
-  }, []);
+  
   
   const handlejoinPress = () => {
     if (lastCandidateLink) {
@@ -529,6 +478,11 @@ const ScheduledMeetingsTable = () => {
               {t("Assessment")}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => handlePress('Past Sessions')}>
+            <Text style={[styles.text, selectedButton === 'Past Sessions' && styles.activeText]}>
+              {t("Past Sessions")}
+            </Text>
+          </TouchableOpacity>
         </View>
         
 
@@ -544,6 +498,7 @@ const ScheduledMeetingsTable = () => {
     {!selectedHub && ( // Show ScheduledMeet when no hub is selected
         <ScheduledMeet />
     )}
+       <PastSession />
      </View>
     {/* Modals */}
     <Modal
