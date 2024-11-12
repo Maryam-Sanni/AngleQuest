@@ -55,17 +55,22 @@ const HubMeeting = () => {
       try {
         const token = await AsyncStorage.getItem("token"); // Retrieve the token
         const response = await axios.get(
-          `${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`,
+          `${apiUrl}/api/jobseeker/get-jobseeker-hub`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Use token for authentication
             },
-          },
+          }
         );
 
         const data = response.data;
-        if (data.status === "success" && data.AllJoinedHubs.length > 0) {
-          setHubs(data.AllJoinedHubs);
+        if (data.status === "success" && data.JoinedHubs.length > 0) {
+          // Set only coaching_hub_name values
+          setHubs(data.JoinedHubs.map(hub => hub.coaching_hub_name));
+
+          // Set the first hub as the default selected hub
+          setSelectedHub(data.JoinedHubs[0].coaching_hub_name);
+          filterMeetings(data.JoinedHubs[0].coaching_hub_name);
         }
       } catch (error) {
         console.error("Error fetching joined hubs:", error);
@@ -287,24 +292,27 @@ const HubMeeting = () => {
           )}
 
           {/* Display three hubs based on the current index */}
-          {hubs.slice(currentIndex, currentIndex + 3).map((hub) => (
+          {hubs.slice(currentIndex, currentIndex + 3).map((hubName) => (
             <TouchableOpacity
-              key={hub.coaching_hub_name}
+              key={hubName}
               style={
-                selectedHub === hub.coaching_hub_name
+                selectedHub === hubName
                   ? styles.selectedItem
                   : styles.unselectedItem
               }
-              onPress={() => filterMeetings(hub.coaching_hub_name)}
+              onPress={() => {
+                setSelectedHub(hubName);
+                filterMeetings(hubName);
+              }}
             >
               <Text
                 style={
-                  selectedHub === hub.coaching_hub_name
+                  selectedHub === hubName
                     ? styles.selectedText
                     : styles.unselectedText
                 }
               >
-                {hub.coaching_hub_name}
+                {hubName}
               </Text>
             </TouchableOpacity>
           ))}

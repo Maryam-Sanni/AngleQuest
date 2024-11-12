@@ -246,94 +246,29 @@ const HomePage = () => {
         "Content-Type": "application/json",
       };
 
-      // Fetch all data concurrently
-      const [growthPlanResponse, interviewResponse, skillAnalysisResponse] =
-        await Promise.all([
-          fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-growthplan`, {
-            headers,
-          }),
-          fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-interview`, {
-            headers,
-          }),
-          fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, {
-            headers,
-          }),
-        ]);
+      const [growthPlanResponse, interviewResponse, skillAnalysisResponse] = await Promise.all([
+        fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-growthplan`, { headers }),
+        fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-interview`, { headers }),
+        fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-skillanalysis`, { headers }),
+      ]);
 
-      // Check if responses are OK
-      if (!growthPlanResponse.ok) {
-        throw new Error(
-          `Growth Plan API responded with status ${growthPlanResponse.status}`,
-        );
-      }
-      if (!interviewResponse.ok) {
-        throw new Error(
-          `Interview API responded with status ${interviewResponse.status}`,
-        );
-      }
-      if (!skillAnalysisResponse.ok) {
-        throw new Error(
-          `Skill Analysis API responded with status ${skillAnalysisResponse.status}`,
-        );
-      }
+      if (!growthPlanResponse.ok) throw new Error(`Growth Plan API error: ${growthPlanResponse.status}`);
+      if (!interviewResponse.ok) throw new Error(`Interview API error: ${interviewResponse.status}`);
+      if (!skillAnalysisResponse.ok) throw new Error(`Skill Analysis API error: ${skillAnalysisResponse.status}`);
 
-      // Parse JSON responses
       const growthPlanData = await growthPlanResponse.json();
       const interviewData = await interviewResponse.json();
       const skillAnalysisData = await skillAnalysisResponse.json();
 
-      // Log the raw data for debugging
-      console.log("Raw Growth Plan Data:", growthPlanData);
-      console.log("Raw Interview Data:", interviewData);
-      console.log("Raw Skill Analysis Data:", skillAnalysisData);
+      const filteredGrowthPlan = (growthPlanData.allGrowthPlan || []).filter((plan) => plan.expertid === storedExpertId);
+      const filteredInterview = (interviewData.allInterview || []).filter((entry) => entry.expertid === storedExpertId);
+      const filteredSkillAnalysis = (skillAnalysisData.skillAnalysis || []).filter((entry) => entry.expertid === storedExpertId);
 
-      // Check and filter data based on storedExpertId
-      const filteredGrowthPlan = (growthPlanData.allGrowthPlan || []).filter(
-        (plan) => plan.expertid === storedExpertId,
-      );
-      const filteredInterview = (interviewData.allInterview || []).filter(
-        (entry) => entry.expertid === storedExpertId,
-      );
-      const filteredSkillAnalysis = (
-        skillAnalysisData.skillAnalysis || []
-      ).filter((entry) => entry.expertid === storedExpertId);
+      const latestGrowthPlan = processLatestEntry(filteredGrowthPlan, "name", "date_time", "expert_link");
+      const latestInterview = processLatestEntry(filteredInterview, "name", "date_time", "expert_link");
+      const latestSkillAnalysis = processLatestEntry(filteredSkillAnalysis, "name", "date_time", "expert_link");
 
-      // Log the filtered data for debugging
-      console.log("Filtered Growth Plan Data:", filteredGrowthPlan);
-      console.log("Filtered Interview Data:", filteredInterview);
-      console.log("Filtered Skill Analysis Data:", filteredSkillAnalysis);
-
-      const latestGrowthPlan = processLatestEntry(
-        filteredGrowthPlan,
-        "name",
-        "date_time",
-        "expert_link", // Add this field to get the candidate_link
-      );
-
-      const latestInterview = processLatestEntry(
-        filteredInterview,
-        "name",
-        "date_time",
-        "expert_link", // Add this field to get the candidate_link
-      );
-
-      const latestSkillAnalysis = processLatestEntry(
-        filteredSkillAnalysis,
-        "name",
-        "date_time",
-        "expert_link", // Add this field to get the candidate_link
-      );
-
-      // Log the processed latest data for debugging
-      console.log("Latest Growth Plan:", latestGrowthPlan);
-      console.log("Latest Interview:", latestInterview);
-      console.log("Latest Skill Analysis:", latestSkillAnalysis);
-
-      return {
-        latestGrowthPlan,
-        latestInterview,
-        latestSkillAnalysis,
-      };
+      return { latestGrowthPlan, latestInterview, latestSkillAnalysis };
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -342,45 +277,53 @@ const HomePage = () => {
   const processLatestEntry = (entries, nameField, dateTimeField, linkField) => {
     if (!entries || entries.length === 0) return {};
 
-    // Parse the date_time field to Date objects
     const parsedEntries = entries.map((entry) => ({
-        ...entry,
-        [dateTimeField]: new Date(entry[dateTimeField]), // Convert date_time to Date object
-    }));
+      ...entry,
+      [dateTimeField]: parseCustomDate(entry[dateTimeField]), // Use custom parsing function
+    })).filter(entry => entry[dateTimeField]); // Only keep entries with valid dates
 
-    // Sort entries by date in descending order (most recent first)
     parsedEntries.sort((a, b) => b[dateTimeField] - a[dateTimeField]);
 
-    // Log sorted entries for debugging
-    console.log("Sorted Entries:", parsedEntries);
-
-    // Return the latest entry's name, formatted date_time, and expert_link
-    const latestEntry = parsedEntries[0]; // Get the most recent entry
+    const latestEntry = parsedEntries[0];
 
     return {
-        name: latestEntry ? latestEntry[nameField] : "No Name Available",
-        dateTime: latestEntry ? formatDate(latestEntry[dateTimeField].toISOString()) : "No Date Available",
-        expertLink: latestEntry ? latestEntry[linkField] : "No Link Available",
+      name: latestEntry ? latestEntry[nameField] : "No Name Available",
+      dateTime: latestEntry ? formatDate(latestEntry[dateTimeField]) : "No Date Available",
+      expertLink: latestEntry ? latestEntry[linkField] : "No Link Available",
     };
-};
+  };
 
+  // Custom date parsing function
+  const parseCustomDate = (dateString) => {
+    if (!dateString) return null;
+
+    // Attempt to parse standard ISO dates
+    let parsedDate = Date.parse(dateString);
+    if (!isNaN(parsedDate)) return new Date(parsedDate);
+
+    // Handle custom formats
+    const regexPatterns = [
+      /(\w+),\s(\d{4}-\d{2}-\d{2}\s\d{1,2}:\d{2}\s\w{2})/,  // "Thursday, 2024-10-17 10:55 AM"
+      /(\w+),\s(\w+\s\d{1,2},\s\d{4}\s\|\s\d{1,2}:\d{2}\s\w{2})/, // "Sunday, October 27, 2024 | 12:00 AM"
+    ];
+
+    for (let pattern of regexPatterns) {
+      const match = dateString.match(pattern);
+      if (match) {
+        parsedDate = Date.parse(match[2]); // Attempt to parse the matched date part
+        if (!isNaN(parsedDate)) return new Date(parsedDate);
+      }
+    }
+
+    console.warn("Unable to parse date:", dateString);
+    return null;
+  };
 
   // Formatting function
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-
-    // Use Intl.DateTimeFormat for consistent formatting
-    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
-      date,
-    );
-    const day = new Intl.DateTimeFormat("en-US", { day: "2-digit" }).format(
-      date,
-    );
-    const time = new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(date);
+  const formatDate = (date) => {
+    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
+    const day = new Intl.DateTimeFormat("en-US", { day: "2-digit" }).format(date);
+    const time = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", hour12: true }).format(date);
 
     return `${month} ${day} | ${time}`;
   };
@@ -393,6 +336,7 @@ const HomePage = () => {
       }
     });
   }, []);
+
 
   return (
     <ImageBackground

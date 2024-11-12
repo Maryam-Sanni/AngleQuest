@@ -92,10 +92,18 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
             return;
           }
 
-          // Ensure hub_id is treated as a string for comparison
-          const filteredMeetings = NewMeeting.filter(meeting => String(meeting.hub_id) === String(hubId));
+          // Get the current date and set it to the start of today (midnight)
+          const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0); // Start of today, to exclude today's meetings
 
+          // Filter by hub_id first, then by date
+          const filteredMeetings = NewMeeting
+            .filter(meeting => String(meeting.hub_id) === String(hubId)) // Filter by hub_id
+            .filter(meeting => new Date(meeting.date) < currentDate); // Filter by past date (before today)
+
+          // Sort the filtered meetings by date in descending order (latest past meetings first)
           const sortedMeetings = filteredMeetings.sort((a, b) => new Date(b.date) - new Date(a.date));
+
           setMeetings(sortedMeetings);
         } else {
           console.error('Failed to fetch meeting data');
@@ -156,58 +164,49 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
   return (
     <View>
       <ScrollView contentContainerStyle={styles.cardContainer}>
-        {(showAllMeetings ? meetings : meetings.slice(0, 2)).map((meeting) => (
-          <View key={meeting.id} style={styles.meetingContainer}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
-                }}
-                style={{width: 150, height: 150, marginTop: 30, marginBottom: 30, marginLeft: 50}}
-              />
-              <View style={{flexDirection: "column", width: "75%"}}>
-                <View style={{flexDirection: 'row', marginTop: 20}}>
-                  <Text style={styles.meetingTime}>Live Session . </Text>
-                  <Text style={styles.meetingTime}>Online . </Text>
-                  <Text style={styles.meetingTime}>Get Started</Text>
-                </View>
-                <Text style={styles.hubName}>{meeting.meeting_topic}</Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "bold",
-                    marginBottom: 10,
+        {meetings.length === 0 ? (
+          <Text style={{textAlign: 'center', color: 'white', fontSize: 16, fontWeight: '600'}}>No meetings have been done previously.</Text>
+        ) : (
+          (showAllMeetings ? meetings : meetings.slice(0, 2)).map((meeting) => (
+            <View key={meeting.id} style={styles.meetingContainer}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
                   }}
-                >
-                  {moment(meeting.time)
-                    .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
-                    .format('MMMM Do YYYY, h:mm A [( ' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')]')}
-                </Text>
-                <Text style={styles.meetingDescription}>{meeting.meeting_description}</Text>
-
-                <View style={{flexDirection: 'row', marginTop: 20, alignSelf: 'flex-end'}}>
-                  <TouchableOpacity onPress={() => handleAddToCalendar(meeting)} style={styles.joinButton2}>
-                    <Text style={styles.buttonText2}>Add To Calendar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleJoinLink(meeting)} style={styles.joinButton}>
-                    <Text style={styles.buttonText}>Launch Meeting</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                  <Image
-                    source={{ uri: 'https://img.icons8.com/?size=100&id=362&format=png&color=000000' }} 
-                    style={{width: 25, height: 25, marginLeft: 30, top: 10 }}
-                  />
-                   </TouchableOpacity>
+                  style={{width: 150, height: 150, marginTop: 30, marginBottom: 30, marginLeft: 50}}
+                />
+                <View style={{flexDirection: "column", width: "75%"}}>
+                  <View style={{flexDirection: 'row', marginTop: 20}}>
+                    <Text style={styles.meetingTime}>Live Session . </Text>
+                    <Text style={styles.meetingTime}>Online . </Text>
+                    <Text style={styles.meetingTime}>Get Started</Text>
+                  </View>
+                  <Text style={styles.hubName}>{meeting.meeting_topic}</Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "bold",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {moment(meeting.time)
+                      .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
+                      .format('MMMM Do YYYY, h:mm A [( ' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')]')}
+                  </Text>
+                  <Text style={styles.meetingDescription}>{meeting.meeting_description}</Text>
                 </View>
               </View>
             </View>
-          </View>
-        ))}
+          ))
+        )}
+
         {!showAllMeetings && meetings.length > 2 && (
           <TouchableOpacity onPress={() => setShowAllMeetings(true)} style={styles.viewAllButton}>
             <Text style={styles.viewAllButtonText}>View All</Text>
           </TouchableOpacity>
         )}
+
       </ScrollView>
     </View>
   );

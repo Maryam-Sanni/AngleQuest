@@ -491,14 +491,16 @@ const ScheduledMeetingsTable = () => {
         
 
     )}
-    {selectedHub && ( // Only show the below components if a hub is selected
-    <ScheduledMeet2 hubId={hubId} coachingHubName={selectedHub.coaching_hub_name} />
-    )}
+       {selectedHub && selectedButton === 'Upcoming' && (
+         <ScheduledMeet2 hubId={hubId} coachingHubName={selectedHub.coaching_hub_name} />
+       )}
+
+       {selectedButton === 'Past Sessions' && <PastSession hubId={hubId} coachingHubName={selectedHub.coaching_hub_name} />}
 
     {!selectedHub && ( // Show ScheduledMeet when no hub is selected
         <ScheduledMeet />
     )}
-       <PastSession />
+
      </View>
     {/* Modals */}
     <Modal

@@ -215,7 +215,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [availableTimes, setAvailableTimes] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [hubId, setID] = useState('');
-  
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleObjectiveChange = (text) => {
     if (text.length <= maxObjectiveLength) {
@@ -377,20 +377,33 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
       if (response.status === 200) {
         setAlertMessage(t('Hub updated successfully'));
+        setIsSuccess(true);  // Mark success
       } else {
         setAlertMessage(t('Failed to update Hub'));
+        setIsSuccess(false); // Mark failure
       }
     } catch (error) {
       console.error('Error during save:', error); // Log error for debugging
       setAlertMessage(t('Failed to update Hub'));
+      setIsSuccess(false); // Mark failure
     }
     setAlertVisible(true);
   };
 
 
   const hideAlert = () => {
+    // Close the alert regardless of success/failure
     setAlertVisible(false);
-    setIsVisible(false);
+
+    // Only perform onClose actions and refresh the page if the meeting creation was successful
+    if (isSuccess) {
+      setAlertVisible(false);
+      setIsVisible(false);
+      onClose();
+
+      // Refresh the page
+      window.location.reload();
+    }
   };
 
   const [fontsLoaded]=useFonts({

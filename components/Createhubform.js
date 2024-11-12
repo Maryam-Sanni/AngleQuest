@@ -206,7 +206,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
   const [objectiveLength, setObjectiveLength] = useState(0);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
-  const [level, setLevel] = useState('Beginner');
+  const [level, setLevel] = useState(' ');
   const [objectives, setObjectives] = useState('');
   const [coaching_hub_fee, setfee] = useState('$40 per meeting');
   const maxDescriptionLength = 200; // Max character limit for description
@@ -410,6 +410,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
                   style={styles.picker}
                   onValueChange={(itemValue) => setLevel(itemValue)}
                 >
+          <Picker.Item label={t('Select training level')} value=" " />
                   <Picker.Item label={t('Beginner')} value="Beginner" />
                   <Picker.Item label={t('Intermediate')} value="Intermediate" />
                   <Picker.Item label={t('Advanced')} value="Advanced" />

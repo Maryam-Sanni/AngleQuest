@@ -272,47 +272,59 @@ const HomePage = () => {
   const processLatestEntry = (entries, expertNameField, dateTimeField, linkField) => {
     if (!entries || entries.length === 0) return {};
 
-    // Parse the date_time field to Date objects
-    const parsedEntries = entries.map((entry) => ({
+    const parsedEntries = entries.map((entry) => {
+      const parsedDate = parseCustomDate(entry[dateTimeField]);
+      return {
         ...entry,
-        [dateTimeField]: new Date(entry[dateTimeField]), // Convert date_time to Date object
-    }));
+        [dateTimeField]: parsedDate ? parsedDate : null, // Store parsed date or null if invalid
+      };
+    }).filter(entry => entry[dateTimeField]); // Filter out entries with invalid dates
 
-    // Sort entries by date in descending order (most recent first)
+    if (parsedEntries.length === 0) return {};
+
     parsedEntries.sort((a, b) => b[dateTimeField] - a[dateTimeField]);
 
-    // Log sorted entries for debugging
-    console.log("Sorted Entries:", parsedEntries);
-
-    // Return the latest entry's name, formatted date_time, and expert_link
-    const latestEntry = parsedEntries[0]; // Get the most recent entry
+    const latestEntry = parsedEntries[0];
 
     return {
-      expertName: latestEntry ? latestEntry[expertNameField] : "No Name Available",
-        dateTime: latestEntry ? formatDate(latestEntry[dateTimeField].toISOString()) : "No Date Available",
-        expertLink: latestEntry ? latestEntry[linkField] : "No Link Available",
+      expertName: latestEntry[expertNameField] || "No Name Available",
+      dateTime: latestEntry[dateTimeField] ? formatDate(latestEntry[dateTimeField]) : "No Date Available",
+      expertLink: latestEntry[linkField] || "No Link Available",
     };
-};
+  };
 
-  // Formatting function
-  function formatDate(dateString) {
-    const date = new Date(dateString);
+  // Custom date parsing function to handle various formats
+  function parseCustomDate(dateString) {
+    if (!dateString) return null;
 
-    // Use Intl.DateTimeFormat for consistent formatting
-    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
-      date,
-    );
-    const day = new Intl.DateTimeFormat("en-US", { day: "2-digit" }).format(
-      date,
-    );
-    const time = new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(date);
+    // Try to parse ISO date first
+    let parsedDate = Date.parse(dateString);
+    if (!isNaN(parsedDate)) return new Date(parsedDate);
+
+    // Handle common non-ISO formats
+    const formats = [
+      "EEEE, yyyy-MM-dd hh:mm a",      // e.g., "Thursday, 2024-10-17 10:55 AM"
+      "EEEE, MMMM dd, yyyy | hh:mm a", // e.g., "Sunday, October 27, 2024 | 12:00 AM"
+    ];
+
+    for (let format of formats) {
+      parsedDate = Date.parse(dateString.replace(/,| \|/g, '')); // Simple replace to normalize formats
+      if (!isNaN(parsedDate)) return new Date(parsedDate);
+    }
+
+    console.warn("Unable to parse date:", dateString);
+    return null;
+  }
+
+  // Formatting function (unchanged)
+  function formatDate(date) {
+    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
+    const day = new Intl.DateTimeFormat("en-US", { day: "2-digit" }).format(date);
+    const time = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", hour12: true }).format(date);
 
     return `${month} ${day} | ${time}`;
   }
+
 
   useEffect(() => {
     fetchAllData().then((fetchedData) => {

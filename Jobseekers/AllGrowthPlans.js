@@ -237,25 +237,19 @@ function MyComponent() {
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
                     <View style={{ marginLeft: 270 }}>
                     <View style={styles.header}>
-            <TouchableOpacity>
-              <View style={styles.item}>
-                <Image
-                  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                  style={styles.image}
-                />
-                <Text style={{color: '#666', fontWeight: '600', marginLeft: 10, fontSize: 14, marginTop: 5 }}>{t("Growth Plan")}</Text>
-              </View>
-            </TouchableOpacity>
+                      <TouchableOpacity onPress={handleOpenPress}>
+                        <View style={{ marginLeft: 70, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 150, alignItems: 'center',}}>
+
+                          <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("+ New Growth Plan")}</Text>
+                        </View>
+                           </TouchableOpacity>
+                          <Text style={{fontSize: 20, color: 'black', fontWeight: '600', position: 'absolute', right: 50, marginTop: 5 }}>Growth Plan Sessions</Text>
             </View>
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
-                  </View>
-     </TouchableOpacity>
+                       
 
                         <TouchableOpacity onPress={gotoanalysis}>
-                          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
                                           <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Expert Roadmap")}</Text>
                                         </View>
                            </TouchableOpacity>

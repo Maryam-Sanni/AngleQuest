@@ -267,7 +267,7 @@ function MyComponent() {
                                 <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Join New Hub")}</Text>
                               </View>
                                  </TouchableOpacity>
-                                <Text style={{fontSize: 20, color: '#206C00', fontWeight: '600', marginLeft: 20, marginTop: 5 }}>Knowledge Sharing Sessions</Text>
+                                <Text style={{fontSize: 20, color: 'black', fontWeight: '600', position: 'absolute', right: 50, marginTop: 5 }}>Knowledge Sharing Sessions</Text>
                                        
                         
                             </View>

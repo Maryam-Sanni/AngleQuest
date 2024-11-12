@@ -3,8 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import {
   View,
-  Image,
-  Text,
+  Image, Modal,
+  Text, Alert,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
@@ -12,6 +12,7 @@ import {
   Linking,
 } from "react-native";
 import { BlurView } from "expo-blur";
+import OpenModal from './EditMeet';
 import moment from "moment-timezone";
 import { useNavigate } from "react-router-dom";
 
@@ -24,8 +25,17 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
   const [error, setError] = useState(null);
   const [hubName, setHubName] = useState(coachingHubName || "");
   const [showAllMeetings, setShowAllMeetings] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
   const generateGoogleCalendarUrl = (meeting) => {
     const startDate = moment(meeting.date).format("YYYYMMDDTHHmmss") + "Z";
 
@@ -164,6 +174,56 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
     }
   };
 
+  const handleDelete = async (meeting) => {
+    try {
+      // Convert meeting.id to string
+      const meeting_id = String(meeting.id);
+
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        Alert.alert('Error', 'User is not authenticated');
+        return;
+      }
+
+      // Make the POST request using axios
+      const response = await axios.post(
+        `${apiUrl}/api/expert/newhubmeeting/delete`,
+        {
+          meeting_id, // Include the meeting_id in the request body
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Refresh the page if deletion is successful
+        window.location.reload(); // Reload the current page
+      } else {
+        // Handle error in response
+        alert('Error', 'Failed to delete the meeting.');
+      }
+    } catch (error) {
+      // Handle any errors (e.g., network issues)
+      alert('Error', 'An error occurred. Please try again later.');
+    }
+  };
+
+  const confirmDelete = (meeting) => {
+    // Show confirmation dialog using window.confirm() for React Native Web
+    const isConfirmed = window.confirm("Are you sure you want to delete this meeting?");
+
+    if (isConfirmed) {
+      handleDelete(meeting); // Proceed with deletion if "OK" is pressed
+    }
+  };
+
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -195,7 +255,24 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                   <Text style={styles.meetingTime}>Live Session . </Text>
                   <Text style={styles.meetingTime}>Online . </Text>
                   <Text style={styles.meetingTime}>Get Started</Text>
-                  
+                  <View style={{ flexDirection: 'row', right: 10, position: 'absolute'}}>
+                  <TouchableOpacity onPress={handleOpenPress}>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=6698&format=png&color=000000",
+                      }}
+                      style={{ width: 20, height: 20}}
+                    />
+                  </TouchableOpacity>
+                    <TouchableOpacity onPress={() => confirmDelete(meeting)}>
+                      <Image
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=362&format=png&color=000000",
+                        }}
+                        style={{ width: 20, height: 20, marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <Text style={styles.hubName}>{meeting.meeting_topic}</Text>
                 <Text
@@ -236,14 +313,7 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                   >
                     <Text style={styles.buttonText}>Launch Meeting</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={{
-                        uri: "https://img.icons8.com/?size=100&id=362&format=png&color=000000",
-                      }}
-                      style={{ width: 25, height: 25, marginLeft: 30, top: 10 }}
-                    />
-                  </TouchableOpacity>
+                  
                 </View>
               </View>
             </View>
@@ -258,6 +328,16 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
           </TouchableOpacity>
         )}
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+          <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+          </View>
+      </Modal>
     </View>
   );
 };
@@ -320,6 +400,12 @@ const styles = StyleSheet.create({
   viewAllButtonText: {
     color: "#206C00",
     fontWeight: "bold",
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 
