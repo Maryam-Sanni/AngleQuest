@@ -37,7 +37,7 @@ function MyComponent({ onClose }) {
    const [alertVisible, setAlertVisible] = useState(false);
    const [alertMessage, setAlertMessage] = useState('');
   const [isGridView, setIsGridView] = useState(true);
-
+   const [isSuccess, setIsSuccess] = useState(false);
  
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -164,6 +164,7 @@ useEffect(() => {
       if (createHubResponse.status === 200 || createHubResponse.status === 201) {
         console.log('Hub successfully created');
         setAlertMessage(t('Hub joined successfully, proceed to register for meeting by clicking view'));
+         setIsSuccess(true);  // Mark success
 
         // Proceed to the second API only if the first was successful
         const firstName = await AsyncStorage.getItem('first_name');
@@ -185,20 +186,27 @@ useEffect(() => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        // Navigate to '/coaching-hub-sessions' and refresh
+        navigate('/coaching-hub-sessions');
+        window.location.reload();
+        
       } else if (createHubResponse.status === 400) {
         const errorMessage = createHubResponse.data?.message || t('Hub joined successfully, proceed to register for meeting by clicking view');
         console.warn(errorMessage);
         setAlertMessage(errorMessage);
-
+        setIsSuccess(false); // Mark failure
+        
       } else if (createHubResponse.status === 500) {
         console.error('Error creating hub:', createHubResponse.statusText);
         setAlertMessage(t('Error joining hub'));
+        setIsSuccess(false); // Mark failure
       }
 
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       console.error('Error:', errorMessage);
       setAlertMessage(errorMessage);
+      setIsSuccess(false); // Mark failure
     }
     setAlertVisible(true);
   };
@@ -209,11 +217,20 @@ useEffect(() => {
 
 
 
-const hideAlert = () => {
-  setAlertVisible(false);
-  setIsVisible(false);
-  onClose();
-};
+  const hideAlert = () => {
+    // Close the alert regardless of success/failure
+    setAlertVisible(false);
+
+    // Only perform onClose actions and refresh the page if the meeting creation was successful
+    if (isSuccess) {
+      setAlertVisible(false);
+      setIsVisible(false);
+      onClose();
+
+      // Refresh the page
+      window.location.reload();
+    }
+  };
 
   const handleCloseModal3 = () => {
     setModalVisible3(false);

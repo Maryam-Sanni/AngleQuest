@@ -280,22 +280,17 @@ const handleFileChange = (event) => {
             />
 
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily:"Roboto-Light" }}>
-  {t("Date *")}
+  {t("Date and Time *")}
 </Text>
 <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
   <Text style={styles.input}>
     <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
-    {selectedDateTime ? selectedDateTime.toDateString() : t("Select Date")} {/* Format Date here */}
+    {selectedDateTime ? selectedDateTime.toDateString() : t("Select Date")} {selectedTime || ''}
   </Text>
 </TouchableOpacity>
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
-  {t("Time *")}
-</Text>
-<Text style={styles.input}>
-  <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Time: </Text> 
-  {selectedTime || t("Select Time")}
-</Text>
+
+
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
   {t("Duration")}
 </Text>

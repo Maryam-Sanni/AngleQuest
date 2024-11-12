@@ -356,6 +356,7 @@ function MyComponent({ onClose }) {
                 <>
                   <Text style={styles.sessionTitle}>{selectedHubData.coaching_hub_name}</Text>
                   <View style={styles.iconRow}>
+                   
                     <View style={styles.iconTextWrapper}>
                       <Icon name="calendar-outline" size={20} color="#FFF" style={styles.icon} />
                       <Text style={styles.iconText}>{t(`Created: ${formatDate(selectedHubData.created_at)}`)}</Text>
@@ -368,10 +369,7 @@ function MyComponent({ onClose }) {
                       <Icon name="globe-outline" size={20} color="#FFF" style={styles.icon} />
                       <Text style={styles.iconText}>{t("Online")}</Text>
                     </View>
-                    <View style={styles.iconTextWrapper}>
-                      <Icon name="time-outline" size={20} color="#FFF" style={styles.icon} />
-                      <Text style={styles.iconText}>{t("1 hour")}</Text>
-                    </View>
+                    
                   </View>
                   <Image
                     source={require('../assets/TG4.png')}
@@ -405,7 +403,7 @@ function MyComponent({ onClose }) {
 
                 </>
               )}
-              <TouchableOpacity
+              <TouchableOpacity onPress={createHubAndJoinExpertHub}
                 style={{
                   backgroundColor: hasJoinedHub ? 'lightgreen' : '#206C00',
                   borderRadius: 5,
