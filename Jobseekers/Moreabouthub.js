@@ -440,39 +440,52 @@ function MyComponent({ onClose }) {
 
             {selectedHubData && selectedHubData.meeting &&
               (typeof selectedHubData.meeting === 'object') && Object.keys(selectedHubData.meeting).length > 0 ? (
-                Object.keys(selectedHubData.meeting).map((key) => {
-                  const meeting = selectedHubData.meeting[key]; // Access each meeting by key
-                  const userTimezone = moment.tz.guess(); // Get the user's timezone
-                  const meetingDate = meeting.time ? moment(meeting.time).tz(userTimezone) : null; // Convert the date
+                Object.keys(selectedHubData.meeting)
+                  .filter((key) => {
+                    const meeting = selectedHubData.meeting[key];
+                    if (!meeting.time) return false; // Exclude meetings with no time
 
-                  return (
-                    <View key={key} style={styles.scheduleRow}>
-                      <Text style={styles.cell}>{meeting.description || "No description available"}</Text>
-                      <Text style={styles.cell}>
-                        {meetingDate ? meetingDate.format('LLLL') : "No date available"} {/* Format the date as needed */}
-                      </Text>
-                     
-                      <TouchableOpacity 
-                        style={styles.button} 
-                        onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
-                      >
-                        <Text style={styles.buttonText}>
-                          {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
+                    const meetingTime = moment(meeting.time);
+                    const now = moment();
+                    const past24Hours = now.clone().subtract(24, 'hours');
+
+                    // Include only meetings within the past 24 hours or in the future
+                    return meetingTime.isBetween(past24Hours, now) || meetingTime.isAfter(now);
+                  })
+                  .map((key) => {
+                    const meeting = selectedHubData.meeting[key];
+                    const userTimezone = moment.tz.guess(); // Get the user's timezone
+                    const meetingDate = meeting.time ? moment(meeting.time).tz(userTimezone) : null; // Convert the date
+
+                    return (
+                      <View key={key} style={styles.scheduleRow}>
+                        <Text style={styles.cell}>{meeting.description || "No description available"}</Text>
+                        <Text style={styles.cell}>
+                          {meetingDate ? meetingDate.format('LLLL') : "No date available"} {/* Format the date as needed */}
                         </Text>
-                      </TouchableOpacity>
-                       <View style={styles.cell2}/>
-                      <TouchableOpacity 
-                        style={styles.linkbutton} 
-                         onPress={() => handleJoinLink(meeting)}>
-                      
-                        <Text style={styles.linkText}>{t("Join Meeting")}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })
+
+                        <TouchableOpacity 
+                          style={styles.button} 
+                          onPress={() => handleJoinMeeting(meeting)} // Pass the meeting object to the function
+                        >
+                          <Text style={styles.buttonText}>
+                            {registrationStatus.includes(String(meeting.meeting_id)) ? 'Unregister' : 'Register'}
+                          </Text>
+                        </TouchableOpacity>
+                        <View style={styles.cell2} />
+                        <TouchableOpacity 
+                          style={styles.linkbutton} 
+                          onPress={() => handleJoinLink(meeting)}
+                        >
+                          <Text style={styles.linkText}>{t("Join Meeting")}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })
               ) : (
                 <Text>{t("No meetings available.")}</Text> // Fallback if no meetings exist
               )}
+
           </View>
 
 

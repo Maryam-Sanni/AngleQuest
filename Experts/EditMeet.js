@@ -52,6 +52,32 @@ const handleFileChange = (event) => {
 };
 
   useEffect(() => {
+    const retrieveMeetingDetails = async () => {
+      try {
+        const storedTopic = await AsyncStorage.getItem("meeting_topic");
+        const storedDescription = await AsyncStorage.getItem("meeting_description");
+        const storedDate = await AsyncStorage.getItem("meeting_date");
+        const storedTime = await AsyncStorage.getItem("meeting_time");
+        const storedLocation = await AsyncStorage.getItem("meeting_location");
+        const storedDuration = await AsyncStorage.getItem("meeting_duration");
+        const storedMeetingId = await AsyncStorage.getItem("meeting_id");
+
+        if (storedTopic) setTopic(storedTopic);
+        if (storedDescription) setDescription(storedDescription);
+        if (storedDate) setSelectedTime(storedDate);
+        if (storedLocation) setHubName(storedLocation);
+        if (storedDuration) setDuration(Number(storedDuration));
+        if (storedMeetingId) setID(storedMeetingId);
+
+      } catch (error) {
+        console.error("Error retrieving meeting details:", error);
+      }
+    };
+
+    retrieveMeetingDetails();
+  }, []);
+  
+  useEffect(() => {
       const loadHubData = async () => {
           try {
               const storedHubId = await AsyncStorage.getItem('hub_id');
@@ -69,45 +95,6 @@ const handleFileChange = (event) => {
       };
 
       loadHubData();
-  }, []);
-
-  useEffect(() => {
-    const fetchHubData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const storedHubId = await AsyncStorage.getItem('hub_id');
-
-        if (!token || !storedHubId) {
-          console.error("Missing token or hub ID in AsyncStorage");
-          return;
-        }
-
-        const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const meetings = response.data.NewMeeting;
-
-        // Find the meeting that matches the stored hub ID
-        const matchingMeeting = meetings.find(meeting => meeting.hub_id === storedHubId);
-
-        if (matchingMeeting) {
-          setHubData(matchingMeeting);
-          setTopic(matchingMeeting.meeting_topic);
-          setID(matchingMeeting.id);
-          setDescription(matchingMeeting.meeting_description);
-          setSelectedDateTime(new Date(matchingMeeting.date));
-          setSelectedTime(new Date(matchingMeeting.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-          setDuration(matchingMeeting.duration);
-        } else {
-          console.log("No matching meeting found for the stored hub ID");
-        }
-      } catch (error) {
-        console.error("Error fetching hub data:", error);
-      }
-    };
-
-    fetchHubData();
   }, []);
 
   useEffect(() => {
@@ -193,7 +180,7 @@ const handleFileChange = (event) => {
          time: selectedDateTime,
          hub_id: hubId,
          roles: candidate,
-         duration: duration,
+         duration: String(duration),
          learning_obj: learningObj,
        };
 
@@ -296,23 +283,17 @@ const handleFileChange = (event) => {
               multiline
             />
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily:"Roboto-Light" }}>
-  {t("Date *")}
-</Text>
-<TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
-  <Text style={styles.input}>
-    <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
-    {selectedDateTime ? selectedDateTime.toDateString() : t("Select Date")} {/* Format Date here */}
-  </Text>
-</TouchableOpacity>
+              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily:"Roboto-Light" }}>
+                {t("Date and Time *")}
+              </Text>
+              <TouchableOpacity onPress={() => setIsDateTimeModalVisible(true)}>
+                <Text style={styles.input}>
+                  <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Date: </Text>
+                  {selectedDateTime ? selectedDateTime.toDateString() : t(" ")} {selectedTime || ''}
+                </Text>
+              </TouchableOpacity>
 
-<Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
-  {t("Time *")}
-</Text>
-<Text style={styles.input}>
-  <Text style={{ fontWeight: '500', fontFamily: "Roboto-Light" }}>Time: </Text> 
-  {selectedTime || t("Select Time")}
-</Text>
+
 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 10, marginBottom: 10, fontFamily: "Roboto-Light" }}>
   {t("Duration")}
 </Text>

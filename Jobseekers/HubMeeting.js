@@ -13,8 +13,7 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";
-import moment from 'moment-timezone';
-
+import moment from "moment-timezone";
 
 const HubMeeting = () => {
   const [meetings, setMeetings] = useState([]);
@@ -44,11 +43,10 @@ const HubMeeting = () => {
       setCurrentIndex(currentIndex + 1);
     }
   };
-  
+
   const tabs = ["Upcoming", "Past Sessions", "Assessment"];
 
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 
   useEffect(() => {
     const fetchJoinedHubs = async () => {
@@ -60,13 +58,13 @@ const HubMeeting = () => {
             headers: {
               Authorization: `Bearer ${token}`, // Use token for authentication
             },
-          }
+          },
         );
 
         const data = response.data;
         if (data.status === "success" && data.JoinedHubs.length > 0) {
           // Set only coaching_hub_name values
-          setHubs(data.JoinedHubs.map(hub => hub.coaching_hub_name));
+          setHubs(data.JoinedHubs.map((hub) => hub.coaching_hub_name));
 
           // Set the first hub as the default selected hub
           setSelectedHub(data.JoinedHubs[0].coaching_hub_name);
@@ -116,7 +114,6 @@ const HubMeeting = () => {
 
     fetchMeetings();
   }, [apiUrl]);
-
 
   const handleJoinMeeting = async (meeting) => {
     try {
@@ -263,12 +260,23 @@ const HubMeeting = () => {
     }
   };
 
-  const filterMeetings = (hubName) => {
-    setSelectedHub(hubName);
-    const filtered = meetings.filter((meeting) => meeting.hubName === hubName);
-    setFilteredMeetings(filtered);
-    setShowAll(false); // Reset to show only two meetings when a new hub is selected
-  };
+  const filteredByHub = meetings.filter((meeting) => meeting.hubName === selectedHub);
+
+  const currentDate = new Date();
+  const upcomingMeetings = filteredByHub.filter((meeting) => {
+    const meetingDate = new Date(meeting.time);
+    return meetingDate >= new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+  });
+
+  const pastSessions = filteredByHub.filter((meeting) => {
+    const meetingDate = new Date(meeting.time);
+    return meetingDate < new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+  });
+
+  // Define meetingsToDisplay based on the activeTab
+  const meetingsToDisplay =
+    activeTab === "Upcoming" ? upcomingMeetings : pastSessions;
+
 
   const toggleShowAll = () => {
     setShowAll(!showAll);
@@ -326,7 +334,6 @@ const HubMeeting = () => {
         </View>
       </View>
 
-
       <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50 }}>
         <View style={{ flexDirection: "row", marginBottom: 30 }}>
           {tabs.map((tab) => (
@@ -351,67 +358,70 @@ const HubMeeting = () => {
           ))}
         </View>
 
-        {/* Display meetings */}
-        {activeTab === "Upcoming" ? (
-          filteredMeetings.length > 0 ? (
-            <>
-              {filteredMeetings
-                .slice(0, showAll ? filteredMeetings.length : 2)
-                .map((meeting) => (   
-                  <View
-                    key={meeting.meeting_id}
-                    style={styles.meetingContainer}
-                  >
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Image
-                        source={{
-                          uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
-                        }}
-                        style={{
-                          width: 150,
-                          height: 150,
-                          marginTop: 30,
-                          marginBottom: 30,
-                          marginLeft: 50,
-                        }}
-                      />
-                      <View style={{ marginLeft: 10 }}>
-                        <View style={{ flexDirection: "row", marginTop: -60 }}>
-                          <Text style={styles.meetingTime}>
-                            Live Session .{" "}
-                          </Text>
-                          <Text style={styles.meetingTime}>Get Started . </Text>
-                          <Text style={styles.meetingTime}>Online . </Text>
-                          <Text style={styles.meetingTime}>
-                            {meeting.hubCat}
-                          </Text>
-                        </View>
-                        <Text style={styles.hubName}>
-                          {meeting.hubName}
+      {/* Display meetings */}
+      {activeTab === "Upcoming" || activeTab === "Past Sessions" ? (
+        meetingsToDisplay.length > 0 ? (
+          <>
+            {meetingsToDisplay
+              .slice(0, showAll ? meetingsToDisplay.length : 2)
+              .map((meeting) => (
+                <View
+                  key={meeting.meeting_id}
+                  style={styles.meetingContainer}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                      }}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        marginLeft: 50,
+                      }}
+                    />
+                    <View style={{ marginLeft: 10 }}>
+                      <View style={{ flexDirection: "row", marginTop: 10 }}>
+                        <Text style={styles.meetingTime}>
+                          Live Session .{" "}
                         </Text>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontWeight: "bold",
-                            marginBottom: 10,
-                          }}
-                        >
-                          {moment(meeting.time)
-                            .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
-                            .format('MMMM Do YYYY, h:mm A [( ' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')]')}
-                        </Text>
-
-                        <Text style={styles.meetingDescription}>
-                       {meeting.description} 
+                        <Text style={styles.meetingTime}>Get Started . </Text>
+                        <Text style={styles.meetingTime}>Online . </Text>
+                        <Text style={styles.meetingTime}>
+                          {meeting.hubCat}
                         </Text>
                       </View>
+                      <Text style={styles.hubName}>{meeting.hubName}</Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "bold",
+                          marginBottom: 10,
+                        }}
+                      >
+                        {moment(meeting.time)
+                          .tz(
+                            Intl.DateTimeFormat().resolvedOptions().timeZone,
+                          )
+                          .format(
+                            "MMMM Do YYYY, h:mm A [( " +
+                              Intl.DateTimeFormat().resolvedOptions()
+                                .timeZone +
+                              ")]",
+                          )}
+                      </Text>
+                      <Text style={styles.meetingDescription}>
+                        {meeting.description}
+                      </Text>
                     </View>
+                  </View>
+
+                  {/* Only show Register and Join buttons for Upcoming meetings */}
+                  {activeTab === "Upcoming" && (
                     <View
                       style={{
                         flexDirection: "row",
-                        marginTop: -30,
+                        marginTop: 10,
                         alignSelf: "flex-end",
                       }}
                     >
@@ -434,41 +444,20 @@ const HubMeeting = () => {
                         <Text style={styles.buttonText}>Join Meeting</Text>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                ))}
-              {filteredMeetings.length > 2 && (
-                <TouchableOpacity
-                  style={styles.viewAllButton}
-                  onPress={toggleShowAll}
-                >
-                  <Text style={{ color: "#206C00" }}>
-                    {showAll ? "Show Less" : "View All"}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </>
-          ) : ( <View
-              style={{
-                alignContent: "center",
-                justifyContent: "center",
-                alignSelf: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-                }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  marginLeft: 100,
-                }}
-              />
-            <Text style={styles.noMeetings}>
-              No meetings available for this hub
-            </Text>
-          </View>
-          )
+                  )}
+                </View>
+              ))}
+            {meetingsToDisplay.length > 2 && (
+              <TouchableOpacity
+                style={styles.viewAllButton}
+                onPress={toggleShowAll}
+              >
+                <Text style={{ color: "#206C00" }}>
+                  {showAll ? "Show Less" : "View All"}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </>
         ) : (
           <View
             style={{
@@ -477,23 +466,20 @@ const HubMeeting = () => {
               alignSelf: "center",
             }}
           >
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-                }}
-              style={{
-                width: 50,
-                height: 50,
-                marginLeft: 100,
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
               }}
+              style={{ width: 50, height: 50, marginLeft: 100 }}
             />
             <Text style={styles.noMeetings}>
-              {activeTab === "Past Sessions"
-                ? "There are no past sessions yet"
-                : "There are no assessments yet"}
+              No meetings available for this hub
             </Text>
           </View>
-        )}
+        )
+      ) : null}
+
+      
       </View>
       <CustomAlert
         visible={alertVisible}
@@ -525,7 +511,6 @@ const styles = StyleSheet.create({
   meetingContainer: {
     marginBottom: 20,
     padding: 30,
-     overflow: 'hidden',
     backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#000",
@@ -543,7 +528,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 4,
     marginRight: 20,
-    overflow: 'hidden'
+    overflow: "hidden",
   },
   meetingDate: {
     fontSize: 14,
@@ -626,7 +611,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5, // Adjust space between hubs and arrows
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 15
+    marginTop: 15,
   },
   arrowText: {
     fontSize: 20, // Adjust size as needed

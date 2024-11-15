@@ -38,6 +38,7 @@ function MyComponent({ onClose }) {
    const [alertMessage, setAlertMessage] = useState('');
   const [isGridView, setIsGridView] = useState(true);
    const [isSuccess, setIsSuccess] = useState(false);
+  const [joinedHubs, setJoinedHubs] = useState([]);
  
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -283,6 +284,80 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
+    const fetchHubs = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-hub`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (data.status === 'success' && data.JoinedHubs.length > 0) {
+          const joinedHubNames = data.JoinedHubs.map((hub) => hub.coaching_hub_name);
+          setJoinedHubs(joinedHubNames); // Store joined hubs for quick lookup
+        } else {
+          setJoinedHubs([]); // No joined hubs
+        }
+      } catch (error) {
+        console.error('Error fetching hubs:', error);
+        setJoinedHubs([]);
+      }
+    };
+
+    fetchHubs();
+  }, []); // No dependency on selectedHubData since we're tracking all joined hubs
+
+  const handleUnjoinHub = async (index) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+
+      const selectedHubName = filteredData[index]?.coaching_hub_name;
+      if (!selectedHubName) {
+        console.error('Hub name not found');
+        return;
+      }
+
+      const response = await axios.post(
+        `${apiUrl}/api/jobseeker/unjoin-hub`,
+        { coaching_hub_name: selectedHubName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200 && response.data.status === 'success') {
+        console.log('Successfully unjoined the hub:', selectedHubName);
+        setAlertMessage(t('You have successfully unjoined this hub'));
+
+        // Update state to reflect the change
+        setJoinedHubs((prevHubs) =>
+          prevHubs.filter((hubName) => hubName !== selectedHubName)
+        );
+      } else {
+        console.error('Failed to unjoin the hub:', response.data.message || response.statusText);
+      }
+    } catch (error) {
+      console.error('Error unjoining the hub:', error.response?.data || error.message);
+    }
+    setAlertVisible(true);
+  };
+
+  
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
@@ -361,150 +436,279 @@ useEffect(() => {
     (!searchQuery || data.coaching_hub_description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const renderCards = () => {
-    return filteredData.map((data, index) => (
-      <Animated.View
-        key={index}
-        style={{
-          width: '33%',
-          paddingHorizontal: 5,
-          marginBottom: 20,
-          transform: [{ scale: scaleAnimations[index] }],
-        }}
-        onMouseEnter={() => handleCardAnimation(index, 1.05)}
-        onMouseLeave={() => handleCardAnimation(index, 1)}
-      >
-        <View
-          style={{
-            width: '95%',
-            height: 360,
-            padding: 10,
-            borderRadius: 10,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-            backgroundColor: "white",
-          }}
-        >
-          <View style={{flexDirection: 'row', marginTop: 20,}}>
-          <View style={{height: 35, width: 8, backgroundColor: '#206C00', borderTopRightRadius: 5, borderBottomRightRadius: 5, marginLeft: -10}}> </View>
-          <Text style={{ fontSize: 14, color: "black", fontWeight: '400', marginLeft: 10, marginTop: -10 }}> {t("Live Session")}<Text style={{ fontSize: 35, color: "black", fontWeight: '400', marginLeft: 5}}>.</Text> {data.level} </Text>
-          </View>
-          <TouchableOpacity onPress={() => handleOpenPress(index)}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, }}>
-              <View style={{ flex: 1, }}>
-                <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginTop: 10,}}>{data.coaching_hub_name}</Text>
-                
-                <Text style={{ fontSize: 15, color: "black", fontWeight: '400',}}>
-                  {t("Specialization")}: {data.specialization}
-                </Text>
-                <Text style={{ fontSize: 12, color: "black", fontWeight: '400', marginTop: 5}}>
-                  {t("Expert")}: {data.expert_name}
-                </Text>
+      const renderCards = () => {
+        return filteredData.map((data, index) => {
+          const hasJoined = joinedHubs.includes(data.coaching_hub_name); 
+
+          return (
+            <Animated.View
+              key={index}
+              style={{
+                width: '33%',
+                paddingHorizontal: 5,
+                marginBottom: 20,
+                transform: [{ scale: scaleAnimations[index] }],
+              }}
+              onMouseEnter={() => handleCardAnimation(index, 1.05)}
+              onMouseLeave={() => handleCardAnimation(index, 1)}
+            >
+              <View
+                style={{
+                  width: '95%',
+                  height: 360,
+                  padding: 10,
+                  borderRadius: 10,
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                  backgroundColor: 'white',
+                }}
+              >
+                <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                  <View
+                    style={{
+                      height: 35,
+                      width: 8,
+                      backgroundColor: '#206C00',
+                      borderTopRightRadius: 5,
+                      borderBottomRightRadius: 5,
+                      marginLeft: -10,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'black',
+                      fontWeight: '400',
+                      marginLeft: 10,
+                      marginTop: -10,
+                    }}
+                  >
+                    {t('Live Session')}
+                    <Text
+                      style={{
+                        fontSize: 35,
+                        color: 'black',
+                        fontWeight: '400',
+                        marginLeft: 5,
+                      }}
+                    >
+                      .
+                    </Text>{' '}
+                    {data.level}
+                  </Text>
+                </View>
+                <TouchableOpacity onPress={() => handleOpenPress(index)}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 22, color: '#000', fontWeight: '600', marginTop: 10 }}>
+                        {data.coaching_hub_name}
+                      </Text>
+
+                      <Text style={{ fontSize: 15, color: 'black', fontWeight: '400' }}>
+                        {t('Specialization')}: {data.specialization}
+                      </Text>
+                      <Text style={{ fontSize: 12, color: 'black', fontWeight: '400', marginTop: 5 }}>
+                        {t('Expert')}: {data.expert_name}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: '#888',
+                      marginTop: 10,
+                      marginLeft: 10,
+                      height: 55,
+                      overflow: 'hidden',
+                    }}
+                    numberOfLines={3}
+                  >
+                    {data.coaching_hub_description}
+                  </Text>
+                </TouchableOpacity>
+                {hasJoined && (
+                  <Text
+                    style={{
+                      backgroundColor: '#F0FFF0',
+                      padding: 5,
+                      borderRadius: 5,
+                      fontSize: 12,
+                      color: '#206C00',
+                      marginTop: 5,
+                      marginLeft: 10,
+                      marginRight: 10,
+                      width: 200,
+                    }}
+                  >
+                    You have already joined this hub
+                  </Text>
+                )}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 15,
+                    position: 'absolute',
+                    bottom: 15,
+                    alignSelf: 'center',
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => handleOpenPress(index)}
+                    style={{
+                      backgroundColor: '#F5F5F5',
+                      borderWidth: 0.5,
+                      borderColor: 'grey',
+                      borderRadius: 5,
+                      marginRight: 10,
+                      width: 120,
+                      padding: 5,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: 'black',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
+                    >
+                      View
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => (hasJoined ? handleUnjoinHub(index) : handleJoinPressIn(index))}
+                    style={{
+                      backgroundColor: '#F5F5F5',
+                      borderWidth: 0.5,
+                      borderColor: 'grey',
+                      borderRadius: 5,
+                      width: 120,
+                      padding: 5,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: 'black',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
+                    >
+                      {hasJoined ? 'Unjoin Hub' : 'Join Hub'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-
-            <Text
-  style={{
-    fontSize: 15,
-    color: "#888",
-    marginTop: 10,
-    marginLeft: 10,
-    height: 55,             // Fixed height
-    overflow: 'hidden'      // Hides overflowed text
-  }}
-  numberOfLines={3}          // Limits text to 3 lines and adds ellipsis if text overflows
->
-  {data.coaching_hub_description}
-</Text>
-
-            
-          </TouchableOpacity>
-          <View style={{flexDirection: 'row', marginTop: 15, position: 'absolute', bottom: 15, alignSelf: "center", }}>
-          <TouchableOpacity
-onPress={() => handleOpenPress(index)}
-            style={{
-              backgroundColor: "#F5F5F5",
-              borderWidth: 0.5,
-              borderColor: 'grey',
-                borderRadius: 5,
-                marginRight: 10,
-                width: 120,
-                padding: 5,
-                justifyContent: 'center',
-            }}
-          >
-         <Text style={{ color: 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>View</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPressIn={() => handleJoinPressIn(index)}
-            onPressOut={handleJoinPressOut}
-            style={{
-              backgroundColor: "#F5F5F5",
-              borderWidth: 0.5,
-              borderColor: isPressed[index] ? 'coral' : 'grey',
-                borderRadius: 5,
-                width: 120,
-                padding: 5,
-                justifyContent: 'center',
-              backgroundColor: isPressed[index] ? 'coral' : '#F5F5F5',
-            }}
-          >
-         <Text style={{ color: isPressed[index] ? '#fff' : 'black', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
-          </TouchableOpacity>
-        </View>
-        </View>
-      </Animated.View>
-    ));
-  };
+            </Animated.View>
+              );
+            });
+          };
 
   const renderList = () => {
-    return filteredData.map((data, index) => (
-      <View
-        key={index}
-        style={{
-          flexDirection: 'column',
-          padding: 10,
-          width: "100%", 
-          borderBottomWidth: 1,
-          borderBottomColor: '#ddd',
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginBottom: 10 }}>{data.coaching_hub_name}</Text>
-          <Text style={{ fontSize: 16, color: "black", fontWeight: '400' }}>{t("Specialization")}: {data.specialization}</Text>
-          <Text style={{ fontSize: 14, color: "black", fontWeight: '400' }}>{t("Expert")}: {data.expert_name}</Text>
-          <Text numberOfLines={3} style={{ color: "#888", width: "90%", fontSize: 14, }}>{data.coaching_hub_description}</Text>
-        </View>
-        <View style={{flexDirection: 'row',  marginTop: 30 }}>
-        <TouchableOpacity onPress={() => handleOpenPress(index)} style={{ borderColor: '#206C00', borderWidth: 1, padding: 5, width: 120, borderRadius: 5 }}>
-          <Text style={{fontWeight: 'bold', color: '#206C00', textAlign: 'center' }}>View</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPressIn={() => handleJoinPressIn(index)}
-          onPressOut={handleJoinPressOut}
+    return filteredData.map((data, index) => {
+      const hasJoined = joinedHubs.includes(data.coaching_hub_name); // Check if joined
+
+      return (
+        <View
+          key={index}
           style={{
-            borderColor: '#206C00',
-            borderWidth: 1,
-            marginLeft: 20,
-              borderRadius: 5,
-              width: 120,
-              padding: 5,
-              justifyContent: 'center',
+            flexDirection: 'column',
+            padding: 10,
+            width: "100%", 
+            borderBottomWidth: 1,
+            borderBottomColor: '#ddd',
           }}
         >
-        <Text style={{ color : '#206C00', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>Join Hub</Text>
-        </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 22, color: "#000", fontWeight: '600', marginBottom: 10 }}>
+              {data.coaching_hub_name}
+            </Text>
+            <Text style={{ fontSize: 16, color: "black", fontWeight: '400' }}>
+              {t("Specialization")}: {data.specialization}
+            </Text>
+            <Text style={{ fontSize: 14, color: "black", fontWeight: '400' }}>
+              {t("Expert")}: {data.expert_name}
+            </Text>
+            <Text
+              numberOfLines={3}
+              style={{ color: "#888", width: "90%", fontSize: 14 }}
+            >
+              {data.coaching_hub_description}
+            </Text>
+          </View>
+          {hasJoined && (
+            <Text
+              style={{
+                backgroundColor: '#F0FFF0',
+                padding: 5,
+                borderRadius: 5,
+                fontSize: 12,
+                color: '#206C00',
+                marginTop: 5,
+width: 200,
+              }}
+            >
+              You have already joined this hub
+            </Text>
+          )}
+          <View style={{ flexDirection: 'row', marginTop: 30 }}>
+            <TouchableOpacity
+              onPress={() => handleOpenPress(index)}
+              style={{
+                borderColor: '#206C00',
+                borderWidth: 1,
+                padding: 5,
+                width: 120,
+                borderRadius: 5,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: '#206C00',
+                  textAlign: 'center',
+                }}
+              >
+                View
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => (hasJoined ? handleUnjoinHub(index) : handleJoinPressIn(index))}
+              onPressOut={handleJoinPressOut}
+              style={{
+                borderColor: '#206C00',
+                borderWidth: 1,
+                marginLeft: 20,
+                borderRadius: 5,
+                width: 120,
+                padding: 5,
+                justifyContent: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: '#206C00',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                }}
+              >
+                {hasJoined ? 'Unjoin Hub' : 'Join Hub'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    ));
+      );
+    });
   };
+
 
   
   const [fontsLoaded]=useFonts({

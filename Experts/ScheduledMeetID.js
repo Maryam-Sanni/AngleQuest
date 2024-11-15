@@ -28,8 +28,23 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const handleOpenPress = () => {
-    setModalVisible(true);
+  // Updated handleOpenPress function to accept the meeting details and save to AsyncStorage
+  const handleOpenPress = async (meeting) => {
+    try {
+      // Save meeting details to AsyncStorage
+      await AsyncStorage.setItem("meeting_topic", meeting.meeting_topic);
+      await AsyncStorage.setItem("meeting_description", meeting.meeting_description);
+      await AsyncStorage.setItem("meeting_date", meeting.date);
+      await AsyncStorage.setItem("meeting_time", meeting.time);
+      await AsyncStorage.setItem("meeting_location", meeting.meeting_location || "Online");
+      await AsyncStorage.setItem("meeting_duration", String(meeting.duration));
+      await AsyncStorage.setItem("meeting_id", String(meeting.id));
+
+      // Open the modal
+      setModalVisible(true);
+    } catch (error) {
+      console.error("Failed to save meeting details:", error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -105,12 +120,9 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
           return;
         }
 
-        const response = await axios.get(
-          `${apiUrl}/api/expert/newhubmeeting/get`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (response.status === 200) {
           const { NewMeeting } = response.data;
@@ -120,14 +132,21 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
             return;
           }
 
-          // Ensure hub_id is treated as a string for comparison
-          const filteredMeetings = NewMeeting.filter(
-            (meeting) => String(meeting.hub_id) === String(hubId),
-          );
+          const currentTime = new Date();
+          const twentyFourHoursAgo = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000);
+
+          const filteredMeetings = NewMeeting.filter((meeting) => {
+            const meetingDate = new Date(meeting.date);
+            return (
+              String(meeting.hub_id) === String(hubId) &&
+              meetingDate >= twentyFourHoursAgo
+            );
+          });
 
           const sortedMeetings = filteredMeetings.sort(
             (a, b) => new Date(a.date) - new Date(b.date),
           );
+
           setMeetings(sortedMeetings);
         } else {
           console.error("Failed to fetch meeting data");
@@ -135,12 +154,13 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
       } catch (error) {
         console.error("Error fetching meeting data:", error);
       } finally {
-        setLoading(false); // Ensure loading stops on both success and error
+        setLoading(false);
       }
     };
 
     fetchMeetingData();
   }, [hubId, apiUrl]);
+
 
   const handleJoinLink = async (meeting) => {
     try {
@@ -256,7 +276,7 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                   <Text style={styles.meetingTime}>Online . </Text>
                   <Text style={styles.meetingTime}>Get Started</Text>
                   <View style={{ flexDirection: 'row', right: 10, position: 'absolute'}}>
-                  <TouchableOpacity onPress={handleOpenPress}>
+                  <TouchableOpacity onPress={() => handleOpenPress(meeting)}>
                     <Image
                       source={{
                         uri: "https://img.icons8.com/?size=100&id=6698&format=png&color=000000",
