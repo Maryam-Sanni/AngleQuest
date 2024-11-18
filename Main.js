@@ -142,6 +142,7 @@ import Reset from './components/ResetPassword';
 import Tickets from './Jobseekers/Tickets';
 import AllTickets from './Experts/AllTickets';
 import Response from './Experts/TicketsResponse';
+import PastSessions from './Jobseekers/CourseVideo';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -223,6 +224,7 @@ const App = () => {
          <Route path="/tickets" element={<Tickets />} />
          <Route path="/all-tickets" element={<AllTickets />} />
          <Route path="/response" element={<Response />} />
+        <Route path="/past-sessions" element={<PastSessions />} />
       </Routes>
     </Router>
   );

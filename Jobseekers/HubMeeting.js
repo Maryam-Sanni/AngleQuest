@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";
+import { Video } from 'expo-av';
 import moment from "moment-timezone";
 
 const HubMeeting = () => {
@@ -29,7 +30,25 @@ const HubMeeting = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
+  const [expandedView, setExpandedView] = useState(false); 
 
+  
+  useEffect(() => {
+    // When the expanded view is closed, reset the selected meeting
+    if (!expandedView) {
+      setSelectedMeeting(null);
+    }
+  }, [expandedView]);
+
+  // Logic to toggle between "Upcoming" and "Past Sessions"
+  const handleTabChange = (tab) => {
+    if (tab === "Upcoming" && expandedView) {
+      // Close the expanded view when switching to the "Upcoming" tab
+      setExpandedView(false);
+    }
+  };
+  
   // Move to the previous set of hubs
   const handlePrev = () => {
     if (currentIndex > 0) {
@@ -68,7 +87,6 @@ const HubMeeting = () => {
 
           // Set the first hub as the default selected hub
           setSelectedHub(data.JoinedHubs[0].coaching_hub_name);
-          filterMeetings(data.JoinedHubs[0].coaching_hub_name);
         }
       } catch (error) {
         console.error("Error fetching joined hubs:", error);
@@ -310,7 +328,6 @@ const HubMeeting = () => {
               }
               onPress={() => {
                 setSelectedHub(hubName);
-                filterMeetings(hubName);
               }}
             >
               <Text
@@ -358,38 +375,65 @@ const HubMeeting = () => {
           ))}
         </View>
 
-      {/* Display meetings */}
-      {activeTab === "Upcoming" || activeTab === "Past Sessions" ? (
-        meetingsToDisplay.length > 0 ? (
-          <>
-            {meetingsToDisplay
-              .slice(0, showAll ? meetingsToDisplay.length : 2)
-              .map((meeting) => (
-                <View
-                  key={meeting.meeting_id}
-                  style={styles.meetingContainer}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Image
-                      source={{
-                        uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+        {activeTab === "Upcoming" || activeTab === "Past Sessions" ? (
+          meetingsToDisplay.length > 0 ? (
+            <>
+              {meetingsToDisplay
+                .slice(0, showAll ? meetingsToDisplay.length : 2)
+                .map((meeting) => (
+                  <View
+                    key={meeting.meeting_id}
+                    style={[styles.meetingContainer, activeTab === "Past Sessions" && selectedMeeting === meeting.meeting_id && { flexDirection: 'column' }]} // Apply layout change for selected past session
+                  >
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    {activeTab === "Upcoming" ? (
+                      // Display image for Upcoming sessions
+                      <Image
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=42287&format=png&color=000000",
+                        }}
+                        style={{
+                          width: 150,
+                          height: 150,
+                          marginLeft: 50,
+                        }}
+                      />
+                    ) : (
+                      // Display video for Past sessions
+                    <TouchableOpacity
+                      style={{ width: 150, height: 150, flexDirection: 'row',  marginRight: 50 }}
+                      onPress={() => {
+                        setSelectedMeeting(meeting.meeting_id);
+                        setExpandedView(true); 
                       }}
-                      style={{
-                        width: 150,
-                        height: 150,
-                        marginLeft: 50,
-                      }}
-                    />
-                    <View style={{ marginLeft: 10 }}>
+                    >
+                      <Image
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=85366&format=png&color=000000",
+                        }}
+                        style={{
+                          width: 30,
+                          height: 30,
+                          marginRight: 10,
+                          alignSelf: 'center'
+                        }}
+                      />
+                      <Video
+                        source={{ uri: '../assets/coursetest.mp4' }}
+                        shouldPlay={selectedMeeting === meeting.meeting_id}
+                        resizeMode="contain"
+                        style={{ width: '100%', height: '100%',  borderRadius: 10 }}
+                      />
+                    </TouchableOpacity>
+                    
+                    )}
+
+                    <View style={{ marginLeft: 10, width: '60%' }}>
                       <View style={{ flexDirection: "row", marginTop: 10 }}>
-                        <Text style={styles.meetingTime}>
-                          Live Session .{" "}
-                        </Text>
+                        <Text style={styles.meetingTime}>Live Session . </Text>
                         <Text style={styles.meetingTime}>Get Started . </Text>
                         <Text style={styles.meetingTime}>Online . </Text>
-                        <Text style={styles.meetingTime}>
-                          {meeting.hubCat}
-                        </Text>
+                        <Text style={styles.meetingTime}>{meeting.hubCat}</Text>
                       </View>
                       <Text style={styles.hubName}>{meeting.hubName}</Text>
                       <Text
@@ -400,84 +444,144 @@ const HubMeeting = () => {
                         }}
                       >
                         {moment(meeting.time)
-                          .tz(
-                            Intl.DateTimeFormat().resolvedOptions().timeZone,
-                          )
-                          .format(
-                            "MMMM Do YYYY, h:mm A [( " +
-                              Intl.DateTimeFormat().resolvedOptions()
-                                .timeZone +
-                              ")]",
-                          )}
+                          .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
+                          .format("MMMM Do YYYY, h:mm A [( " +
+                            Intl.DateTimeFormat().resolvedOptions().timeZone +
+                            ")]")}
                       </Text>
                       <Text style={styles.meetingDescription}>
                         {meeting.description}
                       </Text>
                     </View>
+                      </View>
+                      {/* Only show Register and Join buttons for Upcoming meetings */}
+                      {activeTab === "Upcoming" && (
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            marginTop: 10,
+                            alignSelf: "flex-end",
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={styles.joinButton2}
+                            onPress={() => handleJoinMeeting(meeting)}
+                          >
+                            <Text style={styles.buttonText2}>
+                              {registrationStatus.includes(String(meeting.meeting_id)) ? "Unregister" : "Register"}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.joinButton}
+                            onPress={() => handleJoinLink(meeting)}
+                          >
+                            <Text style={styles.buttonText}>Join Meeting</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    
                   </View>
-
-                  {/* Only show Register and Join buttons for Upcoming meetings */}
-                  {activeTab === "Upcoming" && (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: 10,
-                        alignSelf: "flex-end",
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={styles.joinButton2}
-                        onPress={() => handleJoinMeeting(meeting)}
-                      >
-                        <Text style={styles.buttonText2}>
-                          {registrationStatus.includes(
-                            String(meeting.meeting_id),
-                          )
-                            ? "Unregister"
-                            : "Register"}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.joinButton}
-                        onPress={() => handleJoinLink(meeting)}
-                      >
-                        <Text style={styles.buttonText}>Join Meeting</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              ))}
-            {meetingsToDisplay.length > 2 && (
-              <TouchableOpacity
-                style={styles.viewAllButton}
-                onPress={toggleShowAll}
-              >
-                <Text style={{ color: "#206C00" }}>
-                  {showAll ? "Show Less" : "View All"}
-                </Text>
-              </TouchableOpacity>
-            )}
-          </>
-        ) : (
-          <View
-            style={{
-              alignContent: "center",
-              justifyContent: "center",
-              alignSelf: "center",
-            }}
-          >
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+                ))}
+              {meetingsToDisplay.length > 2 && (
+                <TouchableOpacity
+                  style={styles.viewAllButton}
+                  onPress={toggleShowAll}
+                >
+                  <Text style={{ color: "#206C00" }}>
+                    {showAll ? "Show Less" : "View All"}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </>
+          ) : (
+            <View
+              style={{
+                alignContent: "center",
+                justifyContent: "center",
+                alignSelf: "center",
               }}
-              style={{ width: 50, height: 50, marginLeft: 100 }}
-            />
-            <Text style={styles.noMeetings}>
-              No meetings available for this hub
-            </Text>
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
+                }}
+                style={{ width: 50, height: 50, marginLeft: 100 }}
+              />
+              <Text style={styles.noMeetings}>
+                No meetings available for this hub
+              </Text>
+            </View>
+          )
+        ) : null}
+
+        {expandedView && selectedMeeting && (
+          <View style={styles.expandedViewContainer}>
+            {/* Larger Video Player */}
+            <View style={styles.largeVideoContainer}>
+              {/* Find the selected meeting from the array */}
+              {meetingsToDisplay && meetingsToDisplay.length > 0 && (
+                // Find the meeting in the meetingsToDisplay array
+                (() => {
+                  const selectedMeetingData = meetingsToDisplay.find(meeting => meeting.meeting_id === selectedMeeting);
+                  if (selectedMeetingData) {
+                    return (
+                      <>
+                        <Video
+                          source={require('../assets/coursetest.mp4')}
+                          useNativeControls
+                          resizeMode="cover"
+                          style={styles.largeVideo}
+                        />
+                        <Text style={styles.meetingDetailsTitle}>
+                          {selectedMeetingData.description}
+                        </Text>
+                        <Text style={styles.meetingDetails}>
+                          {moment(selectedMeetingData.time)
+                            .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
+                            .format("MMMM Do YYYY, h:mm A [( " +
+                              Intl.DateTimeFormat().resolvedOptions().timeZone +
+                              ")]")}
+                        </Text>
+                      </>
+                    );
+                  }
+                  return null;
+                })()
+              )}
+            </View>
+
+            {/* List of other Meetings on the right */}
+            <View style={styles.meetingsListContainer}>
+              {meetingsToDisplay.map((otherMeeting) => (
+                <TouchableOpacity
+                  key={otherMeeting.meeting_id}
+                  onPress={() => {
+                    setSelectedMeeting(otherMeeting.meeting_id); // Update selected meeting
+                  }}
+                  style={[
+                    styles.meetingThumbnail,
+                    selectedMeeting === otherMeeting.meeting_id && { borderColor: '#206C00' }
+                  ]}
+                >
+                  <Text style={styles.meetingName}>
+                    {otherMeeting.hubName}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Close Button */}
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setExpandedView(false)} // Close the expanded view
+            >
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+                ✕
+              </Text>
+            </TouchableOpacity>
           </View>
-        )
-      ) : null}
+        )}
+
 
       
       </View>
@@ -608,14 +712,96 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   arrowButton: {
-    marginHorizontal: 5, // Adjust space between hubs and arrows
+    marginHorizontal: 5,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 15,
   },
   arrowText: {
-    fontSize: 20, // Adjust size as needed
-    color: "white", // Change color to match your theme
+    fontSize: 20, 
+    color: "white", 
+  },
+  expandedViewContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    height: 600,
+    top: 100,
+    left: 50,
+    right: 50,
+    bottom: 0,
+    backgroundColor: 'white',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  largeVideoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  largeVideo: {
+    width: "100%",
+    height: 300,
+    objectFit: 'cover',
+  },
+  meetingsListContainer: {
+    flex: 0.3,
+    backgroundColor: '#fff',
+    padding: 10,
+    maxHeight: '90%',
+    overflowY: 'scroll',
+  },
+  meetingThumbnail: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 10,
+  },
+  meetingName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  meetingDetailsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  meetingDetails: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  controlsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  button: {
+    padding: 10,
+  },
+  icon: {
+    width: 40,
+    height: 40,
   },
 });
 

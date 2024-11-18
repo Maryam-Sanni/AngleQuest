@@ -26,6 +26,7 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
   const [hubName, setHubName] = useState(coachingHubName || "");
   const [showAllMeetings, setShowAllMeetings] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [uniqueNameCount, setUniqueNameCount] = useState(0);
   const apiUrl = process.env.REACT_APP_API_URL;
 
   // Updated handleOpenPress function to accept the meeting details and save to AsyncStorage
@@ -234,6 +235,40 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
     }
   };
 
+  const fetchData = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        const hubId = await AsyncStorage.getItem('hub_id'); 
+        const storedHubName = await AsyncStorage.getItem('coaching_hub_name');
+        setHubName(storedHubName);
+
+        const response = await axios.get(`${apiUrl}/api/expert/get-all-meeting`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Filter and format the meetings
+        const formattedMeetings = response.data.data
+            .filter(meeting => meeting.hub_id === hubId)
+            .map((meeting) => ({
+                id: meeting.id,
+                name: meeting.jobseeker_name,
+            }));
+
+        setMeetings(formattedMeetings);
+
+        // Calculate the number of unique names
+        const uniqueNames = new Set(formattedMeetings.map(meeting => meeting.name));
+        setUniqueNameCount(uniqueNames.size); // Update the state with the unique count
+    } catch (error) {
+        console.error('Error fetching meetings:', error);
+        alert('Failed to load meetings.');
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const confirmDelete = (meeting) => {
     // Show confirmation dialog using window.confirm() for React Native Web
     const isConfirmed = window.confirm("Are you sure you want to delete this meeting?");
@@ -321,6 +356,18 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                     alignSelf: "flex-end",
                   }}
                 >
+                  <View style={styles.joinButton3}>
+                      {[...Array(4)].map((_, index) => (
+                          <Image
+                              key={index}
+                              source={{
+                                  uri: "https://img.icons8.com/?size=100&id=34105&format=png&color=206C00",
+                              }}
+                              style={{ width: 25, height: 25, marginRight: 5 }}
+                          />
+                      ))}
+                      <Text style={{ fontSize: 16, marginTop: 3 }}>+{uniqueNameCount}</Text>
+                  </View>
                   <TouchableOpacity
                     onPress={() => handleAddToCalendar(meeting)}
                     style={styles.joinButton2}
@@ -403,8 +450,21 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 20,
   },
+  joinButton3: {
+    borderColor: "#206C00",
+    borderWidth: 1,
+    padding: 10,
+    flexDirection: "row",
+    borderRadius: 5,
+    marginRight: 20,
+  },
   buttonText: {
     color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  buttonText2: {
+    color: "#206C00",
     fontWeight: "bold",
     textAlign: "center",
   },
