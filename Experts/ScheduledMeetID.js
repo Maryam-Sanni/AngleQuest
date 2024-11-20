@@ -357,16 +357,20 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                   }}
                 >
                   <View style={styles.joinButton3}>
-                      {[...Array(4)].map((_, index) => (
-                          <Image
-                              key={index}
-                              source={{
-                                  uri: "https://img.icons8.com/?size=100&id=34105&format=png&color=206C00",
-                              }}
-                              style={{ width: 25, height: 25, marginRight: 5 }}
-                          />
-                      ))}
-                      <Text style={{ fontSize: 16, marginTop: 3 }}>+{uniqueNameCount}</Text>
+                    {[...Array(Math.min(uniqueNameCount, 5))].map((_, index) => (
+                      <Image
+                        key={index}
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=34105&format=png&color=206C00",
+                        }}
+                        style={{ width: 25, height: 25, marginRight: 5 }}
+                      />
+                    ))}
+                    {uniqueNameCount > 5 && (
+                      <Text style={{ fontSize: 16, marginTop: 3 }}>
+                        +{uniqueNameCount - 5}
+                      </Text>
+                    )}
                   </View>
                   <TouchableOpacity
                     onPress={() => handleAddToCalendar(meeting)}

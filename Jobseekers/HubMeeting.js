@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Button,
-  Image,
+  Image, TextInput,
   FlatList,
   StyleSheet,
   ScrollView,
@@ -32,7 +32,8 @@ const HubMeeting = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [expandedView, setExpandedView] = useState(false); 
-
+  const [isAddingNote, setIsAddingNote] = useState(false);
+  const [note, setNote] = useState("");
   
   useEffect(() => {
     // When the expanded view is closed, reset the selected meeting
@@ -63,7 +64,20 @@ const HubMeeting = () => {
     }
   };
 
-  const tabs = ["Upcoming", "Past Sessions", "Assessment"];
+  const tabs = [
+    {
+      label: "Upcoming",
+      icon: "https://img.icons8.com/?size=100&id=10034&format=png&color=000000",
+    },
+    {
+      label: "Past Sessions",
+      icon: "https://img.icons8.com/?size=100&id=85162&format=png&color=000000",
+    },
+    {
+      label: "Assessment",
+      icon: "https://img.icons8.com/?size=100&id=65285&format=png&color=000000",
+    },
+  ];
 
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -352,28 +366,43 @@ const HubMeeting = () => {
       </View>
 
       <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50 }}>
-        <View style={{ flexDirection: "row", marginBottom: 30 }}>
-          {tabs.map((tab) => (
-            <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)}>
+      <View style={{ flexDirection: "row", marginBottom: 30 }}>
+        {tabs.map((tab) => (
+          <TouchableOpacity key={tab.label} onPress={() => setActiveTab(tab.label)}>
+            <View
+              style={{
+                alignItems: "center",
+                marginRight: 15,
+                padding: 5,
+                backgroundColor: activeTab === tab.label ? "transparent" : "transparent",
+                flexDirection: 'row',
+                borderRadius: 10,
+                borderWidth: activeTab === tab.label ? 1 : 0,
+                borderColor: "white",
+                paddingHorizontal: 10,
+              }}
+            >
+              <Image
+                source={{ uri: tab.icon }}
+                style={{
+                  width: 20,
+                  height: 20,
+                  marginRight: 5,
+                  tintColor: activeTab === tab.label ? "#FFF" : "#D3D3D3", // Tint color for active tab
+                }}
+              />
               <Text
                 style={{
                   fontSize: 18,
-                  marginRight: 10,
-                  padding: 5,
-                  color: activeTab === tab ? "white" : "#D3D3D3",
-                  borderRadius: 10,
-                  borderWidth: activeTab === tab ? 1 : 0,
-                  backgroundColor:
-                    activeTab === tab ? "transparent" : "transparent",
-                  borderColor: "white",
-                  paddingHorizontal: 10, // Adds padding for better UX
+                  color: activeTab === tab.label ? "#FFF" : "#D3D3D3",
                 }}
               >
-                {tab}
+                {tab.label}
               </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
 
         {activeTab === "Upcoming" || activeTab === "Past Sessions" ? (
           meetingsToDisplay.length > 0 ? (
@@ -401,31 +430,43 @@ const HubMeeting = () => {
                     ) : (
                       // Display video for Past sessions
                     <TouchableOpacity
-                      style={{ width: 150, height: 150, flexDirection: 'row',  marginRight: 50 }}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        marginRight: 50,
+                      }}
                       onPress={() => {
                         setSelectedMeeting(meeting.meeting_id);
-                        setExpandedView(true); 
+                        setExpandedView(true);
                       }}
                     >
-                      <Image
-                        source={{
-                          uri: "https://img.icons8.com/?size=100&id=85366&format=png&color=000000",
-                        }}
-                        style={{
-                          width: 30,
-                          height: 30,
-                          marginRight: 10,
-                          alignSelf: 'center'
-                        }}
-                      />
-                      <Video
-                        source={{ uri: '../assets/coursetest.mp4' }}
-                        shouldPlay={selectedMeeting === meeting.meeting_id}
-                        resizeMode="contain"
-                        style={{ width: '100%', height: '100%',  borderRadius: 10 }}
-                      />
+                      <View style={{ width: '100%', height: '100%', position: 'relative' }}>
+                        {/* Video Component */}
+                        <Video
+                          source={{ uri: '../assets/coursetest.mp4' }}
+                          shouldPlay={true}
+                          isMuted={true} // Ensures the video plays without sound
+                          resizeMode="contain"
+                          style={{ width: '100%', height: '100%', borderRadius: 10 }}
+                        />
+
+                        {/* Image Overlay */}
+                        <Image
+                          source={{
+                            uri: "https://img.icons8.com/?size=100&id=85366&format=png&color=000000",
+                          }}
+                          style={{
+                            width: 50,
+                            height: 50,
+                            position: "absolute",
+                            top: 60,
+                            left: 50,
+                            backgroundColor: "rgba(211,249,216,0.3)",
+                          }}
+                        />
+                      </View>
                     </TouchableOpacity>
-                    
+
                     )}
 
                     <View style={{ marginLeft: 10, width: '60%' }}>
@@ -435,7 +476,7 @@ const HubMeeting = () => {
                         <Text style={styles.meetingTime}>Online . </Text>
                         <Text style={styles.meetingTime}>{meeting.hubCat}</Text>
                       </View>
-                      <Text style={styles.hubName}>{meeting.hubName}</Text>
+                      <Text style={styles.hubName}>{meeting.topic}</Text>
                       <Text
                         style={{
                           fontSize: 14,
@@ -532,16 +573,84 @@ const HubMeeting = () => {
                           resizeMode="cover"
                           style={styles.largeVideo}
                         />
+                        <TouchableOpacity 
+                          style={{ flexDirection: 'row', marginLeft: 550, marginTop: 10 }}
+                          onPress={() => setIsAddingNote(true)}
+                        >
+                          <Image
+                            source={{
+                              uri: "https://img.icons8.com/?size=100&id=24717&format=png&color=206C00",
+                            }}
+                            style={{ width: 20, height: 20, marginRight: 10 }}
+                          />
+                          <Text style={{ color: '#206C00', marginTop: 2 }}>
+                            Add Note to Expert
+                          </Text>
+                        </TouchableOpacity>
+
+                        {isAddingNote && (
+                          <View style={styles.noteContainer}>
+                            <TextInput
+                              style={styles.textInput}
+                              placeholder="Write down your questions"
+                              value={note}
+                              onChangeText={setNote}
+                              multiline
+                            />
+                            <View style={styles.noteActions}>
+                              <TouchableOpacity
+                                style={styles.submitButton}
+                                onPress={() => {
+                                  // Replace the selectedMeetingData (you can also update state or API as required)
+                                  selectedMeetingData.note = note;
+                                  setIsAddingNote(false);
+                                }}
+                              >
+                                <Text style={styles.submitText}>Submit</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                                style={styles.notecloseButton}
+                                onPress={() => setIsAddingNote(false)}
+                              >
+                                <Text style={styles.notecloseText}>Close</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        )}
+
                         <Text style={styles.meetingDetailsTitle}>
-                          {selectedMeetingData.description}
-                        </Text>
+                          {selectedMeetingData.topic}
+                       
                         <Text style={styles.meetingDetails}>
+                          {selectedMeetingData.description}
+                          </Text>
+                            </Text>
+                        <Text style={styles.meetingDetails2}>
+                          Timestamp:
+
+                        <Text style={styles.meetingDetails3}>
                           {moment(selectedMeetingData.time)
                             .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
                             .format("MMMM Do YYYY, h:mm A [( " +
                               Intl.DateTimeFormat().resolvedOptions().timeZone +
-                              ")]")}
-                        </Text>
+                              ")]")}   
+                          {(() => {
+                            const now = moment();
+                            const meetingTime = moment(selectedMeetingData.time);
+                            const diffInHours = now.diff(meetingTime, 'hours');
+                            const diffInDays = now.diff(meetingTime, 'days');
+
+                            if (diffInDays > 0) {
+                              return `${diffInDays} ${diffInDays === 1 ? "day ago" : "days ago"}`;
+                            } else if (diffInHours > 0) {
+                              return `${diffInHours} ${diffInHours === 1 ? "hour ago" : "hours ago"}`;
+                            } else {
+                              return "Less than an hour ago";
+                            }
+                          })()}
+
+                           </Text>
+                           </Text>
                       </>
                     );
                   }
@@ -563,8 +672,18 @@ const HubMeeting = () => {
                     selectedMeeting === otherMeeting.meeting_id && { borderColor: '#206C00' }
                   ]}
                 >
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=8OtIp7ddIMJm&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginRight: 10,
+                    }}
+                  />
                   <Text style={styles.meetingName}>
-                    {otherMeeting.hubName}
+                    {otherMeeting.topic}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -725,6 +844,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     height: 600,
+    overflow: 'hidden',
     top: 100,
     left: 50,
     right: 50,
@@ -742,8 +862,6 @@ const styles = StyleSheet.create({
   },
   largeVideoContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 20,
   },
   largeVideo: {
@@ -763,10 +881,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   meetingName: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
   },
   closeButton: {
     position: 'absolute',
@@ -778,14 +897,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   meetingDetailsTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
-    textAlign: 'center'
+    marginLeft: 5,
+    width: 700
   },
   meetingDetails: {
+    fontSize: 16,
+    marginLeft: 5,
+     fontWeight: '400',
+    marginRight: 10
+  },
+  meetingDetails2: {
     fontSize: 14,
-    marginTop: 5,
+    marginLeft: 5,
+    marginTop: 10,
+     fontWeight: '600',
+  },
+  meetingDetails3: {
+    fontSize: 14,
+    marginLeft: 5,
+    marginTop: 10,
+     fontWeight: '400',
   },
   controlsContainer: {
     flexDirection: 'row',
@@ -802,6 +936,42 @@ const styles = StyleSheet.create({
   icon: {
     width: 40,
     height: 40,
+  },
+  noteContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+  },
+  textInput: {
+    height: 100,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    textAlignVertical: 'top',
+  },
+  noteActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  submitButton: {
+    backgroundColor: '#206C00',
+    padding: 10,
+    borderRadius: 8,
+  },
+  submitText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  notecloseButton: {
+    backgroundColor: '#ccc',
+    padding: 10,
+    borderRadius: 8,
+  },
+  notecloseText: {
+    color: '#000',
   },
 });
 

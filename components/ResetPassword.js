@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Top from '../components/top';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPasswordForm = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -9,6 +10,7 @@ const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -31,10 +33,24 @@ const ResetPasswordForm = () => {
     }
   };
 
+    const handleBack = () => {
+   navigate("/sign-in");
+    };
+
   return (
     <View style={{ flex: 1 }}>
       <Top />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={styles.contained}>
+           <Image
+             source={{
+               uri: "https://img.icons8.com/?size=100&id=96646&format=png&color=000000",
+             }}
+             style={{
+               width: 100,
+               height: 100,
+             }}
+           />
         <Text style={styles.title}>Reset Your Password</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -67,6 +83,10 @@ const ResetPasswordForm = () => {
         <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
           <Text style={styles.buttonText}>Reset Password</Text>
         </TouchableOpacity>
+          <TouchableOpacity onPress={handleBack} >
+             <Text style={{fontSize: 12, marginTop: 40}}>Go to Login</Text>
+               </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
@@ -79,23 +99,43 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputContainer: {
-    width: "80%",
+    width: "100%",
     marginBottom: 20,
   },
+      contained: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 30,
+        // Shadow for iOS
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        // Shadow for Android
+        elevation: 5,
+      },
   input: {
+    width: 500,
     padding: 10,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
+    marginTop: 5,
+    fontFamily: "Roboto-Light"
   },
   button: {
-    backgroundColor: "coral",
-    padding: 10,
+    backgroundColor: "#135837",
     borderRadius: 5,
+    padding: 10,
+    width: 500,
+    alignItems: "center",
+    marginTop: 30,
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
   errorText: {
     color: "red",

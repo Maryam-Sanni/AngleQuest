@@ -229,7 +229,7 @@ function MyComponent() {
                     <View style={{marginLeft: 270}}>
                       <View style={styles.header}>
                                 <TouchableOpacity onPress={handleOpenPress}>
-                                  <View style={{ marginLeft: 70, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 150, alignItems: 'center',}}>
+                                  <View style={{ marginLeft: 55, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 150, alignItems: 'center',}}>
 
                                     <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("+ New Skill Analysis")}</Text>
                                   </View>
@@ -239,7 +239,7 @@ function MyComponent() {
                       <View style={{flexDirection: 'row'}}>
                         
                       <TouchableOpacity onPress={gotoresult}>
-                        <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
+                        <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, borderWidth: 1 }}>
                           
                                         <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("AI Analysis")}</Text>
                        

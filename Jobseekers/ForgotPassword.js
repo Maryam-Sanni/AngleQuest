@@ -1,15 +1,17 @@
 import React, { useState, useRef } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import Top from '../components/top';
 import { useFonts } from 'expo-font';
 import { useTranslation } from "react-i18next";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false); // To track if email has been sent
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -46,6 +48,10 @@ const ResetPasswordForm = () => {
     }
   };
 
+    const handleBack = () => {
+   navigate("/sign-in");
+    };
+  
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
@@ -59,10 +65,19 @@ const ResetPasswordForm = () => {
     <View style={{ flex: 1}}>
       <Top />
       <View style={styles.container}>
-        <Text style={styles.title}>Enter your email address to rest your password</Text>
+         <View style={styles.contained}>
+           <Image
+             source={{
+               uri: "https://img.icons8.com/?size=100&id=112162&format=png&color=000000",
+             }}
+             style={{
+               width: 100,
+               height: 100,
+             }}
+           />
+           <Text style={{fontSize: 24, fontWeight: 'bold', marginTop: 20, marginBottom: 10 }}>Forgot Password</Text>
+        <Text style={styles.title}>Enter your email address and we'll send you a link to rest your password</Text>
 
-        {success && <Text style={styles.successText}>{success}</Text>}
-        {error && <Text style={styles.errorText}>{error}</Text>}
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -74,6 +89,8 @@ const ResetPasswordForm = () => {
             editable={!emailSent} // Disable input if email is sent
           />
         </View>
+           {success && <Text style={styles.successText}>{success}</Text>}
+           {error && <Text style={styles.errorText}>{error}</Text>}
 
         <TouchableOpacity 
           style={[styles.button, emailSent && styles.buttonSuccess]} // Conditional styling
@@ -81,9 +98,13 @@ const ResetPasswordForm = () => {
           disabled={emailSent} // Disable button if email is sent
         >
           <Text style={styles.buttonText}>
-            {emailSent ? "Email Sent" : t("Reset Password")} {/* Change button text */}
+            {emailSent ? "Email Sent" : t("Submit")} {/* Change button text */}
           </Text>
         </TouchableOpacity>
+           <TouchableOpacity onPress={handleBack} >
+           <Text style={{fontSize: 12, marginTop: 40}}>Back to Login</Text>
+             </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
@@ -94,12 +115,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 200
+  },
+  contained: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 30,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Shadow for Android
+    elevation: 5,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "black",
+    fontSize: 14,
+    textAlign: 'center',
+    color: "grey",
+    width: 400,
     marginBottom: 30,
   },
   inputContainer: {
@@ -126,22 +161,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "green",
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: 'flex-start',
     fontFamily: "Roboto-Light"
   },
   errorText: {
-    fontSize: 12,
+    fontSize: 14,
     color: "red",
+    textAlign: 'flex-start',
     marginBottom: 10,
-    textAlign: "center",
   },
   button: {
-    backgroundColor: "coral",
+    backgroundColor: "#135837",
     borderRadius: 5,
     padding: 10,
-    width: 200,
+    width: 500,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 30,
   },
   buttonSuccess: {
     backgroundColor: "green", // Button color when email is sent
