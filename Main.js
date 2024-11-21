@@ -144,6 +144,7 @@ import AllTickets from './Experts/AllTickets';
 import Response from './Experts/TicketsResponse';
 import PastSessions from './Jobseekers/CourseVideo';
 import RateMeeting from './Jobseekers/RatingExpert';
+import RateExpert from './Experts/RateMeeting';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -227,6 +228,7 @@ const App = () => {
          <Route path="/response" element={<Response />} />
         <Route path="/past-sessions" element={<PastSessions />} />
         <Route path="/rate-meeting" element={<RateMeeting />} />
+        <Route path="/rate-progress" element={<RateExpert />} />
       </Routes>
     </Router>
   );
