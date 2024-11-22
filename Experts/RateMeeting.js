@@ -55,9 +55,9 @@ const ExpertRating = () => {
             ) : (
               <>
                 <Text style={styles.heading2}>
-                  Are you on track to reaching your goals?
+                  You rated the meeting {rating}, what is the progress on reaching the training goals?
                 </Text>
-                <Text style={styles.selectedRating}>Selected Rating: {rating}</Text>
+        
                 <View style={styles.checkboxContainer}>
                   {[
                     { label: "On Track", color: "green" },
@@ -89,7 +89,7 @@ const ExpertRating = () => {
                 {goalStatus && (
                   <View style={styles.feedbackContainer}>
                     <Text style={styles.feedbackPrompt}>
-                      {goalStatus === "On Track" && "What could you have done better?"}
+                      {goalStatus === "On Track" && "Do you have any feedback on the progress?"}
                       {goalStatus === "Some Concerns" && "What are your concerns?"}
                       {goalStatus === "Behind" && "What is wrong?"}
                     </Text>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   heading: { fontSize: 20, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
-  heading2: { fontSize: 20, fontWeight: "bold", marginBottom: 20, alignSelf: 'flex-start'},
+  heading2: { fontSize: 16, fontWeight: "600", marginBottom: 20, alignSelf: 'flex-start'},
   ratingOptions: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center" },
   ratingOption: {
     alignItems: "center",

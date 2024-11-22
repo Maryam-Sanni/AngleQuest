@@ -266,7 +266,8 @@ const HubMeeting = () => {
       const firstName = await AsyncStorage.getItem("first_name");
       const lastName = await AsyncStorage.getItem("last_name");
       const candidateName = `${firstName} ${lastName}`;
-
+      const duration = meeting.duration;
+      
       if (!token || !candidateName) {
         console.error("Token or candidate name missing.");
         return;
@@ -275,7 +276,7 @@ const HubMeeting = () => {
       // API request
       const response = await axios.post(
         `${apiUrl}/api/expert/join-candidate`,
-        { meeting_id, candidate_name: candidateName },
+        { meeting_id, duration, candidate_name: candidateName },
         { headers: { Authorization: `Bearer ${token}` } },
       );
 

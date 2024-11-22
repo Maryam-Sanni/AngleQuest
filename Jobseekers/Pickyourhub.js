@@ -727,8 +727,8 @@ function MyComponent({ onClose }) {
           {hasJoined && (
             <Text
               style={{
-                backgroundColor: "#F0FFF0",
-                padding: 5,
+                backgroundColor: "lightgreen",
+                padding: 7,
                 borderRadius: 5,
                 fontSize: 12,
                 color: "#206C00",
@@ -783,7 +783,7 @@ function MyComponent({ onClose }) {
                   fontSize: 14,
                 }}
               >
-                {hasJoined ? "Unjoin Hub" : "Join Hub"}
+                {hasJoined ? "Leave Hub" : "Join Hub"}
               </Text>
             </TouchableOpacity>
           </View>

@@ -70,7 +70,38 @@ function MyComponent({ onClose }) {
     fetchHubs();
   }, [selectedHubData]); // Include selectedHubData as a dependency
 
+  const leaveHubHandler = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
 
+      const response = await fetch(`${apiUrl}/api/jobseeker/unjoin-hub`, {
+        method: 'POST', // Assuming POST is required for this endpoint
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          coaching_hub_name: selectedHubData.coaching_hub_name,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to leave hub: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Successfully left the hub:', data);
+
+      // Update UI or state
+      setHasJoinedHub(false);
+    } catch (error) {
+      console.error('Error leaving the hub:', error.message);
+    }
+  };
   
   const handleJoinMeeting = async (meeting) => {
     try {
@@ -263,7 +294,8 @@ function MyComponent({ onClose }) {
       const firstName = await AsyncStorage.getItem('first_name');
       const lastName = await AsyncStorage.getItem('last_name');
       const candidateName = `${firstName} ${lastName}`;
-
+      const duration = meeting.duration;
+      
       if (!token || !candidateName) {
         console.error("Token or candidate name missing.");
         return;
@@ -272,7 +304,7 @@ function MyComponent({ onClose }) {
       // API request
       const response = await axios.post(
         `${apiUrl}/api/expert/join-candidate`,
-        { meeting_id, candidate_name: candidateName },
+        { meeting_id, duration, candidate_name: candidateName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -403,22 +435,57 @@ function MyComponent({ onClose }) {
 
                 </>
               )}
-              <TouchableOpacity onPress={createHubAndJoinExpertHub}
-                style={{
-                  backgroundColor: hasJoinedHub ? 'lightgreen' : '#206C00',
-                  borderRadius: 5,
-                  marginRight: 10,
-                   width: hasJoinedHub ? 300 : 120,
-                  marginTop: 30,
-                  padding: 10,
-                  justifyContent: 'center',
-                }}
-                activeOpacity={0.7}
-              >
-                <Text style={{ color: hasJoinedHub ? 'black' : 'white', textAlign: 'center', fontWeight: 'bold', fontSize: 14 }}>
-                  {hasJoinedHub ? 'You have already joined this hub ✔ ' : 'Join Hub'}
-                </Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
+                <TouchableOpacity
+                  onPress={createHubAndJoinExpertHub}
+                  style={{
+                    backgroundColor: hasJoinedHub ? 'lightgreen' : '#206C00',
+                    borderRadius: 5,
+                    marginRight: hasJoinedHub ? 10 : 0, // Add spacing only if "Leave Hub" is shown
+                    width: hasJoinedHub ? 300 : 120,
+                    padding: 10,
+                    justifyContent: 'center',
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={{
+                      color: hasJoinedHub ? 'black' : 'white',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                    }}
+                  >
+                    {hasJoinedHub ? 'You have already joined this hub ✔ ' : 'Join Hub'}
+                  </Text>
+                </TouchableOpacity>
+
+                {hasJoinedHub && (
+                  <TouchableOpacity
+                    onPress={leaveHubHandler} // Replace with your logic to leave the hub
+                    style={{
+                      backgroundColor: 'red',
+                      borderRadius: 5,
+                      padding: 10,
+                      justifyContent: 'center',
+                      width: 120,
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}
+                    >
+                      Leave Hub
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
 
             </View>
            
