@@ -203,7 +203,7 @@ const SupportRequestPage = () => {
                     />
                     <Image
                       source={{
-                        uri: "https://img.icons8.com/?size=100&id=6HcDYyk5GfGb&format=png&color=000000",
+                        uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
                       }}
                       style={{
                         width: 90,
@@ -225,6 +225,10 @@ const SupportRequestPage = () => {
                     <Text style={styles.lightText2}>
                       Has been assigned to your request
                     </Text>
+                    <TouchableOpacity onPress={() => setCurrentStep('resolution')} // Navigate to Resolution
+                      >
+                           <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -257,7 +261,7 @@ const SupportRequestPage = () => {
                 />
                 <Image
                   source={{
-                    uri: "https://img.icons8.com/?size=100&id=6HcDYyk5GfGb&format=png&color=000000",
+                    uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
                   }}
                   style={{
                     width: 90,
@@ -271,31 +275,435 @@ const SupportRequestPage = () => {
                 <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
               </View>
             <View style={styles.step3}>
-              <Text style={styles.header}>Expert has responded</Text>
+              <Text style={styles.header}>Response from Maryam</Text>
+          <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+              }}
+              style={{
+                width: 35,
+                height: 35,
+                marginTop: 20,
+                marginBottom: 20,
+                alignSelf: 'center'
+              }}
+            />
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+              }}
+              style={{
+                width: 90,
+                height: 90,
+                marginBottom: 20,
+                alignSelf: 'center'
+              }}
+            />
+               <View style={{flexDirection: 'row', borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
+            <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Response</Text>
+                 <Image
+                   source={{
+                     uri: "https://img.icons8.com/?size=100&id=11204&format=png&color=000000",
+                   }}
+                   style={{
+                     width: 30,
+                     height: 30,
+                     marginLeft: 5,
+                   }}
+                 />
+               </View>
               <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=904&format=png&color=000000",
-                }}
-                style={{
-                  width: 35,
-                  height: 35,
-                  marginTop: 20,
-                  marginBottom: 20,
-                  alignSelf: 'center'
-                }}
-              />
-              <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
-            </View>
+                 source={{
+                   uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+                 }}
+                 style={{
+                   width: 35,
+                   height: 35,
+                   alignSelf: 'center',
+                   marginTop: 5
+                 }}
+               />
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to open</Text>
+
+              <TouchableOpacity onPress={() => setCurrentStep('resolution2')} // Navigate to Resolution
+                >
+                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.submitButton}>
+                <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+              </TouchableOpacity>
+          </View>
         </View>
           )}
 
+            {/* Resolution Section */}
+              {currentStep === 'resolution2' && (
+            <View style={{flexDirection: 'row', maxWidth: '75%'}}>
+              <View style={styles.step}>
+                <Text style={styles.header}>Create Support Request</Text>
+                <SupportForm formData={formData} setFormData={setFormData} />
+                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                  <Text style={styles.submitButtonText}>Submit Request</Text>
+                </TouchableOpacity>
+              </View>
+                  <View style={styles.step2}>
+                    <Text style={styles.header}>Found an expert for you!</Text>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                      }}
+                      style={{
+                        width: 35,
+                        height: 35,
+                        marginTop: 20,
+                        marginBottom: 20,
+                        alignSelf: 'center'
+                      }}
+                    />
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                      }}
+                      style={{
+                        width: 90,
+                        height: 90,
+                        marginBottom: 20,
+                        alignSelf: 'center'
+                      }}
+                    />
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                    <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                    <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+                  </View>
+                <View style={styles.step3}>
+                  <Text style={styles.header}>Response from Maryam</Text>
+              <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                  }}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: 20,
+                    marginBottom: 20,
+                    alignSelf: 'center'
+                  }}
+                />
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                  }}
+                  style={{
+                    width: 90,
+                    height: 90,
+                    marginBottom: 20,
+                    alignSelf: 'center'
+                  }}
+                />
+                     <Image
+                       source={{
+                         uri: "https://img.icons8.com/?size=100&id=9387&format=png&color=000000",
+                       }}
+                       style={{
+                         width: 70,
+                         height: 70,
+                         alignSelf: 'center'
+                       }}
+                     />
+                  <Image
+                     source={{
+                       uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+                     }}
+                     style={{
+                       width: 35,
+                       height: 35,
+                       alignSelf: 'center',
+                       marginTop: 5
+                     }}
+                   />
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to listen</Text>
+
+                  <TouchableOpacity onPress={() => setCurrentStep('resolution3')} // Navigate to Resolution
+                    >
+                         <Text style={{fontSize: 16, color: 'white',  marginBottom: 90}}>Your request will be assigned to the first one available</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton}>
+                    <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+                  </TouchableOpacity>
+              </View>
+            </View>
+              )}
+
+            {/* Resolution Section */}
+              {currentStep === 'resolution3' && (
+            <View style={{flexDirection: 'row', maxWidth: '75%'}}>
+              <View style={styles.step}>
+                <Text style={styles.header}>Create Support Request</Text>
+                <SupportForm formData={formData} setFormData={setFormData} />
+                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                  <Text style={styles.submitButtonText}>Submit Request</Text>
+                </TouchableOpacity>
+              </View>
+                  <View style={styles.step2}>
+                    <Text style={styles.header}>Found an expert for you!</Text>
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                      }}
+                      style={{
+                        width: 35,
+                        height: 35,
+                        marginTop: 20,
+                        marginBottom: 20,
+                        alignSelf: 'center'
+                      }}
+                    />
+                    <Image
+                      source={{
+                        uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                      }}
+                      style={{
+                        width: 90,
+                        height: 90,
+                        marginBottom: 20,
+                        alignSelf: 'center'
+                      }}
+                    />
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                    <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                    <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+                  </View>
+                <View style={styles.step3}>
+                  <Text style={styles.header}>Response from Maryam</Text>
+              
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=2L3pGQnCYHCG&format=png&color=000000",
+                  }}
+                  style={{
+                    width: 90,
+                    height: 90,
+                    marginBottom: 20,
+                    marginTop: 10,
+                    alignSelf: 'center'
+                  }}
+                />
+                   <Text style={{fontSize: 18, marginBottom: 20, textAlign: 'center', marginLeft: 10, marginRight: 10}}>Maryam is ready to join you on the call on 22-11-2024 2PM WAT</Text>
+                  <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
+                    <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Join Meeting</Text>
+                       </TouchableOpacity>
+                  <Image
+                     source={{
+                       uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+                     }}
+                     style={{
+                       width: 35,
+                       height: 35,
+                       alignSelf: 'center',
+                       marginTop: 5
+                     }}
+                   />
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
+
+                  <TouchableOpacity onPress={() => setCurrentStep('review')} // Navigate to Resolution
+                    >
+                         <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton}>
+                    <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+                  </TouchableOpacity>
+              </View>
+            </View>
+              )}
+            
           {/* Review Section */}
           {currentStep === 'review' && (
-            <View style={styles.step}>
-              <Text style={styles.header}>Review</Text>
-              <Text style={styles.bodyText}>Provide feedback for the resolution process.</Text>
+        <View style={{flexDirection: 'row', maxWidth: '100%'}}>
+          <View style={styles.step}>
+            <Text style={styles.header}>Create Support Request</Text>
+            <SupportForm formData={formData} setFormData={setFormData} />
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Submit Request</Text>
+            </TouchableOpacity>
+          </View>
+              <View style={styles.step2}>
+                <Text style={styles.header}>Found an expert for you!</Text>
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                  }}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: 20,
+                    marginBottom: 20,
+                    alignSelf: 'center'
+                  }}
+                />
+                <Image
+                  source={{
+                    uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                  }}
+                  style={{
+                    width: 90,
+                    height: 90,
+                    marginBottom: 20,
+                    alignSelf: 'center'
+                  }}
+                />
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+              </View>
+            <View style={styles.step3}>
+              <Text style={styles.header}>Response from Maryam</Text>
+
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=2L3pGQnCYHCG&format=png&color=000000",
+              }}
+              style={{
+                width: 90,
+                height: 90,
+                marginBottom: 20,
+                marginTop: 10,
+                alignSelf: 'center'
+              }}
+            />
+               <Text style={{fontSize: 18, marginBottom: 20, textAlign: 'center', marginLeft: 10, marginRight: 10}}>Maryam is ready to join you on the call on 22-11-2024 2PM WAT</Text>
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
+                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Join Meeting</Text>
+                   </TouchableOpacity>
+              <Image
+                 source={{
+                   uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+                 }}
+                 style={{
+                   width: 35,
+                   height: 35,
+                   alignSelf: 'center',
+                   marginTop: 5
+                 }}
+               />
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
+
+              <TouchableOpacity onPress={() => setCurrentStep('fetch')} // Navigate to Resolution
+                >
+                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.submitButton}>
+                <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+              </TouchableOpacity>
+          </View>
+          <View style={styles.step3}>
+              <Text style={styles.header}>Response from Maryam</Text>
+
+
+
+
+            <View style={styles.ratingOptions}>
+              {["Excellent", "Good", "Satisfactory", "Poor"].map((label, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.ratingOption}
+                >
+                  <Text style={styles.emoji}>{["😊", "🙂", "😐", "😞"][index]}</Text>
+                  <Text style={styles.ratingText}>{label}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
+            
+
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginBottom: 10}}>
+                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Clear request</Text>
+                   </TouchableOpacity>
+             
+            <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginTop: 10}}>
+              <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Recreate the request</Text>
+                 </TouchableOpacity>
+              
+                     <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+              
+          </View>
+        </View>
           )}
+
+            {/* Review Section */}
+              {currentStep === 'fetch' && (
+            <View style={{flexDirection: 'column', maxWidth: '100%'}}>
+              <View style={{flexDirection: 'row', maxWidth: '100%'}}>
+              <View style={styles.smallstep0}>
+                 <Text style={{fontSize: 20, fontWeight: 'bold' }}>SAP FI</Text>
+                 <Text style={{fontSize: 16 }}>Unable to create master data for material posting expense</Text>
+                 <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600' }}>21/11/2024</Text>
+
+                <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+                
+              </View>
+                  <View style={styles.smallstep}>
+                    <View style={{flexDirection: 'row'}}>
+                      
+
+                      <Text style={{fontSize: 24, fontWeight: '600', marginTop: 20}}>Maryam Bakhali</Text>
+                      <Image
+                        source={{
+                          uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                        }}
+                        style={{
+                          width: 70,
+                          height: 70,
+                          marginLeft: 20,
+                        }}
+                      />
+                    </View>
+                    
+                    <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one availableYour request will be assigned to the first one available</Text>
+                    
+
+                  
+              </View>
+              <View style={styles.smallstep}>
+                <View style={{flexDirection: 'row'}}>
+
+
+                  <Text style={{fontSize: 24, fontWeight: '600', marginTop: 20}}>Replay Anytime</Text>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=103566&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      marginLeft: 20,
+                    }}
+                  />
+                </View>
+                 <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600' }}>Solved 21/11/2024 2PM</Text>
+
+
+
+               
+
+              </View>
+              <View style={styles.smallstep}>
+                  
+                 <View style={styles.ratingOption}
+                >
+
+                   <Text style={styles.emoji}>😐</Text>
+                   <Text style={styles.ratingText}>Satisfactory</Text>
+                   
+                 </View>
+
+
+              </View>
+            </View>
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 250, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
+                  >
+                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500', color: '#206C00'}}>+ Create Support Request</Text>
+                   </TouchableOpacity>
+            </View>
+              )}
         </View>
       </ScrollView>
     </View>
@@ -378,7 +786,7 @@ const styles = StyleSheet.create({
      flex: 1,
     width: "24%", 
     height: 600,
-    marginLeft: 20,
+    marginLeft: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",
     padding: 20,
@@ -396,7 +804,7 @@ const styles = StyleSheet.create({
      flex: 1,
     width: "24%", 
     height: 600,
-    marginLeft: 20,
+    marginLeft: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",
     marginLeft: 20,
@@ -417,6 +825,45 @@ const styles = StyleSheet.create({
     height: 600,
     marginBottom: 10,
     backgroundColor: "none",
+    marginLeft: 20,
+    padding: 20,
+  borderRadius: 10,
+  shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  smallstep0: {
+    flex: 1,
+    width: "24%", 
+    height: 200,
+    justifyContent: 'center',
+    marginRight: 10,
+    marginBottom: 10,
+    backgroundColor: "#FFF",
+    padding: 20,
+  borderRadius: 10,
+  shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  smallstep: {
+     flex: 1,
+    width: "24%", 
+    justifyContent: 'center',
+     alignItems: 'center',
+    height: 200,
+    marginBottom: 10,
+    backgroundColor: "white",
     marginLeft: 20,
     padding: 20,
   borderRadius: 10,
@@ -498,6 +945,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',  
     marginTop: 5
   },
+  ratingOptions: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginTop: 70, marginBottom: 40 },
+  ratingOption: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: 'lightgrey',
+    borderWidth: 0.5,
+    borderRadius: 10,
+    flexDirection: "row",
+    padding: 10,
+    width: '40%',
+    margin: 10,
+    shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+  emoji: { fontSize: 30 },
+  ratingText: { marginLeft: 5, fontSize: 15, fontWeight: "500" },
 });
 
 export default SupportRequestPage;
