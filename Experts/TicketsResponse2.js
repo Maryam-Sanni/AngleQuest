@@ -69,7 +69,7 @@ const ResponseModal = ({ visible, onClose, title }) => {
               }}
             />
              <Text style={{fontSize: 20, MarginTop: 10, fontWeight: '600' }}>Description</Text>
-           
+
             </View>
           <TextInput
             value={description}
@@ -78,37 +78,13 @@ const ResponseModal = ({ visible, onClose, title }) => {
             multiline
             style={styles.textInput}
           />
+         
+          <Text style={{fontSize: 20, fontWeight: '600', textAlign: 'center', marginTop: 10, marginBottom: 10 }}>Join the meeting 24/11/2024 - 2PM </Text>
           <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 10}}>
+              <TouchableOpacity>
             <Image
               source={{
-                uri: "https://img.icons8.com/?size=100&id=a3p4tCfgq8qa&format=png&color=000000",
-              }}
-              style={{
-                width: 30,
-                height: 30,
-            marginRight: 10
-              }}
-            />
-             <Text style={{fontSize: 20, fontWeight: '600' }}>Give your response</Text>
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
-            <View style={{backgroundColor: 'green', width: 30, height: 30, borderRadius: 15, marginRight: 10, borderWidth: 1, borderColor: 'lightgreen'}}>
-            </View>
-          <TextInput
-            value={response}
-            onChangeText={setResponse}
-            placeholder="Write your response..."
-            multiline
-            style={styles.input}
-          />
-          </View>
-           <Text style={{fontSize: 20, fontWeight: '600', textAlign: 'center', marginTop: 10, marginBottom: 10 }}>OR</Text>
-          <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 10}}>
-            {recording ? (
-              <TouchableOpacity onPress={stopRecording}>
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=AsTz6rCweT4n&format=png&color=000000",
+                uri: "https://img.icons8.com/?size=100&id=GsPxgmTxBONV&format=png&color=000000",
               }}
               style={{
                 width: 30,
@@ -117,50 +93,24 @@ const ResponseModal = ({ visible, onClose, title }) => {
               }}
             />
                   </TouchableOpacity>
-                ) : (
-      <TouchableOpacity onPress={startRecording}>
-        <Image
-          source={{
-            uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=000000",
-          }}
-          style={{
-            width: 30,
-            height: 30,
-        marginRight: 10
-          }}
-        />
-              </TouchableOpacity>
-      )}
-            <View style={{flex:1, padding: 10, borderWidth: 1, borderColor: 'black'}}>
+            <View style={{flex:1, padding: 10, borderWidth: 1,
+                          borderColor: 'green',
+                          backgroundColor: "#B6D0E2",}}>
+              <View style={{padding: 10, borderRadius: 10, borderWidth: 1, borderColor: 'grey', alignSelf: 'center',}}>
               <Image
                 source={{
-                  uri: "https://img.icons8.com/?size=100&id=9387&format=png&color=000000",
+                  uri: "https://img.icons8.com/?size=100&id=jHA3O0dbvOj1&format=png&color=FFFFFF",
                 }}
                 style={{
-                  width: 40,
-                  height: 40,
-alignSelf: 'center',
-                  marginLeft: -40,
-                  marginBottom: -70
+                  width: 30,
+                  height: 30,
+          alignSelf: 'center',
                 }}
               />
-            <ReactMic
-              record={recording}
-              className="sound-wave"
-              onStop={onDataRecorded}
-              mimeType="audio/wav"
-              strokeColor="black"
-              backgroundColor="transparent"
-            />
+              </View>
+               <Text style={{fontSize: 18, fontWeight: '600', textAlign: 'center', marginTop: 10, marginBottom: 10 }}>Start</Text>
             </View>
           </View>
-          {recordedBlob && (
-            <View style={styles.audioContainer}>
-              <Text>Recorded Audio:</Text>
-              <audio controls src={recordedBlob.blobURL} />
-            </View>
-          )}
-          
           <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
             <Image
               source={{
@@ -203,7 +153,7 @@ alignSelf: 'center',
             </TouchableOpacity>
           </View>
 
-          
+
           <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
             <Text style={styles.submitButtonText}>Submit</Text>
           </TouchableOpacity>
@@ -297,7 +247,7 @@ const styles = StyleSheet.create({
   audioContainer: {
     marginTop: 10,
     marginBottom: 20,
-    marginLeft: 50,
+    marginLeft: 50
   },
   submitButton: {
     backgroundColor: 'darkgreen',

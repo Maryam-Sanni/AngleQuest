@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ImageBackground, ScrollView, Picker, Modal, Image } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
-import ResponseModal from '../Experts/TicketsResponse';
+import OpenModal from '../Experts/TicketsResponse';
+import OpenModal2 from '../Experts/TicketsResponse2';
 
 const TicketsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -10,13 +11,25 @@ const TicketsPage = () => {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [isPressed, setIsPressed] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
    const [currentTicketTitle, setCurrentTicketTitle] = useState(''); 
 
  
 
-  const openModal = (title) => {
-    setCurrentTicketTitle(title); // Set the current ticket title
-    setModalVisible(true); // Open the modal
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
   };
   
   return (
@@ -54,6 +67,7 @@ const TicketsPage = () => {
                 <View style={{flexDirection: 'row', maxWidth: '100%'}}>
                   <View style={{flexDirection: 'column', width: '24%'}}>
                 <View style={styles.smallstep0}>
+                  <TouchableOpacity onPress={handleOpenPress}>
                   <View style={{flexDirection: 'row'}}>
                    <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
                   <Image
@@ -86,9 +100,10 @@ const TicketsPage = () => {
                        />
                      </View>
                  
-
+                  </TouchableOpacity>
                 </View>
                     <View style={styles.smallstepB}>
+                       <TouchableOpacity onPress={handleOpenPress}>
                       <View style={{flexDirection: 'row'}}>
                        <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
                       <Image
@@ -120,9 +135,11 @@ const TicketsPage = () => {
                              }}
                            />
                          </View>
+                       </TouchableOpacity>
                     </View>
                     
                     <View style={styles.smallstepV}>
+                       <TouchableOpacity onPress={handleOpenPress2}>
                       <View style={{flexDirection: 'row'}}>
                        <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
                       <Image
@@ -154,6 +171,7 @@ const TicketsPage = () => {
                              }}
                            />
                          </View>
+                       </TouchableOpacity>
                     </View>
                   </View>
 
@@ -313,12 +331,38 @@ const TicketsPage = () => {
           </View>
         </View>
       </View>
-       <ResponseModal visible={modalVisible} onClose={() => setModalVisible(false)} title={currentTicketTitle} /> {/* Render the modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
+  },
   background: {
     height: '100%',
     width: '100%',
