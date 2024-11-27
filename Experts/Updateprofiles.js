@@ -6,6 +6,7 @@ import OpenModal2 from './Interview-guide';
 import OpenModal3 from './Skill-analysis-guide';
 import OpenModal4 from '../components/Create-hub';
 import OpenModal5 from './PaymentDetails';
+import OpenModal6 from './RequestGuide';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = ({ onClose }) => {
@@ -19,7 +20,8 @@ const ProfilePage = ({ onClose }) => {
     { id: 3, title: "Skill Analysis Guide" },
     { id: 4, title: "Growth Plan Guide" },
     { id: 5, title: "Create a new Hub" },
-    { id: 6, title: "Interview Guide" },
+    { id: 6, title: "Support Request Guide" },
+     { id: 7, title: "Interview Guide" },
   ];
 
   const handleSectionClick = (section) => {
@@ -100,6 +102,12 @@ const ProfilePage = ({ onClose }) => {
   </View>
         )}
 
+        {activeSection === "Support Request Guide" && (
+          <View style={styles.modalContainer}>
+            <OpenModal6 />
+          </View>
+        )}
+        
         {!activeSection && (
   <View style={styles.modalContainer}>
     <OpenModal1 />
