@@ -67,141 +67,194 @@ const TicketsPage = () => {
                 <View style={{flexDirection: 'row', maxWidth: '100%'}}>
                   <View style={{flexDirection: 'column', width: '24%'}}>
                 <View style={styles.smallstep0}>
-                  <TouchableOpacity onPress={handleOpenPress}>
                   <View style={{flexDirection: 'row'}}>
-                   <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
-                  <Image
-                      source={{
-                        uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
-                      }}
-                      style={{
-                        width: 30,
-                        height: 30,
-                        position: 'absolute',
-                        right: 10
-                      }}
-                    />
-                  </View>
-                  
-                   <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600', color: 'white' }}>Bilal Husain</Text>
-                   <Text style={{fontSize: 16, color: 'white', marginTop: 5, }}>Material posting expense not...</Text>
-                   <View style={{flexDirection: 'row', marginTop: 10}}>
-                   <Text style={{fontSize: 17, fontWeight: '600',}}>Deadline: 25/11/2024 - 2PM</Text>
-                     <Image
-                         source={{
-                           uri: "https://img.icons8.com/?size=100&id=k1xXzD3NEvLF&format=png&color=FFFFFF",
-                         }}
-                         style={{
-                           width: 30,
-                           height: 30,
-                           position: 'absolute',
-                           right: 10
-                         }}
-                       />
-                     </View>
-                 
-                  </TouchableOpacity>
+
+                                            <Image
+                                              source={{
+                                                uri: "https://img.icons8.com/?size=100&id=JfOkE4KGyx7r&format=png&color=000000",
+                                              }}
+                                              style={{
+                                                width: 40,
+                                                height: 40,
+                    marginRight: 10,
+                                                borderRadius: 20,
+                                                borderWidth: 1,
+                                                padding: 10
+                                              }}
+                                            />
+
+                                           <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 5 }}>Bilal Husain</Text>
+
+                                          </View>
+                                             <View style={{flexDirection: 'row', marginTop: 10}}>
+                                               <View style={{flexDirection: 'column'}}>
+                                                  <Text style={{fontSize: 14 }}>Service</Text>
+                                           <Text style={{fontSize: 18, fontWeight: '600', }}>SAP FI</Text>
+                                               </View>
+                                               <View style={{flexDirection: 'column', marginLeft: 60}}>
+                                                 <Text style={{fontSize: 14 }}>Deadline</Text>
+                                               <Text style={{fontSize: 18, fontWeight: '600', }}>25/11/2024 - 2PM</Text>
+                                               </View>
+
+                                             </View>
+
+                                           <Text style={{fontSize: 16, marginTop: 5, marginBottom: 15 }}>Material posting expense not...</Text>
+
+
+                                              <View style={{flexDirection: 'row',     alignSelf: 'center',}}>
+                                                <TouchableOpacity style={styles.submitButton}>
+                                                  <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Decline</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={handleOpenPress} style={styles.submitButton1}>
+                                                   <View style={{flexDirection: 'row'}}>
+                                                  <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Accept</Text>
+                                                     <Image
+                                                          source={{
+                                                            uri: "https://img.icons8.com/?size=100&id=QWY6uhBxcr1I&format=png&color=000000",
+                                                          }}
+                                                          style={{
+                                                            width: 20,
+                                                            height: 20,
+                                                        marginLeft: 10
+                                                          }}
+                                                        />
+                                                      </View>
+                                                </TouchableOpacity>
+                                              </View>
+                
                 </View>
                     <View style={styles.smallstepB}>
-                       <TouchableOpacity onPress={handleOpenPress}>
                       <View style={{flexDirection: 'row'}}>
-                       <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
-                      <Image
+
+                        <Image
                           source={{
-                            uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
+                            uri: "https://img.icons8.com/?size=100&id=JfOkE4KGyx7r&format=png&color=000000",
                           }}
                           style={{
-                            width: 30,
-                            height: 30,
-                            position: 'absolute',
-                            right: 10
+                            width: 40,
+                            height: 40,
+                        marginRight: 10,
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            padding: 10
                           }}
                         />
-                      </View>
 
-                       <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600', color: 'white' }}>Mike Ross</Text>
-                       <Text style={{fontSize: 16, color: 'white', marginTop: 5, }}>Material posting expense not...</Text>
-                       <View style={{flexDirection: 'row', marginTop: 10}}>
-                       <Text style={{fontSize: 17, color: 'white', fontWeight: '600',}}>Deadline: 25/11/2024 - 5PM</Text>
-                         <Image
-                             source={{
-                               uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=FFFFFF",
-                             }}
-                             style={{
-                               width: 30,
-                               height: 30,
-                               position: 'absolute',
-                               right: 10
-                             }}
-                           />
-                         </View>
-                       </TouchableOpacity>
+                                             <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 5 }}>Mike Ross</Text>
+
+                                            </View>
+                                               <View style={{flexDirection: 'row', marginTop: 10}}>
+                                                 <View style={{flexDirection: 'column'}}>
+                                                    <Text style={{fontSize: 14 }}>Service</Text>
+                                             <Text style={{fontSize: 18, fontWeight: '600', }}>SAP FI</Text>
+                                                 </View>
+                                                 <View style={{flexDirection: 'column', marginLeft: 60}}>
+                                                   <Text style={{fontSize: 14 }}>Deadline</Text>
+                                                 <Text style={{fontSize: 18, fontWeight: '600', }}>25/11/2024 - 5PM</Text>
+                                                 </View>
+
+                                               </View>
+
+                                             <Text style={{fontSize: 16, marginTop: 5, marginBottom: 15 }}>Material posting expense not...</Text>
+
+
+                                                <View style={{flexDirection: 'row',     alignSelf: 'center',}}>
+                                                  <TouchableOpacity style={styles.submitButton}>
+                                                    <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Decline</Text>
+                                                  </TouchableOpacity>
+                                                  <TouchableOpacity onPress={handleOpenPress} style={styles.submitButton2}>
+                                                     <View style={{flexDirection: 'row'}}>
+                                                    <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Accept</Text>
+                                                       <Image
+                                                            source={{
+                                                              uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=000000",
+                                                            }}
+                                                            style={{
+                                                              width: 20,
+                                                              height: 20,
+                                                          marginLeft: 10
+                                                            }}
+                                                          />
+                                                        </View>
+                                                  </TouchableOpacity>
+                                                </View>
                     </View>
                     
                     <View style={styles.smallstepV}>
-                       <TouchableOpacity onPress={handleOpenPress2}>
                       <View style={{flexDirection: 'row'}}>
-                       <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold' }}>SAP FI</Text>
-                      <Image
+
+                        <Image
                           source={{
-                            uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
+                            uri: "https://img.icons8.com/?size=100&id=JfOkE4KGyx7r&format=png&color=000000",
                           }}
                           style={{
-                            width: 30,
-                            height: 30,
-                            position: 'absolute',
-                            right: 10
+                            width: 40,
+                            height: 40,
+                        marginRight: 10,
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            padding: 10
                           }}
                         />
+                        
+                       <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 5 }}>Racheal Zain</Text>
+                     
                       </View>
-
-                       <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600', color: 'white' }}>Racheal Zain</Text>
-                       <Text style={{fontSize: 16, color: 'white', marginTop: 5, }}>Material posting expense not...</Text>
-                       <View style={{flexDirection: 'row', marginTop: 10}}>
-                       <Text style={{fontSize: 17, color: 'black', fontWeight: '600',}}>Deadline: 25/11/2024 - 9AM</Text>
-                         <Image
-                             source={{
-                               uri: "https://img.icons8.com/?size=100&id=11402&format=png&color=FFFFFF",
-                             }}
-                             style={{
-                               width: 30,
-                               height: 30,
-                               position: 'absolute',
-                               right: 10
-                             }}
-                           />
+                         <View style={{flexDirection: 'row', marginTop: 10}}>
+                           <View style={{flexDirection: 'column'}}>
+                              <Text style={{fontSize: 14 }}>Service</Text>
+                       <Text style={{fontSize: 18, fontWeight: '600', }}>SAP FI</Text>
+                           </View>
+                           <View style={{flexDirection: 'column', marginLeft: 60}}>
+                             <Text style={{fontSize: 14 }}>Deadline</Text>
+                           <Text style={{fontSize: 18, fontWeight: '600', }}>25/11/2024 - 9AM</Text>
+                           </View>
+                          
                          </View>
-                       </TouchableOpacity>
+                         
+                       <Text style={{fontSize: 16, marginTop: 5, marginBottom: 15 }}>Material posting expense not...</Text>
+                       
+                         
+                          <View style={{flexDirection: 'row',     alignSelf: 'center',}}>
+                            <TouchableOpacity style={styles.submitButton}>
+                              <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Decline</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleOpenPress2} style={styles.submitButton3}>
+                               <View style={{flexDirection: 'row'}}>
+                              <Text style={{color: 'black', fontSize: 16, textAlign: 'center'}}>Accept</Text>
+                                 <Image
+                                      source={{
+                                        uri: "https://img.icons8.com/?size=100&id=11402&format=png&color=000000",
+                                      }}
+                                      style={{
+                                        width: 20,
+                                        height: 20,
+                                    marginLeft: 10
+                                      }}
+                                    />
+                                  </View>
+                            </TouchableOpacity>
+                          </View>
                     </View>
                   </View>
 
                   <View style={{flexDirection: 'column', width: '24%', marginRight: 10, marginLeft: 20}}>
                   <View style={styles.smallstep}>
                     <View style={{flexDirection: 'row'}}>
-                       <Text style={{fontSize: 20, color: 'grey', fontWeight: 'bold' }}>Adalain Huter</Text>
-                      <Image
-                          source={{
-                            uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
-                          }}
-                          style={{
-                            width: 30,
-                            height: 30,
-                            position: 'absolute',
-                            right: 10
-                          }}
-                        />
+                       <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold' }}>Adalain Huter</Text>
+                     
                       </View>
                      <Text style={{fontSize: 16, color: 'grey', marginTop: 20, }}>Material posting expense not...</Text>
                        <Text style={{fontSize: 18, marginTop: 5, fontWeight: '600', color: 'black' }}>Deadline: 25/11/2024 - 2PM</Text>
-                       <View style={{flexDirection: 'row', marginTop: 25, backgroundColor: 'grey', padding: 10, marginLeft: -20, marginRight: -20}}>
+                       <View style={{flexDirection: 'row',marginTop: 46, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#FFDBBB', padding: 10, marginLeft: -20, marginRight: -20}}>
                        <Text style={{fontSize: 16}}>Preferred Text - Start Typing</Text>
                          <Image
                              source={{
-                               uri: "https://img.icons8.com/?size=100&id=k1xXzD3NEvLF&format=png&color=FFFFFF",
+                               uri: "https://img.icons8.com/?size=100&id=QWY6uhBxcr1I&format=png&color=000000",
                              }}
                              style={{
-                               width: 30,
-                               height: 30,
+                               width: 25,
+                               height: 25,
                                position: 'absolute',
                                right: 10
                              }}
@@ -211,30 +264,20 @@ const TicketsPage = () => {
 
                     <View style={styles.smallstep}>
                       <View style={{flexDirection: 'row'}}>
-                         <Text style={{fontSize: 20, color: 'grey', fontWeight: 'bold' }}>Susan Ambrose</Text>
-                        <Image
-                            source={{
-                              uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
-                            }}
-                            style={{
-                              width: 30,
-                              height: 30,
-                              position: 'absolute',
-                              right: 10
-                            }}
-                          />
+                         <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold' }}>Susan Ambrose</Text>
+                        
                         </View>
                        <Text style={{fontSize: 16, color: 'grey', marginTop: 20, }}>Material posting expense not...</Text>
                          <Text style={{fontSize: 18, marginTop: 5, fontWeight: '600', color: 'black' }}>Deadline: 25/11/2024 - 3PM</Text>
-                         <View style={{flexDirection: 'row', marginTop: 25, backgroundColor: 'black', padding: 10, marginLeft: -20, marginRight: -20}}>
-                         <Text style={{fontSize: 16, color: 'white'}}>Preferred Voice - Start Recording</Text>
+                         <View style={{flexDirection: 'row', marginTop: 46, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#c1e1c1', padding: 10, marginLeft: -20, marginRight: -20}}>
+                         <Text style={{fontSize: 16, color: 'black'}}>Preferred Voice - Start Recording</Text>
                            <Image
                                source={{
-                                 uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=FFFFFF",
+                                 uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=000000",
                                }}
                                style={{
-                                 width: 30,
-                                 height: 30,
+                                 width: 25,
+                                 height: 25,
                                  position: 'absolute',
                                  right: 10
                                }}
@@ -244,30 +287,20 @@ const TicketsPage = () => {
                     
                     <View style={styles.smallstep}>
                       <View style={{flexDirection: 'row'}}>
-                         <Text style={{fontSize: 20, color: 'grey', fontWeight: 'bold' }}>Adalain Huter</Text>
-                        <Image
-                            source={{
-                              uri: "https://img.icons8.com/?size=100&id=55908&format=png&color=FFFFFF",
-                            }}
-                            style={{
-                              width: 30,
-                              height: 30,
-                              position: 'absolute',
-                              right: 10
-                            }}
-                          />
+                         <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold' }}>Adalain Huter</Text>
+                       
                         </View>
                        <Text style={{fontSize: 16, color: 'grey', marginTop: 20, }}>Material posting expense not...</Text>
                          <Text style={{fontSize: 18, marginTop: 5, fontWeight: '600', color: 'black' }}>Deadline: 25/11/2024 - 2PM</Text>
-                         <View style={{flexDirection: 'row', marginTop: 25, backgroundColor: '#B6D0E2', padding: 10, marginLeft: -20, marginRight: -20}}>
+                         <View style={{flexDirection: 'row', marginTop: 46, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#B6D0E2', padding: 10, marginLeft: -20, marginRight: -20}}>
                          <Text style={{fontSize: 16}}>Preferred Video - Join Call(4pm)</Text>
                            <Image
                                source={{
                                  uri: "https://img.icons8.com/?size=100&id=11402&format=png&color=FFFFFF",
                                }}
                                style={{
-                                 width: 30,
-                                 height: 30,
+                                 width: 25,
+                                 height: 25,
                                  position: 'absolute',
                                  right: 10
                                }}
@@ -280,38 +313,40 @@ const TicketsPage = () => {
                   <View style={{flexDirection: 'column', width: '24%'}}>
                   <View style={styles.smallstep1}>
                     <View style={{flexDirection: 'row'}}>
-                       <Text style={{fontSize: 20, color: 'black', fontWeight: '600', marginTop: 30 }}>Deadline State</Text>
+                       <Text style={{fontSize: 20, color: 'black', fontWeight: '600' }}>Deadline State</Text>
                       <Image
                           source={{
                             uri: "https://img.icons8.com/?size=100&id=jZGjc3FZtRYv&format=png&color=000000",
                           }}
                           style={{
-                            width: 100,
-                            height: 100,
+                            width: 80,
+                            height: 80,
                             position: 'absolute',
-                            right: 10
+                            right: 20,
+                              top: -30
                           }}
                         />
-                      
+                      <Text style={{backgroundColor: 'red', color: 'white', fontSize: 18, padding: 5, width: 100, textAlign: 'center',                                position: 'absolute',
+                                    right: 10, marginTop: 37}}>DEADLINE
+                      </Text>
                     
                          </View>
-                    <Text style={{backgroundColor: 'red', color: 'white', fontSize: 18, padding: 5, width: 100, textAlign: 'center',                                position: 'absolute',
-                                  right: 30, marginTop: 75}}>DEADLINE
-                    </Text>
+                    
                       </View>
 
                     <View style={styles.smallstep1}>
                       <View style={{flexDirection: 'row'}}>
-                         <Text style={{fontSize: 20, color: 'black', fontWeight: '600', marginTop: 30 }}>On time State</Text>
+                         <Text style={{fontSize: 20, color: 'black', fontWeight: '600' }}>On time State</Text>
                         <Image
                             source={{
                               uri: "https://img.icons8.com/?size=100&id=13026&format=png&color=000000",
                             }}
                             style={{
-                              width: 100,
-                              height: 100,
+                              width: 80,
+                              height: 80,
                               position: 'absolute',
-                              right: 10
+                              right: 20,
+                              top: -20
                             }}
                           />
 
@@ -386,12 +421,12 @@ const styles = StyleSheet.create({
   },
   smallstep0: {
     width: "100%", 
-    height: 180,
+    height: 200,
     justifyContent: 'center',
     marginBottom: 10,
     borderWidth: 1,
     borderColor: 'green',
-    backgroundColor: "grey",
+    backgroundColor: "white",
     padding: 20,
   borderRadius: 10,
   shadowColor: "#000",
@@ -405,13 +440,13 @@ const styles = StyleSheet.create({
   },
   smallstepB: {
     width: "100%", 
-    height: 180,
+    height: 200,
     justifyContent: 'center',
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 1,
     borderColor: 'green',
-    backgroundColor: "black",
+    backgroundColor: "white",
     padding: 20,
   borderRadius: 10,
   shadowColor: "#000",
@@ -425,13 +460,13 @@ const styles = StyleSheet.create({
   },
   smallstepV: {
     width: "100%", 
-    height: 180,
+    height: 200,
     justifyContent: 'center',
     marginBottom: 10,
     marginTop: 10,
     borderWidth: 1,
     borderColor: 'green',
-    backgroundColor: "#B6D0E2",
+    backgroundColor: "white",
     padding: 20,
   borderRadius: 10,
   shadowColor: "#000",
@@ -445,11 +480,11 @@ const styles = StyleSheet.create({
   },
   smallstep: {
     width: "100%", 
-    height: 180,
+    height: 200,
     marginBottom: 20,
   borderWidth: 1,
-    borderColor: 'green',
-    backgroundColor: "#FFDBBB",
+    borderColor: 'red',
+    backgroundColor: "white",
     padding: 20,
   borderRadius: 10,
   shadowColor: "#000",
@@ -464,11 +499,12 @@ const styles = StyleSheet.create({
       smallstep1: {
         width: "100%", 
       marginLeft: 10,
-        height: 180,
+        height: 200,
         marginBottom: 20,
       borderWidth: 1,
         borderColor: 'green',
         backgroundColor: "white",
+        justifyContent: 'center',
         padding: 20,
       borderRadius: 10,
       shadowColor: "#000",
@@ -483,7 +519,7 @@ const styles = StyleSheet.create({
       smallstep2: {
         width: "24%", 
       marginLeft: 15,
-        height: 180,
+        height: 200,
         marginBottom: 10,
         backgroundColor: "#e0e0e0",
         padding: 20,
@@ -506,11 +542,70 @@ const styles = StyleSheet.create({
     marginHorizontal: 7,
     borderRadius: 5,
   },
+  progressStep2: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: 'darkred',
+    marginHorizontal: 7,
+    borderRadius: 5,
+  },
+  progressStep3: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: 'coral',
+    marginHorizontal: 7,
+    borderRadius: 5,
+  },
+  progressStep4: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: 'green',
+    marginHorizontal: 7,
+    borderRadius: 5,
+  },
   activeStep: {
     backgroundColor: '#3F5637',
   },
   stepText: {
     color: '#fff',
+  },
+  submitButton: {
+    backgroundColor: 'lightgrey',
+    width: 150,
+    borderRadius: 5,
+    alignItems: 'center',
+    padding: 10,
+    justifyContent: 'center'
+  },
+  submitButton3: {
+    backgroundColor: '#B6D0E2',
+    width: 150,
+    borderRadius: 5,
+    alignItems: 'center',
+    padding: 10,
+    marginLeft: 15,
+    justifyContent: 'center'
+  },
+  submitButton2: {
+    backgroundColor: '#c1e1c1',
+    width: 150,
+    borderRadius: 5,
+    alignItems: 'center',
+    padding: 10,
+    marginLeft: 15,
+    justifyContent: 'center'
+  },
+  submitButton1: {
+    backgroundColor: '#FFDBBB',
+    width: 150,
+    borderRadius: 5,
+    alignItems: 'center',
+    padding: 10,
+    marginLeft: 15,
+    justifyContent: 'center'
   },
 });
 
