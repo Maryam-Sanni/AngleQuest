@@ -110,7 +110,7 @@ import AdviceOffer from './Jobseekers/OfferAdvice';
 import GrowthOffer from './Jobseekers/OfferGrowth';
 import InterviewOffer from './Jobseekers/OfferInterview';
 import HubOffer from './Jobseekers/OfferHub';
-import JoinCourse from './Jobseekers/JoinCourses';
+import JoinCourse from './Jobseekers/CourseVideo';
 import AIindv1 from './Jobseekers/SkillanalysisAI';
 import AIindv2 from './Jobseekers/AI2';
 import AIindv3 from './Jobseekers/AI3';

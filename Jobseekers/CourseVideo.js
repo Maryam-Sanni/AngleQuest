@@ -1,151 +1,279 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ImageBackground, ScrollView, TouchableOpacity, FlatList, StyleSheet, Picker, Image, TextInput } from 'react-native';
+import { Video } from 'expo-av';
+import Topbar from '../components/topbar';
+import Sidebar from '../components/sidebar';
+import { BlurView } from "expo-blur";
 
-const { width } = Dimensions.get('window');
-
-const meetingsToDisplay = [
-  {
-    meeting_id: '1',
-    hubCat: 'Tech Talk',
-    hubName: 'Frontend Development',
-    time: '2024-11-20T14:00:00Z',
-    description: 'Join us for an insightful discussion about the latest trends in frontend development.',
-    videoUri: require('../assets/testimonial1.mp4'),
-    title: 'Testimonial 1',
-  },
-  {
-    meeting_id: '2',
-    hubCat: 'Career Development',
-    hubName: 'Career Coaching',
-    time: '2024-11-22T15:00:00Z',
-    description: 'Learn career development tips and strategies.',
-    videoUri: require('../assets/testimonial2.mp4'),
-    title: 'Testimonial 2',
-  },
+const courses = [
+  { id: '1', category: 'SAP', tutor: 'John Doe', level: 'Beginner' },
+  { id: '2', category: 'Microsoft', tutor: 'Jane Smith', level: 'Intermediate' },
+  { id: '3', category: 'Scrum', tutor: 'Emily Davis', level: 'Advanced' },
+  { id: '4', category: 'Business Analysis', tutor: 'Michael Brown', level: 'Beginner' },
 ];
 
-const VideoPlayerSection = () => {
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const [isVideoSelected, setIsVideoSelected] = useState(false);
+const meetingsData = {
+  '1': [
+    { id: '101', title: 'Introduction to SAP', description: 'Basics of SAP and its modules.' },
+    { id: '102', title: 'SAP Navigation', description: 'How to navigate the SAP system.' },
+  ],
+  '2': [
+    { id: '201', title: 'Getting Started with Office 365', description: 'Overview of Office 365 tools.' },
+  ],
+  '3': [
+    { id: '301', title: 'Scrum Roles', description: 'Detailed explanation of Scrum roles.' },
+    { id: '302', title: 'Scrum Ceremonies', description: 'Introduction to Scrum ceremonies.' },
+  ],
+  '4': [
+    { id: '401', title: 'What is Business Analysis?', description: 'Understanding the role of a Business Analyst.' },
+  ],
+};
 
-  const onVideoPress = (video) => {
-    setSelectedVideo(video);
-    setIsVideoSelected(true);
+const CourseCard = ({ course, onPress }) => (
+  <View style={{marginTop: 15}}>
+  <TouchableOpacity style={styles.card} onPress={onPress}>
+    <ImageBackground
+      source={require('../assets/groupPeeps.png')} 
+      style={styles.cardImage}
+      imageStyle={styles.cardImageStyle}
+    />
+    <View style={styles.cardDetails}>
+      <Text style={styles.cardCategory}>{course.category}</Text>
+      <Text style={styles.cardTutor}>Tutor: {course.tutor}</Text>
+      <Text style={styles.cardLevel}>Level: {course.level}</Text>
+    </View>
+  </TouchableOpacity>
+    </View>
+);
+
+export default function CoursesPage() {
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const videoRef = React.useRef(null);
+
+  // Programmatically trigger fullscreen using the native controls
+  const handleExpandVideo = async () => {
+    if (videoRef.current) {
+      await videoRef.current.presentFullscreenPlayer(); // Trigger fullscreen
+    }
   };
-
-  return (
-    <View style={styles.container}>
-      <View style={[styles.videoListContainer, isVideoSelected && styles.listShifted]}>
-        <FlatList
-          data={meetingsToDisplay}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => onVideoPress(item)} style={styles.videoItem}>
-              <Image source={item.videoUri} style={styles.thumbnail} />
-              <View style={styles.videoDetails}>
-                <Text style={styles.videoTitle}>{item.title}</Text>
-                <Text style={styles.videoHub}>{item.hubName}</Text>
-                <Text style={styles.videoCategory}>{item.hubCat}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.meeting_id}
+  
+  const renderMeeting = ({ item }) => (
+    <View style={styles.meetingCard}>
+      <TouchableOpacity onPress={handleExpandVideo}>
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=397&format=png&color=000000",
+          }}
+          style={{ width: 25, height: 25, marginRight: 10, marginTop: 30 }} 
         />
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.videoPlayerContainer}>
-        {isVideoSelected ? (
-          <>
-            <Text style={styles.selectedVideoTitle}>{selectedVideo.title}</Text>
-            <Text style={styles.selectedHubName}>{selectedVideo.hubName}</Text>
-            <Text style={styles.selectedCategory}>{selectedVideo.hubCat}</Text>
-            <Text style={styles.selectedTime}>Time: {new Date(selectedVideo.time).toLocaleString()}</Text>
-            <Text style={styles.selectedDescription}>{selectedVideo.description}</Text>
-            {/* Add video player component here (React Native video player or similar) */}
-            <Text>Video Player: {selectedVideo.title} will play here</Text>
-          </>
-        ) : (
-          <Text style={styles.selectVideoText}>Select a video to play</Text>
-        )}
+      <TouchableOpacity onPress={handleExpandVideo}>
+        <Video
+          ref={videoRef}
+          source={require('../assets/coursetest.mp4')}
+          useNativeControls
+          resizeMode="cover"
+          style={styles.largeVideo}
+        />
+      </TouchableOpacity>
+      <View style={{flexDirection: 'column' }}>
+      <Text style={styles.meetingTitle}>{item.title}</Text>
+      <Text style={styles.meetingDescription}>{item.description}</Text>
       </View>
+     
     </View>
   );
-};
+
+  return (
+    <ImageBackground
+      source={require("../assets/backgroundimg2.png")}
+      style={{ height: "100%", width: "100%", flex: 1 }}
+    >
+      <View style={{ flex: 1 }}>
+        <Topbar />
+        <View style={{ flexDirection: "row", flex: 1 }}>
+          <Sidebar />
+          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+            <View style={{marginLeft: 230 }}>
+              <View style={{flexDirection: 'row', marginTop: 30, marginLeft: 10 }}>
+                <View style={{flexDirection: 'column' }}>
+                <Text style={{fontSize: 45, textAlign: 'left', color: 'white', fontWeight: '600', width: 500, marginRight: 150, marginTop: 30 }}>EXPLORE, COMPLETE, AND EXCEL IN ESSENTIAL COURSES</Text>
+                <Text style={{fontSize: 15, textAlign: 'left', color: 'white', marginTop: 10, marginLeft: 10}}>Unlock New Skills, One Step at a Time. Learn at Your Own Pace</Text>
+                </View>
+              <Video
+                source={require('../assets/background.mp4')}
+                useNativeControls
+                resizeMode="cover"
+                shouldPlay={true}
+                isMuted={true} 
+                style={{ width: 600, height: 300, borderRadius: 10 }}
+              />
+              </View>
+              <View style={styles.container}>
+                <BlurView intensity={50} style={styles.blurBackground}>
+
+      {selectedCourse ? (
+        <View>
+          <TouchableOpacity onPress={() => setSelectedCourse(null)} style={styles.backButton}>
+            <Text style={styles.backText}>← Back to Courses</Text>
+          </TouchableOpacity>
+          <FlatList
+            data={meetingsData[selectedCourse]}
+            renderItem={renderMeeting}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
+      ) : (
+      <View>
+        <View style={{flexDirection: 'row'}}>
+        <Picker
+          style={styles.picker}
+        >
+        <Picker.Item label="All Categories" value="" />
+          <Picker.Item label="SAP" value="SAP" />
+          <Picker.Item label="Microsoft" value="Microsoft" />
+          <Picker.Item label="Scrum" value="Scrum" />
+          <Picker.Item label="Business Analysis" value="Business Analysis" />
+        </Picker>
+        <TextInput
+          placeholder="Search"
+          style={styles.input}
+        />
+        </View>
+      <Text style={{fontSize: 18, textAlign: 'left', color: 'white', fontWeight: '600', marginLeft: 10}}>All Courses</Text>
+        <TouchableOpacity style={{position: 'absolute', right: 30, top: 40}}>
+        <Text style={{fontSize: 14, backgroundColor: '#F5F5F5', padding: 10, borderRadius: 20, width: 100, textAlign: 'center'}}>View All</Text>
+        </TouchableOpacity>
+      <FlatList
+        data={courses}
+        renderItem={({ item, index }) => (
+          <View style={styles.leftCard }>
+            <CourseCard course={item} onPress={() => setSelectedCourse(item.id)} />
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.courseList}
+      />
+      </View>
+      )}
+                </BlurView>
+              </View>
+            </View>
+    </ScrollView>
+        </View>
+      </View>
+    </ImageBackground>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    height: '100%',
+    flex: 1,
+    borderRadius: 10,
+    backgroundColor: "rgba(125,125,125,0.3)",
+    marginTop: 100,
+    marginRight: 30
   },
-  videoListContainer: {
-    width: '100%',
-    backgroundColor: '#f5f5f5',
+  blurBackground: {
+    flex: 1,
+    padding: 20,
+    borderRadius: 10,
+  },
+  courseList: {
+    flexWrap: 'wrap',
     padding: 10,
-    transition: 'transform 0.3s ease-in-out',
-  },
-  listShifted: {
-    width: width * 0.3, // Compact the list to 30% of the width when a video is selected
-    position: 'absolute',
-    top: 0,
-    right: 0,
-  },
-  videoItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  thumbnail: {
-    width: 100,
-    height: 60,
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  card: {
+    width: 300,
     marginRight: 10,
+    backgroundColor: 'none',
+    borderRadius: 5,
+    overflow: 'hidden',
   },
-  videoDetails: {
-    flex: 1,
+  leftCard: {
+    marginRight: 8, 
   },
-  videoTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  videoHub: {
-    fontSize: 14,
-    color: '#888',
-  },
-  videoCategory: {
-    fontSize: 12,
-    color: '#888',
-  },
-  videoPlayerContainer: {
-    flex: 1,
+  cardImage: {
+    height: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
-  selectVideoText: {
-    fontSize: 18,
-    textAlign: 'center',
+  cardImageStyle: {
+    borderRadius: 12,
   },
-  selectedVideoTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  cardDetails: {
+    padding: 8,
   },
-  selectedHubName: {
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  selectedCategory: {
+  cardCategory: {
     fontSize: 16,
-    marginBottom: 5,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
   },
-  selectedTime: {
+  cardTutor: {
     fontSize: 14,
-    marginBottom: 10,
+    color: 'white',
+    marginBottom: 4,
   },
-  selectedDescription: {
-    fontSize: 14,
-    marginBottom: 15,
+  cardLevel: {
+    fontSize: 12,
+    color: 'white',
+  },
+  backButton: {
+    marginBottom: 16,
+  },
+  backText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 600
+  },
+  meetingCard: {
+    padding: 16,
+    marginBottom: 16,
+    flexDirection: 'row',
+  },
+  meetingTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+     color: 'black',
+  },
+  meetingDescription: {
+    fontSize: 16,
+    color: 'black',
+    marginTop: 4,
+    marginBottom: 12,
+  },
+  largeVideo: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: 20
+  },
+  picker: {
+    width: 200,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginLeft: 10,
+    marginBottom: 20
+  },
+  input: {
+    width: 400,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 8,
+    borderRadius: 5,
+    marginLeft: 20,
+    backgroundColor: 'white',
+    fontSize: 16,
   },
 });
-
-export default VideoPlayerSection;
