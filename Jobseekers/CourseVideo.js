@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, ScrollView, TouchableOpacity, FlatList, StyleSheet, Picker, Image, TextInput } from 'react-native';
+import { View, Text, ImageBackground, ScrollView, TouchableOpacity, FlatList, StyleSheet, Picker, Image, TextInput, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from "expo-blur";
+import ReactPlayer from 'react-player';
 
 const courses = [
   { id: '1', category: 'SAP', tutor: 'John Doe', level: 'Beginner' },
@@ -97,20 +98,19 @@ export default function CoursesPage() {
           <Sidebar />
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
             <View style={{marginLeft: 230 }}>
-              <View style={{flexDirection: 'row', marginTop: 30, marginLeft: 10 }}>
-                <View style={{flexDirection: 'column' }}>
-                <Text style={{fontSize: 45, textAlign: 'left', color: 'white', fontWeight: '600', width: 500, marginRight: 150, marginTop: 30 }}>EXPLORE, COMPLETE, AND EXCEL IN ESSENTIAL COURSES</Text>
+              <View style={{flexDirection: 'row', marginTop: 30, marginLeft: 10,  maxWidth: '100%'  }}>
+                <View style={{flexDirection: 'column'}}>
+                <Text style={{fontSize: 45, textAlign: 'left', color: 'white', fontWeight: '600', width: 500, marginTop: 30 }}>EXPLORE, COMPLETE, AND EXCEL IN ESSENTIAL COURSES</Text>
                 <Text style={{fontSize: 15, textAlign: 'left', color: 'white', marginTop: 10, marginLeft: 10}}>Unlock New Skills, One Step at a Time. Learn at Your Own Pace</Text>
                 </View>
-              <Video
-                source={require('../assets/background.mp4')}
-                useNativeControls
-                resizeMode="cover"
-                shouldPlay={true}
-                isMuted={true} 
-                style={{ width: 600, height: 300, borderRadius: 10 }}
-              />
+                <video
+                  src="../assets/background.mp4" 
+                  controls
+                  style={{ width: 600, height: 300, borderRadius: 10, position: 'absolute', right: 30 }}
+                />
+                
               </View>
+              <Text style={{fontSize: 16, position: 'absolute', right: 300, color: 'white', top: 340}}>Meeting 7 | SAP FI | Sat 23rd Nov 7 days ago</Text>
               <View style={styles.container}>
                 <BlurView intensity={50} style={styles.blurBackground}>
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 10,
     backgroundColor: "rgba(125,125,125,0.3)",
-    marginTop: 100,
+    marginTop: 150,
     marginRight: 30
   },
   blurBackground: {
@@ -191,17 +191,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   card: {
-    width: 300,
     marginRight: 10,
     backgroundColor: 'none',
     borderRadius: 5,
-    overflow: 'hidden',
   },
   leftCard: {
-    marginRight: 8, 
+    marginRight: 10,
+    justifyContent: 'space-between',
   },
   cardImage: {
     height: 120,
+    width: 300,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -275,5 +275,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     backgroundColor: 'white',
     fontSize: 16,
+  },
+  video: {
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').height * 0.4,
+    borderRadius: 10,
   },
 });
