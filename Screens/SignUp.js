@@ -272,45 +272,12 @@ const SignUp = () => {
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as an Individual"} textSize={18} />
 
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using Google"}
-                        textColor={"black"}
-                        leftImg={google}
-                      />
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using LinkedIn"}
-                        textColor={"black"}
-                        leftImg={linkedIn}
-                      />
+                      
                     </View>
 
-                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                      <Title title={"or"} />
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                    </Row>
+                    
 
-                    <View style={{ marginTop: 40, gap: 20 }}>
+                    <View style={{ marginTop: 20, gap: 20 }}>
                       <InputField
                         keyboardType="name"
                         val={firstName}
@@ -455,45 +422,12 @@ const SignUp = () => {
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as an Expert"} textSize={18} />
 
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using Google"}
-                        textColor={"black"}
-                        leftImg={google}
-                      />
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using LinkedIn"}
-                        textColor={"black"}
-                        leftImg={linkedIn}
-                      />
+                     
                     </View>
 
-                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                      <Title title={"or"} />
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                    </Row>
+                    
 
-                    <View style={{ marginTop: 40, gap: 20 }}>
+                    <View style={{ marginTop: 20, gap: 20 }}>
                       <InputField
                         keyboardType="name"
                         val={firstName}
@@ -638,45 +572,11 @@ const SignUp = () => {
                     <View style={{ marginVertical: 20, gap: 20 }}>
                       <Title title={"Sign up as a Business"} textSize={18} />
 
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using Google"}
-                        textColor={"black"}
-                        leftImg={google}
-                      />
-                      <MainButtons
-                        outlined
-                        paddingVertical={5}
-                        borderRadius={8}
-                        width={"100%"}
-                        title={"Sign up using LinkedIn"}
-                        textColor={"black"}
-                        leftImg={linkedIn}
-                      />
+                     
                     </View>
 
-                    <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                      <Title title={"or"} />
-                      <View
-                        style={{
-                          width: "47%",
-                          height: 1,
-                          backgroundColor: "black",
-                        }}
-                      />
-                    </Row>
-
-                    <View style={{ marginTop: 40, gap: 20 }}>
+                    
+                    <View style={{ marginTop: 20, gap: 20 }}>
                       <InputField
                         keyboardType="name"
                         val={firstName}

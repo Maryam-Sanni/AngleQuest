@@ -41,7 +41,13 @@ function MyComponent() {
   
         if (response.status === 200) {
           const data = response.data.growthPlan;
-  
+
+          // Check if the data array is empty
+          if (!data || data.length === 0) {
+              navigate('/growth-plan-new'); // Navigate to the desired page
+              return;
+          }
+          
           // Log to debug the values
           console.log('Data from API:', data);
   

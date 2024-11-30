@@ -97,6 +97,13 @@ function MyComponent() {
               if (response.status === 200) {
                   const data = response.data.skillAnalysis; // Array of skillAnalysis objects
 
+
+                // Check if the data array is empty
+                if (!data || data.length === 0) {
+                    navigate('/skill-analysis-new'); // Navigate to the desired page
+                    return;
+                }
+                
                   // Sort the skillAnalysis array by created_at in descending order
                   const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 

@@ -63,8 +63,18 @@ const ResetPasswordForm = () => {
 
   return (
     <View style={{ flex: 1}}>
-      <Top />
+   
       <View style={styles.container}>
+        <View style={{flexDirection: 'row',               marginBottom: 50}}>
+        <Image
+          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
+          style={{
+              width: 50,
+              height: 50,
+            }}
+          />
+        <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 1, marginTop: 20, color: '#206c00'}}>AngleQuest</Text>
+        </View>
          <View style={styles.contained}>
            <Image
              source={{

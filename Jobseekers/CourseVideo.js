@@ -4,7 +4,6 @@ import { Video } from 'expo-av';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from "expo-blur";
-import ReactPlayer from 'react-player';
 
 const courses = [
   { id: '1', category: 'SAP', tutor: 'John Doe', level: 'Beginner' },

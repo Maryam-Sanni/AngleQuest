@@ -178,38 +178,14 @@ const SignIn = () => {
                                 borderRadius: 10, 
                               }}
                             >
-                  <MainButtons
-                    outlined
-                    paddingVertical={5}
-                    borderRadius={8}
-                    width={"100%"}
-                    title={"Log In with Google"}
-                    textColor={"black"}
-                    leftImg={google}
-                  />
+                 
 
-                  <Row style={{ marginTop: 40, width: "100%", gap: 5 }}>
-                    <View
-                      style={{
-                        width: "47%",
-                        height: 1,
-                        backgroundColor: "black",
-                      }}
-                    />
-                    <Title title={"or"} />
-                    <View
-                      style={{
-                        width: "47%",
-                        height: 1,
-                        backgroundColor: "black",
-                      }}
-                    />
-                  </Row>
-                  <View style={{ marginTop: 40, gap: 16 }}>
+                 
+                  <View style={{ marginTop: 20, gap: 16 }}>
                     <Title
                       center
                       title={"Login using email address"}
-                      textSize={18}
+                      textSize={20}
                     />
                     <View style={{ marginTop: 10, gap: 20 }}>
                       <InputField

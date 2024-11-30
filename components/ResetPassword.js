@@ -39,9 +39,17 @@ const ResetPasswordForm = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Top />
+
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={styles.contained}>
+          <Image
+            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
+            style={{
+                width: 80,
+                height: 80,
+               marginBottom: 50
+              }}
+            />
            <Image
              source={{
                uri: "https://img.icons8.com/?size=100&id=96646&format=png&color=000000",
@@ -49,17 +57,11 @@ const ResetPasswordForm = () => {
              style={{
                width: 100,
                height: 100,
+               
              }}
            />
         <Text style={styles.title}>Reset Your Password</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            onChangeText={setEmail}
-            value={email}
-          />
-        </View>
+
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}

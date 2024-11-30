@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
-import OpenModal from '../Jobseekers/Pickexpertadv';
+import OpenModal from '../Jobseekers/SkillanalysisAI';
 import OpenModal2 from '../Jobseekers/Newadvice';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
