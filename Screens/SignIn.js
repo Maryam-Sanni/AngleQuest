@@ -68,10 +68,17 @@ const SignIn = () => {
         const { token, user } = response.data;
         const { id, first_name, last_name, role } = user;
 
-        await AsyncStorage.setItem('token', token);
-        await AsyncStorage.setItem('user_id', id.toString());
-        await AsyncStorage.setItem('first_name', first_name);
-        await AsyncStorage.setItem('last_name', last_name);
+        const currentTime = Date.now();
+        const expiryTime = currentTime + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+        
+        // Store user details, token, and expiry time
+        await AsyncStorage.multiSet([
+          ['token', token],
+          ['user_id', id.toString()],
+          ['first_name', first_name],
+          ['last_name', last_name],
+          ['expiry_time', expiryTime.toString()],
+        ]);
 
         // Check if the balance was already sent
         const balanceSent = await AsyncStorage.getItem('balanceSent');

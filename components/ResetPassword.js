@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity } from "react-native";
-import Top from '../components/top';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Ionicons } from '@expo/vector-icons';
 
 const ResetPasswordForm = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    const loadEmail = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem('userEmail');
+        console.log("Loaded email:", storedEmail);
+        setEmail(storedEmail || ""); // Set email or fallback to an empty string
+      } catch (e) {
+        console.error("Failed to load email:", e);
+      }
+    };
+    loadEmail();
+  }, []);
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -21,10 +37,22 @@ const ResetPasswordForm = () => {
     }
 
     try {
-      const response = await axios.post(`${apiUrl}/api/reset-password`, {
+      // Get the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token'); 
+
+      if (!token) {
+        setError("Token not found");
+        return;
+      }
+
+      // Make the request with the token and other details
+      await axios.post(`${apiUrl}/api/reset-password`, {
+        token,
         email,
-        new_password: newPassword, // The new password being reset
+        password: newPassword,
+        password_confirmation: confirmPassword,
       });
+
       setSuccess("Password reset successfully");
       setError(null);
     } catch (error) {
@@ -61,25 +89,52 @@ const ResetPasswordForm = () => {
              }}
            />
         <Text style={styles.title}>Reset Your Password</Text>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="New Password"
-            secureTextEntry={true}
-            onChangeText={setNewPassword}
-            value={newPassword}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            secureTextEntry={true}
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-          />
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              editable={false} 
+            />
+          </View>
+          <View style={styles.input2Container}>
+            <TextInput
+              style={styles.input}
+              placeholder="New Password"
+              secureTextEntry={!newPasswordVisible}
+              onChangeText={setNewPassword}
+              value={newPassword}
+            />
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => setNewPasswordVisible(!newPasswordVisible)}
+            >
+              <Ionicons
+                name={newPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.input2Container}>
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              secureTextEntry={!confirmPasswordVisible}
+              onChangeText={setConfirmPassword}
+              value={confirmPassword}
+            />
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+            >
+              <Ionicons
+                name={confirmPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
         {error && <Text style={styles.errorText}>{error}</Text>}
         {success && <Text style={styles.successText}>{success}</Text>}
         <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
@@ -126,6 +181,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 5,
     fontFamily: "Roboto-Light"
+  },
+  input2Container: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 20,
+  },
+  iconContainer: {
+    padding: 5,
   },
   button: {
     backgroundColor: "#135837",

@@ -5,6 +5,8 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from "react-i18next";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +25,10 @@ const ResetPasswordForm = () => {
       await axios.post(`${apiUrl}/api/forgot-password`, {
         email,  // Only sending the email
       });
+
+      // Save email to AsyncStorage
+      await AsyncStorage.setItem('userEmail', email);
+      
       setSuccess("Password reset link sent to your email. Please check your inbox.");
       setError(null);
       setEmailSent(true); // Set email sent status to true
