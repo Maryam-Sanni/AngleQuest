@@ -3,14 +3,14 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Modal, Ima
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import EmployeeStats from '../components/PerformaceStats';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import CustomPercentageChart from '../components/PercentageChart';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 
 
 function MyComponent() { 
-    const navigation = useNavigation();
+   const navigate = useNavigate();
 
     const [fontsLoaded]=useFonts({
 "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")

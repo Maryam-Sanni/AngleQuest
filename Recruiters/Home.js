@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, FlatList  } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Recruiterssidebar';
 import { BlurView } from 'expo-blur';
 import Topbar from '../components/Recruiterstopbar';
@@ -34,30 +34,30 @@ const HomePage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
-  const navigation = useNavigation();
+   const navigate = useNavigate();
 
   const goToEmployees = () => {
-    navigation.navigate('Employees');
+    navigate('/employees');
   };
 
   const goToManagers = () => {
-    navigation.navigate('Managers');
+    navigate('/managers');
   };
 
   const goToTeams = () => {
-    navigation.navigate('Teams');
+    navigate('/teams');
   };
 
   const goToPerformance = () => {
-    navigation.navigate('Performance');
+    navigate('/performance');
   };
 
   const goToCoach = () => {
-    navigation.navigate('Coach');
+  navigate('/coach');
   };
 
   const goToSubscription = () => {
-    navigation.navigate('Subscription');
+  navigate('/subscription');
   };
 
   const handleOpenPress2 = () => {

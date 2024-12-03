@@ -4,14 +4,14 @@ import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import CustomPercentageChart from '../components/PercentageChart';
 import ManageEmployees from './AssignEmployees';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import OpenModal from '../Recruiters/New Manager';
 import { BlurView } from 'expo-blur';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 function MyComponent() {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
   const [isInterviewHovered, setIsInterviewHovered] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -25,7 +25,7 @@ function MyComponent() {
   };
 
   const goToTeams = () => {
-    navigation.navigate('Teams');
+navigate('/teams');
   };
   
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ImageBackground, Modal, Picker, Animated, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import Svg, { Line, Text as SvgText, Circle } from 'react-native-svg';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
@@ -90,7 +90,7 @@ const yAxisLabels = Array.from({ length: 5 }, (_, index) => {
 });
 
 const MyComponent = () => {
-  const navigation = useNavigation();
+   const navigate = useNavigate();
   const [ModalVisible, setModalVisible] = useState(false);
   const [ModalVisible2, setModalVisible2] = useState(false);
   const [ModalVisible3, setModalVisible3] = useState(false);

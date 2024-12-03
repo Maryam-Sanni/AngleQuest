@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     padding: 5,
+    marginLeft: -40
   },
   button: {
     backgroundColor: "#135837",

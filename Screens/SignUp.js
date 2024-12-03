@@ -153,6 +153,10 @@ const SignUp = () => {
       setLoading(false); // Set loading to false regardless of success or failure
     }
   };
+
+  const handlebusiness = () => {
+   navigate('/business-home');
+  };
   
   return (
         <View style={{ flex: 1, }}>
@@ -631,6 +635,9 @@ const SignUp = () => {
                           </Text>
                         </Row>
                       </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={handlebusiness}
+                      >
                       <MainButtons
                         style={{ alignSelf: "center", width: "100%" }}
                         gradient
@@ -639,6 +646,7 @@ const SignUp = () => {
                         textColor={"white"}
                         title={"Sign Up"}
                       />
+                      </TouchableOpacity>
                     </View>
                     <Text style={styles.signUpText} onPress={handleSignIn}>
                       Already have an Account?{" "}

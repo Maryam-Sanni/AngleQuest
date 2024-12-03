@@ -5,12 +5,12 @@ import Sidebar from '../components/Recruiterssidebar';
 import InterviewSchedule from '../components/InterviewSchJob';
 import InterviewFeedback from '../components/InterviewFdbackRct';
 import OpenModal from '../Recruiters/ChooseInterviewer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 function MyComponent() { 
-    const navigation = useNavigation();
+   const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
 
   

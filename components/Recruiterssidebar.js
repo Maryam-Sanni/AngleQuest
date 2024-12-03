@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import CollapsedComponent from "./Recruiterscollapsed"; 
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ function MyComponent() {
   const [showMenu, setShowMenu] = useState(true);
   const [messageCountText, setMessageCountText] = useState('0');  
 
-  const navigation = useNavigation(); // Get navigation object
+  const navigate = useNavigate();
 
   const handleItemHover = (item) => {
     setHoveredItem(item);
@@ -24,37 +24,37 @@ function MyComponent() {
       // Navigate to respective screens based on menu item clicked
       switch(item.label) {
         case "Home":
-          navigation.navigate('Home - Corporate');
+          navigate('/business-home');
           break;
         case "Offers":
-          navigation.navigate('');
+          navigate('');
           break;
         case "Interviews":
-          navigation.navigate('Interview Candidates');
+         navigate('/interview-candidates');
           break;
           case "Employees":
-          navigation.navigate('Employees');
+         navigate('/employees');
           break;
         case "Managers":
-          navigation.navigate('Managers');
+        navigate('/managers');
           break;
           case "Schedules":
-          navigation.navigate('Schedules');
+          navigate('/schedules');
           break;
           case "Performance":
-          navigation.navigate('Performance');
+         navigate('/employee-performance');
           break;
           case "Coach":
-          navigation.navigate('Coach');
+        navigate('/coach');
           break;
           case "Teams":
-          navigation.navigate('Teams');
+      navigate('/teams');
           break;
           case "Analytics":
-          navigation.navigate('Analytics');
+         navigate('/analytics');
           break;
         case "Subscription":
-          navigation.navigate('Subscription');
+        navigate('/business-subscription');
           break;
         default:
           break;
@@ -65,7 +65,7 @@ function MyComponent() {
   const handleLogout = () => {
     // Handle logout action here
     console.log("Logout clicked");
-    navigation.navigate('Signin'); // Navigate to the sign-in page
+    navigate('/sign-in'); // Navigate to the sign-in page
     setClickedItem(null);
   };
 
@@ -81,6 +81,7 @@ function MyComponent() {
       {showMenu ?  (
         <View style={styles.contentContainer}>
           {/* Menu Items */}
+           <View style={{marginTop: 50}}>
           {menuItems.map((menuItem, index) => (
             <TouchableOpacity
               key={index}
@@ -131,11 +132,12 @@ function MyComponent() {
               <Text style={{ marginTop: 5, marginBottom: 5, color: clickedItem === "Logout" ? 'coral' : '#666' }}>{t("Logout")}</Text>
             </View>
           </TouchableOpacity>
-          
+             </View>
         </View>
       ) : (
         <CollapsedComponent /> 
       )}
+  
       </ScrollView>
     </View>
     
@@ -143,7 +145,6 @@ function MyComponent() {
 }
 
 const menuItems = [
-  { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a17d9f0fc56620b27b7178e38a5e0f099f5de7418907c2f2a45cbee9c6764af?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Employees", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Managers", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },

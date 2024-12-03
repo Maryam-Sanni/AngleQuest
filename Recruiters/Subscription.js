@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, ImageBackground, Modal } from 'react-native';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { BlurView } from 'expo-blur';
 import ManageEmployees from './EmployeesPaymentSub';
 import OpenModal from './AddSubCard';
@@ -10,7 +10,7 @@ import OpenModal from './AddSubCard';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
 function MyComponent() {
-    const navigation = useNavigation();
+  const navigate = useNavigate();
     const [isInterviewHovered, setIsInterviewHovered] = useState(false);
     const [selectedSection, setSelectedSection] = useState('Standard');
     const [isPressed, setIsPressed] = useState(false);
@@ -31,9 +31,9 @@ function MyComponent() {
 
     const handlePurchasePress = (sectionName) => {
         if (sectionName === 'Standard' || sectionName === 'Pro') {
-            navigation.navigate('Subscription');
+           navigate('/business-subscription');
         } else {
-            navigation.navigate('Subscription');
+           navigate('/business-subscription');
         }
     };
 

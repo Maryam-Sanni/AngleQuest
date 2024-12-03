@@ -4,12 +4,12 @@ import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Recruiters/ChooseInterviewer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
 function MyComponent() {
-  const navigation = useNavigation();
+   const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
 
@@ -23,7 +23,7 @@ function MyComponent() {
 
       const goToSchedules = () => {
         // Navigate to ExpertsProfile screen when the button is clicked
-        navigation.navigate('Booked Interviews');
+    navigate('/booked-interviews');
       };
  
       const [fontsLoaded]=useFonts({

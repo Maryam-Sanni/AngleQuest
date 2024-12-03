@@ -229,6 +229,17 @@ const App = () => {
         <Route path="/past-sessions" element={<PastSessions />} />
         <Route path="/rate-meeting" element={<RateMeeting />} />
         <Route path="/rate-progress" element={<RateExpert />} />
+        <Route path="/business-home" element={<HomeRecruit />} />
+         <Route path="/employees" element={<Employees />} />
+        <Route path="/managers" element={<Managers />} />
+        <Route path="/schedules" element={<Schedules />} />
+        <Route path="/employee-performance" element={<Performance />} />
+        <Route path="/interview-candidates" element={<InterviewCandidates />} />
+        <Route path="/booked-interviews" element={<BookedInterview />} />
+        <Route path="/coach" element={<Coach />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/business-subscription" element={<Subscription />} />
+        <Route path="/analytics" element={<Analytics />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, TextInput, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback, Text } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Picker } from '@react-native-picker/picker';
 import SettingsModal from './SettingsRecruiters';
@@ -34,7 +34,7 @@ const Icon = ({ source, style, onPress }) => {
 const MyComponent = () => {
   const [selectedIconIndex, setSelectedIconIndex] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const navigation = useNavigation(); // Initialize navigation
+   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
   const icons = [
@@ -53,7 +53,7 @@ const MyComponent = () => {
   const handleIconPress = (index) => {
     setSelectedIconIndex(index);
     if (index === 0) {
-      navigation.navigate('Notifications'); // Replace 'Notifications' with your actual route name
+     navigate('/notifications'); // Replace 'Notifications' with your actual route name
     } else if (index === 1) {
       setShowSettingsModal(true);
     }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
@@ -8,10 +8,10 @@ function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [isAnnualPressed, setIsAnnualPressed] = useState(false);
   const [isMonthlyPressed, setIsMonthlyPressed] = useState(false);
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const goToSubscription = () => {
-    navigation.navigate('Subscription');
+  navigate('/business-subscription');
     onClose();
   };
 
