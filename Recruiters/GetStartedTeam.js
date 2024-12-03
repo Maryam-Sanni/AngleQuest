@@ -23,13 +23,6 @@ function MyComponent({ onClose }) {
   const {t}=useTranslation()
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
   
           <View style={styles.greenBox}>
@@ -84,30 +77,19 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                 >
                   <Picker.Item label="Pick an area of specialization" value="Pick an area of specialization" />
-                  <Picker.Item label="Java Engineering" value="Java Engineering" />
-                  <Picker.Item label="SAP FI" value="SAP FI" />
-                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
-                  <Picker.Item label="Dev Ops" value="Dev Ops" />
-                  <Picker.Item label="Frontend Development" value="Frontend Development" />
-                  <Picker.Item label="Backend Development" value="Backend Development" />
-                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
-                  <Picker.Item label="Data Analysis" value="Data Analysis" />
-                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+                <Picker.Item label="SAP" value="SAP" />
+                <Picker.Item label="Microsoft" value="Microsoft" />
+                <Picker.Item label="Scrum" value="Scrum" />
+                <Picker.Item label="Business Analysis" value="Business Analysis" />
                 </Picker>
 
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Team Lead")}
                 </Text>
-                <Picker
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Choose a team lead" value="Choose a team lead" />
-<Picker.Item label="Monica Jerry" value="Monica Jerry" />
-          <Picker.Item label="Will Cooper" value="Will Cooper" />
-          <Picker.Item label="John Othega" value="John Othega" />
-          <Picker.Item label="Joop Melcher" value="Joop Melcher" />
-          <Picker.Item label="Yesuf Gabar" value="Yesuf Gabar" />
-</Picker>
+                <TextInput
+                  placeholder="Will Cooper"
+                  style={styles.input}
+                />
 
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Team Target")}
@@ -127,26 +109,25 @@ function MyComponent({ onClose }) {
                 </TouchableOpacity>
               </View>
             </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible}
+              onRequestClose={handleCloseModal}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal onClose={handleCloseModal} />
+              </View>
+            </Modal>
             </ScrollView>
           </View>
         
         </View>
 
              
-             
-              
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible}
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal onClose={handleCloseModal} />
-        </View>
-      </Modal>
-    </>
+      
+     
+
   );
 }
 

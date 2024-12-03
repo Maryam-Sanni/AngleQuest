@@ -23,13 +23,6 @@ function MyComponent({ onClose }) {
     const {t}=useTranslation()
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
           <View style={styles.greenBox}>
             <View style={styles.header}>
@@ -98,20 +91,20 @@ function MyComponent({ onClose }) {
               </View>
             </View>
           </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={ModalVisible}
+            onRequestClose={handleCloseModal}
+          >
+            <View style={styles.modalContent}>
+              <OpenModal onClose={handleCloseModal} />
+            </View>
+          </Modal>
         </View>
-      </Modal>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible}
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal onClose={handleCloseModal} />
-        </View>
-      </Modal>
-    </>
+     
+
   );
 }
 

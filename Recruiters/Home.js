@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image, ImageBackground, Modal, FlatList  } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Recruiterssidebar';
@@ -11,8 +11,7 @@ import OpenModal3 from './New Manager';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePage = () => {
   const [isHovered1, setIsHovered1] = useState(false);
@@ -35,6 +34,8 @@ const HomePage = () => {
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
    const navigate = useNavigate();
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState(''); 
 
   const goToEmployees = () => {
     navigate('/employees');
@@ -84,6 +85,26 @@ const HomePage = () => {
     setModalVisible4(false);
   };
 
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+  
   const ProgressBar = ({ percentage }) => {
     return (
       <View style={styles.progressBarContainer}>
@@ -143,7 +164,7 @@ const {t}=useTranslation()
         }}
         style={{ width: 40, height: 40, marginTop: -5}}
       />
-      <Text style={styles.greeting}>{t("Good Day")}, Pretzel Ent.</Text>
+      <Text style={styles.greeting}>{t("Good Day")}, {first_name}</Text>
       </View>
       <View style={styles.mainContent}>
       <View style={styles.messageBox}>

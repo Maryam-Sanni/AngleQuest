@@ -157,6 +157,40 @@ const SignUp = () => {
   const handlebusiness = () => {
    navigate('/business-home');
   };
+
+  const handleSignUp3 = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    if (!isChecked) {
+      alert('Please agree to the Terms of Service & Privacy Policy');
+      return;
+    }
+
+    const role = 'business';
+
+    try {
+      setLoading(true); // Set loading to true when sign in is initiated
+
+      const response = await axios.post(`${apiUrl}/api/expert/signup`, {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        role,
+      });
+
+      console.log('Signup success:', response.data);
+      navigate("/verify-mail", { state: { userEmail: email } });
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert('Signup failed. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
+  };
   
   return (
         <View style={{ flex: 1, }}>
@@ -600,17 +634,32 @@ const SignUp = () => {
                         placeholder="email"
                       />
 
-                      <InputField
-                        keyboardType="default"
-                        val={password}
-                        placeholder="Password"
-                        onChangeText={setPassword}
-                        secureTextEntry={true} 
-                      />
+                      <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: 5 }}>
+                          <TextInput
+                              keyboardType="default"
+                              value={password}
+                              placeholder="Password"
+                              onChangeText={setPassword}
+                              secureTextEntry={!isPasswordVisible} // Toggle secure text entry based on state
+                              style={{
+                                  flex: 1,
+                                  padding: 10,
+                                borderRadius: 5
+                              }}
+                          />
+                          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                              <Text style={{ padding: 10 }}>
+                                  {isPasswordVisible ? "Hide" : "Show"}
+                              </Text>
+                          </TouchableOpacity>
+                      </View>
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
-                      <TouchableOpacity onPress={() => setAgree1(!agree1)}>
+                      <TouchableOpacity   onPress={() => {
+                        setAgree1(!agree1); 
+                      toggleCheckbox();   
+                      }} >
                         <Row style={{ gap: 10 }}>
                           {agree1 ? (
                             <MaterialIcons
@@ -636,7 +685,7 @@ const SignUp = () => {
                         </Row>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={handlebusiness}
+                        onPress={handleSignUp3}
                       >
                       <MainButtons
                         style={{ alignSelf: "center", width: "100%" }}

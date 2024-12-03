@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import CollapsedComponent from "./Recruiterscollapsed"; 
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() {
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null); 
   const [showMenu, setShowMenu] = useState(true);
   const [messageCountText, setMessageCountText] = useState('0');  
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState(''); 
 
   const navigate = useNavigate();
 
@@ -71,8 +74,29 @@ function MyComponent() {
 
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
-    navigation.navigate('Business Profile');
+    navigate('/business-profile');
   };
+
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+          setLastName(storedLastName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+  
   const {t}=useTranslation()
 
   return (
@@ -113,7 +137,7 @@ function MyComponent() {
               style={{ width: 40, aspectRatio: 1 }}
             />
             <View style={{ marginLeft: 5 }}>
-              <Text style={{ fontSize: 14, color: '#666' }}>Pretzel Ent.</Text>
+              <Text style={{ fontSize: 14, color: '#666' }}>{first_name}</Text>
             </View>
           </View>
           </TouchableOpacity>

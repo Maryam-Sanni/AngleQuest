@@ -117,6 +117,8 @@ const SignIn = () => {
           navigate('/home-experts');
         } else if (role === 'individual') {
           navigate('/home-individuals');
+          } else if (role === 'business') {
+            navigate('/business-home');
         } else {
           alert('Unknown user role');
         }
