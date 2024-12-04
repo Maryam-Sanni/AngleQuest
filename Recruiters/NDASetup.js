@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import OpenModal from './GetStartedTeam';
+import OpenModal from './IndividualorList';
 import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
 
@@ -9,7 +9,6 @@ function MyComponent({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
 
   const handleOpenPress = () => {
-    setMainModalVisible(false);
     setModalVisible(true);
   };
 
@@ -29,13 +28,6 @@ function MyComponent({ onClose }) {
     const {t}=useTranslation()
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
           <View style={styles.greenBox}>
             <View style={styles.header}>
@@ -80,20 +72,19 @@ function MyComponent({ onClose }) {
               </View>
             </View>
           </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={ModalVisible}
+            onRequestClose={handleCloseModal}
+          >
+            <View style={styles.modalContent}>
+              <OpenModal onClose={handleCloseModal} />
+            </View>
+          </Modal>
         </View>
-      </Modal>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible}
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal onClose={handleCloseModal} />
-        </View>
-      </Modal>
-    </>
+   
   );
 }
 

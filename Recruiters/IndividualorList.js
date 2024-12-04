@@ -52,13 +52,6 @@ function MyComponent({ onClose }) {
   })
 const {t}=useTranslation()
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
           <View style={styles.greenBox}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
@@ -80,7 +73,7 @@ const {t}=useTranslation()
                 <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
                   {t("Onboard your members")}
                 </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500',fontFamily:"Roboto-Light" }}>
+                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400 }}>
                {t("Create your members individually or simply upload an excel document to add all members at once.")}
                 </Text>
                 <Image
@@ -88,9 +81,9 @@ const {t}=useTranslation()
                   style={styles.image}
                 />
               </View>
-              <View style={{ flexDirection: 'column' }}>
+              <View style={{ flexDirection: 'column', marginTop: 100 }}>
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Upload employees List")}
+                  {t("Upload employees List from excel")}
                 </Text> 
                 <View style={{ flexDirection: 'row' }}>
                 <View style={styles.input}>
@@ -111,91 +104,55 @@ const {t}=useTranslation()
                   <Text style={styles.buttonTextplus}>{t("Create Employees Individually")}</Text>
                 </TouchableOpacity>
                 
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Upload Managers List")}
-                </Text> 
-                <View style={{ flexDirection: 'row' }}>
-                <View style={styles.input}>
-                <input
-                type="file"
-                accept="image/*"
-                onChange={handleChooseImage}
-              />
-              </View>
-              <TouchableOpacity>
-    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
-                  </View>
-     </TouchableOpacity>
-              </View>
- <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>{t("Create Managers Individually")}</Text>
-                </TouchableOpacity>
-
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Upload Coaches List")}
-                </Text> 
-                <View style={{ flexDirection: 'row' }}>
-                <View style={styles.input}>
-                <input
-                type="file"
-                accept="image/*"
-                onChange={handleChooseImage}
-              />
-              </View>
-              <TouchableOpacity>
-    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
-                  </View>
-     </TouchableOpacity>
-              </View>
- <TouchableOpacity onPress={handleOpenPress3} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>Create Coaches Individually</Text>
-                </TouchableOpacity>
+                
+ 
 
                
 
-                <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+               
+
+                <TouchableOpacity onPress={handleCloseModal} style={styles.buttonplus}>
                   <Text style={styles.buttonTextplus}>{t("Save & Continue Later")}</Text>
                 </TouchableOpacity>
               </View>
             </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible}
+              onRequestClose={handleCloseModal}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal onClose={handleCloseModal} />
+              </View>
+            </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible2}
+              onRequestClose={handleCloseModal2}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal2 onClose={handleCloseModal2} />
+              </View>
+            </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible3}
+              onRequestClose={handleCloseModal3}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal3 onClose={handleCloseModal3} />
+              </View>
+              </Modal>
             </ScrollView>
           </View>
         </View>
-      </Modal>
+    
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible}
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal onClose={handleCloseModal} />
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible2}
-        onRequestClose={handleCloseModal2}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal2 onClose={handleCloseModal2} />
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible3}
-        onRequestClose={handleCloseModal3}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal3 onClose={handleCloseModal3} />
-        </View>
-      </Modal>
-    </>
+     
+
   );
 }
 
@@ -234,8 +191,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     padding: 10,
     marginTop: 30,
-    width: 450,
+     width: 450,
     marginLeft: 50,
+    alignSelf: 'center',
     paddingHorizontal: 20,
     borderRadius: 5,
   },

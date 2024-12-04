@@ -23,13 +23,6 @@ function MyComponent({ onClose }) {
     const {t}=useTranslation()
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mainModalVisible}
-        onRequestClose={onClose}
-      >
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
           <View style={styles.greenBox}>
             <View style={styles.header}>
@@ -45,18 +38,15 @@ function MyComponent({ onClose }) {
               </TouchableOpacity>
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
+
+              <View style={{ flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5, textAlign: 'center' }}>
                   {t("Onboard a New Employee")}
                 </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400, fontWeight: '500',fontFamily:"Roboto-Light" }}>
-                  {t("Recruitangle will attach your employee to an expert that will guide them from their current level of expertise to the next level of their career")}.
+                <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 15, textAlign: 'center'}}>
+                  {t("Anglequest will attach your employee to an expert that will guide them from their current level of expertise to the next level of their career")}.
                 </Text>
-                <Image
-                  source={require('../assets/New Employee.png')}
-                  style={styles.image}
-                />
+               
               </View>
               <View style={{ flexDirection: 'column' }}>
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
@@ -64,6 +54,7 @@ function MyComponent({ onClose }) {
                 </Text> 
                 <TextInput
                   placeholder= {t("Full Name")}
+                  placeholderTextColor= "grey"
                   style={styles.input}
                 />
 
@@ -72,6 +63,7 @@ function MyComponent({ onClose }) {
                 </Text>
                 <TextInput
                   placeholder="hello@mybusiness.com"
+                   placeholderTextColor= "grey"
                   style={styles.input}
                 />
 
@@ -82,28 +74,34 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                 >
                   <Picker.Item label={t("Pick an area of specialization")} value="Pick an area of specialization" />
-                  <Picker.Item label="Java Engineering" value="Java Engineering" />
-                  <Picker.Item label="SAP FI" value="SAP FI" />
-                  <Picker.Item label="Microsoft Azure" value="Microsoft Azure" />
-                  <Picker.Item label="Dev Ops" value="Dev Ops" />
-                  <Picker.Item label="Frontend Development" value="Frontend Development" />
-                  <Picker.Item label="Backend Development" value="Backend Development" />
-                  <Picker.Item label="Fullstack Development" value="Fullstack Development" />
-                  <Picker.Item label="Data Analysis" value="Data Analysis" />
-                  <Picker.Item label="UI/UX Design" value="UI/UX Design" />
+                  <Picker.Item label="SAP" value="SAP" />
+                  <Picker.Item label="Microsoft" value="Microsoft" />
+                  <Picker.Item label="Scrum" value="Scrum" />
+                  <Picker.Item label="Business Analysis" value="Business Analysis" />
                 </Picker>
 
+                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
+                  {t("Type of Service")}
+                </Text>
+                <Picker
+                  style={styles.picker}
+                >
+                  <Picker.Item label={t("Choose a service type")} value=" " />
+                  <Picker.Item label="Professional Support" value="Professional Support" />
+                  <Picker.Item label="Career Transitioning" value="Career Transitioning" />
+                  <Picker.Item label="Professional Support & Career Transitioning" value="Professional Support & Career Transitioning" />
+                </Picker>
+                
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Current role")}
                 </Text>
                 <Picker
                   style={styles.picker}
                 >
-                  <Picker.Item label={t("Junior")} value="Junior" />
                   <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Medior")} value="Medior" />
-                  <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Professional")} value="Professional" />
+                   <Picker.Item label={t("Junior")} value="Junior" />
+                  <Picker.Item label={t("Intermediate")} value="Intermediate" />
+                  <Picker.Item label={t("Advanced")} value="Advanced" />
                 </Picker>
 
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5,fontFamily:"Roboto-Light" }}>
@@ -113,32 +111,31 @@ function MyComponent({ onClose }) {
                   style={styles.picker}
                 >
                   <Picker.Item label={t("Junior")} value="Junior" />
-                  <Picker.Item label={t("Beginner")} value="Beginner" />
-                  <Picker.Item label={t("Medior")} value="Medior" />
-                  <Picker.Item label={t("Senior")} value="Senior" />
-                  <Picker.Item label={t("Professional")} value="Professional" />
+                    <Picker.Item label={t("Senior")} value="Senior" />
+                    <Picker.Item label={t("Manager")} value="Manager" />
+                    <Picker.Item label={t("Senior Manager")} value="Senior Manager" />
+                    <Picker.Item label={t("Solution Architect")} value="Solution Architect" />
                 </Picker>
 
-                <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>{t("Next")}</Text>
+                <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+                  <Text style={styles.buttonTextplus}>{t("Finish")}</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+      
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={ModalVisible}
+                onRequestClose={handleCloseModal}
+              >
+                <View style={styles.modalContent}>
+                  <OpenModal onClose={handleCloseModal} />
+                </View>
+              </Modal>
           </View>
         </View>
-      </Modal>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={ModalVisible}
-        onRequestClose={handleCloseModal}
-      >
-        <View style={styles.modalContent}>
-          <OpenModal onClose={handleCloseModal} />
-        </View>
-      </Modal>
-    </>
+     
   );
 }
 
@@ -164,7 +161,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 40,
-    width: 450,
+    width: "90%",
     backgroundColor: 'white',
     borderColor: '#206C00',
     borderWidth: 1,
@@ -175,9 +172,9 @@ const styles = StyleSheet.create({
   },
   buttonplus: {
     backgroundColor: 'coral',
-    padding: 5,
+    padding: 10,
     marginTop: 30,
-    marginLeft: 400,
+    marginLeft: 450,
     width: 100,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -190,7 +187,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 450,
+    width: "90%",
     backgroundColor: 'white',
     borderColor: '#206C00',
     borderWidth: 1,

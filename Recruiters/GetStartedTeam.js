@@ -1,113 +1,93 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Picker, Modal, TextInput } from 'react-native';
-import OpenModal from './IndividualorList';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Image, Animated } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import OpenModal from './NDASetup';
 
-function MyComponent({ onClose }) {
-  const [mainModalVisible, setMainModalVisible] = useState(true);
+function ServiceCard({ title, description }) {
+  const [isHovered, setIsHovered] = useState(false);
+ 
+  
+  return (
+    <Animated.View
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={[
+        styles.serviceCard,
+        isHovered && styles.hoverCard,
+      ]}
+    >
+      <Text style={[styles.serviceTitle, isHovered && styles.hoverTitle]}>{title}</Text>
+      <Text style={[styles.serviceDescription, isHovered && styles.hoverDescription]}>{description}</Text>
+    </Animated.View>
+  );
+}
+
+function AngleQuestPage({ onClose }) {
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const { t } = useTranslation();
   const [ModalVisible, setModalVisible] = useState(false);
 
   const handleOpenPress = () => {
-    setMainModalVisible(false);
     setModalVisible(true);
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    onClose();
+     onClose();
   };
-  const [fontsLoaded]=useFonts({
-    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
-  })
-  const {t}=useTranslation()
+
+  const [fontsLoaded] = useFonts({
+    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  const services = [
+    { title: t("Professional Support"), description: t("We provide tailored professional support to help employees thrive in their current roles. From skill-building workshops to mentorship programs, our experts are here to empower your workforce.") },
+    { title: t("Career Transitions"), description: t("Our career transition services are designed to guide employees through changes in their career paths. Whether it's upskilling, reskilling, or preparing for a new opportunity, we've got it covered.") },
+    { title: t("Professional Support & Career Transition"), description: t("Why choose when you can have both? We offer a holistic approach that combines professional support and career transition to ensure your employees achieve their full potential.") },
+  ];
 
   return (
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
-  
-          <View style={styles.greenBox}>
+    <View style={styles.container}>
+      <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
+        <View style={styles.greenBox}>
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
             <View style={styles.header}>
               <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+                source={{
+                  uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&',
+                }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>{t("Create Team")}</Text>
+              <Text style={styles.headerText}>{t("Welcome to AngleQuest")}</Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
-                  ✕
-                </Text>
+                <Text style={styles.closeButtonText}>✕</Text>
               </TouchableOpacity>
             </View>
 
-           
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5, marginBottom: 20,fontFamily:"Roboto-Light"}}>
-                  {t("Create a New Team")}
-                </Text>
-                <Image
-                  source={require('../assets/mang.png')}
-                  style={styles.image}
-                />
+            <View style={styles.content}>
+              <Text style={styles.mainHeading}>{t("Empowering Your Employee's Career Journey")}</Text>
+              <Text style={styles.subHeading}>
+                {t("At AngleQuest, we provide tailored professional support & smooth career transitions for your employees. Work alongside industry leaders who understand your unique challenges and offer practical solutions.")}
+              </Text>
+
+              <View style={styles.servicesContainer}>
+                {services.map((service, index) => (
+                  <ServiceCard key={index} title={service.title} description={service.description} />
+                ))}
               </View>
-              <View style={{ flexDirection: 'column' }}>
 
-              <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Team Name")}
-                </Text> 
-                <TextInput
-                  placeholder=" "
-                  style={styles.input}
-                />
-
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Team Goals")}
-                </Text>
-                <TextInput
-                  placeholder=" "
-                  multiline
-                  style={[styles.input, { height: 100 }]}
-                />
-
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Specialization")}
-                </Text>
-                <Picker
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Pick an area of specialization" value="Pick an area of specialization" />
-                <Picker.Item label="SAP" value="SAP" />
-                <Picker.Item label="Microsoft" value="Microsoft" />
-                <Picker.Item label="Scrum" value="Scrum" />
-                <Picker.Item label="Business Analysis" value="Business Analysis" />
-                </Picker>
-
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Team Lead")}
-                </Text>
-                <TextInput
-                  placeholder="Will Cooper"
-                  style={styles.input}
-                />
-
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 30, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Team Target")}
-                </Text>
-                <Picker
-                  style={styles.picker}
-                >
-                  <Picker.Item label="Junior" value="Junior" />
-                  <Picker.Item label="Beginner" value="Beginner" />
-                  <Picker.Item label="Medior" value="Medior" />
-                  <Picker.Item label="Senior" value="Senior" />
-                  <Picker.Item label="Professional" value="Professional" />
-                </Picker>
-
-                <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>{t("Next")}</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity onPress={handleOpenPress} style={styles.button}>
+                <Text style={styles.buttonText}>{t("Lets proceed!")}</Text>
+              </TouchableOpacity>
             </View>
             <Modal
               animationType="slide"
@@ -119,105 +99,133 @@ function MyComponent({ onClose }) {
                 <OpenModal onClose={handleCloseModal} />
               </View>
             </Modal>
-            </ScrollView>
-          </View>
-        
+          </ScrollView>
         </View>
-
-             
-      
-     
-
+      </Animated.View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-    modalContent: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    },
-    container: {
-      flexDirection: 'column',
-      borderWidth: 1,
-      borderColor: '#CCC',
-      marginRight: 70,
-      marginTop: 20,
-      marginLeft: 50,
-    },
-    greenBox: {
-      width: 1000,
-      height: "100%",
-      backgroundColor: '#F8F8F8',
-    },
-    picker: {
-      height: 40,
-      width: 450,
-      backgroundColor: 'white',
-      borderColor: '#206C00',
-      borderWidth: 1,
-      color: 'black',
-      fontSize: 14,
-      marginLeft: 50,
-      borderRadius: 5,
-    },
-    buttonplus: {
-      backgroundColor: 'coral',
-      padding: 5,
-      marginTop: 30,
-      marginLeft: 400,
-      width: 100,
-      paddingHorizontal: 20,
-      borderRadius: 5,
-    },
-    buttonTextplus: {
-      color: 'white',
-      fontSize: 14,
-      textAlign: 'center',
-    },
-    input: {
-      height: 40,
-      width: 450,
-      backgroundColor: 'white',
-      borderColor: '#206C00',
-      borderWidth: 1,
-      color: 'black',
-      fontSize: 14,
-      marginLeft: 50,
-      borderRadius: 5,
-      padding: 10,
-    },
-    closeButton: {
-      position: 'absolute',
-      top: 20,
-      right: 20,
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 10,
-      backgroundColor: 'white',
-      borderBottomWidth: 1,
-      borderBottomColor: '#CCC',
-      marginBottom: 20,
-    },
-    logo: {
-      width: 40,
-      height: 40,
-      marginRight: 10,
-    },
-    headerText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#3F5637',
-      fontFamily:"Roboto-Light"
-    },
-    image: {
-      width: 400,
-      height: 400,
-      marginRight: 30,
-    },
-  });
-  
-  export default MyComponent;
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: "center",
+  },
+  overlay: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  greenBox: {
+    width: "80%",
+    height: "90%",
+    backgroundColor: "#F8F8F8",
+    borderRadius: 15,
+    padding: 20,
+    elevation: 10,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "black",
+  },
+  closeButton: {
+    position: "absolute",
+    right: 10,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: "#3F5637",
+    fontWeight: "bold",
+  },
+  content: {
+    paddingHorizontal: 10,
+    alignItems: "center",
+  },
+  mainHeading: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "black",
+    marginBottom: 10,
+
+  },
+  subHeading: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "black",
+    marginBottom: 30,
+    marginLeft: 100, marginRight: 100
+  },
+  servicesContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  serviceCard: {
+    width: "47%",
+    padding: 15,
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 20,
+    elevation: 5,
+    transition: "all 0.3s ease-in-out", // for web
+  },
+  hoverCard: {
+    backgroundColor: "#206C00",
+    transform: [{ scale: 1.05 }],
+  },
+  serviceTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#206C00",
+    transition: "all 0.3s ease-in-out", // for web
+  },
+  hoverTitle: {
+    color: "white",
+    fontSize: 20,
+  },
+  serviceDescription: {
+    fontSize: 14,
+    color: "#3F5637",
+    transition: "all 0.3s ease-in-out", // for web
+  },
+  hoverDescription: {
+    color: "white",
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: "coral",
+    padding: 10,
+    width: 150,
+    borderRadius: 5,
+    marginTop: 40,
+    elevation: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
+
+export default AngleQuestPage;

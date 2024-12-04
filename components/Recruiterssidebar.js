@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import CollapsedComponent from "./Recruiterscollapsed"; 
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ function MyComponent() {
   };
 
   const handleItemClick = (item) => {
-    if (item === menuItems[0]) {
+    if (item === menuItems[7]) {
       setShowMenu(false); // Hide the menu if the first menu item is clicked
     } else {
       setClickedItem(clickedItem === item ? null : item);
@@ -76,7 +76,23 @@ function MyComponent() {
     // Navigate to MyProfile screen
     navigate('/business-profile');
   };
+  
+  useEffect(() => {
+    const currentPath = location.pathname; // Get the full path
+    const matchedItem = menuItems.find(item => {
+      switch(item.label) {
+        case "Home": return currentPath === '/business-home';
+         case "Employees": return currentPath === '/employees';
+           case "Subscription": return currentPath === '/business-subscription';
+        default: return false;
+      }
+    });
 
+    if (matchedItem) {
+      setClickedItem(matchedItem);
+    }
+  }, [location, menuItems]);
+  
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
     const retrieveData = async () => {
@@ -101,7 +117,6 @@ function MyComponent() {
 
   return (
     <View style={[styles.container, !showMenu && { width: 80 }]}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       {showMenu ?  (
         <View style={styles.contentContainer}>
           {/* Menu Items */}
@@ -161,8 +176,6 @@ function MyComponent() {
       ) : (
         <CollapsedComponent /> 
       )}
-  
-      </ScrollView>
     </View>
     
   );
@@ -171,13 +184,7 @@ function MyComponent() {
 const menuItems = [
   { label: "Home", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c2a8bbea82c77b8fb3265f2792b73ef422d464a228510b5a1a07d2d657c4441f?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Employees", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Managers", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/55120fdad0942a072dd9c4983820860f2be5dfe081dd7a9dc2fbf948476d5ae7?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Coach", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/813d5a4a25e7ea2bc6111724f9da82bc8321c028e79ecedafab3cf526363dfe1?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Teams", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/e5fc48985e9bd23839ab4e933835f0a18c6a7586a0ec50e99bc97886e30e1e63?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Performance", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/c07248ef371c4bd3c8109a5c928c2801705dfc3442beb7951f0c489b455700e9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Analytics", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Schedules", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/af1777ff9219d90e26a5672ec04ed421d4904eb9122e2f1feb8f1b61f8b63b75?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-  { label: "Interviews", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/d10a8ee7c8c9726e17c1a541282a434772d42408c95ac5f784d03e9befeb6519?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
+
   { label: "Subscription", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4b274aadb26c96bd1bf3bcc2196a290c8aa4dd6f8bea63a98f9be3ea6a8bdec9?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
 ];
 
@@ -193,6 +200,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   contentContainer: {
     padding: 20,
@@ -245,9 +258,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     marginLeft: 6,
-    color: "#666",
+    color: "black",
   },
   textActive: {
     color: "coral",
@@ -265,12 +278,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     width: 170,
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 20,
   },
   logoutButton: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    height: 30,
+    width: 140,
+    backgroundColor: '#E3F4DB',
     alignItems: "center",
+    padding: 7,
+    marginTop: 10,
+    borderRadius: 5
   },
   messageCount: {
     width: 16,
@@ -284,7 +303,8 @@ const styles = StyleSheet.create({
   messageCountText: {
     color: 'white',
     fontWeight: '500',
-    fontSize: 11
+    fontSize: 11,
+    fontFamily:"Roboto-Light" 
   },
 });
 

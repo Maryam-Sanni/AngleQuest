@@ -6,7 +6,7 @@ import { BlurView } from 'expo-blur';
 import Topbar from '../components/Recruiterstopbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
-import OpenModal2 from './NDASetup';
+import OpenModal2 from './GetStartedTeam';
 import OpenModal3 from './New Manager';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import { useTranslation } from 'react-i18next';
