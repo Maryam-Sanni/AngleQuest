@@ -1,32 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Image, Animated } from 'react-native';
-import { useFonts } from 'expo-font';
-import { useTranslation } from 'react-i18next';
-import OpenModal from './NDASetup';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Image,
+  Animated,
+  input, Pressable
+} from "react-native";
+import { useFonts } from "expo-font";
+import { useTranslation } from "react-i18next";
+import OpenModal from './New Employee';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ServiceCard({ title, description }) {
+function ServiceCard({ title, description, isStartPressed }) {
   const [isHovered, setIsHovered] = useState(false);
- 
-  
-  return (
-    <Animated.View
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={[
-        styles.serviceCard,
-        isHovered && styles.hoverCard,
-      ]}
-    >
-      <Text style={[styles.serviceTitle, isHovered && styles.hoverTitle]}>{title}</Text>
-      <Text style={[styles.serviceDescription, isHovered && styles.hoverDescription]}>{description}</Text>
-    </Animated.View>
+
+    // Create an animated value for width
+    const animatedWidth = new Animated.Value(isStartPressed ? 360 : 560); // Adjust initial width
+
+    // Animate width change when isStartPressed changes
+    useEffect(() => {
+      Animated.timing(animatedWidth, {
+        toValue: isStartPressed ? 360 : 560, // Set to smaller width when pressed
+        duration: 300, // Duration of the animation
+        useNativeDriver: false, // Disable native driver for width
+      }).start();
+    }, [isStartPressed]); // Re-run the animation when isStartPressed changes
+
+    return (
+      <Animated.View
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={[
+          styles.serviceCard,
+          isHovered && styles.hoverCard,
+          { width: animatedWidth }, // Apply animated width
+        ]}
+      >
+        <Text style={[styles.serviceTitle, isHovered && styles.hoverTitle]}>
+          {title}
+        </Text>
+        <Text style={[styles.serviceDescription, isHovered && styles.hoverDescription]}>
+          {description}
+        </Text>
+      </Animated.View>
   );
 }
 
 function AngleQuestPage({ onClose }) {
   const [fadeAnim] = useState(new Animated.Value(0));
   const { t } = useTranslation();
+  const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
+  const [isStartPressed, setIsStartPressed] = useState(false);
+
+  const [fontsLoaded] = useFonts({
+    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
+  });
+
+  const handleChooseImage = (event) => {
+    const selectedImage = event.target.files[0];
+    const imageUrl = URL.createObjectURL(selectedImage);
+    setProfileImage(imageUrl);
+  };
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -34,12 +73,245 @@ function AngleQuestPage({ onClose }) {
 
   const handleCloseModal = () => {
     setModalVisible(false);
-     onClose();
   };
 
-  const [fontsLoaded] = useFonts({
-    "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
-  });
+  const saveSelectedSupport = async (selectedText) => {
+    try {
+      await AsyncStorage.setItem('selectedSupport', selectedText);
+      console.log('Saved successfully:', selectedText);
+    } catch (error) {
+      console.error('Error saving to AsyncStorage:', error);
+    }
+  };
+  
+  const steps = [
+    {
+      heading: t(
+        "Orchestrate your team members performance and growth using these services...",
+      ),
+      content: (
+        <View>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=gcYV3SPHW03K&format=png&color=000000",
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  alignSelf: "center",
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+                Work Delivery Support
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  width: 250,
+                  marginTop: 5,
+                }}
+              >
+                Improve your employee's performance by 50% using AngleQuest Work
+                Delivery support to quickly deliver excellent result
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  saveSelectedSupport('Work Delivery Support');
+                  setCurrentStep(1);
+                  setIsStartPressed(true);
+                }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "column",
+                marginLeft: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=pF2OfcFGInLa&format=png&color=000000",
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  alignSelf: "center",
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+                Career Growth Support
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  width: 250,
+                  marginTop: 5,
+                }}
+              >
+                Provide hyper carerr growth support to your employees to gro
+                from a level to another in a specified time.
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  saveSelectedSupport('Career Growth Support');
+                  setCurrentStep(1);
+                   setIsStartPressed(true);
+                }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=GhVeCGvvJ9sM&format=png&color=000000",
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  alignSelf: "center",
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+                Work Delivery Support
+              </Text>
+              <Text
+                style={{
+                  fontSize: 26,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+                +
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+                Career Growth Support
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  saveSelectedSupport('Work Delivery Support and Career Growth Support');
+                  setCurrentStep(1);
+                   setIsStartPressed(true);
+                }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+        </View>
+      ),
+    },
+    {
+      heading: t("Onboard Employees"),
+      content: (
+        <View>
+          <Text style={styles.subHeading}>
+            {t("Create your members individually or simply upload an excel document to add all members at once.")}
+          </Text>
+          <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>
+          <View style={{flexDirection: 'column'}}>
+          <View style={styles.input}>
+            <input
+            type="file"
+            accept="image/*"
+            onChange={handleChooseImage}
+          />
+          </View>
+            <Text style={{fontSize: 14, color: 'grey', marginTop: 5, marginLeft: 10, textAlign: 'center'}}>{t("Upload employees List from excel")}</Text>
+          </View>
+
+            <View style={{flexDirection: 'column', marginLeft: 30}}>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
+            <Text style={styles.buttontextind}>{t("Add Employee")}</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: 14, color: 'grey',  marginTop: 5, marginLeft: 10, textAlign: 'center'}}>{t("Create Employees Individually")}</Text>
+            </View>
+        </View>
+        </View>
+      ),
+    },
+    {
+      heading: t("Non-Disclosure Agreement"),
+      content: (
+        <View style={styles.uploadContainer}>
+          <Text style={styles.subHeading2}>
+            {t("Upload Non-Disclosure Agreement to protect your employees")}
+          </Text>
+          <View style={styles.input}>
+            <input type="file" accept="image/*" onChange={handleChooseImage} />
+          </View>
+          <Text style={styles.uploadInfo}>
+            {t("Max File Size: 250MB, File type: pdf or word")}
+          </Text>
+          <TouchableOpacity style={styles.buttonsave}>
+            <Text style={styles.buttonsaveText}>{t("Save")}</Text>
+          </TouchableOpacity>
+          
+        </View>
+      ),
+    },
+  ];
 
   React.useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -50,9 +322,19 @@ function AngleQuestPage({ onClose }) {
   }, []);
 
   const services = [
-    { title: t("Professional Support"), description: t("We provide tailored professional support to help employees thrive in their current roles. From skill-building workshops to mentorship programs, our experts are here to empower your workforce.") },
-    { title: t("Career Transitions"), description: t("Our career transition services are designed to guide employees through changes in their career paths. Whether it's upskilling, reskilling, or preparing for a new opportunity, we've got it covered.") },
-    { title: t("Professional Support & Career Transition"), description: t("Why choose when you can have both? We offer a holistic approach that combines professional support and career transition to ensure your employees achieve their full potential.") },
+    {
+      title: t("Start"),
+      icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
+    },
+    {
+      title: t("Onboard Employees"),
+      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
+      visible: isStartPressed,
+    },
+    {
+      title: t("Non-Disclosure agreement"),
+      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
+    },
   ];
 
   return (
@@ -63,31 +345,41 @@ function AngleQuestPage({ onClose }) {
             <View style={styles.header}>
               <Image
                 source={{
-                  uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&',
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
                 }}
                 style={styles.logo}
               />
-              <Text style={styles.headerText}>{t("Welcome to AngleQuest")}</Text>
+              <Text style={styles.headerText}>
+                {t("Welcome to AngleQuest")}
+              </Text>
               <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>✕</Text>
               </TouchableOpacity>
             </View>
 
+            
+            <View style={styles.servicesContainer}>
+              {services.map((service, index) => (
+                // Only render services that are visible
+                service.visible !== false && (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      setCurrentStep(index);
+                      setIsStartPressed(true); // Set isStartPressed on press
+                    }}
+                  >
+                    <ServiceCard title={service.title} isStartPressed={isStartPressed} />
+                  </TouchableOpacity>
+                )
+              ))}
+            </View>
+
             <View style={styles.content}>
-              <Text style={styles.mainHeading}>{t("Empowering Your Employee's Career Journey")}</Text>
-              <Text style={styles.subHeading}>
-                {t("At AngleQuest, we provide tailored professional support & smooth career transitions for your employees. Work alongside industry leaders who understand your unique challenges and offer practical solutions.")}
+              <Text style={styles.mainHeading}>
+                {steps[currentStep].heading}
               </Text>
-
-              <View style={styles.servicesContainer}>
-                {services.map((service, index) => (
-                  <ServiceCard key={index} title={service.title} description={service.description} />
-                ))}
-              </View>
-
-              <TouchableOpacity onPress={handleOpenPress} style={styles.button}>
-                <Text style={styles.buttonText}>{t("Lets proceed!")}</Text>
-              </TouchableOpacity>
+              {steps[currentStep].content}
             </View>
             <Modal
               animationType="slide"
@@ -109,13 +401,12 @@ function AngleQuestPage({ onClose }) {
 const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   container: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     alignItems: "center",
   },
   overlay: {
@@ -125,7 +416,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   greenBox: {
-    width: "80%",
+    width: 1200,
     height: "90%",
     backgroundColor: "#F8F8F8",
     borderRadius: 15,
@@ -136,6 +427,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    backgroundColor: "white",
+    padding: 10,
   },
   logo: {
     width: 40,
@@ -161,70 +454,163 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   mainHeading: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "black",
+    color: "green",
     marginBottom: 10,
-
+    marginTop: 10,
   },
   subHeading: {
     fontSize: 16,
     textAlign: "center",
     color: "black",
     marginBottom: 30,
-    marginLeft: 100, marginRight: 100
+    marginLeft: 100,
+    marginRight: 100,
+  },
+  mainHeading2: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "green",
+    textAlign: "flex-start",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  subHeading2: {
+    fontSize: 16,
+    textAlign: "flex-start",
+    color: "black",
+    marginBottom: 30,
+    marginLeft: 10,
+    marginRight: 100,
   },
   servicesContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     flexWrap: "wrap",
   },
-  serviceCard: {
-    width: "47%",
-    padding: 15,
+  startPressed: {
+    width: 360,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 100,
     backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "lightgreen",
     borderRadius: 10,
     marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10,
     elevation: 5,
-    transition: "all 0.3s ease-in-out", // for web
+  },
+  serviceCard: {
+    width: 560,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 100,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "lightgreen",
+    borderRadius: 10,
+    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    elevation: 5,
+  },
+  icon: {
+    width: 25,
+    height: 25,
   },
   hoverCard: {
-    backgroundColor: "#206C00",
-    transform: [{ scale: 1.05 }],
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "darkgreen",
   },
   serviceTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#206C00",
-    transition: "all 0.3s ease-in-out", // for web
+    fontSize: 16,
+    textAlign: "center",
   },
   hoverTitle: {
-    color: "white",
-    fontSize: 20,
+    color: "black",
+    fontSize: 16,
   },
   serviceDescription: {
     fontSize: 14,
     color: "#3F5637",
-    transition: "all 0.3s ease-in-out", // for web
   },
   hoverDescription: {
     color: "white",
     fontSize: 16,
   },
+  uploadInfo: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "gray",
+    marginLeft: 10,
+  },
   button: {
-    backgroundColor: "coral",
-    padding: 10,
-    width: 150,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    width: 200,
     borderRadius: 5,
-    marginTop: 40,
+    marginTop: 30,
+    elevation: 5,
+  },
+  buttonsave: {
+    backgroundColor: "darkgreen",
+    padding: 10,
+    width: 100,
+    marginLeft: 10,
+    borderRadius: 5,
+    marginTop: 20,
     elevation: 5,
   },
   buttonText: {
-    color: "white",
-    fontSize: 16,
+    color: "black",
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  buttonsaveText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  input: {
+    height: 45,
+    width: 350,
+    backgroundColor: "white",
+    borderColor: "#206C00",
+    borderWidth: 1,
+    color: "black",
+    fontSize: 14,
+    marginLeft: 10,
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 20,
+  },
+  buttonind: {
+    backgroundColor: "white",
+    borderColor: "#206C00",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    padding: 10,
+    width: 350,
+    marginTop: 20,
+    marginLeft: 10,
+    height: 45,
+    borderRadius: 5,
+  },
+  buttontextind: {
+color: 'black',
+    textAlign: 'center'
   },
 });
 

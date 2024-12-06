@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
 import OpenModal from './AddEmployeeMan';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [ModalVisible, setModalVisible] = useState(false);
+  const [selectedSupport, setSelectedSupport] = useState('');
+
+  // Function to retrieve the selected support from AsyncStorage
+  const getSelectedSupport = async () => {
+    try {
+      const value = await AsyncStorage.getItem('selectedSupport');
+      if (value !== null) {
+        setSelectedSupport(value);
+      } else {
+        console.log('No value found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error retrieving from AsyncStorage:', error);
+    }
+  };
+
+  // Fetch the value on component mount
+  useEffect(() => {
+    getSelectedSupport();
+  }, []);
 
   const handleOpenPress = () => {
     setMainModalVisible(false);
@@ -83,14 +104,13 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Type of Service")}
                 </Text>
-                <Picker
-                  style={styles.picker}
-                >
-                  <Picker.Item label={t("Choose a service type")} value=" " />
-                  <Picker.Item label="Professional Support" value="Professional Support" />
-                  <Picker.Item label="Career Transitioning" value="Career Transitioning" />
-                  <Picker.Item label="Professional Support & Career Transitioning" value="Professional Support & Career Transitioning" />
-                </Picker>
+                <TextInput
+                  placeholder="Selected support"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={selectedSupport} // Display the retrieved value
+                  editable={false} // Make the input non-editable
+                />
                 
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Current role")}
