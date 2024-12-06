@@ -67,7 +67,7 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 15, textAlign: 'center'}}>
                   {t("Anglequest will attach your employee to an expert that will guide them from their current level of expertise to the next level of their career")}.
                 </Text>
-               
+
               </View>
               <View style={{ flexDirection: 'column' }}>
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
@@ -104,14 +104,14 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Type of Service")}
                 </Text>
-                <TextInput
-                  placeholder="Selected support"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={selectedSupport} // Display the retrieved value
-                  editable={false} // Make the input non-editable
-                />
-                
+                <Picker
+                  style={styles.picker}
+                >
+                  <Picker.Item label={t("Choose a service")} value="Pick an area of specialization" />
+                  <Picker.Item label="Work Delivery Support" value="Work Delivery Support" />
+                  <Picker.Item label="Career Growth Support" value="Career Growth Support" />
+                  <Picker.Item label="Work Delivery Support and Career Growth Support" value="Work Delivery Support and Career Growth Support" />
+                </Picker>
                 <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
                   {t("Current role")}
                 </Text>
@@ -141,7 +141,7 @@ function MyComponent({ onClose }) {
                   <Text style={styles.buttonTextplus}>{t("Save")}</Text>
                 </TouchableOpacity>
               </View>
-      
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -155,7 +155,7 @@ function MyComponent({ onClose }) {
           </View>
         </View>
 
-     
+
   );
 }
 

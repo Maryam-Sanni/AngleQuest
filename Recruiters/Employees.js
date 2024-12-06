@@ -1,334 +1,309 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList, ImageBackground, Image, Modal } from 'react-native';
+import { Button, Checkbox, Switch } from 'react-native-paper';
+import * as XLSX from 'xlsx';
+import * as DocumentPicker from 'expo-document-picker';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
-import CustomPercentageChart from '../components/PercentageChart';
-import ManageEmployees from './AssignManagers';
-import { useNavigate } from 'react-router-dom';
-import OpenModal from '../Recruiters/New Employee';
-import { BlurView } from 'expo-blur';
-import { useTranslation } from 'react-i18next';
+import OpenModal from './NewEmployee2';
 
-import {useFonts} from "expo-font"
-
-function MyComponent() {
-   const navigate = useNavigate();
-    const [isInterviewHovered, setIsInterviewHovered] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    
-    const handleOpenPress = () => {
-      setModalVisible(true);
-    };
+const EmployeePage = () => {
+  const [employees, setEmployees] = useState([
+    { id: 1, name: 'Patrick Oche', active: 'active', status: true, email: 'patrickking505@gmail.com', specialization: 'Microsoft', service: 'Work Delivery Support', current: 'senior', target: 'Solution Architect'  },
+    { id: 2, name: 'Aaliyah Badru', active: 'active', status: true, email: 'badruaaliyah@gmail.com', specialization: 'SAP', service: 'Work Delivery Support', current: 'Junior', target: 'Senior' },
+    { id: 3, name: 'Alex Brown', active: 'active', status: true, email: 'lexybrown@hotmail.com', specialization: 'Scrum', service: 'Career Growth Support', current: 'Junior', target: 'Intermediate' },
+    { id: 4, name: 'Raymond Gray', active: 'inactive', status: false, email: 'raymodgray636@gmail.com', specialization: 'Business Analysis', service: 'Work Delivery Support and Career Growth Support', current: 'Beginner', target: 'Junior' },
+    { id: 5, name: 'Mary Claire', active: 'active', status: true, email: 'mclaire2007@yahoo.com', specialization: 'Microsoft', service: 'Career Growth Support', current: 'senior', target: 'Manager' },
+  ]);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [ModalVisible, setModalVisible] = useState(false);
   
-    const handleCloseModal = () => {
-      setModalVisible(false);
-    };
+  // Toggles employee selection
+  const toggleSelectEmployee = (id) => {
+    if (selectedEmployees.includes(id)) {
+      setSelectedEmployees(selectedEmployees.filter((empId) => empId !== id));
+    } else {
+      setSelectedEmployees([...selectedEmployees, id]);
+    }
+  };
+
+  // Toggles employee status
+  const toggleStatus = (id) => {
+    setEmployees((prev) =>
+      prev.map((emp) =>
+        emp.id === id
+          ? { ...emp, status: !emp.status, active: emp.status ? 'inactive' : 'active' }
+          : emp
+      )
+    );
+  };
+
+  // Export to Excel
+  const exportToExcel = async () => {
+    try {
+      // Convert employees data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(employees);
+
+      // Create a workbook and append the worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
+
+      // Write the workbook to binary string
+      const excelData = XLSX.write(workbook, { type: 'binary', bookType: 'xlsx' });
+
+      // Convert binary string to a Blob
+      const blob = new Blob(
+        [new Uint8Array(excelData.split('').map((char) => char.charCodeAt(0)))],
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+
+      // Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'employees.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      alert('Failed to export data.');
+    }
+  };
+
+  // Import from Excel (example, needs implementation)
+  const importFromExcel = async () => {
+    try {
+      // Open a document picker
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'],
+      });
+
+      if (result.type === 'success') {
+        const fileUri = result.uri;
+
+        // Read the file
+        const fileData = await FileSystem.readAsStringAsync(fileUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        // Parse the Excel file
+        const workbook = XLSX.read(fileData, { type: 'base64' });
+        const sheetName = workbook.SheetNames[0]; // Use the first sheet
+        const worksheet = workbook.Sheets[sheetName];
+
+        // Convert the worksheet to JSON
+        const data = XLSX.utils.sheet_to_json(worksheet);
+
+        // Update state with imported data
+        console.log('Imported data:', data);
+        setEmployees(data);
+        alert('Data imported successfully!');
+      } else {
+        alert('No file selected.');
+      }
+    } catch (error) {
+      console.error('Error importing from Excel:', error);
+      alert('Failed to import data.');
+    }
+  };
+
+  // Delete selected employees
+  const deleteEmployees = () => {
+    setEmployees(employees.filter((emp) => !selectedEmployees.includes(emp.id)));
+    setSelectedEmployees([]);
+  };
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   
-    const goToTeams = () => {
-    navigate('/teams');
-    };
-
-    
-  const [fontsLoaded]=useFonts({
-    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
-  })
-  const {t}=useTranslation()
-
   return (
     <ImageBackground
-    source={require ('../assets/Background.png') }
-  style={{ height: '150%', width: '100%',flex: 1}}
->
-    <View style={{ flex: 1 }}>
-      <Topbar />
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        <Sidebar />
-        <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-        <View style={{ marginLeft: 270}}>
-          <View style={styles.header}>
-          <TouchableHighlight>
-                                <View style={styles.item}>
-                                <Image
-  source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/fa3093fa6656295c8b39535a911908d6555a356fccce78af145fec472c4bd154?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-  style={styles.image}
-/>
-                                    <Text style={[styles.headertext, isInterviewHovered && { color: 'coral' }]}>{t("Manage Employees")}</Text>
-                                </View>
-                            </TouchableHighlight>
-                            <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ position: 'absolute', right: 30, paddingHorizontal: 8, paddingVertical: 8, borderRadius: 5, backgroundColor: 'coral', width: 100, alignItems: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
-                  </View>
-     </TouchableOpacity>
-                        </View>
+    source={require ('../assets/backgroundimg2.png') }
+    style={{ height: '100%', width: '100%',flex: 1}}
+    >
+    <View style={{ flex: 1}}>
+    <Topbar />
+    <View style={{ flexDirection: 'row', flex: 1  }}>
+      <Sidebar />
+    <View style={styles.container}>
+      {/* Header Section */}
+      <View style={styles.header}>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={handleOpenPress}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>New</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={deleteEmployees}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=14237&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Delete</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={() => alert('Page refreshed')}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=59872&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Refresh</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={exportToExcel}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=BEMhRoRy403e&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Export to Excel</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={importFromExcel}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=BEMhRoRy403e&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Import from Excel</Button>
+      </View>
+      
+      {/* Employee Table */}
+      <ScrollView style={styles.tableContainer}>
+        <View style={styles.tableHeader}>
+          <Text style={[styles.headerCell, {flex: 0 }]}><Checkbox
+            color="#4CAF50"
+          /></Text>
+          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Status</Text>
+          <Text style={[styles.headerCell, {marginLeft: -50 }]}>Full Name</Text>
+          <Text style={[styles.headerCell, {marginLeft: -50 }]}>Email Address</Text>
+          <Text style={styles.headerCell}>Specialization</Text>
+          <Text style={styles.headerCell}>Current Role</Text>
+          <Text style={styles.headerCell}>Target Role</Text>
+          <Text style={styles.headerCell}>Service</Text>
+          <Text style={[styles.headerCell, {flex: 0 }]}><Switch
+               color="green"
+             /></Text>
+        </View>
+         <View style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginTop: 10 }} />
+        <FlatList
+          data={employees}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.tableRow}>
+              <Checkbox
+                status={selectedEmployees.includes(item.id) ? 'checked' : 'unchecked'}
+                onPress={() => toggleSelectEmployee(item.id)}
+                color="#4CAF50"
+              />
+               <Text style={[styles.cell, {marginLeft: 30 }]}>{item.active}</Text>
+              <Text style={[styles.cell, {marginLeft: -50 }]}>{item.name}</Text>
+              <Text style={[styles.cell, {marginLeft: -50 }]}>{item.email}</Text>
+              <Text style={styles.cell}>{item.specialization}</Text>
+              <Text style={styles.cell}>{item.current}</Text>
+              <Text style={styles.cell}>{item.target}</Text>
+              <Text style={styles.cell}>{item.service}</Text>
 
-     <View style={{flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
-     <View style={styles.container}>
-     <View style={styles.BoxesContainer}>
-      <View style={styles.box2}>
-      <BlurView intensity={100} style={styles.blurBackground}>
-      <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>{t("Onboard a new employee for a career hyper boost")}</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 10, marginRight: 150, color: 'white',fontFamily:"Roboto-Light" }}>{t("Assign each employee to a manager who will oversee their daily tasks and career development, while Recruitangle will assign subject matter experts to tutor and guide the growth of employees.")}</Text>
-     <View style={{flexDirection: 'row'}}>
-     <Image source={require('../assets/23.png')} style={styles.boximage} />
-      </View>
-      <View style={{flexDirection: 'row', marginTop: 10}}>
-        <TouchableOpacity>
-      <Image source={require('../assets/25.png')} style={styles.icon} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleOpenPress}>
-     <Image source={require('../assets/26.png')} style={styles.icon} />
-     </TouchableOpacity>
-      </View>
-      </BlurView>
-      </View>
-
-      <ManageEmployees />
-</View>
-
-      <View style={styles.BoxesContainer}>
-      <View style={styles.box}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>{t("Stats")}</Text>
-      <View style={{flexDirection: 'row'}}>
-      <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Growth Plan")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>5</Text>
-                  </View>
-</View>
-<View style={{flexDirection: 'column', position: 'absolute', right: 10}}>
-<Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Hub Sessions")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>20</Text>
-                  </View>
-                  </View>
-      </View>
-     
-      <View style={{flexDirection: 'row', marginTop: 10}}>
-      <View style={{flexDirection: 'column'}}>
-      <Text style={{ marginTop: 10, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Advice Sessions")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>7</Text>
-                  </View>
-</View>
-<View style={{flexDirection: 'column', position: 'absolute', right: 20}}>
-<Text style={{ marginTop: 10, color: 'white',fontFamily:"Roboto-Light"}}>{t("Reviews")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginTop: 5, backgroundColor: '#F2F2F2', width: 70, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>13</Text>
-                  </View>
-                  </View>
-      </View>
-      <View style={{borderWidth: 1, borderColor: '#63EC55', marginTop: 25,}}>
-      <Text style={{fontSize: 18, color: '#63EC55', marginTop: 10, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Angle Badge")}</Text>
-          <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 14, marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20, color: 'white',fontFamily:"Roboto-Light"  }}>{t("This is the combined progress of your team")}</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
-      <CustomPercentageChart percentage={45} />
-      </View>
-      </View>
-</View>
-
-      </View>
-      <View style={styles.box3}>
-      <View style={{flexDirection: 'row', marginTop: 10}}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>{t("Teams")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',}}>5</Text>
-                  </View>
-      </View>
-      <Text style={{fontSize: 14, marginTop: 5, marginLeft: 10, color: 'white',fontFamily:"Roboto-Light" }}>{t("Create new teams and manage previously created teams.")}</Text>
-      <TouchableOpacity onPress={goToTeams}
-          style={[
-            styles.touchablecoach,
-            isHovered && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          >
-          <Text style={styles.touchableTextcoach}>{t("Manage Teams")}</Text>
-          </TouchableOpacity>
-      </View>
-      <View style={styles.box3}>
-      <View style={{flexDirection: 'row', marginTop: 10,}}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10, marginLeft: 10, color: '#63EC55',fontFamily:"Roboto-Light"}}>{t("Members")}</Text>
-      <View style={{ justifyContent: "center", paddingHorizontal: 7, paddingVertical: 7, marginLeft: 10, marginTop: 5, backgroundColor: '#F2F2F2', width: 40, height: 40, borderRadius: 35, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 16, color: "grey", alignText: 'center',fontFamily:"Roboto-Light"}}>20</Text>
-                  </View>
-      </View>
-      <View style={{flexDirection: 'row', marginTop: 20, marginLeft: 10 }}>
-      <Image source={require('../assets/useravatar4.png')}
-              style={{ width: 40, height: 40, marginTop: 7, borderRadius: 25}}
-            />
-             <Image source={require('../assets/useravatar2.png')}
-              style={{ width: 40, height: 40,  marginLeft: -2, marginTop: 7, borderRadius: 25}}
-            />
-            <Image source={require('../assets/useravatar.jpg')}
-              style={{ width: 40, height: 40, marginLeft: -2, marginTop: 7, borderRadius: 25}}
-            />
-            <Image source={require('../assets/useravatar1.png')}
-              style={{ width: 40, height: 40,  marginLeft: -2, marginTop: 7, borderRadius: 25}}
-            />
-           <Image source={require('../assets/useravatar5.jpg')}
-              style={{ width: 40, height: 40, marginLeft: -2, marginTop: 7, borderRadius: 25}}
-            />
+              <Switch
+                value={item.status}
+                onValueChange={() => toggleStatus(item.id)}
+                color="green"
+              />
             </View>
-      </View>
-      </View>
-      </View>
-
-
-
-
-    </View>
-
- <Modal
+          )}
+        />
+      </ScrollView>
+      <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={ModalVisible}
         onRequestClose={handleCloseModal}
       >
-          <View style={styles.modalContent}>
-          <OpenModal onClose={() => handleCloseModal()} />
-          </View>
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
       </Modal>
-
-
-</View>
-          
-          
-        </ScrollView>
-      </View>
+    </View>
+    </View>
     </View>
     </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  header: {
-    marginLeft: -60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'space-between',
-    backgroundColor: '#f7fff4',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  headertext: {
-    marginLeft: 5,
-    fontSize: 14,
-    fontWeight: '500',
-    marginTop: 5,
-    color: '#666',
-    fontFamily:"Roboto-Light"
-  },
-  image: {
-    width: 21,
-    height: 21,
-    marginRight: 5,
-    marginTop: 5,
-    marginLeft: 100
-  },
-  icon: {
-    width: 25,
-    height: 25,
-    marginRight: 5,
-    marginTop: 5,
-    marginLeft: 10
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: 'white',
+    marginLeft: 210
+  },
+  header: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginLeft: 40, marginRight: 50, marginTop: 50, marginBottom: 20,
-  },
-  BoxesContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-  },
-  box: {
-    backgroundColor: 'rgba(125,125,125,0.3)',
-    marginLeft: 20,
     padding: 10,
-    borderRadius: 20,
-    width: 280,
-    height: 360,
-    borderWidth: 1, borderColor: 'rgba(225,225,212,0.3)',
-  },
-  box2: {
-    backgroundColor: 'rgba(125,125,125,0.3)',
-    borderRadius: 20,
-    width: 750,
-    height: 180,
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.5)',
-  },
-  box3: {
-    backgroundColor: 'rgba(125,125,125,0.3)',
-    marginLeft: 20,
-    marginTop: 20,
-    padding: 10,
-    borderRadius: 20,
-    width: 280,
-    height: 180,
-    marginTop: 30,
-    borderWidth: 1, borderColor: 'rgba(225,225,212,0.3)',
-  },
-  boximage: {
-    width: 120,
-    height: 120,
-   position: 'absolute',
-   right: 20,
-   marginTop: -100
-  },
-  boximage2: {
-    width: 30,
-    height: 30,
-    position: 'absolute',
-    left: 350,
-    marginTop:5, 
-    borderRadius: 25
-  },
-  blurBackground: {
-    flex: 1, 
-    borderRadius: 20, 
-    padding: 10,
-  },
-  touchablecoach: {
-    backgroundColor: 'rgba(200,200,125,0.3)',
-    padding: 8,
-    paddingHorizontal: 5, 
-    marginTop: 25,
-    marginLeft: 30,
-    marginRight: 20,
-    borderRadius: 10,
+    marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+      shadowOffset: { width: 0, height: 2, }, 
+      shadowOpacity: 0.25, 
+      shadowRadius: 3.84,
+       elevation: 5, 
   },
-  touchableTextcoach: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 13,
-    fontFamily:"Roboto-Light"
+  tableContainer: {
+    flex: 1,
+    marginTop: 16,
   },
-  touchableOpacityHovered: {
-    backgroundColor: 'coral'
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 8,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    alignItems: 'center',
+  },
+  headerCell: {
+    fontWeight: 'bold',
+    textAlign: 'flex-start',
+    flex: 1,
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'flex-start',
+  },
+  button: {
+    borderRightWidth: 1, 
+    borderColor: '#000000',
+    paddingHorizontal: 10,
   },
 });
 
-export default MyComponent;
+export default EmployeePage;

@@ -15,8 +15,9 @@ import { useTranslation } from "react-i18next";
 import OpenModal from './New Employee';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ServiceCard({ title, description, isStartPressed }) {
+function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
   const [isHovered, setIsHovered] = useState(false);
+  const isActive = activeCard === title; // Check if the card is active
 
     // Create an animated value for width
     const animatedWidth = new Animated.Value(isStartPressed ? 360 : 560); // Adjust initial width
@@ -34,13 +35,18 @@ function ServiceCard({ title, description, isStartPressed }) {
       <Animated.View
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={[
-          styles.serviceCard,
-          isHovered && styles.hoverCard,
+          style={[
+            styles.serviceCard,
+            (isHovered || isActive) && styles.hoverCard, 
           { width: animatedWidth }, // Apply animated width
         ]}
       >
-        <Text style={[styles.serviceTitle, isHovered && styles.hoverTitle]}>
+        <Text
+          style={[
+            styles.serviceTitle,
+            (isHovered || isActive) && styles.hoverTitle, // Apply hoverTitle for hover or active
+          ]}
+        >
           {title}
         </Text>
         <Text style={[styles.serviceDescription, isHovered && styles.hoverDescription]}>
@@ -56,6 +62,7 @@ function AngleQuestPage({ onClose }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
+  const [activeCard, setActiveCard] = useState('Start');
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -126,6 +133,7 @@ function AngleQuestPage({ onClose }) {
                   fontSize: 14,
                   textAlign: "center",
                   width: 250,
+                  height: 70,
                   marginTop: 5,
                 }}
               >
@@ -137,6 +145,7 @@ function AngleQuestPage({ onClose }) {
                   saveSelectedSupport('Work Delivery Support');
                   setCurrentStep(1);
                   setIsStartPressed(true);
+                   setActiveCard('Onboard Employees');
                 }}
                 style={styles.button}
               >
@@ -150,6 +159,7 @@ function AngleQuestPage({ onClose }) {
                 marginLeft: 10,
                 justifyContent: "center",
                 alignItems: "center",
+                
               }}
             >
               <Image
@@ -179,10 +189,11 @@ function AngleQuestPage({ onClose }) {
                   fontSize: 14,
                   textAlign: "center",
                   width: 250,
+                   height: 70,
                   marginTop: 5,
                 }}
               >
-                Provide hyper carerr growth support to your employees to gro
+                Provide hyper career growth support to your employees to grow
                 from a level to another in a specified time.
               </Text>
               <TouchableOpacity
@@ -190,6 +201,7 @@ function AngleQuestPage({ onClose }) {
                   saveSelectedSupport('Career Growth Support');
                   setCurrentStep(1);
                    setIsStartPressed(true);
+                  setActiveCard('Onboard Employees');
                 }}
                 style={styles.button}
               >
@@ -242,6 +254,7 @@ function AngleQuestPage({ onClose }) {
                   fontWeight: 600,
                   textAlign: "center",
                   width: 300,
+                   height: 45,
                 }}
               >
                 Career Growth Support
@@ -251,6 +264,7 @@ function AngleQuestPage({ onClose }) {
                   saveSelectedSupport('Work Delivery Support and Career Growth Support');
                   setCurrentStep(1);
                    setIsStartPressed(true);
+                  setActiveCard('Onboard Employees');
                 }}
                 style={styles.button}
               >
@@ -292,9 +306,12 @@ function AngleQuestPage({ onClose }) {
       ),
     },
     {
-      heading: t("Non-Disclosure Agreement"),
+      heading: t(" "),
       content: (
         <View style={styles.uploadContainer}>
+          <Text style={styles.mainHeading2}>
+            {t("Non-Disclosure Agreement")}
+          </Text>
           <Text style={styles.subHeading2}>
             {t("Upload Non-Disclosure Agreement to protect your employees")}
           </Text>
@@ -307,7 +324,9 @@ function AngleQuestPage({ onClose }) {
           <TouchableOpacity style={styles.buttonsave}>
             <Text style={styles.buttonsaveText}>{t("Save")}</Text>
           </TouchableOpacity>
-          
+          <TouchableOpacity style={styles.buttondone}>
+            <Text style={styles.buttonsaveText}>{t("Submit")}</Text>
+          </TouchableOpacity>
         </View>
       ),
     },
@@ -366,10 +385,12 @@ function AngleQuestPage({ onClose }) {
                     key={index}
                     onPress={() => {
                       setCurrentStep(index);
-                      setIsStartPressed(true); // Set isStartPressed on press
+                      setActiveCard(service.title); 
                     }}
                   >
-                    <ServiceCard title={service.title} isStartPressed={isStartPressed} />
+                    <ServiceCard title={service.title} isStartPressed={isStartPressed} 
+                      activeCard={activeCard}
+                      setActiveCard={setActiveCard}/>
                   </TouchableOpacity>
                 )
               ))}
@@ -474,7 +495,7 @@ const styles = StyleSheet.create({
     color: "green",
     textAlign: "flex-start",
     marginBottom: 10,
-    marginTop: 10,
+    marginLeft: 10,
   },
   subHeading2: {
     fontSize: 16,
@@ -568,6 +589,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 5,
     marginTop: 20,
+    elevation: 5,
+  },
+  buttondone: {
+    backgroundColor: "coral",
+    padding: 10,
+    width: 100,
+    marginLeft: 1000,
+    borderRadius: 5,
+    marginTop: 100,
     elevation: 5,
   },
   buttonText: {
