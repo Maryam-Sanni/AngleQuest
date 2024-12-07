@@ -61,10 +61,10 @@ function MyComponent({ onClose }) {
 
 
               <View style={{ flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5, textAlign: 'center' }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5, textAlign: 'flex-start' }}>
                   {t("Onboard a New Employee")}
                 </Text>
-                <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 15, textAlign: 'center'}}>
+                <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 15, textAlign: 'flex-start'}}>
                   {t("Anglequest will attach your employee to an expert that will guide them from their current level of expertise to the next level of their career")}.
                 </Text>
                
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'coral',
     padding: 10,
     marginTop: 30,
-    marginLeft: 450,
+    marginLeft: 850,
     width: 100,
     paddingHorizontal: 20,
     borderRadius: 5,

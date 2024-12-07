@@ -1,45 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { Checkbox } from 'react-native-paper';
 import OpenModal from './New Employee';
-import OpenModal2 from './New Manager';
-import OpenModal3 from './New Coach';
-import { useFonts } from 'expo-font';
-import { useTranslation } from 'react-i18next';
 
-function MyComponent({ onClose }) {
-  const [mainModalVisible, setMainModalVisible] = useState(true);
+function BulkUploadModal({ onClose }) {
+  const [isBulkUpload, setIsBulkUpload] = useState(null);
   const [ModalVisible, setModalVisible] = useState(false);
-  const [ModalVisible2, setModalVisible2] = useState(false);
-  const [ModalVisible3, setModalVisible3] = useState(false);
 
-  const handleOpenPress = () => {
-    setMainModalVisible(false);
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    onClose();
-  };
-
-  const handleOpenPress2 = () => {
-    setMainModalVisible(false);
-    setModalVisible2(true);
-  };
-
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
-    onClose();
-  };
-
-  const handleOpenPress3 = () => {
-    setMainModalVisible(false);
-    setModalVisible3(true);
-  };
-
-  const handleCloseModal3 = () => {
-    setModalVisible3(false);
-    onClose();
+  const handleBulkUploadChoice = (choice) => {
+    setIsBulkUpload(choice);
   };
 
   const handleChooseImage = (event) => {
@@ -47,213 +16,195 @@ function MyComponent({ onClose }) {
     const imageUrl = URL.createObjectURL(selectedImage);
     setProfileImage(imageUrl);
   };
-  const [fontsLoaded]=useFonts({
-    "Roboto-Light":require("../assets/fonts/Roboto-Light.ttf")
-  })
-const {t}=useTranslation()
-  return (
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
-          <View style={styles.greenBox}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
-            <View style={styles.header}>
-              <Image
-                source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                style={styles.logo}
-              />
-              <Text style={styles.headerText}>{t("Add members")}</Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
-                  ✕
-                </Text>
-              </TouchableOpacity>
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
+  const renderOptions = () => {
+    if (isBulkUpload === true) {
+      return (
+        <View style={styles.optionsContainer}>
+          <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>
+            <View style={{flexDirection: 'column'}}>
+            <View style={styles.input}>
+              <input
+              type="file"
+              accept="image/*"
+              onChange={handleChooseImage}
+            />
+            </View>
+              <Text style={{fontSize: 14, color: 'grey', marginTop: 5, textAlign: 'center', width: '80%',}}>Upload employees List from excel</Text>
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5,fontFamily:"Roboto-Light"}}>
-                  {t("Onboard your members")}
-                </Text>
-                <Text style={{ fontSize: 14, marginTop: 10, marginBottom: 15, width: 400 }}>
-               {t("Create your members individually or simply upload an excel document to add all members at once.")}
-                </Text>
-                <Image
-                  source={require('../assets/EmployeeName.png')}
-                  style={styles.image}
-                />
+              <View style={{flexDirection: 'column', marginLeft: 30}}>
+            <TouchableOpacity style={styles.buttonind}>
+              <Text style={styles.buttontextind}>View Template</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 14, color: 'grey',  marginTop: 5, textAlign: 'center'}}>View Template for bulk upload</Text>
               </View>
-              <View style={{ flexDirection: 'column', marginTop: 100 }}>
-                <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5,fontFamily:"Roboto-Light" }}>
-                  {t("Upload employees List from excel")}
-                </Text> 
-                <View style={{ flexDirection: 'row' }}>
-                <View style={styles.input}>
-                <input
-                type="file"
-                accept="image/*"
-                onChange={handleChooseImage}
-              />
-              </View>
-              <TouchableOpacity>
-    <View style={{ marginLeft: 10, marginTop: 5, height: 45, borderRadius: 5, backgroundColor: 'white', borderWidth: 1, borderColor: '#206C00', width: 130, justifyContent: 'center', alignContent:  'center', alignItems: 'center'}}>
-                    <Text style={{ fontSize: 13, color: 'black', alignText: 'center', fontWeight: '500',fontFamily:"Roboto-Light" }}>{t("Download Format")}</Text>
-                  </View>
-     </TouchableOpacity>
-              
-              </View>
- <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
-                  <Text style={styles.buttonTextplus}>{t("Create Employees Individually")}</Text>
-                </TouchableOpacity>
-                
-                
- 
-
-               
-
-               
-
-                <TouchableOpacity onPress={handleCloseModal} style={styles.buttonplus}>
-                  <Text style={styles.buttonTextplus}>{t("Save & Continue Later")}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={ModalVisible}
-              onRequestClose={handleCloseModal}
-            >
-              <View style={styles.modalContent}>
-                <OpenModal onClose={handleCloseModal} />
-              </View>
-            </Modal>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={ModalVisible2}
-              onRequestClose={handleCloseModal2}
-            >
-              <View style={styles.modalContent}>
-                <OpenModal2 onClose={handleCloseModal2} />
-              </View>
-            </Modal>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={ModalVisible3}
-              onRequestClose={handleCloseModal3}
-            >
-              <View style={styles.modalContent}>
-                <OpenModal3 onClose={handleCloseModal3} />
-              </View>
-              </Modal>
-            </ScrollView>
           </View>
         </View>
-    
+      );
+    } else if (isBulkUpload === false) {
+      return (
+        <View style={{flexDirection: 'column', marginTop: 30}}>
+          <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
+            <Text style={styles.buttontextind}>New Employee</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: 14, color: 'grey',  marginTop: 5, textAlign: 'center'}}>Create employees individually</Text>
+            </View>
+      );
+    }
+    return null;
+  };
 
-     
-
+  return (
+    <View style={styles.modalContainer}>
+      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+        <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>
+          ✕
+        </Text>
+      </TouchableOpacity>
+      <Text style={styles.questionText}>Create your members individually or simply upload an excel document to add all members at once.</Text>
+      <Text style={{fontSize: 16}}>Do you want to bulk upload employees?</Text>
+      <View style={styles.checkboxContainer}>
+         <View style={{flexDirection: 'row'}}>
+        <Checkbox
+          status={isBulkUpload === true ? 'checked' : 'unchecked'}
+          onPress={() => handleBulkUploadChoice(true)}
+          color="#4CAF50"
+        />
+        <Text style={styles.checkboxLabel}>Yes</Text>
+         </View>
+        <View style={{flexDirection: 'row', marginTop: 10}}>
+        <Checkbox
+          status={isBulkUpload === false ? 'checked' : 'unchecked'}
+          onPress={() => handleBulkUploadChoice(false)}
+          color="#4CAF50"
+        />
+        <Text style={styles.checkboxLabel}>No</Text>
+        </View>
+      </View>
+      {renderOptions()}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    width: 600,
+    height: '60%',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    elevation: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
-  container: {
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: '#CCC',
-    marginRight: 70,
-    marginTop: 20,
-    marginLeft: 50,
-  },
-  greenBox: {
-    width: 1000,
-    height: "100%",
-    backgroundColor: '#F8F8F8',
-  },
-  picker: {
-    height: 40,
-    width: 450,
-    backgroundColor: 'white',
-    borderColor: '#206C00',
-    borderWidth: 1,
-    color: 'black',
-    fontSize: 14,
-    marginLeft: 50,
-    borderRadius: 5,
-  },
-  buttonplus: {
-    backgroundColor: 'coral',
-    padding: 10,
-    marginTop: 30,
-     width: 450,
-    marginLeft: 50,
-    alignSelf: 'center',
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonTextplus: {
-    color: 'white',
-    fontSize: 14,
+  questionText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
     textAlign: 'center',
-    fontFamily:"Roboto-Light"
+    marginTop: 20
   },
-  buttonind: {
-    backgroundColor: 'grey',
+  checkboxContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-around',
+    width: '80%',
+    marginBottom: 20,
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    color: '#206C00',
+    marginTop: 10
+  },
+  optionsContainer: {
+    marginTop: 20,
+  },
+  optionButton: {
     padding: 10,
-    marginTop: 15,
-    width: 450,
-    marginLeft: 50,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  input: {
-    height: 45,
-    width: 310,
-    backgroundColor: 'white',
-    borderColor: '#206C00',
     borderWidth: 1,
-    color: 'black',
-    fontSize: 14,
-    marginLeft: 50,
+    borderColor: '#206C00',
     borderRadius: 5,
-    padding: 10,
-    marginTop: 5
+    backgroundColor: 'white',
+    marginBottom: 10,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#206C00',
   },
   closeButton: {
     position: 'absolute',
     top: 20,
     right: 20,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
-    marginBottom: 20,
+  uploadInfo: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "gray",
+    marginLeft: 10,
   },
-  logo: {
-    width: 40,
+  button: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    width: 200,
+    borderRadius: 5,
+    marginTop: 30,
+    elevation: 5,
+  },
+  input: {
     height: 40,
-    marginRight: 10,
+    width: '80%',
+    backgroundColor: 'white',
+    borderColor: '#206C00',
+    borderWidth: 1,
+    color: 'black',
+    fontSize: 14,
+    borderRadius: 5,
+    padding: 10,
   },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#3F5637',
+  buttonind: {
+    backgroundColor: "white",
+    borderColor: "#206C00",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    padding: 10,
+    width: '80%',
+    marginLeft: 10,
+    height: 45,
+    borderRadius: 5,
   },
-  image: {
-    width: 400,
-    height: 400,
-    marginRight: 30,
+  buttontextind: {
+  color: 'black',
+    textAlign: 'center'
   },
 });
 
-export default MyComponent;
+export default BulkUploadModal;

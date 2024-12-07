@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
-import OpenModal from './New Employee';
+import OpenModal from './IndividualorList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
@@ -37,8 +37,7 @@ function ServiceCard({ title, description, isStartPressed, activeCard, setActive
         onMouseLeave={() => setIsHovered(false)}
           style={[
             styles.serviceCard,
-            (isHovered || isActive) && styles.hoverCard, 
-          { width: animatedWidth }, // Apply animated width
+            (isHovered || isActive) && styles.hoverCard
         ]}
       >
         <Text
@@ -48,9 +47,6 @@ function ServiceCard({ title, description, isStartPressed, activeCard, setActive
           ]}
         >
           {title}
-        </Text>
-        <Text style={[styles.serviceDescription, isHovered && styles.hoverDescription]}>
-          {description}
         </Text>
       </Animated.View>
   );
@@ -62,7 +58,7 @@ function AngleQuestPage({ onClose }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
-  const [activeCard, setActiveCard] = useState('Start');
+  const [activeCard, setActiveCard] = useState('Subscriptions');
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -111,8 +107,8 @@ function AngleQuestPage({ onClose }) {
                   uri: "https://img.icons8.com/?size=100&id=gcYV3SPHW03K&format=png&color=000000",
                 }}
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   marginTop: 20,
                   marginBottom: 5,
                   alignSelf: "center",
@@ -143,13 +139,12 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Work Delivery Support');
-                  setCurrentStep(1);
-                  setIsStartPressed(true);
-                   setActiveCard('Onboard Employees');
+                   setCurrentStep(0);
+                  handleOpenPress();
                 }}
                 style={styles.button}
               >
-                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+                <Text style={styles.buttonText}>{t('Subscribe Employee')}</Text>
               </TouchableOpacity>
             </View>
 
@@ -167,8 +162,8 @@ function AngleQuestPage({ onClose }) {
                   uri: "https://img.icons8.com/?size=100&id=pF2OfcFGInLa&format=png&color=000000",
                 }}
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   marginTop: 20,
                   marginBottom: 5,
                   alignSelf: "center",
@@ -199,13 +194,12 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Career Growth Support');
-                  setCurrentStep(1);
-                   setIsStartPressed(true);
-                  setActiveCard('Onboard Employees');
+                   setCurrentStep(0);
+                  handleOpenPress();
                 }}
                 style={styles.button}
               >
-                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+                <Text style={styles.buttonText}>{t('Subscribe Employee')}</Text>
               </TouchableOpacity>
             </View>
 
@@ -221,8 +215,8 @@ function AngleQuestPage({ onClose }) {
                   uri: "https://img.icons8.com/?size=100&id=GhVeCGvvJ9sM&format=png&color=000000",
                 }}
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   marginTop: 20,
                   marginBottom: 5,
                   alignSelf: "center",
@@ -262,13 +256,12 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Work Delivery Support and Career Growth Support');
-                  setCurrentStep(1);
-                   setIsStartPressed(true);
-                  setActiveCard('Onboard Employees');
+                  setCurrentStep(0);
+                  handleOpenPress();
                 }}
                 style={styles.button}
               >
-                <Text style={styles.buttonText}>{t('Onboard Employee')}</Text>
+                <Text style={styles.buttonText}>{t('Subscribe Employee')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -325,7 +318,7 @@ function AngleQuestPage({ onClose }) {
             <Text style={styles.buttonsaveText}>{t("Save")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttondone}>
-            <Text style={styles.buttonsaveText}>{t("Submit")}</Text>
+            <Text style={styles.buttonsaveText2}>{t("Submit")}</Text>
           </TouchableOpacity>
         </View>
       ),
@@ -342,7 +335,7 @@ function AngleQuestPage({ onClose }) {
 
   const services = [
     {
-      title: t("Start"),
+      title: t("Subscriptions"),
       icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
     },
     {
@@ -358,23 +351,23 @@ function AngleQuestPage({ onClose }) {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
         <View style={styles.greenBox}>
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
+              }}
+              style={styles.logo}
+            />
+            <Text style={styles.headerText}>
+              {t("Set up and Subscriptions")}
+            </Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>✕</Text>
+            </TouchableOpacity>
+          </View>
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
-            <View style={styles.header}>
-              <Image
-                source={{
-                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                }}
-                style={styles.logo}
-              />
-              <Text style={styles.headerText}>
-                {t("Welcome to AngleQuest")}
-              </Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>✕</Text>
-              </TouchableOpacity>
-            </View>
+            
 
             
             <View style={styles.servicesContainer}>
@@ -414,7 +407,6 @@ function AngleQuestPage({ onClose }) {
             </Modal>
           </ScrollView>
         </View>
-      </Animated.View>
     </View>
   );
 }
@@ -429,6 +421,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    marginTop: 40,
   },
   overlay: {
     flex: 1,
@@ -441,15 +434,16 @@ const styles = StyleSheet.create({
     height: "90%",
     backgroundColor: "#F8F8F8",
     borderRadius: 15,
-    padding: 20,
     elevation: 10,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    backgroundColor: "white",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20,
   },
   logo: {
     width: 40,
@@ -507,8 +501,16 @@ const styles = StyleSheet.create({
   },
   servicesContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
+    padding: 10,
+    marginLeft: 20,
+    marginRight: 20,
+     backgroundColor: "white",
+    marginBottom: 10,
+    shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2, }, 
+      shadowOpacity: 0.25, 
+      shadowRadius: 3.84,
+       elevation: 5, 
   },
   startPressed: {
     width: 360,
@@ -526,16 +528,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   serviceCard: {
-    width: 560,
-    padding: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
     justifyContent: "center",
     alignItems: "center",
-    height: 100,
     backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "lightgreen",
-    borderRadius: 10,
-    marginBottom: 20,
+    borderRadius: 30,
     marginLeft: 10,
     marginRight: 10,
     elevation: 5,
@@ -545,17 +543,16 @@ const styles = StyleSheet.create({
     height: 25,
   },
   hoverCard: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "darkgreen",
+    backgroundColor: "rgba(128, 128, 128, 0.1)",
+borderRadius: 30
   },
   serviceTitle: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
   },
   hoverTitle: {
     color: "black",
-    fontSize: 16,
+    fontSize: 14,
   },
   serviceDescription: {
     fontSize: 14,
@@ -592,7 +589,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttondone: {
-    backgroundColor: "coral",
+    backgroundColor: "#F8F8F8",
     padding: 10,
     width: 100,
     marginLeft: 1000,
@@ -608,6 +605,12 @@ const styles = StyleSheet.create({
   },
   buttonsaveText: {
     color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  buttonsaveText2: {
+    color: "#F8F8F8",
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",

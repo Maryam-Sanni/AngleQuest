@@ -167,6 +167,16 @@ const EmployeePage = () => {
         <Button mode="text" 
           textColor="#000000"
           style={styles.button} 
+          onPress={importFromExcel}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=eQywUgX10I1j&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Download Excel Template</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
           onPress={exportToExcel}
           icon={() => (
             <Image 
@@ -192,13 +202,13 @@ const EmployeePage = () => {
           <Text style={[styles.headerCell, {flex: 0 }]}><Checkbox
             color="#4CAF50"
           /></Text>
-          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Status</Text>
-          <Text style={[styles.headerCell, {marginLeft: -50 }]}>Full Name</Text>
-          <Text style={[styles.headerCell, {marginLeft: -50 }]}>Email Address</Text>
-          <Text style={styles.headerCell}>Specialization</Text>
+          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Full Name</Text>
+          <Text style={[styles.headerCell, {marginLeft: 10 }]}>Email Address</Text>
+          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Specialization</Text>
           <Text style={styles.headerCell}>Current Role</Text>
           <Text style={styles.headerCell}>Target Role</Text>
           <Text style={styles.headerCell}>Service</Text>
+          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Status</Text>
           <Text style={[styles.headerCell, {flex: 0 }]}><Switch
                color="green"
              /></Text>
@@ -214,14 +224,13 @@ const EmployeePage = () => {
                 onPress={() => toggleSelectEmployee(item.id)}
                 color="#4CAF50"
               />
-               <Text style={[styles.cell, {marginLeft: 30 }]}>{item.active}</Text>
-              <Text style={[styles.cell, {marginLeft: -50 }]}>{item.name}</Text>
-              <Text style={[styles.cell, {marginLeft: -50 }]}>{item.email}</Text>
-              <Text style={styles.cell}>{item.specialization}</Text>
+              <Text style={[styles.cell, {marginLeft: 30 }]}>{item.name}</Text>
+              <Text style={[styles.cell, {marginLeft: 10 }]}>{item.email}</Text>
+              <Text style={[styles.cell, {marginLeft: 30 }]}>{item.specialization}</Text>
               <Text style={styles.cell}>{item.current}</Text>
               <Text style={styles.cell}>{item.target}</Text>
               <Text style={styles.cell}>{item.service}</Text>
-
+              <Text style={[styles.cell, {marginLeft: 30 }]}>{item.active}</Text>
               <Switch
                 value={item.status}
                 onValueChange={() => toggleStatus(item.id)}

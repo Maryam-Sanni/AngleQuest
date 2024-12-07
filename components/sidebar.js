@@ -179,6 +179,9 @@ function MyComponent() {
           case "Performance":
           navigate('/performance');
           break;
+          case "Support Request":
+            navigate('/support-request');
+            break;
         case "Chats":
           navigate('/chat');
           break;
@@ -234,6 +237,7 @@ function MyComponent() {
         case "Hubs": return ['/coaching-hub-new', '/coaching-hub-sessions'].includes(currentPath);
         case "Performance": return currentPath === '/performance';
         case "Chats": return currentPath === '/chat';
+          case "Support Request": return currentPath === '/support-request';
         default: return false;
       }
     });
@@ -314,7 +318,7 @@ const menuItems = [
    { label: "Skills Analysis", icon: "https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55" },
   { label: "Growth Plan", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
   { label: "Hubs", icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&" },
-
+  { label: "Support Request", icon: "https://img.icons8.com/?size=100&id=51413&format=png&color=5B5D55" },
 ];
 
 const styles = StyleSheet.create({
