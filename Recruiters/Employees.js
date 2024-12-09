@@ -164,16 +164,7 @@ const EmployeePage = () => {
               style={{ width: 20, height: 20 }} 
             />
           )}>Refresh</Button>
-        <Button mode="text" 
-          textColor="#000000"
-          style={styles.button} 
-          onPress={importFromExcel}
-          icon={() => (
-            <Image 
-              source={{ uri: 'https://img.icons8.com/?size=100&id=eQywUgX10I1j&format=png&color=000000' }} 
-              style={{ width: 20, height: 20 }} 
-            />
-          )}>Download Excel Template</Button>
+       
         <Button mode="text" 
           textColor="#000000"
           style={styles.button} 
@@ -194,6 +185,16 @@ const EmployeePage = () => {
               style={{ width: 20, height: 20 }} 
             />
           )}>Import from Excel</Button>
+        <Button mode="text" 
+          textColor="#000000"
+          style={styles.button} 
+          onPress={importFromExcel}
+          icon={() => (
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=eQywUgX10I1j&format=png&color=000000' }} 
+              style={{ width: 20, height: 20 }} 
+            />
+          )}>Download Excel Template</Button>
       </View>
       
       {/* Employee Table */}
