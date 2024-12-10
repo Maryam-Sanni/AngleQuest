@@ -3,18 +3,28 @@ import { View, Text, StyleSheet,  ImageBackground, Modal, TextInput, ScrollView,
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
+import OpenModal from './New Employee';
 
 const BillingsAndPayment = () => {
   const [selectedTab, setSelectedTab] = useState('Plan Management');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [newPaymentDetails, setNewPaymentDetails] = useState({ cardNumber: '', expiry: '', cvv: '' });
    const [activeTab, setActiveTab] = useState('Plan Management');
+  const [ModalVisible, setModalVisible] = useState(false);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedTab(tab);
   };
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -36,7 +46,7 @@ const BillingsAndPayment = () => {
               onPress={() => handleTabChange('Plan Management')}
               icon={() => (
                 <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=tkQlwN0B9yKL&format=png&color=000000' }}
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=41170&format=png&color=206C00' }}
                   style={{ width: 20, height: 20 }}
                 />
               )}
@@ -53,7 +63,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Billings Management')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=fLj9nlDRbcCO&format=png&color=000000' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=215&format=png&color=206C00' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -70,7 +80,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Payment History')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=95090&format=png&color=000000' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=111486&format=png&color=206C00' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -87,7 +97,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Subscription Plan')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=38712&format=png&color=000000' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=7480&format=png&color=206C00' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -126,21 +136,22 @@ const BillingsAndPayment = () => {
                     style={{ width: 20, height: 20 }}
                   />
                 ))}
-                <Text style={{marginLeft: 5, fontSize: 16}}>3 employees</Text>
+                <Text style={{marginLeft: 5, fontSize: 16}}>3 employees</Text>        
               </View>
-                <TouchableOpacity style={styles.newButton} onPress={() => alert('Add new Work Delivery Support')}>
+              <Text style={styles.valueText}>
+                Features
+               </Text>
+              <Text style={styles.descriptionText}>
+                • Support for project delivery and team collaboration.
+              </Text>
+               <Text style={styles.descriptionText}>
+                 • Support for project delivery and team collaboration.
+               </Text>
+                <TouchableOpacity style={styles.newButton} onPress={handleOpenPress}>
                   <Text style={styles.newButtonText}>+ New</Text>
                 </TouchableOpacity>
             </View>
-               <Text style={styles.valueText}>
-                Proposed Values
-               </Text>
-            <Text style={styles.descriptionText}>
-              Support for project delivery and team collaboration.
-            </Text>
-               <Text style={styles.descriptionText}>
-                 Support for project delivery and team collaboration.
-               </Text>
+              
              </View>
             <View style={{flexDirection: 'column', width: '32%', marginRight: "2%"}}>
             <View style={styles.planBox}>
@@ -155,19 +166,20 @@ const BillingsAndPayment = () => {
                   ))}
                   <Text style={{marginLeft: 5, fontSize: 16}}>5 employees</Text>
                 </View>
-                  <TouchableOpacity style={styles.newButton} onPress={() => alert('Add new Work Delivery Support')}>
+              <Text style={styles.valueText}>
+                 Features
+               </Text>
+              <Text style={styles.descriptionText}>
+                • Personalized training and development plans.
+              </Text>
+              <Text style={styles.descriptionText}>
+                • Personalized training and development plans.
+              </Text>
+                  <TouchableOpacity style={styles.newButton} onPress={handleOpenPress}>
                     <Text style={styles.newButtonText}>+ New</Text>
                   </TouchableOpacity>
               </View>
-                 <Text style={styles.valueText}>
-                  Proposed Values
-                 </Text>
-            <Text style={styles.descriptionText}>
-              Personalized training and development plans.
-            </Text>
-              <Text style={styles.descriptionText}>
-                Personalized training and development plans.
-              </Text>
+                
             </View>
             <View style={{flexDirection: 'column', width: '32%',}}>
             <View style={styles.planBox}>
@@ -182,9 +194,186 @@ const BillingsAndPayment = () => {
                   ))}
                   <Text style={{marginLeft: 5, fontSize: 16}}>3 employees</Text>
                 </View>
-                  <TouchableOpacity style={styles.newButton} onPress={() => alert('Add new Work Delivery Support')}>
+              <Text style={styles.valueText}>
+                 Features
+               </Text>
+              <Text style={styles.descriptionText}>
+                 • Comprehensive service for team and individual growth.
+              </Text>
+              <Text style={styles.descriptionText}>
+                 • Comprehensive service for team and individual growth.
+              </Text>
+                  <TouchableOpacity style={styles.newButton} onPress={handleOpenPress}>
                     <Text style={styles.newButtonText}>+ New</Text>
                   </TouchableOpacity>
+              </View>
+                
+          </View>
+          </View>
+         
+        </View>
+      )}
+
+      {selectedTab === 'Billings Management' && (
+        <View style={styles.tabContent}>
+          <Text style={styles.heading}>Billings Management</Text>
+
+          {/* Row: Accumulated Usage Cost and Payment Options */}
+          <View style={styles.billingRow}>
+            <View>
+              <Text style={styles.accumulatedCost}>Accumulated Usage Cost: $300</Text>
+              <TouchableOpacity style={styles.payButton} onPress={() => alert('Payment successful!')}>
+                <Text style={styles.buttonText}>Pay Now</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Saved Card Details and New Payment Option */}
+            <View style={styles.cardSection}>
+              <Text style={styles.savedCardTitle}>Saved Card Details:</Text>
+              <Text style={styles.cardDetails}>**** **** **** 1234</Text>
+              <TouchableOpacity onPress={() => setShowPaymentModal(true)}>
+                <Text style={styles.addCardButton}>Add New Payment Option</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Contact Details */}
+          <View style={styles.contactDetails}>
+            <Text>Contact Details: support@example.com</Text>
+          </View>
+        </View>
+      )}
+
+
+      {selectedTab === 'Payment History' && (
+        <View style={styles.tabContent}>
+          <Text style={styles.sectionHeading}>Payment History</Text>
+
+          {/* Invoice Table */}
+          <View style={styles.invoiceTable}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderItem}>Invoice Number</Text>
+              <Text style={styles.tableHeaderItem}>Invoice Date</Text>
+              <Text style={styles.tableHeaderItem}>Due Date</Text>
+              <Text style={styles.tableHeaderItem}>Amount</Text>
+              <Text style={styles.tableHeaderItem}>Status</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableRowItem}>INV283199546</Text>
+              <Text style={styles.tableRowItem}>01 Dec 2024</Text>
+              <Text style={styles.tableRowItem}>01 Dec 2024</Text>
+              <Text style={styles.tableRowItem}>$300</Text>
+              <Text style={styles.tableRowItemPaid}>Paid</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableRowItem}>INV283199547</Text>
+              <Text style={styles.tableRowItem}>01 Nov 2024</Text>
+              <Text style={styles.tableRowItem}>01 Nov 2024</Text>
+              <Text style={styles.tableRowItem}>$450</Text>
+              <Text style={styles.tableRowItemPaid}>Paid</Text>
+            </View>
+          </View>
+
+          {/* Payment Breakdown Section */}
+          <Text style={styles.sectionHeading}>Payment Breakdown</Text>
+          <View style={styles.breakdownSection}>
+            <Text style={{marginBottom: 5}}>Work Delivery Support: 3 x $80 = $240/monthly</Text>
+            <Text style={{marginBottom: 5}}>Career Growth Plan: 5 x $100 = $500/monthly</Text>
+            <Text style={{marginBottom: 5}}>Work Delivery + Career Growth Support: 3 x $150 = $450/monthly</Text>
+            <Text style={{marginBottom: 5}}>Monthly Total: $1,190</Text>
+            <Text style={styles.billableTotal}>
+              Actual Billable Total = $1,190 - $119 (10% Discount as Standard Plan Holder) = $1,071
+            </Text>
+          </View>
+        </View>
+      )}
+
+
+      {selectedTab === 'Subscription Plan' && (
+        <View style={styles.tabContent}>
+          <Text style={styles.sectionHeading}>Subscription Plan</Text>
+          <View style={styles.tabRow}>
+          <View style={styles.cardContainer}>
+            <View style={styles.planHeader}>
+              <View style={styles.circle} />
+              <Text style={styles.planTitle}>Basic Plan</Text>
+            </View>
+            <View style={styles.planDetails}>
+              <Text style={styles.bulletPoint}>• Under 10 subscribed users</Text>
+              <Text style={styles.bulletPoint}>• 0% Discount</Text>
+            </View>
+           
+          </View>
+
+          {/* Standard Plan */}
+          <View style={[styles.cardContainer, styles.currentPlan]}>
+            <View style={styles.planHeader}>
+              <View style={[styles.circle, { backgroundColor: 'green' }]} />
+              <Text style={styles.planTitle}>Standard Plan</Text>
+            </View>
+            <View style={styles.planDetails}>
+              <Text style={styles.bulletPoint}>• Between 11 and 20 users</Text>
+              <Text style={styles.bulletPoint}>• 10% Discount</Text>
+            </View>
+            <View style={styles.currentBadge}>
+              <Text style={styles.currentBadgeText}>Current Plan</Text>
+            </View>
+          </View>
+
+          {/* Professional Plan */}
+          <View style={styles.cardContainer}>
+            <View style={styles.planHeader}>
+              <View style={[styles.circle, { backgroundColor: 'purple' }]} />
+              <Text style={styles.planTitle}>Professional Plan</Text>
+            </View>
+            <View style={styles.planDetails}>
+              <Text style={styles.bulletPoint}>• 21 users and above</Text>
+              <Text style={styles.bulletPoint}>• 15% Discount</Text>
+            </View>
+          </View>
+          </View>
+          <Text style={styles.serviceBoxTitle}>Services</Text>
+          <View style={styles.tabRow}>
+             <View style={{flexDirection: 'column',  width: '32%', marginRight: "2%"}}>
+            <View style={styles.planBox2}>
+              <Text style={styles.serviceTitle}>Work Delivery Support</Text>
+                <Text style={{fontSize: 14}}>Improve your employee's performance by
+                50% using AngleQuest Work Delivery support
+                to quickly deliver excellent result</Text>
+              <Text style={styles.seviceamount}>$80/month</Text>
+            </View>
+               <Text style={styles.valueText}>
+                Proposed Values
+               </Text>
+            <Text style={styles.descriptionText}>
+              Support for project delivery and team collaboration.
+            </Text>
+               <Text style={styles.descriptionText}>
+                 Support for project delivery and team collaboration.
+               </Text>
+             </View>
+            <View style={{flexDirection: 'column', width: '32%', marginRight: "2%"}}>
+            <View style={styles.planBox2}>
+              <Text style={styles.serviceTitle}>Career Growth Support</Text>
+              <Text style={{fontSize: 14}}>Improve your employee's performance by
+                50% using AngleQuest Work Delivery support
+                to quickly deliver excellent result</Text>
+              <Text style={styles.seviceamount}>$100/month</Text>
+              </View>
+                 <Text style={styles.valueText}>
+                  Proposed Values
+                 </Text>
+            <Text style={styles.descriptionText}>
+              Personalized training and development plans.
+            </Text>
+              <Text style={styles.descriptionText}>
+                Personalized training and development plans.
+              </Text>
+            </View>
+            <View style={{flexDirection: 'column', width: '32%',}}>
+            <View style={styles.planBox2}>
+              <Text style={styles.serviceTitle2}>Work Delivery + Career Growth Support</Text>
+                    <Text style={styles.seviceamount}>$150/month</Text>
               </View>
                  <Text style={styles.valueText}>
                   Proposed Values
@@ -196,69 +385,6 @@ const BillingsAndPayment = () => {
                 Comprehensive service for team and individual growth.
               </Text>
           </View>
-          </View>
-         
-        </View>
-      )}
-
-      {selectedTab === 'Billings Management' && (
-        <View style={styles.tabContent}>
-          <Text style={styles.heading}>Billings Management</Text>
-          <Text>Accumulated Usage Cost: $300</Text>
-          <Button title="Pay Now" onPress={() => alert('Payment successful!')} />
-          <Text>Saved Card Details:</Text>
-          <Text>**** **** **** 1234</Text>
-          <Button title="Add New Payment Option" onPress={() => setShowPaymentModal(true)} />
-          <Text>Contact Details: support@example.com</Text>
-        </View>
-      )}
-
-      {selectedTab === 'Payment History' && (
-        <View style={styles.tabContent}>
-          <Text style={styles.heading}>Payment History</Text>
-          <View style={styles.historyItem}>
-            <Text>Date: 01 Dec 2024</Text>
-            <Text>Amount: $150</Text>
-            <Text>Breakdown: $80 (Work Delivery Support) + $70 (Career Growth Support)</Text>
-          </View>
-          <View style={styles.historyItem}>
-            <Text>Date: 01 Nov 2024</Text>
-            <Text>Amount: $300</Text>
-            <Text>Breakdown: $150 (Work Delivery + Career Growth Support)</Text>
-          </View>
-        </View>
-      )}
-
-      {selectedTab === 'Subscription Plan' && (
-        <View style={styles.tabContent}>
-          <Text style={styles.heading}>Subscription Plan</Text>
-          <View style={styles.planBox}>
-            <Text>Basic Plan</Text>
-            <Text>1-10 employees</Text>
-          </View>
-          <View style={styles.planBox}>
-            <Text>Standard Plan</Text>
-            <Text>11-20 employees</Text>
-          </View>
-          <View style={styles.planBox}>
-            <Text>Professional Plan</Text>
-            <Text>21+ employees</Text>
-          </View>
-          <Text style={styles.serviceBoxTitle}>Services</Text>
-          <View style={styles.serviceBox}>
-            <Text>Work Delivery Support</Text>
-            <Text>$80/month</Text>
-            <Text>Benefits: Project assistance, collaboration tools.</Text>
-          </View>
-          <View style={styles.serviceBox}>
-            <Text>Career Growth Support</Text>
-            <Text>$100/month</Text>
-            <Text>Benefits: Training, skill development programs.</Text>
-          </View>
-          <View style={styles.serviceBox}>
-            <Text>Work Delivery + Career Growth Support</Text>
-            <Text>$150/month</Text>
-            <Text>Benefits: Comprehensive team and personal growth support.</Text>
           </View>
         </View>
       )}
@@ -290,6 +416,16 @@ const BillingsAndPayment = () => {
         </View>
       </Modal>
     </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
     </View>
     </View>
     </ImageBackground>
@@ -298,6 +434,12 @@ const BillingsAndPayment = () => {
 
 const styles = StyleSheet.create({
   container: { padding: 20, backgroundColor: 'white', marginLeft: 210 },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
   header: {
     flexDirection: 'row',
     padding: 10,
@@ -311,24 +453,60 @@ const styles = StyleSheet.create({
   tabContent: { marginVertical: 10},
   tabRow: { flexDirection: 'row' },
     planBox: {
-      padding: 15,
-      borderWidth: 1, borderColor: 'grey',
       marginBottom: 20,
-      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: 'grey',
       alignItems: 'flex-start',
-      height: 150
+      height: 250,
+      borderRadius: 12,
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        padding: 16,
     },
+  planBox2: {
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'grey',
+    alignItems: 'flex-start',
+    height: 150,
+    borderRadius: 12,
+      backgroundColor: '#fff',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+      padding: 16,
+  },
+  cardContainer: {
+    width: '32%',
+    height: 200,
+    marginRight: '2%',
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    padding: 16,
+  },
     serviceTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 10 },
+  serviceTitle2: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
     emojiRow: { flexDirection: 'row', marginBottom: 10 },
-  valueText: { fontSize: 14, fontWeight: 'bold', marginBottom: 20 },
-    descriptionText: { fontSize: 14, marginBottom: 5, color: '#333', },
+  valueText: { fontSize: 12, fontWeight: 'bold', marginBottom: 5, marginTop: 10 },
+    descriptionText: { fontSize: 12, marginBottom: 5, color: '#333', },
   heading: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
   planInform: { marginTop: 10, flexDirection: 'row',  padding: 10, borderWidth: 1, borderColor: 'grey', marginBottom: 20},
   planInfo: {fontSize: 18, color: 'black', fontWeight: 'bold', },
   pricingInfo: {fontSize: 14, color: 'green', position: 'absolute', right: 20, textDecorationLine: 'underline' },
   historyItem: { padding: 10, backgroundColor: '#fff', marginBottom: 10, borderRadius: 8 },
   serviceBox: { padding: 15, backgroundColor: '#f0f0f0', marginBottom: 10, borderRadius: 8 },
-  serviceBoxTitle: { fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 10 },
+  serviceBoxTitle: { fontSize: 16, fontWeight: 'bold', marginTop: 30, marginBottom: 10 },
   modalContainer: { flex: 1, justifyContent: 'center', backgroundColor: 'white', padding: 20 },
   modalHeading: { fontSize: 18, marginBottom: 20, color: '#fff' },
   input: { backgroundColor: '#fff', padding: 10, marginBottom: 10, borderRadius: 5 },
@@ -348,6 +526,161 @@ const styles = StyleSheet.create({
   },
   activeButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.07)',
+  },
+  billingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  accumulatedCost: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  payButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  cardSection: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  savedCardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  cardDetails: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  addCardButton: {
+    color: '#007bff',
+    fontSize: 14,
+    textDecorationLine: 'underline',
+  },
+  contactDetails: {
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    paddingTop: 16,
+    marginTop: 16,
+  },
+  invoiceTable: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#f5f5f5',
+    padding: 8,
+  },
+  tableHeaderItem: {
+    flex: 1,
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    padding: 8,
+  },
+  tableRowItem: {
+    flex: 1,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  tableRowItemPaid: {
+    flex: 1,
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  sectionHeading: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  breakdownSection: {
+    padding: 8,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+  },
+  billableTotal: {
+    marginTop: 8,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  seviceamount: {
+    position: 'absolute',
+    right: 20,
+    bottom: 10,
+  },
+  planHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  circle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: 'blue',
+    marginRight: 8,
+  },
+  planTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  planDetails: {
+    marginBottom: 16,
+  },
+  bulletPoint: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
+  },
+  selectPlanButton: {
+    backgroundColor: '#008000',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+  },
+  selectPlanButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  currentPlan: {
+    borderWidth: 2,
+    borderColor: 'green',
+  },
+  currentBadge: {
+    backgroundColor: '#206C00',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  currentBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 

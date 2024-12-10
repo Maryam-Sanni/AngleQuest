@@ -134,6 +134,7 @@ import AIScreen from "./Screens/AIscreen";
 import Welcome from "./Screens/LandingHome";
 import SignIn2 from "./Screens/SignIn";
 import SignUp2 from "./Screens/SignUp";
+import Skillanalysis from "./Screens/Skillanalysis";
 import Individual from "./Screens/Individual";
 import Community from "./Screens/Community";
 import Business from "./Screens/Business";
@@ -240,6 +241,7 @@ const App = () => {
         <Route path="/teams" element={<Teams />} />
         <Route path="/business-subscription" element={<Subscription />} />
         <Route path="/analytics" element={<Analytics />} />
+         <Route path="/about-skill-analysis" element={<Skillanalysis />} />
       </Routes>
     </Router>
   );

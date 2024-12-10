@@ -91,6 +91,10 @@ const MyComponent = ({ value, tint, intensity }) => {
   const handlebackPress = () => {
     navigate("/welcome");
   };
+
+  const handleskill= () => {
+     navigate('/about-skill-analysis');
+  };
   
   const languages = [
     { code: "en", label: "English", icon: require("../assets/english.png") },
@@ -152,6 +156,7 @@ const MyComponent = ({ value, tint, intensity }) => {
         </View>
           <HButton // onPress={handleAIPress}
             title={"About Us"}
+            onPress={handleskill}
           />
         </View>
         <View style={styles.right}>
