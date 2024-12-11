@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigate } from "react-router-dom";
 import Top from "../components/HomeTop";
 import Top2 from "../components/TopExtra";
-
+   
  // Main Component
  const DiscussSection = () => {
    const boxData = [
@@ -38,34 +38,68 @@ import Top2 from "../components/TopExtra";
      },
    ];
 
+   // Data for Steps
    const stepsData = [
      {
        icon: 'https://img.icons8.com/?size=100&id=58864&format=png&color=135837',
        title: 'Skill Gap Analysis',
-       description: 'Evaluate your skills and align with your interests.',
+       description:
+         'We start by analyzing your skillset and interest with you to arrive at a technology domain that suits your experience and ambition.',
      },
      {
        icon: 'https://img.icons8.com/?size=100&id=375&format=png&color=135837',
        title: 'Growth Plan',
-       description: 'Get a personalized learning roadmap from an expert.',
+       description:
+         'An expert in the chosen technology domain will draw-up a comprehensive learning plan tailored to your unique story and timeline.',
      },
      {
        icon: 'https://img.icons8.com/?size=100&id=20114&format=png&color=135837',
-       title: 'Expert Match',
-       description: 'Connect with a dedicated expert for training.',
+       title: 'Hub',
+       description:
+         'We’ll assign an expert with the right temperament and availability to train you with the most relevant skills needed to succeed quickly.',
      },
      {
        icon: 'https://img.icons8.com/?size=100&id=39594&format=png&color=135837',
        title: 'Interview Prep',
-       description: 'Learn strategies and tips for interview success.',
+       description:
+         'During interviews, our expert will conduct a test-interview on you to equip and share ideas to help you shine-through at your interview.',
      },
      {
        icon: 'https://img.icons8.com/?size=100&id=6895&format=png&color=135837',
-       title: 'Knowledge Support',
-       description: 'Receive ongoing support once you land a job.',
+       title: 'Knowledge Backup',
+       description:
+         'When you secure a job, we’ll serve as your knowledge backup. Our expert is 24/7 ready to quickly help you on any task.',
      },
    ];
+   
 
+    const options = [
+      'SAP FI',
+      'SAP MM',
+      'SAP SD',
+      'SAP PP',
+      'Microsoft Dynamics Sales',
+      'Microsoft Dynamics Customer Service',
+      'Microsoft Power Platform Developer',
+      'Microsoft Dynamics F&O',
+      'Microsoft Dynamics Field Service',
+      'Microsoft Dynamics CRM Developer',
+      'Microsoft Business Central',
+      'Scrum',
+      'Business Analysis',
+    ];
+
+      const [dropdownVisible, setDropdownVisible] = useState(false);
+      const [selectedOptions, setSelectedOptions] = useState([]);
+
+
+   const toggleOption = (option) => {
+     if (selectedOptions.includes(option)) {
+       setSelectedOptions(selectedOptions.filter((item) => item !== option)); // Remove the option
+     } else {
+       setSelectedOptions([...selectedOptions, option]); // Add the option
+     }
+   };
 
    const [topPosition, setTopPosition] = useState(20); 
 
@@ -121,8 +155,10 @@ const handleMouseLeave = (index) => {
               
        <View style={styles.container}>
          <View style={styles.greentop}>
-           <Text style={{color: 'white', fontWeight: '600', marginLeft: 30}}>Personalized guidance, tailored training, and on the job support – now also available</Text>
-           <Text style={{color: 'white', marginTop: 10, marginLeft: 30}}>Also want an expert to prepare a step-by-step plan to accelerate your process? Read more about expert growth plan.</Text>
+           <View style={{marginLeft: -300}}>
+           <Text style={{color: 'white', fontWeight: '600', fontSize: 20}}>Personalized guidance, tailored training, and on the job support – now also available</Text>
+           <Text style={{color: 'white', marginTop: 10, fontSize: 17}}>Also want an expert to prepare a step-by-step plan to accelerate your process? Read more about expert growth plan.</Text>
+         </View>
          </View>
          {/* Left Card */}
          <View style={{flexDirection: 'row'}}>
@@ -174,27 +210,57 @@ const handleMouseLeave = (index) => {
                      </View>
 
                      {/* Category Picker */}
-                     <View style={styles.inputGroup}>
-                       <Text style={styles.label}>Category</Text>
-                       <Picker style={styles.picker}>
-                         <Picker.Item label=" " value=" " />
-                         <Picker.Item label="SAP FI" value="SAP FI" />
-                         <Picker.Item label="SAP MM" value="SAP MM" />
-                         <Picker.Item label="SAP SD" value="SAP SD" />
-                         <Picker.Item label="SAP PP" value="SAP PP" />
-                         <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
-                         <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
-                         <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
-                         <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
-                         <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
-                         <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
-                         <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
-                         <Picker.Item label="Scrum" value="Scrum" />
-                         <Picker.Item label="Business Analysis" value="Business Analysis" />
-                       </Picker>
+                   <View style={styles.inputGroup}>
+                       <Text style={styles.label}>Preference</Text>
+                       <View style={styles.selectContainer}>
+                         {/* Dropdown Header */}
+                         <TouchableOpacity
+                           style={styles.dropdownHeader}
+                           onPress={() => setDropdownVisible(!dropdownVisible)}
+                         >
+                           <Text style={styles.dropdownText}>
+                             {selectedOptions.length > 0
+                               ? selectedOptions.join(', ')
+                               : 'Select Options'}
+                           </Text>
+                         </TouchableOpacity>
+
+                         {/* Dropdown Options */}
+                         {dropdownVisible && (
+                           <View style={styles.dropdownOverlay}>
+                             <ScrollView style={styles.scrollContainer}>
+                               {options.map((option, index) => (
+                                 <TouchableOpacity
+                                   key={index}
+                                   style={[
+                                     styles.option,
+                                     selectedOptions.includes(option) && styles.optionSelected,
+                                   ]}
+                                   onPress={() => toggleOption(option)}
+                                 >
+                                   <Text
+                                     style={[
+                                       styles.optionText,
+                                       selectedOptions.includes(option) && styles.optionTextSelected,
+                                     ]}
+                                   >
+                                     {option}
+                                   </Text>
+                                 </TouchableOpacity>
+                               ))}
+                             </ScrollView>
+                             <TouchableOpacity
+                               style={styles.doneButton}
+                               onPress={() => setDropdownVisible(false)}
+                             >
+                               <Text style={styles.doneButtonText}>Done</Text>
+                             </TouchableOpacity>
+                           </View>
+                         )}
+                       </View>
                      </View>
                    </View>
-
+                   
                    {/* Submit Button */}
                    <TouchableOpacity
                      style={styles.button}
@@ -273,15 +339,8 @@ const handleMouseLeave = (index) => {
            
            
            {/* Button Section */}
-           <TouchableOpacity
-             onPress={handleIndividualSignUp}
-             style={styles.subscribeButton}
-             onMouseEnter={() => setIsHovered2(true)}
-             onMouseLeave={() => setIsHovered2(false)}
-           >
-             <Text style={[styles.buttonText2, isHovered2 && styles.underline]}>
-               &gt; Subscribe to our full-package
-             </Text>
+           <TouchableOpacity style={styles.subscribeButton}>
+             <Text style={styles.buttonText}>Subscribe to our full-package</Text>
            </TouchableOpacity>
          </View>
            </ScrollView>
@@ -302,19 +361,19 @@ const handleMouseLeave = (index) => {
      borderRadius: 10,
      marginBottom: 20,
    },
-    greentop: {
-      backgroundColor: '#135837',
-      marginTop: 30,
-      marginLeft: -20,
-      marginRight: -20,
-      padding: 20,
-      textAlign: 'flex-start',
-      alignSelf: 'stretch',
-    },
+   greentop: {
+     backgroundColor: '#135837',
+     marginTop: 30,
+     marginLeft: -20,
+     marginRight: -20,
+     padding: 20,
+     alignItems: 'center',
+     alignSelf: 'stretch',
+   },
    header: {
      borderTopLeftRadius: 5,
      borderTopRightRadius: 5,
-     fontSize: 14,
+     fontSize: 16,
      color: 'white',
      marginBottom: 10,
      backgroundColor: '#135837',
@@ -325,18 +384,19 @@ const handleMouseLeave = (index) => {
      textAlign: 'center',
    },
    subHeader: {
-     fontSize: 28,
-     fontWeight: '600',
+     fontSize: 38,
+     fontWeight: 'bold',
      marginBottom: 20,
       marginTop: 30,
+     marginRight: 20
    },
     listgreen: {
-      fontSize: 14,
+      fontSize: 16,
       color: 'green',
       marginBottom: 7,
     },
    listItem: {
-     fontSize: 14,
+     fontSize: 16,
      color: 'black',
      marginBottom: 7,
    },
@@ -352,12 +412,13 @@ const handleMouseLeave = (index) => {
      fontSize: 14,
      fontWeight: 'bold',
      marginBottom: 5,
+     marginLeft: 5,
    },
    input: {
      borderWidth: 1,
      borderColor: '#ccc',
      padding: 10,
-     width: 220,
+     width: 250,
      borderRadius: 5,
      marginBottom: 10,
      marginRight: 10,
@@ -367,7 +428,7 @@ const handleMouseLeave = (index) => {
       borderWidth: 1,
       borderColor: '#ccc',
       padding: 10,
-      width: 120,
+      width: 130,
       borderRadius: 5,
       marginBottom: 10,
       marginRight: 10,
@@ -387,11 +448,11 @@ const handleMouseLeave = (index) => {
    button: {
      borderRadius: 5,
      overflow: "hidden", 
-     marginBottom: 20,
+     marginBottom: 40,
      width: 180,
    },
    gradient: {
-     padding: 12,
+     padding: 15,
      alignItems: "center",
      justifyContent: "center",
    },
@@ -401,7 +462,7 @@ const handleMouseLeave = (index) => {
    },
    footerText: {
      marginTop: 20,
-     fontSize: 14,
+     fontSize: 16,
       marginBottom: -20,
      backgroundColor: '#f3e5f5',
      borderBottomLeftRadius: 5,
@@ -459,10 +520,10 @@ const handleMouseLeave = (index) => {
    },
    card: {
      backgroundColor: 'white',
-     width: 550,
-     marginTop: 150,
+     width: 620,
+     marginTop: 100,
      marginBottom: 120,
-     marginLeft: 110,
+     marginLeft: 150,
      borderRadius: 5,
      padding: 20,
      marginHorizontal: 10,
@@ -479,8 +540,8 @@ const handleMouseLeave = (index) => {
      width: 650,
      height: 650,
      resizeMode: 'contain',
-     marginLeft: 100,
-     marginTop: 20,
+     marginLeft: 50,
+     marginTop: 30,
    },
    steppedcontainer: {
      backgroundColor: 'white',
@@ -547,18 +608,18 @@ const handleMouseLeave = (index) => {
      alignItems: 'center',
      justifyContent: 'center',
      position: 'absolute',
-     bottom: -10,
+     bottom: -70,
    },
    stepNumber: {
      color: 'black',
      fontWeight: 'bold',
    },
    subscribeButton: {
-     backgroundColor: 'white',
-     padding: 12,
+     backgroundColor: '#f44336',
+     padding: 15,
      borderRadius: 5,
      alignSelf: 'center',
-     marginTop: 20
+     marginTop: 80
    },
    buttonText: {
      color: '#fff',
@@ -587,6 +648,54 @@ const handleMouseLeave = (index) => {
      fontSize: 14,
      marginTop: 5,
      color: "gray",
+   },
+   selectContainer: {
+     position: 'relative', 
+     width: 160,
+
+   },
+   dropdownHeader: {
+     padding: 10,
+     height: 40,
+     backgroundColor: 'white',
+     overflow: 'hidden',
+     borderWidth: 1,
+     borderColor: '#ccc',
+     borderRadius: 5,
+   },
+   dropdownText: {
+     fontSize: 14,
+     color: '#333',
+   },
+   dropdownOverlay: {
+     position: 'absolute', // Position dropdown over other elements
+     top: 45, // Adjust to position directly below the header
+      width: 160,
+     height: 100,
+     left: 0,
+     right: 0,
+     backgroundColor: '#fff',
+     borderWidth: 1,
+     borderColor: '#ccc',
+     borderRadius: 5,
+     zIndex: 1000, // Ensure it stays on top
+     shadowColor: '#000',
+     shadowOffset: { width: 0, height: 2 },
+     shadowOpacity: 0.2,
+     shadowRadius: 5,
+     elevation: 5, // For Android shadow
+   },
+   scrollContainer: {
+     maxHeight: 150, // Limit height for dropdown
+   },
+   option: {
+     padding: 10,
+     borderBottomWidth: 1,
+     borderBottomColor: '#ccc',
+   },
+   optionText: {
+     fontSize: 14,
+     color: '#333',
    },
  });
 
