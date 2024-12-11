@@ -4,6 +4,7 @@ import { Button, Checkbox, Switch } from 'react-native-paper';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './New Employee';
+import OpenModal2 from './PaymentCard';
 
 const BillingsAndPayment = () => {
   const [selectedTab, setSelectedTab] = useState('Plan Management');
@@ -11,6 +12,7 @@ const BillingsAndPayment = () => {
   const [newPaymentDetails, setNewPaymentDetails] = useState({ cardNumber: '', expiry: '', cvv: '' });
    const [activeTab, setActiveTab] = useState('Plan Management');
   const [ModalVisible, setModalVisible] = useState(false);
+   const [ModalVisible2, setModalVisible2] = useState(false);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -23,6 +25,14 @@ const BillingsAndPayment = () => {
 
   const handleCloseModal = () => {
     setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
   };
   
   return (
@@ -46,7 +56,7 @@ const BillingsAndPayment = () => {
               onPress={() => handleTabChange('Plan Management')}
               icon={() => (
                 <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=41170&format=png&color=206C00' }}
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=41170&format=png&color=000000' }}
                   style={{ width: 20, height: 20 }}
                 />
               )}
@@ -63,7 +73,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Billings Management')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=215&format=png&color=206C00' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=215&format=png&color=000000' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -80,7 +90,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Payment History')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=111486&format=png&color=206C00' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=111486&format=png&color=000000' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -97,7 +107,7 @@ const BillingsAndPayment = () => {
           onPress={() => handleTabChange('Subscription Plan')}
           icon={() => (
             <Image
-              source={{ uri: 'https://img.icons8.com/?size=100&id=7480&format=png&color=206C00' }}
+              source={{ uri: 'https://img.icons8.com/?size=100&id=7479&format=png&color=000000' }}
               style={{ width: 20, height: 20 }}
             />
           )}
@@ -216,22 +226,29 @@ const BillingsAndPayment = () => {
 
       {selectedTab === 'Billings Management' && (
         <View style={styles.tabContent}>
-          <Text style={styles.heading}>Billings Management</Text>
+         
 
           {/* Row: Accumulated Usage Cost and Payment Options */}
           <View style={styles.billingRow}>
-            <View>
-              <Text style={styles.accumulatedCost}>Accumulated Usage Cost: $300</Text>
-              <TouchableOpacity style={styles.payButton} onPress={() => alert('Payment successful!')}>
+            <View style={styles.accumulatedCostContainer}>
+               <Text style={styles.savedCardTitle}>Accumulated Usage Cost</Text>
+              <Text style={styles.accumulatedCost}>$300</Text>
+              <TouchableOpacity 
+                style={styles.payButton} 
+                onPress={() => alert('Payment successful!')}>
                 <Text style={styles.buttonText}>Pay Now</Text>
               </TouchableOpacity>
             </View>
 
             {/* Saved Card Details and New Payment Option */}
             <View style={styles.cardSection}>
+             
               <Text style={styles.savedCardTitle}>Saved Card Details:</Text>
-              <Text style={styles.cardDetails}>**** **** **** 1234</Text>
-              <TouchableOpacity onPress={() => setShowPaymentModal(true)}>
+              <View style={{flexDirection: 'row', marginTop: 10}}>
+               <Image source={{ uri: 'https://img.icons8.com/?size=100&id=13610&format=png&color=000000' }} style={styles.cardIcon} />
+              <Text style={{marginTop: 20, fontSize: 18, marginLeft: 10}}>**** **** **** 1234</Text>
+              </View>
+              <TouchableOpacity onPress={handleOpenPress2}>
                 <Text style={styles.addCardButton}>Add New Payment Option</Text>
               </TouchableOpacity>
             </View>
@@ -239,10 +256,15 @@ const BillingsAndPayment = () => {
 
           {/* Contact Details */}
           <View style={styles.contactDetails}>
-            <Text>Contact Details: support@example.com</Text>
+             <Text style={{fontSize: 16, marginBottom: 15, fontWeight: 'bold'}}>Contact Details</Text>
+            <Text style={styles.contactLabel}>Full Name: John Doe</Text>
+            <Text style={styles.contactLabel}>Email: john.doe@example.com</Text>
+            <Text style={styles.contactLabel}>Phone: +1 234 567 890</Text>
+            <Text style={styles.contactLabel}>Billing Address: 123 Main St, City, Country</Text>
           </View>
         </View>
       )}
+
 
 
       {selectedTab === 'Payment History' && (
@@ -389,30 +411,14 @@ const BillingsAndPayment = () => {
         </View>
       )}
 
-      <Modal visible={showPaymentModal} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalHeading}>Add New Payment Option</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Card Number"
-            value={newPaymentDetails.cardNumber}
-            onChangeText={(text) => setNewPaymentDetails({ ...newPaymentDetails, cardNumber: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Expiry Date"
-            value={newPaymentDetails.expiry}
-            onChangeText={(text) => setNewPaymentDetails({ ...newPaymentDetails, expiry: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="CVV"
-            secureTextEntry
-            value={newPaymentDetails.cvv}
-            onChangeText={(text) => setNewPaymentDetails({ ...newPaymentDetails, cvv: text })}
-          />
-          <Button title="Save" onPress={() => setShowPaymentModal(false)} />
-          <Button title="Cancel" onPress={() => setShowPaymentModal(false)} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
         </View>
       </Modal>
     </ScrollView>
@@ -500,6 +506,7 @@ const styles = StyleSheet.create({
     emojiRow: { flexDirection: 'row', marginBottom: 10 },
   valueText: { fontSize: 12, fontWeight: 'bold', marginBottom: 5, marginTop: 10 },
     descriptionText: { fontSize: 12, marginBottom: 5, color: '#333', },
+  billingheading: { fontSize: 18, fontWeight: '500', marginTop: 20, marginLeft: 20, marginBottom: 10 },
   heading: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
   planInform: { marginTop: 10, flexDirection: 'row',  padding: 10, borderWidth: 1, borderColor: 'grey', marginBottom: 20},
   planInfo: {fontSize: 18, color: 'black', fontWeight: 'bold', },
@@ -530,18 +537,73 @@ const styles = StyleSheet.create({
   billingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 20,
+  },
+  accumulatedCostContainer: {
+    flex: 1,
   },
   accumulatedCost: {
-    fontSize: 16,
-    marginBottom: 8,
+    fontSize: 18,
+    width: 100,
+    backgroundColor: '#F8F8F8',
+     marginTop: 10,
+      padding: 10,
+    textAlign: 'center',
+    color: 'black',
+    marginBottom: 10,
+    marginLeft: 30
   },
   payButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#4CAF50',
+    width: 100,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    alignItems: 'center',
+    marginLeft: 30,
+    marginTop: 10
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  cardSection: {
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingLeft: 5,
+  },
+  cardIcon: {
+    width: 60,
+    height: 60,
+    marginBottom: 10,
+  },
+  savedCardTitle: {
+    fontSize: 16,
+    color: '#444',
+    marginBottom: 5,
+  },
+  cardDetails: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: -30,
+  },
+  addCardButton: {
+    fontSize: 14,
+    color: 'green',
+    textDecorationLine: 'underline',
+    marginTop: 8
+  },
+  contactDetails: {
+    marginTop: 20,
+  },
+  contactLabel: {
+    fontSize: 14,
+    color: '#444',
+    marginBottom: 8,
   },
   buttonText: {
     color: '#fff',
@@ -556,15 +618,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
-  },
-  cardDetails: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  addCardButton: {
-    color: '#007bff',
-    fontSize: 14,
-    textDecorationLine: 'underline',
   },
   contactDetails: {
     borderTopWidth: 1,
