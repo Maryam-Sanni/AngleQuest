@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
- import {Animated, View, Text, Image, TextInput, Platform , ScrollView, Picker, Alert, Input, TouchableOpacity, StyleSheet } from 'react-native';
+ import {Animated, View, Text, Image, TextInput, Platform , ScrollView, Picker, Alert, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigate } from "react-router-dom";
 import Top from "../components/HomeTop";
 import Top2 from "../components/TopExtra";
 import Footer from "../components/Footer";
 import axios from 'axios';
+import OpenModal from './ModalUrgent';
    
  // Main Component
  const DiscussSection = () => {
@@ -91,6 +92,7 @@ import axios from 'axios';
       'Business Analysis',
     ];
 
+   const [ModalVisible, setModalVisible] = useState(false);
    const [email, setEmail] = useState('');
    const [date, setDate] = useState('');
       const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -108,6 +110,14 @@ import axios from 'axios';
      }
    };
 
+   const handleOpenPress = () => {
+     setModalVisible(true);
+   };
+
+   const handleCloseModal = () => {
+     setModalVisible(false);
+   };
+   
    const apiUrl = process.env.REACT_APP_API_URL;
    
    // Function to handle form submission
@@ -257,35 +267,46 @@ const handleMouseLeave = (index) => {
                        />
                       </View>
 
-                     {/* Category Picker */}
-                     <View style={styles.inputGroup}>
-                       <Text style={styles.label}>Preference</Text>
-                       <View style={styles.selectContainer}>
-                         {/* Dropdown Header */}
-                         <TouchableOpacity
-                           style={styles.dropdownHeader}
-                           onPress={() => setDropdownVisible(!dropdownVisible)}
-                         >
-                           <Text style={styles.dropdownText}>
-                             {selectedOptions.length > 0
-                               ? selectedOptions.join(', ')
-                               : 'Select Options'}
-                           </Text>
-                         </TouchableOpacity>
+                   <View style={styles.inputGroup}>
+                     <Text style={styles.label}>Preference</Text>
+                     <View style={styles.selectContainer}>
+                       {/* Dropdown Header */}
+                       <TouchableOpacity
+                         style={styles.dropdownHeader}
+                         onPress={() => setDropdownVisible(!dropdownVisible)}
+                       >
+                         <Text style={styles.dropdownText}>
+                           {selectedOptions.length > 0
+                             ? selectedOptions.join(', ')
+                             : 'Select Options'}
+                         </Text>
+                       </TouchableOpacity>
 
-                         {/* Dropdown Options */}
-                         {dropdownVisible && (
-                           <View style={styles.dropdownOverlay}>
-                             <ScrollView style={styles.scrollContainer}>
-                               {options.map((option, index) => (
-                                 <TouchableOpacity
-                                   key={index}
-                                   style={[
-                                     styles.option,
-                                     selectedOptions.includes(option) && styles.optionSelected,
-                                   ]}
-                                   onPress={() => toggleOption(option)}
-                                 >
+                       {/* Dropdown Options */}
+                       {dropdownVisible && (
+                         <View style={styles.dropdownOverlay}>
+                           <ScrollView style={styles.scrollContainer}>
+                             {options.map((option, index) => (
+                               <TouchableOpacity
+                                 key={index}
+                                 style={[
+                                   styles.option,
+                                   selectedOptions.includes(option) && styles.optionSelected,
+                                 ]}
+                                 onPress={() => toggleOption(option)}
+                               >
+                                 {/* Checkbox */}
+                                 <View style={styles.checkboxContainer}>
+                                   <View
+                                     style={[
+                                       styles.checkbox,
+                                       selectedOptions.includes(option) && styles.checkboxSelected,
+                                     ]}
+                                   >
+                                     {selectedOptions.includes(option) && (
+                                       <Text style={styles.checkboxCheckmark}>✓</Text>
+                                     )}
+                                   </View>
                                    <Text
                                      style={[
                                        styles.optionText,
@@ -294,19 +315,20 @@ const handleMouseLeave = (index) => {
                                    >
                                      {option}
                                    </Text>
-                                 </TouchableOpacity>
-                               ))}
-                             </ScrollView>
-                             <TouchableOpacity
-                               style={styles.doneButton}
-                               onPress={() => setDropdownVisible(false)}
-                             >
-                               <Text style={styles.doneButtonText}>Done</Text>
-                             </TouchableOpacity>
-                           </View>
-                         )}
-                       </View>
+                                 </View>
+                               </TouchableOpacity>
+                             ))}
+                           </ScrollView>
+                           <TouchableOpacity
+                             style={styles.doneButton}
+                             onPress={() => setDropdownVisible(false)}
+                           >
+                             <Text style={styles.doneButtonText}>Done</Text>
+                           </TouchableOpacity>
+                         </View>
+                       )}
                      </View>
+                   </View>
                    </View>
                    
                    {/* Submit Button */}
@@ -326,9 +348,12 @@ const handleMouseLeave = (index) => {
                      </LinearGradient>
                    </TouchableOpacity>
 
+                    <TouchableOpacity
+                       onPress={handleOpenPress}>
                    <Text style={styles.footerText}>
                      Need to speak to our expert quickly? <Text style={styles.linkText}>Schedule urgently</Text>
                    </Text>
+                    </TouchableOpacity>
                  </View>
                )}
              </View>
@@ -387,11 +412,21 @@ const handleMouseLeave = (index) => {
            
            
            {/* Button Section */}
-           <TouchableOpacity style={styles.subscribeButton}>
+           <TouchableOpacity  onPress={handleIndividualSignUp} style={styles.subscribeButton}>
              <Text style={styles.buttonText}>Subscribe to our full-package</Text>
            </TouchableOpacity>
            
          </View>
+             <Modal
+               animationType="slide"
+               transparent={true}
+               visible={ModalVisible}
+               onRequestClose={handleCloseModal}
+             >
+               <View style={styles.modalContent}>
+                 <OpenModal onClose={handleCloseModal} />
+               </View>
+             </Modal>
              <Footer />
            </ScrollView>
        </View>
@@ -404,6 +439,12 @@ const handleMouseLeave = (index) => {
      padding: 20,
      backgroundColor: '#e8f5e9',
      alignItems: 'center',
+   },
+   modalContent: {
+     flex: 1,
+     justifyContent: "center",
+     alignItems: "center",
+     backgroundColor: "rgba(0, 0, 0, 0.1)",
    },
    topSection: {
      backgroundColor: 'lightgreen',
@@ -736,7 +777,7 @@ const handleMouseLeave = (index) => {
      elevation: 5, // For Android shadow
    },
    scrollContainer: {
-     maxHeight: 150, // Limit height for dropdown
+     maxHeight: 160, // Limit height for dropdown
    },
    option: {
      padding: 10,
@@ -746,6 +787,40 @@ const handleMouseLeave = (index) => {
    optionText: {
      fontSize: 14,
      color: '#333',
+   },
+   optionTextSelected: {
+     color: '#00796b',
+   },
+   checkboxContainer: {
+     flexDirection: 'row',
+     alignItems: 'center',
+   },
+   checkbox: {
+     width: 15,
+     height: 15,
+     borderWidth: 2,
+     borderColor: '#00796b',
+     borderRadius: 4,
+     justifyContent: 'center',
+     alignItems: 'center',
+     marginRight: 5
+   },
+   checkboxSelected: {
+     backgroundColor: '#00796b',
+   },
+   checkboxCheckmark: {
+     color: 'white',
+     fontSize: 14,
+   },
+   doneButton: {
+     padding: 5,
+     backgroundColor: '#00796b',
+     justifyContent: 'center',
+     alignItems: 'center',
+   },
+   doneButtonText: {
+     color: 'white',
+     fontSize: 14,
    },
  });
 
