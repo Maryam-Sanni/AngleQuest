@@ -156,7 +156,6 @@ const MyComponent = ({ value, tint, intensity }) => {
         </View>
           <HButton // onPress={handleAIPress}
             title={"About Us"}
-            onPress={handleskill}
           />
         </View>
         <View style={styles.right}>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
- import {Animated, View, Text, Image, TextInput, Platform , ScrollView, Picker, Input, TouchableOpacity, StyleSheet } from 'react-native';
+ import {Animated, View, Text, Image, TextInput, Platform , ScrollView, Picker, Alert, Input, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigate } from "react-router-dom";
 import Top from "../components/HomeTop";
 import Top2 from "../components/TopExtra";
+import Footer from "../components/Footer";
+import axios from 'axios';
    
  // Main Component
  const DiscussSection = () => {
@@ -89,9 +91,14 @@ import Top2 from "../components/TopExtra";
       'Business Analysis',
     ];
 
+   const [email, setEmail] = useState('');
+   const [date, setDate] = useState('');
       const [dropdownVisible, setDropdownVisible] = useState(false);
       const [selectedOptions, setSelectedOptions] = useState([]);
 
+   const handleChange = (e) => {
+     setDate(e.target.value); // This will handle the change in date input
+   };
 
    const toggleOption = (option) => {
      if (selectedOptions.includes(option)) {
@@ -101,6 +108,41 @@ import Top2 from "../components/TopExtra";
      }
    };
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+   
+   // Function to handle form submission
+   const handleSubmit = async () => {
+     const data = {
+       email: email,
+       date: date,
+       category: selectedOptions.join(', ') || '',  // Categories selected as a comma-separated string
+       urgent: 'No'  // Hardcoded for now, adjust as per requirement
+     };
+
+     try {
+       const response = await axios.post(`${apiUrl}/api/inquire-tech`, data, {
+         headers: {
+           'Content-Type': 'application/json',  // Ensure the correct Content-Type is set
+         }
+       });
+
+       // Check if the response status is OK (status code 200)
+       if (response.status === 200) {
+         Alert.alert('Success', 'Your request has been submitted!');
+       } else {
+         Alert.alert('Error', response.data.message || 'Something went wrong');
+       }
+     } catch (error) {
+       console.error(error);  // Log the error for debugging
+       Alert.alert('Error', 'Network error: Please try again later');
+     }
+   };
+
+   const handlePress = () => {
+     setIsHovered(false); // Reset hover state when pressed
+     handleSubmit(); // Call the submit handler
+   };
+   
    const [topPosition, setTopPosition] = useState(20); 
 
    const handleScroll = (event) => {
@@ -200,17 +242,23 @@ const handleMouseLeave = (index) => {
                          placeholder="anglequest@gmail.com"
                          placeholderTextColor="gray"
                          style={styles.input}
+                         value={email}
+                         onChangeText={setEmail}
                        />
                      </View>
-
-                     {/* Date Input */}
+                     
                      <View style={styles.inputGroup}>
-                       <Text style={styles.label}>Date</Text>
-                       <input type="date" style={styles.input2} />
-                     </View>
+                        <Text style={styles.label}>Date</Text>
+                       <input 
+                         type="date"
+                         style={styles.input2}
+                         value={date}
+                         onChange={handleChange}
+                       />
+                      </View>
 
                      {/* Category Picker */}
-                   <View style={styles.inputGroup}>
+                     <View style={styles.inputGroup}>
                        <Text style={styles.label}>Preference</Text>
                        <View style={styles.selectContainer}>
                          {/* Dropdown Header */}
@@ -264,7 +312,7 @@ const handleMouseLeave = (index) => {
                    {/* Submit Button */}
                    <TouchableOpacity
                      style={styles.button}
-                     onPress={() => setIsSessionCreated(true)}
+                      onPress={handlePress}
                      onMouseEnter={() => setIsHovered(true)}
                      onMouseLeave={() => setIsHovered(false)}
                    >
@@ -342,7 +390,9 @@ const handleMouseLeave = (index) => {
            <TouchableOpacity style={styles.subscribeButton}>
              <Text style={styles.buttonText}>Subscribe to our full-package</Text>
            </TouchableOpacity>
+           
          </View>
+             <Footer />
            </ScrollView>
        </View>
    );
@@ -541,7 +591,7 @@ const handleMouseLeave = (index) => {
      height: 650,
      resizeMode: 'contain',
      marginLeft: 50,
-     marginTop: 30,
+     marginTop: 50,
    },
    steppedcontainer: {
      backgroundColor: 'white',
@@ -549,7 +599,7 @@ const handleMouseLeave = (index) => {
      padding: 50
    },
    heading: {
-     fontSize: 24,
+     fontSize: 28,
      fontWeight: 'bold',
      textAlign: 'center',
      color: '#333',
@@ -557,7 +607,7 @@ const handleMouseLeave = (index) => {
      marginTop: 70,
    },
    subHeading: {
-     fontSize: 16,
+     fontSize: 20,
      textAlign: 'center',
      color: '#666',
      marginBottom: 20,
@@ -586,14 +636,14 @@ const handleMouseLeave = (index) => {
      marginBottom: 10,
    },
    stepTitle: {
-     fontSize: 14,
+     fontSize: 18,
      fontWeight: 'bold',
      textAlign: 'center',
      marginBottom: 5,
      color: '#333',
    },
    stepDescription: {
-     fontSize: 12,
+     fontSize: 16,
       textAlign: 'center',
       height: 50,
      color: '#666',
@@ -608,7 +658,7 @@ const handleMouseLeave = (index) => {
      alignItems: 'center',
      justifyContent: 'center',
      position: 'absolute',
-     bottom: -70,
+     bottom: -130,
    },
    stepNumber: {
      color: 'black',
@@ -619,7 +669,7 @@ const handleMouseLeave = (index) => {
      padding: 15,
      borderRadius: 5,
      alignSelf: 'center',
-     marginTop: 80
+     marginTop: 120
    },
    buttonText: {
      color: '#fff',
