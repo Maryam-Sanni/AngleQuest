@@ -360,7 +360,7 @@ function AngleQuestPage({ onClose }) {
               style={styles.logo}
             />
             <Text style={styles.headerText}>
-              {t("Set up and Subscriptions")}
+              {t("Agreements & Subscription")}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>✕</Text>

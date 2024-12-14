@@ -7,25 +7,50 @@ import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './NewEmployee2';
 
-const EmployeePage = () => {
-  const [employees, setEmployees] = useState([
-    { id: 1, name: 'Patrick Oche', active: 'active', status: true, email: 'patrickking505@gmail.com', specialization: 'Microsoft', service: 'Work Delivery Support', current: 'senior', target: 'Solution Architect'  },
-    { id: 2, name: 'Aaliyah Badru', active: 'active', status: true, email: 'badruaaliyah@gmail.com', specialization: 'SAP', service: 'Work Delivery Support', current: 'Junior', target: 'Senior' },
-    { id: 3, name: 'Alex Brown', active: 'active', status: true, email: 'lexybrown@hotmail.com', specialization: 'Scrum', service: 'Career Growth Support', current: 'Junior', target: 'Intermediate' },
-    { id: 4, name: 'Raymond Gray', active: 'inactive', status: false, email: 'raymodgray636@gmail.com', specialization: 'Business Analysis', service: 'Work Delivery Support and Career Growth Support', current: 'Beginner', target: 'Junior' },
-    { id: 5, name: 'Mary Claire', active: 'active', status: true, email: 'mclaire2007@yahoo.com', specialization: 'Microsoft', service: 'Career Growth Support', current: 'senior', target: 'Manager' },
-  ]);
+
+  const EmployeePage = () => {
+    const [employees, setEmployees] = useState([
+      { id: 1, name: 'Patrick Oche', active: 'active', status: true, email: 'patrickking505@gmail.com', specialization: 'Microsoft', service: 'Work Delivery Support', current: 'senior', target: 'Solution Architect', createdDate: new Date('2024-12-14T00:00:00Z')  },
+      { id: 2, name: 'Aaliyah Badru', active: 'active', status: true, email: 'badruaaliyah@gmail.com', specialization: 'SAP', service: 'Work Delivery Support', current: 'Junior', target: 'Senior', createdDate: new Date('2024-12-11T00:00:00Z')  },
+      { id: 3, name: 'Alex Brown', active: 'active', status: true, email: 'lexybrown@hotmail.com', specialization: 'Scrum', service: 'Career Growth Support', current: 'Junior', target: 'Intermediate', createdDate: new Date('2024-12-10T00:00:00Z') },
+      { id: 4, name: 'Raymond Gray', active: 'inactive', status: false, email: 'raymodgray636@gmail.com', specialization: 'Business Analysis', service: 'Work Delivery Support and Career Growth Support', current: 'Beginner', target: 'Junior', createdDate: new Date('2024-12-08T00:00:00Z') },
+      { id: 5, name: 'Mary Claire', active: 'active', status: true, email: 'mclaire2007@yahoo.com', specialization: 'Microsoft', service: 'Career Growth Support', current: 'senior', target: 'Manager', createdDate: new Date('2024-12-01T00:00:00Z') },
+    ]);
+    
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [ModalVisible, setModalVisible] = useState(false);
-  
-  // Toggles employee selection
-  const toggleSelectEmployee = (id) => {
-    if (selectedEmployees.includes(id)) {
-      setSelectedEmployees(selectedEmployees.filter((empId) => empId !== id));
-    } else {
-      setSelectedEmployees([...selectedEmployees, id]);
-    }
-  };
+
+    // Function to check if the createdDate is today
+    const isCreatedToday = (createdDate) => {
+      const today = new Date();
+
+      // Normalize today's date to ignore time
+      const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+      // Normalize createdDate to ignore time
+      const normalizedCreatedDate = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate());
+
+      // Compare normalized dates
+      return normalizedCreatedDate.getTime() === normalizedToday.getTime();
+    };
+
+    // Format the date
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+    };
+
+    // Handle the toggle selection of employees
+    const toggleSelectEmployee = (id) => {
+      if (selectedEmployees.includes(id)) {
+        setSelectedEmployees(selectedEmployees.filter((empId) => empId !== id));
+      } else {
+        setSelectedEmployees([...selectedEmployees, id]);
+      }
+    };
 
   // Toggles employee status
   const toggleStatus = (id) => {
@@ -204,12 +229,13 @@ const EmployeePage = () => {
             color="#4CAF50"
           /></Text>
           <Text style={[styles.headerCell, {marginLeft: 30 }]}>Full Name</Text>
-          <Text style={[styles.headerCell, {marginLeft: 10 }]}>Email Address</Text>
+          <Text style={styles.headerCell}>Email Address</Text>
           <Text style={[styles.headerCell, {marginLeft: 30 }]}>Specialization</Text>
           <Text style={styles.headerCell}>Current Role</Text>
           <Text style={styles.headerCell}>Target Role</Text>
           <Text style={styles.headerCell}>Service</Text>
-          <Text style={[styles.headerCell, {marginLeft: 30 }]}>Status</Text>
+           <Text style={[styles.headerCell, {marginLeft: 30 }]}>Created</Text>
+            <Text style={styles.headerCell}>Status</Text>
           <Text style={[styles.headerCell, {flex: 0 }]}><Switch
                color="green"
              /></Text>
@@ -219,19 +245,25 @@ const EmployeePage = () => {
           data={employees}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.tableRow}>
+            <View
+              style={[
+                styles.tableRow,
+                isCreatedToday(item.createdDate) && styles.highlightRow,
+              ]}
+            >
               <Checkbox
                 status={selectedEmployees.includes(item.id) ? 'checked' : 'unchecked'}
                 onPress={() => toggleSelectEmployee(item.id)}
                 color="#4CAF50"
               />
-              <Text style={[styles.cell, {marginLeft: 30 }]}>{item.name}</Text>
-              <Text style={[styles.cell, {marginLeft: 10 }]}>{item.email}</Text>
+                <TouchableOpacity style={[styles.cell, { marginLeft: 30, color: 'green' }]}>{item.name}</TouchableOpacity>
+                <Text style={styles.cell}>{item.email}</Text>
               <Text style={[styles.cell, {marginLeft: 30 }]}>{item.specialization}</Text>
               <Text style={styles.cell}>{item.current}</Text>
               <Text style={styles.cell}>{item.target}</Text>
               <Text style={styles.cell}>{item.service}</Text>
-              <Text style={[styles.cell, {marginLeft: 30 }]}>{item.active}</Text>
+               <Text style={[styles.cell, {marginLeft: 30 }]}>{formatDate(item.createdDate)}</Text>
+              <Text style={styles.cell}>{item.active}</Text>
               <Switch
                 value={item.status}
                 onValueChange={() => toggleStatus(item.id)}
@@ -300,14 +332,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     alignItems: 'center',
   },
+  highlightRow: {
+    backgroundColor: '#e8f5e9', 
+  },
   headerCell: {
     fontWeight: 'bold',
     textAlign: 'flex-start',
     flex: 1,
+     maxWidth: "11.25%"
   },
   cell: {
     flex: 1,
     textAlign: 'flex-start',
+     maxWidth: "11.25%"
   },
   button: {
     borderRightWidth: 1, 

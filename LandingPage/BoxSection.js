@@ -8,8 +8,8 @@
       // Define your boxes data
       const boxes = [
          {
-           title: "Skill Gap Analysis",
-           description: "We assess the gap between your current skill set and the skills needed to excel in your career",
+           title: "See an expert",
+           description: "Unsure about the technology skill to dive into?",
            navigateTo: "/about-skill-analysis", // This will be used for navigation
          },
          {
@@ -81,12 +81,12 @@
                            <Text style={styles.boxText}>{box.title}</Text>
                            <Text style={styles.boxsubText}>{box.description}</Text>
                            <View style={{ flexDirection: 'row', marginTop: 40 }}>
-                              {box.title === "Skill Gap Analysis" ? (
+                              {box.title === "See an expert" ? (
                                  <TouchableOpacity onPress={gotoskill}>
-                                    <Text style={styles.boxLText}>Learn More</Text>
+                                    <Text style={styles.boxLText}>Book an appointment</Text>
                                  </TouchableOpacity>
                               ) : (
-                                 <Text style={styles.boxLText}>Learn More</Text>
+                                 <Text style={styles.boxLText}>Book an appointment</Text>
                               )}
                               <Image
                                  source={{ uri: 'https://img.icons8.com/?size=100&id=76&format=png&color=206C00' }}
