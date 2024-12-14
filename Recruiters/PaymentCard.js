@@ -1,204 +1,252 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal, Switch } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Switch, CheckBox, Image, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
-import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function MyComponent({ onClose }) {
-  const [ModalVisible, setModalVisible] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [billingAddress, setBillingAddress] = useState('');
+function PaymentForm({ onClose }) {
+  const [cardName, setCardName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [expMonth, setExpMonth] = useState('');
+  const [expYear, setExpYear] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
-
-  const handleOpenPress = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    onClose();
-  };
-
-  const handleSave = () => {
-    // You can store these details into AsyncStorage or any other storage you use
-    console.log({
-      fullName,
-      email,
-      phone,
-      billingAddress,
-      isRecurring,
-    });
-    // Close modal and reset state if needed
-    setModalVisible(false);
-    onClose();
-  };
-
+  const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
 
-  const { t } = useTranslation();
-
   return (
-    <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
-      <View style={styles.greenBox}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-            style={styles.logo}
-          />
-          <Text style={styles.headerText}>{t("Card Details")}</Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
-              ✕
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ flexDirection: 'column', marginLeft: 50, marginRight: 50 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 5, textAlign: 'flex-start' }}>
-            {t("Enter Card Details")}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Full Name")}
-          </Text>
-          <TextInput
-            placeholder={t("Full Name")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={fullName}
-            onChangeText={setFullName}
-          />
-
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Email Address")}
-          </Text>
-          <TextInput
-            placeholder="hello@mybusiness.com"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Phone Number")}
-          </Text>
-          <TextInput
-            placeholder="123-456-7890"
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={phone}
-            onChangeText={setPhone}
-          />
-
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, marginBottom: 5, fontFamily: "Roboto-Light" }}>
-            {t("Billing Address")}
-          </Text>
-          <TextInput
-            placeholder={t("Billing Address")}
-            placeholderTextColor="grey"
-            style={styles.input}
-            value={billingAddress}
-            onChangeText={setBillingAddress}
-          />
-
-          <Text style={{ fontWeight: '500', fontSize: 16, marginLeft: 50, marginTop: 20, fontFamily: "Roboto-Light" }}>
-            {t("Recurring Payment")}
-          </Text>
-          <View style={styles.switchContainer}>
-            <Text>{t("Enable Recurring Payments")}</Text>
-            <Switch
-              value={isRecurring}
-              onValueChange={(value) => setIsRecurring(value)}
-            />
-          </View>
-
-          <TouchableOpacity onPress={handleSave} style={styles.buttonplus}>
-            <Text style={styles.buttonTextplus}>{t("Save")}</Text>
-          </TouchableOpacity>
-        </View>
-
-       
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+        <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
+          ✕
+        </Text>
+      </TouchableOpacity>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Payment Method</Text>
+        <Text style={styles.subHeaderText}>
+          This is the primary payment method that will be charged.
+        </Text>
       </View>
+
+      {/* Buttons */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.button, styles.selectedButton]}>
+          <Image
+            source={{ uri: 'https://img.icons8.com/?size=100&id=83205&format=png&color=206C00' }}
+            style={{width: 20, height: 20, alignSelf: 'flex-end', marginTop: -10}}
+          />
+          <Image
+            source={{ uri: 'https://img.icons8.com/?size=100&id=22128&format=png&color=000000' }}
+            style={{width: 50, height: 50, alignSelf: 'center'}}
+          />
+          <Text style={styles.buttonText}>Credit Or Debit Card</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Image
+            source={{ uri: 'https://img.icons8.com/?size=100&id=59872&format=png&color=000000' }}
+            style={{width: 50, height: 50, alignSelf: 'center', marginTop: 10}}
+          />
+          <Text style={styles.buttonText}>Change Payment</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Form Fields */}
+       <View style={styles.formcontainer}>
+      <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="e.g., John Doe"
+        value={cardName}
+        onChangeText={setCardName}
+      />
+
+      <Text style={styles.label}>Card Number</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="1234 5678 9012 3456"
+        value={cardNumber}
+        onChangeText={setCardNumber}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>CVV</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="123"
+        value={cvv}
+        onChangeText={setCvv}
+        keyboardType="numeric"
+      />
+
+      {/* Expiration Date */}
+      <Text style={styles.label}>Expiration Date</Text>
+      <View style={styles.row}>
+        <TextInput
+          style={[styles.input, styles.smallInput]}
+          placeholder="MM"
+          value={expMonth}
+          onChangeText={setExpMonth}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={[styles.input, styles.smallInput]}
+          placeholder="YY"
+          value={expYear}
+          onChangeText={setExpYear}
+          keyboardType="numeric"
+        />
+      </View>
+
+       </View>
+      
+      {/* Checkbox */}
+      <View style={styles.checkboxContainer}>
+        <CheckBox
+          value={useExistingAddress}
+          onValueChange={setUseExistingAddress}
+        />
+        <Text style={styles.checkboxText}>Use the existing address for this payment method</Text>
+      </View>
+
+        <View style={styles.checkboxContainer}>
+          <Switch
+            value={isRecurring}
+            onValueChange={(value) => setIsRecurring(value)}
+          />
+          <Text style={styles.checkboxText}>Make this payment recurring</Text>
+        </View>
+
+      {/* Captcha */}
+      <View style={styles.captchaContainer}>
+        <Image
+          source={{ uri: 'https://www.gstatic.com/recaptcha/api2/logo_48.png' }}
+          style={styles.captchaImage}
+        />
+        <Text style={styles.captchaText}>Privacy - Terms</Text>
+      </View>
+
+      {/* Submit Button */}
+      <TouchableOpacity style={styles.submitButton}>
+        <Text style={styles.submitButtonText}>Save</Text>
+      </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  modalContent: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'white',
+    padding: 30,
+    marginTop: 40,
+    width: 700
   },
-  greenBox: {
-    width: 1000,
-    height: "100%",
+  formcontainer: {
     backgroundColor: '#F8F8F8',
+    padding: 30,
+    marginTop: 30,
+    marginBottom: 30
+  },
+  header: {
+    marginBottom: 10,
+    marginTop: 10
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  subHeaderText: {
+    fontSize: 14,
+    color: '#555',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  button: {
+    padding: 20,
+    marginRight: 10,
+    backgroundColor: 'none',
+    borderRadius: 10,
+    width: 180,
+    borderColor: 'lightgrey',
+    borderWidth: 2,
+    marginRight: 20
+  },
+  selectedButton: {
+    backgroundColor: 'none',
+    borderColor: 'green',
+    borderWidth: 3,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: 5
+  },
+  label: {
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
   },
   input: {
-    height: 40,
-    width: "90%",
     backgroundColor: 'white',
-    borderColor: '#206C00',
+    borderColor: '#DDD',
     borderWidth: 1,
-    color: 'black',
-    fontSize: 14,
-    marginLeft: 50,
-    borderRadius: 5,
     padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
   },
-  switchContainer: {
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  smallInput: {
+    width: '45%',
+  },
+  checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 50,
-    marginTop: 10,
+    marginBottom: 20,
   },
-  buttonplus: {
-    backgroundColor: 'coral',
-    padding: 10,
-    marginTop: 30,
-    marginLeft: 850,
-    width: 100,
-    paddingHorizontal: 20,
+  checkboxText: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#333',
+  },
+  captchaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  captchaImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  captchaText: {
+    fontSize: 12,
+    color: '#555',
+  },
+  submitButton: {
+    backgroundColor: '#3F5637',
+    padding: 15,
     borderRadius: 5,
   },
-  buttonTextplus: {
+  submitButtonText: {
     color: 'white',
-    fontSize: 14,
     textAlign: 'center',
-    fontFamily: "Roboto-Light",
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   closeButton: {
     position: 'absolute',
     top: 20,
     right: 20,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCC',
-    marginBottom: 20,
-  },
-  logo: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-  },
 });
 
-export default MyComponent;
+export default PaymentForm;

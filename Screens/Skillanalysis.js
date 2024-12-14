@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
     padding: 50,
   },
   heading: {
-    fontSize: 28,
+    fontSize: 31,
     fontWeight: "bold",
     textAlign: "center",
     color: "#333",
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   subHeading: {
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
     color: "#666",
     marginBottom: 20,
@@ -777,7 +777,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignSelf: "center",
-    marginTop: 120,
+    marginTop: 100,
+    marginBottom: 100
   },
   buttonText: {
     color: "#fff",

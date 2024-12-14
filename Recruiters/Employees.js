@@ -6,6 +6,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './NewEmployee2';
+import OpenModal2 from './NewEmp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
   const EmployeePage = () => {
@@ -19,6 +21,7 @@ import OpenModal from './NewEmployee2';
     
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [ModalVisible, setModalVisible] = useState(false);
+     const [ModalVisible2, setModalVisible2] = useState(false);
 
     // Function to check if the createdDate is today
     const isCreatedToday = (createdDate) => {
@@ -146,7 +149,23 @@ import OpenModal from './NewEmployee2';
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-  
+
+    // Function to save selected row data to AsyncStorage
+    const handleOpenPress2 = async (item) => {
+      try {
+        // Save the item to AsyncStorage
+        await AsyncStorage.setItem('selectedEmployee', JSON.stringify(item));
+        console.log('Employee data saved successfully:', item);
+      } catch (error) {
+        console.error('Error saving data to AsyncStorage:', error);
+      }
+       setModalVisible2(true);
+    };
+
+    const handleCloseModal2 = () => {
+      setModalVisible2(false);
+    };
+    
   return (
     <ImageBackground
     source={require ('../assets/backgroundimg2.png') }
@@ -256,7 +275,12 @@ import OpenModal from './NewEmployee2';
                 onPress={() => toggleSelectEmployee(item.id)}
                 color="#4CAF50"
               />
-                <TouchableOpacity style={[styles.cell, { marginLeft: 30, color: 'green' }]}>{item.name}</TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleOpenPress2(item)} 
+                style={[styles.cell, { marginLeft: 30, color: 'green' }]}
+              >
+                <Text>{item.name}</Text>
+              </TouchableOpacity>
                 <Text style={styles.cell}>{item.email}</Text>
               <Text style={[styles.cell, {marginLeft: 30 }]}>{item.specialization}</Text>
               <Text style={styles.cell}>{item.current}</Text>
@@ -281,6 +305,16 @@ import OpenModal from './NewEmployee2';
       >
         <View style={styles.modalContent}>
           <OpenModal onClose={handleCloseModal} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
         </View>
       </Modal>
     </View>

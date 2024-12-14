@@ -58,7 +58,7 @@ function AngleQuestPage({ onClose }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
-  const [activeCard, setActiveCard] = useState('Subscriptions');
+  const [activeCard, setActiveCard] = useState('Non-Disclosure agreement');
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -88,6 +88,55 @@ function AngleQuestPage({ onClose }) {
   };
   
   const steps = [
+    {
+      heading: t(" "),
+      content: (
+        <View style={styles.uploadContainer}>
+          <Text style={styles.mainHeading2}>
+            {t("Non-Disclosure Agreement")}
+          </Text>
+          <Text style={styles.subHeading2}>
+            {t("Upload Non-Disclosure Agreement to protect your employees")}
+          </Text>
+          <View style={styles.input}>
+            <input type="file" accept="image/*" onChange={handleChooseImage} />
+          </View>
+          <Text style={styles.uploadInfo}>
+            {t("Max File Size: 250MB, File type: pdf or word")}
+          </Text>
+          <TouchableOpacity style={styles.buttonsave}>
+            <Text style={styles.buttonsaveText}>{t("Save")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttondone}>
+            <Text style={styles.buttonsaveText2}>{t("Submit")}</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+    {
+      heading: t("AngleQuest Agreement"),
+      content: (
+        <View>
+          <Text style={styles.subHeading}>
+            {t("Create your members individually or simply upload an excel document to add all members at once.")}
+          </Text>
+
+
+        </View>
+      ),
+    },
+    {
+      heading: t("Service level Agreement"),
+      content: (
+        <View>
+          <Text style={styles.subHeading}>
+            {t("Welcome to Service level Agreement")}
+          </Text>
+
+
+        </View>
+      ),
+    },
     {
       heading: t(
         "Orchestrate your team members performance and growth using these services...",
@@ -269,60 +318,8 @@ function AngleQuestPage({ onClose }) {
         </View>
       ),
     },
-    {
-      heading: t("Onboard Employees"),
-      content: (
-        <View>
-          <Text style={styles.subHeading}>
-            {t("Create your members individually or simply upload an excel document to add all members at once.")}
-          </Text>
-          <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 30}}>
-          <View style={{flexDirection: 'column'}}>
-          <View style={styles.input}>
-            <input
-            type="file"
-            accept="image/*"
-            onChange={handleChooseImage}
-          />
-          </View>
-            <Text style={{fontSize: 14, color: 'grey', marginTop: 5, marginLeft: 10, textAlign: 'center'}}>{t("Upload employees List from excel")}</Text>
-          </View>
-
-            <View style={{flexDirection: 'column', marginLeft: 30}}>
-          <TouchableOpacity onPress={handleOpenPress} style={styles.buttonind}>
-            <Text style={styles.buttontextind}>{t("Add Employee")}</Text>
-          </TouchableOpacity>
-          <Text style={{fontSize: 14, color: 'grey',  marginTop: 5, marginLeft: 10, textAlign: 'center'}}>{t("Create Employees Individually")}</Text>
-            </View>
-        </View>
-        </View>
-      ),
-    },
-    {
-      heading: t(" "),
-      content: (
-        <View style={styles.uploadContainer}>
-          <Text style={styles.mainHeading2}>
-            {t("Non-Disclosure Agreement")}
-          </Text>
-          <Text style={styles.subHeading2}>
-            {t("Upload Non-Disclosure Agreement to protect your employees")}
-          </Text>
-          <View style={styles.input}>
-            <input type="file" accept="image/*" onChange={handleChooseImage} />
-          </View>
-          <Text style={styles.uploadInfo}>
-            {t("Max File Size: 250MB, File type: pdf or word")}
-          </Text>
-          <TouchableOpacity style={styles.buttonsave}>
-            <Text style={styles.buttonsaveText}>{t("Save")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttondone}>
-            <Text style={styles.buttonsaveText2}>{t("Submit")}</Text>
-          </TouchableOpacity>
-        </View>
-      ),
-    },
+    
+   
   ];
 
   React.useEffect(() => {
@@ -335,17 +332,20 @@ function AngleQuestPage({ onClose }) {
 
   const services = [
     {
-      title: t("Subscriptions"),
-      icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
-    },
-    {
-      title: t("Onboard Employees"),
-      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
-      visible: isStartPressed,
-    },
-    {
       title: t("Non-Disclosure agreement"),
       icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
+    },
+    {
+      title: t("AngleQuest Agreement"),
+      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
+    },
+    {
+      title: t("Service level Agreement"),
+      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
+    },
+    {
+      title: t("Subscriptions"),
+      icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
     },
   ];
 

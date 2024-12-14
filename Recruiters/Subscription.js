@@ -540,6 +540,9 @@ const styles = StyleSheet.create({
   activeButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.07)',
   },
+  button: {
+   marginRight: 10,
+  },
   billingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
