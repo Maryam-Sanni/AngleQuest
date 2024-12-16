@@ -418,7 +418,7 @@ const HubMeeting = () => {
       
 
 
-      <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50 }}>
+      <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50, marginLeft: 50, marginRight: 50, marginTop: 50 }}>
       <View style={{ flexDirection: "row", marginBottom: 30 }}>
         {tabs.map((tab) => (
           <TouchableOpacity key={tab.label} onPress={() => setActiveTab(tab.label)}>
@@ -787,7 +787,6 @@ const handleJoinMeeting = (link) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: "none",
   },
   modalContent: {
@@ -799,9 +798,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    padding: 5,
-    marginTop: 10,
-    marginBottom: 50,
+    padding: 10,
+    marginLeft: 0,
+    marginBottom: 10,
     shadowColor: '#FFFFFF', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,

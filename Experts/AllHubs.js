@@ -10,6 +10,7 @@ import {
   Modal,
   ImageBackground,
 } from "react-native";
+import { Button, Chip } from "react-native-paper";
 import Topbar from "../components/expertstopbar";
 import Sidebar from "../components/expertssidebar";
 import OpenModal from "../components/Createhubform";
@@ -137,57 +138,7 @@ function MyComponent() {
           <Sidebar />
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
             <View style={{ marginLeft: 270 }}>
-              <View style={styles.header}>
-                <TouchableOpacity onPress={handleOpenPress}>
-                  <View
-                    style={{
-                      marginLeft: 110,
-                      padding: 10,
-                      borderRadius: 5,
-                      backgroundColor: "coral",
-                      width: 130,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        alignText: "center",
-                        fontWeight: "600",
-                        fontFamily: "Roboto-Light",
-                      }}
-                    >
-                      {t("Create New Hub")}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={handleOpenPress2}>
-                  <View
-                    style={{
-                      marginLeft: 10,
-                      padding: 10,
-                      borderRadius: 5,
-                      backgroundColor: "coral",
-                      width: 100,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        alignText: "center",
-                        fontWeight: "600",
-                        fontFamily: "Roboto-Light",
-                      }}
-                    >
-                      {t("Edit Hub")}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              
 
               <Modal
                 animationType="slide"
@@ -262,6 +213,8 @@ function MyComponent() {
 }
 
 const ScheduledMeetingsTable = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible6, setModalVisible6] = useState(false);
   const [modalVisible5, setModalVisible5] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
@@ -280,6 +233,20 @@ const ScheduledMeetingsTable = () => {
     time: "",
   });
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleNext = () => {
+    if (currentIndex + 3 < hubs.length) {
+      setCurrentIndex(currentIndex + 3);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 3);
+    }
+  };
+  
   const handleOpenPress6 = () => {
     setModalVisible6(true);
   };
@@ -439,6 +406,22 @@ const ScheduledMeetingsTable = () => {
 
   const { t } = useTranslation();
 
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+  
   const handleOpenPress4 = () => {
     setModalVisible5(true);
   };
@@ -465,56 +448,91 @@ const ScheduledMeetingsTable = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          padding: 15,
-          marginTop: 20,
-          marginLeft: 50,
-          marginRight: 50,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 18,
-            marginLeft: 20,
-            fontWeight: "600",
-            color: "black",
-          }}
+        <View style={styles.header}>
+          <Button
+            mode="text"
+            textColor="#000000"
+            style={styles.button}
+            onPress={handleOpenPress}
+            icon={() => (
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50",
+                }}
+                style={{ width: 20, height: 20 }}
+              />
+            )}
+          >
+            Create New Hub
+          </Button>
+          <Button
+            mode="text"
+            textColor="#000000"
+            style={styles.button}
+
+            onPress={handleOpenPress2}
+          >
+            Edit Hub
+          </Button>
+          <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20, marginLeft: 10}}/>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Button
+          mode="text"
+          textColor="#000000"
+          style={styles.button}
+          onPress={handlePrev}
+          icon={() => (
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=84842&format=png&color=000000",
+              }}
+              style={{ width: 20, height: 20 }}
+            />
+          )}
         >
-          Training Hubs
-        </Text>
+          Prev
+        </Button>
+        {hubs.slice(currentIndex, currentIndex + 3).map((hub) => {
+          const isSelected = hub.id === selectedHub?.id;
 
-        <View style={{ flexDirection: "row", marginLeft: 20, marginTop: -5 }}>
-          {hubs.map((hub) => {
-            const isSelected = hub.id === selectedHub?.id;
-
-            return (
-              <TouchableOpacity
-                key={hub.id}
-                onPress={() => handleHubPress(hub)}
-                accessibilityRole="button"
-              >
-                <View
-                  style={[
-                    styles.item,
-                    isSelected ? styles.selectedItem : styles.unselectedItem,
-                  ]}
-                >
-                  <Text
+                return (
+                  <Chip
+                    key={hub.id}
+                    mode="text"
+                    textColor="#000000"
                     style={[
-                      styles.hubText,
-                      isSelected ? styles.selectedText : styles.unselectedText,
+                      styles.hubChip,
+                      isSelected && styles.selectedChip,
                     ]}
+                    onPress={() => handleHubPress(hub)}
                   >
                     {hub.coaching_hub_name || "No hub yet"}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                  </Chip>
+                );
+              })}
+        
+          <Button
+            mode="text"
+            textColor="#000000"
+            style={styles.button}
+            onPress={handleNext}
+            icon={() => (
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=86516&format=png&color=000000",
+                }}
+                style={{ width: 20, height: 20 }}
+              />
+            )}
+          >
+            Next
+          </Button>
+          </View>
         </View>
-      </View>
+
+        {/* Training Hubs Section */}
+        
+
       <View
         style={{
           backgroundColor: "rgba(211,249,216,0.1)",
@@ -639,6 +657,26 @@ const ScheduledMeetingsTable = () => {
           <OpenModal5 onClose={handleCloseModal4} />
         </View>
       </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={() => handleCloseModal2()} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={() => handleCloseModal()} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -651,15 +689,17 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   header: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 10,
     marginLeft: -60,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    backgroundColor: "#f7fff4",
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f7fff4",
-  },
+    marginBottom: 10,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5, 
+  }, 
   item: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -842,6 +882,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     borderColor: "white",
+  },
+  hubChip: {
+    marginHorizontal: 5,
+     backgroundColor: "white",
+    borderRadius: 30,
+  },
+  selectedChip: {
+        backgroundColor: "rgba(128, 128, 128, 0.1)",
+    borderRadius: 30,
   },
 });
 

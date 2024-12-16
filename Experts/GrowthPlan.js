@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableH
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledGrowthPlan from '../components/ScheduledGrowthPlan';
+import { Button } from 'react-native-paper';
 import GrowthPlansReview from '../components/GrowthPlansReview';
 import CompletedGrowthPlan from '../components/CompletedGrowthPlan';
 import OpenModal from '../Experts/Growthplanprofile';
@@ -232,25 +233,31 @@ const {t}=useTranslation()
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={{ marginLeft: 270}}>
           <View style={styles.header}>
-            
-                     
-             
-                            
-                        </View>
-                        <View style={{flexDirection: 'row'}}>
-                    
-          <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 1 }}>
-                    <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Create Profile")}</Text>
-                  </View>
-     </TouchableOpacity>
-          
-          <TouchableOpacity onPress={handleOpenPress2}>
-            <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 20, borderWidth: 1 }}>
-                            <Text style={{ fontSize: 13, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Edit Profile")}</Text>
-                          </View>
-             </TouchableOpacity>
-                         </View>
+            <Button mode="text" 
+              textColor="#000000"
+              style={styles.button} 
+              onPress={handleOpenPress}
+              icon={() => (
+                <Image 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=20324&format=png&color=000000' }} 
+                  style={{ width: 20, height: 20 }} 
+                />
+              )}>Create Profile</Button>
+
+            <Button mode="text" 
+              textColor="#000000"
+              style={styles.button} 
+              onPress={handleOpenPress2}
+              icon={() => (
+                <Image 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=Da9Xe1TFL49g&format=png&color=000000' }} 
+                  style={{ width: 20, height: 20 }} 
+                />
+              )}
+              >Edit Profile</Button>
+
+          </View>
+                       
 
           <View style={styles.container}>
             {/* Tab Navigation */}
@@ -323,15 +330,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   header: {
-    marginLeft: -60,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: '#f7fff4',
-    paddingVertical: 25,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
+    backgroundColor: 'white',
+    padding: 10,
+    marginLeft: -60,
+    marginBottom: 10,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5, 
+  }, 
   item: {
     flexDirection: 'row',
     alignItems: 'flex-start',

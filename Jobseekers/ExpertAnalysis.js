@@ -334,7 +334,7 @@ const AIScreen = () => {
                                       style={{ width: 20, height: 20 }} 
                                     />
                                   )}>New</Button>
-
+                                <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20, marginLeft: 10}}/>
                                 <Button mode="text" 
                                   textColor="#000000"
                                   style={styles.button} 
@@ -488,8 +488,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     padding: 10,
-    marginTop: 10,
-    marginRight: 50,
+    marginLeft: -60,
     marginBottom: 10,
     shadowColor: '#FFFFFF', 
     shadowOffset: { width: 0, height: 2 },

@@ -259,7 +259,7 @@ function MyComponent() {
                     <ScrollView
                         contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}
                     >
-                        <View style={{  marginLeft: 270 }}>
+                        <View style={{  marginLeft: 210 }}>
                             
                             
                                 
