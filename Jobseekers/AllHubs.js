@@ -260,17 +260,7 @@ function MyComponent() {
                         contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}
                     >
                         <View style={{  marginLeft: 270 }}>
-                            <View style={styles.header}>
-                               <TouchableOpacity onPress={handleOpenPress}>
-                              <View style={{ marginLeft: 70, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 120, alignItems: 'center',}}>
-                                
-                                <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Join New Hub")}</Text>
-                              </View>
-                                 </TouchableOpacity>
-                                <Text style={{fontSize: 20, color: 'black', fontWeight: '600', position: 'absolute', right: 50, marginTop: 5 }}>Knowledge Sharing Sessions</Text>
-                                       
-                        
-                            </View>
+                            
                             
                                 
                                

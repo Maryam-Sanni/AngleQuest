@@ -7,14 +7,15 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Linking,
+  Linking, Modal
 } from "react-native";
-import { Button } from 'react-native-paper';
+import { Button, Chip } from "react-native-paper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";
 import { Video } from 'expo-av';
 import moment from "moment-timezone";
+import OpenModal from "../Jobseekers/Pickyourhub";
 
 const HubMeeting = () => {
   const [meetings, setMeetings] = useState([]);
@@ -34,7 +35,15 @@ const HubMeeting = () => {
   const [expandedView, setExpandedView] = useState(false); 
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [note, setNote] = useState("");
-  
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   useEffect(() => {
     // When the expanded view is closed, reset the selected meeting
     if (!expandedView) {
@@ -323,48 +332,91 @@ const HubMeeting = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Hub buttons for filtering */}
-      <View style={styles.hubButtonsContainer}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          {/* Left Arrow */}
-          {currentIndex > 0 && (
-            <TouchableOpacity onPress={handlePrev} style={styles.arrowButton}>
-              <Text style={styles.arrowText}>←</Text>
-            </TouchableOpacity>
-          )}
-
-          {/* Display three hubs based on the current index */}
-          {hubs.slice(currentIndex, currentIndex + 3).map((hubName) => (
-            <TouchableOpacity
-              key={hubName}
-              style={
-                selectedHub === hubName
-                  ? styles.selectedItem
-                  : styles.unselectedItem
-              }
-              onPress={() => {
-                setSelectedHub(hubName);
+      <View style={styles.header}>
+        <Button
+          mode="text"
+          textColor="#000000"
+          style={styles.button}
+          onPress={handleOpenPress}
+          icon={() => (
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50",
               }}
-            >
-              <Text
-                style={
-                  selectedHub === hubName
-                    ? styles.selectedText
-                    : styles.unselectedText
-                }
+              style={{ width: 20, height: 20 }}
+            />
+          )}
+        >
+          Join New Hub
+        </Button>
+        <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20}}/>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            {/* Left Arrow */}
+            {currentIndex > 0 && (
+      <Button
+        mode="text"
+        textColor="#000000"
+        style={styles.button}
+        onPress={handlePrev}
+        icon={() => (
+          <Image
+            source={{
+              uri: "https://img.icons8.com/?size=100&id=84842&format=png&color=000000",
+            }}
+            style={{ width: 20, height: 20 }}
+          />
+        )}
+      >
+        Prev
+      </Button>
+            )}
+
+            {/* Hub Items */}
+            {hubs.slice(currentIndex, currentIndex + 3).map((hubName) => (
+              <Chip
+                key={hubName}
+                mode="text"
+                textColor="#000000"
+                style={[
+                  styles.hubChip,
+                  selectedHub === hubName && styles.selectedChip,
+                ]}
+                textStyle={{
+                  color: selectedHub === hubName ? "black" : "black",
+                }}
+                onPress={() => setSelectedHub(hubName)}
+                selected={selectedHub === hubName}
               >
                 {hubName}
-              </Text>
-            </TouchableOpacity>
-          ))}
+              </Chip>
+            ))}
 
-          {/* Right Arrow */}
-          {currentIndex < hubs.length - 3 && (
-            <TouchableOpacity onPress={handleNext} style={styles.arrowButton}>
-              <Text style={styles.arrowText}>→</Text>
-            </TouchableOpacity>
-          )}
+            {/* Right Arrow */}
+            {currentIndex < hubs.length - 3 && (
+      <Button
+        mode="text"
+        textColor="#000000"
+        style={styles.button}
+        onPress={handleNext}
+        icon={() => (
+          <Image
+            source={{
+              uri: "https://img.icons8.com/?size=100&id=86516&format=png&color=000000",
+            }}
+            style={{ width: 20, height: 20 }}
+          />
+        )}
+      >
+        Next
+      </Button>
+            )}
         </View>
+       
       </View>
+
+   
+      
+
 
       <View style={{ backgroundColor: "rgba(211,249,216,0.1)", padding: 50 }}>
       <View style={{ flexDirection: "row", marginBottom: 30 }}>
@@ -702,7 +754,18 @@ const HubMeeting = () => {
           </View>
         )}
 
-
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleCloseModal}
+        >
+          <View style={styles.modalContent}>
+              <OpenModal
+                  onClose={() => handleCloseModal()}
+              />
+          </View>
+        </Modal>
       
       </View>
       <CustomAlert
@@ -726,6 +789,24 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: "none",
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 5,
+    marginTop: 10,
+    marginBottom: 50,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5, 
   },
   hubButtonsContainer: {
     flexDirection: "row",
@@ -973,6 +1054,15 @@ const styles = StyleSheet.create({
   },
   notecloseText: {
     color: '#000',
+  },
+  hubChip: {
+    marginHorizontal: 5,
+     backgroundColor: "white",
+    borderRadius: 30,
+  },
+  selectedChip: {
+        backgroundColor: "rgba(128, 128, 128, 0.1)",
+    borderRadius: 30,
   },
 });
 
