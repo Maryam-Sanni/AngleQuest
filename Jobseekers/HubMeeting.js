@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
-  Button,
   Image, TextInput,
   FlatList,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
+import { Button } from 'react-native-paper';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";

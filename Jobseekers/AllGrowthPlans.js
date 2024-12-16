@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Modal, ImageBackground } from 'react-native';
+import { Button } from 'react-native-paper';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import GrowthPlantype from '../components/growthplantype';
@@ -242,24 +243,25 @@ function MyComponent() {
                 <Sidebar />
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
                     <View style={{ marginLeft: 270 }}>
-                    <View style={styles.header}>
-                      <TouchableOpacity onPress={handleOpenPress}>
-                        <View style={{ marginLeft: 55, padding: 10, borderRadius: 5, backgroundColor: 'coral', width: 150, alignItems: 'center',}}>
-
-                          <Text style={{ fontSize: 14, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("+ New Growth Plan")}</Text>
-                        </View>
-                           </TouchableOpacity>
-                          <Text style={{fontSize: 20, color: 'black', fontWeight: '600', position: 'absolute', right: 50, marginTop: 5 }}>Growth Plan Sessions</Text>
-            </View>
-                      <View style={{flexDirection: 'row'}}>
+                      <View style={styles.header}>
+                        <Button mode="text" 
+                          textColor="#000000"
+                          style={styles.button} 
+                          onPress={handleOpenPress}
+                          icon={() => (
+                            <Image 
+                              source={{ uri: 'https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50' }} 
+                              style={{ width: 20, height: 20 }} 
+                            />
+                          )}>New</Button>
                        
-
-                        <TouchableOpacity onPress={gotoanalysis}>
-                          <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, borderWidth: 1 }}>
-                                          <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Expert Roadmap")}</Text>
-                                        </View>
-                           </TouchableOpacity>
+                        <Button mode="text" 
+                          textColor="#000000"
+                          style={styles.button} 
+                          onPress={gotoanalysis}
+                          >Expert Roadmap</Button>
                       </View>
+                   
                       <View style={styles.container}>
                         {/* Tab Navigation */}
                         <View style={styles.tabContainer}>
@@ -315,16 +317,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: 10
       },
-    header: {
-        marginLeft: -60,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(225,225,212,0.3)',
-        backgroundColor: '#f7fff4',
-    },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 10,
+    marginTop: 10,
+    marginRight: 50,
+    marginBottom: 10,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10, 
+  },
     item: {
         flexDirection: 'row',
         alignItems: 'flex-start',

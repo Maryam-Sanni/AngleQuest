@@ -12,6 +12,7 @@ import {
   ScrollView,
   TextInput
 } from "react-native";
+import { Button } from 'react-native-paper';
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -235,8 +236,8 @@ const AIScreen = () => {
     navigate("/skill-analysis-sessions");
   };
 
-  const handleback = () => {
-    navigate("/skill-analysis-sessions");
+  const GoToan = () => {
+    navigate("/expert-analysis");
   };
 
   const GoToAI = () => {
@@ -311,32 +312,42 @@ const AIScreen = () => {
 
                            
 
-                            <View style={{flexDirection: 'row', marginLeft: 250}}>
-                              <TouchableOpacity onPress={GoToBack}>
-                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "none", backgroundColor: 'none', width: 50, alignItems: 'center', marginTop: 20, marginLeft: 50, borderWidth: 0 }}>
-                                  <Image
-                                    source={{ uri: 'https://img.icons8.com/?size=100&id=99857&format=png&color=FFFFFF' }}
-                                    style={{ width: 30, height: 30, marginTop: -5 }}
-                                  />
-                                </View>
-                                </TouchableOpacity>
-                              <TouchableOpacity onPress={handleOpenPress}>
-                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
-                                <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>+ New</Text>
-                                </View>
-                                </TouchableOpacity>
-                              <TouchableOpacity  onPress={GoToAI}>
-                              <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 200, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
+                            <View style={{ marginLeft: 270}}>
+                              <View style={styles.header}>
+                                <Button mode="text" 
+                                  textColor="#000000"
+                                  style={styles.button} 
+                                  onPress={GoToBack}
+                                  icon={() => (
+                                    <Image 
+                                      source={{ uri: 'https://img.icons8.com/?size=100&id=84842&format=png&color=000000' }} 
+                                      style={{ width: 20, height: 20 }} 
+                                    />
+                                  )}>Back</Button>
+                                <Button mode="text" 
+                                  textColor="#000000"
+                                  style={styles.button} 
+                                  onPress={handleOpenPress}
+                                  icon={() => (
+                                    <Image 
+                                      source={{ uri: 'https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50' }} 
+                                      style={{ width: 20, height: 20 }} 
+                                    />
+                                  )}>New</Button>
 
-                                              <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>AI Analysis</Text>
-
-                                            </View>
-                               </TouchableOpacity>
-                              <TouchableOpacity>
-                                <View style={{ justifyContent: "flex-start", paddingHorizontal: 10, paddingVertical: 10, borderRadius: 5, borderColor: "#f7fff4", backgroundColor: 'rgba(211,249,216,0.3)', width: 150, alignItems: 'center', marginTop: 20, marginLeft: 10, borderWidth: 1 }}>
-                                                <Text style={{ fontSize: 14, color: "#f7fff4", alignText: 'center', fontWeight: 'bold',fontFamily:"Roboto-Light" }}>Expert Analysis</Text>
-                                              </View>
-                                 </TouchableOpacity>
+                                <Button mode="text" 
+                                  textColor="#000000"
+                                  style={styles.button} 
+                                  onPress={GoToAI}
+                                  >AI Analysis</Button>
+                                <Button mode="text" 
+                                  textColor="#000000"
+                                  style={styles.button} 
+                                  onPress={GoToan}
+                                  >Expert Analysis</Button>
+                              </View>
+                              
+                             
                             </View>
                             
               <View style={[styles.aiBody, { minHeight: 900, marginTop: 50, marginLeft: 230 }]}>
@@ -473,6 +484,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     position: "relative",
   },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 10,
+    marginTop: 10,
+    marginRight: 50,
+    marginBottom: 10,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5, 
+  },
   top: {
     height: 48,
     backgroundColor: "#7AA666",
@@ -560,15 +584,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 10
   },
-  button: {
-    alignSelf: "center",
-    padding: 16,
-    width: 150,
-    backgroundColor: "#7AA666",
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+ 
   buttonText: {
     fontWeight: "600",
     color: "white",
@@ -620,16 +636,6 @@ const styles = StyleSheet.create({
     width: 100, 
     height: 100, 
     resizeMode: 'contain', 
-  },
-  header: {
-    marginLeft: -60,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(225,225,212,0.3)',
-    backgroundColor: '#f7fff4',
   },
   item: {
     flexDirection: 'row',
