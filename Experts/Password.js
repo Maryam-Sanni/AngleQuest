@@ -17,6 +17,8 @@ function MyComponent() {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const toggleTwoFactorAuth = () => {
     setTwoFactorAuthEnabled(!twoFactorAuthEnabled);
   };
@@ -43,9 +45,9 @@ function MyComponent() {
       oldPassword,
       newPassword,
     };
-
+ 
     try {
-      const response = await fetch('https://recruitangle.com/api/reset-password', {
+      const response = await fetch(`${apiUrl}/api/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ function MyComponent() {
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>{t("Confirm Password")}</Text>
                 <TextInput
-                 style={[styles.input, { marginLeft: 40 }]}
+                 style={[styles.input, { marginLeft: 34 }]}
                   placeholder={t("Confirm new password")}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
@@ -182,11 +184,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   title: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: "#206C00",
     marginBottom: 20,
-    fontFamily: "Roboto-Light"
   },
   inputContainer: {
     flexDirection: "row",
@@ -196,10 +196,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#206C00",
     fontWeight: '600',
     marginRight: 10,
-    fontFamily: "Roboto-Light"
   },
   input: {
     flex: 1,
@@ -224,24 +222,21 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "coral",
     borderRadius: 5,
-    padding: 8,
+    padding: 10,
     marginRight: 15,
     alignItems: "center",
     alignSelf: "flex-end",
   },
   buttonText: {
-    fontSize: 12,
+    fontSize: 14,
     color: "white",
-    fontFamily: "Roboto-Light"
   },
   sectionTitle: {
     fontSize: 16,
-    color: "#206C00",
     fontWeight: '600',
     marginBottom: 5,
     marginTop: 5,
     marginLeft: 10,
-    fontFamily: "Roboto-Light"
   },
   sectionText: {
     fontSize: 14,
@@ -249,7 +244,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: -20,
     marginLeft: 250,
-    fontFamily: "Roboto-Light"
   },
   verifyButton: {
     backgroundColor: "coral",

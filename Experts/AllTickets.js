@@ -422,11 +422,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
-    marginLeft: 200
+    marginLeft: 200,
+    backgroundColor: '#F5F5F5'
   },
   picker: {
     height: 50,
-    width: 300,
+    width: "24%",
     marginHorizontal: 5,
     backgroundColor: 'white',
     marginBottom: 30
@@ -510,9 +511,9 @@ const styles = StyleSheet.create({
   },
       smallstep1: {
         width: "100%", 
-      marginLeft: 10,
+      marginLeft: 5,
         height: 200,
-        marginBottom: 20,
+        marginBottom: 10,
       borderWidth: 1,
         borderColor: 'green',
         backgroundColor: "white",
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
       marginLeft: 15,
         height: 200,
         marginBottom: 10,
-        backgroundColor: "#e0e0e0",
+        backgroundColor: "#F5F5F5",
         padding: 20,
       },
   container: {
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
   progressBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#F5F5F5',
     marginBottom: 10,
   },
   progressStep: {

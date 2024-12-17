@@ -5,71 +5,108 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 
 const Settings = ({ onClose }) => {
-       const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    // Track hover state for each section individually
+    const [hoveredSection, setHoveredSection] = useState(null);
 
     const goToAccountSettings = () => {
         navigate('/account-setup');
         onClose();
-      };
-    
-      const goToResetPassword = () => {
+    };
+
+    const goToResetPassword = () => {
         navigate('/password');
         onClose();
-      };
-    
-      const goToNotificationSettings = () => {
+    };
+
+    const goToNotificationSettings = () => {
         navigate('/notification-setup');
         onClose();
-      };
-    
-      const goToBillingsAndPayment = () => {
+    };
+
+    const goToBillingsAndPayment = () => {
         navigate('/earnings');
         onClose();
-      };
-    
-      const [fontsLoaded]=useFonts({
-        'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-      })
-const {t}=useTranslation()
+    };
+
+    const [fontsLoaded] = useFonts({
+        'Roboto-Light': require("../assets/fonts/Roboto-Light.ttf"),
+    });
+
+    const { t } = useTranslation();
+
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToAccountSettings} style={styles.accountSettings}>
+
+            <TouchableOpacity
+                onPress={goToAccountSettings}
+                style={styles.accountSettings}
+                onMouseEnter={() => setHoveredSection('accountSettings')} 
+                onMouseLeave={() => setHoveredSection(null)}
+            >
                 <View style={styles.accountSettingsContent}>
                     <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9b7a3a6d0178d9e4654db03454de5de060a67e4b91a6fe4d31a059874d384eb2?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={styles.icon}
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=7odR6nBarM9M&format=png&color=000000' }}
+                        style={[styles.icon, hoveredSection === 'accountSettings' && { tintColor: 'green' }]} // Apply green color on hover
                     />
-                    <Text style={styles.accountSettingsText}>{t("Account Settings")}</Text>
+                    <Text style={[styles.accountSettingsText, hoveredSection === 'accountSettings' && { color: 'green' }]}>
+                        {t("Account Settings")}
+                    </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToNotificationSettings} style={styles.accountSettings}>
+
+            <TouchableOpacity
+                onPress={goToNotificationSettings}
+                style={styles.accountSettings}
+                onMouseEnter={() => setHoveredSection('notificationSettings')} 
+                onMouseLeave={() => setHoveredSection(null)}
+            >
                 <View style={styles.accountSettingsContent}>
                     <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/17d8150403f80380e2928ef1b9db06fb8c60a50c487a2172f5699a0eb5f88b6d?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={styles.icon}
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=82754&format=png&color=000000' }}
+                        style={[styles.icon, hoveredSection === 'notificationSettings' && { tintColor: 'green' }]} // Apply green color on hover
                     />
-                    <Text style={styles.accountSettingsText}>{t("Notification Settings")}</Text>
+                    <Text style={[styles.accountSettingsText, hoveredSection === 'notificationSettings' && { color: 'green' }]}>
+                        {t("Notification Settings")}
+                    </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToResetPassword} style={styles.accountSettings}>
+
+            <TouchableOpacity
+                onPress={goToResetPassword}
+                style={styles.accountSettings}
+                onMouseEnter={() => setHoveredSection('resetPassword')} 
+                onMouseLeave={() => setHoveredSection(null)}
+            >
                 <View style={styles.accountSettingsContent}>
                     <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d2d638a18c02206d9cb09092e754e29b9e7fcec759c21615164f9508890194ba?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={styles.icon}
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=23206&format=png&color=000000' }}
+                        style={[styles.icon, hoveredSection === 'resetPassword' && { tintColor: 'green' }]} // Apply green color on hover
                     />
-                    <Text style={styles.accountSettingsText}>{t("Password")}</Text>
+                    <Text style={[styles.accountSettingsText, hoveredSection === 'resetPassword' && { color: 'green' }]}>
+                        {t("Password")}
+                    </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={goToBillingsAndPayment} style={styles.accountSettings}>
+
+            <TouchableOpacity
+                onPress={goToBillingsAndPayment}
+                style={styles.accountSettings}
+                onMouseEnter={() => setHoveredSection('billingsAndPayment')} 
+                onMouseLeave={() => setHoveredSection(null)}
+            >
                 <View style={styles.accountSettingsContent}>
                     <Image
-                        source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/d71eb11f8b49b8dc89ac885de39244967a9d43ca35a783ff2b5c8a9c872d336c?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-                        style={styles.icon}
+                        source={{ uri: 'https://img.icons8.com/?size=100&id=wdfmkgweCGDk&format=png&color=000000' }}
+                        style={[styles.icon, hoveredSection === 'billingsAndPayment' && { tintColor: 'green' }]} // Apply green color on hover
                     />
-                    <Text style={styles.accountSettingsText}>{t("Earnings & Withdrawal")}</Text>
+                    <Text style={[styles.accountSettingsText, hoveredSection === 'billingsAndPayment' && { color: 'green' }]}>
+                        {t("Earnings & Withdrawal")}
+                    </Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -81,9 +118,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        position: 'relative', // Ensures the close button is positioned correctly
+        position: 'relative', 
     },
     closeButton: {
         position: 'absolute',
@@ -94,9 +129,8 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         fontSize: 18,
-        color: '#3F5637',
+        color: 'black',
         fontWeight: 'bold',
-        fontFamily:"Roboto-Light"
     },
     accountSettings: {
         marginTop: 20,
@@ -106,15 +140,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     icon: {
-        width: 15,
-        height: 15,
-        marginRight: 5,
+        width: 25,
+        height: 25,
+        marginRight: 10,
     },
     accountSettingsText: {
-        fontSize: 14,
-        color: '#666',
+        fontSize: 16,
+        color: 'black',
         fontWeight: '500',
-        fontFamily:"Roboto-Light"
     },
 });
 

@@ -51,6 +51,7 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [rate, setRate] = useState('$30'); // Initial value includes $
   const [id, setID] = useState(null);
+  const [selectedGuide, setSelectedGuide] = useState(null);
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -106,144 +107,29 @@ function MyComponent({ onClose }) {
     getProfileData();
   }, []);
 
-
   useEffect(() => {
-    const loadFormData = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            if (!token) throw new Error('No token found');
-
-            const response = await axios.get(`${apiUrl}/api/expert/skillAnalysis/get`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            if (response.status === 200) {
-                const fetchedGuides = response.data.SkillAnalysis;
-                const newGuide = {
-                    id: 'new',
-                    role: '',
-                    level: '',
-                    rate: '',
-                    available_days: [],
-                    available_times: '',
-                    category: '',
-                    topics: []
-                };
-
-                setSkillAnalysisGuides([newGuide, ...fetchedGuides]);
-                updateFormFields(0);  // Initialize form with the first guide (New)
-            } else {
-                console.error('Failed to fetch data', response);
-            }
-        } catch (error) {
-            console.error('Failed to load form data', error);
+    const loadSelectedGuide = async () => {
+      try {
+        const storedGuide = await AsyncStorage.getItem('selectedGuide');
+        if (storedGuide) {
+          const parsedGuide = JSON.parse(storedGuide);
+          setSelectedGuide(parsedGuide); 
+          setID(parsedGuide.id);
+          setCategory(parsedGuide.category);
+          setLevel(parsedGuide.level);
+          setTopics(parsedGuide.topics);
+          setSelectedRole(parsedGuide.specialization);
+          setAvailableDays(parsedGuide.available_days);
+          setAvailableTimes(parsedGuide.available_times);
         }
+      } catch (error) {
+        console.error('Failed to retrieve guide from storage', error);
+      }
     };
 
-    loadFormData();
+    loadSelectedGuide();
   }, []);
-
-  const updateFormFields = (index) => {
-    const guide = skillAnalysisGuides[index];
-    setCategory(guide.category);
-    setSelectedRole(guide.specialization);
-    setLevel(guide.level);
-    setRate(guide.rate);
-    setAvailableDays(guide.available_days);
-    setAvailableTimes(guide.available_times);
-    setTopics(guide.topics);
-    setID(guide.id);
-  };
-
-  const handleNextGuide = () => {
-    if (selectedGuideIndex < skillAnalysisGuides.length - 1) {
-        const newIndex = selectedGuideIndex + 1;
-        setSelectedGuideIndex(newIndex);
-        updateFormFields(newIndex);
-    }
-  };
-
-  const handlePreviousGuide = () => {
-    if (selectedGuideIndex > 0) {
-        const newIndex = selectedGuideIndex - 1;
-        setSelectedGuideIndex(newIndex);
-        updateFormFields(newIndex);
-    }
-  };
-
-
   
-  const handleNewGuide = async () => {
-      try {
-          // Fetch the latest category from AsyncStorage
-          const storedCategory = await AsyncStorage.getItem('category');
-        
-          const newGuide = {
-              id: 'new',
-              role: '',
-              level: '',
-              rate: '$0',
-            specialization: '',
-              available_days: [],
-              available_times: '',
-              category: storedCategory || '',
-              topics: []
-          };
-
-          // Update the skill analysis guides state
-          setSkillAnalysisGuides([newGuide, ...skillAnalysisGuides]);
-          setSelectedGuideIndex(0); // Set to the new guide
-          updateFormFields(0); // Initialize form fields with the new guide
-
-      } catch (error) {
-          console.error('Failed to create new guide', error);
-      }
-  };
-  
-  
-  const handleSave = async () => {
-    if ( !level || !rate || !availableDays || !availableTimes) {
-      setAlertMessage(t('Please fill all fields'));
-      setAlertVisible(true);
-      return;
-    }
-
-    try {
-      const data = {
-        role,
-        level,
-        rate,
-        timezone: userTimezone,
-        specialization: selectedRole,
-        years_experience: yearsOfExperience,
-        location,
-        available_days: availableDays,
-        available_times: availableTimes,
-        category,
-        topics
-      };
-
-      const token = await AsyncStorage.getItem('token');
-      if (!token) throw new Error('No token found');
-
-      const response = await axios.post(
-        `${apiUrl}/api/expert/skillAnalysis/create`,
-        data,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.status === 201) {
-        await AsyncStorage.setItem('skillAnalysisFormData', JSON.stringify(data));
-        setAlertMessage(t('Skill Analysis profile created successfully'));
-      } else {
-        setAlertMessage(t('Failed to create skill analysis profile'));
-      }
-    } catch (error) {
-      console.error('Error during save:', error); // Log error for debugging
-      setAlertMessage(t('Failed to create skill analysis profile'));
-    }
-    setAlertVisible(true);
-  };
 
   const handlePut = async () => {
     if ( !level || !rate || !availableDays || !availableTimes) {
@@ -333,31 +219,6 @@ function MyComponent({ onClose }) {
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>✕</Text>
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.navigationContainer}>
-              <TouchableOpacity
-                  style={styles.navButton}
-                  onPress={handleNewGuide}
-              >
-                  <Text style={styles.navButtonText}>New</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
-                  onPress={handlePreviousGuide}
-                  disabled={selectedGuideIndex === 1}
-              >
-                  <Text style={styles.navButtonText}>Previous</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === skillAnalysisGuides.length - 1 && styles.disabledNavButton]}
-                  onPress={handleNextGuide}
-                  disabled={selectedGuideIndex === skillAnalysisGuides.length - 1}
-              >
-                  <Text style={styles.navButtonText}>Next</Text>
-              </TouchableOpacity>
           </View>
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
@@ -515,11 +376,11 @@ function MyComponent({ onClose }) {
           </TouchableOpacity>
           
           <TouchableOpacity
-            onPress={selectedGuideIndex === 0 ? handleSave : handlePut} // Assuming the new guide is always at index 0
+            onPress={handlePut} 
             style={styles.buttonsave}
           >
             <Text style={styles.buttonTextsave}>
-                {selectedGuideIndex === 0 ? t("Save") : t("Update")} {/* Change text based on context */}
+              Update
             </Text>
           </TouchableOpacity>
         

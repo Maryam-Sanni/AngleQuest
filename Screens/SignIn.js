@@ -77,6 +77,7 @@ const SignIn = () => {
           ['user_id', id.toString()],
           ['first_name', first_name],
           ['last_name', last_name],
+          ['email', email],
           ['expiry_time', expiryTime.toString()],
         ]);
 

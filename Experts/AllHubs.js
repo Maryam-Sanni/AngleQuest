@@ -449,6 +449,7 @@ const ScheduledMeetingsTable = () => {
   return (
     <View style={{ flex: 1 }}>
         <View style={styles.header}>
+           <View style={{backgroundColor: '#f7fff4', flexDirection: 'row', marginTop: -10, marginRight: -10, marginLeft: -10, marginBottom: -10, padding: 10}}>
           <Button
             mode="text"
             textColor="#000000"
@@ -474,6 +475,7 @@ const ScheduledMeetingsTable = () => {
           >
             Edit Hub
           </Button>
+           </View>
           <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20, marginLeft: 10}}/>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Button
@@ -490,7 +492,7 @@ const ScheduledMeetingsTable = () => {
             />
           )}
         >
-          Prev
+          
         </Button>
         {hubs.slice(currentIndex, currentIndex + 3).map((hub) => {
           const isSelected = hub.id === selectedHub?.id;
@@ -525,7 +527,7 @@ const ScheduledMeetingsTable = () => {
               />
             )}
           >
-            Next
+           
           </Button>
           </View>
         </View>
