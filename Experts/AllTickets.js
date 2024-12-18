@@ -5,6 +5,7 @@ import Sidebar from '../components/expertssidebar';
 import OpenModal from '../Experts/TicketsResponse';
 import OpenModal2 from '../Experts/TicketsResponse2';
 import OpenModal3 from '../Experts/TicketsResponse3';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Function to calculate the difference in days
 const getRemainingDays = (deadline) => {
@@ -93,6 +94,7 @@ const TicketsPage = () => {
     },
   ];
 
+
   const [activeRequests, setActiveRequests] = useState(requests);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   
@@ -127,7 +129,18 @@ const TicketsPage = () => {
     }
   };
   
-  const handleOpenPress = () => {
+  const handleSaveRequest = async (key, request) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(request));
+      console.log('Request saved successfully:', request);
+    } catch (error) {
+      console.error('Error saving request:', error);
+    }
+  };
+
+  const handleOpenPress = async (request) => {
+    console.log('Opening request:', request); // Log the request being passed to handleSaveRequest
+    await handleSaveRequest('selectedRequest', request);
     setModalVisible(true);
   };
 
@@ -135,7 +148,8 @@ const TicketsPage = () => {
     setModalVisible(false);
   };
 
-  const handleOpenPress2 = () => {
+  const handleOpenPress2 = async (request) => {
+    await handleSaveRequest('selectedRequest', request);
     setModalVisible2(true);
   };
 
@@ -143,7 +157,8 @@ const TicketsPage = () => {
     setModalVisible2(false);
   };
   
-  const handleOpenPress3 = () => {
+  const handleOpenPress3 = async (request) => {
+    await handleSaveRequest('selectedRequest', request);
     setModalVisible3(true);
   };
 
@@ -288,12 +303,12 @@ const TicketsPage = () => {
                         marginRight: -20,
                       }}
                       onPress={() => {
-                        if (request.preference === "Text" ) {
-                          handleOpenPress(request); // Calls handleOpenPress if preference is Text
-                        } else if (request.preference === "Voice") {
-                          handleOpenPress3(request); // Calls handleOpenPress3 if preference is Voice
-                        } else if (request.preference === "Video") {
-                          handleOpenPress2(request); // Calls handleOpenPress2 if preference is Video
+                        if (request.preference === 'Text') {
+                          handleOpenPress(request);
+                        } else if (request.preference === 'Voice') {
+                          handleOpenPress3(request);
+                        } else if (request.preference === 'Video') {
+                          handleOpenPress2(request);
                         }
                       }}
                     >

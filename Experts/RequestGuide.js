@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, Picker, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, FlatList, Picker, ScrollView } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +16,7 @@ function MyComponent({ onClose }) {
   });
 
   const { t } = useTranslation();
-
+ 
   const [role, setInterviewRole] = useState('');
   const [category, setCategory] = useState('');
   const [level, setLevel] = useState('');
@@ -27,10 +27,20 @@ function MyComponent({ onClose }) {
   ]); 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');    
-  const [isVisible, setIsVisible] = useState(true); 
-  const [isPressed, setIsPressed] = useState(false);
+  const [selectedSpecializations, setSelectedSpecializations] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [rate, setRate] = useState('$30'); // Initial value includes $
+    const [selectedRoles, setSelectedRoles] = useState([]);
+    const [selectedRole, setSelectedRole] = useState('');
+  const [rate, setRate] = useState('$50'); // Initial value includes $
+  const [isPickerVisible, setPickerVisible] = useState(false);
+
+  const toggleSpecialization = (specialization) => {
+    setSelectedSpecializations((prevSelected) =>
+      prevSelected.includes(specialization)
+        ? prevSelected.filter((item) => item !== specialization)
+        : [...prevSelected, specialization]
+    );
+  };
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -52,8 +62,24 @@ function MyComponent({ onClose }) {
 
   const combinedValue = `${Array.isArray(available_days) ? available_days.join(', ') : ''}, ${available_times}`;
 
+  const specializationsList = [
+    'Business Analysis',
+    'SAP FI',
+    'SAP MM',
+    'SAP SD',
+    'SAP PP',
+    'Scrum',
+    'Microsoft Dynamics Sales',
+    'Microsoft Dynamics Customer Service',
+    'Microsoft Dynamics Field Service',
+    'Microsoft Dynamics CRM Developer',
+    'Microsoft Business Central',
+    'Microsoft Power Platform Developer',
+    'Microsoft Dynamics F&O',
+  ];
+
   const handleSave = async () => {
-    if (!role || !level || !rate || !available_days || !available_times) {
+    if (!category || !available_days || !available_times) {
       setAlertMessage(t('Please fill all fields'));
       setAlertVisible(true);
       return;
@@ -61,53 +87,66 @@ function MyComponent({ onClose }) {
 
     try {
       const data = {
-        role,
-        level,
-        rate,
-        available_days,
-        available_times,
+        time: `${available_days} ${available_times}`,
         category,
-        questions
+        specialization: selectedSpecializations,
       };
 
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
       const response = await axios.post(
-        `${apiUrl}/api/expert/interview/create`,
+        `${apiUrl}/api/expert/create-preference`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.status === 201) {
         await AsyncStorage.setItem('InterviewFormData', JSON.stringify(data));
-        setAlertMessage(t('Interview profile created successfully'));
+        setAlertMessage(t('Support request guide created successfully'));
       } else {
-        setAlertMessage(t('Failed to create interview profile'));
+        setAlertMessage(t('Failed to create Support request guide'));
       }
     } catch (error) {
       console.error('Error during save:', error); // Log error for debugging
-      setAlertMessage(t('Failed to create interview profile'));
+      setAlertMessage(t('Failed to create Support request guide'));
     }
     setAlertVisible(true);
   };
+  
+/// Function to fetch specialization and category from the API using token from AsyncStorage
+const fetchExpertProfile = async () => {
+  try {
+    // Retrieve the token from AsyncStorage
+    const token = await AsyncStorage.getItem('token');
 
-  const addQuestion = () => {
-    if (questions.length < MAX_QUESTIONS) {
-      setQuestions([...questions, { question: '', percentage: '' }]);
+    // Make the API request with the token in the headers
+    const response = await axios.get(`${apiUrl}/api/expert/get-expert-profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the request headers
+      },
+    });
+
+    // Check if the response status is success
+    if (response.data.status === "success") {
+      const { specialization = [], category = '' } = response.data.profile;
+
+      // Set the specialization array
+      setSelectedRoles(specialization);
+
+      // Set the category value
+      setCategory(category);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching profile data:', error);
+  }
+};
 
-  const updateQuestion = (index, key, value) => {
-    const newQuestions = [...questions];
-    newQuestions[index][key] = value;
-    setQuestions(newQuestions);
-  };
+// useEffect to fetch data when the component mounts
+useEffect(() => {
+  fetchExpertProfile();
+}, []);
 
-  const deleteQuestion = (index) => {
-    const newQuestions = questions.filter((_, i) => i !== index);
-    setQuestions(newQuestions);
-  };
 
   const hideAlert = () => {
     setAlertVisible(false);
@@ -148,14 +187,17 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
               </View>
               <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  placeholder="Junior Platform Developer"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={role}
-                  editable={false}
-                  onChangeText={text => setInterviewRole(text)}
-                />
+                <Picker
+                                selectedValue={category}
+                                style={styles.picker}
+                                onValueChange={(value) => setCategory(value)}
+                              >
+                                <Picker.Item label="All Category" value="" />
+                                <Picker.Item label="SAP" value="SAP" />
+                                <Picker.Item label="Microsoft" value="Microsoft" />
+                                <Picker.Item label="Scrum" value="Scrum" />
+                                <Picker.Item label="Business Analysis" value="Business Analysis" />
+                              </Picker>
               </View>
             </View>
             <View style={styles.row}>
@@ -163,33 +205,57 @@ function MyComponent({ onClose }) {
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
               </View>
               <View style={[styles.cell, { flex: 2}]}>
-                <Picker
-                  selectedValue={category}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setCategory(itemValue)}
-                >
-                  <Picker.Item label={t('SAP')} value="SAP" />
-                  <Picker.Item label={t('Microsoft')} value="Microsoft" />
-                  <Picker.Item label={t('Scrum')} value="Scrum" />
-                  <Picker.Item label={t('Business Analysis')} value="Business Analysis" />
-                </Picker>
+                <TouchableOpacity
+                style={styles.dropdownButton}
+                onPress={() => setPickerVisible(true)}
+              >
+                <Text style={styles.dropdownButtonText}>
+                  {selectedSpecializations.length > 0
+                    ? selectedSpecializations.join(', ')
+                    : 'Select Specializations'}
+                </Text>
+              </TouchableOpacity>
+        
+             {/* Modal for Picker */}
+      <Modal
+        visible={isPickerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setPickerVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select one or more Specialization(s)</Text>
+            <FlatList
+              data={specializationsList}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.modalItem}>
+                  <TouchableOpacity
+                    style={styles.checkbox}
+                    onPress={() => toggleSpecialization(item)}
+                  >
+                    {selectedSpecializations.includes(item) && (
+                      <Text style={styles.checkboxText}>✓</Text>
+                    )}
+                  </TouchableOpacity>
+                  <Text style={styles.modalItemText}>{item}</Text>
+                </View>
+              )}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setPickerVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
               </View>
             </View>
            
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  style={styles.input}
-                  value={rate}
-                  onChangeText={handleRateChange}
-                  editable={false}
-                  keyboardType="numeric" 
-                />
-              </View>
-            </View>
+          
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>
@@ -386,6 +452,76 @@ marginTop: 10
     position: 'absolute',
     left: 10,
     top: 15, // Adjust position as needed
+  },
+  label: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  dropdownButton: {
+    borderWidth: 0,
+    borderColor: '#ccc',
+    backgroundColor: 'none',
+  },
+  dropdownButtonText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  modalContent: {
+    position: 'absolute',
+    width: 400,
+    height: 300,
+left: '51.5%',
+top: 350,
+    backgroundColor: '#F5F5F5',
+    padding: 10,
+    borderRadius: 5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  modalItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 5,
+  },
+  modalItemText: {
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  checkboxText: {
+    fontSize: 16,
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: 'coral',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center'
   },
 });
 

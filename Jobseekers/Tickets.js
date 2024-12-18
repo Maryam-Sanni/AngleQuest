@@ -32,6 +32,8 @@ const SupportRequestPage = () => {
   
       // Retrieve token from AsyncStorage
       const token = await AsyncStorage.getItem('token');
+      const firstName = await AsyncStorage.getItem('first_name');
+      const lastName = await AsyncStorage.getItem('last_name');
   
       if (!token) {
         alert('Authorization token not found. Please log in again.');
@@ -40,6 +42,7 @@ const SupportRequestPage = () => {
   
       // Payload
       const payload = {
+        expert_id: firstName + ' ' + lastName,
         specialization: formData.specialization,
         title: formData.title,
         description: formData.description,
@@ -80,16 +83,25 @@ const SupportRequestPage = () => {
       <View>
         <Text style={styles.label}>Specialization</Text>
         <Picker
-          selectedValue={formData.specialization}
-          style={styles.input}
-          onValueChange={(value) => setFormData({ ...formData, specialization: value })}
-        >
-          <Picker.Item label="Select Specialization" value="" />
-          <Picker.Item label="SAP" value="SAP" />
-          <Picker.Item label="Microsoft" value="Microsoft" />
-          <Picker.Item label="Scrum" value="Scrum" />
-          <Picker.Item label="Business Analysis" value="Business Analysis" />
-        </Picker>
+  selectedValue={formData.specialization}
+  style={styles.input}
+  onValueChange={(value) => setFormData({ ...formData, specialization: value })}
+>
+  <Picker.Item label="Select Specialization" value="" />
+  <Picker.Item label="Business Analysis" value="Business Analysis" />
+  <Picker.Item label="SAP FI" value="SAP FI" />
+  <Picker.Item label="SAP MM" value="SAP MM" />
+  <Picker.Item label="SAP SD" value="SAP SD" />
+  <Picker.Item label="SAP PP" value="SAP PP" />
+  <Picker.Item label="Scrum" value="Scrum" />
+  <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
+  <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
+  <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
+  <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
+  <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
+  <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
+  <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
+</Picker>
   
         <Text style={styles.label}>Title</Text>
         <TextInput
