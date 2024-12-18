@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SupportRequestPage = () => {
   const [currentStep, setCurrentStep] = useState('start'); 
@@ -23,12 +25,48 @@ const SupportRequestPage = () => {
     videoCallDate: '', // New field for video call date
   });
 
-  const handleSubmit = () => {
-    setCurrentStep('assigned');
-    // Automatically update content after 3 seconds
-    setTimeout(() => {
-      setAssignedContent('assigned');
-    }, 5000);
+  const handleSubmit = async () => {
+    try {
+      // API URL
+      const apiUrl = process.env.REACT_APP_API_URL;
+  
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+  
+      if (!token) {
+        alert('Authorization token not found. Please log in again.');
+        return;
+      }
+  
+      // Payload
+      const payload = {
+        specialization: formData.specialization,
+        title: formData.title,
+        description: formData.description,
+        prefmode: formData.preferredMode,
+        priority: formData.priority,
+        deadline: formData.deadline,
+        videoCallDate: formData.videoCallDate || null,
+        attachment: '',
+      };
+  
+      // API Request
+      await axios.post(`${apiUrl}/api/jobseeker/support-req`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      // Update UI and proceed to assigned step
+      setCurrentStep('assigned');
+      setTimeout(() => {
+        setAssignedContent('assigned');
+      }, 5000);
+    } catch (error) {
+      console.error('Error submitting the request:', error);
+      alert('Failed to submit the request. Please try again.');
+    }
   };
 
   useEffect(() => {
@@ -52,7 +90,7 @@ const SupportRequestPage = () => {
           <Picker.Item label="Scrum" value="Scrum" />
           <Picker.Item label="Business Analysis" value="Business Analysis" />
         </Picker>
-
+  
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.input}
@@ -60,7 +98,7 @@ const SupportRequestPage = () => {
           value={formData.title}
           onChangeText={(text) => setFormData({ ...formData, title: text })}
         />
-
+  
         <Text style={styles.label}>Description</Text>
         <TextInput
           style={[styles.input, styles.textArea]}
@@ -70,7 +108,18 @@ const SupportRequestPage = () => {
           value={formData.description}
           onChangeText={(text) => setFormData({ ...formData, description: text })}
         />
-
+  
+        <Text style={styles.label}>Priority</Text>
+        <Picker
+          selectedValue={formData.priority}
+          style={styles.input}
+          onValueChange={(value) => setFormData({ ...formData, priority: value })}
+        >
+          <Picker.Item label="Select Priority" value="" />
+          <Picker.Item label="Prioritize" value="Prioritize" />
+          <Picker.Item label="Can Wait" value="Can Wait" />
+        </Picker>
+  
         <Text style={styles.label}>Your Preferred Mode of Response</Text>
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
@@ -79,7 +128,14 @@ const SupportRequestPage = () => {
           >
             {formData.preferredMode === 'text' && <Text style={styles.checkboxText}>✓</Text>}
           </TouchableOpacity>
-          <Text style={styles.checkboxLabel}>Text or Voice Note</Text>
+          <Text style={styles.checkboxLabel}>Text</Text>
+          <TouchableOpacity
+            style={styles.checkbox}
+            onPress={() => setFormData({ ...formData, preferredMode: 'voice', videoCallDate: '' })}
+          >
+            {formData.preferredMode === 'voice' && <Text style={styles.checkboxText}>✓</Text>}
+          </TouchableOpacity>
+          <Text style={styles.checkboxLabel}>Voice Note</Text>
           <TouchableOpacity
             style={styles.checkbox}
             onPress={() => setFormData({ ...formData, preferredMode: 'video' })}
@@ -88,20 +144,22 @@ const SupportRequestPage = () => {
           </TouchableOpacity>
           <Text style={styles.checkboxLabel}>Video Call</Text>
         </View>
-
+  
         {formData.preferredMode === 'video' && (
           <View>
             <Text style={styles.label}>Select a Date for the Video Call</Text>
             <input
               type="date"
               style={styles.input}
-              value={formData.VideoCallDate}
-              onChange={(event) => setFormData({ ...formData, deadline: event.target.value })}
+              value={formData.videoCallDate}
+              onChange={(event) => setFormData({ ...formData, videoCallDate: event.target.value })}
             />
           </View>
         )}
-
-        <Text style={styles.label}>Deadline (After the time elapses expert will not be picking your request)</Text>
+  
+        <Text style={styles.label}>
+          Deadline (After the time elapses, the expert will not pick your request)
+        </Text>
         <input
           type="date"
           style={styles.input}
@@ -141,11 +199,13 @@ const SupportRequestPage = () => {
             {/* Start Section */}
             {currentStep === 'start' && (
               <View style={styles.step0}>
+                        <ScrollView>
                 <Text style={styles.header}>Create Support Request</Text>
                 <SupportForm formData={formData} setFormData={setFormData} />
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                   <Text style={styles.submitButtonText}>Submit Request</Text>
                 </TouchableOpacity>
+                </ScrollView>
               </View>
             )}
 
@@ -768,6 +828,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "24%", 
     height: 600,
+    overflow: 'hidden',
     marginRight: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",

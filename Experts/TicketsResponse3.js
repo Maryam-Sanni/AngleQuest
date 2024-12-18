@@ -91,18 +91,65 @@ const ResponseModal = ({ visible, onClose, title }) => {
             />
              <Text style={{fontSize: 20, fontWeight: '600' }}>Give your response</Text>
           </View>
-          <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
-            <View style={{backgroundColor: 'green', width: 30, height: 30, borderRadius: 15, marginRight: 10, borderWidth: 1, borderColor: 'lightgreen'}}>
+         
+
+          <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 10}}>
+            {recording ? (
+              <TouchableOpacity onPress={stopRecording}>
+            <Image
+              source={{
+                uri: "https://img.icons8.com/?size=100&id=AsTz6rCweT4n&format=png&color=000000",
+              }}
+              style={{
+                width: 30,
+                height: 30,
+            marginRight: 10
+              }}
+            />
+                  </TouchableOpacity>
+                ) : (
+      <TouchableOpacity onPress={startRecording}>
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=M0nvDJhT5w5g&format=png&color=000000",
+          }}
+          style={{
+            width: 30,
+            height: 30,
+        marginRight: 10
+          }}
+        />
+              </TouchableOpacity>
+      )}
+            <View style={{flex:1, padding: 10, borderWidth: 1, borderColor: 'black'}}>
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=9387&format=png&color=000000",
+                }}
+                style={{
+                  width: 40,
+                  height: 40,
+alignSelf: 'center',
+                  marginLeft: -40,
+                  marginBottom: -70
+                }}
+              />
+            <ReactMic
+              record={recording}
+              className="sound-wave"
+              onStop={onDataRecorded}
+              mimeType="audio/wav"
+              strokeColor="black"
+              backgroundColor="transparent"
+            />
             </View>
-          <TextInput
-            value={response}
-            onChangeText={setResponse}
-            placeholder="Write your response..."
-            multiline
-            style={styles.input}
-          />
           </View>
-          
+          {recordedBlob && (
+            <View style={styles.audioContainer}>
+              <Text>Recorded Audio:</Text>
+              <audio controls src={recordedBlob.blobURL} />
+            </View>
+          )}
           
           <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
             <Image

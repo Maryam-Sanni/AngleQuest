@@ -4,6 +4,7 @@ import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import OpenModal from '../Experts/TicketsResponse';
 import OpenModal2 from '../Experts/TicketsResponse2';
+import OpenModal3 from '../Experts/TicketsResponse3';
 
 // Function to calculate the difference in days
 const getRemainingDays = (deadline) => {
@@ -20,6 +21,7 @@ const TicketsPage = () => {
   const [isPressed, setIsPressed] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
    const [currentTicketTitle, setCurrentTicketTitle] = useState('');
 
   const requests = [
@@ -93,21 +95,24 @@ const TicketsPage = () => {
 
   const [activeRequests, setActiveRequests] = useState(requests);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
-
+  
+  // Handle accept logic
   const handleAccept = (requestId) => {
     const acceptedRequest = activeRequests.find(request => request.id === requestId);
     setAcceptedRequests(prevState => [...prevState, acceptedRequest]);
     setActiveRequests(prevState => prevState.filter(request => request.id !== requestId));
   };
-
+  
+  // Handle decline logic
   const handleDecline = (requestId) => {
     setActiveRequests(prevState => prevState.filter(request => request.id !== requestId));
   };
   
   // Filter the activeRequests based on selectedCategory
   const filteredRequests = selectedCategory
-    ? requests.filter((request) => request.category === selectedCategory)
-    : requests; 
+    ? activeRequests.filter((request) => request.category === selectedCategory)
+    : activeRequests;
+  
 
   const getColorByPreference = (preference) => {
     switch (preference) {
@@ -138,6 +143,14 @@ const TicketsPage = () => {
     setModalVisible2(false);
   };
   
+  const handleOpenPress3 = () => {
+    setModalVisible3(true);
+  };
+
+  const handleCloseModal3 = () => {
+    setModalVisible3(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -275,16 +288,37 @@ const TicketsPage = () => {
                         marginRight: -20,
                       }}
                       onPress={() => {
-                        if (request.preference === "Text" || request.preference === "Voice") {
-                          handleOpenPress(request); // Calls handleOpenPress if preference is Text or Voice
+                        if (request.preference === "Text" ) {
+                          handleOpenPress(request); // Calls handleOpenPress if preference is Text
+                        } else if (request.preference === "Voice") {
+                          handleOpenPress3(request); // Calls handleOpenPress3 if preference is Voice
                         } else if (request.preference === "Video") {
                           handleOpenPress2(request); // Calls handleOpenPress2 if preference is Video
                         }
                       }}
                     >
-                      <Text style={{ fontSize: 15, textAlign: 'center' }}>
-                        {`Preferred ${request.preference} - Start Responding`}
-                      </Text>
+                     <Image
+    source={{
+      uri: request.preference === "Text"
+        ? "https://img.icons8.com/?size=100&id=55907&format=png&color=000000"
+        : request.preference === "Voice"
+        ? "https://img.icons8.com/?size=100&id=16071&format=png&color=000000"
+        : "https://img.icons8.com/?size=100&id=11374&format=png&color=000000",
+    }}
+    style={{
+      width: 20,
+      height: 20,
+position: 'absolute',
+right: 10
+    }}
+  />
+  <Text style={{ fontSize: 15, textAlign: 'center' }}>
+    {request.preference === "Text"
+      ? "Preffered Text - Start Typing"
+      : request.preference === "Voice"
+      ? "Preffered Voice - Start Recording"
+      : "Preffered Video - Join Call"}
+  </Text>
                     </TouchableOpacity>
                       </View>
                       </View>
@@ -396,6 +430,16 @@ const TicketsPage = () => {
       >
         <View style={styles.modalContent}>
           <OpenModal2 onClose={handleCloseModal2} />
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible3}
+        onRequestClose={handleCloseModal3}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal3 onClose={handleCloseModal3} />
         </View>
       </Modal>
     </View>
