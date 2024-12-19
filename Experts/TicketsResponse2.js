@@ -57,7 +57,7 @@ const handleSubmit = async () => {
   }
 
   const formData = new FormData();
-  formData.append('video_session', 'Join the meeting 24/11/2024 - 2PM');
+  formData.append('text_response', requestData.deadline);
   formData.append('description', requestData.description);
   formData.append('hyperlink', hyperlink);
 

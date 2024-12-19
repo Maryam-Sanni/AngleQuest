@@ -63,24 +63,26 @@ const ResponseModal = ({ visible, onClose, title }) => {
   
     const formData = new FormData();
   
-    // If there's a recorded blob, convert it to a File and append it
+    // If there's a recorded blob, append it directly as the file without name/size metadata
     if (recordedBlob) {
-      const blob = recordedBlob.blob;
-      const file = new File([blob], 'voice_response.mp3', { type: 'audio/mp3' });
+      const blob = recordedBlob.blob;  // Use the raw blob from recordedBlob
+      
+      // Send as 'audio/wav' type without including file size or name metadata
+      const file = new Blob([blob], { type: 'audio/wav' }); // Raw Blob without extra metadata
   
-      // Append the file to FormData correctly
-      formData.append('voice_response', file);
+      // Append the file to FormData with just the audio data (no size, name) in the request
+      formData.append('voice_response', file, 'voice_response.wav');
     }
   
-    // Add other fields to the form data
-    formData.append('description', requestData.description);
+    // Add other fields to the form data (if needed)
+    formData.append('description', requestData.description || '');
     formData.append('hyperlink', hyperlink);
   
-    // Add attachments to FormData
+    // Add attachments to FormData (if any)
     attachments.forEach((attachment, index) => {
       formData.append(`attachment_${index}`, {
         uri: attachment.uri,
-        type: attachment.type || 'application/octet-stream', // Adjust MIME type if necessary
+        type: attachment.type || 'application/octet-stream',
         name: attachment.fileName || `attachment_${index}`,
       });
     });
@@ -120,24 +122,26 @@ const ResponseModal = ({ visible, onClose, title }) => {
     }
   };
   
-  
 
   const startRecording = () => {
     setRecording(true);
   };
-
+  
   const stopRecording = () => {
     setRecording(false);
   };
-
+  
   const onDataRecorded = (data) => {
-    console.log(data);
-    setRecordedBlob(data);
-    setAttachments((prev) => [
-      ...prev,
-      { uri: data.blobURL, type: 'audio/wav', name: 'voice.wav' },
-    ]);
-  };
+    console.log("Data received from recording:", data);
+  
+    // Check if the data contains a blob
+    if (data && data.blob) {
+      setRecordedBlob(data.blob);
+      console.log("Recorded Blob:", data.blob);
+    } else {
+      console.error("No blob found in recorded data:", data);
+    }
+  };  
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F8F8F8', alignItems: 'center', marginTop: 40, borderRadius: 10, }}>
@@ -190,7 +194,7 @@ const ResponseModal = ({ visible, onClose, title }) => {
               <TouchableOpacity onPress={stopRecording}>
             <Image
               source={{
-                uri: "https://img.icons8.com/?size=100&id=0xYCItyT3xNJ&format=png&color=000000",
+                uri: "https://img.icons8.com/?size=100&id=0xYCItyT3xNJ&format=png&color=FF0000",
               }}
               style={{
                 width: 30,

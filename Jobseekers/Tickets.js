@@ -295,11 +295,11 @@ const SupportRequestPage = () => {
                       Maryam Bakhali
                     </Text>
                     <Text style={styles.lightText2}>
-                      Has been assigned to your request
+                      Has accepted your request
                     </Text>
                     <TouchableOpacity onPress={() => setCurrentStep('resolution')} // Navigate to Resolution
                       >
-                           <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+                           <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20}}>You will not be able to create a new support request until this has been resolved or has passed deadline.</Text>
                     </TouchableOpacity>
                   </View>
                 )}

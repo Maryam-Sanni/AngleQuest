@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ImageBackground, ScrollView, Picker, Modal, Image } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
@@ -24,105 +24,83 @@ const TicketsPage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
    const [currentTicketTitle, setCurrentTicketTitle] = useState('');
+   const [requests, setRequests] = useState([]); // Holds fetched data
+   const [activeRequests, setActiveRequests] = useState([]); // Requests available for action
+   const [acceptedRequests, setAcceptedRequests] = useState([]); // Requests that have been accepted
 
-  const requests = [
-    {
-      id: 1,
-      name: "Bilal Husain",
-      service: "SAP FI",
-      category: "SAP", // New category field
-      deadline: "2024-11-25T14:00:00",
-      description: "Material posting expense not processed correctly.",
-      status: "New Request",
-      deadlineStatus: "Deadline State", // "Deadline State" or "On Time State"
-      preference: "Text", // Can be "Text", "Voice", or "Video"
-    },
-    {
-      id: 2,
-      name: "Mike Ross",
-      service: "Microsoft Excel",
-      category: "Microsoft",
-      deadline: "2024-11-26T17:00:00",
-      description: "Bug in invoice generation.",
-      status: "New Request",
-      deadlineStatus: "Deadline State",
-      preference: "Voice", // Can be "Text", "Voice", or "Video"
-    },
-    {
-      id: 3,
-      name: "Racheal Zain",
-      service: "Business Analysis",
-      category: "Business Analysis",
-      deadline: "2024-12-01T09:00:00",
-      description: "Expense analysis report pending.",
-      status: "New Request",
-      deadlineStatus: "On Time State",
-      preference: "Video", // Can be "Text", "Voice", or "Video"
-    },
-    {
-      id: 4,
-      name: "Susan Ambrose",
-      service: "Scrum",
-      category: "Scrum",
-      deadline: "2024-12-05T15:00:00",
-      description: "Sprint planning is overdue.",
-      status: "New Request",
-      deadlineStatus: "On Time State",
-      preference: "Voice", // Can be "Text", "Voice", or "Video"
-    },
-    {
-      id: 5,
-      name: "Adalain Huter",
-      service: "SAP FI",
-      category: "SAP",
-      deadline: "2025-01-30T12:00:00",
-      description: "Material posting issue needs fixing.",
-      status: "New Request",
-      deadlineStatus: "Deadline State",
-      preference: "Text", // Can be "Text", "Voice", or "Video"
-    },
-    {
-      id: 6,
-      name: "John Doe",
-      service: "Microsoft Power BI",
-      category: "Microsoft",
-      deadline: "2024-12-31T10:00:00",
-      description: "Data visualization not reflecting properly.",
-      status: "New Request",
-      deadlineStatus: "On Time State",
-      preference: "Video", // Can be "Text", "Voice", or "Video"
-    },
-  ];
-
-
-  const [activeRequests, setActiveRequests] = useState(requests);
-  const [acceptedRequests, setAcceptedRequests] = useState([]);
-  
-  // Handle accept logic
-  const handleAccept = (requestId) => {
-    const acceptedRequest = activeRequests.find(request => request.id === requestId);
-    setAcceptedRequests(prevState => [...prevState, acceptedRequest]);
-    setActiveRequests(prevState => prevState.filter(request => request.id !== requestId));
-  };
-  
-  // Handle decline logic
-  const handleDecline = (requestId) => {
-    setActiveRequests(prevState => prevState.filter(request => request.id !== requestId));
-  };
-  
-  // Filter the activeRequests based on selectedCategory
-  const filteredRequests = selectedCategory
-    ? activeRequests.filter((request) => request.category === selectedCategory)
-    : activeRequests;
+   // Fetch requests from API
+   const fetchRequests = async () => {
+     const apiUrl = process.env.REACT_APP_API_URL; // Your API base URL
+     const url = `${apiUrl}/api/expert/unassigned-support-req`;
+ 
+     try {
+       const token = await AsyncStorage.getItem('token');
+       if (!token) throw new Error('No authentication token found');
+ 
+       const response = await fetch(url, {
+         method: 'GET',
+         headers: {
+           Authorization: `Bearer ${token}`,
+           'Content-Type': 'application/json',
+         },
+       });
+ 
+       const result = await response.json();
+ 
+       if (response.ok && result.status === 'success') {
+         const transformedRequests = result.data.map((item) => ({
+           id: item.id,
+           name: item.expert_id || 'NIL', // Adjust based on data structure
+           service: item.title,
+           category: item.specialization,
+           deadline: item.created_at, // Adjust deadline field
+           description: item.description,
+           status: "New Request",
+           deadlineStatus: "On Time State", // Logic for deadline status
+           preference: item.prefmode,
+           attachment: item.attachment,
+         }));
+ 
+         setRequests(transformedRequests); // Update requests
+         setActiveRequests(transformedRequests); // Initialize activeRequests with fetched data
+       } else {
+         throw new Error(result.message || 'Failed to fetch requests');
+       }
+     } catch (error) {
+       console.error('Error fetching requests:', error.message);
+     }
+   };
+ 
+   // Fetch requests on component mount
+   useEffect(() => {
+     fetchRequests();
+   }, []);
+ 
+   // Handle accept logic
+   const handleAccept = (requestId) => {
+     const acceptedRequest = activeRequests.find((request) => request.id === requestId);
+     setAcceptedRequests((prevState) => [...prevState, acceptedRequest]);
+     setActiveRequests((prevState) => prevState.filter((request) => request.id !== requestId));
+   };
+ 
+   // Handle decline logic
+   const handleDecline = (requestId) => {
+     setActiveRequests((prevState) => prevState.filter((request) => request.id !== requestId));
+   };
+ 
+   // Filter the activeRequests based on selectedCategory
+   const filteredRequests = selectedCategory
+     ? activeRequests.filter((request) => request.category === selectedCategory)
+     : activeRequests;
   
 
   const getColorByPreference = (preference) => {
     switch (preference) {
-      case 'Text':
+      case 'text':
         return '#FFDBBB';
-      case 'Voice':
+      case 'voice':
         return '#c1e1c1';
-      case 'Video':
+      case 'video':
         return '#B6D0E2';
       default:
         return '#FFFFFF';
@@ -180,10 +158,19 @@ const TicketsPage = () => {
                 onValueChange={(value) => setSelectedCategory(value)}
               >
                 <Picker.Item label="All Category" value="" />
-                <Picker.Item label="SAP" value="SAP" />
-                <Picker.Item label="Microsoft" value="Microsoft" />
-                <Picker.Item label="Scrum" value="Scrum" />
-                <Picker.Item label="Business Analysis" value="Business Analysis" />
+  <Picker.Item label="Business Analysis" value="Business Analysis" />
+  <Picker.Item label="SAP FI" value="SAP FI" />
+  <Picker.Item label="SAP MM" value="SAP MM" />
+  <Picker.Item label="SAP SD" value="SAP SD" />
+  <Picker.Item label="SAP PP" value="SAP PP" />
+  <Picker.Item label="Scrum" value="Scrum" />
+  <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
+  <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
+  <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
+  <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
+  <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
+  <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
+  <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
               </Picker>
             </View>
             <View style={styles.progressBar}>
@@ -230,7 +217,7 @@ const TicketsPage = () => {
                             </View>
                             
                           <Text style={{ fontSize: 14, marginTop: 5, marginBottom: 5 }}>
-                            {request.description}
+                            {request.category}
                           </Text>
                            
                                 
@@ -303,20 +290,20 @@ const TicketsPage = () => {
                         marginRight: -20,
                       }}
                       onPress={() => {
-                        if (request.preference === 'Text') {
+                        if (request.preference === 'text') {
                           handleOpenPress(request);
-                        } else if (request.preference === 'Voice') {
+                        } else if (request.preference === 'voice') {
                           handleOpenPress3(request);
-                        } else if (request.preference === 'Video') {
+                        } else if (request.preference === 'video') {
                           handleOpenPress2(request);
                         }
                       }}
                     >
                      <Image
     source={{
-      uri: request.preference === "Text"
+      uri: request.preference === "text"
         ? "https://img.icons8.com/?size=100&id=55907&format=png&color=000000"
-        : request.preference === "Voice"
+        : request.preference === "voice"
         ? "https://img.icons8.com/?size=100&id=16071&format=png&color=000000"
         : "https://img.icons8.com/?size=100&id=11374&format=png&color=000000",
     }}
@@ -328,9 +315,9 @@ right: 10
     }}
   />
   <Text style={{ fontSize: 15, textAlign: 'center' }}>
-    {request.preference === "Text"
+    {request.preference === "text"
       ? "Preffered Text - Start Typing"
-      : request.preference === "Voice"
+      : request.preference === "voice"
       ? "Preffered Voice - Start Recording"
       : "Preffered Video - Join Call"}
   </Text>
