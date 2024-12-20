@@ -42,7 +42,7 @@ const SupportRequestPage = () => {
   
       // Payload
       const payload = {
-        expert_id: firstName + ' ' + lastName,
+        name: firstName + ' ' + lastName,
         specialization: formData.specialization,
         title: formData.title,
         description: formData.description,

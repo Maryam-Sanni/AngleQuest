@@ -50,7 +50,7 @@ const TicketsPage = () => {
        if (response.ok && result.status === 'success') {
          const transformedRequests = result.data.map((item) => ({
            id: item.id,
-           name: item.expert_id || 'NIL', // Adjust based on data structure
+           name: item.name || 'NIL', // Adjust based on data structure
            service: item.title,
            category: item.specialization,
            deadline: item.created_at, // Adjust deadline field

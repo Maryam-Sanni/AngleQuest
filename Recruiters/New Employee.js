@@ -1,35 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Picker, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Image, Picker, Modal } from 'react-native';
 import OpenModal from './AddEmployeeMan';
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from 'axios';
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [ModalVisible, setModalVisible] = useState(false);
   const [selectedSupport, setSelectedSupport] = useState('');
   const [activeTab, setActiveTab] = useState('Employee information'); // State for active tab
+  const [employeeData, setEmployeeData] = useState({
+    fullname: '',
+    email_address: '',
+    specialization: '',
+    type: '',
+    current_role: '',
+    target_role: '',
+  });
 
-  // Function to retrieve the selected support from AsyncStorage
-  const getSelectedSupport = async () => {
+  const apiUrl = `${process.env.REACT_APP_API_URL}/api/business/create-employee`;
+
+  // Function to retrieve the token and selected support from AsyncStorage
+  const initializeData = async () => {
     try {
-      const value = await AsyncStorage.getItem('selectedSupport');
-      if (value !== null) {
-        setSelectedSupport(value);
-      } else {
-        console.log('No value found in AsyncStorage');
-      }
+      const token = await AsyncStorage.getItem('token');
+      const support = await AsyncStorage.getItem('selectedSupport');
+      if (support) setSelectedSupport(support);
+      setEmployeeData((prev) => ({ ...prev, type: support, token }));
     } catch (error) {
-      console.error('Error retrieving from AsyncStorage:', error);
+      console.error('Error initializing data:', error);
     }
   };
 
-  // Fetch the value on component mount
   useEffect(() => {
-    getSelectedSupport();
+    initializeData();
   }, []);
+
+  const handleSave = async () => {
+    const { token, ...dataToSend } = employeeData;
+    try {
+      const response = await Axios.post(apiUrl, dataToSend, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log('Employee created successfully:', response.data);
+      onClose();
+    } catch (error) {
+      console.error('Error creating employee:', error.response?.data || error.message);
+    }
+  };
+
+  const handleChange = (field, value) => {
+    setEmployeeData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleOpenPress = () => {
     setMainModalVisible(false);
@@ -52,7 +77,8 @@ function MyComponent({ onClose }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", marginTop: 40, alignItems: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: "#F8F8F8", marginTop: 40, alignItems: 'center' }}>
+       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
       <View style={styles.greenBox}>
         <View style={styles.header}>
           <Image
@@ -66,7 +92,7 @@ function MyComponent({ onClose }) {
             </Text>
           </TouchableOpacity>
         </View>
-
+ 
         {/* Tab Buttons */}
         <View style={styles.header}>
             <Button
@@ -103,6 +129,8 @@ function MyComponent({ onClose }) {
                 placeholder={t("Full Name")}
                 placeholderTextColor="grey"
                 style={styles.input}
+                value={employeeData.fullname}
+                onChangeText={(value) => handleChange('fullname', value)}
               />
 
               <Text style={styles.infoLabel}>{t("Email Address")}</Text>
@@ -110,10 +138,16 @@ function MyComponent({ onClose }) {
                 placeholder="hello@mybusiness.com"
                 placeholderTextColor="grey"
                 style={styles.input}
+                value={employeeData.email_address}
+                onChangeText={(value) => handleChange('email_address', value)}
               />
 
               <Text style={styles.infoLabel}>{t("Specialization")}</Text>
-              <Picker style={styles.picker}>
+              <Picker 
+                                selectedValue={employeeData.specialization}
+                                style={styles.picker}
+                                onValueChange={(value) => handleChange('specialization', value)}
+              >
                 <Picker.Item label={t("Pick an area of specialization")} value="Pick an area of specialization" />
                 <Picker.Item label="SAP" value="SAP" />
                 <Picker.Item label="Microsoft" value="Microsoft" />
@@ -127,22 +161,26 @@ function MyComponent({ onClose }) {
               <Text style={styles.infoLabel}>
                 {t("Type of Service")}
                 <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=82747&format=png&color=000000' }}
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=10641&format=png&color=000000' }}
                   style={styles.lockIcon}
                 />
               </Text>
               <TextInput
-                placeholder={t("Selected support")}
-                placeholderTextColor="grey"
-                style={styles.input}
-                value={selectedSupport}
-                editable={false} // Lock the field
+                  placeholder="Selected support"
+                  placeholderTextColor="grey"
+                  style={styles.input}
+                  value={selectedSupport}
+                  editable={false}
               />
 
               </View>
               
               <Text style={styles.infoLabel}>{t("Current role")}</Text>
-              <Picker style={styles.picker}>
+              <Picker
+                  selectedValue={employeeData.current_role}
+                  style={styles.picker}
+                  onValueChange={(value) => handleChange('current_role', value)}
+                >
                 <Picker.Item label={t("Beginner")} value="Beginner" />
                 <Picker.Item label={t("Junior")} value="Junior" />
                 <Picker.Item label={t("Intermediate")} value="Intermediate" />
@@ -150,7 +188,11 @@ function MyComponent({ onClose }) {
               </Picker>
 
               <Text style={styles.infoLabel}>{t("Target role")}</Text>
-              <Picker style={styles.picker}>
+              <Picker
+                  selectedValue={employeeData.target_role}
+                  style={styles.picker}
+                  onValueChange={(value) => handleChange('target_role', value)}
+                >
                 <Picker.Item label={t("Junior")} value="Junior" />
                 <Picker.Item label={t("Senior")} value="Senior" />
                 <Picker.Item label={t("Manager")} value="Manager" />
@@ -176,7 +218,7 @@ function MyComponent({ onClose }) {
         </View>
 
         {/* Save Button */}
-        <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+        <TouchableOpacity onPress={handleSave} style={styles.buttonplus}>
           <Text style={styles.buttonTextplus}>{t("Save")}</Text>
         </TouchableOpacity>
 
@@ -191,6 +233,7 @@ function MyComponent({ onClose }) {
           </View>
         </Modal>
       </View>
+      </ScrollView>
     </View>
   );
 }
@@ -267,10 +310,10 @@ marginRight: 20
      marginTop: 10,
   },
   lockIcon: {
-    width: 22,
-    height: 22,
-    marginLeft: 10,
-    marginTop: 11
+    width: 16,
+    height: 16,
+    marginLeft: 5,
+    marginTop: 25
   },
   noteContainer: {
     paddingHorizontal: 20,

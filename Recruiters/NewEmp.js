@@ -4,7 +4,10 @@ import OpenModal from './AddEmployeeMan';
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 function MyComponent({ onClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
@@ -15,29 +18,70 @@ function MyComponent({ onClose }) {
   const [current, setCurrent] = useState('');
   const [target, setTarget] = useState('');
   
-  const getSelectedEmployee = async () => {
-    try {
-      const value = await AsyncStorage.getItem('selectedEmployee');
-      if (value) {
-        const parsedEmployee = JSON.parse(value);
-        setSelectedEmployee(parsedEmployee);
-
-        // Set states for specialization, current role, and target role
-        setSpecialization(parsedEmployee?.specialization || '');
-        setCurrent(parsedEmployee?.current || '');
-        setTarget(parsedEmployee?.target || '');
-      } else {
-        console.log('No selected employee found in AsyncStorage');
+   // Fetch the saved employee data on component mount
+   useEffect(() => {
+    const getSelectedEmployee = async () => {
+      try {
+        const value = await AsyncStorage.getItem('selectedEmployee');
+        if (value) {
+          const parsedEmployee = JSON.parse(value);
+          setSelectedEmployee(parsedEmployee);
+          setSpecialization(parsedEmployee?.specialization || '');
+          setCurrent(parsedEmployee?.current || '');
+          setTarget(parsedEmployee?.target || '');
+        } else {
+          console.log('No selected employee found in AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error retrieving selected employee:', error);
       }
+    };
+
+    getSelectedEmployee();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+  
+      // Construct the updated employee object with correct field names
+      const updatedEmployee = {
+        fullname: selectedEmployee?.name || '',
+        email_address: selectedEmployee?.email || '',
+        specialization,
+        type: selectedEmployee?.service || '', // Assuming "service" corresponds to "type"
+        current_role: current || '',
+        target_role: target || '',
+      };
+  
+      // Validate required fields
+      if (!updatedEmployee.fullname || !updatedEmployee.email_address || !updatedEmployee.type || !updatedEmployee.current_role || !updatedEmployee.target_role) {
+        console.error('One or more required fields are missing');
+        return;
+      }
+  
+      // Send PUT request to update employee
+      const response = await axios.put(
+        `${apiUrl}/api/business/edit-employee/${selectedEmployee?.id}`,
+        updatedEmployee,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log('Employee updated successfully:', response.data);
+      onClose(); // Close the modal after saving
     } catch (error) {
-      console.error('Error retrieving selected employee:', error);
+      console.error('Error updating employee:', error.response?.data || error.message);
     }
   };
-
-    // Fetch the saved employee data on component mount
-    useEffect(() => {
-      getSelectedEmployee();
-    }, []);
+  
     
   const handleOpenPress = () => {
     setMainModalVisible(false);
@@ -67,7 +111,7 @@ function MyComponent({ onClose }) {
             source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
             style={styles.logo}
           />
-          <Text style={styles.headerText}>{t("Add Employee")}</Text>
+          <Text style={styles.headerText}>{t("Edit Employee")}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>
               ✕
@@ -109,19 +153,25 @@ function MyComponent({ onClose }) {
             <View style={styles.employeeInfoContainer}>
               <Text style={styles.infoLabel}>{t("Full Name")}</Text>
               <TextInput
-                placeholder={t("Full Name")}
-                placeholderTextColor="grey"
-                style={styles.input}
-                value={selectedEmployee?.name || ''}
-              />
+  placeholder={t("Full Name")}
+  placeholderTextColor="grey"
+  style={styles.input}
+  value={selectedEmployee?.name || ''}
+  onChangeText={(text) =>
+    setSelectedEmployee((prev) => ({ ...prev, name: text }))
+  }
+/>
 
               <Text style={styles.infoLabel}>{t("Email Address")}</Text>
               <TextInput
-                placeholder="hello@mybusiness.com"
-                placeholderTextColor="grey"
-                style={styles.input}
-                value={selectedEmployee?.email || ''}
-              />
+  placeholder="hello@mybusiness.com"
+  placeholderTextColor="grey"
+  style={styles.input}
+  value={selectedEmployee?.email || ''}
+  onChangeText={(text) =>
+    setSelectedEmployee((prev) => ({ ...prev, email: text }))
+  }
+/>
 
               <Text style={styles.infoLabel}>{t("Specialization")}</Text>
               <Picker
@@ -192,7 +242,7 @@ function MyComponent({ onClose }) {
         </View>
 
         {/* Save Button */}
-        <TouchableOpacity onPress={onClose} style={styles.buttonplus}>
+        <TouchableOpacity onPress={handleSave} style={styles.buttonplus}>
           <Text style={styles.buttonTextplus}>{t("Save")}</Text>
         </TouchableOpacity>
 

@@ -13,6 +13,7 @@ import {
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import OpenModal from './IndividualorList';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
@@ -59,15 +60,87 @@ function AngleQuestPage({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
   const [activeCard, setActiveCard] = useState('Non-Disclosure agreement');
+  const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+
+  const handleSave = async () => {
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('nda', {
+        uri: file.uri,
+        type: file.type,
+        name: file.name,
+      });
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('NDA uploaded successfully:', response.data);
+      alert(t('File uploaded successfully'));
+    } catch (error) {
+      console.error('Error uploading NDA:', error);
+      alert(t('Error uploading file'));
+    }
+  };
+
+  useEffect(() => {
+    const fetchNda = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/business/get-business-nda`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data) {
+          // Set the uploaded file details (name or other relevant information)
+          setUploadedFile(response.data); // Assuming response contains file information
+        }
+      } catch (error) {
+        console.error('Error fetching NDA document:', error);
+      }
+    };
+
+    fetchNda();
+  }, []);
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
 
   const handleChooseImage = (event) => {
-    const selectedImage = event.target.files[0];
-    const imageUrl = URL.createObjectURL(selectedImage);
-    setProfileImage(imageUrl);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
   };
 
   const handleOpenPress = () => {
@@ -98,13 +171,25 @@ function AngleQuestPage({ onClose }) {
           <Text style={styles.subHeading2}>
             {t("Upload Non-Disclosure Agreement to protect your employees")}
           </Text>
-          <View style={styles.input}>
-            <input type="file" accept="image/*" onChange={handleChooseImage} />
-          </View>
+          {uploadedFile && (
+        <View style={{marginBottom: -10, flexDirection: 'row', marginLeft: 10, marginTop: '10'}}>
+          <Text>{t('Uploaded NDA File:')}</Text>
+          <Text>{uploadedFile?.fileName || 'N/A'}</Text> {/* Display the uploaded file name */}
+        </View>
+      )}
+        <View style={styles.input}>
+          <input
+            type="file"
+            accept=".pdf, .doc, .docx"
+            onChange={handleChooseImage}
+            style={styles.fileInput}
+          />
+        </View>
+ 
           <Text style={styles.uploadInfo}>
             {t("Max File Size: 250MB, File type: pdf or word")}
           </Text>
-          <TouchableOpacity style={styles.buttonsave}>
+          <TouchableOpacity style={styles.buttonsave} onPress={handleSave}>
             <Text style={styles.buttonsaveText}>{t("Save")}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttondone}>
@@ -188,7 +273,7 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Work Delivery Support');
-                   setCurrentStep(0);
+                   setCurrentStep(3);
                   handleOpenPress();
                 }}
                 style={styles.button}
@@ -243,7 +328,7 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Career Growth Support');
-                   setCurrentStep(0);
+                   setCurrentStep(3);
                   handleOpenPress();
                 }}
                 style={styles.button}
@@ -305,7 +390,7 @@ function AngleQuestPage({ onClose }) {
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Work Delivery Support and Career Growth Support');
-                  setCurrentStep(0);
+                  setCurrentStep(3);
                   handleOpenPress();
                 }}
                 style={styles.button}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList, ImageBackground, Image, Modal } from 'react-native';
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import * as XLSX from 'xlsx';
@@ -7,22 +7,56 @@ import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './NewEmployee2';
 import OpenModal2 from './NewEmp';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
   const EmployeePage = () => {
-    const [employees, setEmployees] = useState([
-      { id: 1, name: 'Patrick Oche', active: 'active', status: true, email: 'patrickking505@gmail.com', specialization: 'Microsoft', service: 'Work Delivery Support', current: 'senior', target: 'Solution Architect', createdDate: new Date('2024-12-14T00:00:00Z')  },
-      { id: 2, name: 'Aaliyah Badru', active: 'active', status: true, email: 'badruaaliyah@gmail.com', specialization: 'SAP', service: 'Work Delivery Support', current: 'Junior', target: 'Senior', createdDate: new Date('2024-12-11T00:00:00Z')  },
-      { id: 3, name: 'Alex Brown', active: 'active', status: true, email: 'lexybrown@hotmail.com', specialization: 'Scrum', service: 'Career Growth Support', current: 'Junior', target: 'Intermediate', createdDate: new Date('2024-12-10T00:00:00Z') },
-      { id: 4, name: 'Raymond Gray', active: 'inactive', status: false, email: 'raymodgray636@gmail.com', specialization: 'Business Analysis', service: 'Work Delivery Support and Career Growth Support', current: 'Beginner', target: 'Junior', createdDate: new Date('2024-12-08T00:00:00Z') },
-      { id: 5, name: 'Mary Claire', active: 'active', status: true, email: 'mclaire2007@yahoo.com', specialization: 'Microsoft', service: 'Career Growth Support', current: 'senior', target: 'Manager', createdDate: new Date('2024-12-01T00:00:00Z') },
-    ]);
+    const [employees, setEmployees] = useState([]);
     
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [ModalVisible, setModalVisible] = useState(false);
      const [ModalVisible2, setModalVisible2] = useState(false);
 
+     useEffect(() => {
+      const fetchEmployees = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+          const response = await axios.get(`${apiUrl}/api/business/get-all-employees`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+    
+          if (response.data.status === 'success' && Array.isArray(response.data.BE)) {
+            const employeesData = response.data.BE.map((employee) => ({
+              id: employee.id, // Use the provided ID
+              name: employee.fullname || '',
+              email: employee.email_address || '',
+              specialization: employee.specialization || '',
+              service: employee.type || '',
+              current: employee.current_role || '',
+              target: employee.target_role || '',
+              createdDate: new Date(employee.created_at), // Use the provided date
+              status: true, // Default status is active
+              active: 'active',
+            }));
+    
+            setEmployees(employeesData);
+          } else {
+            console.error('Unexpected API response format:', response.data);
+            alert('Failed to load employee data.');
+          }
+        } catch (error) {
+          console.error('Error fetching employee data:', error);
+          alert('Failed to load employee data.');
+        }
+      };
+    
+      fetchEmployees();
+    }, []);
+    
     // Function to check if the createdDate is today
     const isCreatedToday = (createdDate) => {
       const today = new Date();
@@ -136,11 +170,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     }
   };
 
-  // Delete selected employees
-  const deleteEmployees = () => {
-    setEmployees(employees.filter((emp) => !selectedEmployees.includes(emp.id)));
-    setSelectedEmployees([]);
+  const deleteEmployees = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Retrieve the token from AsyncStorage
+  
+      // Make DELETE requests for each selected employee
+      for (const id of selectedEmployees) {
+        await axios.delete(`${apiUrl}/api/business/delete-employee/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+  
+      // Update the UI after deletion
+      setEmployees(employees.filter((emp) => !selectedEmployees.includes(emp.id)));
+      setSelectedEmployees([]);
+      alert('Selected employees deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting employees:', error);
+      alert('Failed to delete selected employees.');
+    }
   };
+  
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -198,16 +250,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
               style={{ width: 20, height: 20 }} 
             />
           )}>Delete</Button>
-        <Button mode="text" 
-          textColor="#000000"
-          style={styles.button} 
-          onPress={() => alert('Page refreshed')}
-          icon={() => (
-            <Image 
-              source={{ uri: 'https://img.icons8.com/?size=100&id=59872&format=png&color=000000' }} 
-              style={{ width: 20, height: 20 }} 
-            />
-          )}>Refresh</Button>
+        <Button
+  mode="text"
+  textColor="#000000"
+  style={styles.button}
+  onPress={() => window.location.reload()} // Refresh the page
+  icon={() => (
+    <Image 
+      source={{ uri: 'https://img.icons8.com/?size=100&id=59872&format=png&color=000000' }} 
+      style={{ width: 20, height: 20 }} 
+    />
+  )}
+>
+  Refresh
+</Button>
        
         <Button mode="text" 
           textColor="#000000"
