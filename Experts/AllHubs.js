@@ -548,64 +548,152 @@ const ScheduledMeetingsTable = () => {
         {selectedHub && (
           <View style={styles.buttonContainer}>
             {/* Upcoming - Active by default */}
-            <TouchableOpacity onPress={() => handlePress("Upcoming")}>
-              <Text
-                style={[
-                  styles.text,
-                  selectedButton === "Upcoming" && styles.activeText,
-                ]}
-              >
-                {t("Upcoming")}
-              </Text>
-            </TouchableOpacity>
+            <TouchableOpacity
+  onPress={() => handlePress("Upcoming")}
+  style={[
+    styles.touchable,
+    selectedButton === "Upcoming" && styles.activeTouchable, // Change width when active
+  ]}
+>
+  <View style={styles.iconTextContainer}>
+    <Image
+      source={{
+        uri: "https://img.icons8.com/?size=100&id=10034&format=png&color=000000",
+      }}
+      style={{
+        width: 20,
+        height: 20,
+        tintColor: selectedButton === "Upcoming" ? "#FFFFFF" : "#D3D3D3",
+      }}
+    />
+    <Text
+      style={[
+        styles.text,
+        selectedButton === "Upcoming" && styles.activeText,
+      ]}
+    >
+      {t("Upcoming")}
+    </Text>
+  </View>
+</TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => handlePress("Training Sessions", handleOpenPress4)}
-            >
-              <Text
-                style={[
-                  styles.text,
-                  selectedButton === "Training Sessions" && styles.activeText,
-                ]}
-              >
-                {t("New Meeting")}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handlePress("Hub Members", handleOpenPress6)}
-            >
-              <Text
-                style={[
-                  styles.text,
-                  selectedButton === "Hub Members" && styles.activeText,
-                ]}
-              >
-                {t("Hub Members")}
-              </Text>
-            </TouchableOpacity>
+<TouchableOpacity
+  onPress={() => handlePress("Training Sessions", handleOpenPress4)}
+  style={[
+    styles.touchable,
+    selectedButton === "Training Sessions" && styles.activeTouchable, // Change width when active
+  ]}
+>
+  <View style={styles.iconTextContainer}>
+    <Image
+      source={{
+        uri: "https://img.icons8.com/?size=100&id=10081&format=png&color=000000",
+      }}
+      style={{
+        width: 20,
+        height: 20,
+        tintColor: selectedButton === "Training Sessions" ? "#FFFFFF" : "#D3D3D3",
+      }}
+    />
+    <Text
+      style={[
+        styles.text,
+        selectedButton === "Training Sessions" && styles.activeText,
+      ]}
+    >
+      {t("New Meeting")}
+    </Text>
+  </View>
+</TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => handlePress("Assessment", handleOpenPress3)}
-            >
-              <Text
-                style={[
-                  styles.text,
-                  selectedButton === "Assessment" && styles.activeText,
-                ]}
-              >
-                {t("Assessment")}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handlePress("Past Sessions")}>
-              <Text
-                style={[
-                  styles.text,
-                  selectedButton === "Past Sessions" && styles.activeText,
-                ]}
-              >
-                {t("Past Sessions")}
-              </Text>
-            </TouchableOpacity>
+<TouchableOpacity
+  onPress={() => handlePress("Hub Members", handleOpenPress6)}
+  style={[
+    styles.touchable,
+    selectedButton === "Hub Members" && styles.activeTouchable, // Change width when active
+  ]}
+>
+  <View style={styles.iconTextContainer}>
+    <Image
+      source={{
+        uri: "https://img.icons8.com/?size=100&id=85167&format=png&color=000000",
+      }}
+      style={{
+        width: 20,
+        height: 20,
+        tintColor: selectedButton === "Hub Members" ? "#FFFFFF" : "#D3D3D3",
+      }}
+    />
+    <Text
+      style={[
+        styles.text,
+        selectedButton === "Hub Members" && styles.activeText,
+      ]}
+    >
+      {t("Hub Members")}
+    </Text>
+  </View>
+</TouchableOpacity>
+           
+<TouchableOpacity
+onPress={() => handlePress("Assessment", handleOpenPress3)}
+  style={[
+    styles.touchable,
+    selectedButton === "Assessment" && styles.activeTouchable, // Change width when active
+  ]}
+>
+  <View style={styles.iconTextContainer}>
+    <Image
+      source={{
+        uri: "https://img.icons8.com/?size=100&id=65285&format=png&color=000000",
+      }}
+      style={{
+        width: 20,
+        height: 20,
+        tintColor: selectedButton === "Assessment" ? "#FFFFFF" : "#D3D3D3",
+      }}
+    />
+    <Text
+      style={[
+        styles.text,
+        selectedButton === "Assessment" && styles.activeText,
+      ]}
+    >
+      {t("Assessment")}
+    </Text>
+  </View>
+</TouchableOpacity>
+
+
+ <TouchableOpacity onPress={() => handlePress("Past Sessions")}
+  style={[
+    styles.touchable,
+    selectedButton === "Past Sessions" && styles.activeTouchable, // Change width when active
+  ]}
+>
+  <View style={styles.iconTextContainer}>
+    <Image
+      source={{
+        uri: "https://img.icons8.com/?size=100&id=117816&format=png&color=000000",
+      }}
+      style={{
+        width: 20,
+        height: 20,
+        tintColor: selectedButton === "Past Sessions" ? "#FFFFFF" : "#D3D3D3",
+      }}
+    />
+    <Text
+      style={[
+        styles.text,
+        selectedButton === "Past Sessions" && styles.activeText,
+      ]}
+    >
+      {t("Past Sessions")}
+    </Text>
+  </View>
+</TouchableOpacity>
+
+           
           </View>
         )}
         {selectedHub && selectedButton === "Upcoming" && (
@@ -866,7 +954,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light",
   },
   buttonContainer: {
-    padding: 20,
+    padding: 5,
     alignItems: "flex-start",
     flexDirection: "row",
   },
@@ -874,16 +962,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#D3D3D3",
-    marginBottom: 10,
-    padding: 5,
-    marginRight: 20,
+    marginLeft: 5
   },
   activeText: {
     color: "white",
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 5,
-    borderColor: "white",
+    marginLeft: 5
   },
   hubChip: {
     marginHorizontal: 5,
@@ -893,6 +976,21 @@ const styles = StyleSheet.create({
   selectedChip: {
         backgroundColor: "rgba(128, 128, 128, 0.1)",
     borderRadius: 30,
+  },
+  iconTextContainer: {
+    flexDirection: "row",
+  },
+  touchable: {
+    alignItems: "center",
+    justifyContent: 'center',
+    borderRadius: 10,
+    padding: 7,
+    marginRight: 10
+  },
+  activeTouchable: {
+borderWidth: 1,
+borderRadius: 5,
+borderColor: 'white'
   },
 });
 

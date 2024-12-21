@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Linking, Modal
+  Linking, Modal, Picker
 } from "react-native";
 import { Button, Chip } from "react-native-paper";
 import axios from "axios";
@@ -16,6 +16,7 @@ import CustomAlert from "../components/CustomAlert";
 import { Video } from 'expo-av';
 import moment from "moment-timezone";
 import OpenModal from "../Jobseekers/Pickyourhub";
+import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
 
 const HubMeeting = () => {
   const [meetings, setMeetings] = useState([]);
@@ -329,11 +330,26 @@ const HubMeeting = () => {
     setIsVisible(false);
   };
 
+// Handle the Picker value change (update selected hub)
+const handlePickerChange = (index) => {
+  if (index === 0) return; // Don't do anything if "All Joined Hubs" is selected (index 0)
+
+  const selectedHub = hubs[index]; // Get the selected hub
+  setSelectedHub(selectedHub); // Update the selected hub state
+
+  // Reorder hubs so that the selected hub is first
+  const newHubs = [selectedHub, ...hubs.filter((hub) => hub !== selectedHub)];
+  setHubs(newHubs); // Update the hubs list with the new order
+};
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Hub buttons for filtering */}
+      
+
       <View style={styles.header}>
-                                           <View style={{backgroundColor: '#f7fff4', flexDirection: 'row', marginTop: -10, marginRight: -10, marginLeft: -10, marginBottom: -10, padding: 10}}>
+      {/* Join New Hub Button */}
+      <View style={{ backgroundColor: '#f7fff4', flexDirection: 'row', marginTop: -10, marginRight: -10, marginLeft: -10, marginBottom: -10, padding: 10 }}>
         <Button
           mode="text"
           textColor="#000000"
@@ -350,73 +366,52 @@ const HubMeeting = () => {
         >
           Join New Hub
         </Button>
-        </View>
-        <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20}}/>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* Left Arrow */}
-            {currentIndex > 0 && (
-      <Button
-        mode="text"
-        textColor="#000000"
-        style={styles.button}
-        onPress={handlePrev}
-        icon={() => (
-          <Image
-            source={{
-              uri: "https://img.icons8.com/?size=100&id=84842&format=png&color=000000",
-            }}
-            style={{ width: 20, height: 20 }}
-          />
-        )}
-      >
-        Prev
-      </Button>
-            )}
-
-            {/* Hub Items */}
-            {hubs.slice(currentIndex, currentIndex + 3).map((hubName) => (
-              <Chip
-                key={hubName}
-                mode="text"
-                textColor="#000000"
-                style={[
-                  styles.hubChip,
-                  selectedHub === hubName && styles.selectedChip,
-                ]}
-                textStyle={{
-                  color: selectedHub === hubName ? "black" : "black",
-                }}
-                onPress={() => setSelectedHub(hubName)}
-                selected={selectedHub === hubName}
-              >
-                {hubName}
-              </Chip>
-            ))}
-
-            {/* Right Arrow */}
-            {currentIndex < hubs.length - 3 && (
-      <Button
-        mode="text"
-        textColor="#000000"
-        style={styles.button}
-        onPress={handleNext}
-        icon={() => (
-          <Image
-            source={{
-              uri: "https://img.icons8.com/?size=100&id=86516&format=png&color=000000",
-            }}
-            style={{ width: 20, height: 20 }}
-          />
-        )}
-      >
-        Next
-      </Button>
-            )}
-        </View>
-       
+        {hubs.length > 4 && ( // Show Picker only if hubs length is greater than 4
+  <Picker
+    selectedValue={hubs.indexOf(selectedHub)} // Use the index of the selected hub
+    style={{
+      height: 30,
+      width: 135,
+      marginTop: 13,
+      fontWeight: '600',
+      fontSize: 14,
+      backgroundColor: '#f7fff4',
+      borderColor: '#f7fff4',
+    }}
+    onValueChange={handlePickerChange}
+  >
+    <Picker.Item label="All Joined Hubs" value={0} /> {/* Placeholder for "All Joined Hubs" */}
+    {hubs.map((hub, index) => (
+      <Picker.Item label={hub} value={index} key={index} /> // List all hubs in Picker
+    ))}
+  </Picker>
+)}
       </View>
-
+      <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20, marginLeft: 5}}/>
+      {/* Hub Items Display */}
+      <View style={{ flexDirection: "row", alignItems: "center"}}>
+        {hubs.slice(currentIndex, currentIndex + 4).map((hubName) => (
+          <Chip
+            key={hubName}
+            mode="text"
+            textColor="#000000"
+            style={[
+              styles.hubChip,
+              selectedHub === hubName && styles.selectedChip,
+            ]}
+            textStyle={{
+              color: selectedHub === hubName ? "black" : "black",
+            }}
+            onPress={() => setSelectedHub(hubName)} // Set selected hub when clicked
+            selected={selectedHub === hubName}
+          >
+            {hubName}
+          </Chip>
+        ))}
+      </View>
+      
    
+    </View>
       
 
 
@@ -590,23 +585,51 @@ const HubMeeting = () => {
               )}
             </>
           ) : (
-            <View
-              style={{
-                alignContent: "center",
-                justifyContent: "center",
-                alignSelf: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-                }}
-                style={{ width: 50, height: 50, marginLeft: 100 }}
-              />
-              <Text style={styles.noMeetings}>
-                No meetings available for this hub
-              </Text>
-            </View>
+           <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 20,
+                      backgroundColor: 'white'
+                    }}
+                  >
+                    {/* Empty Schedule Image */}
+                    <Image
+                      source={EmptyScheduleImage}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        marginBottom: 20,
+                      }}
+                    />
+                
+                    {/* Title */}
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        fontWeight: 'bold',
+                        color: '#333',
+                        marginBottom: 10,
+                      }}
+                    >
+                      Nothing available here
+                    </Text>
+                
+                    {/* Explanation */}
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: '#777',
+                        textAlign: 'center',
+                        marginBottom: 20,
+                      }}
+                    >
+                      It seems there are no meetings right now.
+                    </Text>
+                
+                    
+                  </View>
           )
         ) : null}
 

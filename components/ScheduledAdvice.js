@@ -8,6 +8,7 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment-timezone';
+import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -70,25 +71,51 @@ const ScheduledMeetingsTable = () => {
     <View style={styles.container}>
 
         {meetings.length === 0 ? (
-      <View
-        style={{
-          alignContent: "center",
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-      >
-        <Image
-          source={{
-            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-          }}
-          style={{
-            width: 50,
-            height: 50,
-            marginLeft: 100,
-          }}
-        />
-          <Text style={styles.noMeetings}>No new meetings scheduled</Text>
-      </View>
+    <View
+             style={{
+               flex: 1,
+               justifyContent: "center",
+               alignItems: "center",
+               padding: 20,
+               backgroundColor: 'white'
+             }}
+           >
+             {/* Empty Schedule Image */}
+             <Image
+               source={EmptyScheduleImage}
+               style={{
+                 width: 200,
+                 height: 200,
+                 marginBottom: 20,
+               }}
+             />
+         
+             {/* Title */}
+             <Text
+               style={{
+                 fontSize: 24,
+                 fontWeight: 'bold',
+                 color: '#333',
+                 marginBottom: 10,
+               }}
+             >
+               No New Meetings Scheduled
+             </Text>
+         
+             {/* Explanation */}
+             <Text
+               style={{
+                 fontSize: 16,
+                 color: '#777',
+                 textAlign: 'center',
+                 marginBottom: 20,
+               }}
+             >
+               It seems there are no upcoming meetings right now. You will get notification when individuals create new meetings.
+             </Text>
+         
+            
+           </View>
         ) : (
           <>
             {meetings.slice(0, showAllMeetings ? meetings.length : 2).map((meeting, index) => {

@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -82,25 +83,74 @@ const ScheduledMeetingsTable = () => {
 
         <ScrollView>
           {displayedMeetings.length === 0 ? (
-      <View
-        style={{
-          alignContent: "center",
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-      >
-        <Image
-          source={{
-            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-          }}
+       <View
           style={{
-            width: 50,
-            height: 50,
-            marginLeft: 100,
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+            backgroundColor: 'white'
           }}
-        />
-          <Text style={styles.noMeetings}>No new meetings scheduled</Text>
-      </View>
+        >
+          {/* Empty Schedule Image */}
+          <Image
+            source={EmptyScheduleImage}
+            style={{
+              width: 200,
+              height: 200,
+              marginBottom: 20,
+            }}
+          />
+      
+          {/* Title */}
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: '#333',
+              marginBottom: 10,
+            }}
+          >
+            No New Meetings Scheduled
+          </Text>
+      
+          {/* Explanation */}
+          <Text
+            style={{
+              fontSize: 16,
+              color: '#777',
+              textAlign: 'center',
+              marginBottom: 20,
+            }}
+          >
+            It seems there are no upcoming meetings right now. You can create new ones anytime.
+          </Text>
+      
+          {/* Create New Button */}
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'green', // Similar to Microsoft DevOps button color
+              paddingVertical: 12,
+              paddingHorizontal: 30,
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              // Action for Create New button (like navigating to a new screen or opening a form)
+              console.log('Create New clicked!');
+            }}
+          >
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              Create New
+            </Text>
+          </TouchableOpacity>
+        </View>
           ) : (
        displayedMeetings.map((analysis, index) => (
             <View key={index} style={styles.meetingContainer}>
