@@ -17,6 +17,7 @@ import OpenModal from './getstarted';
 import axios from 'axios';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -62,6 +63,7 @@ function AngleQuestPage({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
   const [activeCard, setActiveCard] = useState('Subscriptions');
+  const [activePlan, setActivePlan] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -74,11 +76,14 @@ function AngleQuestPage({ onClose }) {
     const [isRecurring, setIsRecurring] = useState(false);
     const [useExistingAddress, setUseExistingAddress] = useState(false);
 
- // Function to save selected plan to AsyncStorage without prefix or suffix
+ // Function to save selected plan pricing to AsyncStorage
 const saveToAsyncStorage = async (plan) => {
   try {
-    // Extract the numeric part from the plan cost (removing "$" and " Monthly" or " Annually")
-    const costWithoutPrefix = plan.replace(/[^0-9.-]+/g, ''); // This removes everything except numbers and decimal point
+    // Get the selected price based on activePrice (monthly, quarterly, or annually)
+    const selectedPrice = plan.pricing[activePrice];
+
+    // Remove the "$" symbol and any other characters (like /month, /quarter, /year)
+    const costWithoutPrefix = selectedPrice.replace(/[^0-9.-]+/g, '');
 
     // Save the numeric value to AsyncStorage
     await AsyncStorage.setItem('selectedPlan', costWithoutPrefix);
@@ -89,13 +94,12 @@ const saveToAsyncStorage = async (plan) => {
   }
 };
 
-  // Handle button press to select a plan
 // Handle button press to select a plan
-const handlePress = (plan, sectionTitle) => {
-    setSelectedPlan(plan);
-    setSelectedSection(sectionTitle);  // Set the selected section here
-    saveToAsyncStorage(plan);
-  };
+const handlePress = (plan) => {
+  setSelectedPlan(plan); // Set the selected plan
+  setSelectedSection(plan.id); // Set the selected section to the plan id
+  saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
+};
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -129,18 +133,6 @@ const handlePress = (plan, sectionTitle) => {
   ];
 
   const [selectedOptions, setSelectedOptions] = useState({});
-
-  useEffect(() => {
-    // Load previously selected options from AsyncStorage
-    const loadSelectedOptions = async () => {
-      const storedOptions = await AsyncStorage.getItem('selectedOptions');
-      if (storedOptions) {
-        setSelectedOptions(JSON.parse(storedOptions));
-      }
-    };
-
-    loadSelectedOptions();
-  }, []);
 
   const handleSelect = async (sectionTitle, option) => {
     try {
@@ -219,7 +211,100 @@ const handlePress = (plan, sectionTitle) => {
   };
   
   const [totalPlanCost, setTotalPlanCost] = useState(0); // State to hold the total cost
+  const [customAmount, setCustomAmount] = useState("");
+  const [activePrice, setActivePrice] = useState('monthly');
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+  
+  const plans = [
+    {
+      id: "Knowledge Backup",
+      title: "Knowledge Backup",
+      topic:
+        "Preserve your expertise effortlessly. Solve high-priority challenges while securing a solid knowledge foundation.",
+      description: [
+        "Knowledge sharing Hub",
+        "Support Request",
+        "Professional guidance",
+      ],
+      pricing: {
+        monthly: "$100",
+        quarterly: "$85",
+        annually: "$75",
+      },
+      color: "#FFFFFF",
+    },
+    {
+      id: "Growth Plan Support",
+      title: "Career Growth Support",
+      topic:
+        "Accelerate your career growth with expert-backed strategies designed to amplify your success.",
+      description: [
+        "AI Skill analysis",
+        "Monthly strategy growth plan",
+        "Knowledge sharing Hub",
+      ],
+      pricing: {
+        monthly: "$100",
+        quarterly: "$85",
+        annually: "$75",
+      },
+      price: "$100",
+      color: "#FFFFFF",
+    },
+    {
+      id: "Knowledge Backup + Growth Plan Support",
+      title: "Pro Plus",
+      topic:
+        "Unlock unparalleled benefits by combining services for streamlined solutions and career acceleration.",
+      description: [
+        "Everything in Knowledge Backup & Career Growth Support",
+        "Exclusive strategy workshops",
+        "Priority access to expert support",
+        "Custom solutions tailored to you",
+      ],
+      pricing: {
+        monthly: "$200",
+        quarterly: "$170",
+        annually: "$150",
+      },
+      price: "$200",
+      color: "#F3E5F5"
+    },
+  ];
 
+    // Function to handle the price tab selection
+    const handlePriceSelect = (priceType) => {
+      setActivePrice(priceType);
+    };
+    
+  const renderPlanDetails = (plan) => (
+    <View style={styles.paymentOptions}>
+      {plan.id !== "custom" ? (
+        <View>
+          <Text style={styles.planPrice}>{plan.price}</Text>
+          <TouchableOpacity style={styles.getStartedButton}>
+            <Text style={styles.getStartedText}>
+              Enter Your Comfortable Amount
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.customInputContainer}>
+          <Text style={styles.customHeader}>Enter Your Custom Amount</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="$ Enter Amount"
+            keyboardType="numeric"
+            value={customAmount}
+            onChangeText={setCustomAmount}
+          />
+          <TouchableOpacity style={styles.getStartedButton}>
+            <Text style={styles.getStartedText}>Book a Call</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
   
   const steps = [
     {
@@ -228,525 +313,115 @@ const handlePress = (plan, sectionTitle) => {
         ),
         content: (
           <View>
-            <View style={{ flexDirection: "row" }}>
-              <View
-                style={{
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=gcYV3SPHW03K&format=png&color=000000",
-                  }}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    marginTop: 20,
-                    marginBottom: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: 300,
-                  }}
-                >
-                  Knowledge Backup
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    textAlign: "center",
-                    width: 250,
-                    height: 100,
-                    marginTop: 5,
-                  }}
-                >
-                  Start delivering effortlessly at work. Take up
-and solve high priority challenges to stamp
-your excellence. AngleQuest serve as your
-knowledge backup. 24/7 support from
-dedicated expert. Access all best practices.
-                </Text>
-                <View style ={{flexDirection: 'row', marginTop: 5}}>
-                <Image
-                  source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=eoReSiKCoyw3&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=51413&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: 'grey',
-                    textAlign: "center",
-                    width: 250,
-                    marginTop: 25,
-                  }}
-                >
-                 Subscribe
-                </Text>
-                <View style={styles.buttonGroup}>
+             <View style={styles.navBar}>
         <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$100 Monthly' ? styles.selectedButton : null,
-          ]}
-          onPress={() => {
-            handlePress('$100 Monthly', 'Knowledge Backup'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
+          style={[styles.navButton, activePrice === 'monthly' && styles.activeNavButton]}
+          onPress={() => handlePriceSelect('monthly')}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$100 Monthly' ? styles.selectedText : null,
-            ]}
-          >
-            $100 Monthly
-          </Text>
+          <Text style={[styles.navText, activePrice === 'monthly' && styles.activenavText]}>Monthly</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$85 Quarterly' ? styles.selectedButton : null,
-          ]}
-          onPress={() => { handlePress('$85 Quarterly', 'Knowledge Backup'); 
-            setCurrentStep(1);
-            setActiveCard("Service Level Agreement"); 
-          }}
+          style={[styles.navButton, activePrice === 'quarterly' && styles.activeNavButton]}
+          onPress={() => handlePriceSelect('quarterly')}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$85 Quarterly' ? styles.selectedText : null,
-            ]}
-          >
-            $85 Quarterly
-          </Text>
+          <Text style={[styles.navText, activePrice === 'quarterly' && styles.activenavText]}>Quarterly (save 15%)</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[
-            styles.buttonG2,
-            selectedPlan === '$75 Annually' ? styles.selectedButton : null,
-          ]}
-          onPress={() => { handlePress('$75 Annually', 'Knowledge Backup'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
+          style={[styles.navButton, activePrice === 'annually' && styles.activeNavButton]}
+          onPress={() => handlePriceSelect('annually')}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$75 Annually' ? styles.selectedText : null,
-            ]}
-          >
-            $75 Annually
-          </Text>
+          <Text style={[styles.navText, activePrice === 'annually' && styles.activenavText]}>Annually (save 25%)</Text>
         </TouchableOpacity>
-        </View>
-         <Text style={styles.valueText}>
-                         Benefits
-                        </Text>
-                       <Text style={styles.descriptionText}>
-                       Support for project delivery.
-                       </Text>
-                        <Text style={styles.descriptionText}>
-                        Support for project delivery.
-                        </Text>
+      </View>
+      <View style={styles.plansContainer}>
+  {plans.map((plan) => (
+    <View key={plan.id}>
+      {plan.color === "#F3E5F5" ? (
+        <LinearGradient
+          colors={['#F3E5F5', '#A5D6A7']} // Apply gradient for matching plans
+          style={[styles.card, { borderRadius: 10 }]} // Apply gradient to card
+        >
+          <Text style={styles.planTitle2}>{plan.title}</Text>
+          <Text style={styles.planTopic}>{plan.topic}</Text>
+          <Text style={styles.planPrice}>
+            {plan.pricing[activePrice]} 
+            <Text style={{ fontSize: 12, color: 'grey' }}>
+              {activePrice === 'monthly' ? '/month' : activePrice === 'quarterly' ? '/quarter' : '/year'}
+            </Text>
+          </Text>
+          <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
+          <View style={styles.description}>
+            {plan.description.map((item, index) => (
+              <View key={index} style={styles.descriptionItem}>
+                <Image 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
+                  style={styles.checkIcon} 
+                />
+                <Text style={styles.descriptionText}>{item}</Text>
               </View>
-  
-              <View
-                style={{
-                  flexDirection: "column",
-                  marginLeft: 10,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=pF2OfcFGInLa&format=png&color=000000",
-                  }}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    marginTop: 20,
-                    marginBottom: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: 300,
-                  }}
-                >
-                  Career Growth Support
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    textAlign: "center",
-                    width: 250,
-                     height: 103,
-                    marginTop: 5,
-                  }}
-                >
-                 Enjoy hyper career growth support from
-                 top practicing experts who are committed 
-                </Text>
-                <View style ={{flexDirection: 'row', marginTop: 5}}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: 'grey',
-                    textAlign: "center",
-                    width: 250,
-                    marginTop: 25,
-                  }}
-                >
-                 Subscribe
-                </Text>
-                <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$100 Monthly' ? styles.selectedButton : null,
-          ]}
-          onPress={() => {handlePress('$100 Monthly', 'Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$100 Monthly' ? styles.selectedText : null,
-            ]}
-          >
-            $100 Monthly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$85 Quarterly' ? styles.selectedButton : null,
-          ]}
-          onPress={() => { handlePress('$85 Quarterly', 'Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$85 Quarterly' ? styles.selectedText : null,
-            ]}
-          >
-            $85 Quarterly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.buttonG2,
-            selectedPlan === '$75 Annually' ? styles.selectedButton : null,
-          ]}
-          onPress={() => { handlePress('$75 Annually', 'Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$75 Annually' ? styles.selectedText : null,
-            ]}
-          >
-            $75 Annually
-          </Text>
-        </TouchableOpacity>
-        </View>
-         <Text style={styles.valueText}>
-                         Benefits
-                        </Text>
-                       <Text style={styles.descriptionText}>
-                       Support for project delivery.
-                       </Text>
-                        <Text style={styles.descriptionText}>
-                        Support for project delivery.
-                        </Text>
-              </View>
-  
-              <View
-                style={{
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=GhVeCGvvJ9sM&format=png&color=000000",
-                  }}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    marginTop: 20,
-                    marginBottom: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: 300,
-                  }}
-                >
-                  Knowledge Backup
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 26,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: 300,
-                  }}
-                >
-                  +
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    textAlign: "center",
-                    width: 300,
-                     height: 77,
-                  }}
-                >
-                  Career Growth Support
-                </Text>
-                <View style ={{flexDirection: 'row', marginTop: 5}}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=7964&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/dea8538a41a4085f905f7513c46d36613c28b4ada84630149918f4444ac5ecde?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/925cfbb55e82458868f5e0c8cafbdc90d47bec0907e65b77fb918a7ac0dbcfe0?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=51413&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    marginRight: 10,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=eoReSiKCoyw3&format=png&color=5B5D55",
-                  }}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    marginTop: 5,
-                    alignSelf: "center",
-                  }}
-                />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: 'grey',
-                    textAlign: "center",
-                    width: 250,
-                    marginTop: 25,
-                  }}
-                >
-                 Subscribe
-                </Text>
-                <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$200 Monthly' ? styles.selectedButton : null,
-          ]}
-          onPress={() => { handlePress('$200 Monthly', 'Knowledge Backup + Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$200 Monthly' ? styles.selectedText : null,
-            ]}
-          >
-            $200 Monthly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.buttonG,
-            selectedPlan === '$170 Quarterly' ? styles.selectedButton : null,
-          ]}
-          onPress={() =>{ handlePress('$170 Quarterly', 'Knowledge Backup + Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$170 Quarterly' ? styles.selectedText : null,
-            ]}
-          >
-           $170 Quarterly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.buttonG2,
-            selectedPlan === '$150 Annually' ? styles.selectedButton : null,
-          ]}
-          onPress={() =>{ handlePress('$150 Annually', 'Knowledge Backup + Growth Plan Support'); 
-            setCurrentStep(1); 
-            setActiveCard("Service Level Agreement");
-          }}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              selectedPlan === '$150 Annually' ? styles.selectedText : null,
-            ]}
-          >
-            $150 Annually
-          </Text>
-        </TouchableOpacity>
-        </View>
-         <Text style={styles.valueText}>
-                         Benefits
-                        </Text>
-                       <Text style={styles.descriptionText}>
-                       Support for project delivery.
-                       </Text>
-                        <Text style={styles.descriptionText}>
-                        Support for project delivery.
-                        </Text>
-              </View>
-            </View>
-            
+            ))}
           </View>
+          <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10, marginBottom: 10 }} />
+          {activePlan === plan.id ? (
+            renderPlanDetails(plan)
+          ) : (
+            <TouchableOpacity
+              style={styles.getStartedButton2}
+              onPress={() => {
+                handlePress(plan);
+                saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
+                setCurrentStep(1); 
+                setActiveCard("Service Level Agreement");
+              }}
+            >
+              <Text style={styles.getStartedText2}>Get Started</Text>
+            </TouchableOpacity>
+          )}
+        </LinearGradient>
+      ) : (
+        <View style={[styles.card, { borderRadius: 10 }]}>
+          <Text style={styles.planTitle}>{plan.title}</Text>
+          <Text style={styles.planTopic}>{plan.topic}</Text>
+          <Text style={styles.planPrice}>
+            {plan.pricing[activePrice]} 
+            <Text style={{ fontSize: 12, color: 'grey' }}>
+              {activePrice === 'monthly' ? '/month' : activePrice === 'quarterly' ? '/quarter' : '/year'}
+            </Text>
+          </Text>
+          <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
+          <View style={styles.description}>
+            {plan.description.map((item, index) => (
+              <View key={index} style={styles.descriptionItem}>
+                <Image 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
+                  style={styles.checkIcon} 
+                />
+                <Text style={styles.descriptionText}>{item}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10, marginBottom: 10 }} />
+          {activePlan === plan.id ? (
+            renderPlanDetails(plan)
+          ) : (
+            <TouchableOpacity
+              style={styles.getStartedButton}
+              onPress={() => {
+                handlePress(plan);
+                saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
+                setCurrentStep(1); 
+                setActiveCard("Service Level Agreement");
+              }}
+            >
+              <Text style={styles.getStartedText}>Get Started</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+    </View>
+  ))}
+</View>
+</View>
         ),
       },
     {
@@ -827,10 +502,6 @@ dedicated expert. Access all best practices.
                           onPress={async () => {
                             // Call the handleSelect function to save selected option
                             await handleSelect(section.title, option);
-                        
-                            // Move to the next step
-                            setCurrentStep(2);
-                            setActiveCard("Payment Details");
                           }}
                         >
                           <Text
@@ -869,6 +540,12 @@ dedicated expert. Access all best practices.
               </View>
             );
           })}
+          <TouchableOpacity onPress={async () => {
+                            setCurrentStep(2);
+                            setActiveCard("Payment Details");
+                          }} style={styles.buttonnext}>
+                      <Text style={styles.buttonsaveText}>{t("Next")}</Text>
+                    </TouchableOpacity>
       </View>
 ),
     },
@@ -1321,6 +998,16 @@ borderRadius: 30
     marginTop: 100,
     elevation: 5,
   },
+  buttonnext: {
+    backgroundColor: "darkgreen",
+    padding: 10,
+    width: 100,
+    marginLeft: 770,
+    borderRadius: 5,
+    marginTop: 20,
+    marginBottom: 20,
+    elevation: 5,
+  },
   buttonText: {
     color: "black",
     fontSize: 14,
@@ -1499,6 +1186,149 @@ color: 'black',
     borderRadius: 8,
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
+  },
+  plansContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  card: {
+    padding: 20,
+    width: 300,
+    borderRadius: 15,
+    marginBottom: 20,
+    marginRight: 30,
+    alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  planTitle: {
+    fontSize: 16,
+padding: 10, backgroundColor: '#31A353',
+    color: "white",
+    marginBottom: 10,
+    borderRadius: 10
+  },
+  planTitle2: {
+    fontSize: 16,
+padding: 10, backgroundColor: 'white',
+    color: "black",
+    marginBottom: 10,
+    borderRadius: 10
+  },
+  planPrice: {
+    fontSize: 30,
+    fontWeight: "600",
+    color: "black",
+  },
+  planTopic: {
+    fontSize: 12,
+    color: "grey",
+    height: 50,
+    marginBottom: 20
+  },
+  description: {
+    marginBottom: 20,
+    height: 130
+  },
+  descriptionItem: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  checkIcon: {
+    width: 16, 
+    height: 16, 
+    marginRight: 10, 
+  },
+  descriptionText: {
+    fontSize: 16, 
+  },
+  getStartedButton: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    alignSelf: "stretch",
+    alignItems: "center",
+  },
+  getStartedText: {
+    color: "black",
+    fontWeight: "bold",
+  },
+  getStartedButton2: {
+    backgroundColor: "black",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+    alignSelf: "stretch",
+    alignItems: "center",
+  },
+  getStartedText2: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  customInputContainer: {
+    marginTop: 15,
+    width: "100%",
+    alignItems: "center",
+  },
+  customHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#1B5E20",
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#4CAF50",
+    borderRadius: 10,
+    padding: 10,
+    width: "80%",
+    marginBottom: 15,
+  },
+  paymentOptions: {
+    width: "100%",
+    alignItems: "center",
+  },
+  checkmark:{ 
+fontWeight: 200
+  },
+  navBar: {
+    flexDirection: 'row',
+alignSelf: 'center',
+    marginBottom: 20,
+    marginTop: 20,
+backgroundColor: 'white',
+borderRadius: 20,
+width: 750,
+padding: 5
+  },
+  navButton: {
+    padding: 10,
+    borderRadius: 20,
+    width: 250,
+  },
+  activeNavButton: {
+    backgroundColor: '#31A353',
+    width: 250,
+    borderRadius: 20,
+  },
+  navText: {
+    fontSize: 14,
+    color: '#000',
+    textAlign: 'center'
+  },
+  activenavText: {
+    fontSize: 14,
+    color: 'white',
+    textAlign: 'center'
   },
   valueText: { fontSize: 14, fontWeight: '600', marginBottom: 5, marginTop: 25, color: 'grey', textAlign: 'flex-start', alignSelf: 'flex-start' },
   descriptionText: { fontSize: 14, marginBottom: 5, color: '#333', textAlign: 'flex-start', alignSelf: 'flex-start'},
