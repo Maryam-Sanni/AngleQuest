@@ -19,7 +19,7 @@ import SuggestionModal from "../components/Suggestion";
 import HelpModal from "../components/Help";
 import CustomModal from "../Jobseekers/goalspopup";
 import CustomPercentageChart from "../components/PercentageChart";
-import OpenModal2 from "../Jobseekers/SkillanalysisAI";
+import OpenModal2 from "../Jobseekers/GetStartedInd";
 import OpenModal3 from "../Jobseekers/Pickyourcoach";
 import OpenModal4 from "../Jobseekers/Pickyourhub";
 import { useFonts } from "expo-font";
@@ -979,7 +979,7 @@ const HomePage = () => {
           onRequestClose={handleCloseModal2}
         >
           <View style={styles.modalContent}>
-            <CustomModal onClose={() => setCustomModalVisible(false)} /> />
+            <CustomModal onClose={() => setCustomModalVisible(false)} /> 
           </View>
         </Modal>
         

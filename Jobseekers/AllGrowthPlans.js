@@ -244,6 +244,7 @@ function MyComponent() {
                 <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
                     <View style={{ marginLeft: 270 }}>
                       <View style={styles.header}>
+                                                           <View style={{backgroundColor: '#f7fff4', flexDirection: 'row', marginTop: -10, marginRight: -10, marginLeft: -10, marginBottom: -10, padding: 10}}>
                         <Button mode="text" 
                           textColor="#000000"
                           style={styles.button} 
@@ -254,6 +255,7 @@ function MyComponent() {
                               style={{ width: 20, height: 20 }} 
                             />
                           )}>New</Button>
+                          </View>
                         <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20, marginLeft: 10}}/>
                         <Button mode="text" 
                           textColor="#000000"

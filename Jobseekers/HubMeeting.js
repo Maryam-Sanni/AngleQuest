@@ -333,6 +333,7 @@ const HubMeeting = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Hub buttons for filtering */}
       <View style={styles.header}>
+                                           <View style={{backgroundColor: '#f7fff4', flexDirection: 'row', marginTop: -10, marginRight: -10, marginLeft: -10, marginBottom: -10, padding: 10}}>
         <Button
           mode="text"
           textColor="#000000"
@@ -349,6 +350,7 @@ const HubMeeting = () => {
         >
           Join New Hub
         </Button>
+        </View>
         <View style={{ borderRightWidth: 1, borderRightColor: '#CCC', marginRight: 20}}/>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {/* Left Arrow */}
