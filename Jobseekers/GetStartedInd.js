@@ -62,7 +62,7 @@ function AngleQuestPage({ onClose }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
-  const [activeCard, setActiveCard] = useState('Subscriptions');
+  const [activeCard, setActiveCard] = useState('Welcome');
   const [activePlan, setActivePlan] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -75,6 +75,58 @@ function AngleQuestPage({ onClose }) {
     const [expYear, setExpYear] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [useExistingAddress, setUseExistingAddress] = useState(false);
+    const [selectedRole, setSelectedRole] = useState(null);
+    const [first_name, setFirstName] = useState('');
+      const [selectedOption, setSelectedOption] = useState('CreditOrDebitCard');
+      const [fullName, setFullName] = useState('');
+      const [phone, setPhone] = useState('');
+      const [email, setEmail] = useState('');
+      const [billingAddress, setBillingAddress] = useState('');
+
+    // Get today's date in the format: Monday, YYYY-MM-DD
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  useEffect(() => {
+    // Retrieve first_name and last_name from AsyncStorage
+    const retrieveData = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem('first_name');
+        const storedLastName = await AsyncStorage.getItem('last_name');
+        if (storedFirstName !== null && storedLastName !== null) {
+          console.log('Stored first_name:', storedFirstName);
+          console.log('Stored last_name:', storedLastName);
+          setFirstName(storedFirstName);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    retrieveData();
+  }, []);
+
+  const roles = [
+    "SAP FI", "SAP MM", "SAP SD", "SAP PP", 
+    "Microsoft Dynamics Sales", "Microsoft Dynamics Field Service", 
+    "Microsoft Dynamics Marketing", "Microsoft Dynamics Developer", 
+    "Microsoft Business Central", "Microsoft Dynamics F&O"
+  ];
+
+  const handleRoleSelection = (role) => {
+    setSelectedRole(role);
+  };
+
+  const handleContinue = () => {
+    if (selectedRole) {
+      setCurrentStep(1);  // This will change the step, you can define the steps accordingly
+      setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
+    }
+  };
 
  // Function to save selected plan pricing to AsyncStorage
 const saveToAsyncStorage = async (plan) => {
@@ -218,24 +270,24 @@ const handlePress = (plan) => {
   const plans = [
     {
       id: "Knowledge Backup",
-      title: "Knowledge Backup",
+      title: "Monthly",
       topic:
         "Preserve your expertise effortlessly. Solve high-priority challenges while securing a solid knowledge foundation.",
       description: [
         "Knowledge sharing Hub",
         "Support Request",
-        "Professional guidance",
       ],
       pricing: {
         monthly: "$100",
-        quarterly: "$85",
-        annually: "$75",
+        quarterly: "$185",
+        annually: "$250",
       },
-      color: "#FFFFFF",
+      amn: "month",
+      color: "#F3E5F5",
     },
     {
       id: "Growth Plan Support",
-      title: "Career Growth Support",
+      title: "Pay as you go",
       topic:
         "Accelerate your career growth with expert-backed strategies designed to amplify your success.",
       description: [
@@ -244,31 +296,12 @@ const handlePress = (plan) => {
         "Knowledge sharing Hub",
       ],
       pricing: {
-        monthly: "$100",
-        quarterly: "$85",
-        annually: "$75",
+        monthly: "$30",
+        quarterly: "$35",
+        annually: "$55",
       },
-      price: "$100",
+      amn: "session",
       color: "#FFFFFF",
-    },
-    {
-      id: "Knowledge Backup + Growth Plan Support",
-      title: "Pro Plus",
-      topic:
-        "Unlock unparalleled benefits by combining services for streamlined solutions and career acceleration.",
-      description: [
-        "Everything in Knowledge Backup & Career Growth Support",
-        "Exclusive strategy workshops",
-        "Priority access to expert support",
-        "Custom solutions tailored to you",
-      ],
-      pricing: {
-        monthly: "$200",
-        quarterly: "$170",
-        annually: "$150",
-      },
-      price: "$200",
-      color: "#F3E5F5"
     },
   ];
 
@@ -308,6 +341,53 @@ const handlePress = (plan) => {
   
   const steps = [
     {
+      heading: t(" "),
+      content: (
+        <View>
+      <View style={styles.welcomeheader}>
+       
+        <View style={styles.whiteBox}>
+        <Image 
+          source={{ uri: 'https://img.icons8.com/?size=100&id=FUZiNN6aw2Rb&format=png&color=000000' }} 
+          style={styles.image}
+        />
+          <Text style={styles.greetingText}>Hello {first_name}, Welcome to Anglequest</Text>
+          <Text style={styles.subHeading}>Start by letting us what specialization you want anglequest to curate for you</Text>
+        </View>
+   
+
+        <View style={{flexDirection: 'column', marginLeft: 50}}>
+        <Text style={{fontSize: 20, fontWeight: 600, }}>My Specialization is:</Text>
+        <Text style={{fontSize: 14, color: 'grey' }}>Make a selection below</Text>
+      <View style={styles.rolesContainer}>
+        {roles.map((role, index) => (
+          <TouchableOpacity 
+            key={index} 
+            style={[styles.roleButton, selectedRole === role && styles.selectedRole]} 
+            onPress={() => handleRoleSelection(role)}
+          >
+            <Text style={styles.roleText}>{role}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TouchableOpacity 
+        style={[styles.continueButton, !selectedRole && styles.disabledButton]} 
+        onPress={handleContinue} 
+        disabled={!selectedRole}  // Disable if no role is selected
+      >
+        <Text style={styles.continueButtonText}>Continue</Text>
+      </TouchableOpacity>
+
+      </View>
+
+      </View>
+     
+ 
+
+        </View>
+      ),
+    },
+    {
         heading: t(
           "Choose an area where you want AngleQuest to be your professional support",
         ),
@@ -318,19 +398,19 @@ const handlePress = (plan) => {
           style={[styles.navButton, activePrice === 'monthly' && styles.activeNavButton]}
           onPress={() => handlePriceSelect('monthly')}
         >
-          <Text style={[styles.navText, activePrice === 'monthly' && styles.activenavText]}>Monthly</Text>
+          <Text style={[styles.navText, activePrice === 'monthly' && styles.activenavText]}>Knowledge Backup</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navButton, activePrice === 'quarterly' && styles.activeNavButton]}
           onPress={() => handlePriceSelect('quarterly')}
         >
-          <Text style={[styles.navText, activePrice === 'quarterly' && styles.activenavText]}>Quarterly (save 15%)</Text>
+          <Text style={[styles.navText, activePrice === 'quarterly' && styles.activenavText]}>Career Boost</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.navButton, activePrice === 'annually' && styles.activeNavButton]}
+          style={[styles.navButton2, activePrice === 'annually' && styles.activeNavButton2]}
           onPress={() => handlePriceSelect('annually')}
         >
-          <Text style={[styles.navText, activePrice === 'annually' && styles.activenavText]}>Annually (save 25%)</Text>
+          <Text style={[styles.navText, activePrice === 'annually' && styles.activenavText]}>Knowledge Backup + Career Boost</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.plansContainer}>
@@ -346,7 +426,7 @@ const handlePress = (plan) => {
           <Text style={styles.planPrice}>
             {plan.pricing[activePrice]} 
             <Text style={{ fontSize: 12, color: 'grey' }}>
-              {activePrice === 'monthly' ? '/month' : activePrice === 'quarterly' ? '/quarter' : '/year'}
+            {activePrice === 'monthly' ? `/${plan.amn}` : activePrice === 'quarterly' ? `/${plan.amn}` : `/${plan.amn}`}
             </Text>
           </Text>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
@@ -383,10 +463,10 @@ const handlePress = (plan) => {
           <Text style={styles.planTitle}>{plan.title}</Text>
           <Text style={styles.planTopic}>{plan.topic}</Text>
           <Text style={styles.planPrice}>
-            {plan.pricing[activePrice]} 
-            <Text style={{ fontSize: 12, color: 'grey' }}>
-              {activePrice === 'monthly' ? '/month' : activePrice === 'quarterly' ? '/quarter' : '/year'}
-            </Text>
+          {plan.pricing[activePrice]} 
+<Text style={{ fontSize: 12, color: 'grey' }}>
+  {activePrice === 'monthly' ? `/${plan.amn}` : activePrice === 'quarterly' ? `/${plan.amn}` : `/${plan.amn}`}
+</Text>
           </Text>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
           <View style={styles.description}>
@@ -409,7 +489,7 @@ const handlePress = (plan) => {
               onPress={() => {
                 handlePress(plan);
                 saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
-                setCurrentStep(1); 
+                setCurrentStep(2); 
                 setActiveCard("Service Level Agreement");
               }}
             >
@@ -448,14 +528,14 @@ const handlePress = (plan) => {
               >
                 <Text
                   style={{
-                    fontSize: 24,
-                    fontWeight: 'bold',
-                    color: '#206C00',
+                    fontSize: 22,
+                    fontWeight: '600',
+                    color: 'black',
                     marginBottom: 20,
                     textAlign: 'left',
                   }}
                 >
-                  {section.title}
+                  {section.title} SLA
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                   {section.options.map((option, optionIndex) => {
@@ -540,6 +620,67 @@ const handlePress = (plan) => {
               </View>
             );
           })}
+           <View style={styles.borderBox}>
+                  <ScrollView style={styles.scrollView}>
+                    <Text style={styles.title}>THIS APPLICATION LICENCE AGREEMENT</Text>
+                    <Text style={styles.date}>Dated: {today}</Text>
+                    <Text style={styles.content}>
+                      BETWEEN:
+                      {'\n'}AngleQuest (the “Vendor”)
+                      {'\n'}– AND –
+                      {'\n'}[Insert name] or [Insert company name] (the “Licensee”)
+                      {'\n'}BACKGROUND:
+                      {'\n'}The Vendor wishes to licence application Application to the Licensee and the Licensee desires to use the
+                      application licence under the terms and conditions stated below.
+                      {'\n'}IN CONSIDERATION OF the provisions contained in this Agreement and for other good and valuable consideration, the receipt and sufficiency of which is acknowledged, the parties agree as follows:
+                      {'\n'}
+                      {'\n'}Licence
+                      {'\n'}1. Under this Agreement the Vendor grants to the Licensee a non-exclusive and non-transferable licence (the “Licence”) to use AngleQuest (the “Application”).
+                      {'\n'}2. “Application” includes the executable computer programs and any related printed, electronic and online documentation and any other files that may accompany the product.
+                      {'\n'}3. Title, copyright, intellectual property rights and distribution rights of the Application remain exclusively with the Vendor. Intellectual property rights include the look and feel of the Application. This Agreement constitutes a licence for use only and is not in any way a transfer of ownership rights to the Application.
+                      {'\n'}4. The Application may be used from the web and mobile. An account can only owned and used by only one user.
+                      {'\n'}5. The rights and obligations of this Agreement are personal rights granted to the Licensee only. The Licensee may not transfer or assign any of the rights or obligations granted under this Agreement to any other person or legal entity. The Licensee may not make available the Application for use by one or more third parties except her employees only.
+                      {'\n'}6. The Application may not be modified, reverse-engineered, or de-compiled in any manner through current or future available technologies.
+                      {'\n'}7. Failure to comply with any of the terms under the Licence section will be considered a material breach of this Agreement.
+                      {'\n'}
+                      {'\n'}Licence Fee
+                      {'\n'}8. The subscription price of [Insert amount] paid by the Licensee will constitute the entire licence fee and is the full consideration for this Agreement.
+                      {'\n'}
+                      {'\n'}Limitation of Liability
+          {'\n'}9. The Application is provided by the Vendor and accepted by the Licensee “as is”. Liability of the Vendor will be limited to a maximum of the original purchase price of the Application. The Vendor will not be liable for any general, special, incidental or consequential damages including, but not limited to, loss of production, loss of profits, loss of revenue, loss of data, or any other business or economic disadvantage suffered by the Licensee arising out of the use or failure to use the Application.
+          {'\n'}10. The Vendor makes no warranty expressed or implied regarding the fitness of the Application for a particular purpose or that the Application will be suitable or appropriate for the specific requirements of the Licensee.
+          {'\n'}11. The Vendor does not warrant that use of the Application will be uninterrupted or error-free. The Licensee accepts that Application in general is prone to bugs and flaws within an acceptable level as determined in the industry.
+          {'\n'}
+          {'\n'}Warrants and Representations
+          {'\n'}12. The Vendor warrants and represents that it is the copyright holder of the Application. The Vendor warrants and represents that granting the licence to use this Application is not in violation of any other agreement, copyright or applicable statute.
+          Acceptance
+          {'\n'}13. All terms, conditions and obligations of this Agreement will be deemed to be accepted by the Licensee (“Acceptance”) upon execution of this Agreement.
+          {'\n'}
+          {'\n'}
+          {'\n'}Term
+          {'\n'}15. The term of this Agreement will begin on Acceptance and is perpetual.
+          {'\n'}
+          {'\n'}Termination
+          {'\n'}16. This Agreement will be terminated and the Licence forfeited where the Licensee has failed to comply with any of the terms of this Agreement or is in breach of this Agreement. On termination of this Agreement for any reason, the Licensee will promptly delete her account from the Application and all its users account will be blocked.
+          {'\n'}
+          {'\n'}Force Majeure
+          {'\n'}17. The Vendor will be free of liability to the Licensee where the Vendor is prevented from executing its obligations under this Agreement in whole or in part due to Force Majeure, such as earthquake, typhoon, flood, fire, and war or any other unforeseen and uncontrollable event where the Vendor has taken any and all appropriate action to mitigate such an event.
+          Governing Law
+          {'\n'}18. The Parties to this Agreement submit to the jurisdiction of the courts of Netherlands for the enforcement of this Agreement or any arbitration award or decision arising from this Agreement. This Agreement will be enforced or construed according to the laws of the Netherlands.
+          {'\n'}
+          {'\n'}Miscellaneous
+          {'\n'}19. This Agreement can only be modified in writing signed by both the Vendor and the Licensee.
+          {'\n'}20. This Agreement does not create or imply any relationship in agency or partnership between the Vendor and the Licensee.
+          {'\n'}21. Headings are inserted for the convenience of the parties only and are not to be considered when interpreting this Agreement. Words in the singular mean and include the plural and vice versa. Words in the masculine gender include the feminine gender and vice versa. Words in the neuter gender include the masculine gender and the feminine gender and vice versa.
+          {'\n'}22. If any term, covenant, condition or provision of this Agreement is held by a court of competent jurisdiction to be invalid, void or unenforceable, it is the parties’ intent that such provision be reduced in scope by the court only to the extent deemed necessary by that court to render the provision reasonable and enforceable and the remainder of the provisions of this Agreement will in no way be affected, impaired or invalidated as a result.
+          {'\n'}23. This Agreement contains the entire agreement between the parties. All understandings have been included in this Agreement. Representations which may have been made by any party to this Agreement may in some way be inconsistent with this final written Agreement. All such statements are declared to be of no value in this Agreement. Only the written terms of this Agreement will bind the parties.
+          {'\n'}24. This Agreement and the terms and conditions contained in this Agreement apply to and are binding upon the Vendor’s successors and assigns.
+          {'\n'}
+          {'\n'}Notices
+          {'\n'}25. All notices to the parties under this Agreement are to be provided at the following addresses, or at such addresses as may be later provided in writing: ask@anglequest.com. And the provided email of the Licensee during signup will be used by AngleQuest. 
+                    </Text>
+                    </ScrollView>
+                  </View>
           <TouchableOpacity onPress={async () => {
                             setCurrentStep(2);
                             setActiveCard("Payment Details");
@@ -560,139 +701,157 @@ const handlePress = (plan) => {
                   </Text>
                 </View>
           
-                {/* Buttons */}
-                <View style={styles.PaymentbuttonContainer}>
-                  <TouchableOpacity style={[styles.Paymentbutton, styles.PaymentselectedButton]}>
-                    <Image
-                      source={{ uri: 'https://img.icons8.com/?size=100&id=83205&format=png&color=206C00' }}
-                      style={{width: 20, height: 20, alignSelf: 'flex-end', marginTop: -10}}
-                    />
-                    <Image
-                      source={{ uri: 'https://img.icons8.com/?size=100&id=22128&format=png&color=000000' }}
-                      style={{width: 50, height: 50, alignSelf: 'center'}}
-                    />
-                    <Text style={styles.PaymentbuttonText}>Credit Or Debit Card</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.Paymentbutton}>
-                    <Image
-                      source={{ uri: 'https://img.icons8.com/?size=100&id=59872&format=png&color=000000' }}
-                      style={{width: 50, height: 50, alignSelf: 'center', marginTop: 10}}
-                    />
-                    <Text style={styles.PaymentbuttonText}>Change Payment</Text>
-                  </TouchableOpacity>
-                </View>
-          
-                {/* Form Fields */}
-                 <View style={styles.formcontainer}>
-                <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="e.g., Elijah Mateo"
-                  placeholderTextColor={"grey"}
-                  value={cardName}
-                  onChangeText={setCardName}
-                />
-          
-                <Text style={styles.label}>Card Number</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="1234 5678 9012 3456"
-                  placeholderTextColor={"grey"}
-                  value={cardNumber}
-                  onChangeText={setCardNumber}
-                  keyboardType="numeric"
-                />
-           <View style ={{flexDirection: 'row', marginBottom: 20, marginTop: -10}}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=1431&format=png&color=808080",
-                  }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    marginRight: 2,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=1429&format=png&color=808080",
-                  }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    marginRight: 2,
-                    alignSelf: "center",
-                  }}
-                />
-                 <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=1433&format=png&color=808080",
-                  }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    alignSelf: "center",
-                  }}
-                />
-                </View>
-                <Text style={styles.label}>CVV</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="123"
-                  placeholderTextColor={"grey"}
-                  value={cvv}
-                  onChangeText={setCvv}
-                  keyboardType="numeric"
-                />
-          
-                {/* Expiration Date */}
-                <Text style={styles.label}>Expiration Date</Text>
-                <View style={styles.row}>
-                  <TextInput
-                    style={[styles.input, styles.smallInput]}
-                    placeholder="MM"
-                    placeholderTextColor={"grey"}
-                    value={expMonth}
-                    onChangeText={setExpMonth}
-                    keyboardType="numeric"
-                  />
-                  <TextInput
-                    style={[styles.input, styles.smallInput]}
-                    placeholder="YY"
-                    placeholderTextColor={"grey"}
-                    value={expYear}
-                    onChangeText={setExpYear}
-                    keyboardType="numeric"
-                  />
-                </View>
-          
-                 </View>
+                <View style={{marginLeft: 40, marginRight: 40}}>
+                <View style={styles.buttonContainer}>
+                          {/* Credit or Debit Card Option */}
+                          <TouchableOpacity
+                            style={[styles.button, selectedOption === 'CreditOrDebitCard' && styles.selectedButton]}
+                            onPress={() => setSelectedOption('CreditOrDebitCard')}
+                          >
+                            {selectedOption === 'CreditOrDebitCard' && (
+                              <Image
+                                source={{
+                                  uri: 'https://img.icons8.com/?size=100&id=83205&format=png&color=206C00',
+                                }}
+                                style={{ width: 20, height: 20, alignSelf: 'flex-end', marginTop: -10 }}
+                              />
+                            )}
+                            <Image
+                              source={{
+                                uri: 'https://img.icons8.com/?size=100&id=22128&format=png&color=000000',
+                              }}
+                              style={{ width: 50, height: 50, alignSelf: 'center' }}
+                            />
+                            <Text style={styles.buttonText}>Credit Or Debit Card</Text>
+                          </TouchableOpacity>
                 
-                {/* Checkbox */}
-                <View style={styles.checkboxContainer}>
+                          {/* Contact Details Option */}
+                          <TouchableOpacity
+                            style={[styles.button, selectedOption === 'ContactDetails' && styles.selectedButton]}
+                            onPress={() => setSelectedOption('ContactDetails')}
+                          >
+                            {selectedOption === 'ContactDetails' && (
+                              <Image
+                                source={{
+                                  uri: 'https://img.icons8.com/?size=100&id=83205&format=png&color=206C00',
+                                }}
+                                style={{ width: 20, height: 20, alignSelf: 'flex-end', marginTop: -10 }}
+                              />
+                            )}
+                            <Image
+                              source={{
+                                uri: 'https://img.icons8.com/?size=100&id=34105&format=png&color=000000',
+                              }}
+                              style={{ width: 50, height: 50, alignSelf: 'center', marginTop: 10 }}
+                            />
+                            <Text style={styles.buttonText}>Contact Details</Text>
+                          </TouchableOpacity>
+                        </View>
+                
+                        {/* Conditionally Render Form Fields */}
+                        {selectedOption === 'CreditOrDebitCard' ? (
+                          <View style={styles.formcontainer}>
+                            <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="e.g., John Doe"
+                              value={cardName}
+                              onChangeText={setCardName}
+                            />
+                
+                            <Text style={styles.label}>Card Number</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="1234 5678 9012 3456"
+                              value={cardNumber}
+                              onChangeText={setCardNumber}
+                              keyboardType="numeric"
+                            />
+                
+                            <Text style={styles.label}>CVV</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="123"
+                              value={cvv}
+                              onChangeText={setCvv}
+                              keyboardType="numeric"
+                            />
+                
+                            {/* Expiration Date */}
+                            <Text style={styles.label}>Expiration Date</Text>
+                            <View style={styles.row}>
+                              <TextInput
+                                style={[styles.input, styles.smallInput]}
+                                placeholder="MM"
+                                value={expMonth}
+                                onChangeText={setExpMonth}
+                                keyboardType="numeric"
+                              />
+                              <TextInput
+                                style={[styles.input, styles.smallInput]}
+                                placeholder="YY"
+                                value={expYear}
+                                onChangeText={setExpYear}
+                                keyboardType="numeric"
+                              />
+                            </View>
+                          </View>
+                        ) : (
+                          <View style={styles.formcontainer}>
+                            <Text style={styles.label}>Full Name</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="e.g., John Doe"
+                              value={fullName}
+                              onChangeText={setFullName}
+                            />
+                
+                            <Text style={styles.label}>Phone</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="e.g., +1 123 456 7890"
+                              value={phone}
+                              onChangeText={setPhone}
+                              keyboardType="phone-pad"
+                            />
+                
+                            <Text style={styles.label}>Email</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="e.g., john.doe@example.com"
+                              value={email}
+                              onChangeText={setEmail}
+                              keyboardType="email-address"
+                            />
+                
+                            <Text style={styles.label}>Billing Address</Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder="e.g., 123 Main St, City, State"
+                              value={billingAddress}
+                              onChangeText={setBillingAddress}
+                            />
+                          </View>
+                        )}
+                
+                        {/* Checkbox */}
+                        <View style={styles.checkboxContainer}>
                   <CheckBox
                     value={useExistingAddress}
                     onValueChange={setUseExistingAddress}
+                    tintColors={{ true: '#206C00', false: '#DDD' }} // iOS and Android color for true and false states
                   />
                   <Text style={styles.checkboxText}>Use the existing address for this payment method</Text>
                 </View>
-          
-                  <View style={styles.checkboxContainer}>
-                    <Switch
-                      value={isRecurring}
-                      onValueChange={(value) => setIsRecurring(value)}
-                    />
-                    <Text style={styles.checkboxText}>Make this payment recurring</Text>
-                  </View>
-          
-                {/* Captcha */}
-                <View style={styles.captchaContainer}>
-                  <Image
-                    source={{ uri: 'https://www.gstatic.com/recaptcha/api2/logo_48.png' }}
-                    style={styles.captchaImage}
+                
+                        <View style={styles.checkboxContainer}>
+                  <Switch
+                    value={isRecurring}
+                    onValueChange={(value) => setIsRecurring(value)}
+                    trackColor={{ false: '#DDD', true: '#206C00' }} 
+                    thumbColor={isRecurring ? '#206C00' : '#FFF'} 
                   />
-                  <Text style={styles.captchaText}>Privacy - Terms</Text>
+                  <Text style={styles.checkboxText}>Make this payment recurring</Text>
                 </View>
           
                 {/* Submit Button */}
@@ -704,21 +863,11 @@ const handlePress = (plan) => {
             <Text style={styles.buttonsaveText2}>{t("Submit")}</Text>
           </TouchableOpacity>
 
+</View>
         </View>
       ),
     },
-    {
-        heading: t("AngleQuest Agreement"),
-        content: (
-          <View>
-            <Text style={styles.subHeading}>
-              {t("Create your members individually or simply upload an excel document to add all members at once.")}
-            </Text>
-  
-  
-          </View>
-        ),
-      },
+   
     
    
   ];
@@ -733,7 +882,11 @@ const handlePress = (plan) => {
 
   const services = [
     {
-      title: t("Subscriptions"),
+      title: t("Welcome"),
+      icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
+    },
+    {
+      title: t("Subscription Plans"),
       icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
     },
     {
@@ -743,10 +896,6 @@ const handlePress = (plan) => {
     {
       title: t("Payment Details"),
       icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
-    },
-    {
-      title: t("AngleQuest Agreement"),
-      icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
     },
   ];
 
@@ -875,6 +1024,7 @@ const styles = StyleSheet.create({
     color: "green",
     marginBottom: 10,
     marginTop: 10,
+    textAlign: 'center'
   },
   subHeading: {
     fontSize: 16,
@@ -1094,7 +1244,8 @@ color: 'black',
   },
   Paymentheader: {
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
+    marginLeft: 20
   },
   PaymentbuttonContainer: {
     flexDirection: 'row',
@@ -1186,6 +1337,7 @@ color: 'black',
     borderRadius: 8,
     backgroundColor: '#fdfdfd',
     alignItems: 'center',
+    alignSelf: 'center'
   },
   plansContainer: {
     flexDirection: "row",
@@ -1307,7 +1459,7 @@ alignSelf: 'center',
     marginTop: 20,
 backgroundColor: 'white',
 borderRadius: 20,
-width: 750,
+width: 860,
 padding: 5
   },
   navButton: {
@@ -1320,6 +1472,16 @@ padding: 5
     width: 250,
     borderRadius: 20,
   },
+  navButton2: {
+    padding: 10,
+    borderRadius: 20,
+    width: 350,
+  },
+  activeNavButton2: {
+    backgroundColor: '#31A353',
+    width: 350,
+    borderRadius: 20,
+  },
   navText: {
     fontSize: 14,
     color: '#000',
@@ -1329,6 +1491,189 @@ padding: 5
     fontSize: 14,
     color: 'white',
     textAlign: 'center'
+  },
+  scrollView: {
+    marginVertical: 10,
+  },
+  borderBox: {
+    borderWidth: 2,
+    borderColor: '#000',
+    borderRadius: 10,
+    padding: 15,
+    backgroundColor: '#fff',
+    marginLeft: 10,
+    marginRight: 30,
+    marginTop: 10,
+    height: 300
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  date: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+  content: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#333',
+  },
+  welcomeheader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 30,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+  },
+  whiteBox: {
+    backgroundColor: 'white',
+    marginLeft: 50,
+    height: 350,
+    justifyContent: 'center',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    alignItems: 'center',
+  },
+  greetingText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  subHeading: {
+    fontSize: 16,
+    color: '#777',
+    marginTop: 10,
+    textAlign: 'center',
+    width: 450
+  },
+  rolesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: 600,
+    marginTop: 20,
+  },
+  roleButton: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectedRole: {
+    backgroundColor: 'lightgreen',
+  },
+  roleText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  continueButton: {
+    padding: 15,
+    marginTop: 30,
+    borderRadius: 5,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'green',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc', // Grey background when disabled
+  },
+  continueButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  button: {
+    padding: 20,
+    marginRight: 10,
+    backgroundColor: 'none',
+    borderRadius: 10,
+    width: 180,
+    borderColor: 'lightgrey',
+    borderWidth: 2,
+    marginRight: 20
+  },
+  selectedButton: {
+    backgroundColor: 'none',
+    borderColor: 'green',
+    borderWidth: 3,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: 5
+  },
+  label: {
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  input: {
+    backgroundColor: 'white',
+    borderColor: '#DDD',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  smallInput: {
+    width: '45%',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  checkboxText: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#333',
+  },
+  captchaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  captchaImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  captchaText: {
+    fontSize: 12,
+    color: '#555',
+  },
+  submitButton: {
+    backgroundColor: '#206C00',
+    padding: 15,
+    borderRadius: 5,
+  },
+  submitButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   valueText: { fontSize: 14, fontWeight: '600', marginBottom: 5, marginTop: 25, color: 'grey', textAlign: 'flex-start', alignSelf: 'flex-start' },
   descriptionText: { fontSize: 14, marginBottom: 5, color: '#333', textAlign: 'flex-start', alignSelf: 'flex-start'},

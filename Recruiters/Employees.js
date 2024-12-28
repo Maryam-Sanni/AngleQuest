@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList, ImageBackground, Image, Modal } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, ScrollView, StyleSheet, Linking, TouchableOpacity, FlatList, ImageBackground, Image, Modal } from 'react-native';
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import * as XLSX from 'xlsx';
 import * as DocumentPicker from 'expo-document-picker';
@@ -133,42 +133,87 @@ const apiUrl = process.env.REACT_APP_API_URL;
     }
   };
 
-  // Import from Excel (example, needs implementation)
-  const importFromExcel = async () => {
-    try {
-      // Open a document picker
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'],
-      });
+  const [employeeData, setEmployeeData] = useState([]);
+  const fileInputRef = useRef(null); // Ref for the file input
 
-      if (result.type === 'success') {
-        const fileUri = result.uri;
-
-        // Read the file
-        const fileData = await FileSystem.readAsStringAsync(fileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        // Parse the Excel file
-        const workbook = XLSX.read(fileData, { type: 'base64' });
-        const sheetName = workbook.SheetNames[0]; // Use the first sheet
-        const worksheet = workbook.Sheets[sheetName];
-
-        // Convert the worksheet to JSON
-        const data = XLSX.utils.sheet_to_json(worksheet);
-
-        // Update state with imported data
-        console.log('Imported data:', data);
-        setEmployees(data);
-        alert('Data imported successfully!');
-      } else {
-        alert('No file selected.');
-      }
-    } catch (error) {
-      console.error('Error importing from Excel:', error);
-      alert('Failed to import data.');
+  // Handle file selection (triggered by button)
+  const handleFileSelect = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger the hidden file input programmatically
     }
   };
+
+  // Handle file input change when user selects a file
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const fileData = reader.result;
+
+          // Parse the Excel file using XLSX library
+          const workbook = XLSX.read(fileData, { type: 'binary' });
+          const sheetName = workbook.SheetNames[0];  // Use the first sheet
+          const worksheet = workbook.Sheets[sheetName];
+
+          // Convert the worksheet into JSON format
+          const data = XLSX.utils.sheet_to_json(worksheet);
+
+          // Map the data to the required format
+          const mappedData = data.map((row) => ({
+            fullname: row['Full Name'] || '',
+            email_address: row['Email'] || '',
+            specialization: row['Specialization'] || '',
+            current_role: row['Current Role'] || '',
+            target_role: '', // Add the necessary logic if needed
+            type: 'service',  // Assuming 'type' should always be 'service'
+          }));
+
+          setEmployeeData(mappedData);
+          alert('Data imported successfully!');
+        };
+        reader.readAsBinaryString(file);
+      } catch (error) {
+        console.error('Error importing from Excel:', error);
+        alert('Failed to import data.');
+      }
+    }
+  };
+
+  // useEffect to auto-save the data once it is set
+  useEffect(() => {
+    const saveData = async () => {
+      if (employeeData.length > 0) {
+        try {
+          // Retrieve the token from AsyncStorage
+          const token = await AsyncStorage.getItem('token');
+
+          if (!token) {
+            alert('User is not authenticated.');
+            return;
+          }
+
+          // Dynamically append the endpoint to apiUrl
+          const createEmployeeUrl = `${apiUrl}/api/business/create-employee`;
+
+          // Send data to the API (sending all employees at once)
+          const response = await axios.post(createEmployeeUrl, employeeData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          console.log('Employees created successfully:', response.data);
+          onClose();  // Close the modal or trigger any other action after successful import
+        } catch (error) {
+          console.error('Error creating employees:', error.response?.data || error.message);
+          alert('Failed to save employees.');
+        }
+      }
+    };
+
+    // Trigger the saveData function when employeeData changes
+    saveData();
+  }, [employeeData, apiUrl]);
 
   const deleteEmployees = async () => {
     try {
@@ -193,6 +238,14 @@ const apiUrl = process.env.REACT_APP_API_URL;
     }
   };
   
+    const handleDownload = () => {
+      // Use the modified direct download link
+      const fileUrl = 'https://docs.google.com/spreadsheets/d/1MQ2NFFheqhKBEA83W7UYXJiQNDMb9oxT/export?format=xlsx';
+  
+      // Open the URL for downloading the file
+      Linking.openURL(fileUrl)
+        .catch((err) => console.error('Failed to open URL:', err));
+    };
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -278,23 +331,31 @@ const apiUrl = process.env.REACT_APP_API_URL;
         <Button mode="text" 
           textColor="#000000"
           style={styles.button} 
-          onPress={importFromExcel}
+          onPress={handleFileSelect}
           icon={() => (
             <Image 
               source={{ uri: 'https://img.icons8.com/?size=100&id=BEMhRoRy403e&format=png&color=000000' }} 
               style={{ width: 20, height: 20 }} 
             />
-          )}>Import from Excel</Button>
+          )}>Import from Excel
+         </Button>
         <Button mode="text" 
           textColor="#000000"
           style={styles.button} 
-          onPress={importFromExcel}
+          onPress={handleDownload}
           icon={() => (
             <Image 
               source={{ uri: 'https://img.icons8.com/?size=100&id=eQywUgX10I1j&format=png&color=000000' }} 
               style={{ width: 20, height: 20 }} 
             />
           )}>Download Excel Template</Button>
+           <input
+        ref={fileInputRef}
+        type="file"
+        accept=".xlsx, .xls"
+        style={{ display: 'none' }} // Hide the input element
+        onChange={handleFileChange}
+      />
       </View>
       
       {/* Employee Table */}
@@ -308,7 +369,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
           <Text style={[styles.headerCell, {marginLeft: 30 }]}>Specialization</Text>
           <Text style={styles.headerCell}>Current Role</Text>
           <Text style={styles.headerCell}>Target Role</Text>
-          <Text style={styles.headerCell}>Service</Text>
            <Text style={[styles.headerCell, {marginLeft: 30 }]}>Created</Text>
             <Text style={styles.headerCell}>Status</Text>
           <Text style={[styles.headerCell, {flex: 0 }]}><Switch
@@ -341,7 +401,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
               <Text style={[styles.cell, {marginLeft: 30 }]}>{item.specialization}</Text>
               <Text style={styles.cell}>{item.current}</Text>
               <Text style={styles.cell}>{item.target}</Text>
-              <Text style={styles.cell}>{item.service}</Text>
                <Text style={[styles.cell, {marginLeft: 30 }]}>{formatDate(item.createdDate)}</Text>
               <Text style={styles.cell}>{item.active}</Text>
               <Switch

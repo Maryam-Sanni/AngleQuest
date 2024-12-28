@@ -16,7 +16,7 @@ function MyComponent({ onClose }) {
     fullname: '',
     email_address: '',
     specialization: '',
-    type: '',
+    type: 'service',
     current_role: '',
     target_role: '',
   });
@@ -149,31 +149,20 @@ function MyComponent({ onClose }) {
                                 onValueChange={(value) => handleChange('specialization', value)}
               >
                 <Picker.Item label={t("Pick an area of specialization")} value="Pick an area of specialization" />
-                <Picker.Item label="SAP" value="SAP" />
-                <Picker.Item label="Microsoft" value="Microsoft" />
-                <Picker.Item label="Scrum" value="Scrum" />
-                <Picker.Item label="Business Analysis" value="Business Analysis" />
+  <Picker.Item label="SAP FI" value="SAP FI" />
+  <Picker.Item label="SAP MM" value="SAP MM" />
+  <Picker.Item label="SAP SD" value="SAP SD" />
+  <Picker.Item label="SAP PP" value="SAP PP" />
+  <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
+  <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
+  <Picker.Item label="Microsoft Dynamics Marketing" value="Microsoft Dynamics Marketing" />
+  <Picker.Item label="Microsoft Dynamics Developer" value="Microsoft Dynamics Developer" />
+  <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
+  <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
               </Picker>
 
               
-              {/* Lock icon for Type of Service */}
-              <View style={{marginTop: -15}}>
-              <Text style={styles.infoLabel}>
-                {t("Type of Service")}
-                <Image
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=10641&format=png&color=000000' }}
-                  style={styles.lockIcon}
-                />
-              </Text>
-              <TextInput
-                  placeholder="Selected support"
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={selectedSupport}
-                  editable={false}
-              />
-
-              </View>
+              
               
               <Text style={styles.infoLabel}>{t("Current role")}</Text>
               <Picker

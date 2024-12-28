@@ -7,13 +7,17 @@ import {
   Modal,
   ScrollView,
   Image,
-  Animated,
+  Animated, Linking,
   input, Pressable
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
-import OpenModal from './IndividualorList';
+import OpenModal from './New Employee';
+import OpenModal2 from './Emailemployees';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { launchImageLibrary } from 'react-native-image-picker';
+import * as XLSX from 'xlsx';
+import axios from 'axios';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -57,18 +61,126 @@ function AngleQuestPage({ onClose }) {
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [ModalVisible, setModalVisible] = useState(false);
+  const [ModalVisible2, setModalVisible2] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
   const [activeCard, setActiveCard] = useState('Subscriptions');
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
 
-  const handleChooseImage = (event) => {
-    const selectedImage = event.target.files[0];
-    const imageUrl = URL.createObjectURL(selectedImage);
-    setProfileImage(imageUrl);
+  const handleChooseImage = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorMessage) {
+        console.error('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const image = response.assets[0]; // Get the selected image
+        setSelectedImage(image.uri); // Save the image URI to state
+        console.log('Selected Image: ', image);
+      }
+    });
   };
+
+  const handleDownload = () => {
+    // Use the modified direct download link
+    const fileUrl = 'https://docs.google.com/spreadsheets/d/1MQ2NFFheqhKBEA83W7UYXJiQNDMb9oxT/export?format=xlsx';
+
+    // Open the URL for downloading the file
+    Linking.openURL(fileUrl)
+      .catch((err) => console.error('Failed to open URL:', err));
+  };
+
+  const [employeeData, setEmployeeData] = useState([]);
+  const fileInputRef = useRef(null); // Ref for the file input
+
+  // Handle file selection (triggered by button)
+  const handleFileSelect = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger the hidden file input programmatically
+    }
+  };
+
+  // Handle file input change when user selects a file
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const fileData = reader.result;
+
+          // Parse the Excel file using XLSX library
+          const workbook = XLSX.read(fileData, { type: 'binary' });
+          const sheetName = workbook.SheetNames[0];  // Use the first sheet
+          const worksheet = workbook.Sheets[sheetName];
+
+          // Convert the worksheet into JSON format
+          const data = XLSX.utils.sheet_to_json(worksheet);
+
+          // Map the data to the required format
+          const mappedData = data.map((row) => ({
+            fullname: row['Full Name'] || '',
+            email_address: row['Email'] || '',
+            specialization: row['Specialization'] || '',
+            current_role: row['Current Role'] || '',
+            target_role: '', // Add the necessary logic if needed
+            type: 'service',  // Assuming 'type' should always be 'service'
+          }));
+
+          setEmployeeData(mappedData);
+          alert('Data imported successfully!');
+        };
+        reader.readAsBinaryString(file);
+      } catch (error) {
+        console.error('Error importing from Excel:', error);
+        alert('Failed to import data.');
+      }
+    }
+  };
+
+  // useEffect to auto-save the data once it is set
+  useEffect(() => {
+    const saveData = async () => {
+      if (employeeData.length > 0) {
+        try {
+          // Retrieve the token from AsyncStorage
+          const token = await AsyncStorage.getItem('token');
+
+          if (!token) {
+            alert('User is not authenticated.');
+            return;
+          }
+
+          // Dynamically append the endpoint to apiUrl
+          const createEmployeeUrl = `${apiUrl}/api/business/create-employee`;
+
+          // Send data to the API (sending all employees at once)
+          const response = await axios.post(createEmployeeUrl, employeeData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          console.log('Employees created successfully:', response.data);
+          onClose();  // Close the modal or trigger any other action after successful import
+        } catch (error) {
+          console.error('Error creating employees:', error.response?.data || error.message);
+          alert('Failed to save employees.');
+        }
+      }
+    };
+
+    // Trigger the saveData function when employeeData changes
+    saveData();
+  }, [employeeData, apiUrl]);
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -76,6 +188,14 @@ function AngleQuestPage({ onClose }) {
 
   const handleCloseModal = () => {
     setModalVisible(false);
+  };
+
+  const handleOpenPress2 = () => {
+    setModalVisible2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
   };
 
   const saveSelectedSupport = async (selectedText) => {
@@ -90,7 +210,7 @@ function AngleQuestPage({ onClose }) {
   const steps = [
     {
       heading: t(
-        "Orchestrate your team members performance and growth using these services...",
+        "Orchestrate your team members performance and growth using AngleQuest",
       ),
       content: (
         <View>
@@ -104,7 +224,7 @@ function AngleQuestPage({ onClose }) {
             >
               <Image
                 source={{
-                  uri: "https://img.icons8.com/?size=100&id=gcYV3SPHW03K&format=png&color=000000",
+                  uri: "https://img.icons8.com/?size=100&id=BEMhRoRy403e&format=png&color=000000",
                 }}
                 style={{
                   width: 70,
@@ -122,7 +242,7 @@ function AngleQuestPage({ onClose }) {
                   width: 300,
                 }}
               >
-                Work Delivery Support
+               Bulk Upload Employees
               </Text>
               <Text
                 style={{
@@ -133,12 +253,74 @@ function AngleQuestPage({ onClose }) {
                   marginTop: 5,
                 }}
               >
-                Improve your employee's performance by 50% using AngleQuest Work
-                Delivery support to quickly deliver excellent result
+               Use excel to create employees and upload excel documents to add all employees at once.  
+              <TouchableOpacity onPress={handleDownload}> <Text style={{ textDecorationLine: 'underline', textDecorationColor: 'green', color: 'green', marginLeft: 2 }}
+              >Download excel template</Text></TouchableOpacity> for directions.
+              </Text>
+              <TouchableOpacity
+        onPress={() => {
+          saveSelectedSupport('Work Delivery Support');
+          setCurrentStep(0);
+          handleFileSelect();
+        }}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Subscribe Employees</Text>
+      </TouchableOpacity>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".xlsx, .xls"
+        style={{ display: 'none' }} // Hide the input element
+        onChange={handleFileChange}
+      />
+            </View>
+
+            <View
+              style={{
+                flexDirection: "column",
+                marginLeft: 10,
+                justifyContent: "center",
+                alignItems: "center",
+
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=102559&format=png&color=000000",
+                }}
+                style={{
+                  width: 70,
+                  height: 70,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  alignSelf: "center",
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  textAlign: "center",
+                  width: 300,
+                }}
+              >
+               Create members individually
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  width: 250,
+                   height: 70,
+                  marginTop: 5,
+                }}
+              >
+                Create your employees one after the other. Subscribe a new employee by filling the employee details form.
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  saveSelectedSupport('Work Delivery Support');
+                  saveSelectedSupport('Career Growth Support');
                    setCurrentStep(0);
                   handleOpenPress();
                 }}
@@ -159,7 +341,7 @@ function AngleQuestPage({ onClose }) {
             >
               <Image
                 source={{
-                  uri: "https://img.icons8.com/?size=100&id=pF2OfcFGInLa&format=png&color=000000",
+                  uri: "https://img.icons8.com/?size=100&id=LPcVDft9Isqt&format=png&color=000000",
                 }}
                 style={{
                   width: 70,
@@ -177,7 +359,7 @@ function AngleQuestPage({ onClose }) {
                   width: 300,
                 }}
               >
-                Career Growth Support
+               Create members from email
               </Text>
               <Text
                 style={{
@@ -188,83 +370,20 @@ function AngleQuestPage({ onClose }) {
                   marginTop: 5,
                 }}
               >
-                Provide hyper career growth support to your employees to grow
-                from a level to another in a specified time.
+               Subscribe a new employee by providing their email address, anglequest will send the employee an invite and they can fill their details upon login.
               </Text>
               <TouchableOpacity
                 onPress={() => {
                   saveSelectedSupport('Career Growth Support');
                    setCurrentStep(0);
-                  handleOpenPress();
+                  handleOpenPress2();
                 }}
                 style={styles.button}
               >
                 <Text style={styles.buttonText}>{t('Subscribe Employee')}</Text>
               </TouchableOpacity>
             </View>
-
-            <View
-              style={{
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=GhVeCGvvJ9sM&format=png&color=000000",
-                }}
-                style={{
-                  width: 70,
-                  height: 70,
-                  marginTop: 20,
-                  marginBottom: 5,
-                  alignSelf: "center",
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  width: 300,
-                }}
-              >
-                Work Delivery Support
-              </Text>
-              <Text
-                style={{
-                  fontSize: 26,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  width: 300,
-                }}
-              >
-                +
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: 600,
-                  textAlign: "center",
-                  width: 300,
-                   height: 45,
-                }}
-              >
-                Career Growth Support
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  saveSelectedSupport('Work Delivery Support and Career Growth Support');
-                  setCurrentStep(0);
-                  handleOpenPress();
-                }}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>{t('Subscribe Employee')}</Text>
-              </TouchableOpacity>
             </View>
-          </View>
 
         </View>
       ),
@@ -394,6 +513,16 @@ function AngleQuestPage({ onClose }) {
             >
               <View style={styles.modalContent}>
                 <OpenModal onClose={handleCloseModal} />
+              </View>
+            </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible2}
+              onRequestClose={handleCloseModal2}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal2 onClose={handleCloseModal2} />
               </View>
             </Modal>
           </ScrollView>

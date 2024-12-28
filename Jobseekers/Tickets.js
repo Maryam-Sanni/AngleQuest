@@ -88,18 +88,15 @@ const SupportRequestPage = () => {
   onValueChange={(value) => setFormData({ ...formData, specialization: value })}
 >
   <Picker.Item label="Select Specialization" value="" />
-  <Picker.Item label="Business Analysis" value="Business Analysis" />
   <Picker.Item label="SAP FI" value="SAP FI" />
   <Picker.Item label="SAP MM" value="SAP MM" />
   <Picker.Item label="SAP SD" value="SAP SD" />
   <Picker.Item label="SAP PP" value="SAP PP" />
-  <Picker.Item label="Scrum" value="Scrum" />
   <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
-  <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
   <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
-  <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
+  <Picker.Item label="Microsoft Dynamics Marketing" value="Microsoft Dynamics Marketing" />
+  <Picker.Item label="Microsoft Dynamics Developer" value="Microsoft Dynamics Developer" />
   <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
-  <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
   <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
 </Picker>
   
