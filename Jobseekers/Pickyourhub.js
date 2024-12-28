@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import CustomAlert from "../components/CustomAlert";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function MyComponent({ onClose }) {
   const [scaleAnimations] = useState(
@@ -403,6 +404,7 @@ function MyComponent({ onClose }) {
       );
     }
     setAlertVisible(true);
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -604,20 +606,24 @@ function MyComponent({ onClose }) {
               </Text>
             </TouchableOpacity>
             {hasJoined && (
-              <Text
+              <View
                 style={{
                   backgroundColor: "lightgreen",
                   padding: 7,
                   borderRadius: 5,
-                  fontSize: 12,
-                  marginTop: 5,
+                  flexDirection: 'row',
                   marginLeft: 10,
-                  marginRight: 10,
-                  width: 200,
+                  width: 100,
                 }}
               >
-                You have already joined this hub
-              </Text>
+                 <Text
+                style={{
+                  fontSize: 12,
+                  marginLeft: 10,
+                }}
+              >
+                Member  </Text>  <MaterialIcons name="star" size={15} color="green" style={{}} />
+              </View>
             )}
             <View
               style={{
@@ -725,19 +731,24 @@ function MyComponent({ onClose }) {
             </Text>
           </View>
           {hasJoined && (
-            <Text
-              style={{
-                backgroundColor: "lightgreen",
-                padding: 7,
-                borderRadius: 5,
-                fontSize: 12,
-                color: "#206C00",
-                marginTop: 5,
-                width: 200,
-              }}
-            >
-              You have already joined this hub
-            </Text>
+            <View
+            style={{
+              backgroundColor: "lightgreen",
+              padding: 7,
+              borderRadius: 5,
+              flexDirection: 'row',
+              marginTop: 5,
+              width: 100,
+            }}
+          >
+             <Text
+            style={{
+              fontSize: 12,
+              marginLeft: 10,
+            }}
+          >
+            Member  </Text>  <MaterialIcons name="star" size={15} color="green" style={{}} />
+          </View>
           )}
           <View style={{ flexDirection: "row", marginTop: 30 }}>
             <TouchableOpacity

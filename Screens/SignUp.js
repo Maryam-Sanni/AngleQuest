@@ -4,11 +4,11 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StyleSheet, TextInput,
+  StyleSheet, TextInput, Modal, 
   ScrollView, ActivityIndicator
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import OpenModal from "../components/TermsofService";
 import { useNavigate } from 'react-router-dom';
 import Top from "../components/HomeTop";
 import Top2 from "../components/TopExtra";
@@ -43,6 +43,15 @@ const SignUp = () => {
   const { signUpOption: routeSignUpOption } = location.state || { signUpOption: 0 }; // Get from location
   const [signUpOption, setSignUpOption] = useState(routeSignUpOption); // Initialize state
   const [topPosition, setTopPosition] = useState(20); 
+  const [ModalVisible, setModalVisible] = useState(false);
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
 
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
@@ -357,11 +366,11 @@ const SignUp = () => {
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
-                      <TouchableOpacity   onPress={() => {
-                          setAgree1(!agree1); 
-                    toggleCheckbox();   
-                        }} >
-                        <Row style={{ gap: 10 }}>
+                      <Row style={{ gap: 10 }}>
+                        <TouchableOpacity   onPress={() => {
+                        setAgree1(!agree1); 
+                      toggleCheckbox();   
+                      }} >
                           {agree1 ? (
                             <MaterialIcons
                               name="check-box"
@@ -375,17 +384,18 @@ const SignUp = () => {
                               color="black"
                             />
                           )}
+                             </TouchableOpacity>
+                               <TouchableOpacity onPress={handleOpenPress}>
                           <Text
                             style={{
                               fontSize: 14,
                               fontWeight: "400",
-                              fontFamily: "Poppins-Regular",
                             }}
                           >
                             I agree to the Terms of Service & Privacy Policy
                           </Text>
+                          </TouchableOpacity>
                         </Row>
-                      </TouchableOpacity>
                       <TouchableOpacity
                         onPress={handleSignUp}
                         disabled={loading}
@@ -507,11 +517,11 @@ const SignUp = () => {
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
-                      <TouchableOpacity   onPress={() => {
+                      <Row style={{ gap: 10 }}>
+                        <TouchableOpacity   onPress={() => {
                         setAgree1(!agree1); 
                       toggleCheckbox();   
                       }} >
-                        <Row style={{ gap: 10 }}>
                           {agree1 ? (
                             <MaterialIcons
                               name="check-box"
@@ -525,6 +535,8 @@ const SignUp = () => {
                               color="black"
                             />
                           )}
+                             </TouchableOpacity>
+                               <TouchableOpacity onPress={handleOpenPress}>
                           <Text
                             style={{
                               fontSize: 14,
@@ -533,8 +545,8 @@ const SignUp = () => {
                           >
                             I agree to the Terms of Service & Privacy Policy
                           </Text>
+                          </TouchableOpacity>
                         </Row>
-                      </TouchableOpacity>
 
                       <TouchableOpacity
                         onPress={handleSignUp2}
@@ -656,11 +668,12 @@ const SignUp = () => {
                       <Text style={{ fontSize: 12, marginTop: -5 }}>
                         Password must be at least 8 characters long
                       </Text>
-                      <TouchableOpacity   onPress={() => {
+
+                        <Row style={{ gap: 10 }}>
+                        <TouchableOpacity   onPress={() => {
                         setAgree1(!agree1); 
                       toggleCheckbox();   
                       }} >
-                        <Row style={{ gap: 10 }}>
                           {agree1 ? (
                             <MaterialIcons
                               name="check-box"
@@ -674,6 +687,8 @@ const SignUp = () => {
                               color="black"
                             />
                           )}
+                             </TouchableOpacity>
+                               <TouchableOpacity onPress={handleOpenPress}>
                           <Text
                             style={{
                               fontSize: 14,
@@ -682,8 +697,9 @@ const SignUp = () => {
                           >
                             I agree to the Terms of Service & Privacy Policy
                           </Text>
+                          </TouchableOpacity>
                         </Row>
-                      </TouchableOpacity>
+                   
                       <TouchableOpacity
                         onPress={handleSignUp3}
                       >
@@ -711,6 +727,7 @@ const SignUp = () => {
                 </Row>
               )}
             </View>
+            
           </View>
           <View style={{ position: "relative", width: "100%" }}>
             <View
@@ -719,11 +736,23 @@ const SignUp = () => {
                 height: 155,
               }}
             />
+              
             <PeopleComponent />
             <Footer />
           </View>
         </View>
+       
       </ScrollView>
+      <Modal
+              animationType="slide"
+              transparent={true}
+              visible={ModalVisible}
+              onRequestClose={handleCloseModal}
+            >
+              <View style={styles.modalContent}>
+                <OpenModal onClose={handleCloseModal} />
+              </View>
+            </Modal>
     </View>
   );
 };
@@ -736,6 +765,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   container: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",

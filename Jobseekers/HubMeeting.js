@@ -303,6 +303,11 @@ const HubMeeting = () => {
     }
   };
 
+  useEffect(() => {
+    // Whenever the activeTab changes, close the expanded view
+    setExpandedView(false);
+  }, [activeTab]); // Depend on activeTab to trigger this effect
+  
   const filteredByHub = meetings.filter((meeting) => meeting.hubName === selectedHub);
 
   const currentDate = new Date();

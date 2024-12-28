@@ -101,6 +101,7 @@ function MyComponent({ onClose }) {
     } catch (error) {
       console.error('Error leaving the hub:', error.message);
     }
+    window.location.reload();
   };
   
   const handleJoinMeeting = async (meeting) => {
@@ -242,6 +243,7 @@ function MyComponent({ onClose }) {
       setAlertMessage(errorMessage);
       setAlertVisible(true);
     }
+    window.location.reload();
   };
 
   const checkRegistration = async () => {

@@ -656,11 +656,9 @@ const SupportRequestPage = () => {
                />
                 <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
 
-              <TouchableOpacity onPress={() => setCurrentStep('fetch')} // Navigate to Resolution
-                >
                      <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.submitButton}>
+          
+              <TouchableOpacity onPress={() => setCurrentStep('fetch')} style={styles.submitButton}>
                 <Text style={styles.submitButtonText}>Are you satisfied?</Text>
               </TouchableOpacity>
           </View>
@@ -818,7 +816,7 @@ const styles = StyleSheet.create({
   },
   step0: {
     width: "24%", 
-    height: 600,
+    height: 700,
     marginRight: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",
@@ -836,7 +834,7 @@ const styles = StyleSheet.create({
   step: {
     flex: 1,
     width: "24%", 
-    height: 600,
+    height: 700,
     overflow: 'hidden',
     marginRight: 10,
     marginBottom: 10,
@@ -855,7 +853,7 @@ const styles = StyleSheet.create({
   step2: {
      flex: 1,
     width: "24%", 
-    height: 600,
+    height: 700,
     marginLeft: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",
@@ -873,7 +871,7 @@ const styles = StyleSheet.create({
   step3: {
      flex: 1,
     width: "24%", 
-    height: 600,
+    height: 700,
     marginLeft: 10,
     marginBottom: 10,
     backgroundColor: "#FFF",
@@ -892,7 +890,7 @@ const styles = StyleSheet.create({
   step4: {
      flex: 1,
     width: "24%", 
-    height: 600,
+    height: 700,
     marginBottom: 10,
     backgroundColor: "none",
     marginLeft: 20,
