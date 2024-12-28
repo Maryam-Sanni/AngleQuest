@@ -146,12 +146,21 @@ const saveToAsyncStorage = async (plan) => {
   }
 };
 
-// Handle button press to select a plan
-const handlePress = (plan) => {
-  setSelectedPlan(plan); // Set the selected plan
-  setSelectedSection(plan.id); // Set the selected section to the plan id
-  saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
+const handlePress = (selectedPlan) => {
+  // Update the colors dynamically based on the selected plan
+  const updatedPlans = plans.map((plan) =>
+    plan.id === selectedPlan.id
+      ? { ...plan, color: '#F3E5F5' } // Highlight the selected plan
+      : { ...plan, color: '#FFFFFF' } // Reset the color for other plans
+  );
+
+  setPlans(updatedPlans); // Update the state with the new plan colors
+  setSelectedPlan(selectedPlan); // Set the selected plan
+  setSelectedSection(selectedPlan.id); // Update the selected section
+  saveToAsyncStorage(selectedPlan); // Save the selected plan to AsyncStorage
 };
+
+
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -167,7 +176,7 @@ const handlePress = (plan) => {
       ],
     },
     {
-      title: "Growth Plan Support",
+      title: "Career Boost",
       options: [
         { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 1 hub access"], cost: "No additional cost", isDefault: true },
         { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 2 hub access"], cost: "$40 monthly" },
@@ -175,7 +184,7 @@ const handlePress = (plan) => {
       ],
     },
     {
-      title: "Knowledge Backup + Growth Plan Support",
+      title: "Knowledge Backup + Career Boost",
       options: [
         { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 24hrs", "Coaching hub - 1 hub access", "Best practice access - 30%"], cost: "No additional cost", isDefault: true },
         { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 12hrs", "Coaching hub - 2 hub access", "Best practice access - 60%"], cost: "$40 monthly" },
@@ -267,16 +276,13 @@ const handlePress = (plan) => {
   const [activePrice, setActivePrice] = useState('monthly');
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   
-  const plans = [
+  const [plans, setPlans] = useState([
     {
       id: "Knowledge Backup",
       title: "Monthly",
       topic:
         "Preserve your expertise effortlessly. Solve high-priority challenges while securing a solid knowledge foundation.",
-      description: [
-        "Knowledge sharing Hub",
-        "Support Request",
-      ],
+      description: ["Knowledge sharing Hub", "Support Request"],
       pricing: {
         monthly: "$100",
         quarterly: "$185",
@@ -303,7 +309,7 @@ const handlePress = (plan) => {
       amn: "session",
       color: "#FFFFFF",
     },
-  ];
+  ]);  
 
     // Function to handle the price tab selection
     const handlePriceSelect = (priceType) => {
@@ -449,12 +455,9 @@ const handlePress = (plan) => {
               style={styles.getStartedButton2}
               onPress={() => {
                 handlePress(plan);
-                saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
-                setCurrentStep(1); 
-                setActiveCard("Service Level Agreement");
               }}
             >
-              <Text style={styles.getStartedText2}>Get Started</Text>
+              <Text style={styles.getStartedText2}>Selected</Text>
             </TouchableOpacity>
           )}
         </LinearGradient>
@@ -488,12 +491,9 @@ const handlePress = (plan) => {
               style={styles.getStartedButton}
               onPress={() => {
                 handlePress(plan);
-                saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
-                setCurrentStep(2); 
-                setActiveCard("Service Level Agreement");
               }}
             >
-              <Text style={styles.getStartedText}>Get Started</Text>
+              <Text style={styles.getStartedText}>Select</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -501,125 +501,115 @@ const handlePress = (plan) => {
     </View>
   ))}
 </View>
+<View style={{marginLeft: 70, marginRight: 70, marginTop: 50}}>
+  {sections
+    .filter((section) => {
+      if (activePrice === 'monthly') return section.title === 'Knowledge Backup';
+      if (activePrice === 'quarterly') return section.title === 'Career Boost';
+      if (activePrice === 'annually') return section.title === 'Knowledge Backup + Career Boost';
+      return false;
+    })
+    .map((section, sectionIndex) => {
+      const isFirstOptionSelected =
+        !selectedOptions[section.title] && section.options.length > 0;
+
+      return (
+        <View
+          key={sectionIndex}
+          style={{
+            marginBottom: 30,
+            padding: 20,
+            backgroundColor: '#fff',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+            elevation: 3,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: '600',
+              color: 'black',
+              marginBottom: 40,
+              textAlign: 'flex-start',
+            }}
+          >
+            {section.title} SLA
+          </Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            {section.options.map((option, optionIndex) => {
+              const isSelected =
+                selectedOptions[section.title]?.title === option.title ||
+                (isFirstOptionSelected && optionIndex === 0);
+
+              if (isFirstOptionSelected && optionIndex === 0) {
+                handleSelect(section.title, option);
+              }
+
+              return (
+                <View key={optionIndex} style={{ alignItems: 'flex-start', width: 320 }}>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+                    {option.title}
+                  </Text>
+                  {option.details.map((detail, index) => (
+                    <Text key={index} style={{ fontSize: 14, marginBottom: 5 }}>
+                      • {detail}
+                    </Text>
+                  ))}
+                  <TouchableOpacity
+                    style={{
+                      marginTop: 30,
+                      backgroundColor: isSelected ? '#4CAF50' : '#F0F0F0',
+                      paddingVertical: 10,
+                      paddingHorizontal: 25,
+                      borderRadius: 5,
+                      width: 280,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={async () => {
+                      await handleSelect(section.title, option);
+                    }}
+                  >
+                    <Text style={{ color: isSelected ? '#fff' : 'darkgrey', fontSize: 18 }}>
+                      {isSelected ? 'Selected' : 'Select'}
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      textAlign: 'center',
+                      alignSelf: 'center',
+                      marginTop: 10,
+                      color: 'grey',
+                    }}
+                  >
+                    {option.cost}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      );
+    })}
+</View>
+<TouchableOpacity onPress={async () => {
+                            setCurrentStep(2);
+                            setActiveCard("Service Level Agreement");
+                          }} style={styles.buttonnext}>
+                      <Text style={styles.buttonsaveText}>{t("Next")}</Text>
+                    </TouchableOpacity>
 </View>
         ),
       },
     {
       heading: t(" "),
       content: (
-        <View style={styles.optionCard}>
-        {sections
-          .filter((section) => section.title === selectedSection) // Filter sections to match selectedSection
-          .map((section, sectionIndex) => {
-            // Check if there's already a selected option for this section, if not select the first option
-            const isFirstOptionSelected =
-              !selectedOptions[section.title] && section.options.length > 0;
-  
-            return (
-              <View
-                key={sectionIndex}
-                style={{
-                  marginBottom: 30,
-                  padding: 20,
-                  backgroundColor: '#fff',
-                  borderRadius: 10,
-                  elevation: 3,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 22,
-                    fontWeight: '600',
-                    color: 'black',
-                    marginBottom: 20,
-                    textAlign: 'left',
-                  }}
-                >
-                  {section.title} SLA
-                </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  {section.options.map((option, optionIndex) => {
-                    // If this is the first option and no option is selected, set it as selected by default
-                    const isSelected =
-                      selectedOptions[section.title]?.title === option.title ||
-                      (isFirstOptionSelected && optionIndex === 0);
-  
-                    // Automatically select the first option if no option has been selected yet
-                    if (isFirstOptionSelected && optionIndex === 0) {
-                      handleSelect(section.title, option);
-                    }
-  
-                    return (
-                      <View key={optionIndex} style={{ alignItems: 'flex-start', width: 320 }}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            marginBottom: 10,
-                            textAlign: 'flex-start',
-                          }}
-                        >
-                          {option.title}
-                        </Text>
-                        {option.details.map((detail, index) => (
-                          <Text key={index} style={{ fontSize: 14, textAlign: 'left', marginBottom: 5 }}>
-                            • {detail}
-                          </Text>
-                        ))}
-  
-                        <TouchableOpacity
-                          style={{
-                            marginTop: 30,
-                            backgroundColor: isSelected ? '#4CAF50' : '#F0F0F0',
-                            paddingVertical: 10,
-                            paddingHorizontal: 25,
-                            borderRadius: 5,
-                            width: 280,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                          onPress={async () => {
-                            // Call the handleSelect function to save selected option
-                            await handleSelect(section.title, option);
-                          }}
-                        >
-                          <Text
-                            style={{
-                              color: 'darkgrey',
-                              fontSize: 18,
-                              textAlign: 'center',
-                            }}
-                          >
-                            {isSelected ? (
-                              <>
-                                <MaterialIcons name="check" size={18} color="#fff" />
-                                {' '}
-                              </>
-                            ) : (
-                              'Select'
-                            )}
-                          </Text>
-                        </TouchableOpacity>
-  
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            textAlign: 'center',
-                            marginTop: 10,
-                            alignSelf: 'center',
-                            color: 'grey',
-                          }}
-                        >
-                          {option.cost}
-                        </Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
-            );
-          })}
+        <View>
+        
            <View style={styles.borderBox}>
                   <ScrollView style={styles.scrollView}>
                     <Text style={styles.title}>THIS APPLICATION LICENCE AGREEMENT</Text>
@@ -682,7 +672,7 @@ const handlePress = (plan) => {
                     </ScrollView>
                   </View>
           <TouchableOpacity onPress={async () => {
-                            setCurrentStep(2);
+                            setCurrentStep(3);
                             setActiveCard("Payment Details");
                           }} style={styles.buttonnext}>
                       <Text style={styles.buttonsaveText}>{t("Next")}</Text>
@@ -1152,10 +1142,10 @@ borderRadius: 30
     backgroundColor: "darkgreen",
     padding: 10,
     width: 100,
-    marginLeft: 770,
+marginLeft: 1000,
+marginTop: 50,
+marginBottom: 50,
     borderRadius: 5,
-    marginTop: 20,
-    marginBottom: 20,
     elevation: 5,
   },
   buttonText: {
@@ -1501,8 +1491,8 @@ padding: 5
     borderRadius: 10,
     padding: 15,
     backgroundColor: '#fff',
-    marginLeft: 10,
-    marginRight: 30,
+    marginLeft: 50,
+    marginRight: 50,
     marginTop: 10,
     height: 300
   },
