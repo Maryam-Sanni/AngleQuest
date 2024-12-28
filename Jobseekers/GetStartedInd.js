@@ -83,13 +83,18 @@ function AngleQuestPage({ onClose }) {
       const [email, setEmail] = useState('');
       const [billingAddress, setBillingAddress] = useState('');
 
-    // Get today's date in the format: Monday, YYYY-MM-DD
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
+    const [isChecked, setIsChecked] = useState(false);
+     // Get today's date in the format: Monday, YYYY-MM-DD
+     const today = new Date().toLocaleDateString('en-US', {
+       weekday: 'long',
+       year: 'numeric',
+       month: '2-digit',
+       day: '2-digit',
+     });
+   
+     const handleCheckboxToggle = () => {
+       setIsChecked(!isChecked);
+     };
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -598,7 +603,7 @@ const handlePress = (selectedPlan) => {
 </View>
 <TouchableOpacity onPress={async () => {
                             setCurrentStep(2);
-                            setActiveCard("Service Level Agreement");
+                            setActiveCard("AngleQuest Agreement");
                           }} style={styles.buttonnext}>
                       <Text style={styles.buttonsaveText}>{t("Next")}</Text>
                     </TouchableOpacity>
@@ -671,6 +676,10 @@ const handlePress = (selectedPlan) => {
                     </Text>
                     </ScrollView>
                   </View>
+                   <View style={styles.checkboxContainer}>
+                            <CheckBox value={isChecked} onValueChange={handleCheckboxToggle} />
+                            <Text style={styles.checkboxText}>I agree to the terms and conditions</Text>
+                          </View>
           <TouchableOpacity onPress={async () => {
                             setCurrentStep(3);
                             setActiveCard("Payment Details");
@@ -880,7 +889,7 @@ const handlePress = (selectedPlan) => {
       icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
     },
     {
-      title: t("Service Level Agreement"),
+      title: t("AngleQuest Agreement"),
       icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
     },
     {
@@ -1287,6 +1296,7 @@ color: 'black',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    marginLeft: 50
   },
   checkboxText: {
     marginLeft: 10,
@@ -1634,6 +1644,7 @@ padding: 5
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    marginLeft: 50, marginTop: 20
   },
   checkboxText: {
     marginLeft: 10,
