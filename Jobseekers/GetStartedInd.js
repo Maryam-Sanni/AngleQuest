@@ -130,20 +130,42 @@ function AngleQuestPage({ onClose }) {
     setSelectedRole(role);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedRole) {
-      // Directly set the selectedRole here
-      setSelectedRole(selectedRole);
+      // Save the selected role to AsyncStorage
+      try {
+        await AsyncStorage.setItem('selectedRole', selectedRole); // Save selectedRole
+        // Directly set the selectedRole here
+        setSelectedRole(selectedRole);
   
-      // Perform any additional actions here, like updating steps or active card
-      setCurrentStep(1);  // This will change the step, you can define the steps accordingly
-      setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
+        // Perform any additional actions here, like updating steps or active card
+        setCurrentStep(1);  // This will change the step, you can define the steps accordingly
+        setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
+      } catch (error) {
+        console.error('Error saving selected role to AsyncStorage', error);
+      }
     } else {
       // Optional: Handle case where no role is selected (if needed)
       console.log('Please select a role first.');
     }
-  };  
+  };
   
+  const [savedRole, setSavedRole] = useState(""); // State for saved specialization
+
+  // Fetch saved specialization from AsyncStorage
+  useEffect(() => {
+    const fetchSavedRole = async () => {
+      try {
+        const role = await AsyncStorage.getItem('selectedRole');
+        if (role) {
+          setSavedRole(role); // Set saved role for specialization
+        }
+      } catch (error) {
+        console.error('Error fetching saved role:', error);
+      }
+    };
+    fetchSavedRole();
+  }, []);
 
  // Function to save selected plan pricing to AsyncStorage
 const saveToAsyncStorage = async (plan) => {
@@ -319,7 +341,7 @@ const handlePress = (selectedPlan) => {
       },
       explanation: {
         monthly: "Maintain your top performer status by completing your task quickly and professionally with grade-A support from our top expert",
-        quarterly: `Expedite your transition from one level of your ${selectedRole} skills to the next.`,
+        quarterly: `Expedite your transition from one level of your ${savedRole} skills to the next.`,
         annually: "This offers the best value and commitment for the long-term with the most benefits."
       },
       pricing: {

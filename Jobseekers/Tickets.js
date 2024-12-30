@@ -25,6 +25,23 @@ const SupportRequestPage = () => {
     videoCallDate: '', // New field for video call date
   });
 
+  const [savedRole, setSavedRole] = useState(""); // State for saved specialization
+
+  // Fetch saved specialization from AsyncStorage
+  useEffect(() => {
+    const fetchSavedRole = async () => {
+      try {
+        const role = await AsyncStorage.getItem('selectedRole');
+        if (role) {
+          setSavedRole(role); // Set saved role for specialization
+        }
+      } catch (error) {
+        console.error('Error fetching saved role:', error);
+      }
+    };
+    fetchSavedRole();
+  }, []);
+
   const handleSubmit = async () => {
     try {
       // API URL
@@ -43,7 +60,7 @@ const SupportRequestPage = () => {
       // Payload
       const payload = {
         name: firstName + ' ' + lastName,
-        specialization: formData.specialization,
+        specialization: savedRole,
         title: formData.title,
         description: formData.description,
         prefmode: formData.preferredMode,
@@ -82,41 +99,30 @@ const SupportRequestPage = () => {
     return (
       <View>
         <Text style={styles.label}>Specialization</Text>
-        <Picker
-  selectedValue={formData.specialization}
-  style={styles.input}
-  onValueChange={(value) => setFormData({ ...formData, specialization: value })}
->
-  <Picker.Item label="Select Specialization" value="" />
-  <Picker.Item label="SAP FI" value="SAP FI" />
-  <Picker.Item label="SAP MM" value="SAP MM" />
-  <Picker.Item label="SAP SD" value="SAP SD" />
-  <Picker.Item label="SAP PP" value="SAP PP" />
-  <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
-  <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
-  <Picker.Item label="Microsoft Dynamics Marketing" value="Microsoft Dynamics Marketing" />
-  <Picker.Item label="Microsoft Dynamics Developer" value="Microsoft Dynamics Developer" />
-  <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
-  <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
-</Picker>
+        <TextInput
+        style={styles.input}
+        value={savedRole} 
+        editable={false}
+        onChangeText={(text) => setFormData({ ...formData, specialization: text })}
+      />
   
         <Text style={styles.label}>Title</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Enter title"
-          value={formData.title}
-          onChangeText={(text) => setFormData({ ...formData, title: text })}
-        />
+        style={styles.input}
+        placeholder="Enter title"
+        value={formData.title}
+        onChangeText={(text) => setFormData({ ...formData, title: text })}
+      />
   
         <Text style={styles.label}>Description</Text>
         <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Enter description"
-          multiline
-          numberOfLines={4}
-          value={formData.description}
-          onChangeText={(text) => setFormData({ ...formData, description: text })}
-        />
+        style={[styles.input, styles.textArea]}
+        placeholder="Enter description"
+        multiline
+        numberOfLines={4}
+        value={formData.description}
+        onChangeText={(text) => setFormData({ ...formData, description: text })}
+      />
   
         <Text style={styles.label}>Priority</Text>
         <Picker
@@ -130,41 +136,31 @@ const SupportRequestPage = () => {
         </Picker>
   
         <Text style={styles.label}>Your Preferred Mode of Response</Text>
-        <View style={styles.checkboxContainer}>
-          <TouchableOpacity
-            style={styles.checkbox}
-            onPress={() => setFormData({ ...formData, preferredMode: 'text', videoCallDate: '' })}
-          >
-            {formData.preferredMode === 'text' && <Text style={styles.checkboxText}>✓</Text>}
-          </TouchableOpacity>
-          <Text style={styles.checkboxLabel}>Text</Text>
-          <TouchableOpacity
-            style={styles.checkbox}
-            onPress={() => setFormData({ ...formData, preferredMode: 'voice', videoCallDate: '' })}
-          >
-            {formData.preferredMode === 'voice' && <Text style={styles.checkboxText}>✓</Text>}
-          </TouchableOpacity>
-          <Text style={styles.checkboxLabel}>Voice Note</Text>
-          <TouchableOpacity
-            style={styles.checkbox}
-            onPress={() => setFormData({ ...formData, preferredMode: 'video' })}
-          >
-            {formData.preferredMode === 'video' && <Text style={styles.checkboxText}>✓</Text>}
-          </TouchableOpacity>
-          <Text style={styles.checkboxLabel}>Video Call</Text>
+        <Picker
+        selectedValue={formData.preferredMode}
+        style={styles.input}
+        onValueChange={(value) => {
+          setFormData({ ...formData, preferredMode: value, videoCallDate: '' }); // Reset videoCallDate on change
+        }}
+      >
+        <Picker.Item label="Select Mode" value="" />
+        <Picker.Item label="Text" value="text" />
+        <Picker.Item label="Voice Note" value="voice" />
+        <Picker.Item label="Video Call" value="video" />
+      </Picker>
+
+      {/* Video Call Date Picker - Only if Video Mode is selected */}
+      {formData.preferredMode === 'video' && (
+        <View>
+          <Text style={styles.label}>Select a Date for the Video Call</Text>
+          <input
+            type="date"
+            style={styles.input}
+            value={formData.videoCallDate}
+            onChange={(event) => setFormData({ ...formData, videoCallDate: event.target.value })}
+          />
         </View>
-  
-        {formData.preferredMode === 'video' && (
-          <View>
-            <Text style={styles.label}>Select a Date for the Video Call</Text>
-            <input
-              type="date"
-              style={styles.input}
-              value={formData.videoCallDate}
-              onChange={(event) => setFormData({ ...formData, videoCallDate: event.target.value })}
-            />
-          </View>
-        )}
+      )}
   
         <Text style={styles.label}>
           Deadline (After the time elapses, the expert will not pick your request)
