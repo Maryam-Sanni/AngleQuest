@@ -75,13 +75,16 @@ function AngleQuestPage({ onClose }) {
     const [expYear, setExpYear] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [useExistingAddress, setUseExistingAddress] = useState(false);
-    const [selectedRole, setSelectedRole] = useState(null);
+    const [selectedRole, setSelectedRole] = useState("specialization");
     const [first_name, setFirstName] = useState('');
       const [selectedOption, setSelectedOption] = useState('CreditOrDebitCard');
       const [fullName, setFullName] = useState('');
       const [phone, setPhone] = useState('');
       const [email, setEmail] = useState('');
       const [billingAddress, setBillingAddress] = useState('');
+      const [showSetup, setShowSetup] = useState(false); 
+      const scrollViewRef = useRef(null);
+      const [showMore, setShowMore] = useState(false);
 
     const [isChecked, setIsChecked] = useState(false);
      // Get today's date in the format: Monday, YYYY-MM-DD
@@ -123,15 +126,25 @@ function AngleQuestPage({ onClose }) {
   ];
 
   const handleRoleSelection = (role) => {
+    console.log('Selected role:', role);  // Debugging line
     setSelectedRole(role);
   };
 
   const handleContinue = () => {
     if (selectedRole) {
+      // Directly set the selectedRole here
+      setSelectedRole(selectedRole);
+
+      // Perform any additional actions here, like updating steps or active card
       setCurrentStep(1);  // This will change the step, you can define the steps accordingly
       setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
+      
+      alert('Your selection has been saved!');
+    } else {
+      alert('Please select a role first.');
     }
   };
+  
 
  // Function to save selected plan pricing to AsyncStorage
 const saveToAsyncStorage = async (plan) => {
@@ -152,18 +165,27 @@ const saveToAsyncStorage = async (plan) => {
 };
 
 const handlePress = (selectedPlan) => {
-  // Update the colors dynamically based on the selected plan
+  // Highlight the selected plan
   const updatedPlans = plans.map((plan) =>
     plan.id === selectedPlan.id
       ? { ...plan, color: '#F3E5F5' } // Highlight the selected plan
-      : { ...plan, color: '#FFFFFF' } // Reset the color for other plans
+      : { ...plan, color: '#FFFFFF' } // Reset other plans
   );
 
-  setPlans(updatedPlans); // Update the state with the new plan colors
-  setSelectedPlan(selectedPlan); // Set the selected plan
-  setSelectedSection(selectedPlan.id); // Update the selected section
-  saveToAsyncStorage(selectedPlan); // Save the selected plan to AsyncStorage
+  setPlans(updatedPlans); // Update state with selected plan
+  setSelectedPlan(selectedPlan); // Set selected plan
+  saveToAsyncStorage(selectedPlan); // Save to AsyncStorage
+
+   // Scroll down within the ScrollView by a specific number of pixels
+   if (scrollViewRef.current) {
+    scrollViewRef.current.scrollTo({
+      y: 700,  // Number of pixels to scroll down
+      animated: true, // Smooth scroll
+    });
+  }
 };
+
+
 
 
 
@@ -175,25 +197,25 @@ const handlePress = (selectedPlan) => {
     {
       title: "Knowledge Backup",
       options: [
-        { title: "Default", details: ["Backup response time - 24hrs", "Best practice access - 30%"], cost: "No additional cost", isDefault: true },
-        { title: "Standard", details: ["Backup response time - 12hrs", "Best practice access - 60%"], cost: "$40 monthly" },
-        { title: "Advance", details: ["Backup response time - 4hrs", "Best practice access - Unlimited"], cost: "$100 monthly" },
+        { title: "Default", details: ["Backup response time - 24hrs", "Best practice access - 30%"], cost: "No extra cost", isDefault: true },
+        { title: "Standard", details: ["Backup response time - 12hrs", "Best practice access - 60%"], cost: "Extra $40 monthly" },
+        { title: "Advance", details: ["Backup response time - 4hrs", "Best practice access - Unlimited"], cost: "Extra $100 monthly" },
       ],
     },
     {
       title: "Career Boost",
       options: [
-        { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 1 hub access"], cost: "No additional cost", isDefault: true },
-        { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 2 hub access"], cost: "$40 monthly" },
-        { title: "Advance", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - Unlimited"], cost: "$100 monthly" },
+        { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 1 hub access"], cost: "No extra cost", isDefault: true },
+        { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 2 hub access"], cost: "Extra $40 monthly" },
+        { title: "Advance", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - Unlimited"], cost: "Extra $100 monthly" },
       ],
     },
     {
       title: "Knowledge Backup + Career Boost",
       options: [
-        { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 24hrs", "Coaching hub - 1 hub access", "Best practice access - 30%"], cost: "No additional cost", isDefault: true },
-        { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 12hrs", "Coaching hub - 2 hub access", "Best practice access - 60%"], cost: "$40 monthly" },
-        { title: "Advance", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 4hrs", "Coaching hub - Unlimited", "Best practice access - Unlimited"], cost: "$100 monthly" },
+        { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 24hrs", "Coaching hub - 1 hub access", "Best practice access - 30%"], cost: "No extra cost", isDefault: true },
+        { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 12hrs", "Coaching hub - 2 hub access", "Best practice access - 60%"], cost: "Extra $40 monthly" },
+        { title: "Advance", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 4hrs", "Coaching hub - Unlimited", "Best practice access - Unlimited"], cost: "Extra $100 monthly" },
       ],
     },
   ];
@@ -285,36 +307,59 @@ const handlePress = (selectedPlan) => {
     {
       id: "Knowledge Backup",
       title: "Monthly",
-      topic:
-        "Preserve your expertise effortlessly. Solve high-priority challenges while securing a solid knowledge foundation.",
-      description: ["Knowledge sharing Hub", "Support Request"],
+      topic: "Cancel anytime with 1 month notice",
+      description: {
+        monthly: ["Support request", "Knowledge sharing hub", "Best practices"],
+        quarterly: ["Skill Analysis", "Growth Plan", "Hub", "Interview"],
+        annually: ["Everything in Knowledge Backup", "Everything in Career Boost"]
+      },
+      offer: {
+        monthly: ["Get A-Level support on your work", "Solve your blockers with top expert", "Complete task in record time",  "Learn from top expert first-hand", "Pick up more challenging task at work and complete it quickly", "Access global best practice" , "Know and apply global best practices to your work and advice others", "Accomplish more in less time", "Meet your SLA with ease", "Take more project on", "Command trust and dependability",  "Create up-to 6 support request monthly"],
+        quarterly: ["Have your skills evaluated by expert", "Know the precise gap in your skillset", "Receive a personalized growth plan",  "Establish timeline to grow from one level to another", "Be taught by dedicated expert to close the gap in your skillset", "Get continuous skillset evaluation" , "Identify and focus on the key areas that matter with our expert", "Access live interview with our expert before actual interviews", `Dedicated expert to clarify all concerns and challenges regarding ${selectedRole}`],
+        annually: ["Command trust and dependability",  "Create up-to 6 support request monthly", "Have your skills evaluated by expert","Know the precise gap in your skillset", "Receive a personalized growth plan",  "Establish timeline to grow from one level to another", "Be taught by dedicated expert to close the gap in your skillset", "Get continuous skillset evaluation" , "Identify and focus on the key areas that matter with our expert", "Access live interview with our expert before actual interviews", `Dedicated expert to clarify all concerns and challenges regarding ${selectedRole}`, "Get A-Level support on your work", "Solve your blockers with top expert", "Complete task in record time",  "Learn from top expert first-hand", "Pick up more challenging task at work and complete it quickly", "Access global best practice" , "Know and apply global best practices to your work and advice others", "Accomplish more in less time", "Meet your SLA with ease", "Take more project on"]
+      },
+      explanation: {
+        monthly: "Maintain your top performer status by completing your task quickly and professionally with grade-A support from our top expert",
+        quarterly: `Expedite your transition from one level of your ${selectedRole} skills to the next.`,
+        annually: "This offers the best value and commitment for the long-term with the most benefits."
+      },
       pricing: {
         monthly: "$100",
-        quarterly: "$185",
-        annually: "$250",
+        quarterly: "$100",
+        annually: "$175"
       },
-      amn: "month",
-      color: "#F3E5F5",
+      amn: "month", // You can change this based on the duration, as needed.
+      color: "#FFFFFF",
     },
     {
       id: "Growth Plan Support",
       title: "Pay as you go",
-      topic:
-        "Accelerate your career growth with expert-backed strategies designed to amplify your success.",
-      description: [
-        "AI Skill analysis",
-        "Monthly strategy growth plan",
-        "Knowledge sharing Hub",
-      ],
+      topic: "Pay per item you want to resolve",
+      description: {
+        monthly: ["Support request", "Knowledge sharing hub", "Best practices"],
+        quarterly: ["Skill Analysis", "Growth Plan", "Hub", "Interview"],
+        annually: ["Everything in Knowledge Backup", "Everything in Career Boost"]
+      },
+      offer: {
+        monthly: ["Get A-Level support on your work", "Solve your blockers with top expert", "Complete task in record time",  "Learn from top expert first-hand", "Pick up more challenging task at work and complete it quickly", "Access global best practice" , "Know and apply global best practices to your work and advice others", "Accomplish more in less time", "Meet your SLA with ease", "Take more project on", "Command trust and dependability",  "Create up-to 6 support request monthly"],
+        quarterly: ["Have your skills evaluated by expert", "Know the precise gap in your skillset", "Receive a personalized growth plan",  "Establish timeline to grow from one level to another", "Be taught by dedicated expert to close the gap in your skillset", "Get continuous skillset evaluation" , "Identify and focus on the key areas that matter with our expert", "Access live interview with our expert before actual interviews", "Dedicated expert to clarify all concerns and challenges regarding {0}"],
+        annually: ["Command trust and dependability",  "Create up-to 6 support request monthly", "Have your skills evaluated by expert","Know the precise gap in your skillset", "Receive a personalized growth plan",  "Establish timeline to grow from one level to another", "Be taught by dedicated expert to close the gap in your skillset", "Get continuous skillset evaluation" , "Identify and focus on the key areas that matter with our expert", "Access live interview with our expert before actual interviews", "Dedicated expert to clarify all concerns and challenges regarding {0}", "Get A-Level support on your work", "Solve your blockers with top expert", "Complete task in record time",  "Learn from top expert first-hand", "Pick up more challenging task at work and complete it quickly", "Access global best practice" , "Know and apply global best practices to your work and advice others", "Accomplish more in less time", "Meet your SLA with ease", "Take more project on"]
+      },
+      explanation: {
+        monthly: "",
+        quarterly: "",
+        annually: ""
+      },
       pricing: {
-        monthly: "$30",
-        quarterly: "$35",
-        annually: "$55",
+        monthly: "$40",
+        quarterly: "$40",
+        annually: "$65"
       },
       amn: "session",
       color: "#FFFFFF",
-    },
-  ]);  
+    }
+  ]);
+  
 
     // Function to handle the price tab selection
     const handlePriceSelect = (priceType) => {
@@ -355,52 +400,64 @@ const handlePress = (selectedPlan) => {
       heading: t(" "),
       content: (
         <View>
-      <View style={styles.welcomeheader}>
-       
-        <View style={styles.whiteBox}>
-        <Image 
-          source={{ uri: 'https://img.icons8.com/?size=100&id=FUZiNN6aw2Rb&format=png&color=000000' }} 
-          style={styles.image}
-        />
-          <Text style={styles.greetingText}>Hello {first_name}, Welcome to Anglequest</Text>
-          <Text style={styles.subHeading}>Start by letting us what specialization you want anglequest to curate for you</Text>
+  <View style={styles.welcomeheader}>
+    <View style={styles.whiteBox}>
+      <Image 
+        source={{ uri: 'https://img.icons8.com/?size=100&id=FUZiNN6aw2Rb&format=png&color=000000' }} 
+        style={styles.image}
+      />
+      <Text style={styles.greetingText}>Hello John, Welcome to Anglequest</Text>
+      <Text style={styles.subHeading}>Let's get your account setup. Takes a maximum of 5 minutes.</Text>
+      {!showSetup && (
+        <TouchableOpacity 
+          style={styles.startnowButton} 
+          onPress={() => setShowSetup(true)} // Switch to the setup view
+        >
+          <Text style={styles.continueButtonText}>Start Now</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+
+    {showSetup && (
+      <View style={{ flexDirection: 'column', marginLeft: 50 }}>
+        <Text style={{ fontSize: 20, fontWeight: '600', width: 600 }}>
+          Which of these technologies do you specialize in, or which do you want to transition into?
+        </Text>
+        <Text style={{ fontSize: 14, color: 'grey', marginTop: 5 }}>Make a selection below</Text>
+        <View style={styles.rolesContainer}>
+          {roles.map((role, index) => (
+            <TouchableOpacity 
+              key={index} 
+              style={[
+                styles.roleButton, 
+                selectedRole === role && styles.selectedRole
+              ]} 
+              onPress={() => handleRoleSelection(role)}
+            >
+              <Text style={styles.roleText}>{role}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-   
-
-        <View style={{flexDirection: 'column', marginLeft: 50}}>
-        <Text style={{fontSize: 20, fontWeight: 600, }}>My Specialization is:</Text>
-        <Text style={{fontSize: 14, color: 'grey' }}>Make a selection below</Text>
-      <View style={styles.rolesContainer}>
-        {roles.map((role, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={[styles.roleButton, selectedRole === role && styles.selectedRole]} 
-            onPress={() => handleRoleSelection(role)}
-          >
-            <Text style={styles.roleText}>{role}</Text>
-          </TouchableOpacity>
-        ))}
+        <TouchableOpacity 
+          style={[
+            styles.continueButton, 
+            !selectedRole && styles.disabledButton
+          ]} 
+          onPress={handleContinue} 
+          disabled={!selectedRole} // Disable if no role is selected
+        >
+          <Text style={styles.continueButtonText}>Continue</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity 
-        style={[styles.continueButton, !selectedRole && styles.disabledButton]} 
-        onPress={handleContinue} 
-        disabled={!selectedRole}  // Disable if no role is selected
-      >
-        <Text style={styles.continueButtonText}>Continue</Text>
-      </TouchableOpacity>
+    )}
+  </View>
+</View>
 
-      </View>
-
-      </View>
-     
- 
-
-        </View>
       ),
     },
     {
         heading: t(
-          "Choose an area where you want AngleQuest to be your professional support",
+          "Choose a service, plan and SLA ",
         ),
         content: (
           <View>
@@ -424,6 +481,19 @@ const handlePress = (selectedPlan) => {
           <Text style={[styles.navText, activePrice === 'annually' && styles.activenavText]}>Knowledge Backup + Career Boost</Text>
         </TouchableOpacity>
       </View>
+      <View style={{width: 850, alignSelf: 'center', alignItems: 'center'}}>
+  <Text style={{textAlign: 'center', marginBottom: 20}}>
+    {plans.map(plan => {
+      if (activePrice === 'monthly') {
+        return plan.explanation.monthly;
+      } else if (activePrice === 'quarterly') {
+        return plan.explanation.quarterly;
+      } else {
+        return plan.explanation.annually;
+      }
+    })}
+  </Text>
+</View>
       <View style={styles.plansContainer}>
   {plans.map((plan) => (
     <View key={plan.id}>
@@ -434,6 +504,17 @@ const handlePress = (selectedPlan) => {
         >
           <Text style={styles.planTitle2}>{plan.title}</Text>
           <Text style={styles.planTopic}>{plan.topic}</Text>
+          <View style={styles.description}>
+          {plan.description[activePrice].map((item, index) => (
+            <View key={index} style={styles.descriptionItem}>
+              <Image 
+                source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
+                style={styles.checkIcon} 
+              />
+              <Text style={styles.descriptionText}>{item}</Text>
+            </View>
+          ))}
+          </View>
           <Text style={styles.planPrice}>
             {plan.pricing[activePrice]} 
             <Text style={{ fontSize: 12, color: 'grey' }}>
@@ -441,17 +522,42 @@ const handlePress = (selectedPlan) => {
             </Text>
           </Text>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
-          <View style={styles.description}>
-            {plan.description.map((item, index) => (
-              <View key={index} style={styles.descriptionItem}>
-                <Image 
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
-                  style={styles.checkIcon} 
-                />
-                <Text style={styles.descriptionText}>{item}</Text>
-              </View>
-            ))}
-          </View>
+          <View
+  style={[
+    styles.description2,
+    {
+      height: showMore
+        ? activePrice === "monthly"
+          ? 420
+          : activePrice === "quarterly"
+          ? 420
+          : 800
+        : 190,
+    },
+  ]}
+>
+  {plan.offer[activePrice]
+    .slice(0, showMore ? plan.offer[activePrice].length : 4)
+    .map((item, index) => (
+      <View key={index} style={styles.descriptionItem}>
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=J59Mg9rwboHk&format=png&color=000000",
+          }}
+          style={styles.checkIcon}
+        />
+        <Text style={styles.descriptionText}> {item}</Text>
+      </View>
+    ))}
+  <TouchableOpacity
+    onPress={() => setShowMore((prev) => !prev)}
+    style={styles.toggleButton}
+  >
+    <Text style={styles.toggleButtonText}>
+      {showMore ? "See Less" : "See More"}
+    </Text>
+  </TouchableOpacity>
+</View>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10, marginBottom: 10 }} />
           {activePlan === plan.id ? (
             renderPlanDetails(plan)
@@ -470,6 +576,17 @@ const handlePress = (selectedPlan) => {
         <View style={[styles.card, { borderRadius: 10 }]}>
           <Text style={styles.planTitle}>{plan.title}</Text>
           <Text style={styles.planTopic}>{plan.topic}</Text>
+          <View style={styles.description}>
+          {plan.description[activePrice].map((item, index) => (
+            <View key={index} style={styles.descriptionItem}>
+              <Image 
+                source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
+                style={styles.checkIcon} 
+              />
+              <Text style={styles.descriptionText}>{item}</Text>
+            </View>
+          ))}
+          </View>
           <Text style={styles.planPrice}>
           {plan.pricing[activePrice]} 
 <Text style={{ fontSize: 12, color: 'grey' }}>
@@ -477,17 +594,43 @@ const handlePress = (selectedPlan) => {
 </Text>
           </Text>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
-          <View style={styles.description}>
-            {plan.description.map((item, index) => (
-              <View key={index} style={styles.descriptionItem}>
-                <Image 
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=82817&format=png&color=000000' }} 
-                  style={styles.checkIcon} 
-                />
-                <Text style={styles.descriptionText}>{item}</Text>
-              </View>
-            ))}
-          </View>
+          <View
+  style={[
+    styles.description2,
+    {
+      height: showMore
+        ? activePrice === "monthly"
+          ? 420
+          : activePrice === "quarterly"
+          ? 420
+          : 800
+        : 190,
+    },
+  ]}
+>
+  {plan.offer[activePrice]
+    .slice(0, showMore ? plan.offer[activePrice].length : 4)
+    .map((item, index) => (
+      <View key={index} style={styles.descriptionItem}>
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=J59Mg9rwboHk&format=png&color=000000",
+          }}
+          style={styles.checkIcon}
+        />
+        <Text style={styles.descriptionText}> {item}</Text>
+      </View>
+    ))}
+  <TouchableOpacity
+    onPress={() => setShowMore((prev) => !prev)}
+    style={styles.toggleButton}
+  >
+    <Text style={styles.toggleButtonText}>
+      {showMore ? "See Less" : "See More"}
+    </Text>
+  </TouchableOpacity>
+</View>
+
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10, marginBottom: 10 }} />
           {activePlan === plan.id ? (
             renderPlanDetails(plan)
@@ -620,59 +763,55 @@ const handlePress = (selectedPlan) => {
                     <Text style={styles.title}>THIS APPLICATION LICENCE AGREEMENT</Text>
                     <Text style={styles.date}>Dated: {today}</Text>
                     <Text style={styles.content}>
-                      BETWEEN:
-                      {'\n'}AngleQuest (the “Vendor”)
-                      {'\n'}– AND –
-                      {'\n'}[Insert name] or [Insert company name] (the “Licensee”)
-                      {'\n'}BACKGROUND:
-                      {'\n'}The Vendor wishes to licence application Application to the Licensee and the Licensee desires to use the
-                      application licence under the terms and conditions stated below.
-                      {'\n'}IN CONSIDERATION OF the provisions contained in this Agreement and for other good and valuable consideration, the receipt and sufficiency of which is acknowledged, the parties agree as follows:
+                      Welcome to AngleQuest ("the Service"). These Terms and Conditions ("Terms") govern your access and use of our software-as-a-service (SaaS) platform, located www.anglequest.com, operated by AngleQuest ("we," "our," or "us"). By using the Service, you agree to comply with and be bound by these Terms. If you do not agree, please do not use the Service.
                       {'\n'}
-                      {'\n'}Licence
-                      {'\n'}1. Under this Agreement the Vendor grants to the Licensee a non-exclusive and non-transferable licence (the “Licence”) to use AngleQuest (the “Application”).
-                      {'\n'}2. “Application” includes the executable computer programs and any related printed, electronic and online documentation and any other files that may accompany the product.
-                      {'\n'}3. Title, copyright, intellectual property rights and distribution rights of the Application remain exclusively with the Vendor. Intellectual property rights include the look and feel of the Application. This Agreement constitutes a licence for use only and is not in any way a transfer of ownership rights to the Application.
-                      {'\n'}4. The Application may be used from the web and mobile. An account can only owned and used by only one user.
-                      {'\n'}5. The rights and obligations of this Agreement are personal rights granted to the Licensee only. The Licensee may not transfer or assign any of the rights or obligations granted under this Agreement to any other person or legal entity. The Licensee may not make available the Application for use by one or more third parties except her employees only.
-                      {'\n'}6. The Application may not be modified, reverse-engineered, or de-compiled in any manner through current or future available technologies.
-                      {'\n'}7. Failure to comply with any of the terms under the Licence section will be considered a material breach of this Agreement.
+                      {'\n'}1. Definitions
+                      {'\n'}•	Service: The software-as-a-service application provided by AngleQuest.
+                      {'\n'}•	User: Any individual or entity who accesses or uses the Service.
+                      {'\n'}•	Account: The user profile created to access the Service.
+                      {'\n'}•	Content: Any data, information, text, files, or other materials uploaded, downloaded, or stored using the Service.
                       {'\n'}
-                      {'\n'}Licence Fee
-                      {'\n'}8. The subscription price of [Insert amount] paid by the Licensee will constitute the entire licence fee and is the full consideration for this Agreement.
-                      {'\n'}
-                      {'\n'}Limitation of Liability
-          {'\n'}9. The Application is provided by the Vendor and accepted by the Licensee “as is”. Liability of the Vendor will be limited to a maximum of the original purchase price of the Application. The Vendor will not be liable for any general, special, incidental or consequential damages including, but not limited to, loss of production, loss of profits, loss of revenue, loss of data, or any other business or economic disadvantage suffered by the Licensee arising out of the use or failure to use the Application.
-          {'\n'}10. The Vendor makes no warranty expressed or implied regarding the fitness of the Application for a particular purpose or that the Application will be suitable or appropriate for the specific requirements of the Licensee.
-          {'\n'}11. The Vendor does not warrant that use of the Application will be uninterrupted or error-free. The Licensee accepts that Application in general is prone to bugs and flaws within an acceptable level as determined in the industry.
-          {'\n'}
-          {'\n'}Warrants and Representations
-          {'\n'}12. The Vendor warrants and represents that it is the copyright holder of the Application. The Vendor warrants and represents that granting the licence to use this Application is not in violation of any other agreement, copyright or applicable statute.
-          Acceptance
-          {'\n'}13. All terms, conditions and obligations of this Agreement will be deemed to be accepted by the Licensee (“Acceptance”) upon execution of this Agreement.
-          {'\n'}
-          {'\n'}
-          {'\n'}Term
-          {'\n'}15. The term of this Agreement will begin on Acceptance and is perpetual.
-          {'\n'}
-          {'\n'}Termination
-          {'\n'}16. This Agreement will be terminated and the Licence forfeited where the Licensee has failed to comply with any of the terms of this Agreement or is in breach of this Agreement. On termination of this Agreement for any reason, the Licensee will promptly delete her account from the Application and all its users account will be blocked.
-          {'\n'}
-          {'\n'}Force Majeure
-          {'\n'}17. The Vendor will be free of liability to the Licensee where the Vendor is prevented from executing its obligations under this Agreement in whole or in part due to Force Majeure, such as earthquake, typhoon, flood, fire, and war or any other unforeseen and uncontrollable event where the Vendor has taken any and all appropriate action to mitigate such an event.
-          Governing Law
-          {'\n'}18. The Parties to this Agreement submit to the jurisdiction of the courts of Netherlands for the enforcement of this Agreement or any arbitration award or decision arising from this Agreement. This Agreement will be enforced or construed according to the laws of the Netherlands.
-          {'\n'}
-          {'\n'}Miscellaneous
-          {'\n'}19. This Agreement can only be modified in writing signed by both the Vendor and the Licensee.
-          {'\n'}20. This Agreement does not create or imply any relationship in agency or partnership between the Vendor and the Licensee.
-          {'\n'}21. Headings are inserted for the convenience of the parties only and are not to be considered when interpreting this Agreement. Words in the singular mean and include the plural and vice versa. Words in the masculine gender include the feminine gender and vice versa. Words in the neuter gender include the masculine gender and the feminine gender and vice versa.
-          {'\n'}22. If any term, covenant, condition or provision of this Agreement is held by a court of competent jurisdiction to be invalid, void or unenforceable, it is the parties’ intent that such provision be reduced in scope by the court only to the extent deemed necessary by that court to render the provision reasonable and enforceable and the remainder of the provisions of this Agreement will in no way be affected, impaired or invalidated as a result.
-          {'\n'}23. This Agreement contains the entire agreement between the parties. All understandings have been included in this Agreement. Representations which may have been made by any party to this Agreement may in some way be inconsistent with this final written Agreement. All such statements are declared to be of no value in this Agreement. Only the written terms of this Agreement will bind the parties.
-          {'\n'}24. This Agreement and the terms and conditions contained in this Agreement apply to and are binding upon the Vendor’s successors and assigns.
-          {'\n'}
-          {'\n'}Notices
-          {'\n'}25. All notices to the parties under this Agreement are to be provided at the following addresses, or at such addresses as may be later provided in writing: ask@anglequest.com. And the provided email of the Licensee during signup will be used by AngleQuest. 
+  {'\n'}2. Account Registration
+  {'\n'}2.1. To use the Service, you must register for an account and provide accurate and complete information.2.2. You are responsible for maintaining the confidentiality of your account credentials.2.3. You agree to notify us immediately if you suspect unauthorized use of your account.
+  {'\n'}
+  {'\n'}3. Use of the Service
+
+  {'\n'}3.1. The Service is provided solely for your lawful use.3.2. You agree not to:
+  {'\n'}•	Reverse engineer, decompile, or attempt to extract the source code of the Service.
+  {'\n'}•	Use the Service for any illegal or unauthorized purpose.
+  {'\n'}•	Interfere with or disrupt the integrity or performance of the Service.
+  {'\n'}
+  {'\n'}4. Subscription and Payment
+  {'\n'}4.1. The Service may require a subscription to access certain features.4.2. Subscription fees are billed in advance on a monthly basis and are non-refundable.4.3. We reserve the right to change subscription fees with [30 days'] prior notice.
+  {'\n'}
+  {'\n'}5. User Content
+  {'\n'}5.1. You retain ownership of all Content you upload to the Service.5.2. By uploading Content, you grant us a limited license to use, store, and process your Content as necessary to provide the Service.5.3. You are solely responsible for the legality, accuracy, and quality of your Content.
+  {'\n'}
+  {'\n'}6. Intellectual Property
+  {'\n'}6.1. The Service and all associated materials, including logos, software, and content (excluding User Content), are the exclusive property of [Your Company Name].6.2. You are granted a limited, non-exclusive, non-transferable license to use the Service under these Terms.
+  {'\n'}
+  {'\n'}7. Termination
+  {'\n'}7.1. You may terminate your account at any time by contacting us or using the settings in your account.7.2. We reserve the right to suspend or terminate your account for any breach of these Terms or any suspected illegal activity.7.3. Upon termination, you will lose access to the Service, and your Content may be deleted.
+  {'\n'}
+  {'\n'}8. Disclaimers
+  {'\n'}8.1. The Service is provided "as is" without warranties of any kind, either express or implied.8.2. We do not guarantee that the Service will be error-free, secure, or operate uninterrupted.
+  {'\n'}
+  {'\n'}9. Limitation of Liability
+  {'\n'}9.1. To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, or consequential damages, including but not limited to loss of profits, data, or use.9.2. Our total liability for any claim related to the Service shall not exceed the amount you paid for the Service in the [12 months] preceding the claim.
+  {'\n'}
+  {'\n'}10. Privacy
+  {'\n'}10.1. By using the Service, you consent to our data collection, use, and disclosure practices as described in our Privacy Policy [insert link].
+  {'\n'}
+  {'\n'}11. Modifications
+  {'\n'}11.1. We reserve the right to update these Terms at any time.11.2. Changes will be effective immediately upon posting, and your continued use of the Service constitutes your acceptance of the modified Terms.
+  {'\n'}
+  {'\n'}12. Governing Law
+  {'\n'}12.1. These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction].12.2. Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts of [Your Jurisdiction].
+  {'\n'}
+  {'\n'}13. Contact Information
+  {'\n'}If you have any questions about these Terms, please contact us at:Email: [Insert Email Address]Address: [Insert Company Address]
+  {'\n'}
+  {'\n'} By accessing or using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
                     </Text>
                     </ScrollView>
                   </View>
@@ -915,7 +1054,7 @@ const handlePress = (selectedPlan) => {
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
+          <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
             
 
             
@@ -1020,7 +1159,6 @@ const styles = StyleSheet.create({
   mainHeading: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "green",
     marginBottom: 10,
     marginTop: 10,
     textAlign: 'center'
@@ -1378,17 +1516,21 @@ padding: 10, backgroundColor: 'white',
   planTopic: {
     fontSize: 12,
     color: "grey",
-    height: 50,
+    height: 10,
     marginBottom: 20
   },
   description: {
     marginBottom: 20,
-    height: 130
+    height: 100
+  },
+  description2: {
+    marginBottom: 20,
+    height: 750
   },
   descriptionItem: {
     flexDirection: 'row', 
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   checkIcon: {
     width: 16, 
@@ -1584,7 +1726,16 @@ padding: 5
     width: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'green',
+    backgroundColor: '#206C00',
+  },
+  startnowButton: {
+    padding: 15,
+    marginTop: 30,
+    borderRadius: 5,
+    width: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#206C00',
   },
   disabledButton: {
     backgroundColor: '#ccc', // Grey background when disabled
@@ -1675,6 +1826,16 @@ padding: 5
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  toggleButton: {
+    marginTop: 10,
+    alignSelf: "flex-start",
+marginLeft: 15
+  },
+  toggleButtonText: {
+    fontSize: 14,
+    color: "grey",
+    textDecorationLine: 'underline'
   },
   valueText: { fontSize: 14, fontWeight: '600', marginBottom: 5, marginTop: 25, color: 'grey', textAlign: 'flex-start', alignSelf: 'flex-start' },
   descriptionText: { fontSize: 14, marginBottom: 5, color: '#333', textAlign: 'flex-start', alignSelf: 'flex-start'},
