@@ -134,16 +134,15 @@ function AngleQuestPage({ onClose }) {
     if (selectedRole) {
       // Directly set the selectedRole here
       setSelectedRole(selectedRole);
-
+  
       // Perform any additional actions here, like updating steps or active card
       setCurrentStep(1);  // This will change the step, you can define the steps accordingly
       setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
-      
-      alert('Your selection has been saved!');
     } else {
-      alert('Please select a role first.');
+      // Optional: Handle case where no role is selected (if needed)
+      console.log('Please select a role first.');
     }
-  };
+  };  
   
 
  // Function to save selected plan pricing to AsyncStorage

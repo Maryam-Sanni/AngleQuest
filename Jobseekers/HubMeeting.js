@@ -6,14 +6,14 @@ import {
   FlatList,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity, ActivityIndicator,
   Linking, Modal, Picker
 } from "react-native";
 import { Button, Chip } from "react-native-paper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomAlert from "../components/CustomAlert";
-import { Video } from 'expo-av';
+import Video from 'react-native-video';
 import moment from "moment-timezone";
 import OpenModal from "../Jobseekers/Pickyourhub";
 import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
@@ -37,6 +37,41 @@ const HubMeeting = () => {
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [note, setNote] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null); // State to hold the video URL
+  const [isLoading, setIsLoading] = useState(true); // State for loading indicator
+  const [isBuffering, setIsBuffering] = useState(true);
+
+  useEffect(() => {
+    const fetchRecording = async () => {
+      if (!selectedMeeting) return;
+  
+      try {
+        const token = await AsyncStorage.getItem('token'); // Get token from AsyncStorage
+        
+        // Make the GET request with query parameters
+        const response = await axios.get(`${apiUrl}/api/expert/get-recording`, {
+          params: { meeting_id: selectedMeeting }, // Add meeting_id as query parameter
+          headers: {
+            Authorization: `Bearer ${token}`, // Use token for authentication
+          },
+        });
+  
+        // Check the response data
+        if (response.data.status === 'success' && response.data.data?.recording_url) {
+          setVideoUrl(response.data.data.recording_url); // Use recording URL from API
+        } else {
+          setVideoUrl(require('../assets/coursetest.mp4')); // Fallback video
+        }
+      } catch (error) {
+        console.error('Error fetching video URL:', error);
+        setVideoUrl(require('../assets/coursetest.mp4')); // Fallback video
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchRecording();
+  }, [selectedMeeting]);  
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -73,6 +108,13 @@ const HubMeeting = () => {
       setCurrentIndex(currentIndex + 1);
     }
   };
+
+  useEffect(() => {
+    // If expanded view is active, automatically collapse the meetings view.
+    if (expandedView) {
+      setShowAll(false);
+    }
+  }, [expandedView]);
 
   const tabs = [
     {
@@ -459,6 +501,52 @@ const handlePickerChange = (index) => {
         ))}
       </View>
 
+      {activeTab === "Assessment" && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+            backgroundColor: 'white',
+          }}
+        >
+          {/* Empty Schedule Image */}
+          <Image
+            source={EmptyScheduleImage}
+            style={{
+              width: 200,
+              height: 200,
+              marginBottom: 20,
+            }}
+          />
+
+          {/* Title */}
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: '#333',
+              marginBottom: 10,
+            }}
+          >
+            Nothing available here
+          </Text>
+
+          {/* Explanation */}
+          <Text
+            style={{
+              fontSize: 16,
+              color: '#777',
+              textAlign: 'center',
+              marginBottom: 20,
+            }}
+          >
+            It seems there are no assessments right now.
+          </Text>
+        </View>
+      )}
+
         {activeTab === "Upcoming" || activeTab === "Past Sessions" ? (
           meetingsToDisplay.length > 0 ? (
             <>
@@ -498,12 +586,12 @@ const handlePickerChange = (index) => {
                       <View style={{ width: '100%', height: '100%', position: 'relative' }}>
                         {/* Video Component */}
                         <Video
-                          source={{ uri: '../assets/coursetest.mp4' }}
-                          shouldPlay={true}
-                          isMuted={true} // Ensures the video plays without sound
-                          resizeMode="contain"
-                          style={{ width: '100%', height: '100%', borderRadius: 10 }}
-                        />
+        source={require('../assets/coursetest.mp4')} // Local video file
+        muted={true} // Mute the video
+        resizeMode="contain" // Resize the video to fit within its container
+        repeat={true} // Optional: Loop the video
+        style={styles.video} // Apply styles
+      />
 
                         {/* Image Overlay */}
                         <Image
@@ -638,24 +726,34 @@ const handlePickerChange = (index) => {
           )
         ) : null}
 
-        {expandedView && selectedMeeting && (
-          <View style={styles.expandedViewContainer}>
-            {/* Larger Video Player */}
-            <View style={styles.largeVideoContainer}>
-              {/* Find the selected meeting from the array */}
-              {meetingsToDisplay && meetingsToDisplay.length > 0 && (
-                // Find the meeting in the meetingsToDisplay array
-                (() => {
-                  const selectedMeetingData = meetingsToDisplay.find(meeting => meeting.meeting_id === selectedMeeting);
-                  if (selectedMeetingData) {
+;
+
+{expandedView && selectedMeeting && (
+  <View style={styles.expandedViewContainer}>
+    {/* Larger Video Player */}
+    <View style={styles.largeVideoContainer}>
+      {meetingsToDisplay && meetingsToDisplay.length > 0 && (
+        (() => {
+          const selectedMeetingData = meetingsToDisplay.find(
+            meeting => meeting.meeting_id === selectedMeeting
+          );
+          if (selectedMeetingData) {
+            
                     return (
                       <>
-                        <Video
-                          source={require('../assets/coursetest.mp4')}
-                          useNativeControls
-                          resizeMode="cover"
-                          style={styles.largeVideo}
-                        />
+     <View style={{width: "100%", height: 300, position: 'relative', backgroundColor: 'grey'}}>
+     <Video
+        source={{ uri: videoUrl }}
+        style={styles.largeVideo}
+        controls
+        onLoadStart={() => setIsBuffering(true)} // Show loader on start
+        onLoad={() => setIsBuffering(false)} // Hide loader when loaded
+        onError={(error) => {
+          setIsBuffering(false);
+          console.error('Video Error:', error);
+        }}
+      />
+    </View>
                         <TouchableOpacity 
                           style={{ flexDirection: 'row', marginLeft: 550, marginTop: 10 }}
                           onPress={() => setIsAddingNote(true)}
@@ -978,7 +1076,6 @@ const styles = StyleSheet.create({
   largeVideo: {
     width: "100%",
     height: 300,
-    objectFit: 'cover',
   },
   meetingsListContainer: {
     flex: 0.3,
