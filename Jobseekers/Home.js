@@ -17,7 +17,7 @@ import { BlurView } from "expo-blur";
 import Topbar from "../components/topbar";
 import SuggestionModal from "../components/Suggestion";
 import HelpModal from "../components/Help";
-import CustomModal from "../Jobseekers/goalspopup";
+import CustomModal from "../Jobseekers/GetStartedInd";
 import CustomPercentageChart from "../components/PercentageChart";
 import OpenModal2 from "../Jobseekers/GetStartedInd";
 import OpenModal3 from "../Jobseekers/Pickyourcoach";
@@ -29,6 +29,7 @@ import axios from "axios";
 import { api_url, AuthContext } from "../Messaging/AuthProvider";
 import { formatDistanceToNow, format } from "date-fns";
 import { enGB } from "date-fns/locale";
+import { useLocation } from 'react-router-dom';
 
 const defaultAvatar = require("../assets/account.png");
 
@@ -122,16 +123,37 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const modalShown = localStorage.getItem("modalShown");
-    if (!modalShown) {
-      // If the modal hasn't been shown, show the modal
-      setCustomModalVisible(true);
-      localStorage.setItem("modalShown", "true");
-    } else {
-      // If modal has been shown before, ensure modalVisible is false
-      setCustomModalVisible(false);
-    }
-  }, []);
+    const checkPaymentMethod = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Get token from localStorage for web
+        if (!token) {
+          console.error('Token not found');
+          return;
+        }
+
+        // Fetch payment details from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Check if payment_method is null
+        const paymentMethod = response?.data?.PaystackDetail?.[0]?.payment_method;
+
+        // Show modal only if payment_method is null
+        if (paymentMethod === null) {
+          setModalVisible2(true);
+        } else {
+          setModalVisible2(false);
+        }
+      } catch (error) {
+        console.error('Error fetching payment details:', error);
+      }
+    };
+
+    checkPaymentMethod();
+  }, []); // Empty dependency array, this runs once on page load
 
 
   useEffect(() => {
@@ -186,9 +208,35 @@ const HomePage = () => {
     setModalVisible2(true);
   };
 
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
+  const handleCloseModal2 = async () => {
+    const token = await AsyncStorage.getItem('token'); // Get token from AsyncStorage
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+  
+    try {
+      // Fetch payment details from the API
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      // Check if payment_method is filled
+      const paymentMethod = response?.data?.PaystackDetail?.[0]?.payment_method;
+  
+      if (paymentMethod !== null) {
+        // Allow closing the modal only if payment_method is filled
+        setModalVisible2(false);
+      } else {
+        console.log('Cannot close modal. Payment method is not filled yet.');
+      }
+    } catch (error) {
+      console.error('Error fetching payment details:', error);
+    }
   };
+  
 
   const handleOpenPress3 = () => {
     setModalVisible3(true);

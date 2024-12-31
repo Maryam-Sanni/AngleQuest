@@ -85,6 +85,9 @@ function AngleQuestPage({ onClose }) {
       const [showSetup, setShowSetup] = useState(false); 
       const scrollViewRef = useRef(null);
       const [showMore, setShowMore] = useState(false);
+      const [planTitle, setPlanTitle] = useState("");
+
+      const apiUrl = process.env.REACT_APP_API_URL;
 
     const [isChecked, setIsChecked] = useState(false);
      // Get today's date in the format: Monday, YYYY-MM-DD
@@ -96,8 +99,73 @@ function AngleQuestPage({ onClose }) {
      });
    
      const handleCheckboxToggle = () => {
-       setIsChecked(!isChecked);
-     };
+      setIsChecked(!isChecked);
+    };
+    
+    const handleNext2 = async () => {
+      // Ensure the user has agreed to the terms before proceeding
+      if (!isChecked) {
+        alert("Please agree to the terms and conditions before proceeding.");
+        return;
+      }
+    
+      try {
+        // Get the token from AsyncStorage for authorization
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+    
+        // Fetch the latest payment details from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        if (response.data.status === "success" && response.data.PaystackDetail.length > 0) {
+          // Use the last item in the PaystackDetail array (most recently created)
+          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1];
+    
+          // Construct the payload with fetched details
+          const payload = {
+            specialization: details.specialization || "", // Fallback to empty string if not found
+            service: details.service || "", // Fallback to empty string if not found
+            plan: details.plan || "", // Fallback to empty string if not found
+            sla: details.sla || "", // Processed SLA cost (use the fetched SLA)
+            agreement: "Yes", // Set agreement as "Yes"
+            payment_method: "", // Placeholder (you can fill this in if needed)
+            payment_detail: "", // Placeholder (you can fill this in if needed)
+            contact_detail: "", // Placeholder (you can fill this in if needed)
+          };
+    
+          // Make the POST request with the constructed payload
+          const postResponse = await fetch(`${apiUrl}/api/jobseeker/paystack-payment-details`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // Add token to Authorization header
+            },
+            body: JSON.stringify(payload),
+          });
+    
+          if (postResponse.ok) {
+            const postData = await postResponse.json();
+            console.log("API Response:", postData);
+            // Move to the next step in the process
+            setCurrentStep(3);
+            setActiveCard("Payment Details");
+          } else {
+            console.error("Failed to save payment details:", postResponse.statusText);
+          }
+        } else {
+          console.error("No Paystack details found or invalid response structure.");
+        }
+      } catch (error) {
+        console.error("Error during API request:", error.response?.data || error.message);
+      }
+    };
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -118,6 +186,130 @@ function AngleQuestPage({ onClose }) {
     retrieveData();
   }, []);
 
+  const handleNext = async () => {
+    try {
+      // Retrieve the token from AsyncStorage
+      const token = await AsyncStorage.getItem("token");
+  
+      // Ensure token is available
+      if (!token) {
+        console.error("Token not found in AsyncStorage");
+        return false; // Exit if there's no token
+      }
+  
+      // Determine the `service` based on `activePrice`
+      let service = "";
+      if (activePrice === "monthly") {
+        service = "Knowledge Backup";
+      } else if (activePrice === "quarterly") {
+        service = "Career Support";
+      } else if (activePrice === "annually") {
+        service = "Knowledge Backup + Career Support";
+      }
+  
+      // Retrieve `selectedRole`, `selectedPlan`, and `sla-cost` from AsyncStorage
+      const selectedRole = await AsyncStorage.getItem("selectedRole");
+      const selectedPlan = JSON.parse(await AsyncStorage.getItem("selectedPlan"));
+      const slaCost = await AsyncStorage.getItem("sla-cost"); // SLA cost from `handleSelect`
+  
+      // Process the SLA cost to remove non-numeric parts (e.g., "$", "monthly", "No additional cost")
+      let sla = "0"; // Default to "0" if no valid SLA is found
+      if (slaCost) {
+        if (slaCost === "No additional cost") {
+          sla = "0"; // If it's "No additional cost", set SLA to "0"
+        } else {
+          // Remove any non-numeric characters like "$", "monthly", etc.
+          sla = slaCost.replace(/[^0-9.-]+/g, ""); // Remove everything except digits, dot, and minus sign
+          if (sla === "") sla = "0"; // In case the SLA contains only non-numeric characters
+        }
+      }
+  
+      // Construct the payload for the API request
+      const payload = {
+        specialization: selectedRole || "", // Fallback to empty if not found
+        service: service,
+        plan: planTitle || "", // Fallback to empty if not found
+        sla: sla, // Processed SLA cost
+        agreement: "", // Placeholder
+        payment_method: "", // Placeholder
+        payment_detail: "", // Placeholder
+        contact_detail: "", // Placeholder
+      };
+  
+      // Make the POST request to the API with token authentication
+      const response = await fetch(`${apiUrl}/api/jobseeker/paystack-payment-details`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add token to Authorization header
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("API Response:", data);
+        return true; // Return true if the request was successful
+      } else {
+        console.error("Failed to save payment details:", response.statusText);
+        return false; // Return false if the request failed
+      }
+    } catch (error) {
+      console.error("Error during API request:", error);
+      return false; // Return false in case of any error
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+  
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.data.status === "success" && response.data.PaystackDetail.length > 0) {
+          // Use the last item in the PaystackDetail array (most recently saved data)
+          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1];
+  
+          // Update active card and service visibility based on available data
+          if (details.specialization) {
+            setActiveCard("Subscription Plans");
+            setCurrentStep(1);
+            services[1].visible = true; // Enable "Subscription Plans"
+          }
+          if (details.plan) {
+            setActiveCard("AngleQuest Agreement");
+            setCurrentStep(2);
+            services[2].visible = true; // Enable "AngleQuest Agreement"
+          }
+          if (details.agreement) {
+            setActiveCard("Payment Details");
+            setCurrentStep(3);
+            services[3].visible = true; // Enable "Payment Details"
+          }
+  
+          // Update services state to reflect visibility changes
+          setServices([...services]);
+        } else {
+          console.error("No Paystack details found or invalid response structure.");
+        }
+      } catch (error) {
+        console.error("Error fetching payment details:", error.response?.data || error.message);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
   const roles = [
     "SAP FI", "SAP MM", "SAP SD", "SAP PP", 
     "Microsoft Dynamics Sales", "Microsoft Dynamics Field Service", 
@@ -132,21 +324,48 @@ function AngleQuestPage({ onClose }) {
 
   const handleContinue = async () => {
     if (selectedRole) {
-      // Save the selected role to AsyncStorage
       try {
-        await AsyncStorage.setItem('selectedRole', selectedRole); // Save selectedRole
-        // Directly set the selectedRole here
-        setSelectedRole(selectedRole);
+        // Save the selected role to AsyncStorage
+        await AsyncStorage.setItem("selectedRole", selectedRole);
   
-        // Perform any additional actions here, like updating steps or active card
-        setCurrentStep(1);  // This will change the step, you can define the steps accordingly
-        setActiveCard("Subscription Plans");  // Set the active card to "Subscription Plans"
+        // Get the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+  
+        // Prepare the payload for the API request
+        const payload = {
+          specialization: selectedRole,
+          service: "", // Add appropriate value here
+          plan: "", // Add appropriate value here
+          sla: "", // Add appropriate value here
+          agreement: "", // Add appropriate value here
+          payment_method: "", // Add appropriate value here
+          payment_detail: "", // Add appropriate value here
+          contact_detail: "", // Add appropriate value here
+        };
+  
+        // Make the POST request to the API using Axios
+        const response = await axios.post(`${apiUrl}/api/jobseeker/paystack-payment-details`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Use token in Authorization header
+          },
+        });
+  
+        // Handle the response
+        console.log("API Response:", response.data);
+  
+        // Perform additional actions based on API response if needed
+        setCurrentStep(1); // Update step
+        setActiveCard("Subscription Plans"); // Update active card
       } catch (error) {
-        console.error('Error saving selected role to AsyncStorage', error);
+        console.error("Error handling continue action:", error.response?.data || error.message);
       }
     } else {
-      // Optional: Handle case where no role is selected (if needed)
-      console.log('Please select a role first.');
+      console.log("Please select a role first.");
     }
   };
   
@@ -196,6 +415,10 @@ const handlePress = (selectedPlan) => {
   setPlans(updatedPlans); // Update state with selected plan
   setSelectedPlan(selectedPlan); // Set selected plan
   saveToAsyncStorage(selectedPlan); // Save to AsyncStorage
+
+    // Set the planTitle to the selected plan's title
+    setPlanTitle(selectedPlan.title);  // Updates the planTitle state with the title of the selected plan
+    console.log("Selected Plan Title: ", selectedPlan.title);
 
    // Scroll down within the ScrollView by a specific number of pixels
    if (scrollViewRef.current) {
@@ -670,107 +893,122 @@ const handlePress = (selectedPlan) => {
     </View>
   ))}
 </View>
-<View style={{marginLeft: 70, marginRight: 70, marginTop: 50}}>
-  {sections
-    .filter((section) => {
-      if (activePrice === 'monthly') return section.title === 'Knowledge Backup';
-      if (activePrice === 'quarterly') return section.title === 'Career Boost';
-      if (activePrice === 'annually') return section.title === 'Knowledge Backup + Career Boost';
-      return false;
-    })
-    .map((section, sectionIndex) => {
-      const isFirstOptionSelected =
-        !selectedOptions[section.title] && section.options.length > 0;
+<View style={{ marginLeft: 70, marginRight: 70, marginTop: 50 }}>
+  {/* Check if selectedPlan?.title is "Monthly" */}
+  {selectedPlan?.title === 'Monthly' &&
+    sections
+      .filter((section) => {
+        // Retain activePrice filtering logic
+        if (activePrice === 'monthly') return section.title === 'Knowledge Backup';
+        if (activePrice === 'quarterly') return section.title === 'Career Boost';
+        if (activePrice === 'annually') return section.title === 'Knowledge Backup + Career Boost';
+        return false;
+      })
+      .map((section, sectionIndex) => {
+        const isFirstOptionSelected =
+          !selectedOptions[section.title] && section.options.length > 0;
 
-      return (
-        <View
-          key={sectionIndex}
-          style={{
-            marginBottom: 30,
-            padding: 20,
-            backgroundColor: '#fff',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-            elevation: 3,
-          }}
-        >
-          <Text
+        return (
+          <View
+            key={sectionIndex}
             style={{
-              fontSize: 22,
-              fontWeight: '600',
-              color: 'black',
-              marginBottom: 40,
-              textAlign: 'flex-start',
+              marginBottom: 30,
+              padding: 20,
+              backgroundColor: '#fff',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              elevation: 3,
             }}
           >
-            {section.title} SLA
-          </Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {section.options.map((option, optionIndex) => {
-              const isSelected =
-                selectedOptions[section.title]?.title === option.title ||
-                (isFirstOptionSelected && optionIndex === 0);
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: '600',
+                color: 'black',
+                marginBottom: 40,
+                textAlign: 'flex-start',
+              }}
+            >
+              {section.title} SLA
+            </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {section.options.map((option, optionIndex) => {
+                const isSelected =
+                  selectedOptions[section.title]?.title === option.title ||
+                  (isFirstOptionSelected && optionIndex === 0);
 
-              if (isFirstOptionSelected && optionIndex === 0) {
-                handleSelect(section.title, option);
-              }
+                if (isFirstOptionSelected && optionIndex === 0) {
+                  handleSelect(section.title, option);
+                }
 
-              return (
-                <View key={optionIndex} style={{ alignItems: 'flex-start', width: 320 }}>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-                    {option.title}
-                  </Text>
-                  {option.details.map((detail, index) => (
-                    <Text key={index} style={{ fontSize: 14, marginBottom: 5 }}>
-                      • {detail}
+                return (
+                  <View key={optionIndex} style={{ alignItems: 'flex-start', width: 320 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+                      {option.title}
                     </Text>
-                  ))}
-                  <TouchableOpacity
-                    style={{
-                      marginTop: 30,
-                      backgroundColor: isSelected ? '#4CAF50' : '#F0F0F0',
-                      paddingVertical: 10,
-                      paddingHorizontal: 25,
-                      borderRadius: 5,
-                      width: 280,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    onPress={async () => {
-                      await handleSelect(section.title, option);
-                    }}
-                  >
-                    <Text style={{ color: isSelected ? '#fff' : 'darkgrey', fontSize: 18 }}>
-                      {isSelected ? 'Selected' : 'Select'}
-                    </Text>
-                  </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      textAlign: 'center',
-                      alignSelf: 'center',
-                      marginTop: 10,
-                      color: 'grey',
-                    }}
-                  >
-                    {option.cost}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-      );
-    })}
-</View>
-<TouchableOpacity onPress={async () => {
-                            setCurrentStep(2);
-                            setActiveCard("AngleQuest Agreement");
-                          }} style={styles.buttonnext}>
-                      <Text style={styles.buttonsaveText}>{t("Next")}</Text>
+                    {option.details.map((detail, index) => (
+                      <Text key={index} style={{ fontSize: 14, marginBottom: 5 }}>
+                        • {detail}
+                      </Text>
+                    ))}
+                    <TouchableOpacity
+                      style={{
+                        marginTop: 30,
+                        backgroundColor: isSelected ? '#4CAF50' : '#F0F0F0',
+                        paddingVertical: 10,
+                        paddingHorizontal: 25,
+                        borderRadius: 5,
+                        width: 280,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                      onPress={async () => {
+                        await handleSelect(section.title, option);
+                      }}
+                    >
+                      <Text style={{ color: isSelected ? '#fff' : 'darkgrey', fontSize: 18 }}>
+                        {isSelected ? 'Selected' : 'Select'}
+                      </Text>
                     </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        textAlign: 'center',
+                        alignSelf: 'center',
+                        marginTop: 10,
+                        color: 'grey',
+                      }}
+                    >
+                      {option.cost}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        );
+      })}
+</View>
+<TouchableOpacity
+  onPress={async () => {
+    // Call handleNext before proceeding with the step change
+    const success = await handleNext();
+    
+    if (success) {
+      // Only change the step and card if the API request was successful
+      setCurrentStep(2);
+      setActiveCard("AngleQuest Agreement");
+    } else {
+      // Optionally handle failure (e.g., show an error message)
+      console.log("Failed to proceed, try again.");
+    }
+  }}
+  style={styles.buttonnext}
+>
+  <Text style={styles.buttonsaveText}>{t("Next")}</Text>
+</TouchableOpacity>
 </View>
         ),
       },
@@ -840,12 +1078,18 @@ const handlePress = (selectedPlan) => {
                             <CheckBox value={isChecked} onValueChange={handleCheckboxToggle} />
                             <Text style={styles.checkboxText}>I agree to the terms and conditions</Text>
                           </View>
-          <TouchableOpacity onPress={async () => {
-                            setCurrentStep(3);
-                            setActiveCard("Payment Details");
-                          }} style={styles.buttonnext}>
-                      <Text style={styles.buttonsaveText}>{t("Next")}</Text>
-                    </TouchableOpacity>
+                          <TouchableOpacity
+  onPress={async () => {
+    // Call handleNext2 function
+    await handleNext2(); // Make sure to await the function if it returns a promise
+
+    setCurrentStep(3);
+    setActiveCard("Payment Details");
+  }}
+  style={styles.buttonnext}
+>
+  <Text style={styles.buttonsaveText}>{t("Next")}</Text>
+</TouchableOpacity>
       </View>
 ),
     },
@@ -1084,16 +1328,16 @@ const handlePress = (selectedPlan) => {
                 // Only render services that are visible
                 service.visible !== false && (
                   <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      setCurrentStep(index);
-                      setActiveCard(service.title); 
-                    }}
-                  >
-                    <ServiceCard title={service.title} isStartPressed={isStartPressed} 
-                      activeCard={activeCard}
-                      setActiveCard={setActiveCard}/>
-                  </TouchableOpacity>
+                  key={index}
+                  onPress={() => {
+                    setCurrentStep(index);
+                    setActiveCard(service.title); 
+                  }}
+                >
+                  <ServiceCard title={service.title} isStartPressed={isStartPressed} 
+                    activeCard={activeCard}
+                    setActiveCard={setActiveCard}/>
+                </TouchableOpacity>
                 )
               ))}
             </View>
