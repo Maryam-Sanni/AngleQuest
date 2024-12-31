@@ -16,7 +16,7 @@ import CustomAlert from "../components/CustomAlert";
 import Video from 'react-native-video';
 import moment from "moment-timezone";
 import OpenModal from "../Jobseekers/Pickyourhub";
-import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const HubMeeting = () => {
   const [meetings, setMeetings] = useState([]);

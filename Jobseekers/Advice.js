@@ -4,7 +4,7 @@ import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Jobseekers/SkillanalysisAI';
-import OpenModal2 from '../Jobseekers/Newadvice';
+import OpenModal2 from '../Jobseekers/Pickexpertadv';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
 
@@ -52,25 +52,26 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Skill Analysis")}</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16, }}>{t("Skill Analysis")}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleOpenPress2} >
-            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
-                  </View>
-                  </TouchableOpacity>
+            
             </View>
      <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Skill Analysis")}</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("Are you in a place where you need some straightening, fresh insights, leverage new perspective and some realignment?")}</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,}}>{t("About Skill Analysis")}</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 10, marginLeft: 30, marginRight: 200, }}>{t("Evaluate your skillset to identify the precise gap keeping you behind your next level.")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light" }}>{t("Meet an expert")}</Text>
+    <View style={styles.button}>
+                    <Text style={styles.buttontext}>{t("Start with AngleQuest AI")}</Text>
                   </View>
      </TouchableOpacity>
-     <Image source={require('../assets/20.png')} style={styles.boximage} />
+     <TouchableOpacity onPress={handleOpenPress2} >
+     <View style={styles.button}>
+     <Text style={styles.buttontext}>{t("Go direct to an Expert")}</Text>
+                  </View>
+                  </TouchableOpacity>
+     <Image source={require('../assets/EmptySch.jpeg')} style={styles.boximage} />
       </View>
       </View>
      </View>
@@ -205,5 +206,14 @@ const styles = StyleSheet.create({
    right: 20,
    marginTop: -40
   },
+  button:{
+    backgroundColor: 'coral',
+    padding: 15,
+    marginTop: 50,
+    marginLeft: 20
+  },
+  buttontext:{
+    color: 'white'
+  }
 });
 export default MyComponent;

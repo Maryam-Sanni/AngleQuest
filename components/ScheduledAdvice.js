@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);

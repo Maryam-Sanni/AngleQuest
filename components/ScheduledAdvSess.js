@@ -6,7 +6,7 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EmptyScheduleImage from '../assets/EmptySchedule.jpeg';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);

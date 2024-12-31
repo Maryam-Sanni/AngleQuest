@@ -54,25 +54,21 @@ function MyComponent() {
             <TouchableOpacity>
               <View style={styles.item}>
                 <Image source={require('../assets/list.png')} style={styles.image} />
-                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16,fontFamily:"Roboto-Light" }}>{t("Growth Plan")}</Text>
+                <Text style={{color: 'black', fontWeight: '600', marginLeft: 7, fontSize: 16, }}>{t("Growth Plan")}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleOpenPress2} >
-            <View style={{ position: 'absolute', right: 20, width: 100, backgroundColor: 'coral', borderRadius: 5, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight:'600',fontFamily:"Roboto-Light" }}>+ {t("New")}</Text>
-                  </View>
-                  </TouchableOpacity>
+          
             </View>
      <View style={styles.box}>
-     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,fontFamily:"Roboto-Light"}}>{t("About Growth Plan")}</Text>
-     <Text style={{ fontSize: 15, color: "black", marginTop: 5, marginLeft: 30, marginRight: 200,fontFamily:"Roboto-Light" }}>{t("The process begins with selecting an expert to serve as your coach. Next, describe the growth objectives you wish to achieve. Your expert will then review your goals and arrange a meeting to discuss them in detail.")}</Text>
+     <Text style={{ fontSize: 19, fontWeight: 'bold', marginTop: 30, marginLeft: 30,}}>{t("About Career Growth Plan")}</Text>
+     <Text style={{ fontSize: 15, color: "black", marginTop: 5, marginLeft: 30, marginRight: 200, }}>{t("Begin the real change in your career by crafting a clear-cut growth plan with an expert")}</Text>
      <View style={{flexDirection: 'row'}}>
      <TouchableOpacity onPress={handleOpenPress}>
-    <View style={{ justifyContent: "center", paddingHorizontal: 10, paddingVertical: 10, marginTop: 40, marginLeft: 30, backgroundColor: 'coral', borderRadius: 5, width: 200, alignItems: 'center', alignContent: 'center',}}>
-                    <Text style={{ fontSize: 13, color: "white", alignText: 'center', fontWeight: '600',fontFamily:"Roboto-Light"}}>{t("Get Started")}</Text>
+    <View style={styles.button}>
+                       <Text style={styles.buttontext}>{t("Schedule an appointment")}</Text>
                   </View>
      </TouchableOpacity>
-     <Image source={require('../assets/19.png')} style={styles.boximage} />
+     <Image source={require('../assets/EmptySch.jpeg')} style={styles.boximage} />
       </View>
       </View>
      </View>
@@ -207,5 +203,14 @@ const styles = StyleSheet.create({
    right: 20,
    marginTop: -60
   },
+  button:{
+    backgroundColor: 'coral',
+    padding: 15,
+    marginTop: 50,
+    marginLeft: 20
+  },
+  buttontext:{
+    color: 'white'
+  }
 });
 export default MyComponent;
