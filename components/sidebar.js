@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import CollapsedComponent from "./collapsed"; // Import your collapsed component
 import { useTranslation } from 'react-i18next';
+import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigate, useLocation } from 'react-router-dom';
 import OpenModal from "../Experts/Updateprofiles";
@@ -26,133 +27,6 @@ function MyComponent() {
   };
   
   const apiUrl = process.env.REACT_APP_API_URL;
-  
-  // Function to check if interview data is filled
-  const checkInterviewData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert("Error", "No token found");
-        return false;
-      }
-
-      const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-interview`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.status === "success" && data.interview) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error fetching interview data:", error);
-      Alert.alert("Error", "Failed to fetch interview data");
-      return false;
-    }
-  };
-
-  // Function to check if advice data is filled
-  const checkSkillAnalysisData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert("Error", "No token found");
-        return false;
-      }
-
-      const response = await fetch(`${apiUrl}api/jobseeker/get-jobseeker-skill-analysis`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.status === "success" && data.skillAnalysis) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error fetching skill analysis data:", error);
-      Alert.alert("Error", "Failed to fetch skill analysis data");
-      return false;
-    }
-  };
-
-  // Function to check if advice data is filled
-  const checkgrowthPlanData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert("Error", "No token found");
-        return false;
-      }
-
-      const response = await fetch(`${apiUrl}/api/jobseeker/get-jobseeker-growthplan`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.status === "success" && data.growthPlan) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error fetching growth Plan data:", error);
-      Alert.alert("Error", "Failed to fetch growth Plan data");
-      return false;
-    }
-  };
-
-  const checkHubData = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert("Error", "No token found");
-        return false;
-      }
-
-      const response = await fetch(`${apiUrl}/api/jobseeker/get-all-jobseeker-hubs`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.status === "success" && data.AllJoinedHubs) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error fetching hub data:", error);
-      Alert.alert("Error", "Failed to fetch hub data");
-      return false;
-    }
-  };
-  
-  const handleItemHover = (item) => {
-    setHoveredItem(item);
-  };
 
   const handleItemClick = async (item) => {
     
@@ -274,7 +148,7 @@ function MyComponent() {
 
     fetchPaymentDetails();
   }, [apiUrl]);
-  
+
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -307,7 +181,7 @@ function MyComponent() {
           <View style={styles.contentContainer}>
             {/* Menu Items */}
             <View style={{marginTop: 50}}>
-            {menuItems.map((menuItem, index) => (
+            {filteredMenuItems.map((menuItem, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
