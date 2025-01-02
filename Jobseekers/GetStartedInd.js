@@ -8,6 +8,8 @@ import {
   ScrollView,
   Image,
   Animated,
+  ActivityIndicator,
+  Alert,
   TextInput, Switch, CheckBox,
   input, Pressable
 } from "react-native";
@@ -86,6 +88,7 @@ function AngleQuestPage({ onClose }) {
       const scrollViewRef = useRef(null);
       const [showMore, setShowMore] = useState(false);
       const [planTitle, setPlanTitle] = useState("");
+      const [isLoading, setIsLoading] = useState(false);
 
       const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -164,6 +167,72 @@ function AngleQuestPage({ onClose }) {
         }
       } catch (error) {
         console.error("Error during API request:", error.response?.data || error.message);
+      }
+    };
+
+    const handleFinish = async () => {
+      setIsLoading(true); // Start the loading state
+  
+      try {
+        // Get the token from AsyncStorage for authorization
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          Alert.alert("Error", "Authorization token not found.");
+          setIsLoading(false);
+          return;
+        }
+  
+        // Fetch the latest payment details from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response?.data?.status === "success" && Array.isArray(response.data.PaystackDetail)) {
+          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1]; // Use the most recent details
+  
+          // Construct the payload
+          const payload = {
+            specialization: details.specialization || "",
+            service: details.service || "",
+            plan: details.plan || "",
+            sla: details.sla || "",
+            agreement: details.agreement || "",
+            payment_method: "Done",
+            payment_detail: "",
+            contact_detail: "",
+          };
+  
+          // Post the payment details
+          const postResponse = await axios.post(
+            `${apiUrl}/api/jobseeker/paystack-payment-details`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+  
+          if (postResponse.status === 200) {
+            console.log("Payment details saved successfully:", postResponse.data);
+            setCurrentStep(3); // Proceed to the next step
+            setActiveCard("Payment Details"); // Update UI
+          } else {
+            Alert.alert("Error", "Failed to save payment details.");
+            console.error("API error:", postResponse.statusText);
+          }
+        } else {
+          Alert.alert("Error", "No payment details found or invalid API response.");
+          console.error("API response error:", response.data);
+        }
+      } catch (error) {
+        Alert.alert("Error", error.response?.data?.message || error.message);
+        console.error("Error during API request:", error.response?.data || error.message);
+      } finally {
+        setIsLoading(false); // End the loading state
+        onClose();
       }
     };
 
@@ -1262,9 +1331,17 @@ const handlePress = (selectedPlan) => {
             <Text style={styles.buttonsaveText}>{t("Save")}</Text>
           </TouchableOpacity>
             
-                <TouchableOpacity style={styles.buttondone}>
-            <Text style={styles.buttonsaveText2}>{t("Submit")}</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+      style={styles.buttondone}
+      disabled={isLoading}
+      onPress={handleFinish}
+    >
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text style={{ color: "white", textAlign: "center" }}>{t("Finish")}</Text>
+      )}
+    </TouchableOpacity>
 
 </View>
         </View>
@@ -1542,12 +1619,15 @@ borderRadius: 30
     elevation: 5,
   },
   buttondone: {
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "darkgreen",
     padding: 10,
     width: 100,
     marginLeft: 1000,
     borderRadius: 5,
-    marginTop: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+    marginBottom: 50,
     elevation: 5,
   },
   buttonnext: {

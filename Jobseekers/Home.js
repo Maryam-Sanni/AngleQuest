@@ -122,38 +122,46 @@ const HomePage = () => {
     navigate("/chat", { activeRoom: room });
   };
 
-  useEffect(() => {
-    const checkPaymentMethod = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Get token from localStorage for web
-        if (!token) {
-          console.error('Token not found');
-          return;
+  const useCheckLastPayment = ({ apiUrl, setModalVisible }) => {
+    useEffect(() => {
+      const checkLastPaymentMethod = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("Token not found");
+            return;
+          }
+  
+          const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          const paystackDetails = response?.data?.PaystackDetail;
+  
+          if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
+            // Get the most recent record based on 'created_at'
+            const lastPayment = paystackDetails[paystackDetails.length - 1];
+  
+            if (lastPayment?.payment_method === "Done") {
+              setModalVisible(false); // Payment is completed; no need to show the modal
+            } else {
+              setModalVisible(true); // Payment is not completed
+            }
+          } else {
+            console.warn("No payment details found");
+            setModalVisible(true); // No payment details found; show modal
+          }
+        } catch (error) {
+          console.error("Error fetching payment details:", error.response?.data || error.message);
+          setModalVisible(true); // Show modal on error
         }
-
-        // Fetch payment details from the API
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // Check if PaystackDetail is empty or payment_method is null
-        const paystackDetails = response?.data?.PaystackDetail;
-        const paymentMethod = paystackDetails?.[0]?.payment_method;
-
-        if (!paystackDetails || paystackDetails.length === 0 || paymentMethod === null) {
-          setModalVisible2(true); // Show modal if empty or payment_method is null
-        } else {
-          setModalVisible2(false); // Hide modal if there is a valid payment method
-        }
-      } catch (error) {
-        console.error('Error fetching payment details:', error);
-      }
-    };
-
-    checkPaymentMethod();
-  }, []);
+      };
+  
+      checkLastPaymentMethod();
+    }, [apiUrl, setModalVisible]);
+  };
 
 
   useEffect(() => {
@@ -209,9 +217,9 @@ const HomePage = () => {
   };
 
   const handleCloseModal2 = async () => {
-    const token = await AsyncStorage.getItem('token'); // Get token from AsyncStorage
+    const token = await AsyncStorage.getItem("token"); // Get token from AsyncStorage
     if (!token) {
-      console.error('Token not found');
+      console.error("Token not found");
       return;
     }
   
@@ -223,19 +231,26 @@ const HomePage = () => {
         },
       });
   
-      // Check if payment_method is filled
-      const paymentMethod = response?.data?.PaystackDetail?.[0]?.payment_method;
+      // Get the PaystackDetail array
+      const paystackDetails = response?.data?.PaystackDetail;
   
-      if (paymentMethod !== null) {
-        // Allow closing the modal only if payment_method is filled
-        setModalVisible2(false);
+      if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
+        // Use the last payment method
+        const lastPaymentMethod = paystackDetails[paystackDetails.length - 1]?.payment_method;
+  
+        if (lastPaymentMethod === "Done") {
+          // Allow closing the modal only if the last payment method is "Done"
+          setModalVisible2(false);
+        } else {
+          console.log("Cannot close modal. Payment method is not 'Done'.");
+        }
       } else {
-        console.log('Cannot close modal. Payment method is not filled yet.');
+        console.warn("No payment details found");
       }
     } catch (error) {
-      console.error('Error fetching payment details:', error);
+      console.error("Error fetching payment details:", error.response?.data || error.message);
     }
-  };
+  };  
   
 
   const handleOpenPress3 = () => {

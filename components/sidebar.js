@@ -15,6 +15,7 @@ function MyComponent() {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [filteredMenuItems, setFilteredMenuItems] = useState([]);
 
   const handleOpenPress = () => {
     setModalVisible(true);
@@ -222,6 +223,58 @@ function MyComponent() {
     retrieveData();
   }, []);
 
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found");
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const paystackDetails = response?.data?.PaystackDetail;
+
+        if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
+          const lastService = paystackDetails[paystackDetails.length - 1]?.service;
+
+          // Filter menu items based on the service
+          let filteredItems = [];
+          switch (lastService) {
+            case "Career Support":
+              filteredItems = menuItems.filter(item =>
+                ["Skills Analysis", "Growth Plan", "Hubs"].includes(item.label)
+              );
+              break;
+            case "Knowledge Backup":
+              filteredItems = menuItems.filter(item =>
+                ["Hubs", "Support Request"].includes(item.label)
+              );
+              break;
+            case "Knowledge Backup + Career Support":
+              filteredItems = menuItems; // Show everything
+              break;
+            default:
+              filteredItems = []; // Show nothing if no valid service is found
+          }
+
+          setFilteredMenuItems(filteredItems);
+        } else {
+          console.warn("No payment details found");
+        }
+      } catch (error) {
+        console.error("Error fetching payment details:", error.response?.data || error.message);
+      }
+    };
+
+    fetchPaymentDetails();
+  }, [apiUrl]);
+  
   const { t } = useTranslation()
 
   useEffect(() => {
