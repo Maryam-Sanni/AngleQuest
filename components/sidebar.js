@@ -122,12 +122,12 @@ function MyComponent() {
           switch (lastService) {
             case "Career Support":
               filteredItems = menuItems.filter(item =>
-                ["Skills Analysis", "Growth Plan", "Hubs"].includes(item.label)
+                ["Home", "Skills Analysis", "Growth Plan", "Hubs"].includes(item.label)
               );
               break;
             case "Knowledge Backup":
               filteredItems = menuItems.filter(item =>
-                ["Hubs", "Support Request"].includes(item.label)
+                ["Home", "Hubs", "Support Request"].includes(item.label)
               );
               break;
             case "Knowledge Backup + Career Support":
@@ -160,7 +160,7 @@ function MyComponent() {
         case "Growth Plan": return ['/growth-plan-new', '/growth-plan-sessions', '/expert-roadmap'].includes(currentPath);
         case "Interview": return ['/interview-new', '/interview-sessions'].includes(currentPath);
         case "Scenario Project": return currentPath === '/project';
-        case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result', '/expert-analysis', '/ai-analysis'].includes(currentPath);
+        case "Skills Analysis": return ['/skill-analysis-sessions', '/ai-result', '/expert-analysis', '/ai-analysis', '/skill-analysis-new'].includes(currentPath);
         case "Hubs": return ['/coaching-hub-new', '/coaching-hub-sessions'].includes(currentPath);
         case "Performance": return currentPath === '/performance';
         case "Chats": return currentPath === '/chat';
