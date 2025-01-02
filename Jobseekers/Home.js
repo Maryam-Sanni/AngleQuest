@@ -138,14 +138,14 @@ const HomePage = () => {
           },
         });
 
-        // Check if payment_method is null
-        const paymentMethod = response?.data?.PaystackDetail?.[0]?.payment_method;
+        // Check if PaystackDetail is empty or payment_method is null
+        const paystackDetails = response?.data?.PaystackDetail;
+        const paymentMethod = paystackDetails?.[0]?.payment_method;
 
-        // Show modal only if payment_method is null
-        if (paymentMethod === null) {
-          setModalVisible2(true);
+        if (!paystackDetails || paystackDetails.length === 0 || paymentMethod === null) {
+          setModalVisible2(true); // Show modal if empty or payment_method is null
         } else {
-          setModalVisible2(false);
+          setModalVisible2(false); // Hide modal if there is a valid payment method
         }
       } catch (error) {
         console.error('Error fetching payment details:', error);
@@ -153,7 +153,7 @@ const HomePage = () => {
     };
 
     checkPaymentMethod();
-  }, []); // Empty dependency array, this runs once on page load
+  }, []);
 
 
   useEffect(() => {
