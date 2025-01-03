@@ -131,17 +131,17 @@ const HomePage = () => {
           console.error("Token not found in AsyncStorage");
           return;
         }
-  
+
         // Fetch payment details from the API
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         // Extract PaystackDetail object from the response
         const paystackDetails = response?.data?.PaystackDetail;
-  
+
         if (paystackDetails) {
           // Check the payment method
           if (paystackDetails.payment_method === "Done") {
@@ -154,15 +154,15 @@ const HomePage = () => {
           setModalVisible2(true); // Show the modal if no payment details are found
         }
       } catch (error) {
-        console.error("Error fetching payment details: ", error);
+        console.error("Error fetching payment details:", error.response?.data || error.message);
         setModalVisible2(true); // Show the modal in case of an error
       }
     };
-  
+
     // Call the function immediately
     checkLastPaymentMethod();
   }, [apiUrl, setModalVisible2]); // Dependencies
-  
+
 
 
   useEffect(() => {
@@ -217,41 +217,42 @@ const HomePage = () => {
     setModalVisible2(true);
   };
 
-  const handleCloseModal2 = async () => {
-    const token = await AsyncStorage.getItem("token"); // Get token from AsyncStorage
-    if (!token) {
-      console.error("Token not found");
-      return;
-    }
-  
-    try {
-      // Fetch payment details from the API
-      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      // Get the PaystackDetail array
-      const paystackDetails = response?.data?.PaystackDetail;
-  
-      if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
-        // Use the last payment method
-        const lastPaymentMethod = paystackDetails[paystackDetails.length - 1]?.payment_method;
-  
-        if (lastPaymentMethod === "Done") {
-          // Allow closing the modal only if the last payment method is "Done"
-          setModalVisible2(false);
-        } else {
-          console.log("Cannot close modal. Payment method is not 'Done'.");
-        }
-      } else {
-        console.warn("No payment details found");
-      }
-    } catch (error) {
-      console.error("Error fetching payment details:", error.response?.data || error.message);
-    }
-  };  
+   const handleCloseModal2 = async () => {
+     const token = await AsyncStorage.getItem("token"); // Get token from AsyncStorage
+     if (!token) {
+       console.error("Token not found");
+       return;
+     }
+
+     try {
+       // Fetch payment details from the API
+       const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+         headers: {
+           Authorization: `Bearer ${token}`,
+         },
+       });
+
+       // Get the PaystackDetail object
+       const paystackDetails = response?.data?.PaystackDetail;
+
+       if (paystackDetails) {
+         // Check the payment method
+         const paymentMethod = paystackDetails.payment_method;
+
+         if (paymentMethod === "Done") {
+           // Allow closing the modal only if the payment method is "Done"
+           setModalVisible2(false);
+         } else {
+           console.log("Cannot close modal. Payment method is not 'Done'.");
+         }
+       } else {
+         console.warn("No payment details found");
+       }
+     } catch (error) {
+       console.error("Error fetching payment details:", error.response?.data || error.message);
+     }
+   };
+
   
 
   const handleOpenPress3 = () => {
@@ -888,25 +889,7 @@ const HomePage = () => {
                     </BlurView>
                   </View>
 
-                  <View style={styles.messagecontainer}>
-                    <Image
-                      source={require("../assets/messagebox.png")}
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      placeholder={t("Send Message to your Expert")}
-                      placeholderTextColor="#888"
-                      style={styles.input}
-                    />
-                    <TouchableOpacity>
-                      <Image
-                        source={{
-                          uri: "https://img.icons8.com/?size=100&id=94664&format=png&color=000000",
-                        }}
-                        style={styles.icon}
-                      />
-                    </TouchableOpacity>
-                  </View>
+                 
                 </View>
 
                 <View style={styles.whiteBoxesContainer}>
@@ -941,7 +924,7 @@ const HomePage = () => {
                           textDecorationLine: 'underline'
                         }}
                       >
-                      Hubs
+                      Upcoming Hubs
                       </Text>
                        </TouchableOpacity>
                     </View>
@@ -1007,19 +990,7 @@ const HomePage = () => {
                         {t("Suggestion")}
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => sethelpModalVisible(true)}
-                      style={[
-                        styles.touchablecoach,
-                        isHovered14 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered14(true)}
-                      onMouseLeave={() => setIsHovered14(false)}
-                    >
-                      <Text style={styles.touchableTextcoach}>
-                        {t("Get Help")}
-                      </Text>
-                    </TouchableOpacity>
+                   
                   </View>
                 </View>
                

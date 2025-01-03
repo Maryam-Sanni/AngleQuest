@@ -16,7 +16,7 @@ const Settings = ({ onClose }) => {
       };
 
       const goToResetPassword = () => {
-        navigate('/reset-password');
+        navigate('/change-password');
         onClose();
       };
 
@@ -60,23 +60,6 @@ const Settings = ({ onClose }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-                onPress={goToNotificationSettings}
-                style={styles.accountSettings}
-                onMouseEnter={() => setHoveredSection('notificationSettings')} 
-                onMouseLeave={() => setHoveredSection(null)}
-            >
-                <View style={styles.accountSettingsContent}>
-                    <Image
-                        source={{ uri: 'https://img.icons8.com/?size=100&id=82754&format=png&color=000000' }}
-                        style={[styles.icon, hoveredSection === 'notificationSettings' && { tintColor: 'green' }]} // Apply green color on hover
-                    />
-                    <Text style={[styles.accountSettingsText, hoveredSection === 'notificationSettings' && { color: 'green' }]}>
-                        {t("Notification Settings")}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
                 onPress={goToResetPassword}
                 style={styles.accountSettings}
                 onMouseEnter={() => setHoveredSection('resetPassword')} 
@@ -88,7 +71,7 @@ const Settings = ({ onClose }) => {
                         style={[styles.icon, hoveredSection === 'resetPassword' && { tintColor: 'green' }]} // Apply green color on hover
                     />
                     <Text style={[styles.accountSettingsText, hoveredSection === 'resetPassword' && { color: 'green' }]}>
-                        {t("Password")}
+                        {t("Reset Password")}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -105,7 +88,7 @@ const Settings = ({ onClose }) => {
                         style={[styles.icon, hoveredSection === 'billingsAndPayment' && { tintColor: 'green' }]} // Apply green color on hover
                     />
                     <Text style={[styles.accountSettingsText, hoveredSection === 'billingsAndPayment' && { color: 'green' }]}>
-                        {t("Earnings & Withdrawal")}
+                        {t("Billings & Payment")}
                     </Text>
                 </View>
             </TouchableOpacity>

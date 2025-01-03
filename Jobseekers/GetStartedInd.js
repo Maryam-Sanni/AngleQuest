@@ -105,136 +105,139 @@ function AngleQuestPage({ onClose }) {
       setIsChecked(!isChecked);
     };
     
-    const handleNext2 = async () => {
-      // Ensure the user has agreed to the terms before proceeding
-      if (!isChecked) {
-        alert("Please agree to the terms and conditions before proceeding.");
+  const handleNext2 = async () => {
+    // Ensure the user has agreed to the terms before proceeding
+    if (!isChecked) {
+      alert("Please agree to the terms and conditions before proceeding.");
+      return;
+    }
+
+    try {
+      // Get the token from AsyncStorage for authorization
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        console.error("Token not found in AsyncStorage");
         return;
       }
-    
-      try {
-        // Get the token from AsyncStorage for authorization
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          console.error("Token not found in AsyncStorage");
-          return;
-        }
-    
-        // Fetch the latest payment details from the API
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-    
-        if (response.data.status === "success" && response.data.PaystackDetail.length > 0) {
-          // Use the last item in the PaystackDetail array (most recently created)
-          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1];
-    
-          // Construct the payload with fetched details
-          const payload = {
-            specialization: details.specialization || "", // Fallback to empty string if not found
-            service: details.service || "", // Fallback to empty string if not found
-            plan: details.plan || "", // Fallback to empty string if not found
-            sla: details.sla || "", // Processed SLA cost (use the fetched SLA)
-            agreement: "Yes", // Set agreement as "Yes"
-            payment_method: "", // Placeholder (you can fill this in if needed)
-            payment_detail: "", // Placeholder (you can fill this in if needed)
-            contact_detail: "", // Placeholder (you can fill this in if needed)
-          };
-    
-          // Make the POST request with the constructed payload
-          const postResponse = await fetch(`${apiUrl}/api/jobseeker/paystack-payment-details`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Add token to Authorization header
-            },
-            body: JSON.stringify(payload),
-          });
-    
-          if (postResponse.ok) {
-            const postData = await postResponse.json();
-            console.log("API Response:", postData);
-            // Move to the next step in the process
-            setCurrentStep(3);
-            setActiveCard("Payment Details");
-          } else {
-            console.error("Failed to save payment details:", postResponse.statusText);
-          }
-        } else {
-          console.error("No Paystack details found or invalid response structure.");
-        }
-      } catch (error) {
-        console.error("Error during API request:", error.response?.data || error.message);
-      }
-    };
 
-    const handleFinish = async () => {
-      setIsLoading(true); // Start the loading state
-  
-      try {
-        // Get the token from AsyncStorage for authorization
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          Alert.alert("Error", "Authorization token not found.");
-          setIsLoading(false);
-          return;
-        }
-  
-        // Fetch the latest payment details from the API
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+      // Fetch the latest payment details from the API
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.status === "success" && response.data.PaystackDetail) {
+        // Extract details from the PaystackDetail object
+        const details = response.data.PaystackDetail;
+
+        // Construct the payload with fetched details
+        const payload = {
+          specialization: details.specialization || "", // Fallback to empty string if not found
+          service: details.service || "", // Fallback to empty string if not found
+          plan: details.plan || "", // Fallback to empty string if not found
+          sla: details.sla || "", // Processed SLA cost (use the fetched SLA)
+          agreement: "Yes", // Set agreement as "Yes"
+          payment_method: details.payment_method || "", // Fallback to empty string if not found
+          payment_detail: details.payment_detail || "", // Fallback to empty string if not found
+          contact_detail: details.contact_detail || "", // Fallback to empty string if not found
+        };
+
+        // Make the POST request with the constructed payload
+        const postResponse = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
+          method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Add token to Authorization header
           },
+          body: JSON.stringify(payload),
         });
-  
-        if (response?.data?.status === "success" && Array.isArray(response.data.PaystackDetail)) {
-          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1]; // Use the most recent details
-  
-          // Construct the payload
-          const payload = {
-            specialization: details.specialization || "",
-            service: details.service || "",
-            plan: details.plan || "",
-            sla: details.sla || "",
-            agreement: details.agreement || "",
-            payment_method: "Done",
-            payment_detail: "",
-            contact_detail: "",
-          };
-  
-          // Post the payment details
-          const postResponse = await axios.post(
-            `${apiUrl}/api/jobseeker/paystack-payment-details`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-  
-          if (postResponse.status === 200) {
-            console.log("Payment details saved successfully:", postResponse.data);
-            setCurrentStep(3); // Proceed to the next step
-            setActiveCard("Payment Details"); // Update UI
-          } else {
-            Alert.alert("Error", "Failed to save payment details.");
-            console.error("API error:", postResponse.statusText);
-          }
+
+        if (postResponse.ok) {
+          const postData = await postResponse.json();
+          console.log("API Response:", postData);
+          // Move to the next step in the process
+          setCurrentStep(3);
+          setActiveCard("Payment Details");
         } else {
-          Alert.alert("Error", "No payment details found or invalid API response.");
-          console.error("API response error:", response.data);
+          console.error("Failed to save payment details:", postResponse.statusText);
         }
-      } catch (error) {
-        Alert.alert("Error", error.response?.data?.message || error.message);
-        console.error("Error during API request:", error.response?.data || error.message);
-      } finally {
-        setIsLoading(false); // End the loading state
-        onClose();
+      } else {
+        console.error("No Paystack details found or invalid response structure.");
       }
-    };
+    } catch (error) {
+      console.error("Error during API request:", error.response?.data || error.message);
+    }
+  };
+
+
+  const handleFinish = async () => {
+    setIsLoading(true); // Start the loading state
+
+    try {
+      // Get the token from AsyncStorage for authorization
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Error", "Authorization token not found.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Fetch the latest payment details from the API
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
+        const details = response.data.PaystackDetail; // Use the PaystackDetail object directly
+
+        // Construct the payload
+        const payload = {
+          specialization: details.specialization || "",
+          service: details.service || "",
+          plan: details.plan || "",
+          sla: details.sla || "",
+          agreement: details.agreement || "Yes",
+          payment_method: "Done", // Set the payment method
+          payment_detail: details.payment_detail || "",
+          contact_detail: details.contact_detail || "",
+        };
+
+        // Post the payment details
+        const postResponse = await axios.put(
+          `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (postResponse.status === 201) {
+          console.log("Payment details saved successfully:", postResponse.data);
+          setCurrentStep(3); // Proceed to the next step
+          setActiveCard("Payment Details"); // Update UI
+        } else {
+          Alert.alert("Error", "Failed to save payment details.");
+          console.error("API error:", postResponse.statusText);
+        }
+      } else {
+        Alert.alert("Error", "No payment details found or invalid API response.");
+        console.error("API response error:", response.data);
+      }
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || error.message);
+      console.error("Error during API request:", error.response?.data || error.message);
+    } finally {
+      setIsLoading(false); // End the loading state
+      onClose();
+      window.location.reload();
+    }
+  };
+
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -306,8 +309,8 @@ function AngleQuestPage({ onClose }) {
       };
   
       // Make the POST request to the API with token authentication
-      const response = await fetch(`${apiUrl}/api/jobseeker/paystack-payment-details`, {
-        method: "POST",
+      const response = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Add token to Authorization header
@@ -337,17 +340,17 @@ function AngleQuestPage({ onClose }) {
           console.error("Token not found in AsyncStorage");
           return;
         }
-  
+
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
-        if (response.data.status === "success" && response.data.PaystackDetail.length > 0) {
-          // Use the last item in the PaystackDetail array (most recently saved data)
-          const details = response.data.PaystackDetail[response.data.PaystackDetail.length - 1];
-  
+
+        if (response.data.status === "success" && response.data.PaystackDetail) {
+          // Use the PaystackDetail object directly
+          const details = response.data.PaystackDetail;
+
           // Update active card and service visibility based on available data
           if (details.specialization) {
             setActiveCard("Subscription Plans");
@@ -364,9 +367,7 @@ function AngleQuestPage({ onClose }) {
             setCurrentStep(3);
             services[3].visible = true; // Enable "Payment Details"
           }
-  
-          // Update services state to reflect visibility changes
-          setServices([...services]);
+          
         } else {
           console.error("No Paystack details found or invalid response structure.");
         }
@@ -374,9 +375,10 @@ function AngleQuestPage({ onClose }) {
         console.error("Error fetching payment details:", error.response?.data || error.message);
       }
     };
-  
+
     fetchData();
   }, []);
+
   
 
   const roles = [

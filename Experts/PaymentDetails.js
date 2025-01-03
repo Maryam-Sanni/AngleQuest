@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 
 const PaymentDetailsForm = () => {
   const [bankName, setBankName] = useState('');
-  const [sortCode, setSortCode] = useState('Not applicable');
+  const [sortCode, setSortCode] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [country, setCountry] = useState('');
@@ -64,13 +64,7 @@ const PaymentDetailsForm = () => {
   
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
-          style={styles.logo}
-        />
-        <Text style={styles.headerText}>Provide withdrawal details</Text>
-      </View>
+       <ScrollView contentContainerStyle={{maxHeight: 500}}>
 
       <Text style={styles.label}>Bank Name</Text>
       <TextInput
@@ -81,7 +75,7 @@ const PaymentDetailsForm = () => {
         placeholderTextColor="grey"
       />
 
-      <Text style={styles.label}>Sort/Swift Code</Text>
+      <Text style={styles.label}>Sort/Swift Code (If applicable)</Text>
       <TextInput
         style={styles.input}
         value={sortCode}
@@ -129,6 +123,7 @@ const PaymentDetailsForm = () => {
         message={alertMessage}
         onConfirm={hideAlert}
       />
+       </ScrollView>
     </View>
   );
 };
@@ -137,6 +132,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: 'white',
+    marginLeft: 150, marginRight: 150,
+    marginTop: 50
   },
   label: {
     fontSize: 16,
@@ -152,16 +149,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   submitButton: {
-    backgroundColor: 'coral',
-    paddingVertical: 15,
-    alignItems: 'center',
+    backgroundColor: '#4caf50',
+    padding: 12,
     borderRadius: 5,
-    marginTop: 20,
-    width: 200,
+    alignItems: 'center',
+    width: 150
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
   },
   header: {
     flexDirection: 'row',

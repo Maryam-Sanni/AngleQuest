@@ -349,7 +349,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
+    <View style={{ flex: 1, backgroundColor: "white", alignItems: 'center'  }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
           <View style={styles.header}>
             <Image
@@ -476,15 +476,14 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   scrollContainer: {
     flexGrow: 1,
     maxHeight: 500
   },
   formContainer: {
-    width: '80%',
-    paddingHorizontal: 5,
+    width: '100%',
   },
   input: {
     height: 40,

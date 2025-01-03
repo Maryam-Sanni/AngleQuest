@@ -46,7 +46,7 @@ import { LinearGradient } from "expo-linear-gradient";
  import OpenModal2 from '../Jobseekers/Pickexpertadv';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+ import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 
 const Levels = ({ val }) => {
@@ -885,6 +885,8 @@ const AIScreen = () => {
     );
   }
 
+  const isDataEmpty = !apiData || !apiData.analysis || !apiData.next_career_stage;
+  
   const getColorForCertification = (index, isSecondColor = false) => {
     const colors = [
       { color1: "#DE7423", color2: "#DD963336" },
@@ -1414,6 +1416,75 @@ const AIScreen = () => {
                           backgroundColor: "white",
                         }}
                       >
+                        
+                          {isDataEmpty ? (
+                            <View
+                              style={{
+                                flex: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                padding: 20,
+                                backgroundColor: "white",
+                              }}
+                            >
+                              {/* Empty Schedule Image */}
+                              <Image
+                                source={EmptyScheduleImage}
+                                style={{
+                                  width: 200,
+                                  height: 200,
+                                  marginBottom: 20,
+                                }}
+                              />
+                              {/* Title */}
+                              <Text
+                                style={{
+                                  fontSize: 24,
+                                  fontWeight: "bold",
+                                  color: "#333",
+                                  marginBottom: 10,
+                                }}
+                              >
+                                No Data Available
+                              </Text>
+                              {/* Explanation */}
+                              <Text
+                                style={{
+                                  fontSize: 16,
+                                  color: "#777",
+                                  textAlign: "center",
+                                  marginBottom: 20,
+                                }}
+                              >
+                                It seems there is no data. You can try again later or check your settings.
+                              </Text>
+                              {/* Create New Button */}
+                              <TouchableOpacity
+                                style={{
+                                  backgroundColor: "green", // Similar to Microsoft DevOps button color
+                                  paddingVertical: 12,
+                                  paddingHorizontal: 30,
+                                  borderRadius: 5,
+                                }}
+                                onPress={() => {
+                                  console.log("Create New clicked!");
+                                  // Action for Create New button (like navigating to a new screen or opening a form)
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 16,
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  Create New
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          ) : (
+                        
 
                         <View
                           style={{
@@ -1475,7 +1546,7 @@ const AIScreen = () => {
                               gap: 6,
                             }}
                           >
-                            {apiData.three_months_step_by_step_guide.certifications_and_courses &&
+                          {apiData.three_months_step_by_step_guide.certifications_and_courses &&
                              apiData.three_months_step_by_step_guide.certifications_and_courses.length > 0 ? (
                                apiData.three_months_step_by_step_guide.certifications_and_courses.map((course, index) => (
                                  <Barz
@@ -1585,7 +1656,7 @@ const AIScreen = () => {
                             </Row>
                           </View>
                         </View>
-
+                         )}
                         <Row
                           style={{
                             justifyContent: "center",

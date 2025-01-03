@@ -147,9 +147,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#206C00",
     marginBottom: 20,
-    fontFamily:"Roboto-Light"
   },
   inputContainer: {
     flexDirection: "row",
@@ -159,10 +157,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#206C00",
     fontWeight: '600',
     marginRight: 10,
-    fontFamily:"Roboto-Light"
   },
   input: {
     flex: 1,
@@ -177,7 +173,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777",
     marginBottom: 10,
-    fontFamily:"Roboto-Light"
   },
   button: {
     backgroundColor: "coral",
@@ -190,16 +185,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 12,
     color: "white",
-    fontFamily:"Roboto-Light"
   },
   sectionTitle: {
     fontSize: 16,
-    color: "#206C00",
     fontWeight: '600',
     marginBottom: 5,
     marginTop: 5,
     marginLeft: 10,
-    fontFamily:"Roboto-Light"
   },
   sectionText: {
     fontSize: 14,
@@ -207,7 +199,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: -20,
     marginLeft: 250,
-    fontFamily:"Roboto-Light"
   },
   verifyButton: {
     backgroundColor: "coral",

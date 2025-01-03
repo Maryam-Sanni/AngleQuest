@@ -50,11 +50,6 @@ const MyComponent = () => {
   const icons = [
     {
       src:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/20bc5485e6416336b3f6bb2335faf463679bfa1e55902e6397d8473a8fb5d15f?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
-      alt: "Icon 1",
-    },
-    {
-      src:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/365ad64d295ea0276c8bffec19bb298c7b622a5a12d7bfcc93b77c7da295c4e5?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
       alt: "Icon 2",
     },
@@ -76,7 +71,7 @@ const MyComponent = () => {
   const handleIconPress = (index) => {
     setSelectedIconIndex(index);
     if (index === 0) {
-    navigate('/experts-notifications'); // Replace 'Notifications' with your actual route name
+      setShowSettingsModal(true);
     } else if (index === 1) {
       setShowSettingsModal(true);
     }

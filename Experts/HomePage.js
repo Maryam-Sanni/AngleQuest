@@ -21,7 +21,7 @@ import OpenModal2 from "../Experts/Updateprofiles";
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
-import CustomModal from "./TourGuide";
+import CustomModal from "../Experts/Updateprofiles";
 import { api_url, AuthContext } from "../Messaging/AuthProvider";
 
 const defaultAvatar = require("../assets/account.png");
@@ -202,7 +202,7 @@ const HomePage = () => {
   };
 
   const goToWithdrawal = () => {
-    navigate("/withdrawal");
+    navigate("/earnings");
   };
 
   const goToInterview = () => {
@@ -380,60 +380,11 @@ const HomePage = () => {
                           fontFamily: "Roboto-Light",
                         }}
                       >
-                        {t("Hub Chats")}
+                        {t("Upcoming Hub Sessions")}
                       </Text>
                     </View>
-      {conversations.length === 0 ? (
-          <TextInput
-            style={styles.chatInput}
-            placeholder="Start a conversation"
-            placeholderTextColor="grey"
-          />
-      ) : (
-                      <FlatList
-                        data={conversations.slice(0, 5)}
-                        keyExtractor={(item) => item?.room?.id.toString()}
-                        renderItem={({ item }) => (
-                          <TouchableOpacity
-                            style={styles.conversation}
-                            onPress={() =>
-                              handleSelectRoom({
-                                id: item?.room?.id,
-                                name: item?.room?.displayName,
-                                image: item?.room?.roomIcon,
-                              })
-                            }
-                          >
-                            <Image
-                              source={{ uri: item?.room?.roomIcon || ico }}
-                              style={styles.avatar}
-                            />
-                            <View style={styles.conversationInfo}>
-                              <Text style={styles.conversationName}>
-                                {item?.room?.displayName}
-                              </Text>
-                              <Text style={styles.conversationLastMessage}>
-                                {item?.room?.lastMessage}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        )}
-                      />
-                    )}
 
-                    <TouchableOpacity
-                      onPress={goToMessages}
-                      style={[
-                        styles.touchablechat,
-                        isHovered1 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered1(true)}
-                      onMouseLeave={() => setIsHovered1(false)}
-                    >
-                      <Text style={styles.touchableText}>
-                        {t("See All Chats")}
-                      </Text>
-                    </TouchableOpacity>
+                  
                   </BlurView>
                 </View>
 
@@ -863,56 +814,7 @@ const HomePage = () => {
                     </BlurView>
                   </View>
 
-                  <View style={styles.whiteBox}>
-                    <BlurView intensity={50} style={styles.blurBackground}>
-                      <View style={{ flexDirection: "row" }}>
-                        <Image
-                          source={require("../assets/QandA.png")}
-                          style={styles.boxicon}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: "#63EC55",
-                            marginTop: 25,
-                            marginLeft: 10,
-                            fontWeight: "bold",
-                            fontFamily: "Roboto-Light",
-                          }}
-                        >
-                          {t("Need Help?")}
-                        </Text>
-                      </View>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: "white",
-                          marginTop: 10,
-                          marginLeft: 35,
-                          marginRight: 20,
-                          marginBottom: 20,
-                          fontFamily: "Roboto-Light",
-                        }}
-                      >
-                        {t(
-                          "Do you have an issue you would like us to assist you with?",
-                        )}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => sethelpModalVisible(true)}
-                        style={[
-                          styles.touchablecoach,
-                          isHovered14 && styles.touchableOpacityHovered,
-                        ]}
-                        onMouseEnter={() => setIsHovered14(true)}
-                        onMouseLeave={() => setIsHovered14(false)}
-                      >
-                        <Text style={styles.touchableTextcoach}>
-                          {t("Get Help")}
-                        </Text>
-                      </TouchableOpacity>
-                    </BlurView>
-                  </View>
+                 
 
                   <View style={styles.whiteBox}>
                     <BlurView intensity={100} style={styles.blurBackground}>

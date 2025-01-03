@@ -112,14 +112,14 @@ function MyComponent() {
           },
         });
 
-        const paystackDetails = response?.data?.PaystackDetail;
+        const paystackDetail = response?.data?.PaystackDetail;
 
-        if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
-          const lastService = paystackDetails[paystackDetails.length - 1]?.service;
+        if (paystackDetail && typeof paystackDetail === "object") {
+          const { service } = paystackDetail;
 
           // Filter menu items based on the service
           let filteredItems = [];
-          switch (lastService) {
+          switch (service) {
             case "Career Support":
               filteredItems = menuItems.filter(item =>
                 ["Home", "Skills Analysis", "Growth Plan", "Hubs"].includes(item.label)
@@ -139,7 +139,7 @@ function MyComponent() {
 
           setFilteredMenuItems(filteredItems);
         } else {
-          console.warn("No payment details found");
+          console.warn("Invalid or no payment details found");
         }
       } catch (error) {
         console.error("Error fetching payment details:", error.response?.data || error.message);
@@ -148,6 +148,7 @@ function MyComponent() {
 
     fetchPaymentDetails();
   }, [apiUrl]);
+
 
   const { t } = useTranslation()
 
@@ -204,7 +205,6 @@ function MyComponent() {
             ))}
             </View>
             {/* Profile Info */}
-            <TouchableOpacity >
               <View style={styles.divider} />
               <View style={styles.profileInfo}>
                 <Image
@@ -215,7 +215,6 @@ function MyComponent() {
                   <Text style={{ fontSize: 14, color: '#666' }}>{first_name} {last_name}</Text>
                 </View>
               </View>
-            </TouchableOpacity>
             <View style={styles.divider} />
             {/* Logout */}
             <TouchableOpacity
