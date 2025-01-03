@@ -154,7 +154,7 @@ const HomePage = () => {
           setModalVisible2(true); // Show the modal if no payment details are found
         }
       } catch (error) {
-        console.error("Error fetching payment details:", error.response?.data || error.message);
+        console.error("Error fetching payment details: ", error);
         setModalVisible2(true); // Show the modal in case of an error
       }
     };
