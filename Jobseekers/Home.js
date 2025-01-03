@@ -125,42 +125,44 @@ const HomePage = () => {
   useEffect(() => {
     const checkLastPaymentMethod = async () => {
       try {
-        const token = localStorage.getItem("token");
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
         if (!token) {
-          console.error("Token not found");
+          console.error("Token not found in AsyncStorage");
           return;
         }
   
+        // Fetch payment details from the API
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
   
+        // Extract PaystackDetail object from the response
         const paystackDetails = response?.data?.PaystackDetail;
   
-        if (Array.isArray(paystackDetails) && paystackDetails.length > 0) {
-          // Sort by 'created_at' to ensure we get the most recent
-          const sortedDetails = [...paystackDetails].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-          const lastPayment = sortedDetails[sortedDetails.length - 1];
-  
-          console.log("Last payment details:", lastPayment);
-  
-          if (lastPayment?.payment_method === "Done") {
-            setModalVisible(false); // Hide modal if payment completed
+        if (paystackDetails) {
+          // Check the payment method
+          if (paystackDetails.payment_method === "Done") {
+            setModalVisible2(false); // Payment is completed; hide the modal
           } else {
-            setModalVisible(true); // Show modal otherwise
+            setModalVisible2(true); // Payment is not completed; show the modal
           }
         } else {
-          console.warn("No payment details found");
-          setModalVisible(true); // Show modal if no payment details
+          console.warn("No payment details found in the response.");
+          setModalVisible2(true); // Show the modal if no payment details are found
         }
       } catch (error) {
-        console.error("Error fetching payment details:", error.response?.data || error.message);
-        setModalVisible(true); // Show modal on error
+        console.error("Error fetching payment details: ", error);
+        setModalVisible2(true); // Show the modal in case of an error
       }
     };
   
+    // Call the function immediately
     checkLastPaymentMethod();
-  }, [apiUrl, setModalVisible]);  
+  }, [apiUrl, setModalVisible2]); // Dependencies
+  
 
 
   useEffect(() => {
