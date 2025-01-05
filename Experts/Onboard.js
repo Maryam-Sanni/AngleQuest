@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const onboardingData = [
@@ -12,84 +11,90 @@ const onboardingData = [
   },
   {
     id: '2',
-    title: 'What does AngleQuest do?',
-    description: 'AngleQuest is a comprehensive and dynamic platform designed to connect experts from various fields and industries with individuals or organizations seeking specialized knowledge and assistance. This platform serves as a bridge, enabling experts to provide valuable insights and solutions in several key areas. First, it facilitates support requests, offering a streamlined process for individuals or businesses to seek advice or solutions to specific challenges they may face. Whether it’s technical troubleshooting, strategic guidance, or emotional support, experts on AngleQuest are equipped to respond efficiently and effectively. Second, AngleQuest is a knowledge-sharing hub, fostering a community where experts can exchange ideas, insights, and resources. This enables continuous learning and collaboration, ensuring that users benefit from a vast pool of collective expertise. Third, the platform promotes organizational best practices, allowing experts to share tried-and-tested strategies that can optimize workflows, improve team dynamics, and enhance productivity. This is particularly valuable for organizations aiming to stay competitive in their respective industries. Moreover, AngleQuest includes features for skill analysis, where experts assess individuals or teams competencies and identify areas for improvement. This helps users better understand their strengths and weaknesses, paving the way for targeted development initiatives. In addition to skill analysis, the platform supports growth plans, enabling experts to create tailored development roadmaps. These plans can guide users toward achieving their personal, professional, or organizational goals by focusing on specific milestones and actionable steps. Finally, AngleQuest provides a venue for interview sessions, where experts can conduct mock interviews, offer feedback, and help individuals prepare for career opportunities. This feature is invaluable for job seekers looking to refine their skills and boost their confidence. Beyond these core functionalities, AngleQuest is a versatile ecosystem that adapts to the evolving needs of its users, ensuring that experts and seekers alike can benefit from meaningful interactions and impactful solutions.'
-  },
-  {
-    id: '3',
-    title: 'How can i be productive on AngleQuest?',
-    description: 'Please select all the areas you can contribute to as an expert.',
+    title: 'How can I be productive on AngleQuest?',
+    description: 'AngleQuest serves as a bridge, enabling experts to provide valuable insights and solutions in several key areas. Here are the areas you can contribute to AngleQuest as an expert.',
     options: [
-      'Support Requests',
-      'Knowledge Sharing Hub',
-      'Best Practices',
-      'Skill Analysis',
-      'Growth Plan',
-      'Interview Sessions',
+      {
+        name: 'Support Requests',
+        explanation: 'Provide solutions to specific challenges users face.'
+      },
+      {
+        name: 'Knowledge Sharing Hub',
+        explanation: 'Share insights and resources with the community.'
+      },
+      {
+        name: 'Best Practices',
+        explanation: 'Guide others with tried-and-tested strategies.'
+      },
+      {
+        name: 'Skill Analysis',
+        explanation: 'Assess and identify areas for improvement.'
+      },
+      {
+        name: 'Growth Plan',
+        explanation: 'Develop roadmaps for achieving personal or professional goals.'
+      },
+      {
+        name: 'Interview Sessions',
+        explanation: 'Help individuals prepare for job opportunities.'
+      }
     ]
   }
 ];
 
-const Onboarding = () => {
+const Onboarding = ({ onFinish }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
-  useEffect(() => {
-    // Only set the interval if the current slide is 0 (first slide)
-    if (currentSlide === 0) {
-      const timer = setInterval(() => {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % onboardingData.length);
-      }, 5000);
-
-      // Clear the interval when the component is unmounted or the currentSlide changes
-      return () => clearInterval(timer);
-    }
-  }, [currentSlide]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % onboardingData.length);
+    if (currentSlide === onboardingData.length - 1) {
+      if (onFinish) onFinish(); 
+    } else {
+      setCurrentSlide((prev) => (prev + 1) % onboardingData.length);
+      setSelectedOption(null); // Reset the selected option when moving to the next slide
+    }
   };
 
   const handleBack = () => {
     setCurrentSlide((prev) => (prev - 1 + onboardingData.length) % onboardingData.length);
+    setSelectedOption(null); // Reset the selected option when moving to the previous slide
   };
 
   const handleSelectOption = (option) => {
-    setSelectedOptions((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option]
-    );
+    setSelectedOption(option === selectedOption ? null : option);
   };
 
   const renderSlide = () => {
     const slide = onboardingData[currentSlide];
-    if (slide.id === '3') {
+    if (slide.id === '2') {
       return (
-        <View>
+        <View style={{marginTop: -150}}>
           <Text style={styles.title}>{slide.title}</Text>
           <Text style={styles.description}>{slide.description}</Text>
           <View style={styles.optionsRow}>
             {slide.options.map((item) => (
               <TouchableOpacity
-                key={item}
+                key={item.name}
                 style={[
                   styles.option,
-                  selectedOptions.includes(item) && styles.optionSelected
+                  selectedOption === item && styles.optionSelected
                 ]}
                 onPress={() => handleSelectOption(item)}
               >
                 <Text
                   style={[
                     styles.optionText,
-                    selectedOptions.includes(item) && styles.optionTextSelected
+                    selectedOption === item && styles.optionTextSelected
                   ]}
                 >
-                  {item}
+                  {item.name}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
+          {selectedOption && (
+            <Text style={styles.explanation}>{selectedOption.explanation}</Text>
+          )}
         </View>
       );
     }
@@ -99,20 +104,12 @@ const Onboarding = () => {
         <View>
           <Text style={styles.title}>{slide.title}</Text>
           <Text style={styles.description}>{slide.description}</Text>
-          <Image 
-            source={slide.image}
-            style={styles.image}
-          />
+          <Image source={slide.image} style={styles.image} />
         </View>
       );
     }
 
-    return (
-      <View>
-        <Text style={styles.title}>{slide.title}</Text>
-        <Text style={styles.description}>{slide.description}</Text>
-      </View>
-    );
+    return null;
   };
 
   const renderProgressBar = () => {
@@ -136,15 +133,19 @@ const Onboarding = () => {
       {renderProgressBar()}
       <View style={styles.slideContainer}>{renderSlide()}</View>
       <View style={styles.navigationContainer}>
-        {currentSlide > 0 && (
-          <TouchableOpacity onPress={handleBack} style={styles.buttonback}>
-            <MaterialIcons name="arrow-back" size={16} color="white" /> <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
-        )}
+        <View style={styles.buttonPlaceholder}>
+          {currentSlide > 0 && (
+            <TouchableOpacity onPress={handleBack} style={styles.buttonback}>
+              <MaterialIcons name="arrow-back" size={16} color="white" />
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <TouchableOpacity onPress={handleNext} style={styles.button}>
-           <Text style={styles.buttonText2}>
-            {currentSlide === onboardingData.length - 1 ? 'Finish' : 'Continue'}
-          </Text> <MaterialIcons name="arrow-forward" size={16} color="white" />
+          <Text style={styles.buttonText2}>
+            {currentSlide === onboardingData.length - 1 ? 'Next' : 'Continue'}
+          </Text>
+          <MaterialIcons name="arrow-forward" size={16} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -171,7 +172,9 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: 16
+    marginBottom: 16,
+    width: 600,
+    alignSelf: 'center'
   },
   image: {
     width: 250,
@@ -206,6 +209,12 @@ const styles = StyleSheet.create({
     color: '#4caf50',
     fontWeight: 'bold'
   },
+  explanation: {
+    marginTop: 16,
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#555'
+  },
   progressBarContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -225,6 +234,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  buttonPlaceholder: {
+    flex: 1, // Ensures the placeholder takes equal space as the button
+    alignItems: 'flex-start' // Aligns the "Back" button to the left
   },
   button: {
     padding: 12,
@@ -252,4 +265,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Onboarding; 
+export default Onboarding;

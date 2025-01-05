@@ -900,18 +900,7 @@ const HomePage = () => {
                         source={require("../assets/chat.png")}
                         style={styles.boxicon}
                       />
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: "#63EC55",
-                          marginTop: 30,
-                          marginLeft: 10,
-                          fontWeight: "bold",
-                          fontFamily: "Roboto-Light",
-                        }}
-                      >
-                        Chats  |  
-                      </Text>
+                      
                        <TouchableOpacity onPress={goToHubs}>
                       <Text
                         style={{
@@ -921,20 +910,13 @@ const HomePage = () => {
                           marginLeft: 10,
                           fontWeight: "bold",
                           fontFamily: "Roboto-Light",
-                          textDecorationLine: 'underline'
                         }}
                       >
-                      Upcoming Hubs
+                      Upcoming Hub Sessions
                       </Text>
                        </TouchableOpacity>
                     </View>
-      {conversations.length === 0 ? (
-          <TextInput
-            style={styles.chatInput}
-            placeholder="Start a conversation"
-            placeholderTextColor="grey"
-          />
-      ) : (
+     
                     <FlatList
                       data={conversations.slice(0, 4)}
                       keyExtractor={(item) => item?.room?.id.toString()}

@@ -63,12 +63,10 @@ function MyComponent({ onClose }) {
   const combinedValue = `${Array.isArray(available_days) ? available_days.join(', ') : ''}, ${available_times}`;
 
   const specializationsList = [
-    'Business Analysis',
     'SAP FI',
     'SAP MM',
     'SAP SD',
     'SAP PP',
-    'Scrum',
     'Microsoft Dynamics Sales',
     'Microsoft Dynamics Customer Service',
     'Microsoft Dynamics Field Service',
@@ -195,8 +193,6 @@ useEffect(() => {
                                 <Picker.Item label="All Category" value="" />
                                 <Picker.Item label="SAP" value="SAP" />
                                 <Picker.Item label="Microsoft" value="Microsoft" />
-                                <Picker.Item label="Scrum" value="Scrum" />
-                                <Picker.Item label="Business Analysis" value="Business Analysis" />
                               </Picker>
               </View>
             </View>

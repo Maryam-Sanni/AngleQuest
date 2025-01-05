@@ -28,65 +28,115 @@ const TicketsPage = () => {
    const [activeRequests, setActiveRequests] = useState([]); // Requests available for action
    const [acceptedRequests, setAcceptedRequests] = useState([]); // Requests that have been accepted
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
    // Fetch requests from API
-   const fetchRequests = async () => {
-     const apiUrl = process.env.REACT_APP_API_URL; // Your API base URL
-     const url = `${apiUrl}/api/expert/unassigned-support-req`;
- 
-     try {
-       const token = await AsyncStorage.getItem('token');
-       if (!token) throw new Error('No authentication token found');
- 
-       const response = await fetch(url, {
-         method: 'GET',
-         headers: {
-           Authorization: `Bearer ${token}`,
-           'Content-Type': 'application/json',
-         },
-       });
- 
-       const result = await response.json();
- 
-       if (response.ok && result.status === 'success') {
-         const transformedRequests = result.data.map((item) => ({
-           id: item.id,
-           name: item.name || 'NIL', // Adjust based on data structure
-           service: item.title,
-           category: item.specialization,
-           deadline: item.created_at, // Adjust deadline field
-           description: item.description,
-           status: "New Request",
-           deadlineStatus: "On Time State", // Logic for deadline status
-           preference: item.prefmode,
-           attachment: item.attachment,
-         }));
- 
-         setRequests(transformedRequests); // Update requests
-         setActiveRequests(transformedRequests); // Initialize activeRequests with fetched data
-       } else {
-         throw new Error(result.message || 'Failed to fetch requests');
-       }
-     } catch (error) {
-       console.error('Error fetching requests:', error.message);
-     }
-   };
- 
-   // Fetch requests on component mount
-   useEffect(() => {
-     fetchRequests();
-   }, []);
- 
-   // Handle accept logic
-   const handleAccept = (requestId) => {
-     const acceptedRequest = activeRequests.find((request) => request.id === requestId);
-     setAcceptedRequests((prevState) => [...prevState, acceptedRequest]);
-     setActiveRequests((prevState) => prevState.filter((request) => request.id !== requestId));
-   };
- 
-   // Handle decline logic
-   const handleDecline = (requestId) => {
-     setActiveRequests((prevState) => prevState.filter((request) => request.id !== requestId));
-   };
+  const fetchRequests = async () => {
+    const url = `${apiUrl}/api/expert/get-pending-reqs`;
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.status === 'success') {
+        const transformedRequests = result.data.map((item) => ({
+          id: item.id,
+          name: item.name || 'NIL',
+          service: item.title,
+          category: item.specialization,
+          deadline: item.created_at,
+          description: item.description,
+          status: 'New Request',
+          deadlineStatus: 'On Time State',
+          preference: item.prefmode,
+          attachment: item.attachment,
+        }));
+
+        setRequests(transformedRequests);
+        setActiveRequests(transformedRequests);
+      } else {
+        throw new Error(result.message || 'Failed to fetch requests');
+      }
+    } catch (error) {
+      console.error('Error fetching requests:', error.message);
+    }
+  };
+
+  // Handle accept logic
+  const handleAccept = async (requestId) => {
+    const url = `${apiUrl}/api/expert/support-requests/${requestId}`;
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'accepted' }),
+      });
+
+      if (response.ok) {
+        const acceptedRequest = activeRequests.find((request) => request.id === requestId);
+        setAcceptedRequests((prevState) => [...prevState, acceptedRequest]);
+        setActiveRequests((prevState) =>
+          prevState.filter((request) => request.id !== requestId)
+        );
+      } else {
+        const result = await response.json();
+        throw new Error(result.message || 'Failed to update request');
+      }
+    } catch (error) {
+      console.error('Error accepting request:', error.message);
+    }
+  };
+
+  // Handle decline logic
+  const handleDecline = async (requestId) => {
+    const url = `${apiUrl}/api/expert/support-requests/${requestId}`;
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'declined' }),
+      });
+
+      if (response.ok) {
+        setActiveRequests((prevState) =>
+          prevState.filter((request) => request.id !== requestId)
+        );
+      } else {
+        const result = await response.json();
+        throw new Error(result.message || 'Failed to update request');
+      }
+    } catch (error) {
+      console.error('Error declining request:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
  
    // Filter the activeRequests based on selectedCategory
    const filteredRequests = selectedCategory
@@ -158,12 +208,10 @@ const TicketsPage = () => {
                 onValueChange={(value) => setSelectedCategory(value)}
               >
                 <Picker.Item label="All Category" value="" />
-  <Picker.Item label="Business Analysis" value="Business Analysis" />
   <Picker.Item label="SAP FI" value="SAP FI" />
   <Picker.Item label="SAP MM" value="SAP MM" />
   <Picker.Item label="SAP SD" value="SAP SD" />
   <Picker.Item label="SAP PP" value="SAP PP" />
-  <Picker.Item label="Scrum" value="Scrum" />
   <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
   <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
   <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />

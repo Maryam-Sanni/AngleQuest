@@ -77,7 +77,7 @@ function AngleQuestPage({ onClose }) {
     const [expYear, setExpYear] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [useExistingAddress, setUseExistingAddress] = useState(false);
-    const [selectedRole, setSelectedRole] = useState("specialization");
+    const [selectedRole, setSelectedRole] = useState("");
     const [first_name, setFirstName] = useState('');
       const [selectedOption, setSelectedOption] = useState('CreditOrDebitCard');
       const [fullName, setFullName] = useState('');
@@ -104,7 +104,93 @@ function AngleQuestPage({ onClose }) {
      const handleCheckboxToggle = () => {
       setIsChecked(!isChecked);
     };
-    
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data.status === "success" && response.data.PaystackDetail) {
+          // Use the PaystackDetail object directly
+          const details = response.data.PaystackDetail;
+
+          // Set specialization and service details
+          if (details.specialization) {
+            setSelectedRole(details.specialization); // Set the specialization
+          }
+          if (details.plan) {
+            setSelectedPlan(details.plan); // Set the service
+          }
+
+          if (details.agreement === 'Yes') {
+            setIsChecked(true); // Set the agreement to true if details.agreement is "Yes"
+          }
+          
+          // Highlight selected plan
+          if (details.plan) {
+            const selectedPlanId = details.plan === "Monthly" ? "Monthly" : details.plan === "Pay as you go" ? "Pay as you go" : null;
+
+            if (selectedPlanId) {
+              setSelectedPlan({ id: selectedPlanId }); // Set the selected plan by ID
+
+              // Update plan colors based on the selected plan
+              const updatedPlans = plans.map((plan) =>
+                plan.id === selectedPlanId
+                  ? { ...plan, color: "#F3E5F5" } // Highlight selected plan
+                  : { ...plan, color: "#FFFFFF" } // Reset other plans
+              );
+
+              setPlans(updatedPlans); // Update plans state
+            }
+          }
+
+          // Set the active price based on the service
+          if (details.service === "Knowledge Backup") {
+            setActivePrice("monthly");
+          } else if (details.service === "Career Support") {
+            setActivePrice("quarterly");
+          } else if (details.service === "Knowledge Backup + Career Support") {
+            setActivePrice("annually");
+          }
+          
+          // Update active card and service visibility based on available data
+          if (details.specialization) {
+            setActiveCard("Subscription Plans");
+            setCurrentStep(1);
+            services[1].visible = true; // Enable "Subscription Plans"
+          }
+          if (details.plan) {
+            setActiveCard("AngleQuest Agreement");
+            setCurrentStep(2);
+            services[2].visible = true; // Enable "AngleQuest Agreement"
+          }
+          if (details.agreement) {
+            setActiveCard("Payment Details");
+            setCurrentStep(3);
+            services[3].visible = true; // Enable "Payment Details"
+          }
+
+        } else {
+          console.error("No Paystack details found or invalid response structure.");
+        }
+      } catch (error) {
+        console.error("Error fetching payment details:", error.response?.data || error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
   const handleNext2 = async () => {
     // Ensure the user has agreed to the terms before proceeding
     if (!isChecked) {
@@ -138,9 +224,6 @@ function AngleQuestPage({ onClose }) {
           plan: details.plan || "", // Fallback to empty string if not found
           sla: details.sla || "", // Processed SLA cost (use the fetched SLA)
           agreement: "Yes", // Set agreement as "Yes"
-          payment_method: details.payment_method || "", // Fallback to empty string if not found
-          payment_detail: details.payment_detail || "", // Fallback to empty string if not found
-          contact_detail: details.contact_detail || "", // Fallback to empty string if not found
         };
 
         // Make the POST request with the constructed payload
@@ -201,8 +284,6 @@ function AngleQuestPage({ onClose }) {
           sla: details.sla || "",
           agreement: details.agreement || "Yes",
           payment_method: "Done", // Set the payment method
-          payment_detail: details.payment_detail || "",
-          contact_detail: details.contact_detail || "",
         };
 
         // Post the payment details
@@ -238,6 +319,74 @@ function AngleQuestPage({ onClose }) {
     }
   };
 
+  const handlePutContinue = async () => {
+    if (selectedRole) {
+      try {
+        // Save the selected role to AsyncStorage
+        await AsyncStorage.setItem("selectedRole", selectedRole);
+
+        // Get the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+
+        // Fetch the latest payment details from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
+          const details = response.data.PaystackDetail;
+
+          // Construct the payload
+          const payload = {
+            specialization: selectedRole || "",
+            service: details.service || "",
+            plan: details.plan || "",
+            sla: details.sla || "",
+            agreement: details.agreement || "Yes",
+            payment_method: "Done", // Set the payment method
+          };
+
+          // Make the PUT request to edit payment details
+          const putResponse = await axios.put(
+            `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          // Make the POST request to store payment details
+          const postResponse = await axios.post(`${apiUrl}/api/jobseeker/paystack-payment-details`, payload, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // Use token in Authorization header
+            },
+          });
+
+          // Handle the response
+          console.log("API Response:", postResponse.data);
+
+          // Perform additional actions based on API response if needed
+          setCurrentStep(1); // Update step
+          setActiveCard("Subscription Plans"); // Update active card
+        } else {
+          console.error("No Paystack details found or invalid response structure.");
+        }
+      } catch (error) {
+        console.error("Error handling continue action:", error.response?.data || error.message);
+      }
+    } else {
+      console.log("Please select a role first.");
+    }
+  };
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -302,10 +451,6 @@ function AngleQuestPage({ onClose }) {
         service: service,
         plan: planTitle || "", // Fallback to empty if not found
         sla: sla, // Processed SLA cost
-        agreement: "", // Placeholder
-        payment_method: "", // Placeholder
-        payment_detail: "", // Placeholder
-        contact_detail: "", // Placeholder
       };
   
       // Make the POST request to the API with token authentication
@@ -331,55 +476,6 @@ function AngleQuestPage({ onClose }) {
       return false; // Return false in case of any error
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          console.error("Token not found in AsyncStorage");
-          return;
-        }
-
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.data.status === "success" && response.data.PaystackDetail) {
-          // Use the PaystackDetail object directly
-          const details = response.data.PaystackDetail;
-
-          // Update active card and service visibility based on available data
-          if (details.specialization) {
-            setActiveCard("Subscription Plans");
-            setCurrentStep(1);
-            services[1].visible = true; // Enable "Subscription Plans"
-          }
-          if (details.plan) {
-            setActiveCard("AngleQuest Agreement");
-            setCurrentStep(2);
-            services[2].visible = true; // Enable "AngleQuest Agreement"
-          }
-          if (details.agreement) {
-            setActiveCard("Payment Details");
-            setCurrentStep(3);
-            services[3].visible = true; // Enable "Payment Details"
-          }
-          
-        } else {
-          console.error("No Paystack details found or invalid response structure.");
-        }
-      } catch (error) {
-        console.error("Error fetching payment details:", error.response?.data || error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  
 
   const roles = [
     "SAP FI", "SAP MM", "SAP SD", "SAP PP", 
@@ -409,13 +505,6 @@ function AngleQuestPage({ onClose }) {
         // Prepare the payload for the API request
         const payload = {
           specialization: selectedRole,
-          service: "", // Add appropriate value here
-          plan: "", // Add appropriate value here
-          sla: "", // Add appropriate value here
-          agreement: "", // Add appropriate value here
-          payment_method: "", // Add appropriate value here
-          payment_detail: "", // Add appropriate value here
-          contact_detail: "", // Add appropriate value here
         };
   
         // Make the POST request to the API using Axios
@@ -620,7 +709,7 @@ const handlePress = (selectedPlan) => {
   
   const [plans, setPlans] = useState([
     {
-      id: "Knowledge Backup",
+      id: "Monthly",
       title: "Monthly",
       topic: "Cancel anytime with 1 month notice",
       description: {
@@ -647,7 +736,7 @@ const handlePress = (selectedPlan) => {
       color: "#FFFFFF",
     },
     {
-      id: "Growth Plan Support",
+      id: "Pay as you go",
       title: "Pay as you go",
       topic: "Pay per item you want to resolve",
       description: {
@@ -758,7 +847,7 @@ const handlePress = (selectedPlan) => {
             styles.continueButton, 
             !selectedRole && styles.disabledButton
           ]} 
-          onPress={handleContinue} 
+          onPress={selectedRole ? handlePutContinue : handleContinue}
           disabled={!selectedRole} // Disable if no role is selected
         >
           <Text style={styles.continueButtonText}>Continue</Text>

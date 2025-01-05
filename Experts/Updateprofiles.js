@@ -46,6 +46,10 @@ const ProfilePage = ({ onClose }) => {
     setActiveSection("Skill Analysis Guide"); 
   };
 
+  const handleFinishOnboarding = () => {
+    setActiveSection("Personal Information");
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -71,17 +75,7 @@ const ProfilePage = ({ onClose }) => {
         >
           Personal Information
         </Button>
-        <Button
-          mode="text"
-          textColor="#000000"
-          style={[
-            styles.button,
-            activeSection === 'Withdrawal Details' && styles.activeButton,
-          ]}
-          onPress={() => handleSectionClick("Withdrawal Details")}
-        >
-          Withdrawal Details
-        </Button>
+       
         <Button
           mode="text"
           textColor="#000000"
@@ -92,6 +86,17 @@ const ProfilePage = ({ onClose }) => {
           onPress={toggleSidebar}
         >
          Create Guides
+        </Button>
+        <Button
+          mode="text"
+          textColor="#000000"
+          style={[
+            styles.button,
+            activeSection === 'Withdrawal Details' && styles.activeButton,
+          ]}
+          onPress={() => handleSectionClick("Withdrawal Details")}
+        >
+          Withdrawal Details
         </Button>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Text
@@ -177,7 +182,7 @@ const ProfilePage = ({ onClose }) => {
 
           {activeSection === "Welcome Onboard" && (
             <View style={styles.modalContainer}>
-              <OpenModal7 />
+              <OpenModal7 onFinish={handleFinishOnboarding} />
             </View>
           )}
         </View>
