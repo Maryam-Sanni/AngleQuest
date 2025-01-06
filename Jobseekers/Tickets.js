@@ -22,7 +22,8 @@ const SupportRequestPage = () => {
     description: '',
     preferredMode: '',
     deadline: '',
-    videoCallDate: '', // New field for video call date
+    videoCallDate: '', 
+    name: ''
   });
 
   const [savedRole, setSavedRole] = useState(""); // State for saved specialization
@@ -56,10 +57,12 @@ const SupportRequestPage = () => {
         alert('Authorization token not found. Please log in again.');
         return;
       }
-  
+      
+      const name = `${firstName || ''} ${lastName || ''}`.trim();
+      
       // Payload
       const payload = {
-        name: firstName + ' ' + lastName,
+        name,
         specialization: savedRole,
         title: formData.title,
         description: formData.description,

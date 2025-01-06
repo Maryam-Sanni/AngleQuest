@@ -184,7 +184,7 @@ const ProfileUpdate = () => {
         formData.append('image', blob, 'profileImage.jpg');
       }
 
-      formData.append('location', selectedCountry);
+      formData.append('location', String(selectedCountry));
       formData.append('category', specialization);
 
       currentSelectedRoles.forEach((role, index) => {

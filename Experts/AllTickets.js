@@ -5,6 +5,7 @@ import Sidebar from '../components/expertssidebar';
 import OpenModal from '../Experts/TicketsResponse';
 import OpenModal2 from '../Experts/TicketsResponse2';
 import OpenModal3 from '../Experts/TicketsResponse3';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Function to calculate the difference in days
@@ -80,27 +81,26 @@ const TicketsPage = () => {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'accepted' }),
-      });
+      const response = await axios.post(
+        url,
+        { status: 'accepted' },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         const acceptedRequest = activeRequests.find((request) => request.id === requestId);
         setAcceptedRequests((prevState) => [...prevState, acceptedRequest]);
         setActiveRequests((prevState) =>
           prevState.filter((request) => request.id !== requestId)
         );
-      } else {
-        const result = await response.json();
-        throw new Error(result.message || 'Failed to update request');
       }
     } catch (error) {
-      console.error('Error accepting request:', error.message);
+      console.error('Error accepting request:', error.response?.data?.message || error.message);
     }
   };
 
@@ -112,25 +112,24 @@ const TicketsPage = () => {
       const token = await AsyncStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'declined' }),
-      });
+      const response = await axios.post(
+        url,
+        { status: 'declined' },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         setActiveRequests((prevState) =>
           prevState.filter((request) => request.id !== requestId)
         );
-      } else {
-        const result = await response.json();
-        throw new Error(result.message || 'Failed to update request');
       }
     } catch (error) {
-      console.error('Error declining request:', error.message);
+      console.error('Error declining request:', error.response?.data?.message || error.message);
     }
   };
 
