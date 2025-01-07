@@ -52,10 +52,11 @@ const TicketsPage = () => {
       if (response.ok && result.status === 'success') {
         const transformedRequests = result.data.map((item) => ({
           id: item.id,
+          user_id: item.user_id,
           name: item.name || 'NIL',
           service: item.title,
           category: item.specialization,
-          deadline: item.created_at,
+          deadline: item.deadline,
           description: item.description,
           status: 'New Request',
           deadlineStatus: 'On Time State',
@@ -73,24 +74,38 @@ const TicketsPage = () => {
     }
   };
 
-  // Handle accept logic
   const handleAccept = async (requestId) => {
+    const request = activeRequests.find((req) => req.id === requestId);
+    if (!request) {
+      console.error(`Request with ID ${requestId} not found.`);
+      return;
+    }
+
+    const { user_id } = request; // Extract user_id from the request object
     const url = `${apiUrl}/api/expert/support-requests/${requestId}`;
 
     try {
+      // Retrieve token and expert name from AsyncStorage
       const token = await AsyncStorage.getItem('token');
+      const firstName = await AsyncStorage.getItem('first_name');
+      const lastName = await AsyncStorage.getItem('last_name');
+      const expert_name = `${firstName || ''} ${lastName || ''}`.trim();
+
       if (!token) throw new Error('No authentication token found');
 
-      const response = await axios.post(
-        url,
-        { status: 'accepted' },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const payload = {
+        status: 'accepted',
+        user_id, 
+        expert_name,
+        request_id: requestId,
+      };
+
+      const response = await axios.post(url, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (response.status === 200) {
         const acceptedRequest = activeRequests.find((request) => request.id === requestId);
@@ -103,6 +118,7 @@ const TicketsPage = () => {
       console.error('Error accepting request:', error.response?.data?.message || error.message);
     }
   };
+
 
   // Handle decline logic
   const handleDecline = async (requestId) => {

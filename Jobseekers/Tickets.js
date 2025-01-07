@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Picker, Image,
-  ScrollView,
+  ScrollView, Modal
 } from 'react-native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -15,7 +15,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SupportRequestPage = () => {
   const [currentStep, setCurrentStep] = useState('start'); 
+  const [latestRequest, setLatestRequest] = useState(null);
+  const [isAcceptedRequestFetched, setIsAcceptedRequestFetched] = useState(false);
+  const [acceptedRequests, setAcceptedRequests] = useState(null);
    const [assignedContent, setAssignedContent] = useState('waiting');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [textResponse, setTextResponse] = useState('');
   const [formData, setFormData] = useState({
     specialization: '',
     title: '',
@@ -28,6 +33,8 @@ const SupportRequestPage = () => {
 
   const [savedRole, setSavedRole] = useState(""); // State for saved specialization
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   // Fetch saved specialization from AsyncStorage
   useEffect(() => {
     const fetchSavedRole = async () => {
@@ -43,24 +50,112 @@ const SupportRequestPage = () => {
     fetchSavedRole();
   }, []);
 
+  // Fetch accepted requests once when the component mounts
+  useEffect(() => {
+    const fetchAcceptedRequests = async () => {
+      try {
+        // Get the token and support_id from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        const supportId = await AsyncStorage.getItem('support_id');
+
+        if (!token || !supportId) {
+          console.error('Token or Support ID not found in AsyncStorage.');
+          return;
+        }
+
+        // Check if the accepted requests have already been fetched
+        if (acceptedRequests) {
+          return; // Don't fetch again if the requests are already fetched
+        }
+
+        // Make the API call to get accepted requests
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log('API Response:', response.data);
+
+        if (response.data && response.data.status === 'success' && Array.isArray(response.data.data)) {
+          const matchingRequest = response.data.data.find(
+            (request) => request.id.toString() === supportId
+          );
+
+          if (matchingRequest) {
+            setAcceptedRequests(response.data.data); // Store the accepted requests in state
+            setAssignedContent('assigned');
+            setCurrentStep('assigned');
+            setIsAcceptedRequestFetched(true); // Set flag to indicate that accepted request is fetched
+
+            // After successfully fetching accepted request, move to the next step
+            fetchSupportResponses(supportId, token); // Fetch responses for this supportId
+          } else {
+            console.log('No request found matching the stored support ID.');
+          }
+        } else {
+          console.error('Unexpected response format:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching accepted requests:', error);
+      }
+    };
+
+    // Start the fetching process
+    fetchAcceptedRequests();
+  }, [acceptedRequests, setCurrentStep, setAssignedContent]); // The effect will run only once on mount
+
+  const fetchSupportResponses = async (supportId, token) => {
+    try {
+      // Make the API call to get responses for the support request
+      const response = await axios.get(`${apiUrl}/api/jobseeker/view-responses/${supportId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.status === 'failed' && response.data?.message === 'No responses found for this support request') {
+        console.log('No responses found for this support request.');
+        // Proceed to the resolution step as no responses were found
+        setCurrentStep('resolution');
+      } else {
+        // Handle other cases (successful response with data)
+        console.log('Response Data:', response.data);
+        const firstResponse = response.data?.data?.[0];
+        if (firstResponse) {
+          setTextResponse(firstResponse.text_response || 'No text response available');
+        }
+        setCurrentStep('resolution');
+      }
+    } catch (error) {
+      console.error('Error fetching support responses:', error);
+      setCurrentStep('assigned');
+    }
+  };
+
+  // Show or hide the modal
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+  
   const handleSubmit = async () => {
     try {
       // API URL
       const apiUrl = process.env.REACT_APP_API_URL;
-  
-      // Retrieve token from AsyncStorage
+
+      // Retrieve token and user details from AsyncStorage
       const token = await AsyncStorage.getItem('token');
       const firstName = await AsyncStorage.getItem('first_name');
       const lastName = await AsyncStorage.getItem('last_name');
-  
+
       if (!token) {
         alert('Authorization token not found. Please log in again.');
         return;
       }
-      
+
       const name = `${firstName || ''} ${lastName || ''}`.trim();
-      
-      // Payload
+
+      // Payload for the API
       const payload = {
         name,
         specialization: savedRole,
@@ -72,20 +167,33 @@ const SupportRequestPage = () => {
         videoCallDate: formData.videoCallDate || null,
         attachment: '',
       };
-  
+
       // API Request
-      await axios.post(`${apiUrl}/api/jobseeker/support-req`, payload, {
+      const response = await axios.post(`${apiUrl}/api/jobseeker/support-req`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-  
-      // Update UI and proceed to assigned step
-      setCurrentStep('assigned');
-      setTimeout(() => {
-        setAssignedContent('assigned');
-      }, 5000);
+
+      // Log the full response to check the data
+      console.log('Response Data:', response.data);
+
+      // Extract the support ID from the response
+      const supportId = response.data?.data?.id;
+
+      console.log('Support ID:', supportId); // Check the value here
+
+      if (supportId) {
+        // Save the support ID to AsyncStorage
+        await AsyncStorage.setItem('support_id', supportId.toString());
+
+        // Update UI and proceed to the assigned step
+        setCurrentStep('assigned');
+        setAssignedContent('waiting');
+      } else {
+        alert('Support request created, but no ID was returned.');
+      }
     } catch (error) {
       console.error('Error submitting the request:', error);
       alert('Failed to submit the request. Please try again.');
@@ -98,35 +206,86 @@ const SupportRequestPage = () => {
     }
   }, [currentStep, assignedContent]);
   
-  const SupportForm = ({ formData, setFormData }) => {
+      const SupportForm = ({ formData, setFormData }) => {
+        useEffect(() => {
+          const fetchMatchingRequest = async () => {
+            try {
+              // Get the token and support_id from AsyncStorage
+              const token = await AsyncStorage.getItem("token");
+              const supportId = await AsyncStorage.getItem("support_id");
+
+              if (!token || !supportId) {
+                console.error("Token or Support ID not found in AsyncStorage.");
+                return;
+              }
+
+              // Make API call to get accepted requests
+              const response = await axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+
+              // Log the response to check the structure
+              console.log('API Response:', response.data);
+
+              if (response.data && response.data.status === "success" && Array.isArray(response.data.data)) {
+                // Find the request that matches the support_id
+                const matchingRequest = response.data.data.find(
+                  (request) => request.id.toString() === supportId // Ensure both are strings for comparison
+                );
+
+                if (matchingRequest) {
+                  setFormData({
+                    specialization: matchingRequest.specialization || '',
+                    title: matchingRequest.title || '',
+                    description: matchingRequest.description || '',
+                    priority: matchingRequest.priority || '',
+                    preferredMode: matchingRequest.prefmode || '',
+                    videoCallDate: matchingRequest.videoCallDate || '',
+                    deadline: matchingRequest.deadline || '',
+                  });
+                } else {
+                  console.log("No request found matching the stored support ID.");
+                }
+              } else {
+                console.error("Unexpected response format:", response.data);
+              }
+            } catch (error) {
+              console.error("Error fetching the matching request:", error);
+            }
+          };
+
+          fetchMatchingRequest();
+        }, []);
+
     return (
       <View>
         <Text style={styles.label}>Specialization</Text>
         <TextInput
-        style={styles.input}
-        value={savedRole} 
-        editable={false}
-        onChangeText={(text) => setFormData({ ...formData, specialization: text })}
-      />
-  
+          style={styles.input}
+          value={formData.specialization}
+          editable={false}
+        />
+
         <Text style={styles.label}>Title</Text>
         <TextInput
-        style={styles.input}
-        placeholder="Enter title"
-        value={formData.title}
-        onChangeText={(text) => setFormData({ ...formData, title: text })}
-      />
-  
+          style={styles.input}
+          placeholder="Enter title"
+          value={formData.title}
+          onChangeText={(text) => setFormData({ ...formData, title: text })}
+        />
+
         <Text style={styles.label}>Description</Text>
         <TextInput
-        style={[styles.input, styles.textArea]}
-        placeholder="Enter description"
-        multiline
-        numberOfLines={4}
-        value={formData.description}
-        onChangeText={(text) => setFormData({ ...formData, description: text })}
-      />
-  
+          style={[styles.input, styles.textArea]}
+          placeholder="Enter description"
+          multiline
+          numberOfLines={4}
+          value={formData.description}
+          onChangeText={(text) => setFormData({ ...formData, description: text })}
+        />
+
         <Text style={styles.label}>Priority</Text>
         <Picker
           selectedValue={formData.priority}
@@ -137,34 +296,35 @@ const SupportRequestPage = () => {
           <Picker.Item label="Prioritize" value="Prioritize" />
           <Picker.Item label="Can Wait" value="Can Wait" />
         </Picker>
-  
+
         <Text style={styles.label}>Your Preferred Mode of Response</Text>
         <Picker
-        selectedValue={formData.preferredMode}
-        style={styles.input}
-        onValueChange={(value) => {
-          setFormData({ ...formData, preferredMode: value, videoCallDate: '' }); // Reset videoCallDate on change
-        }}
-      >
-        <Picker.Item label="Select Mode" value="" />
-        <Picker.Item label="Text" value="text" />
-        <Picker.Item label="Voice Note" value="voice" />
-        <Picker.Item label="Video Call" value="video" />
-      </Picker>
+          selectedValue={formData.preferredMode}
+          style={styles.input}
+          onValueChange={(value) =>
+            setFormData({ ...formData, preferredMode: value, videoCallDate: '' })
+          }
+        >
+          <Picker.Item label="Select Mode" value="" />
+          <Picker.Item label="Text" value="text" />
+          <Picker.Item label="Voice Note" value="voice" />
+          <Picker.Item label="Video Call" value="video" />
+        </Picker>
 
-      {/* Video Call Date Picker - Only if Video Mode is selected */}
-      {formData.preferredMode === 'video' && (
-        <View>
-          <Text style={styles.label}>Select a Date for the Video Call</Text>
-          <input
-            type="date"
-            style={styles.input}
-            value={formData.videoCallDate}
-            onChange={(event) => setFormData({ ...formData, videoCallDate: event.target.value })}
-          />
-        </View>
-      )}
-  
+        {formData.preferredMode === 'video' && (
+          <View>
+            <Text style={styles.label}>Select a Date for the Video Call</Text>
+            <input
+              type="date"
+              style={styles.input}
+              value={formData.videoCallDate}
+              onChange={(event) =>
+                setFormData({ ...formData, videoCallDate: event.target.value })
+              }
+            />
+          </View>
+        )}
+
         <Text style={styles.label}>
           Deadline (After the time elapses, the expert will not pick your request)
         </Text>
@@ -172,13 +332,14 @@ const SupportRequestPage = () => {
           type="date"
           style={styles.input}
           value={formData.deadline}
-          onChange={(event) => setFormData({ ...formData, deadline: event.target.value })}
+          onChange={(event) =>
+            setFormData({ ...formData, deadline: event.target.value })
+          }
         />
       </View>
     );
   };
-
-  
+ 
   return (
       <View style={{ flex: 1}}>
         <TopBar />
@@ -209,7 +370,81 @@ const SupportRequestPage = () => {
               <View style={styles.step0}>
                         <ScrollView>
                 <Text style={styles.header}>Create Support Request</Text>
-                <SupportForm formData={formData} setFormData={setFormData} />
+                          <View>
+                            <Text style={styles.label}>Specialization</Text>
+                            <TextInput
+                            style={styles.input}
+                            value={savedRole} 
+                            editable={false}
+                            onChangeText={(text) => setFormData({ ...formData, specialization: text })}
+                          />
+
+                            <Text style={styles.label}>Title</Text>
+                            <TextInput
+                            style={styles.input}
+                            placeholder="Enter title"
+                            value={formData.title}
+                            onChangeText={(text) => setFormData({ ...formData, title: text })}
+                          />
+
+                            <Text style={styles.label}>Description</Text>
+                            <TextInput
+                            style={[styles.input, styles.textArea]}
+                            placeholder="Enter description"
+                            multiline
+                            numberOfLines={4}
+                            value={formData.description}
+                            onChangeText={(text) => setFormData({ ...formData, description: text })}
+                          />
+
+                            <Text style={styles.label}>Priority</Text>
+                            <Picker
+                              selectedValue={formData.priority}
+                              style={styles.input}
+                              onValueChange={(value) => setFormData({ ...formData, priority: value })}
+                            >
+                              <Picker.Item label="Select Priority" value="" />
+                              <Picker.Item label="Prioritize" value="Prioritize" />
+                              <Picker.Item label="Can Wait" value="Can Wait" />
+                            </Picker>
+
+                            <Text style={styles.label}>Your Preferred Mode of Response</Text>
+                            <Picker
+                            selectedValue={formData.preferredMode}
+                            style={styles.input}
+                            onValueChange={(value) => {
+                              setFormData({ ...formData, preferredMode: value, videoCallDate: '' }); // Reset videoCallDate on change
+                            }}
+                          >
+                            <Picker.Item label="Select Mode" value="" />
+                            <Picker.Item label="Text" value="text" />
+                            <Picker.Item label="Voice Note" value="voice" />
+                            <Picker.Item label="Video Call" value="video" />
+                          </Picker>
+
+                          {/* Video Call Date Picker - Only if Video Mode is selected */}
+                          {formData.preferredMode === 'video' && (
+                            <View>
+                              <Text style={styles.label}>Select a Date for the Video Call</Text>
+                              <input
+                                type="date"
+                                style={styles.input}
+                                value={formData.videoCallDate}
+                                onChange={(event) => setFormData({ ...formData, videoCallDate: event.target.value })}
+                              />
+                            </View>
+                          )}
+
+                            <Text style={styles.label}>
+                              Deadline (After the time elapses, the expert will not pick your request)
+                            </Text>
+                            <input
+                              type="date"
+                              style={styles.input}
+                              value={formData.deadline}
+                              onChange={(event) => setFormData({ ...formData, deadline: event.target.value })}
+                            />
+                          </View>
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                   <Text style={styles.submitButtonText}>Submit Request</Text>
                 </TouchableOpacity>
@@ -223,10 +458,13 @@ const SupportRequestPage = () => {
         <View style={styles.step}>
           <Text style={styles.header}>Create Support Request</Text>
           <SupportForm formData={formData} setFormData={setFormData} />
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Submit Request</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setCurrentStep('start')} // Navigate to Resolution
+             >
+                  <Text style={{fontSize: 16, textAlign: 'center', marginTop: 20, color: 'green',  textDecorationLine: 'underline'}}>Create New Request</Text>
+           </TouchableOpacity>
         </View>
+          
+       
         {/* Dynamically Update Assigned Content */}
               <View style={styles.step2}>
                 {assignedContent === 'waiting' ? (
@@ -288,14 +526,14 @@ const SupportRequestPage = () => {
                         marginTop: 10,
                       }}
                     >
-                      Maryam Bakhali
+                      Patrick Oche
                     </Text>
                     <Text style={styles.lightText2}>
                       Has accepted your request
                     </Text>
                     <TouchableOpacity onPress={() => setCurrentStep('resolution')} // Navigate to Resolution
                       >
-                           <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20}}>You will not be able to create a new support request until this has been resolved or has passed deadline.</Text>
+                           <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20, color: 'white'}}>You will not be able to create a new support request until this has been resolved or has passed deadline.</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -338,12 +576,12 @@ const SupportRequestPage = () => {
                     alignSelf: 'center'
                   }}
                 />
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Patrick Oche</Text>
                 <Text style={styles.lightText2}>Has been assigned to your request</Text>
                 <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
               </View>
             <View style={styles.step3}>
-              <Text style={styles.header}>Response from Maryam</Text>
+              <Text style={styles.header}>Response from Patrick Oche</Text>
           <Image
               source={{
                 uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
@@ -391,12 +629,12 @@ const SupportRequestPage = () => {
                    marginTop: 5
                  }}
                />
+              <TouchableOpacity onPress={toggleModal}>
                 <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to open</Text>
-
-              <TouchableOpacity onPress={() => setCurrentStep('resolution2')} // Navigate to Resolution
-                >
-                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
               </TouchableOpacity>
+
+                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+          
               <TouchableOpacity style={styles.submitButton}>
                 <Text style={styles.submitButtonText}>Are you satisfied?</Text>
               </TouchableOpacity>
@@ -771,6 +1009,21 @@ const SupportRequestPage = () => {
             </View>
               )}
         </View>
+        <Modal
+          visible={isModalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={toggleModal}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>{textResponse}</Text>
+              <TouchableOpacity onPress={toggleModal}>
+                <Text style={styles.closeButton}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </View>
       </View>
@@ -1029,6 +1282,36 @@ const styles = StyleSheet.create({
       shadowRadius: 3.84,
       elevation: 5,
     },
+  openText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '500',
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '50%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    fontSize: 18,
+    color: 'grey',
+    textDecorationLine: 'underline',
+  },
   emoji: { fontSize: 30 },
   ratingText: { marginLeft: 5, fontSize: 15, fontWeight: "500" },
 });
