@@ -21,6 +21,12 @@ const SupportRequestPage = () => {
    const [assignedContent, setAssignedContent] = useState('waiting');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [textResponse, setTextResponse] = useState('');
+  const [voiceResponse, setVoiceResponse] = useState('');
+  const [videoSession, setVideoSession] = useState('');
+  const [responseType, setResponseType] = useState('');
+  const [responseData, setResponseData] = useState({});
+  const [selectedRating, setSelectedRating] = useState(null); 
+  const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
     specialization: '',
     title: '',
@@ -107,7 +113,6 @@ const SupportRequestPage = () => {
 
   const fetchSupportResponses = async (supportId, token) => {
     try {
-      // Make the API call to get responses for the support request
       const response = await axios.get(`${apiUrl}/api/jobseeker/view-responses/${supportId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -116,16 +121,26 @@ const SupportRequestPage = () => {
 
       if (response.data?.status === 'failed' && response.data?.message === 'No responses found for this support request') {
         console.log('No responses found for this support request.');
-        // Proceed to the resolution step as no responses were found
         setCurrentStep('resolution');
       } else {
-        // Handle other cases (successful response with data)
-        console.log('Response Data:', response.data);
         const firstResponse = response.data?.data?.[0];
         if (firstResponse) {
-          setTextResponse(firstResponse.text_response || 'No text response available');
+          setResponseData(firstResponse);
+
+          if (firstResponse.text_response) {
+            setResponseType('text');
+             setTextResponse(firstResponse.text_response);
+            setCurrentStep('resolution');
+          } else if (firstResponse.voice_response) {
+            setResponseType('voice');
+            setCurrentStep('resolution');
+          } else if (firstResponse.video_session) {
+            setResponseType('video');
+            setCurrentStep('resolution');
+          } else {
+            setCurrentStep('assigned'); // Default to resolution step if no valid response type
+          }
         }
-        setCurrentStep('resolution');
       }
     } catch (error) {
       console.error('Error fetching support responses:', error);
@@ -137,6 +152,189 @@ const SupportRequestPage = () => {
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  const handleRatingPress = (index) => {
+    setSelectedRating(index); // Update the selected rating
+  };
+
+  const sendRating = async () => {
+    if (selectedRating === null) {
+      Alert.alert("Error", "Please select a rating before submitting.");
+      return;
+    }
+
+    const token = await AsyncStorage.getItem("token");
+    const supportId = await AsyncStorage.getItem("support_id");
+
+    if (!token || !supportId) {
+      Alert.alert("Error", "Authentication token or support ID missing.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/jobseeker/rate-response/${supportId}`,
+        { rating: ratings[selectedRating] },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Alert.alert("Success", `Your rating "${ratings[selectedRating]}" has been submitted.`);
+      } else {
+        Alert.alert("Error", "Failed to submit rating.");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      Alert.alert("Error", "An error occurred while submitting your rating.");
+    }
+  };
+  
+  const renderResponse = () => {
+    if (responseType === 'text') {
+      return (
+        <View style={styles.step3}>
+          <Text style={styles.header}>Response from {responseData.expert_name || 'Expert'}</Text>
+          <Image
+            source={{ uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00" }}
+            style={{ width: 35, height: 35, marginTop: 20, marginBottom: 20, alignSelf: 'center' }}
+          />
+          <Image
+            source={{ uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000" }}
+            style={{ width: 90, height: 90, marginBottom: 20, alignSelf: 'center' }}
+          />
+          <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center' }}>
+            <Text style={{ textAlign: 'center', fontSize: 18, fontWeight: '500' }}>Response</Text>
+            <Image
+              source={{ uri: "https://img.icons8.com/?size=100&id=11204&format=png&color=000000" }}
+              style={{ width: 30, height: 30, marginLeft: 5 }}
+            />
+          </View>
+          <Image
+             source={{
+               uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+             }}
+             style={{
+               width: 35,
+               height: 35,
+               alignSelf: 'center',
+               marginTop: 5
+             }}
+           />
+          <TouchableOpacity onPress={toggleModal}>
+            <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to open</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: 16, color: 'white',  marginBottom: 185}}>Your request will be assigned to the first one available</Text>
+          <TouchableOpacity onPress={() => setCurrentStep('review')} style={styles.submitButton}>
+            <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (responseType === 'voice') {
+      return (
+        <View style={styles.step3}>
+          <Text style={styles.header}>Response from {responseData.expert_name || 'Expert'}</Text>
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+          }}
+          style={{
+            width: 35,
+            height: 35,
+            marginTop: 20,
+            marginBottom: 20,
+            alignSelf: 'center'
+          }}
+        />
+        <Image
+          source={{
+            uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+          }}
+          style={{
+            width: 90,
+            height: 90,
+            marginBottom: 20,
+            alignSelf: 'center'
+          }}
+        />
+             <Image
+               source={{
+                 uri: "https://img.icons8.com/?size=100&id=9387&format=png&color=000000",
+               }}
+               style={{
+                 width: 70,
+                 height: 70,
+                 alignSelf: 'center'
+               }}
+             />
+          <Image
+             source={{
+               uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+             }}
+             style={{
+               width: 35,
+               height: 35,
+               alignSelf: 'center',
+               marginTop: 5
+             }}
+           />
+            <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to listen</Text>
+
+          <Text style={{fontSize: 16, color: 'white',  marginBottom: 165}}>Your request will be assigned to the first one available</Text>
+          <TouchableOpacity onPress={() => setCurrentStep('review')}
+             style={styles.submitButton}>
+            <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (responseType === 'video') {
+      return (
+        <View style={styles.step3}>
+            <Text style={styles.header}>Response from {responseData.expert_name || 'Expert'}</Text>
+
+          <Image
+            source={{
+              uri: "https://img.icons8.com/?size=100&id=2L3pGQnCYHCG&format=png&color=000000",
+            }}
+            style={{
+              width: 90,
+              height: 90,
+              marginBottom: 20,
+              marginTop: 10,
+              alignSelf: 'center'
+            }}
+          />
+             <Text style={{fontSize: 18, marginBottom: 20, textAlign: 'center', marginLeft: 10, marginRight: 10}}>Maryam is ready to join you on the call on 22-11-2024 2PM WAT</Text>
+            <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
+              <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Join Meeting</Text>
+                 </TouchableOpacity>
+            <Image
+               source={{
+                 uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
+               }}
+               style={{
+                 width: 35,
+                 height: 35,
+                 alignSelf: 'center',
+                 marginTop: 5
+               }}
+             />
+              <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
+
+            <Text style={{fontSize: 16, color: 'white',  marginBottom: 195}}>Your request will be assigned to the first one available</Text>
+            <TouchableOpacity onPress={() => setCurrentStep('review')}
+               style={styles.submitButton}>
+              <Text style={styles.submitButtonText}>Are you satisfied?</Text>
+            </TouchableOpacity>
+        </View>
+      );
+    }
+    return null;
+  };
+
   
   const handleSubmit = async () => {
     try {
@@ -541,106 +739,71 @@ const SupportRequestPage = () => {
             </View>
           )}
 
-          {/* Resolution Section */}
-          {currentStep === 'resolution' && (
-        <View style={{flexDirection: 'row', maxWidth: '75%'}}>
-          <View style={styles.step}>
-            <Text style={styles.header}>Create Support Request</Text>
-            <SupportForm formData={formData} setFormData={setFormData} />
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit Request</Text>
-            </TouchableOpacity>
-          </View>
-              <View style={styles.step2}>
-                <Text style={styles.header}>Found an expert for you!</Text>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
-                  }}
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: 20,
-                    marginBottom: 20,
-                    alignSelf: 'center'
-                  }}
-                />
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
-                  }}
-                  style={{
-                    width: 90,
-                    height: 90,
-                    marginBottom: 20,
-                    alignSelf: 'center'
-                  }}
-                />
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Patrick Oche</Text>
-                <Text style={styles.lightText2}>Has been assigned to your request</Text>
-                <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+            {/* Resolution Section */}
+            {currentStep === 'resolution' && (
+              <View style={{ flexDirection: 'row', maxWidth: '75%' }}>
+                <View style={styles.step}>
+                  <Text style={styles.header}>Create Support Request</Text>
+                  <SupportForm formData={formData} setFormData={setFormData} />
+                  <TouchableOpacity onPress={() => setCurrentStep('start')}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        marginTop: 20,
+                        color: 'green',
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      Create New Request
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.step2}>
+                  <Text style={styles.header}>Found an expert for you!</Text>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                    }}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      marginTop: 20,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 90,
+                      height: 90,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 20,
+                      fontWeight: '500',
+                      marginTop: 10,
+                    }}
+                  >
+                    Patrick Oche
+                  </Text>
+                  <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                  <Text style={{ fontSize: 16, color: 'white' }}>
+                    Your request will be assigned to the first one available
+                  </Text>
+                </View>
+                {/* Render the response dynamically */}
+                {renderResponse()}
               </View>
-            <View style={styles.step3}>
-              <Text style={styles.header}>Response from Patrick Oche</Text>
-          <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
-              }}
-              style={{
-                width: 35,
-                height: 35,
-                marginTop: 20,
-                marginBottom: 20,
-                alignSelf: 'center'
-              }}
-            />
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
-              }}
-              style={{
-                width: 90,
-                height: 90,
-                marginBottom: 20,
-                alignSelf: 'center'
-              }}
-            />
-               <View style={{flexDirection: 'row', borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
-            <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Response</Text>
-                 <Image
-                   source={{
-                     uri: "https://img.icons8.com/?size=100&id=11204&format=png&color=000000",
-                   }}
-                   style={{
-                     width: 30,
-                     height: 30,
-                     marginLeft: 5,
-                   }}
-                 />
-               </View>
-              <Image
-                 source={{
-                   uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
-                 }}
-                 style={{
-                   width: 35,
-                   height: 35,
-                   alignSelf: 'center',
-                   marginTop: 5
-                 }}
-               />
-              <TouchableOpacity onPress={toggleModal}>
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to open</Text>
-              </TouchableOpacity>
+            )}
 
-                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
-          
-              <TouchableOpacity style={styles.submitButton}>
-                <Text style={styles.submitButtonText}>Are you satisfied?</Text>
-              </TouchableOpacity>
-          </View>
-        </View>
-          )}
 
             {/* Resolution Section */}
               {currentStep === 'resolution2' && (
@@ -729,11 +892,9 @@ const SupportRequestPage = () => {
                    />
                     <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to listen</Text>
 
-                  <TouchableOpacity onPress={() => setCurrentStep('resolution3')} // Navigate to Resolution
-                    >
-                         <Text style={{fontSize: 16, color: 'white',  marginBottom: 90}}>Your request will be assigned to the first one available</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.submitButton}>
+                  <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+                  <TouchableOpacity onPress={() => setCurrentStep('review')}
+                     style={styles.submitButton}>
                     <Text style={styles.submitButtonText}>Are you satisfied?</Text>
                   </TouchableOpacity>
               </View>
@@ -811,11 +972,9 @@ const SupportRequestPage = () => {
                    />
                     <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
 
-                  <TouchableOpacity onPress={() => setCurrentStep('review')} // Navigate to Resolution
-                    >
-                         <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.submitButton}>
+                  <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
+                  <TouchableOpacity onPress={() => setCurrentStep('review')}
+                     style={styles.submitButton}>
                     <Text style={styles.submitButtonText}>Are you satisfied?</Text>
                   </TouchableOpacity>
               </View>
@@ -828,8 +987,18 @@ const SupportRequestPage = () => {
           <View style={styles.step}>
             <Text style={styles.header}>Create Support Request</Text>
             <SupportForm formData={formData} setFormData={setFormData} />
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit Request</Text>
+            <TouchableOpacity onPress={() => setCurrentStep('start')}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  textAlign: 'center',
+                  marginTop: 20,
+                  color: 'green',
+                  textDecorationLine: 'underline',
+                }}
+              >
+                Create New Request
+              </Text>
             </TouchableOpacity>
           </View>
               <View style={styles.step2}>
@@ -857,50 +1026,13 @@ const SupportRequestPage = () => {
                     alignSelf: 'center'
                   }}
                 />
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Patrick Oche</Text>
                 <Text style={styles.lightText2}>Has been assigned to your request</Text>
                 <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
               </View>
-            <View style={styles.step3}>
-              <Text style={styles.header}>Response from Maryam</Text>
-
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=2L3pGQnCYHCG&format=png&color=000000",
-              }}
-              style={{
-                width: 90,
-                height: 90,
-                marginBottom: 20,
-                marginTop: 10,
-                alignSelf: 'center'
-              }}
-            />
-               <Text style={{fontSize: 18, marginBottom: 20, textAlign: 'center', marginLeft: 10, marginRight: 10}}>Maryam is ready to join you on the call on 22-11-2024 2PM WAT</Text>
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 150, alignSelf: 'center'}}>
-                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Join Meeting</Text>
-                   </TouchableOpacity>
-              <Image
-                 source={{
-                   uri: "https://img.icons8.com/?size=100&id=23540&format=png&color=000000",
-                 }}
-                 style={{
-                   width: 35,
-                   height: 35,
-                   alignSelf: 'center',
-                   marginTop: 5
-                 }}
-               />
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500',}}>Click to join</Text>
-
-                     <Text style={{fontSize: 16, color: 'white',  marginBottom: 100}}>Your request will be assigned to the first one available</Text>
-          
-              <TouchableOpacity onPress={() => setCurrentStep('fetch')} style={styles.submitButton}>
-                <Text style={styles.submitButtonText}>Are you satisfied?</Text>
-              </TouchableOpacity>
-          </View>
+            {renderResponse()}
           <View style={styles.step3}>
-              <Text style={styles.header}>Response from Maryam</Text>
+              <Text style={styles.header}>Rate Expert's Response</Text>
 
 
 
@@ -909,24 +1041,35 @@ const SupportRequestPage = () => {
               {["Excellent", "Good", "Satisfactory", "Poor"].map((label, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.ratingOption}
+                  style={[
+                    styles.ratingOption,
+                    selectedRating === index && styles.selectedRating, // Apply style if selected
+                  ]}
+                  onPress={() => handleRatingPress(index)} // Handle press event
                 >
                   <Text style={styles.emoji}>{["😊", "🙂", "😐", "😞"][index]}</Text>
                   <Text style={styles.ratingText}>{label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
+           
             
 
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginBottom: 10}}>
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginBottom: 10}}
+                onPress={() => setCurrentStep('start')} >
                 <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Clear request</Text>
                    </TouchableOpacity>
              
-            <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginTop: 10}}>
+            <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginTop: 10, marginBottom: 140}}>
               <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Recreate the request</Text>
                  </TouchableOpacity>
               
-                     <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={sendRating} // Submit the rating on press
+            >
+              <Text style={styles.submitButtonText}>Send Rating</Text>
+            </TouchableOpacity>
               
           </View>
         </View>
@@ -1017,7 +1160,7 @@ const SupportRequestPage = () => {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>{textResponse}</Text>
+              <Text style={styles.modalText}>{textResponse || "No response available"}</Text>
               <TouchableOpacity onPress={toggleModal}>
                 <Text style={styles.closeButton}>Close</Text>
               </TouchableOpacity>
@@ -1299,7 +1442,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    width: '50%',
+    width: '40%',
     alignItems: 'center',
   },
   modalText: {
@@ -1312,8 +1455,11 @@ const styles = StyleSheet.create({
     color: 'grey',
     textDecorationLine: 'underline',
   },
+  selectedRating: {
+    backgroundColor: 'lightgreen', 
+  },
   emoji: { fontSize: 30 },
-  ratingText: { marginLeft: 5, fontSize: 15, fontWeight: "500" },
+  ratingText: { marginLeft: 5, fontSize: 10, fontWeight: "500" },
 });
 
 export default SupportRequestPage;
