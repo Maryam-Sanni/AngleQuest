@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Picker, Image,
-  ScrollView, Modal
+  ScrollView, Modal, FlatList
 } from 'react-native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -25,6 +25,7 @@ const SupportRequestPage = () => {
   const [videoSession, setVideoSession] = useState('');
   const [responseType, setResponseType] = useState('');
   const [responseData, setResponseData] = useState({});
+  const [jobSeekers, setJobSeekers] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null); 
   const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
@@ -335,6 +336,33 @@ const SupportRequestPage = () => {
     return null;
   };
 
+  useEffect(() => {
+    const fetchJobSeekers = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data.status === 'success') {
+          setJobSeekers(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching job seekers:', error);
+      }
+    };
+
+    fetchJobSeekers();
+  }, []);
+
+  const formatDate = (date) => new Date(date).toLocaleDateString();
   
   const handleSubmit = async () => {
     try {
@@ -565,6 +593,7 @@ const SupportRequestPage = () => {
           <View style={styles.stepsContainer}>
             {/* Start Section */}
             {currentStep === 'start' && (
+        <View style={{width: "24%",}}>
               <View style={styles.step0}>
                         <ScrollView>
                 <Text style={styles.header}>Create Support Request</Text>
@@ -647,7 +676,13 @@ const SupportRequestPage = () => {
                   <Text style={styles.submitButtonText}>Submit Request</Text>
                 </TouchableOpacity>
                 </ScrollView>
-              </View>
+               
+              </View>    
+          <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 20, backgroundColor: 'white', borderColor: '#206C00', marginLeft: '15%'}}  onPress={() => setCurrentStep('all')} 
+            >
+          <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>All Requests</Text>
+             </TouchableOpacity>
+      </View>
             )}
 
           {/* Assigned to Expert Section */}
@@ -794,7 +829,7 @@ const SupportRequestPage = () => {
                   >
                     Patrick Oche
                   </Text>
-                  <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                  <Text style={styles.lightText2}>Has responded to your request</Text>
                   <Text style={{ fontSize: 16, color: 'white' }}>
                     Your request will be assigned to the first one available
                   </Text>
@@ -1027,7 +1062,7 @@ const SupportRequestPage = () => {
                   }}
                 />
                 <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Patrick Oche</Text>
-                <Text style={styles.lightText2}>Has been assigned to your request</Text>
+                <Text style={styles.lightText2}>Has responded to your request</Text>
                 <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
               </View>
             {renderResponse()}
@@ -1075,23 +1110,65 @@ const SupportRequestPage = () => {
         </View>
           )}
 
+            {currentStep === 'all' && (
+         <View style={styles.tableContainer}>
+            <ScrollView>
+              <View style={styles.tableHeader}>
+                <Text style={[styles.headerCell, { marginLeft: 10 }]}>Specialization</Text>
+                <Text style={styles.headerCell}>Title</Text>
+                <Text style={styles.headerCell}>Description</Text>
+                <Text style={styles.headerCell}>Preferred Mode</Text>
+                <Text style={styles.headerCell}>Created At</Text>
+                <Text style={styles.headerCell}>Accepted by</Text>
+                <Text style={styles.headerCell}>Deadline</Text>
+                <Text style={styles.headerCell}> </Text>
+              </View>
+              <View
+                style={{ borderBottomWidth: 1, borderBottomColor: '#ddd', marginTop: 10 }}
+              />
+              <FlatList
+                data={jobSeekers}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.tableRow}>
+                    <Text style={[styles.cell, { marginLeft: 10 }]}>{item.specialization || '-'}</Text>
+                    <Text style={styles.cell}>{item.title || '-'}</Text>
+                    <Text style={styles.cell}>{item.description || '-'}</Text>
+                    <Text style={styles.cell}>{item.prefmode || '-'}</Text>
+                    <Text style={styles.cell}>{formatDate(item.created_at)}</Text>
+                     <Text style={styles.cell}>{item.expert_name || '-'}</Text>
+                    <Text style={styles.cell}>{item.deadline ? formatDate(item.deadline) : '-'}</Text>
+                    <TouchableOpacity onPress={() => setCurrentStep('fetch')} style={styles.cell2}>
+                    <Text style={{color: 'green', textDecorationLine: 'underline'}}>Open</Text>
+                      </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </ScrollView>
+        <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
+          >
+        <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>New Support Request</Text>
+           </TouchableOpacity>
+      </View>
+        )}
+            
             {/* Review Section */}
               {currentStep === 'fetch' && (
-            <View style={{flexDirection: 'column', maxWidth: '100%'}}>
+            <View style={{flexDirection: 'column'}}>
               <View style={{flexDirection: 'row', maxWidth: '100%'}}>
               <View style={styles.smallstep0}>
-                 <Text style={{fontSize: 20, fontWeight: 'bold' }}>SAP FI</Text>
-                 <Text style={{fontSize: 16 }}>Unable to create master data for material posting expense</Text>
-                 <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600' }}>21/11/2024</Text>
+                 <Text style={{fontSize: 16, fontWeight: 'bold' }}>SAP FI</Text>
+                 <Text style={{fontSize: 14 }}>Unable to create master data for material posting expense</Text>
+                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>21/11/2024</Text>
 
-                <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
+                <Text style={{fontSize: 14, color: 'white'}}>Your request will be assigned to the first one available</Text>
                 
               </View>
                   <View style={styles.smallstep}>
                     <View style={{flexDirection: 'row'}}>
                       
 
-                      <Text style={{fontSize: 24, fontWeight: '600', marginTop: 20}}>Maryam Bakhali</Text>
+                      <Text style={{fontSize: 18, fontWeight: '600', marginTop: 20}}>Patrick Oche</Text>
                       <Image
                         source={{
                           uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
@@ -1102,18 +1179,13 @@ const SupportRequestPage = () => {
                           marginLeft: 20,
                         }}
                       />
-                    </View>
-                    
-                    <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one availableYour request will be assigned to the first one available</Text>
-                    
-
-                  
+                    </View>  
               </View>
               <View style={styles.smallstep}>
                 <View style={{flexDirection: 'row'}}>
 
 
-                  <Text style={{fontSize: 24, fontWeight: '600', marginTop: 20}}>Replay Anytime</Text>
+                  <Text style={{fontSize: 16, fontWeight: '600', marginTop: 20}}>Replay Anytime</Text>
                   <Image
                     source={{
                       uri: "https://img.icons8.com/?size=100&id=103566&format=png&color=000000",
@@ -1125,29 +1197,16 @@ const SupportRequestPage = () => {
                     }}
                   />
                 </View>
-                 <Text style={{fontSize: 18, marginTop: 15, fontWeight: '600' }}>Solved 21/11/2024 2PM</Text>
-
-
-
-               
-
+                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>Solved 21/11/2024 2PM</Text>
               </View>
-              <View style={styles.smallstep}>
-                  
-                 <View style={styles.ratingOption}
-                >
-
+              <View style={styles.smallstep}>     
                    <Text style={styles.emoji}>😐</Text>
                    <Text style={styles.ratingText}>Satisfactory</Text>
-                   
-                 </View>
-
-
               </View>
             </View>
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 250, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
                   >
-                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500', color: '#206C00'}}>+ Create Support Request</Text>
+                <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>New Support Request</Text>
                    </TouchableOpacity>
             </View>
               )}
@@ -1177,28 +1236,35 @@ const SupportRequestPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: 'white',
     marginLeft: 210
   },
   progressBar: {
+    marginTop: 20,
+    marginLeft: 20, marginRight: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: '#e0e0e0',
-  },
+      marginBottom: 10,
+      shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2, }, 
+        shadowOpacity: 0.25, 
+        shadowRadius: 3.84,
+         elevation: 5, 
+    },
   progressStep: {
     flex: 1,
     padding: 10,
     alignItems: 'center',
-    backgroundColor: '#c0c0c0',
+    backgroundColor: 'none',
     marginHorizontal: 5,
-    borderRadius: 5,
   },
   activeStep: {
-    backgroundColor: '#3F5637',
+    backgroundColor: 'rgba(128, 128, 128, 0.1)',
+    borderRadius: 30,
   },
   stepText: {
-    color: '#fff',
+    color: 'black',
   },
   content: {
     padding: 20,
@@ -1210,7 +1276,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   step0: {
-    width: "24%", 
     height: 700,
     marginRight: 10,
     marginBottom: 10,
@@ -1302,7 +1367,7 @@ const styles = StyleSheet.create({
   },
   smallstep0: {
     flex: 1,
-    width: "24%", 
+     width: "24%", 
     height: 200,
     justifyContent: 'center',
     marginRight: 10,
@@ -1321,7 +1386,7 @@ const styles = StyleSheet.create({
   },
   smallstep: {
      flex: 1,
-    width: "24%", 
+     width: "24%",  
     justifyContent: 'center',
      alignItems: 'center',
     height: 200,
@@ -1388,6 +1453,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 20
+  },
+  submitButton2: {
+    backgroundColor: 'grey',
+    padding: 10,
+    borderRadius: 5,
+    width: 200,
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 20
   },
   submitButtonText: {
     color: '#fff',
@@ -1460,6 +1534,49 @@ const styles = StyleSheet.create({
   },
   emoji: { fontSize: 30 },
   ratingText: { marginLeft: 5, fontSize: 10, fontWeight: "500" },
+  tableContainer: {
+    flex: 1,
+    marginTop: 16,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 8,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    alignItems: 'center',
+  },
+  highlightRow: {
+    backgroundColor: '#e8f5e9', 
+  },
+  headerCell: {
+    fontWeight: 'bold',
+    textAlign: 'flex-start',
+    flex: 1,
+     maxWidth: "12.7%"
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'flex-start',
+     maxWidth: "12.7%"
+  },
+  cell2: {
+    flex: 1,
+    textAlign: 'flex-start',
+     maxWidth: "12.7%",
+  },
+  button: {
+    borderRightWidth: 1, 
+    borderColor: '#000000',
+    paddingHorizontal: 10,
+  },
 });
 
 export default SupportRequestPage;
