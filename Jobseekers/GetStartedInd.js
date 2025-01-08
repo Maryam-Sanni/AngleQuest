@@ -16,6 +16,8 @@ import {
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
 import OpenModal from './getstarted';
+import { PaystackWebView } from 'react-paystack';
+import { Platform } from 'react-native';
 import axios from 'axios';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -589,9 +591,113 @@ const handlePress = (selectedPlan) => {
   }
 };
 
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const script = document.createElement('script');
+      script.src = "https://js.paystack.co/v1/inline.js";
+      script.async = true;
+      document.head.appendChild(script);
+
+      script.onload = () => {
+        console.log('Paystack SDK loaded');
+      };
+
+      script.onerror = () => {
+        console.error('Failed to load Paystack SDK');
+      };
+    }
+  }, []);
+  
+   const [paymentDetails, setPaymentDetails] = useState(null);
+  const [paystackData, setPaystackData] = useState(null);
+
+  useEffect(() => {
+    // Get the total plan cost from AsyncStorage
+    const getTotalCost = async () => {
+      const cost = await AsyncStorage.getItem('totalPlanCost');
+      if (cost) {
+        setTotalPlanCost(parseFloat(cost)); // Set the value as numeric
+      }
+    };
+    getTotalCost();
+  }, []);
+
+  const paystackPublicKey = "pk_live_969e99d7807594dc826cdced51d3fda3fc33e078"; // Replace with your actual Paystack public key
+
+  // Step 1: Save Card Details and Proceed
+  const saveCardDetails = () => {
+    if (!cardName || !cardNumber || !cvv || !expMonth || !expYear) {
+      Alert.alert('Error', 'Please fill in all credit card details.');
+      return;
+    }
+
+    const cardInfo = {
+      cardName,
+      cardNumber,
+      cvv,
+      expMonth,
+      expYear,
+    };
+
+    // Save the card details to AsyncStorage (or your backend)
+    AsyncStorage.setItem('cardDetails', JSON.stringify(cardInfo));
+    Alert.alert('Success', 'Card details saved. Proceed to billing details.');
+    setSelectedOption('BillingDetails');
+  };
+
+  const initiatePayment = () => {
+    if (!window.PaystackPop) {
+      alert('Paystack is not loaded');
+      return;
+    }
+
+    const paymentData = {
+      amount: totalPlanCost * 1600, 
+      email,
+      reference: `ref_${Math.floor(Math.random() * 1000000)}`, // Generate unique reference
+      fullName, // Add full name
+      phone, // Add phone number
+    };
+
+    const handler = window.PaystackPop.setup({
+      key: paystackPublicKey, // Your Paystack public key
+      email: paymentData.email,
+      amount: paymentData.amount, // in cents (for USD, this should be in cents)
+      reference: paymentData.reference,
+      currency: 'NGN', // Ensure you're specifying USD as the currency
+      metadata: {
+        full_name: paymentData.fullName, // Pass Full Name in metadata
+        phone_number: paymentData.phone, // Pass Phone Number in metadata
+      },
+      onClose: () => alert('Payment window closed'),
+      callback: (response) => {
+        if (response.status === 'success') {
+          alert(`Payment Successful! Transaction reference: ${response.reference}`);
+        } else {
+          alert('Payment failed, please try again.');
+        }
+      },
+    });
+
+    handler.openIframe(); // Open the payment window (iframe)
+  };
 
 
 
+
+  // Payment success callback
+  const handlePaymentSuccess = (transaction) => {
+    console.log('Payment Successful:', transaction);
+    Alert.alert('Payment Successful', `Transaction Reference: ${transaction.reference}`);
+  };
+
+  // Payment failure callback
+  const handlePaymentFailure = (error) => {
+    console.error('Payment Failed:', error);
+    Alert.alert('Payment Failed', 'An error occurred. Please try again.');
+  };
+
+  
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -631,52 +737,61 @@ const handlePress = (selectedPlan) => {
       // Update the selection for the section
       setSelectedOptions((prevState) => {
         const updatedOptions = { ...prevState, [sectionTitle]: option };
-  
+
         // Save the updated selected options to AsyncStorage
         AsyncStorage.setItem('selectedOptions', JSON.stringify(updatedOptions));
-  
+
         return updatedOptions;
       });
-  
-      // Check if the cost is "No additional cost", and set it to 0
-      let costWithoutMonthly = option.cost.replace(' monthly', '').replace('$', '').trim(); // Remove "$" and "monthly"
-      if (costWithoutMonthly === "No additional cost") {
-        costWithoutMonthly = "0"; // Set the cost to 0 if it's "No additional cost"
+
+      // Parse the cost value (handle "No extra cost" and "Extra <amount>")
+      let costWithoutExtras = option.cost.replace('Extra', '').replace('No extra cost', '0').trim();
+      if (costWithoutExtras === "No extra cost") {
+        costWithoutExtras = "0"; // Set cost to "0" if it's "No extra cost"
       }
-  
-      // Save the cost as a numeric value (for example, "40" instead of "$40 monthly")
-      await AsyncStorage.setItem(`${sectionTitle}-cost`, costWithoutMonthly);
-  
-      console.log(`Saved cost for ${sectionTitle}: ${costWithoutMonthly}`);
-  
+
+      // Remove any non-numeric characters to get the pure numeric value
+      const numericCost = parseFloat(costWithoutExtras.replace(/[^\d.-]/g, ''));
+
+      // If parsing failed (i.e., the result is NaN), default to 0
+      if (isNaN(numericCost)) {
+        console.error("Error parsing cost for", sectionTitle, ": Invalid cost format");
+        numericCost = 0;
+      }
+
+      // Save the sanitized numeric cost to AsyncStorage
+      await AsyncStorage.setItem(`${sectionTitle}-cost`, numericCost.toString());
+
+      console.log(`Saved cost for ${sectionTitle}: ${numericCost}`);
+
       // Retrieve the saved selected plan cost from AsyncStorage
-      const selectedPlanCost = await AsyncStorage.getItem('selectedPlan');
-  
-      // Retrieve the option cost from AsyncStorage (already saved)
-      const optionCost = await AsyncStorage.getItem(`${sectionTitle}-cost`);
-  
-      // Ensure both costs are available for calculation
-      if (optionCost && selectedPlanCost) {
-        // Convert the string values to floats for proper calculation
-        const optionCostValue = parseFloat(optionCost);
-        const selectedPlanCostValue = parseFloat(selectedPlanCost);
-  
-        // Calculate the total combined cost
-        const totalCost = optionCostValue + selectedPlanCostValue;
-  
-        // Save the total combined cost to AsyncStorage
-        await AsyncStorage.setItem('totalPlanCost', totalCost.toString());
-  
-        setTotalPlanCost(totalCost);
-  
-        console.log("Total Plan Cost:", totalCost);
-      } else {
-        console.error("Option cost or selected plan cost not found in AsyncStorage.");
+      let selectedPlanCost = await AsyncStorage.getItem('selectedPlan') || "0";
+      let optionCost = await AsyncStorage.getItem(`${sectionTitle}-cost`) || "0";
+
+      // Parse costs into numeric values
+      const selectedPlanCostValue = parseFloat(selectedPlanCost);
+      const optionCostValue = parseFloat(optionCost);
+
+      // Ensure both are valid numbers
+      if (isNaN(selectedPlanCostValue) || isNaN(optionCostValue)) {
+        console.error("Invalid cost values. Selected Plan Cost:", selectedPlanCost, "Option Cost:", optionCost);
+        return;
       }
+
+      // Calculate the total cost
+      const totalCost = optionCostValue + selectedPlanCostValue;
+
+      // Save the total combined cost to AsyncStorage
+      await AsyncStorage.setItem('totalPlanCost', totalCost.toString());
+
+      setTotalPlanCost(totalCost);
+
+      console.log("Total Plan Cost:", totalCost);
     } catch (error) {
       console.error("Error in handleSelect:", error);
     }
   };
+
   
   const handleChooseImage = (event) => {
     const selectedFile = event.target.files[0];
@@ -1285,127 +1400,60 @@ const handlePress = (selectedPlan) => {
                               }}
                               style={{ width: 50, height: 50, alignSelf: 'center' }}
                             />
-                            <Text style={styles.buttonText}>Credit Or Debit Card</Text>
+                            <Text style={styles.buttonText}>Payment Details</Text>
                           </TouchableOpacity>
                 
                           {/* Contact Details Option */}
-                          <TouchableOpacity
-                            style={[styles.button, selectedOption === 'ContactDetails' && styles.selectedButton]}
-                            onPress={() => setSelectedOption('ContactDetails')}
-                          >
-                            {selectedOption === 'ContactDetails' && (
-                              <Image
-                                source={{
-                                  uri: 'https://img.icons8.com/?size=100&id=83205&format=png&color=206C00',
-                                }}
-                                style={{ width: 20, height: 20, alignSelf: 'flex-end', marginTop: -10 }}
-                              />
-                            )}
-                            <Image
-                              source={{
-                                uri: 'https://img.icons8.com/?size=100&id=34105&format=png&color=000000',
-                              }}
-                              style={{ width: 50, height: 50, alignSelf: 'center', marginTop: 10 }}
-                            />
-                            <Text style={styles.buttonText}>Contact Details</Text>
-                          </TouchableOpacity>
+                         
                         </View>
                 
-                        {/* Conditionally Render Form Fields */}
-                        {selectedOption === 'CreditOrDebitCard' ? (
-                          <View style={styles.formcontainer}>
-                            <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="e.g., John Doe"
-                              value={cardName}
-                              onChangeText={setCardName}
-                            />
-                
-                            <Text style={styles.label}>Card Number</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="1234 5678 9012 3456"
-                              value={cardNumber}
-                              onChangeText={setCardNumber}
-                              keyboardType="numeric"
-                            />
-                
-                            <Text style={styles.label}>CVV</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="123"
-                              value={cvv}
-                              onChangeText={setCvv}
-                              keyboardType="numeric"
-                            />
-                
-                            {/* Expiration Date */}
-                            <Text style={styles.label}>Expiration Date</Text>
-                            <View style={styles.row}>
-                              <TextInput
-                                style={[styles.input, styles.smallInput]}
-                                placeholder="MM"
-                                value={expMonth}
-                                onChangeText={setExpMonth}
-                                keyboardType="numeric"
-                              />
-                              <TextInput
-                                style={[styles.input, styles.smallInput]}
-                                placeholder="YY"
-                                value={expYear}
-                                onChangeText={setExpYear}
-                                keyboardType="numeric"
-                              />
-                            </View>
-                          </View>
-                        ) : (
+                       
                           <View style={styles.formcontainer}>
                             <Text style={styles.label}>Full Name</Text>
                             <TextInput
                               style={styles.input}
-                              placeholder="e.g., John Doe"
+                              placeholder="George Karim"
+                               placeholderTextColor="grey"
                               value={fullName}
                               onChangeText={setFullName}
                             />
-                
+
                             <Text style={styles.label}>Phone</Text>
                             <TextInput
                               style={styles.input}
-                              placeholder="e.g., +1 123 456 7890"
+                              placeholder="+1 123 456 7890"
+                               placeholderTextColor="grey"
                               value={phone}
                               onChangeText={setPhone}
                               keyboardType="phone-pad"
                             />
-                
+
                             <Text style={styles.label}>Email</Text>
                             <TextInput
                               style={styles.input}
-                              placeholder="e.g., john.doe@example.com"
+                              placeholder="georgek@example.com"
+                               placeholderTextColor="grey"
                               value={email}
                               onChangeText={setEmail}
                               keyboardType="email-address"
                             />
-                
+
                             <Text style={styles.label}>Billing Address</Text>
                             <TextInput
                               style={styles.input}
-                              placeholder="e.g., 123 Main St, City, State"
+                              placeholder="123 Main St, City, State"
+                              placeholderTextColor="grey"
                               value={billingAddress}
                               onChangeText={setBillingAddress}
                             />
+                            <TouchableOpacity style={styles.buttonblack}
+                              onPress={initiatePayment}>
+                              <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
+                            </TouchableOpacity>
                           </View>
-                        )}
-                
+
                         {/* Checkbox */}
-                        <View style={styles.checkboxContainer}>
-                  <CheckBox
-                    value={useExistingAddress}
-                    onValueChange={setUseExistingAddress}
-                    tintColors={{ true: '#206C00', false: '#DDD' }} // iOS and Android color for true and false states
-                  />
-                  <Text style={styles.checkboxText}>Use the existing address for this payment method</Text>
-                </View>
+                        
                 
                         <View style={styles.checkboxContainer}>
                   <Switch
@@ -1414,13 +1462,9 @@ const handlePress = (selectedPlan) => {
                     trackColor={{ false: '#DDD', true: '#206C00' }} 
                     thumbColor={isRecurring ? '#206C00' : '#FFF'} 
                   />
-                  <Text style={styles.checkboxText}>Make this payment recurring</Text>
+                  <Text style={styles.checkboxText}>Recurring Payment</Text>
                 </View>
-          
-                {/* Submit Button */}
-                <TouchableOpacity style={styles.buttonsave}>
-            <Text style={styles.buttonsaveText}>{t("Save")}</Text>
-          </TouchableOpacity>
+        
             
           <TouchableOpacity
       style={styles.buttondone}
@@ -1526,6 +1570,16 @@ const handlePress = (selectedPlan) => {
                 <OpenModal onClose={handleCloseModal} />
               </View>
             </Modal>
+            {paystackData && (
+              <PaystackWebView
+                paystackKey={paystackPublicKey}
+                amount={paystackData.amount}
+                email={paystackData.email}
+                reference={paystackData.reference}
+                onSuccess={handlePaymentSuccess}
+                onCancel={handlePaymentFailure}
+              />
+            )}
           </ScrollView>
         </View>
     </View>
@@ -1607,7 +1661,7 @@ const styles = StyleSheet.create({
   mainHeading2: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "green",
+    color: "black",
     textAlign: "flex-start",
     marginBottom: 10,
     marginLeft: 10,
@@ -1705,6 +1759,14 @@ borderRadius: 30
     padding: 10,
     width: 100,
     marginLeft: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    elevation: 5,
+  },
+  buttonblack: {
+    backgroundColor: "black",
+    padding: 12,
+    width: 150,
     borderRadius: 5,
     marginTop: 20,
     elevation: 5,
