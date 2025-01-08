@@ -27,6 +27,7 @@ const SupportRequestPage = () => {
   const [responseData, setResponseData] = useState({});
   const [jobSeekers, setJobSeekers] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null); 
+  const [expertName, setExpertName] = useState('');
   const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
     specialization: '',
@@ -90,13 +91,13 @@ const SupportRequestPage = () => {
           );
 
           if (matchingRequest) {
-            setAcceptedRequests(response.data.data); // Store the accepted requests in state
+            setAcceptedRequests(response.data.data);
             setAssignedContent('assigned');
             setCurrentStep('assigned');
-            setIsAcceptedRequestFetched(true); // Set flag to indicate that accepted request is fetched
-
-            // After successfully fetching accepted request, move to the next step
-            fetchSupportResponses(supportId, token); // Fetch responses for this supportId
+            setIsAcceptedRequestFetched(true);
+            const name = matchingRequest.expert_name || 'N/A';
+            setExpertName(name);
+            fetchSupportResponses(supportId, token); 
           } else {
             console.log('No request found matching the stored support ID.');
           }
@@ -645,7 +646,6 @@ const SupportRequestPage = () => {
                           >
                             <Picker.Item label="Select Mode" value="" />
                             <Picker.Item label="Text" value="text" />
-                            <Picker.Item label="Voice Note" value="voice" />
                             <Picker.Item label="Video Call" value="video" />
                           </Picker>
 
@@ -759,7 +759,7 @@ const SupportRequestPage = () => {
                         marginTop: 10,
                       }}
                     >
-                      Patrick Oche
+                      {expertName || 'Expert'}
                     </Text>
                     <Text style={styles.lightText2}>
                       Has accepted your request
@@ -827,7 +827,7 @@ const SupportRequestPage = () => {
                       marginTop: 10,
                     }}
                   >
-                    Patrick Oche
+                     {expertName || 'Expert'}
                   </Text>
                   <Text style={styles.lightText2}>Has responded to your request</Text>
                   <Text style={{ fontSize: 16, color: 'white' }}>
@@ -875,7 +875,7 @@ const SupportRequestPage = () => {
                         alignSelf: 'center'
                       }}
                     />
-                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}> {expertName || 'Expert'}</Text>
                     <Text style={styles.lightText2}>Has been assigned to your request</Text>
                     <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
                   </View>
@@ -971,7 +971,7 @@ const SupportRequestPage = () => {
                         alignSelf: 'center'
                       }}
                     />
-                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Maryam Bakhali</Text>
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>{expertName || 'Expert'}</Text>
                     <Text style={styles.lightText2}>Has been assigned to your request</Text>
                     <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
                   </View>
@@ -1061,13 +1061,13 @@ const SupportRequestPage = () => {
                     alignSelf: 'center'
                   }}
                 />
-                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>Patrick Oche</Text>
+                <Text style={{textAlign: 'center', fontSize: 20, fontWeight: '500', marginTop: 10}}>{expertName || 'Expert'}</Text>
                 <Text style={styles.lightText2}>Has responded to your request</Text>
                 <Text style={{fontSize: 16, color: 'white'}}>Your request will be assigned to the first one available</Text>
               </View>
             {renderResponse()}
           <View style={styles.step3}>
-              <Text style={styles.header}>Rate Expert's Response</Text>
+              <Text style={styles.header}>Rate {expertName || 'Expert'}'s Response</Text>
 
 
 

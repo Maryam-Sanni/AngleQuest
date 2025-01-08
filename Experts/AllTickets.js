@@ -30,8 +30,8 @@ const TicketsPage = () => {
    const [acceptedRequests, setAcceptedRequests] = useState([]); // Requests that have been accepted
 
    const apiUrl = process.env.REACT_APP_API_URL;
-  
-   // Fetch requests from API
+
+  // Fetch requests from API
   const fetchRequests = async () => {
     const url = `${apiUrl}/api/expert/get-pending-reqs`;
 
@@ -74,6 +74,47 @@ const TicketsPage = () => {
     }
   };
 
+  const fetchAcceptedRequests = async () => {
+    const url = `${apiUrl}/api/expert/get-expert-accepted-reqs`;
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.status === 'success') {
+        const transformedRequests = result.data.map((item) => ({
+          id: item.id,
+          user_id: item.user_id,
+          name: item.name || 'NIL',
+          service: item.title,
+          category: item.specialization,
+          deadline: item.deadline,
+          description: item.description,
+          status: 'New Request',
+          deadlineStatus: 'On Time State',
+          preference: item.prefmode,
+          attachment: item.attachment,
+        }));
+        
+        setAcceptedRequests(transformedRequests);
+      } else {
+        throw new Error(result.message || 'Failed to fetch requests');
+      }
+    } catch (error) {
+      console.error('Error fetching requests:', error.message);
+    }
+  };
+  
   const handleAccept = async (requestId) => {
     const request = activeRequests.find((req) => req.id === requestId);
     if (!request) {
@@ -151,7 +192,9 @@ const TicketsPage = () => {
 
   useEffect(() => {
     fetchRequests();
+    fetchAcceptedRequests();
   }, []);
+
  
    // Filter the activeRequests based on selectedCategory
    const filteredRequests = selectedCategory
@@ -168,7 +211,7 @@ const TicketsPage = () => {
       case 'video':
         return '#B6D0E2';
       default:
-        return '#FFFFFF';
+        return '#B6D0E2';
     }
   };
   
@@ -241,13 +284,13 @@ const TicketsPage = () => {
                 <Text style={styles.stepText}>New Request</Text>
               </View>
                <View style={styles.progressStep}>
-                <Text style={styles.stepText}>To do</Text>
+                <Text style={styles.stepText}>* To do</Text>
               </View>
                <View style={styles.progressStep}>
-                <Text style={styles.stepText}>Status</Text>
+                <Text style={styles.stepText}>* To do status</Text>
               </View>
                <View style={styles.progressStep}>
-                <Text style={styles.stepText}>Rating</Text>
+                <Text style={styles.stepText}>Ratings</Text>
               </View>
             </View>
             <ScrollView contentContainerStyle={styles.ticketContainer}>
@@ -444,7 +487,7 @@ right: 10
                             <View style={styles.smallstep1}>
                               <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontSize: 20, color: 'black', fontWeight: '600' }}>
-                                  On Time State
+                                  On Time
                                 </Text>
                                 <Image
                                   source={{
@@ -532,7 +575,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     marginLeft: 200,
-    backgroundColor: '#F5F5F5'
+    backgroundColor: 'white'
   },
   picker: {
     height: 50,
@@ -606,7 +649,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   borderWidth: 1,
     borderColor: 'green',
-    backgroundColor: "white",
+    backgroundColor: "#F5F5F5",
     padding: 20,
   borderRadius: 10,
   shadowColor: "#000",
@@ -625,7 +668,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
       borderWidth: 1,
         borderColor: 'green',
-        backgroundColor: "white",
+        backgroundColor: "#F5F5F5",
         justifyContent: 'center',
         padding: 20,
       borderRadius: 10,
@@ -643,7 +686,7 @@ const styles = StyleSheet.create({
       marginLeft: 15,
         height: 200,
         marginBottom: 10,
-        backgroundColor: "#F5F5F5",
+        backgroundColor: "white",
         padding: 20,
       },
   container: {
@@ -660,7 +703,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: 'center',
-    backgroundColor: '#206C00',
+    backgroundColor: 'green',
     marginHorizontal: 7,
     borderRadius: 5,
   },
