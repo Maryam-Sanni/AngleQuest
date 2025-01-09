@@ -80,6 +80,7 @@ function AngleQuestPage({ onClose }) {
     const [isRecurring, setIsRecurring] = useState(false);
     const [useExistingAddress, setUseExistingAddress] = useState(false);
     const [selectedRole, setSelectedRole] = useState("");
+  const [backendRole, setBackendRole] = useState("");
     const [first_name, setFirstName] = useState('');
       const [selectedOption, setSelectedOption] = useState('CreditOrDebitCard');
       const [fullName, setFullName] = useState('');
@@ -91,6 +92,8 @@ function AngleQuestPage({ onClose }) {
       const [showMore, setShowMore] = useState(false);
       const [planTitle, setPlanTitle] = useState("");
       const [isLoading, setIsLoading] = useState(false);
+  const [createdAt, setCreatedAt] = useState(null);
+  const [oneMonthLater, setOneMonthLater] = useState(null);
 
       const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -128,7 +131,9 @@ function AngleQuestPage({ onClose }) {
 
           // Set specialization and service details
           if (details.specialization) {
-            setSelectedRole(details.specialization); // Set the specialization
+            setSelectedRole(details.specialization); 
+            setBackendRole(details.specialization); 
+            setShowSetup(true);
           }
           if (details.plan) {
             setSelectedPlan(details.plan); // Set the service
@@ -334,7 +339,7 @@ function AngleQuestPage({ onClose }) {
           return;
         }
 
-        // Fetch the latest payment details from the API
+        // Fetch the latest payment details and created_at from the API
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -343,6 +348,18 @@ function AngleQuestPage({ onClose }) {
 
         if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
           const details = response.data.PaystackDetail;
+          const createdAt = new Date(details.created_at);
+
+          // Calculate the one-month limit
+          const oneMonthLater = new Date(createdAt);
+          oneMonthLater.setMonth(createdAt.getMonth() + 1);
+
+          const now = new Date();
+          if (now < oneMonthLater) {
+            console.log(`You are not allowed to change your specialization until ${oneMonthLater.toDateString()}`);
+            alert(`You are not allowed to change your specialization until ${oneMonthLater.toDateString()}`);
+            return;
+          }
 
           // Construct the payload
           const payload = {
@@ -355,21 +372,9 @@ function AngleQuestPage({ onClose }) {
           };
 
           // Make the PUT request to edit payment details
-          const putResponse = await axios.put(
-            `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          // Make the POST request to store payment details
-          const postResponse = await axios.post(`${apiUrl}/api/jobseeker/paystack-payment-details`, payload, {
+          await axios.put(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, payload, {
             headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Use token in Authorization header
+              Authorization: `Bearer ${token}`,
             },
           });
 
@@ -566,30 +571,37 @@ const saveToAsyncStorage = async (plan) => {
   }
 };
 
-const handlePress = (selectedPlan) => {
-  // Highlight the selected plan
-  const updatedPlans = plans.map((plan) =>
-    plan.id === selectedPlan.id
-      ? { ...plan, color: '#F3E5F5' } // Highlight the selected plan
-      : { ...plan, color: '#FFFFFF' } // Reset other plans
-  );
+  const handlePress = async (selectedPlan) => {
+    try {
+      // Highlight the selected plan
+      const updatedPlans = plans.map((plan) =>
+        plan.id === selectedPlan.id
+          ? { ...plan, color: '#F3E5F5' } // Highlight the selected plan
+          : { ...plan, color: '#FFFFFF' } // Reset other plans
+      );
 
-  setPlans(updatedPlans); // Update state with selected plan
-  setSelectedPlan(selectedPlan); // Set selected plan
-  saveToAsyncStorage(selectedPlan); // Save to AsyncStorage
+      setPlans(updatedPlans); // Update state with selected plan
+      setSelectedPlan(selectedPlan); // Set selected plan
+       saveToAsyncStorage(selectedPlan); // Save to AsyncStorage
+      setPlanTitle(selectedPlan.title); // Set plan title
 
-    // Set the planTitle to the selected plan's title
-    setPlanTitle(selectedPlan.title);  // Updates the planTitle state with the title of the selected plan
-    console.log("Selected Plan Title: ", selectedPlan.title);
+      // Save to AsyncStorage
+      await AsyncStorage.setItem("planTitle", selectedPlan.title);
+      console.log("Selected Plan Title: ", selectedPlan.title);
 
-   // Scroll down within the ScrollView by a specific number of pixels
-   if (scrollViewRef.current) {
-    scrollViewRef.current.scrollTo({
-      y: 700,  // Number of pixels to scroll down
-      animated: true, // Smooth scroll
-    });
-  }
-};
+      // Scroll down within the ScrollView
+      if (scrollViewRef?.current) {
+        scrollViewRef.current.scrollTo({
+          y: 700, // Number of pixels to scroll down
+          animated: true, // Smooth scroll
+        });
+      }
+    } catch (error) {
+      console.error("Error in handlePress:", error);
+    }
+  };
+
+
 
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -652,7 +664,7 @@ const handlePress = (selectedPlan) => {
     }
 
     const paymentData = {
-      amount: totalPlanCost * 1600, 
+      amount: totalPlanCost * 160000, 
       email,
       reference: `ref_${Math.floor(Math.random() * 1000000)}`, // Generate unique reference
       fullName, // Add full name
@@ -792,6 +804,23 @@ const handlePress = (selectedPlan) => {
     }
   };
 
+  useEffect(() => {
+    const fetchPlanTitle = async () => {
+      try {
+        const title = await AsyncStorage.getItem("planTitle"); // Retrieve the title
+        if (title) {
+          setPlanTitle(title); // Set the title in state
+          console.log("Retrieved Plan Title:", title);
+        } else {
+          console.log("No plan title found in AsyncStorage.");
+        }
+      } catch (error) {
+        console.error("Error fetching plan title:", error);
+      }
+    };
+
+    fetchPlanTitle();
+  }, []);
   
   const handleChooseImage = (event) => {
     const selectedFile = event.target.files[0];
@@ -807,7 +836,7 @@ const handlePress = (selectedPlan) => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
+  
   const saveSelectedSupport = async (selectedText) => {
     try {
       await AsyncStorage.setItem('selectedSupport', selectedText);
@@ -962,7 +991,7 @@ const handlePress = (selectedPlan) => {
             styles.continueButton, 
             !selectedRole && styles.disabledButton
           ]} 
-          onPress={selectedRole ? handlePutContinue : handleContinue}
+          onPress={backendRole ? handlePutContinue : handleContinue}
           disabled={!selectedRole} // Disable if no role is selected
         >
           <Text style={styles.continueButtonText}>Continue</Text>
@@ -1170,7 +1199,7 @@ const handlePress = (selectedPlan) => {
 </View>
 <View style={{ marginLeft: 70, marginRight: 70, marginTop: 50 }}>
   {/* Check if selectedPlan?.title is "Monthly" */}
-  {selectedPlan?.title === 'Monthly' &&
+  {planTitle === 'Monthly' &&
     sections
       .filter((section) => {
         // Retain activePrice filtering logic
@@ -1374,9 +1403,19 @@ const handlePress = (selectedPlan) => {
         <View>
             <View style={styles.Paymentheader}>
           <Text style={styles.mainHeading2}>Payment Method</Text>
-          <Text style={styles.subHeading2}>
+              {planTitle === "Pay as you go" ? (
+                <>
+                  <Text style={styles.subHeading2}>
+                    You will not be charged until you create a new session.
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.subHeading2}>
                     This is the primary payment method that ${totalPlanCost} will be charged from.
                   </Text>
+                </>
+              )}
                 </View>
           
                 <View style={{marginLeft: 40, marginRight: 40}}>
@@ -1446,24 +1485,21 @@ const handlePress = (selectedPlan) => {
                               value={billingAddress}
                               onChangeText={setBillingAddress}
                             />
-                            <TouchableOpacity style={styles.buttonblack}
-                              onPress={initiatePayment}>
-                              <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
-                            </TouchableOpacity>
+                            {planTitle === "Pay as you go" ? (
+                              <>
+                                <TouchableOpacity style={styles.buttonblack}>
+                                  <Text style={styles.buttonsaveText}>{t("Save Details")}</Text>
+                                </TouchableOpacity>
+                              </>
+                            ) : (
+                              <>
+                                <TouchableOpacity style={styles.buttonblack} onPress={initiatePayment}>
+                                  <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
+                                </TouchableOpacity>
+                              </>
+                            )}
+                  
                           </View>
-
-                        {/* Checkbox */}
-                        
-                
-                        <View style={styles.checkboxContainer}>
-                  <Switch
-                    value={isRecurring}
-                    onValueChange={(value) => setIsRecurring(value)}
-                    trackColor={{ false: '#DDD', true: '#206C00' }} 
-                    thumbColor={isRecurring ? '#206C00' : '#FFF'} 
-                  />
-                  <Text style={styles.checkboxText}>Recurring Payment</Text>
-                </View>
         
             
           <TouchableOpacity
