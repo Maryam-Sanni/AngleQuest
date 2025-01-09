@@ -663,36 +663,44 @@ const saveToAsyncStorage = async (plan) => {
       return;
     }
 
+ 
+    const dynamicAmount = totalPlanCost * 160000; 
+
     const paymentData = {
-      amount: totalPlanCost * 160000, 
+      amount: dynamicAmount, 
       email,
-      reference: `ref_${Math.floor(Math.random() * 1000000)}`, // Generate unique reference
-      fullName, // Add full name
-      phone, // Add phone number
+      reference: `ref_${Math.floor(Math.random() * 1000000)}`, 
+      fullName, // Full name of the user
+      phone, // Phone number of the user
+      planId: "PLN_oajvfvbidtfy8gy",
     };
 
     const handler = window.PaystackPop.setup({
       key: paystackPublicKey, // Your Paystack public key
       email: paymentData.email,
-      amount: paymentData.amount, // in cents (for USD, this should be in cents)
+      amount: paymentData.amount, // Dynamic amount in Kobo
       reference: paymentData.reference,
-      currency: 'NGN', // Ensure you're specifying USD as the currency
+      currency: 'NGN', // Currency (NGN)
       metadata: {
         full_name: paymentData.fullName, // Pass Full Name in metadata
         phone_number: paymentData.phone, // Pass Phone Number in metadata
+        plan_id: paymentData.planId, // Pass the static plan ID from Paystack
       },
       onClose: () => alert('Payment window closed'),
       callback: (response) => {
         if (response.status === 'success') {
           alert(`Payment Successful! Transaction reference: ${response.reference}`);
+
+          // Handle post-payment success logic (e.g., access to services)
         } else {
           alert('Payment failed, please try again.');
         }
       },
     });
 
-    handler.openIframe(); // Open the payment window (iframe)
+    handler.openIframe(); // Open Paystack payment modal (iframe)
   };
+
 
 
 
@@ -1447,59 +1455,109 @@ const saveToAsyncStorage = async (plan) => {
                         </View>
                 
                        
-                          <View style={styles.formcontainer}>
-                            <Text style={styles.label}>Full Name</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="George Karim"
-                               placeholderTextColor="grey"
-                              value={fullName}
-                              onChangeText={setFullName}
-                            />
-
-                            <Text style={styles.label}>Phone</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="+1 123 456 7890"
-                               placeholderTextColor="grey"
-                              value={phone}
-                              onChangeText={setPhone}
-                              keyboardType="phone-pad"
-                            />
-
-                            <Text style={styles.label}>Email</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="georgek@example.com"
-                               placeholderTextColor="grey"
-                              value={email}
-                              onChangeText={setEmail}
-                              keyboardType="email-address"
-                            />
-
-                            <Text style={styles.label}>Billing Address</Text>
-                            <TextInput
-                              style={styles.input}
-                              placeholder="123 Main St, City, State"
-                              placeholderTextColor="grey"
-                              value={billingAddress}
-                              onChangeText={setBillingAddress}
-                            />
                             {planTitle === "Pay as you go" ? (
-                              <>
-                                <TouchableOpacity style={styles.buttonblack}>
-                                  <Text style={styles.buttonsaveText}>{t("Save Details")}</Text>
+                              <View style={styles.formcontainer}>
+                                <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="George Karim"
+                                   placeholderTextColor="grey"
+                                  value={cardName}
+                                  onChangeText={setCardName}
+                                />
+
+                                <Text style={styles.label}>Card Number</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="1234 5678 9012 3456"
+                                   placeholderTextColor="grey"
+                                  value={cardNumber}
+                                  onChangeText={setCardNumber}
+                                  keyboardType="numeric"
+                                />
+
+                                <Text style={styles.label}>CVV</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="123"
+                                   placeholderTextColor="grey"
+                                  value={cvv}
+                                  onChangeText={setCvv}
+                                  keyboardType="numeric"
+                                />
+
+                                {/* Expiration Date */}
+                                <Text style={styles.label}>Expiration Date</Text>
+                                <View style={styles.row}>
+                                  <TextInput
+                                    style={[styles.input, styles.smallInput]}
+                                    placeholder="MM"
+                                     placeholderTextColor="grey"
+                                    value={expMonth}
+                                    onChangeText={setExpMonth}
+                                    keyboardType="numeric"
+                                  />
+                                  <TextInput
+                                    style={[styles.input, styles.smallInput]}
+                                    placeholder="YYYY"
+                                     placeholderTextColor="grey"
+                                    value={expYear}
+                                    onChangeText={setExpYear}
+                                    keyboardType="numeric"
+                                  />
+                                </View>
+                                <TouchableOpacity style={styles.buttonblack}
+                                  onPress={saveCardDetails}>
+                                  <Text style={styles.buttonsaveText}>{t("Save Card Details")}</Text>
                                 </TouchableOpacity>
-                              </>
+                              </View>
                             ) : (
-                              <>
-                                <TouchableOpacity style={styles.buttonblack} onPress={initiatePayment}>
+                              <View style={styles.formcontainer}>
+                                <Text style={styles.label}>Full Name</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="George Karim"
+                                   placeholderTextColor="grey"
+                                  value={fullName}
+                                  onChangeText={setFullName}
+                                />
+
+                                <Text style={styles.label}>Phone</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="+1 123 456 7890"
+                                   placeholderTextColor="grey"
+                                  value={phone}
+                                  onChangeText={setPhone}
+                                  keyboardType="phone-pad"
+                                />
+
+                                <Text style={styles.label}>Email</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="georgek@example.com"
+                                   placeholderTextColor="grey"
+                                  value={email}
+                                  onChangeText={setEmail}
+                                  keyboardType="email-address"
+                                />
+
+                                <Text style={styles.label}>Billing Address</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  placeholder="123 Main St, City, State"
+                                  placeholderTextColor="grey"
+                                  value={billingAddress}
+                                  onChangeText={setBillingAddress}
+                                />
+                                <TouchableOpacity style={styles.buttonblack}
+                                  onPress={initiatePayment}>
                                   <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
                                 </TouchableOpacity>
-                              </>
+                              </View>
                             )}
                   
-                          </View>
+                      
         
             
           <TouchableOpacity
