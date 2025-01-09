@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useTranslation } from "react-i18next";
+import { saveAs } from 'file-saver';
 import OpenModal from './New Employee';
 import OpenModal2 from './Emailemployees';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -92,12 +93,13 @@ function AngleQuestPage({ onClose }) {
   };
 
   const handleDownload = () => {
-    // Use the modified direct download link
-    const fileUrl = 'https://docs.google.com/spreadsheets/d/1MQ2NFFheqhKBEA83W7UYXJiQNDMb9oxT/export?format=xlsx';
-
-    // Open the URL for downloading the file
-    Linking.openURL(fileUrl)
-      .catch((err) => console.error('Failed to open URL:', err));
+    const fileUrl = '../assets/AQ Template.xlsx';
+    fetch(fileUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        saveAs(blob, 'AQ Template.xlsx');
+      })
+      .catch((err) => console.error('Failed to download file:', err));
   };
 
   const [employeeData, setEmployeeData] = useState([]);
@@ -110,43 +112,53 @@ function AngleQuestPage({ onClose }) {
     }
   };
 
-  // Handle file input change when user selects a file
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    console.log("Selected file:", file); // Log file to ensure it's properly accessed
+
     if (file) {
-      try {
-        const reader = new FileReader();
-        reader.onload = async () => {
-          const fileData = reader.result;
-
-          // Parse the Excel file using XLSX library
-          const workbook = XLSX.read(fileData, { type: 'binary' });
-          const sheetName = workbook.SheetNames[0];  // Use the first sheet
-          const worksheet = workbook.Sheets[sheetName];
-
-          // Convert the worksheet into JSON format
-          const data = XLSX.utils.sheet_to_json(worksheet);
-
-          // Map the data to the required format
-          const mappedData = data.map((row) => ({
-            fullname: row['Full Name'] || '',
-            email_address: row['Email'] || '',
-            specialization: row['Specialization'] || '',
-            current_role: row['Current Role'] || '',
-            target_role: '', // Add the necessary logic if needed
-            type: 'service',  // Assuming 'type' should always be 'service'
-          }));
-
-          setEmployeeData(mappedData);
-          alert('Data imported successfully!');
-        };
-        reader.readAsBinaryString(file);
-      } catch (error) {
-        console.error('Error importing from Excel:', error);
-        alert('Failed to import data.');
+      // Ensure the file type is either xlsx or xls
+      const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Invalid file type. Please upload an Excel file.");
+        return;
       }
+
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          alert("Authentication token is missing. Please log in again.");
+          return;
+        }
+
+        // Create FormData object and append the file
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Send the file to the server using Axios
+        const response = await axios.post(
+          `${apiUrl}/api/business/upload-employees`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+              "Content-Type": "multipart/form-data", // Ensure content type is set
+            },
+          }
+        );
+
+        alert("Data uploaded successfully!");
+        console.log("Server response:", response.data);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Failed to upload data.");
+      }
+    } else {
+      alert("No file selected.");
     }
   };
+
 
   // useEffect to auto-save the data once it is set
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { Modal, View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Linking, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,6 +49,42 @@ const handleImagePick = () => {
   });
 };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
+  const handleJoinLink = async () => {
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token is missing.");
+        alert("Please log in again.");
+        return;
+      }
+
+      // API Request to get expert accepted requests
+      const response = await axios.get(`${apiUrl}/api/expert/get-expert-accepted-reqs`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Find the matching request based on requestData?.id
+      const meetingRequest = response.data?.data?.find(
+        (request) => request.id === requestData?.id
+      );
+
+      // If matching request is found, open the meeting link
+      if (meetingRequest && meetingRequest.meeting_link) {
+        Linking.openURL(meetingRequest.meeting_link);
+      } else {
+        alert("Failed to retrieve the meeting link or request not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching expert accepted requests:", error);
+      alert("Failed to join the meeting. Please try again.");
+    }
+  };
+
+  
 const handleSubmit = async () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   if (!requestData || !requestData.id) {
@@ -139,9 +175,9 @@ const handleSubmit = async () => {
                     style={styles.textInput}
                     editable={false}
                   />
-          <Text style={{fontSize: 20, fontWeight: '600', textAlign: 'center', marginTop: 10, marginBottom: 10 }}>Join the meeting 24/11/2024 - 2PM </Text>
+          <Text style={{fontSize: 20, fontWeight: '600', textAlign: 'center', marginTop: 50, marginBottom: 10 }}>Join the meeting {requestData?.deadline || 'No Date'} </Text>
           <View style={{flexDirection: 'row', marginBottom: 10, marginTop: 10}}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleJoinLink}>
             <Image
               source={{
                 uri: "https://img.icons8.com/?size=100&id=GsPxgmTxBONV&format=png&color=000000",
@@ -153,7 +189,7 @@ const handleSubmit = async () => {
               }}
             />
                   </TouchableOpacity>
-            <View style={{flex:1, padding: 10, borderWidth: 1,
+            <TouchableOpacity onPress={handleJoinLink} style={{flex:1, padding: 10, borderWidth: 1,
                           borderColor: 'green',
                           backgroundColor: "#B6D0E2",}}>
               <View style={{padding: 10, borderRadius: 10, borderWidth: 1, borderColor: 'grey', alignSelf: 'center',}}>
@@ -169,54 +205,9 @@ const handleSubmit = async () => {
               />
               </View>
                <Text style={{fontSize: 18, fontWeight: '600', textAlign: 'center', marginTop: 10, marginBottom: 10 }}>Start</Text>
-            </View>
+               </TouchableOpacity >
           </View>
-          <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=7867&format=png&color=000000",
-              }}
-              style={{
-                width: 30,
-                height: 30,
-            marginRight: 10
-              }}
-            />
-          <TextInput
-            value={hyperlink}
-            onChangeText={setHyperlink}
-            placeholder="Add Hyperlink..."
-            style={styles.input2}
-          />
-          </View>
-          <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
-            <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=86460&format=png&color=000000",
-              }}
-              style={{
-                width: 30,
-                height: 30,
-            marginRight: 10
-              }}
-            />
-            <TouchableOpacity style={styles.input2} onPress={handleImagePick}>
-                {attachments.length === 0 ? (
-                  <Text style={{ color: 'black' }}>Add Attachment...</Text>
-                ) : (
-                  attachments.map((attachment, index) => (
-                    <Text key={index} style={{ color: '#555', marginBottom: 5, width: 600, maxHeight: 30, textAlign: 'center' }}>
-                      {attachment.name || attachment.uri}
-                    </Text>
-                  ))
-                )}
-            </TouchableOpacity>
-          </View>
-
-
-          <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-            <Text style={styles.submitButtonText}>Submit</Text>
-          </TouchableOpacity>
+          
 
         </View>
         </ScrollView>

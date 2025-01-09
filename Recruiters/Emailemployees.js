@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Image, TouchableOpacity, Alert, FlatList, Dimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function BookingModal({ onClose }) {
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
   const [emailError, setEmailError] = useState('');
-  
+
   const handleEmailInputChange = (input) => {
     setEmail(input);
     setEmailError(''); // Clear the error message when the user types
+    if (input.includes(',')) {
+      handleAddEmail(); // Automatically add email when comma is typed
+    }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleAddEmail = () => {
     // Simple email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -30,46 +37,53 @@ function BookingModal({ onClose }) {
 
   const handleSubmit = async () => {
     const bookingData = {
-      emails,
+      email: emails,
     };
 
     try {
-      // Simulate sending emails using a placeholder API (use your real backend/email API here)
-      const response = await fetch('https://example.com/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: 'ask@anglequest.com',
-          subject: 'New Booking Inquiry',
-          message: `
-            Emails: ${emails.join(', ')}
-          `,
-        }),
-      });
+      // Retrieve the token from AsyncStorage for authentication
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'User is not authenticated. Please log in.');
+        return;
+      }
 
-      if (response.ok) {
-        Alert.alert('Success', 'Your booking request has been sent!');
+      // Send the booking request using axios
+      const response = await axios.post(
+        `${apiUrl}/api/business/invite-employees`, // Replace apiUrl with actual endpoint URL
+        bookingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        alert('Success', 'Invitation Sent successfully!');
         onClose();
       } else {
-        Alert.alert('Error', 'Failed to send booking request. Please try again.');
+        alert('Error', 'Failed to send invitation. Please try again.');
       }
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error sending booking request:', error);
       Alert.alert('Error', 'Failed to send booking request. Please try again.');
     }
   };
+
 
   const renderEmailItem = ({ item }) => {
     return (
       <View style={styles.emailItem}>
         <Text style={styles.emailText}>{item}</Text>
         <TouchableOpacity onPress={() => handleRemoveEmail(item)}>
-           <Image
-                            source={{
-                              uri: 'https://img.icons8.com/?size=100&id=95771&format=png&color=E70B0B',
-                            }}
-                            style={{width: 18, height: 18}}
-                          />
+          <Image
+            source={{
+              uri: 'https://img.icons8.com/?size=100&id=95771&format=png&color=E70B0B',
+            }}
+            style={{ width: 18, height: 18 }}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -79,27 +93,25 @@ function BookingModal({ onClose }) {
 
   return (
     <View style={styles.modalContainer}>
-      
       <Text style={styles.heading}>Add Employees via Email</Text>
 
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
         <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold' }}>✕</Text>
       </TouchableOpacity>
-      
- <View style={{flexDirection: 'row'}}>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter email address"
-        value={email}
-        onChangeText={handleEmailInputChange}
-        keyboardType="email-address"
-      />
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddEmail}>
-      <MaterialIcons name="add-circle" size={20} color="#206C00" />
-        <Text style={styles.addButtonText}>Add Email</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row' }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter email address"
+          value={email}
+          onChangeText={handleEmailInputChange}
+          keyboardType="email-address"
+        />
 
+        <TouchableOpacity style={styles.addButton} onPress={handleAddEmail}>
+          <MaterialIcons name="add-circle" size={20} color="#206C00" />
+          <Text style={styles.addButtonText}>Add Email</Text>
+        </TouchableOpacity>
       </View>
       {/* Display error message if email is invalid */}
       {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
@@ -161,18 +173,14 @@ const styles = StyleSheet.create({
     color: '#206C00',
     fontSize: 15,
     marginLeft: 10,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   emailListContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  emailList: {
-    marginTop: 5,
-    width: '100%',
-  },
   emailItem: {
-    backgroundColor: '#E8F8E0', 
+    backgroundColor: '#E8F8E0',
     padding: 5,
     borderRadius: 10,
     marginBottom: 10,
@@ -180,12 +188,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'flex-start',
-    marginRight: 10
+    marginRight: 10,
   },
   emailText: {
     color: '#333',
     fontSize: 14,
-    marginRight: 10
+    marginRight: 10,
   },
   button: {
     backgroundColor: 'black',
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-    marginRight: 10
+    marginRight: 10,
   },
   closeButton: {
     position: 'absolute',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Linking, TouchableOpacity, FlatList, ImageBackground, Image, Modal } from 'react-native';
 import { Button, Checkbox, Switch } from 'react-native-paper';
+import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as DocumentPicker from 'expo-document-picker';
 import Topbar from '../components/Recruiterstopbar';
@@ -239,12 +240,13 @@ const apiUrl = process.env.REACT_APP_API_URL;
   };
   
     const handleDownload = () => {
-      // Use the modified direct download link
-      const fileUrl = 'https://docs.google.com/spreadsheets/d/1MQ2NFFheqhKBEA83W7UYXJiQNDMb9oxT/export?format=xlsx';
-  
-      // Open the URL for downloading the file
-      Linking.openURL(fileUrl)
-        .catch((err) => console.error('Failed to open URL:', err));
+      const fileUrl = '../assets/AQ Template.xlsx';
+      fetch(fileUrl)
+        .then((response) => response.blob())
+        .then((blob) => {
+          saveAs(blob, 'AQ Template.xlsx');
+        })
+        .catch((err) => console.error('Failed to download file:', err));
     };
 
   const handleOpenPress = () => {

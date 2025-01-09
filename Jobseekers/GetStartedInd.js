@@ -10,7 +10,7 @@ import {
   Animated,
   ActivityIndicator,
   Alert,
-  TextInput, Switch, CheckBox,
+  TextInput, Picker, CheckBox,
   input, Pressable
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -1457,6 +1457,18 @@ const saveToAsyncStorage = async (plan) => {
                        
                             {planTitle === "Pay as you go" ? (
                               <View style={styles.formcontainer}>
+                                <Text style={styles.label}>Card Type</Text>
+                                <Picker
+                                  
+                                  style={styles.input}
+                                 
+                                >
+                                  <Picker.Item label="Master Card" value="Master Card" />
+                                   <Picker.Item label="Visa" value="Visa" />
+                                  <Picker.Item label="Verve" value="Verve" />
+                                  <Picker.Item label="American Express" value="American Express" />
+                                  <Picker.Item label="UnionPay" value="UnionPay" />
+                                </Picker>
                                 <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
                                 <TextInput
                                   style={styles.input}
@@ -1507,8 +1519,14 @@ const saveToAsyncStorage = async (plan) => {
                                   />
                                 </View>
                                 <TouchableOpacity style={styles.buttonblack}
-                                  onPress={saveCardDetails}>
+                                  disabled={isLoading}
+                                    onPress={handleFinish}
+                                  >
+                                    {isLoading ? (
+                                      <ActivityIndicator color="white" />
+                                    ) : (
                                   <Text style={styles.buttonsaveText}>{t("Save Card Details")}</Text>
+                                     )}
                                 </TouchableOpacity>
                               </View>
                             ) : (
@@ -1560,17 +1578,7 @@ const saveToAsyncStorage = async (plan) => {
                       
         
             
-          <TouchableOpacity
-      style={styles.buttondone}
-      disabled={isLoading}
-      onPress={handleFinish}
-    >
-      {isLoading ? (
-        <ActivityIndicator color="white" />
-      ) : (
-        <Text style={{ color: "white", textAlign: "center" }}>{t("Finish")}</Text>
-      )}
-    </TouchableOpacity>
+          
 
 </View>
         </View>
