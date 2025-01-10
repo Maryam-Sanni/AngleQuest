@@ -152,7 +152,7 @@ const MyComponent = ({ onClose }) => {
 
     try {
       const response = await fetch(
-        "https://ai.recruitangle.com/api/v1/prediction/622858da-03bd-40fc-bf7e-67293dfa70b1",
+        "https://ai.anglequest.work/api/v1/prediction/bfa76195-9530-43c3-b0eb-c1946cf4cdac",
         {
           method: "POST",
           headers: {

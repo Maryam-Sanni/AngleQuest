@@ -1816,8 +1816,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#5679EE"}
                                 num={"1"}
-                               title={apiData.six_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} 
-                                text1={apiData.six_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} 
+                               title={apiData.three_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} 
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} 
                                 top={10}
                                 left={-500}
                               />
@@ -1837,8 +1837,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#17A398"}
                                 num={"2"}
-                                title={apiData.three_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.three_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 top={150}
                                 left={-275}
@@ -1859,8 +1859,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#FFC107"}
                                 num={"3"}
-                                title={apiData.nine_months_step_by_step_guide.study_road_map[0]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.nine_months_step_by_step_guide.study_road_map[0]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 top={285}
                                 left={-375}
@@ -1881,8 +1881,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#FF6F61"}
                                 num={"4"}
-                                title={apiData.six_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.six_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[3]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[3]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 bottom={-10}
                                 left={-500}
@@ -1902,8 +1902,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#2ECC71"}
                                 num={"5"}
-                                title={apiData.three_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.three_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[4]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[4]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 bottom={10}
                                 left={-170}
@@ -1923,8 +1923,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#C19682"}
                                 num={"6"}
-                                title={apiData.nine_months_step_by_step_guide.study_road_map[1]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.nine_months_step_by_step_guide.study_road_map[1]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[5]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[5]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 bottom={0}
                                 right={-400}
@@ -1945,8 +1945,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#B4CBDB"}
                                 num={"7"}
-                                title={apiData.six_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.six_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[6]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[6]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 top={285}
                                 right={-275}
@@ -1967,8 +1967,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#CDDCD0"}
                                 num={"8"}
-                                title={apiData.three_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.three_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[7]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[7]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 right={-442}
                                 top={165}
@@ -1989,8 +1989,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#40E0CD"}
                                 num={"9"}
-                                title={apiData.nine_months_step_by_step_guide.study_road_map[2]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.nine_months_step_by_step_guide.study_road_map[2]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[8]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[8]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 top={10}
                                 right={-500}
@@ -2011,8 +2011,8 @@ const AIScreen = () => {
                               <Step5Card
                                 bgColor={"#B284BE"}
                                 num={"10"}
-                                title={apiData.three_months_step_by_step_guide.study_road_map[3]?.area || 'No Title Available'} // Fallback if area is not present
-                                text1={apiData.three_months_step_by_step_guide.study_road_map[3]?.details || 'No Details Available'} // Fallback if details are not present
+                                title={apiData.three_months_step_by_step_guide.study_road_map[9]?.area || 'No Title Available'} // Fallback if area is not present
+                                text1={apiData.three_months_step_by_step_guide.study_road_map[9]?.details || 'No Details Available'} // Fallback if details are not present
 
                                 top={30}
                                 right={-170}
