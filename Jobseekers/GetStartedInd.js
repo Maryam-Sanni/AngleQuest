@@ -72,6 +72,7 @@ function AngleQuestPage({ onClose }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
+  const [cardType, setCardType] = useState('Master Card');
     const [cardName, setCardName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [cvv, setCvv] = useState('');
@@ -129,6 +130,31 @@ function AngleQuestPage({ onClose }) {
           // Use the PaystackDetail object directly
           const details = response.data.PaystackDetail;
 
+          // Handle user_detail
+          if (details.user_detail) {
+            const userDetails = JSON.parse(details.user_detail)[0]; // Assuming it's an array with a single object
+            setFullName(userDetails.fullname || "");
+            setPhone(userDetails.phone || "");
+            setEmail(userDetails.email || "");
+            setBillingAddress(userDetails.billing_address || "");
+          }
+
+          // Handle card_detail
+          if (details.card_detail) {
+            const cardDetails = JSON.parse(details.card_detail)[0]; // Assuming it's an array with a single object
+            setCardType(cardDetails.card_type || "");
+            setCardName(cardDetails.cardholder_name || "");
+            setCardNumber(cardDetails.cardnumber || "");
+            setCvv(cardDetails.cvv || "");
+
+            // Extract expMonth and expYear from exp_date (e.g., "10/2026")
+            if (cardDetails.exp_date) {
+              const [month, year] = cardDetails.exp_date.split("/");
+              setExpMonth(month || "");
+              setExpYear(year || "");
+            }
+          }
+          
           // Set specialization and service details
           if (details.specialization) {
             setSelectedRole(details.specialization); 
@@ -281,7 +307,7 @@ function AngleQuestPage({ onClose }) {
       });
 
       if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
-        const details = response.data.PaystackDetail; // Use the PaystackDetail object directly
+        const details = response.data.PaystackDetail;
 
         // Construct the payload
         const payload = {
@@ -290,7 +316,17 @@ function AngleQuestPage({ onClose }) {
           plan: details.plan || "",
           sla: details.sla || "",
           agreement: details.agreement || "Yes",
-          payment_method: "Done", // Set the payment method
+          payment_method: "Done",
+          payment_detail: "Pay as you go",
+          card_detail: [
+            {
+              card_type: cardType, // Use the state variable for selected card type
+              cardholder_name: cardName,
+              cardnumber: cardNumber,
+              cvv: cvv,
+              exp_date: `${expMonth}/${expYear}`, // Combine month and year for expiration date
+            },
+          ],
         };
 
         // Post the payment details
@@ -325,6 +361,7 @@ function AngleQuestPage({ onClose }) {
       window.location.reload();
     }
   };
+
 
   const handlePutContinue = async () => {
     if (selectedRole) {
@@ -657,52 +694,118 @@ const saveToAsyncStorage = async (plan) => {
     setSelectedOption('BillingDetails');
   };
 
-  const initiatePayment = () => {
-    if (!window.PaystackPop) {
-      alert('Paystack is not loaded');
-      return;
-    }
+  const initiatePayment = async () => {
+    try {
+      setIsLoading(true); // Start loading state
 
- 
-    const dynamicAmount = totalPlanCost * 160000; 
+      // Get the token from AsyncStorage for authorization
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Error", "Authorization token not found.");
+        setIsLoading(false);
+        return;
+      }
 
-    const paymentData = {
-      amount: dynamicAmount, 
-      email,
-      reference: `ref_${Math.floor(Math.random() * 1000000)}`, 
-      fullName, // Full name of the user
-      phone, // Phone number of the user
-      planId: "PLN_oajvfvbidtfy8gy",
-    };
+      // Fetch the latest payment details from the API
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const handler = window.PaystackPop.setup({
-      key: paystackPublicKey, // Your Paystack public key
-      email: paymentData.email,
-      amount: paymentData.amount, // Dynamic amount in Kobo
-      reference: paymentData.reference,
-      currency: 'NGN', // Currency (NGN)
-      metadata: {
-        full_name: paymentData.fullName, // Pass Full Name in metadata
-        phone_number: paymentData.phone, // Pass Phone Number in metadata
-        plan_id: paymentData.planId, // Pass the static plan ID from Paystack
-      },
-      onClose: () => alert('Payment window closed'),
-      callback: (response) => {
-        if (response.status === 'success') {
-          alert(`Payment Successful! Transaction reference: ${response.reference}`);
+      if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
+        const details = response.data.PaystackDetail;
 
-          // Handle post-payment success logic (e.g., access to services)
+        // Construct the payload
+        const payload = {
+          specialization: details.specialization || "",
+          service: details.service || "",
+          plan: details.plan || "",
+          sla: details.sla || "",
+          agreement: details.agreement || "Yes",
+          payment_method: "Done",
+          payment_detail: "Subscribed Monthly",
+          user_detail: [
+            {
+              fullname: fullName,
+              phone: phone,
+              email: email,
+              billing_address: billingAddress,
+            },
+          ],
+        };
+
+        // Post the payment details
+        const postResponse = await axios.put(
+          `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (postResponse.status === 200) {
+          console.log("Payment details saved successfully:", postResponse.data);
+
+          // Ensure Paystack script is loaded
+          if (!window.PaystackPop) {
+            alert("Paystack is not loaded");
+            return;
+          }
+
+          const dynamicAmount = totalPlanCost * 160000;
+
+          const paymentData = {
+            amount: dynamicAmount,
+            email,
+            reference: `ref_${Math.floor(Math.random() * 1000000)}`,
+            fullName,
+            phone,
+            planId: "PLN_oajvfvbidtfy8gy",
+          };
+
+          const handler = window.PaystackPop.setup({
+            key: paystackPublicKey, // Your Paystack public key
+            email: paymentData.email,
+            amount: paymentData.amount, // Dynamic amount in Kobo
+            reference: paymentData.reference,
+            currency: "NGN", // Currency (NGN)
+            metadata: {
+              full_name: paymentData.fullName, // Pass Full Name in metadata
+              phone_number: paymentData.phone, // Pass Phone Number in metadata
+              plan_id: paymentData.planId, // Pass the static plan ID from Paystack
+            },
+            onClose: () => alert("Payment window closed"),
+            callback: (response) => {
+              if (response.status === "success") {
+                alert(`Payment Successful! Transaction reference: ${response.reference}`);
+                setCurrentStep(3); // Proceed to the next step
+                setActiveCard("Payment Details"); // Update UI
+              } else {
+                alert("Payment failed, please try again.");
+              }
+            },
+          });
+
+          // Open Paystack payment modal (iframe)
+          handler.openIframe();
         } else {
-          alert('Payment failed, please try again.');
+          Alert.alert("Error", "Failed to save payment details.");
+          console.error("API error:", postResponse.statusText);
         }
-      },
-    });
-
-    handler.openIframe(); // Open Paystack payment modal (iframe)
+      } else {
+        Alert.alert("Error", "No payment details found or invalid API response.");
+        console.error("API response error:", response.data);
+      }
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || error.message);
+      console.error("Error during API request:", error.response?.data || error.message);
+    } finally {
+      setIsLoading(false); // End the loading state
+    }
   };
-
-
-
 
 
   // Payment success callback
@@ -1459,12 +1562,12 @@ const saveToAsyncStorage = async (plan) => {
                               <View style={styles.formcontainer}>
                                 <Text style={styles.label}>Card Type</Text>
                                 <Picker
-                                  
                                   style={styles.input}
-                                 
+                                  selectedValue={cardType}
+                                  onValueChange={(itemValue) => setCardType(itemValue)}
                                 >
                                   <Picker.Item label="Master Card" value="Master Card" />
-                                   <Picker.Item label="Visa" value="Visa" />
+                                  <Picker.Item label="Visa" value="Visa" />
                                   <Picker.Item label="Verve" value="Verve" />
                                   <Picker.Item label="American Express" value="American Express" />
                                   <Picker.Item label="UnionPay" value="UnionPay" />
@@ -1569,10 +1672,18 @@ const saveToAsyncStorage = async (plan) => {
                                   onChangeText={setBillingAddress}
                                 />
                                 <TouchableOpacity style={styles.buttonblack}
-                                  onPress={initiatePayment}>
-                                  <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
+                                  disabled={isLoading}
+                                    onPress={initiatePayment}
+                                  >
+                                    {isLoading ? (
+                                      <ActivityIndicator color="white" />
+                                    ) : (
+                                    <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
+                                     )}
                                 </TouchableOpacity>
+                               
                               </View>
+                                     
                             )}
                   
                       

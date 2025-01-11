@@ -74,7 +74,7 @@ const ScheduledMeetingsTable = () => {
         return;
       }
 
-      const meeting_id = String(meeting.id);
+      const meeting_id = String(meeting.meeting_id);
 
       const response = await axios.post(
         `${apiUrl}/api/expert/join-candidate`,

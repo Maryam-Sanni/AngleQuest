@@ -6,7 +6,7 @@ import Sidebar from '../components/sidebar';
 import ScheduledAdvice from '../components/ScheduledAdvSess';
 import Expired from '../components/ExpiredSchedlue';
 import CompletedAdvice from '../components/CompletedAdvSess';
-import OpenModal from '../Jobseekers/SkillanalysisAI';
+import OpenModal from '../Jobseekers/Pickexpertadv';
 import { useNavigate } from 'react-router-dom';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
