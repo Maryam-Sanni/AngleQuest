@@ -909,9 +909,9 @@ const saveToAsyncStorage = async (plan) => {
       pricing: {
         monthly: "$40",
         quarterly: "$40",
-        annually: "$65"
+        annually: "$40"
       },
-      amn: "session",
+      amn: "service used",
       color: "#FFFFFF",
     }
   ]);
@@ -1414,7 +1414,7 @@ const saveToAsyncStorage = async (plan) => {
               {planTitle === "Pay as you go" ? (
                 <>
                   <Text style={styles.subHeading2}>
-                    You will not be charged until you create a new session.
+                    You will only be charged for the service you use.
                   </Text>
                 </>
               ) : (

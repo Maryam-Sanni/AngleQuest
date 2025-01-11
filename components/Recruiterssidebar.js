@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { View, Image, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Image, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from "react-native";
 import CollapsedComponent from "./Recruiterscollapsed"; 
 import { useTranslation } from 'react-i18next';
+ import OpenModal from '../Recruiters/businessprofile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function MyComponent() {
   const [clickedItem, setClickedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null); 
   const [showMenu, setShowMenu] = useState(true);
-  const [messageCountText, setMessageCountText] = useState('0');  
+  const [messageCountText, setMessageCountText] = useState('0'); 
+  const [modalVisible, setModalVisible] = useState(false);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState(''); 
 
@@ -75,6 +77,14 @@ function MyComponent() {
   const handleProfileClick = () => {
     // Navigate to MyProfile screen
     navigate('/business-profile');
+  };
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
   
   useEffect(() => {
@@ -144,7 +154,7 @@ function MyComponent() {
           ))}
           {/* Profile Info */}
           
-          <TouchableOpacity onPress={handleProfileClick}>
+          <TouchableOpacity onPress={handleOpenPress}>
           <View style={styles.divider} />
           <View style={styles.profileInfo}>
             <Image
@@ -172,6 +182,16 @@ function MyComponent() {
             </View>
           </TouchableOpacity>
              </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={handleCloseModal}
+          >
+            <View style={styles.modalContent}>
+              <OpenModal onClose={() => handleCloseModal()} />
+            </View>
+          </Modal>
         </View>
       ) : (
         <CollapsedComponent /> 
