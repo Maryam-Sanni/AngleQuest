@@ -93,11 +93,20 @@ function AngleQuestPage({ onClose }) {
   };
 
   const handleDownload = () => {
-    const fileUrl = '../assets/AQ Template.xlsx';
+    const fileUrl = 'https://docs.google.com/spreadsheets/d/1j17xSFj5LmL-6JsPBLTMIS8b2SjbFLzm/export?format=xlsx&id=1j17xSFj5LmL-6JsPBLTMIS8b2SjbFLzm';
+
     fetch(fileUrl)
-      .then((response) => response.blob())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.blob();
+      })
       .then((blob) => {
-        saveAs(blob, 'AQ Template.xlsx');
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'AQ_Template.xlsx';
+        link.click();
       })
       .catch((err) => console.error('Failed to download file:', err));
   };

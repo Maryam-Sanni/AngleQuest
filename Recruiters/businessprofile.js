@@ -1,14 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const BusinessProfilePage = () => {
-  const [businessName, setBusinessName] = useState('Anglequest');
-  const [email, setEmail] = useState('example@business.com');
-  const [phoneNumber, setPhoneNumber] = useState('123-456-7890');
-  const [companyType, setCompanyType] = useState('LLC');
+const BusinessProfilePage = ({ onClose }) => {
+  const [businessName, setBusinessName] = useState(' ');
+  const [email, setEmail] = useState(' ');
+  const [phoneNumber, setPhoneNumber] = useState(' ');
+  const [companyType, setCompanyType] = useState(' ');
   const [ndaFile, setNdaFile] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    const fetchBusinessProfile = async () => {
+      try {
+        // Get the token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          Alert.alert('Error', 'No authentication token found.');
+          return;
+        }
+
+        // Make the API call
+        const response = await axios.get(`${apiUrl}/api/business/get-business-profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Populate state with the fetched data
+        const { businessName, email, phoneNumber, companyType, ndaFile } = response.data;
+        setBusinessName(businessName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setCompanyType(companyType);
+        setNdaFile(ndaFile);
+      } catch (error) {
+        console.error('Error fetching business profile:', error);
+        Alert.alert('Error', 'Failed to fetch business profile.');
+      }
+    };
+
+    fetchBusinessProfile();
+  }, []);
+
+  useEffect(() => {
+    const fetchBusinessDetails = async () => {
+      try {
+        // Fetch first_name, last_name, and email from AsyncStorage
+        const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+
+        // Extract the stored values
+        const firstName = values[0][1] || '';
+        const lastName = values[1][1] || '';
+        const userEmail = values[2][1] || '';
+
+        // Set the state with fetched values
+        setBusinessName(`${firstName}`.trim());
+        setEmail(userEmail);
+      } catch (error) {
+        console.error('Error fetching data from AsyncStorage:', error);
+        Alert.alert('Error', 'Failed to load business details.');
+      }
+    };
+
+    fetchBusinessDetails();
+  }, []);
+  
   const handleFileUpload = () => {
     alert('File uploaded successfully!');
   };
@@ -23,6 +83,9 @@ const BusinessProfilePage = () => {
           colors={['#A8E063', '#56AB2F']}
           style={styles.gradientBackground}
         >
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
       </LinearGradient>
       <View style={styles.headerContainer}>
         <View style={styles.imagePlaceholder}>
@@ -50,7 +113,7 @@ const BusinessProfilePage = () => {
           onChangeText={setBusinessName}
         />
       </View>
-
+      
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -203,6 +266,16 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  closeButton: {
+    position: "absolute",
+    right: 15,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    marginTop: 10, 
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
