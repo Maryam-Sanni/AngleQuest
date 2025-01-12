@@ -377,43 +377,37 @@ const BillingsAndPayment = () => {
               <Text style={styles.tableHeaderItem}>Invoice Date</Text>
               <Text style={styles.tableHeaderItem}>Due Date</Text>
               <Text style={styles.tableHeaderItem}>Amount</Text>
+              <Text style={styles.tableHeaderItem}>Type</Text>
               <Text style={styles.tableHeaderItem}>Status</Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableRowItem}>INV283199546</Text>
-              <Text style={styles.tableRowItem}>01 Dec 2024</Text>
-              <Text style={styles.tableRowItem}>01 Dec 2024</Text>
-              <Text style={styles.tableRowItem}>$300</Text>
+              <Text style={styles.tableRowItem}>01 Jan 2024</Text>
+              <Text style={styles.tableRowItem}>01 Jan 2025</Text>
+              <Text style={styles.tableRowItem}>$3900</Text>
+               <Text style={styles.tableRowItem}>Standard plan</Text>
               <Text style={styles.tableRowItemPaid}>Paid</Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableRowItem}>INV283199547</Text>
-              <Text style={styles.tableRowItem}>01 Nov 2024</Text>
-              <Text style={styles.tableRowItem}>01 Nov 2024</Text>
-              <Text style={styles.tableRowItem}>$450</Text>
+              <Text style={styles.tableRowItem}>01 Jan 2025</Text>
+              <Text style={styles.tableRowItem}>01 Jan 2026</Text>
+              <Text style={styles.tableRowItem}>$15500</Text>
+              <Text style={styles.tableRowItem}>Professional plan</Text>
+              <Text style={styles.tableRowItemPaid}>Paid</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableRowItem}>INV283199548</Text>
+              <Text style={styles.tableRowItem}>02 Jan 2025</Text>
+              <Text style={styles.tableRowItem}>02 Feb 2025</Text>
+              <Text style={styles.tableRowItem}>$400</Text>
+               <Text style={styles.tableRowItem}>Advanced sla x 4</Text>
               <Text style={styles.tableRowItemPaid}>Paid</Text>
             </View>
           </View>
 
-          {/* Payment Breakdown Section */}
-          <Text style={styles.sectionHeading}>Payment Breakdown</Text>
-          <View style={styles.breakdownSection}>
-            <Text style={[styles.breakdownText, {borderBottomWidth: 1, borderBottomColor: '#ccc'}]}>
-              Work Delivery Support: 3 x $80 = $240/monthly
-            </Text>
-            <Text style={[styles.breakdownText, {borderBottomWidth: 1, borderBottomColor: '#ccc'}]}>
-              Career Growth Plan: 5 x $100 = $500/monthly
-            </Text>
-            <Text style={[styles.breakdownText, {borderBottomWidth: 1, borderBottomColor: '#ccc'}]}>
-              Work Delivery + Career Growth Support: 3 x $150 = $450/monthly
-            </Text>
-            <Text style={[styles.breakdownText, {borderBottomWidth: 1, borderBottomColor: '#ccc'}]}>
-              Monthly Total: $1,190
-            </Text>
-            <Text style={styles.billableTotal}>
-              Actual Billable Total = $1,190 - $119 (10% Discount as Standard Plan Holder) = $1,071
-            </Text>
-          </View>
+         
+        
         </View>
       )}
 
