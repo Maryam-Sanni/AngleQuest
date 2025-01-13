@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Picker, Image, Linking,
-  ScrollView, Modal, FlatList
+  ScrollView, Modal, FlatList, Alert
 } from 'react-native';
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
+import DateTimePickerModal from "../components/DateTimePickerModal";
 import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +19,8 @@ const SupportRequestPage = () => {
   const [currentStep, setCurrentStep] = useState('start'); 
   const [latestRequest, setLatestRequest] = useState(null);
   const [isAcceptedRequestFetched, setIsAcceptedRequestFetched] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [acceptedRequests, setAcceptedRequests] = useState(null);
    const [assignedContent, setAssignedContent] = useState('waiting');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,6 +45,18 @@ const SupportRequestPage = () => {
     name: ''
   });
 
+  // Get user's timezone
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const handleConfirmDateTime = (dateTime) => {
+    setSelectedDateTime(dateTime);
+    setIsModalVisible2(false);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalVisible2(false);
+  };
+  
   const [savedRole, setSavedRole] = useState(""); // State for saved specialization
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -486,6 +501,57 @@ const SupportRequestPage = () => {
     }
   };
 
+  const handleSupportRequest = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'No authentication token found.');
+        return;
+      }
+
+      const payload = { specialization: savedRole };
+      const response = await axios.post(
+        `${apiUrl}/api/jobseeker/support-req`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      // Validate and parse the response
+      const supportData = response.data[0]; // Adjust if the data is not in an array
+      if (!supportData || !supportData.time) {
+        throw new Error('Invalid API response: missing time');
+      }
+
+      const { time } = supportData;
+
+      // Extract days and time range
+      const [days, timeRange] = time.split(' ', 2);  // Split the first part for days and the rest for time range
+
+      // Format days
+      const formattedDays = days.split(',').map((day) => day.trim()).join(', ');
+
+      console.log('Formatted Days:', formattedDays);
+      console.log('Time Range:', timeRange); // "01:00 AM - 02:00 PM"
+
+      // Store the full time range in AsyncStorage
+      await AsyncStorage.setItem('selectedUserDays', formattedDays);
+      await AsyncStorage.setItem('selectedUserTimes', timeRange); // Store the time range directly
+
+      Alert.alert('Success', 'Support request submitted and availability stored successfully!');
+    } catch (error) {
+      console.error('Error submitting support request or storing data:', error);
+      Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
+    }
+  };
+
+  
   useEffect(() => {
     if (currentStep === 'assigned' && assignedContent === 'waiting') {
       // You can add additional side effects here if needed
@@ -554,12 +620,13 @@ const SupportRequestPage = () => {
         <Text style={styles.label}>
          Select a date
         </Text>
-        <input
-          type="date"
+        <View
           style={styles.input}
-          value={formData.deadline}
-          onChange={(event) => setFormData({ ...formData, deadline: event.target.value })}
-        />
+        >
+          <Text style={{color: 'black' }}>
+            {date || 'No deadline set'}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -653,12 +720,20 @@ const SupportRequestPage = () => {
                             <Text style={styles.label}>
                              Select a date
                             </Text>
-                            <input
-                              type="date"
+                            <TouchableOpacity
                               style={styles.input}
-                              value={formData.deadline}
-                              onChange={(event) => setFormData({ ...formData, deadline: event.target.value })}
-                            />
+                              onPress={async () => {
+                                // Show the modal first
+                                setIsModalVisible2(true);
+
+                                // Make the API call
+                                await handleSupportRequest();
+                              }}
+                            >
+                              <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
+                                {selectedDateTime ? selectedDateTime.toLocaleString() : 'Select date and time'}
+                              </Text>
+                            </TouchableOpacity>
                           </View>
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                   <Text style={styles.submitButtonText}>Submit Request</Text>
@@ -1216,6 +1291,12 @@ const SupportRequestPage = () => {
             </View>
               )}
         </View>
+        <DateTimePickerModal
+          isVisible={isModalVisible2}
+          mode="datetime"
+          onConfirm={handleConfirmDateTime}
+          onCancel={handleCancelModal}
+        />
         <Modal
           visible={isModalVisible}
           animationType="slide"

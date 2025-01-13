@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Image, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, Image, TextInput, View, TouchableOpacity, ScrollView, Picker} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const BusinessProfilePage = ({ onClose }) => {
   const [businessName, setBusinessName] = useState(' ');
+  const [adminName, setAdminName] = useState(' ');
   const [email, setEmail] = useState(' ');
   const [phoneNumber, setPhoneNumber] = useState(' ');
   const [companyType, setCompanyType] = useState(' ');
@@ -59,6 +60,7 @@ const BusinessProfilePage = ({ onClose }) => {
 
         // Set the state with fetched values
         setBusinessName(`${firstName}`.trim());
+        setAdminName(`${lastName}`.trim());
         setEmail(userEmail);
       } catch (error) {
         console.error('Error fetching data from AsyncStorage:', error);
@@ -73,9 +75,49 @@ const BusinessProfilePage = ({ onClose }) => {
     alert('File uploaded successfully!');
   };
 
-  const handleSave = () => {
-    alert('Profile saved!');
+  const handleSave = async () => {
+    try {
+      // Get the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'No authentication token found.');
+        return;
+      }
+
+      // Create the form data to be sent
+      const formData = new FormData();
+      formData.append('business_name', businessName);
+      formData.append('business_email', email);
+      formData.append('phone_no', phoneNumber);
+      formData.append('company_type', companyType);
+      if (ndaFile) {
+        formData.append('upload_nda_file', {
+          uri: ndaFile.uri,
+          type: ndaFile.type,
+          name: ndaFile.name,
+        });
+      }
+
+      // Make the API call
+      const response = await axios.post(
+        `${apiUrl}/api/business/create-business-profile`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      // Handle successful response
+      Alert.alert('Success', 'Business profile created successfully!');
+    } catch (error) {
+      console.error('Error creating business profile:', error);
+      Alert.alert('Error', 'Failed to create business profile.');
+    }
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -113,6 +155,15 @@ const BusinessProfilePage = ({ onClose }) => {
           onChangeText={setBusinessName}
         />
       </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Adminstrator Name</Text>
+        <TextInput
+          style={styles.input}
+          value={adminName}
+          onChangeText={setAdminName}
+        />
+      </View>
       
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Email</Text>
@@ -136,11 +187,15 @@ const BusinessProfilePage = ({ onClose }) => {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Company Type</Text>
-        <TextInput
+        <Picker
+          selectedValue={companyType}
           style={styles.input}
-          value={companyType}
-          onChangeText={setCompanyType}
-        />
+          onValueChange={(itemValue) => setCompanyType(itemValue)}
+          >
+          <Picker.Item label="Consulting" value="Consulting" />
+          <Picker.Item label="Recruitment" value="Recruitment" />
+          <Picker.Item label="In-house Company" value="In-house Company" />
+        </Picker>
       </View>
 
       <View style={styles.inputGroup}>
@@ -160,8 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
     width: 800,
-    height: 800,
-    marginTop: 40
+    height: 850,
   },
   gradientBackground: {
    height: 150,
@@ -254,7 +308,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saveButton: {
-    backgroundColor: 'darkgrey',
+    backgroundColor: '#36454F',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',

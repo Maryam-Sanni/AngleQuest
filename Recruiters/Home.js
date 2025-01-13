@@ -156,7 +156,7 @@ const {t}=useTranslation()
       <Sidebar />
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500  }}>
            <View style={styles.container}>
-           <View style={{flexDirection: 'row' }}>
+           <View style={{flexDirection: 'row', marginLeft: -100 }}>
            <Image
         source={{
           uri:
@@ -167,30 +167,7 @@ const {t}=useTranslation()
       <Text style={styles.greeting}>{t("Good Day")}, {first_name}</Text>
       </View>
       <View style={styles.mainContent}>
-      <View style={styles.messageBox}>
-      <BlurView intensity={50} style={styles.blurBackground}>
-      <View style={{flexDirection: 'row', marginBottom: 30 }}>
-          <Image
-       source={require('../assets/performance.png')}
-        style={styles.boxicon}
-      />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Performance")}</Text>
-          </View>
-
-          <EmployeePerformance />
-
-          <TouchableOpacity onPress={goToPerformance} 
-           style={[
-            styles.touchablechat,
-            isHovered1 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered1(true)}
-          onMouseLeave={() => setIsHovered1(false)}
-        >
-          <Text style={styles.touchableText}>{t("See All")}</Text>
-          </TouchableOpacity>
-          </BlurView>
-          </View>
+      
         <View style={styles.sideColumn}>
         <View style={styles.greenBorderedBox}>
           <BlurView intensity={80} style={styles.blurBackground}>
