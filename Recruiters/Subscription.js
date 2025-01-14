@@ -55,7 +55,7 @@ const BillingsAndPayment = () => {
         annually: "$75",
       },
       price: "$3,900",
-      plan: "Up to 5 users",
+      plan: "5 users plan",
       color: "#FFFFFF",
     },
     {
@@ -76,7 +76,7 @@ const BillingsAndPayment = () => {
         annually: "$75",
       },
       price: "$15,500",
-      plan: "Up to 25 users",
+      plan: "25 users plan",
       color: "#FFFFFF",
     },
     {
@@ -97,7 +97,7 @@ const BillingsAndPayment = () => {
         annually: "$75",
       },
       price: "$25,500",
-      plan: "Up to 50 users",
+      plan: "50 users plan",
       color: "#FFFFFF",
     },
   ]);

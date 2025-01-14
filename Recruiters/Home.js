@@ -208,8 +208,8 @@ const {t}=useTranslation()
          
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Activities")}</Text>
-<View style={{flexDirection: 'row' }}>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Quick Actions")}</Text>
+<View style={{flexDirection: 'row', marginLeft: 10 }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
   styles.touchablerate,
@@ -218,7 +218,7 @@ const {t}=useTranslation()
 onMouseEnter={() => setIsHovered2(true)}
 onMouseLeave={() => setIsHovered2(false)}
 >
-          <Text style={styles.touchableTextrate}>{t("Employees")}</Text>
+          <Text style={styles.touchableTextrate}>{t("All Employees")}</Text>
           </TouchableOpacity>
 <TouchableOpacity onPress={goToManagers} 
 style={[
@@ -228,7 +228,7 @@ style={[
 onMouseEnter={() => setIsHovered3(true)}
 onMouseLeave={() => setIsHovered3(false)}
 >
-          <Text style={styles.touchableTextrate}>{t("Managers")}</Text>
+          <Text style={styles.touchableTextrate}>{t("New Employee")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={goToCoach} 
           style={[
@@ -238,28 +238,9 @@ onMouseLeave={() => setIsHovered3(false)}
 onMouseEnter={() => setIsHovered5(true)}
 onMouseLeave={() => setIsHovered5(false)}
 >
-          <Text style={styles.touchableTextrate}>{t("Coach")}</Text>
+          <Text style={styles.touchableTextrate}>{t("Import From Excel")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToTeams} 
-          style={[
-            styles.touchablerate,
-            isHovered6 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered6(true)}
-          onMouseLeave={() => setIsHovered6(false)}
-          >
-          <Text style={styles.touchableTextrate}>{t("Teams")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={goToPerformance} 
-          style={[
-            styles.touchablerate,
-            isHovered4 && styles.touchableOpacityHovered
-          ]}
-          onMouseEnter={() => setIsHovered4(true)}
-          onMouseLeave={() => setIsHovered4(false)}
-          >
-          <Text style={styles.touchableTextrate}>{t("Performance")}</Text>
-          </TouchableOpacity>
+         
 </View>
 </View>
 </View>
@@ -268,7 +249,7 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Growth Plan Session")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 55, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white',marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
@@ -293,7 +274,7 @@ onMouseLeave={() => setIsHovered7(false)}
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Advice Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 95, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
@@ -317,8 +298,8 @@ onMouseLeave={() => setIsHovered8(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Interview Session")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, marginLeft: 75, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Hub Session")} </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15,  position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
@@ -394,9 +375,9 @@ onMouseLeave={() => setIsHovered9(false)}
         source={require('../assets/money (2).png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Due Payment")}</Text>
+           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("SLA Subscription")}</Text>
            </View>
-           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25,fontFamily:"Roboto-Light"  }}>{t("Wicher Jeroen payment is due 12th of June 2024")}</Text>
+           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25,fontFamily:"Roboto-Light"  }}>{t("SLA for 8 users due in 13 days")}</Text>
           <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
@@ -412,11 +393,11 @@ onMouseLeave={() => setIsHovered9(false)}
 
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Your Angle Badge")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Plan Count")}</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("This is the combined progress of your team")}</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("You have 1 employee(s) left to fill up your standard plan ")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
-      <CustomPercentageChart percentage={70} />
+      <CustomPercentageChart percentage={90} />
       </View>
     </View>
           </View>
@@ -721,7 +702,7 @@ blurBackground: {
     paddingHorizontal: 10, 
     marginTop: 15,
     marginLeft: 10,
-    width: 90,
+    width: 150,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {

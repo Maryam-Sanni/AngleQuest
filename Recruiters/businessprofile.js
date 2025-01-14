@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, TextInput, View, TouchableOpacity, ScrollView, Picker} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -9,7 +10,7 @@ const BusinessProfilePage = ({ onClose }) => {
   const [adminName, setAdminName] = useState(' ');
   const [email, setEmail] = useState(' ');
   const [phoneNumber, setPhoneNumber] = useState(' ');
-  const [companyType, setCompanyType] = useState(' ');
+  const [companyType, setCompanyType] = useState('consulting');
   const [ndaFile, setNdaFile] = useState(null);
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -17,27 +18,25 @@ const BusinessProfilePage = ({ onClose }) => {
   useEffect(() => {
     const fetchBusinessProfile = async () => {
       try {
-        // Get the token from AsyncStorage
         const token = await AsyncStorage.getItem('token');
         if (!token) {
           Alert.alert('Error', 'No authentication token found.');
           return;
         }
 
-        // Make the API call
         const response = await axios.get(`${apiUrl}/api/business/get-business-profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Populate state with the fetched data
-        const { businessName, email, phoneNumber, companyType, ndaFile } = response.data;
-        setBusinessName(businessName);
-        setEmail(email);
-        setPhoneNumber(phoneNumber);
-        setCompanyType(companyType);
-        setNdaFile(ndaFile);
+
+        const { profile } = response.data;
+        if (profile) {
+          setPhoneNumber(profile.phone_no || ''); 
+          setCompanyType(profile.company_type || ''); 
+          
+        }
       } catch (error) {
         console.error('Error fetching business profile:', error);
         Alert.alert('Error', 'Failed to fetch business profile.');
@@ -45,7 +44,72 @@ const BusinessProfilePage = ({ onClose }) => {
     };
 
     fetchBusinessProfile();
-  }, []);
+  }, []); // Runs once when the component mounts
+
+
+  const handlePickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const file = result.assets[0];
+        setNdaFile({
+          uri: file.uri,
+          name: file.uri.split('/').pop(),
+          type: file.type || 'image/jpeg',
+        });
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'Failed to pick image.');
+    }
+  };
+  
+  const handleSave = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'No authentication token found.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('business_name', businessName.trim());
+      formData.append('business_email', email.trim());
+      formData.append('phone_no', phoneNumber.trim());
+      formData.append('company_type', companyType.trim());
+      formData.append('administrator_name', adminName.trim());
+        if (ndaFile) {
+          formData.append('upload_nda_file', {
+            uri: ndaFile.uri,
+            type: ndaFile.type,
+            name: ndaFile.name,
+          });
+      }
+
+      const response = await axios.post(
+        `${apiUrl}/api/business/edit-business-profile`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      Alert.alert('Success', 'Business profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating business profile:', error);
+      Alert.alert('Error', 'Failed to update business profile.');
+    }
+  };
+
 
   useEffect(() => {
     const fetchBusinessDetails = async () => {
@@ -75,49 +139,6 @@ const BusinessProfilePage = ({ onClose }) => {
     alert('File uploaded successfully!');
   };
 
-  const handleSave = async () => {
-    try {
-      // Get the token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert('Error', 'No authentication token found.');
-        return;
-      }
-
-      // Create the form data to be sent
-      const formData = new FormData();
-      formData.append('business_name', businessName);
-      formData.append('business_email', email);
-      formData.append('phone_no', phoneNumber);
-      formData.append('company_type', companyType);
-      if (ndaFile) {
-        formData.append('upload_nda_file', {
-          uri: ndaFile.uri,
-          type: ndaFile.type,
-          name: ndaFile.name,
-        });
-      }
-
-      // Make the API call
-      const response = await axios.post(
-        `${apiUrl}/api/business/create-business-profile`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      // Handle successful response
-      Alert.alert('Success', 'Business profile created successfully!');
-    } catch (error) {
-      console.error('Error creating business profile:', error);
-      Alert.alert('Error', 'Failed to create business profile.');
-    }
-  };
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -130,13 +151,13 @@ const BusinessProfilePage = ({ onClose }) => {
           </TouchableOpacity>
       </LinearGradient>
       <View style={styles.headerContainer}>
-        <View style={styles.imagePlaceholder}>
-          <Image 
-            source={require('../assets/coursehead.png')} 
-            style={styles.logoImage} 
-            resizeMode="cover" 
+        <TouchableOpacity style={styles.imagePlaceholder}>
+          <Image
+            source={ndaFile ? { uri: ndaFile.uri } : require('../assets/coursehead.png')}
+            style={styles.logoImage}
+            resizeMode="cover"
           />
-        </View>
+        </TouchableOpacity>
         <View style={{flexDirection: 'column', marginTop: 20, marginLeft: 50}} >
         <Text style={styles.header}>Profile</Text>
         <Text style={styles.subHeader}>Update your photo and personal details</Text>
@@ -198,12 +219,7 @@ const BusinessProfilePage = ({ onClose }) => {
         </Picker>
       </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Non-Disclosure Agreement</Text>
-        <TouchableOpacity style={styles.fileUploadButton} onPress={handleFileUpload}>
-          <Text style={styles.fileUploadText}>{ndaFile ? 'File Uploaded' : 'Upload File'}</Text>
-        </TouchableOpacity>
-      </View>
+     
 
      
     </ScrollView>
@@ -215,7 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
     width: 800,
-    height: 850,
+    height: 800,
   },
   gradientBackground: {
    height: 150,
