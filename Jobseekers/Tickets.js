@@ -524,25 +524,47 @@ const SupportRequestPage = () => {
       console.log('API Response:', response.data);
 
       // Validate and parse the response
-      const supportData = response.data[0]; // Adjust if the data is not in an array
+      const supportData = response.data[0];
       if (!supportData || !supportData.time) {
         throw new Error('Invalid API response: missing time');
       }
 
       const { time } = supportData;
 
-      // Extract days and time range
-      const [days, timeRange] = time.split(' ', 2);  // Split the first part for days and the rest for time range
+      // Split entries and process each
+      const timeEntries = time.split(',').map(entry => entry.trim());
+      const daysList = [];
+      const timeRanges = [];
 
-      // Format days
-      const formattedDays = days.split(',').map((day) => day.trim()).join(', ');
+      timeEntries.forEach(entry => {
+        // Match days and time range using regex
+        const match = entry.match(/^([A-Za-z, ]+)\s+(\d{1,2}:\d{2}\s*[AP]M\s*-\s*\d{1,2}:\d{2}\s*[AP]M)$/);
+        if (!match) {
+          console.warn('Skipping invalid entry:', entry);
+          return;
+        }
 
-      console.log('Formatted Days:', formattedDays);
-      console.log('Time Range:', timeRange); // "01:00 AM - 02:00 PM"
+        const days = match[1].trim(); // Extract days (e.g., "Fri, Sat")
+        const timeRange = match[2].trim(); // Extract time range (e.g., "02:00 PM - 04:00 PM")
 
-      // Store the full time range in AsyncStorage
+        daysList.push(days);
+        timeRanges.push(timeRange);
+      });
+
+      if (daysList.length === 0 || timeRanges.length === 0) {
+        throw new Error('No valid time entries found in API response');
+      }
+
+      // Format days and time ranges for storage
+      const formattedDays = daysList.join(', '); // Join days with ', '
+      const selectedUserTimes = timeRanges.join('; '); // Join times with '; '
+
+      console.log('Selected User Days:', formattedDays);
+      console.log('Selected User Times:', selectedUserTimes);
+
+      // Store in AsyncStorage
       await AsyncStorage.setItem('selectedUserDays', formattedDays);
-      await AsyncStorage.setItem('selectedUserTimes', timeRange); // Store the time range directly
+      await AsyncStorage.setItem('selectedUserTimes', selectedUserTimes);
 
       Alert.alert('Success', 'Support request submitted and availability stored successfully!');
     } catch (error) {
@@ -550,6 +572,8 @@ const SupportRequestPage = () => {
       Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
     }
   };
+
+
 
   
   useEffect(() => {
