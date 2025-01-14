@@ -19,25 +19,36 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 
   useEffect(() => {
     const fetchAvailability = async () => {
-      const storedDays = await AsyncStorage.getItem('selectedUserDays');
-      const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
+      try {
+        const storedDays = await AsyncStorage.getItem('selectedUserDays');
+        const storedTimes = await AsyncStorage.getItem('selectedUserTimes');
 
-      console.log('Stored Days:', storedDays);
-      console.log('Stored Times:', storedTimes);
+        console.log('Stored Days:', storedDays);
+        console.log('Stored Times:', storedTimes);
 
-      setAvailableDays(storedDays ? storedDays.split(', ') : []);
+        if (storedDays) {
+          // Check if the storedDays is in the format with commas or spaces
+          const daysArray = storedDays.includes(',') 
+            ? storedDays.split(',').map(day => day.trim()) // Split by commas if days are comma-separated
+            : storedDays.split(' ').map(day => day.trim()); // Split by spaces if days are space-separated
 
-      if (storedTimes) {
-        // Check if storedTimes needs additional processing
-        const times = storedTimes.split(';').map(range => range.trim());
-        console.log('Parsed Times:', times);
-        setAvailableTimes({ '*': times });
-        setStoredTimes(storedTimes);
+          setAvailableDays(daysArray);
+        }
+
+        if (storedTimes) {
+          const times = storedTimes.split(';').map(range => range.trim());
+          console.log('Parsed Times:', times);
+          setAvailableTimes({ '*': times });
+          setStoredTimes(storedTimes);
+        }
+      } catch (error) {
+        console.error('Error fetching availability:', error);
       }
     };
 
     fetchAvailability();
   }, []);
+
 
 
 

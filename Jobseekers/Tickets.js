@@ -34,6 +34,7 @@ const SupportRequestPage = () => {
   const [expertName, setExpertName] = useState('');
   const [date, setDate] = useState('');
   const [attachments, setAttachments] = useState([]);
+  const [expertId, setExpertId] = useState(null);
   const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
     specialization: '',
@@ -84,6 +85,88 @@ const SupportRequestPage = () => {
     });
   };
 
+  const handleSupportRequest = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'No authentication token found.');
+        return;
+      }
+
+      const payload = { specialization: savedRole };
+      const response = await axios.post(
+        `${apiUrl}/api/jobseeker/support-req`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      const supportData = response.data[0];
+      if (!supportData || !supportData.time) {
+        throw new Error('Invalid API response: missing time');
+      }
+
+      const { time, user_id } = supportData;
+
+      console.log('Raw Time:', JSON.stringify(time));
+      console.log('User ID:', user_id);
+
+      const timeEntries = time.split(',').map(entry => entry.trim());
+      const daysList = [];
+      const timeRanges = [];
+
+      timeEntries.forEach(entry => {
+        console.log('Processing Entry:', entry);
+
+        if (!entry.includes(' ')) {
+          console.warn('Single day entry without time range:', entry);
+          daysList.push(entry);
+          return;
+        }
+
+        const match = entry.match(/^([A-Za-z,]+)\s*(\d{1,2}:\d{2}\s*[AP]M\s*-\s*\d{1,2}:\d{2}\s*[AP]M)$/);
+        if (!match) {
+          console.warn('Skipping invalid entry:', entry);
+          return;
+        }
+
+        const days = match[1].trim();
+        const timeRange = match[2].trim();
+
+        console.log('Matched Days:', days);
+        console.log('Matched Time Range:', timeRange);
+
+        days.split(',').forEach(day => daysList.push(day.trim()));
+        timeRanges.push(timeRange);
+      });
+
+      if (!daysList.length || !timeRanges.length) {
+        throw new Error('No valid time entries found in API response');
+      }
+
+      const formattedDays = daysList.join(' '); // Ensure days are joined by comma
+      const selectedUserTimes = timeRanges.join('; '); // Ensure time ranges are joined by semicolon
+
+      console.log('Formatted Days:', formattedDays);
+      console.log('Formatted Times:', selectedUserTimes);
+
+      // Save all necessary data to AsyncStorage
+      await AsyncStorage.setItem('selectedUserDays', formattedDays);
+      await AsyncStorage.setItem('selectedUserTimes', selectedUserTimes);
+      setExpertId(user_id);
+
+      Alert.alert('Success', 'Support request submitted and availability stored successfully!');
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
+    }
+  };
  
 
   useEffect(() => {
@@ -459,6 +542,7 @@ const SupportRequestPage = () => {
       // Payload for the API
       const payload = {
         name,
+        expert_id: expertId,
         specialization: savedRole,
         title: formData.title,
         description: formData.description,
@@ -470,7 +554,7 @@ const SupportRequestPage = () => {
       };
 
       // API Request
-      const response = await axios.post(`${apiUrl}/api/jobseeker/support-req`, payload, {
+      const response = await axios.post(`${apiUrl}/api/jobseeker/merge-request`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -501,79 +585,7 @@ const SupportRequestPage = () => {
     }
   };
 
-  const handleSupportRequest = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert('Error', 'No authentication token found.');
-        return;
-      }
-
-      const payload = { specialization: savedRole };
-      const response = await axios.post(
-        `${apiUrl}/api/jobseeker/support-req`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      console.log('API Response:', response.data);
-
-      // Validate and parse the response
-      const supportData = response.data[0];
-      if (!supportData || !supportData.time) {
-        throw new Error('Invalid API response: missing time');
-      }
-
-      const { time } = supportData;
-
-      // Split entries and process each
-      const timeEntries = time.split(',').map(entry => entry.trim());
-      const daysList = [];
-      const timeRanges = [];
-
-      timeEntries.forEach(entry => {
-        // Match days and time range using regex
-        const match = entry.match(/^([A-Za-z, ]+)\s+(\d{1,2}:\d{2}\s*[AP]M\s*-\s*\d{1,2}:\d{2}\s*[AP]M)$/);
-        if (!match) {
-          console.warn('Skipping invalid entry:', entry);
-          return;
-        }
-
-        const days = match[1].trim(); // Extract days (e.g., "Fri, Sat")
-        const timeRange = match[2].trim(); // Extract time range (e.g., "02:00 PM - 04:00 PM")
-
-        daysList.push(days);
-        timeRanges.push(timeRange);
-      });
-
-      if (daysList.length === 0 || timeRanges.length === 0) {
-        throw new Error('No valid time entries found in API response');
-      }
-
-      // Format days and time ranges for storage
-      const formattedDays = daysList.join(', '); // Join days with ', '
-      const selectedUserTimes = timeRanges.join('; '); // Join times with '; '
-
-      console.log('Selected User Days:', formattedDays);
-      console.log('Selected User Times:', selectedUserTimes);
-
-      // Store in AsyncStorage
-      await AsyncStorage.setItem('selectedUserDays', formattedDays);
-      await AsyncStorage.setItem('selectedUserTimes', selectedUserTimes);
-
-      Alert.alert('Success', 'Support request submitted and availability stored successfully!');
-    } catch (error) {
-      console.error('Error submitting support request or storing data:', error);
-      Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
-    }
-  };
-
-
+  
 
   
   useEffect(() => {
