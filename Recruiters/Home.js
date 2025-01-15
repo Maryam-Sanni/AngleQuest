@@ -7,7 +7,7 @@ import Topbar from '../components/Recruiterstopbar';
 import SuggestionModal from '../components/Suggestion';
 import CustomPercentageChart from '../components/PercentageChart';
 import OpenModal2 from './GetStartedTeam';
-import OpenModal3 from './New Manager';
+import OpenModal3 from './New Employee';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
@@ -85,6 +85,53 @@ const HomePage = () => {
     setModalVisible4(false);
   };
 
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    console.log("Selected file:", file); // Log file to ensure it's properly accessed
+
+    if (file) {
+      // Ensure the file type is either xlsx or xls
+      const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Invalid file type. Please upload an Excel file.");
+        return;
+      }
+
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          alert("Authentication token is missing. Please log in again.");
+          return;
+        }
+
+        // Create FormData object and append the file
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Send the file to the server using Axios
+        const response = await axios.post(
+          `${apiUrl}/api/business/upload-employees`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+              "Content-Type": "multipart/form-data", // Ensure content type is set
+            },
+          }
+        );
+
+        alert("Data uploaded successfully!");
+        console.log("Server response:", response.data);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Failed to upload data.");
+      }
+    } else {
+      alert("No file selected.");
+    }
+  };
+  
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
     const retrieveData = async () => {
@@ -220,7 +267,7 @@ onMouseLeave={() => setIsHovered2(false)}
 >
           <Text style={styles.touchableTextrate}>{t("All Employees")}</Text>
           </TouchableOpacity>
-<TouchableOpacity onPress={goToManagers} 
+<TouchableOpacity onPress={handleOpenPress3} 
 style={[
   styles.touchablerate,
   isHovered3 && styles.touchableOpacityHovered
@@ -230,7 +277,7 @@ onMouseLeave={() => setIsHovered3(false)}
 >
           <Text style={styles.touchableTextrate}>{t("New Employee")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={goToCoach} 
+          <TouchableOpacity onPress={handleFileChange} 
           style={[
   styles.touchablerate,
   isHovered5 && styles.touchableOpacityHovered
@@ -248,15 +295,15 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Growth Plan Session")} </Text>
-<Text style={{fontSize: 12, color: 'white',marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Skill Analysis Session")} </Text>
+<Text style={{fontSize: 12, color: 'white',marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Maryam Bakahali with expert Joop Melcher</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -273,15 +320,15 @@ onMouseLeave={() => setIsHovered7(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Advice Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Growth Plan Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Eniobanke Ademide with expert Emily Ray</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -299,13 +346,13 @@ onMouseLeave={() => setIsHovered8(false)}
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
 <Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Hub Session")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15,  position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}>9:30 AM to 10:30 AM | Jun 25</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15,  position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>Patrick King with expert Wicher Jeroen</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,

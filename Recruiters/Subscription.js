@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet,  ImageBackground, Modal, TextInput, FlatList, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet,  ImageBackground, Modal, TextInput, FlatList, Alert, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Button, Checkbox, Switch } from 'react-native-paper';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './New Employee';
-import OpenModal2 from './PaymentCard';
+import OpenModal2 from './PaytoBank';
 import { MaterialIcons } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BillingsAndPayment = () => {
   const [selectedTab, setSelectedTab] = useState('Plan Management');
@@ -14,7 +16,115 @@ const BillingsAndPayment = () => {
    const [activeTab, setActiveTab] = useState('Plan Management');
   const [ModalVisible, setModalVisible] = useState(false);
    const [ModalVisible2, setModalVisible2] = useState(false);
+  const [profile, setProfile] = useState(null); 
+  const [userName, setUserName] = useState(''); 
+  const [userEmail, setUserEmail] = useState('')
+  const [phone, setPhone] = useState(''); 
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+   const apiUrl = process.env.REACT_APP_API_URL;
+  
+  useEffect(() => {
+    const fetchBusinessProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          Alert.alert('Error', 'No authentication token found.');
+          return;
+        }
+
+        // Try fetching business profile data from the API
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/business/get-business-profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const { profile } = response.data;
+        console.log(response.data); // Log the entire response data
+
+        // Check if the profile is available
+        if (profile) {
+          // Set profile data from the API response
+          setProfile(profile);
+          setUserName(profile.business_name);
+          setUserEmail(profile.business_email);
+          setPhone(profile.phone_no || "No phone number available");
+
+          // Optionally, save the business profile data to AsyncStorage if not already saved
+          await AsyncStorage.multiSet([
+            ['first_name', profile.administrator_name || ''],
+            ['email', profile.business_email || ''],
+          ]);
+        } else {
+          // Fallback to AsyncStorage if no profile is available
+          const values = await AsyncStorage.multiGet(['first_name', 'email', 'phone_no']);
+          const firstName = values[0][1];  // first_name value
+          const email = values[1][1];  // email value
+          const storedPhone = values[2][1];  // phone_no value
+
+          if (firstName && email) {
+            setUserName(firstName);
+            setUserEmail(email);
+          } else {
+            Alert.alert('Error', 'No user data found.');
+          }
+
+          // Use the phone number from AsyncStorage, or default to "No phone number available"
+          setPhone(storedPhone || "No phone number available");
+        }
+      } catch (error) {
+        console.error('Error fetching business profile:', error);
+        Alert.alert('Error', 'Failed to fetch business profile.');
+      }
+    };
+
+    fetchBusinessProfile();
+  }, []); // Runs once when the component mounts
+
+
+  // Fallback in case both AsyncStorage and API request fail
+  const displayName = userName || "No name yet";
+  const displayEmail = userEmail || "No email yet";
+  const avatarLetter = displayName.charAt(0).toUpperCase();
+
+
+  // Fetch Payment History from API
+  useEffect(() => {
+    const fetchPaymentHistory = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          Alert.alert('Error', 'No authentication token found.');
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/business/payment-history`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const { payments } = response.data; // Assuming the response has the 'payments' field
+
+        if (payments) {
+          setPaymentHistory(payments);
+        } else {
+          Alert.alert('Error', 'No payment history available.');
+        }
+      } catch (error) {
+        console.error('Error fetching payment history:', error);
+        Alert.alert('Error', 'Failed to fetch payment history.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPaymentHistory();
+  }, []);
+
+  
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedTab(tab);
@@ -317,14 +427,14 @@ const BillingsAndPayment = () => {
 
           <View style={{backgroundColor: '#F0F0F0', padding: 20, borderRadius: 10, marginTop: 10}}>
           <View style={{flexDirection: 'row', marginTop: 10}}>
-               <Image source={{ uri: 'https://img.icons8.com/?size=100&id=13610&format=png&color=000000' }} style={styles.cardIcon} />
+               <Image source={{ uri: 'https://img.icons8.com/?size=100&id=B2BCRf9ICcvF&format=png&color=000000' }} style={styles.cardIcon} />
                <View style={{flexDirection: 'column'}}>
-              <Text style={{ fontSize: 16, marginLeft: 10}}>Mastercard ending in 3421</Text>
-              <Text style={{ fontSize: 16, marginLeft: 10}}>Expiry 12/25</Text>
-              <Text style={{ fontSize: 16, marginLeft: 10}}>Patrick Oche</Text>
+              <Text style={{ fontSize: 18, fontWeight: 600,marginLeft: 10, marginBottom: 5}}>Next Billing Date</Text>
+              <Text style={{ fontSize: 16, marginLeft: 10}}>Current Plan: 24-01-2026</Text>
+                 <Text style={{ fontSize: 16, marginLeft: 10, marginBottom: 5}}>SLA: 24-02-2025 [Standard SLA]</Text>
               </View>
               <TouchableOpacity style={{position: 'absolute', right: 5}} onPress={handleOpenPress2}>
-                <Text style={styles.addCardButton}>Edit</Text>
+                <Text style={styles.addCardButton}>Pay Now</Text>
               </TouchableOpacity>
               </View>
             </View>
@@ -339,25 +449,20 @@ const BillingsAndPayment = () => {
           <View style={styles.contactDetails}>
              <Text style={{fontSize: 19, marginBottom: 15, fontWeight: 'bold'}}>Contact Details</Text>
              <View style={{flexDirection: 'row', marginTop: 10}}>
-             <Text style={{backgroundColor: 'lightgreen', fontSize: 20, fontWeight: '600', padding: 10, textAlign: 'center', borderRadius: 5, width: 50, height: 45}}>P</Text>
+             <Text style={{backgroundColor: 'lightgreen', fontSize: 20, fontWeight: '600', padding: 10, textAlign: 'center', borderRadius: 5, width: 50, height: 45}}>{avatarLetter}</Text>
              <View style={{flexDirection: 'column'}}>
-            <Text style={styles.contactLabel1}>Patrick Oche</Text>
+            <Text style={styles.contactLabel1}>{displayName}</Text>
             <View style={styles.contactRow}>
         <MaterialIcons name="email" size={20} color="#444" />
-        <Text style={styles.contactLabel}>patricko@example.com</Text>
+        <Text style={styles.contactLabel}>{displayEmail}</Text>
       </View>
 
       {/* Phone */}
       <View style={styles.contactRow}>
         <MaterialIcons name="phone" size={20} color="#444" />
-        <Text style={styles.contactLabel}>+1 234 567 890</Text>
+        <Text style={styles.contactLabel}>{phone || 'No phone available'}</Text>
       </View>
-
-      {/* Address */}
-      <View style={styles.contactRow}>
-        <MaterialIcons name="home" size={20} color="#444" />
-        <Text style={styles.contactLabel}>123 Main St, City, Country</Text>
-      </View>
+      
             </View>
             </View>
           </View>
@@ -380,30 +485,31 @@ const BillingsAndPayment = () => {
               <Text style={styles.tableHeaderItem}>Type</Text>
               <Text style={styles.tableHeaderItem}>Status</Text>
             </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableRowItem}>INV283199546</Text>
-              <Text style={styles.tableRowItem}>01 Jan 2024</Text>
-              <Text style={styles.tableRowItem}>01 Jan 2025</Text>
-              <Text style={styles.tableRowItem}>$3900</Text>
-               <Text style={styles.tableRowItem}>Standard plan</Text>
-              <Text style={styles.tableRowItemPaid}>Paid</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableRowItem}>INV283199547</Text>
-              <Text style={styles.tableRowItem}>01 Jan 2025</Text>
-              <Text style={styles.tableRowItem}>01 Jan 2026</Text>
-              <Text style={styles.tableRowItem}>$15500</Text>
-              <Text style={styles.tableRowItem}>Professional plan</Text>
-              <Text style={styles.tableRowItemPaid}>Paid</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableRowItem}>INV283199548</Text>
-              <Text style={styles.tableRowItem}>02 Jan 2025</Text>
-              <Text style={styles.tableRowItem}>02 Feb 2025</Text>
-              <Text style={styles.tableRowItem}>$400</Text>
-               <Text style={styles.tableRowItem}>Advanced sla x 4</Text>
-              <Text style={styles.tableRowItemPaid}>Paid</Text>
-            </View>
+
+            {/* If there are no transactions, display "No transactions yet" */}
+            {paymentHistory.length === 0 ? (
+              <View style={styles.noTransactions}>
+                <Text>No transactions yet</Text>
+              </View>
+            ) : (
+              // Map over paymentHistory array to render table rows
+              !loading ? (
+                paymentHistory.map((payment, index) => (
+                  <View style={styles.tableRow} key={index}>
+                    <Text style={styles.tableRowItem}>{payment.invoiceNumber}</Text>
+                    <Text style={styles.tableRowItem}>{payment.invoiceDate}</Text>
+                    <Text style={styles.tableRowItem}>{payment.dueDate}</Text>
+                    <Text style={styles.tableRowItem}>${payment.amount}</Text>
+                    <Text style={styles.tableRowItem}>{payment.type}</Text>
+                    <Text style={payment.status === 'Paid' ? styles.tableRowItemPaid : styles.tableRowItem}>
+                      {payment.status}
+                    </Text>
+                  </View>
+                ))
+              ) : (
+                <Text>Loading...</Text>
+              )
+            )}
           </View>
 
          

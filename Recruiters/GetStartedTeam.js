@@ -63,7 +63,7 @@ function AngleQuestPage({ onClose }) {
   const [ModalVisible, setModalVisible] = useState(false);
   const [isStartPressed, setIsStartPressed] = useState(false);
   const [activeCard, setActiveCard] = useState('Non-Disclosure agreement');
-  const [file, setFile] = useState(null);
+  const [file, setFile] = React.useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [activePlan, setActivePlan] = useState(null);
@@ -89,11 +89,56 @@ const saveToAsyncStorage = async (plan) => {
 };
 
       // Handle button press to select a plan
-const handlePress = (plan) => {
-  setSelectedPlan(plan); // Set the selected plan
-  setSelectedSection(plan.id); // Set the selected section to the plan id
-  saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
-};
+  const handlePress = async (plan) => {
+    try {
+      setSelectedPlan(plan); // Set the selected plan
+      setSelectedSection(plan.id); // Set the selected section to the plan id
+      await saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
+
+      // Prepare the subscription data
+      const selectedPrice = plan.pricing[activePrice];
+      const costWithoutPrefix = selectedPrice.replace(/[^0-9.-]+/g, '');
+
+      const subscriptionData = [
+        {
+          type: plan.title, // Assuming `plan.name` holds the type of the plan
+          amount: costWithoutPrefix, // Numeric amount of the plan
+        },
+      ];
+
+      // Get token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        alert('Authentication error. Please log in again.');
+        return;
+      }
+
+      // Send subscription data to the backend
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
+        {
+          subscription: subscriptionData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json', // Ensure correct content type
+          },
+        }
+      );
+
+      console.log('Subscription saved successfully:', response.data);
+      alert('Plan selected and subscription saved successfully!');
+
+      // Proceed to the next step
+      setCurrentStep(3);
+      setActiveCard("Service Level Agreement");
+    } catch (error) {
+      console.error('Error saving subscription:', error.response?.data || error.message);
+      alert('An error occurred while saving the subscription. Please try again.');
+    }
+  };
 
 const [selectedOptions, setSelectedOptions] = useState({});
 
@@ -102,55 +147,92 @@ const [selectedOptions, setSelectedOptions] = useState({});
       // Update the selection for the section
       setSelectedOptions((prevState) => {
         const updatedOptions = { ...prevState, [sectionTitle]: option };
-  
+
         // Save the updated selected options to AsyncStorage
         AsyncStorage.setItem('selectedOptions', JSON.stringify(updatedOptions));
-  
+
         return updatedOptions;
       });
-  
-      // Check if the cost is "No additional cost", and set it to 0
+
+      // Check if the cost is "No additional cost" and set it to 0
       let costWithoutMonthly = option.cost.replace(' monthly', '').replace('$', '').trim(); // Remove "$" and "monthly"
       if (costWithoutMonthly === "No additional cost") {
         costWithoutMonthly = "0"; // Set the cost to 0 if it's "No additional cost"
       }
-  
-      // Save the cost as a numeric value (for example, "40" instead of "$40 monthly")
+
+      // Save the cost as a numeric value (e.g., "40" instead of "$40 monthly")
       await AsyncStorage.setItem(`${sectionTitle}-cost`, costWithoutMonthly);
-  
+
       console.log(`Saved cost for ${sectionTitle}: ${costWithoutMonthly}`);
-  
+
       // Retrieve the saved selected plan cost from AsyncStorage
       const selectedPlanCost = await AsyncStorage.getItem('selectedPlan');
-  
-      // Retrieve the option cost from AsyncStorage (already saved)
+
+      // Retrieve the option cost from AsyncStorage
       const optionCost = await AsyncStorage.getItem(`${sectionTitle}-cost`);
-  
+
       // Ensure both costs are available for calculation
       if (optionCost && selectedPlanCost) {
         // Convert the string values to floats for proper calculation
         const optionCostValue = parseFloat(optionCost);
         const selectedPlanCostValue = parseFloat(selectedPlanCost);
-  
+
         // Calculate the total combined cost
         const totalCost = optionCostValue + selectedPlanCostValue;
-  
+
         // Save the total combined cost to AsyncStorage
         await AsyncStorage.setItem('totalPlanCost', totalCost.toString());
-  
+
         setTotalPlanCost(totalCost);
-  
+
         console.log("Total Plan Cost:", totalCost);
+
+        // Submit the SLA to the backend
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          alert('Authentication error. Please log in again.');
+          return;
+        }
+
+        // API call to submit the SLA cost
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
+          { sla: costWithoutMonthly }, // Send SLA field with total cost
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json', // Set appropriate content type
+            },
+          }
+        );
+
+        console.log('SLA submitted successfully:', response.data);
+        alert('SLA cost submitted successfully!');
       } else {
         console.error("Option cost or selected plan cost not found in AsyncStorage.");
       }
     } catch (error) {
       console.error("Error in handleSelect:", error);
+      alert('An error occurred while handling your selection. Please try again.');
     }
   };
 
+
     const [totalPlanCost, setTotalPlanCost] = useState(0); // State to hold the total cost
     const [customAmount, setCustomAmount] = useState("");
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile({
+        uri: URL.createObjectURL(selectedFile), // Temporary URL for preview
+        type: selectedFile.type, // MIME type
+        name: selectedFile.name, // File name
+        rawFile: selectedFile, // Original file object
+      });
+    }
+  };
 
   const handleSave = async () => {
     if (!file) {
@@ -166,11 +248,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
       }
 
       const formData = new FormData();
-      formData.append('nda', {
-        uri: file.uri,
-        type: file.type,
-        name: file.name,
-      });
+      formData.append('nda', file.rawFile); // Append the file directly
 
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
@@ -184,12 +262,14 @@ const [selectedOptions, setSelectedOptions] = useState({});
       );
 
       console.log('NDA uploaded successfully:', response.data);
-      alert(t('File uploaded successfully'));
+      alert('File uploaded successfully');
     } catch (error) {
-      console.error('Error uploading NDA:', error);
-      alert(t('Error uploading file'));
+      console.error('Error uploading NDA:', error.response?.data || error.message);
+      alert('Error uploading file');
     }
   };
+
+
 
   const [isChecked, setIsChecked] = useState(false);
   // Get today's date in the format: Monday, YYYY-MM-DD
@@ -206,13 +286,48 @@ const [selectedOptions, setSelectedOptions] = useState({});
 
   const handleSubmit = async () => {
     if (isChecked) {
-      // Proceed to the next step if the checkbox is checked
-      setCurrentStep(2);
-      setActiveCard("Subscriptions");
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          alert('Authentication error. Please log in again.');
+          return;
+        }
+
+        // Prepare form data
+        const formData = new FormData();
+        if (file) {
+          formData.append('nda', file.rawFile); // Append file directly
+        }
+        formData.append('agreement', 'Yes'); // Include agreement field
+
+        // Send data to the backend
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        console.log('Response from server:', response.data);
+        alert('Terms and conditions accepted. Proceeding to the next step.');
+
+        // Proceed to the next step
+        setCurrentStep(2);
+        setActiveCard("Subscriptions");
+      } catch (error) {
+        console.error('Error submitting agreement:', error.response?.data || error.message);
+        alert('An error occurred while submitting the agreement. Please try again.');
+      }
     } else {
       alert('Please agree to the terms and conditions before proceeding.');
     }
   };
+
 
   useEffect(() => {
     const fetchNda = async () => {
@@ -326,7 +441,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
           annually: "$75",
         },
         price: "$3,900",
-        plan: "Up to 5 users",
+        plan: "5 users pack",
         color: "#FFFFFF",
       },
       {
@@ -347,7 +462,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
           annually: "$75",
         },
         price: "$15,500",
-        plan: "Up to 25 users",
+        plan: "25 users pack",
         color: "#FFFFFF",
       },
       {
@@ -368,7 +483,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
           annually: "$75",
         },
         price: "$25,500",
-        plan: "Up to 50 users",
+        plan: "50 users pack",
         color: "#FFFFFF",
       },
       {
@@ -477,9 +592,8 @@ const [selectedOptions, setSelectedOptions] = useState({});
     <View style={styles.input}>
       <input
         type="file"
-        accept=".pdf, .doc, .docx"
-        onChange={handleChooseImage}
-        style={styles.fileInput}
+        onChange={handleFileChange}
+        accept=".pdf,.doc,.docx" // Optional: Restrict file types
       />
        </View>
       <Text style={styles.uploadInfo}>
@@ -648,8 +762,7 @@ Governing Law
                      onPress={() => {
                        handlePress(plan);
                        saveToAsyncStorage(plan); // Save the selected plan pricing to AsyncStorage
-                       setCurrentStep(3); 
-                       setActiveCard("Service Level Agreement");
+                       
                      }}
                    >
                      <Text style={styles.getStartedText}>Get Started</Text>

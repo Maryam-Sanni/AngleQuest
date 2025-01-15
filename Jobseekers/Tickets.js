@@ -58,7 +58,7 @@ const SupportRequestPage = () => {
     setIsModalVisible2(false);
   };
   
-  const [savedRole, setSavedRole] = useState(""); // State for saved specialization
+  const [savedRole, setSavedRole] = useState(""); 
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
