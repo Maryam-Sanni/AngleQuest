@@ -75,7 +75,7 @@ const TicketsPage = () => {
   };
 
   const fetchAcceptedRequests = async () => {
-    const url = `${apiUrl}/api/expert/get-expert-accepted-reqs`;
+    const url = `${apiUrl}/api/expert/accepted-request`;
 
     try {
       const token = await AsyncStorage.getItem('token');
@@ -123,7 +123,7 @@ const TicketsPage = () => {
     }
 
     const { user_id } = request; // Extract user_id from the request object
-    const url = `${apiUrl}/api/expert/support-requests/${requestId}`;
+    const url = `${apiUrl}/api/expert/accept-request/${requestId}`;
 
     try {
       // Retrieve token and expert name from AsyncStorage

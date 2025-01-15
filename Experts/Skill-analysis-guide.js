@@ -10,7 +10,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 const MAX_TOPICS = 15;
 
-function MyComponent({ onClose }) {
+function MyComponent({ onClose, onGuide }) {
   const [checkedItems, setCheckedItems] = useState([]);
 
   const toggleCheckbox = (idx) => {
@@ -281,6 +281,7 @@ useEffect(() => {
       setAlertMessage(t('Failed to create skill analysis profile'));
     }
     setAlertVisible(true);
+    onGuide();
   };
 
   const handlePut = async () => {
@@ -399,7 +400,8 @@ useEffect(() => {
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={styles.buttonTextDue}>Please fill in all fields</Text>
+              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide that helps users assess their skill levels effectively. This guide should include instructions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.
+              </Text>
             </View>
           </View>
 
@@ -460,19 +462,6 @@ useEffect(() => {
                   <Picker.Item label={t('Intermediate')} value="Intermediate" />
                   <Picker.Item label={t('Advanced')} value="Advanced" />
                 </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  placeholder="$20"
-                  placeholderTextColor="black"
-                  style={styles.input}
-                  editable={false} // Prevent manual input
-                />
               </View>
             </View>
             <View style={styles.row}>

@@ -30,7 +30,7 @@ function MyComponent({ onClose }) {
   const [isVisible, setIsVisible] = useState(true); 
   const [isPressed, setIsPressed] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [rate, setRate] = useState('$0'); // Initial value includes $
+  const [rate, setRate] = useState('$30'); // Initial value includes $
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -138,7 +138,8 @@ function MyComponent({ onClose }) {
 
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={styles.buttonTextDue}>Please fill all fields</Text>
+              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Build a guide to assist users in preparing for and conducting interviews effectively. Include instructions on crafting questions, evaluating responses, and providing feedback. Make sure to fill all fields.
+                </Text>
             </View>
           </View>
 
@@ -191,19 +192,7 @@ function MyComponent({ onClose }) {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  style={styles.input}
-                  value={rate}
-                  onChangeText={handleRateChange}
-                  keyboardType="numeric" 
-                />
-              </View>
-            </View>
+           
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>

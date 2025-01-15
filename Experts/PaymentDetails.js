@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, Alert, StyleSheet, ScrollView, Modal } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
+import OpenModal from '../Experts/TourGuide';
 
-const PaymentDetailsForm = () => {
+const PaymentDetailsForm = ({ handleClose }) => {
   const [bankName, setBankName] = useState('');
   const [sortCode, setSortCode] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -12,12 +13,13 @@ const PaymentDetailsForm = () => {
   const [country, setCountry] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
   const handleSubmit = async () => {
-    if (!bankName || !sortCode || !accountNumber || !mobileNumber || !country) {
-      setAlertMessage('All fields are required');
+    if (!bankName || !accountNumber || !mobileNumber || !country) {
+      setAlertMessage('Fill required fields');
       setAlertVisible(true);
       return;
     }
@@ -33,7 +35,7 @@ const PaymentDetailsForm = () => {
         `${apiUrl}/api/jobseeker/payment-details`,  // Update to the correct endpoint
         {
           bank_name: bankName,
-          sort_code: sortCode,
+          sort_code: sortCode || 'Not Applicable',
           acc_num: accountNumber,
           mobile_num: mobileNumber,
           country: country,
@@ -55,17 +57,33 @@ const PaymentDetailsForm = () => {
        setAlertMessage('An error occured');
     }
     setAlertVisible(true);
+    setModalVisible(true);
   };
 
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
   };
+
+  const handleOpenPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   
   return (
     <View style={styles.container}>
        <ScrollView contentContainerStyle={{maxHeight: 500}}>
 
+         <Text style={styles.title}>Input Withdrawal Details</Text>
+         <Text style={styles.description}>
+           Withdrawal details are the necessary information required to process your withdrawals. 
+           Ensure you provide accurate details to avoid delays or issues during the withdrawal process.
+         </Text>
+
+         
       <Text style={styles.label}>Bank Name</Text>
       <TextInput
         style={styles.input}
@@ -124,16 +142,27 @@ const PaymentDetailsForm = () => {
         onConfirm={hideAlert}
       />
        </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal onClose={handleClose} />
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
     backgroundColor: 'white',
     marginLeft: 150, marginRight: 150,
-    marginTop: 50
+    marginTop: 30
   },
   label: {
     fontSize: 16,
@@ -175,6 +204,19 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 30,
+    width: 800,
+    alignSelf: 'center'
   },
 });
 

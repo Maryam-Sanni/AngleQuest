@@ -101,44 +101,25 @@ const saveToAsyncStorage = async (plan) => {
 
       const subscriptionData = [
         {
-          type: plan.title, // Assuming `plan.name` holds the type of the plan
+          type: plan.title, // Assuming plan.title holds the type of the plan
           amount: costWithoutPrefix, // Numeric amount of the plan
         },
       ];
 
-      // Get token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        alert('Authentication error. Please log in again.');
-        return;
-      }
+      // Store the subscription data as a stringified array in AsyncStorage
+      await AsyncStorage.setItem('selectedPlan', JSON.stringify(subscriptionData));
+      await AsyncStorage.setItem('selectedPlanCost', costWithoutPrefix);
 
-      // Send subscription data to the backend
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
-        {
-          subscription: subscriptionData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json', // Ensure correct content type
-          },
-        }
-      );
-
-      console.log('Subscription saved successfully:', response.data);
-      alert('Plan selected and subscription saved successfully!');
 
       // Proceed to the next step
       setCurrentStep(3);
       setActiveCard("Service Level Agreement");
     } catch (error) {
-      console.error('Error saving subscription:', error.response?.data || error.message);
-      alert('An error occurred while saving the subscription. Please try again.');
+      console.error('Error handling plan selection:', error);
+      alert('An error occurred while selecting the plan. Please try again.');
     }
   };
+
 
 const [selectedOptions, setSelectedOptions] = useState({});
 
@@ -154,8 +135,8 @@ const [selectedOptions, setSelectedOptions] = useState({});
         return updatedOptions;
       });
 
-      // Check if the cost is "No additional cost" and set it to 0
-      let costWithoutMonthly = option.cost.replace(' monthly', '').replace('$', '').trim(); // Remove "$" and "monthly"
+      // Handle SLA cost
+      let costWithoutMonthly = option?.cost?.replace(' monthly', '').replace('$', '').trim(); // Remove "$" and "monthly"
       if (costWithoutMonthly === "No additional cost") {
         costWithoutMonthly = "0"; // Set the cost to 0 if it's "No additional cost"
       }
@@ -165,55 +146,60 @@ const [selectedOptions, setSelectedOptions] = useState({});
 
       console.log(`Saved cost for ${sectionTitle}: ${costWithoutMonthly}`);
 
-      // Retrieve the saved selected plan cost from AsyncStorage
-      const selectedPlanCost = await AsyncStorage.getItem('selectedPlan');
+      // Retrieve necessary values from AsyncStorage
+      const selectedPlan = await AsyncStorage.getItem('selectedPlan'); // Stored as a JSON string
+      const file = await AsyncStorage.getItem('ndaFile'); // Assuming the file path or raw file is stored
+      const token = await AsyncStorage.getItem('token');
 
-      // Retrieve the option cost from AsyncStorage
-      const optionCost = await AsyncStorage.getItem(`${sectionTitle}-cost`);
-
-      // Ensure both costs are available for calculation
-      if (optionCost && selectedPlanCost) {
-        // Convert the string values to floats for proper calculation
-        const optionCostValue = parseFloat(optionCost);
-        const selectedPlanCostValue = parseFloat(selectedPlanCost);
-
-        // Calculate the total combined cost
-        const totalCost = optionCostValue + selectedPlanCostValue;
-
-        // Save the total combined cost to AsyncStorage
-        await AsyncStorage.setItem('totalPlanCost', totalCost.toString());
-
-        setTotalPlanCost(totalCost);
-
-        console.log("Total Plan Cost:", totalCost);
-
-        // Submit the SLA to the backend
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          alert('Authentication error. Please log in again.');
-          return;
-        }
-
-        // API call to submit the SLA cost
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
-          { sla: costWithoutMonthly }, // Send SLA field with total cost
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json', // Set appropriate content type
-            },
-          }
-        );
-
-        console.log('SLA submitted successfully:', response.data);
-        alert('SLA cost submitted successfully!');
-      } else {
-        console.error("Option cost or selected plan cost not found in AsyncStorage.");
+      // Ensure all necessary data is available
+      if (!token) {
+        console.error('No token found');
+        alert('Authentication error. Please log in again.');
+        return;
       }
+
+      if (!selectedPlan) {
+        console.error('Missing selected plan data');
+        alert('Some required data is missing.');
+        return;
+      }
+
+      // Parse subscription data
+      const subscriptionData = JSON.parse(selectedPlan);
+
+      // Prepare form data for backend submission
+      const formData = new FormData();
+
+
+
+      // Append subscription data as an array
+      formData.append('subscription', JSON.stringify(subscriptionData));
+
+      // Append SLA and agreement
+      formData.append('sla', costWithoutMonthly || "0"); // Default to "0" if SLA is missing
+      formData.append('agreement', "Yes"); 
+
+      // Send the data to the backend in one request
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data', // Ensure the correct content type
+          },
+        }
+      );
+
+      console.log('Data uploaded successfully:', response.data);
+      alert('Data uploaded successfully!');
+
+      // Optionally, proceed to the next step
+      setCurrentStep(3);
+      setActiveCard("Service Level Agreement");
+
     } catch (error) {
-      console.error("Error in handleSelect:", error);
+      console.error('Error in handleSelect:', error.response?.data || error.message);
       alert('An error occurred while handling your selection. Please try again.');
     }
   };
@@ -241,34 +227,16 @@ const [selectedOptions, setSelectedOptions] = useState({});
     }
 
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
+      // Save the NDA file to AsyncStorage
+      await AsyncStorage.setItem('ndaFile', file.rawFile); 
 
-      const formData = new FormData();
-      formData.append('nda', file.rawFile); // Append the file directly
-
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      console.log('NDA uploaded successfully:', response.data);
-      alert('File uploaded successfully');
+      // Optionally, you can reset the file state or do any other necessary steps
+      alert('File saved and data submitted successfully!');
     } catch (error) {
-      console.error('Error uploading NDA:', error.response?.data || error.message);
-      alert('Error uploading file');
+      console.error('Error handling NDA file save:', error);
+      alert('Error saving file and submitting data');
     }
   };
-
 
 
   const [isChecked, setIsChecked] = useState(false);
@@ -294,39 +262,29 @@ const [selectedOptions, setSelectedOptions] = useState({});
           return;
         }
 
-        // Prepare form data
+        // Prepare form data (without sending API request directly here)
         const formData = new FormData();
         if (file) {
           formData.append('nda', file.rawFile); // Append file directly
         }
         formData.append('agreement', 'Yes'); // Include agreement field
 
-        // Send data to the backend
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/business/upload-business-nda`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
-
-        console.log('Response from server:', response.data);
-        alert('Terms and conditions accepted. Proceeding to the next step.');
+        // Store the data in AsyncStorage for later submission
+        await AsyncStorage.setItem('agreement', 'Yes');
 
         // Proceed to the next step
         setCurrentStep(2);
         setActiveCard("Subscriptions");
+
       } catch (error) {
-        console.error('Error submitting agreement:', error.response?.data || error.message);
+        console.error('Error submitting agreement:', error);
         alert('An error occurred while submitting the agreement. Please try again.');
       }
     } else {
       alert('Please agree to the terms and conditions before proceeding.');
     }
   };
+
 
 
   useEffect(() => {

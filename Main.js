@@ -153,12 +153,25 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 const App = () => {
   const { width } = Dimensions.get('window');
   const initialRoute = width < 600 ? "/mobile" : "/welcome";
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 600);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
   return (
     <Router>
       <Routes>
         {/* Redirect to initial route */}
-        <Route path="*" element={<Navigate to={initialRoute} />} />
+        <Route
+          path="*"
+          element={<Navigate to={isMobile ? "/mobile" : "/welcome"} />}
+        />
 
          <Route path="/" element={<Navigate to="/welcome" />} />
         <Route path="/welcome" element={<Welcome />} />

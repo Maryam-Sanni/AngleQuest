@@ -2,13 +2,14 @@ import React, { useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import OpenModal from '../components/Tour0';
 
-function MyComponent({ onClose }) {
+function MyComponent({ onClose, handleClose }) {
   const [mainModalVisible, setMainModalVisible] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleOpenPress = () => {
     setMainModalVisible(false);
     setModalVisible(true);
+    handleClose();
   };
 
   const handleCloseModal = () => {
@@ -19,6 +20,7 @@ function MyComponent({ onClose }) {
   const handleCloseMainModal = () => {
     setMainModalVisible(false);
     onClose(); // Notify parent component to close this modal
+    handleClose();
   };
 
   return (
@@ -52,9 +54,17 @@ function MyComponent({ onClose }) {
               />
             </View>
 
+            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <TouchableOpacity onPress={handleCloseMainModal} style={styles.buttonplus2}>
+              <Text style={styles.buttonTextplus}>Close</Text>
+            </TouchableOpacity>
+            
             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
               <Text style={styles.buttonTextplus}>Start Tour</Text>
             </TouchableOpacity>
+
+            </View>
+            
           </View>
         </View>
       </Modal>
@@ -102,11 +112,19 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'coral',
     borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+padding: 10,
     alignSelf: 'center',
-    width: 300,
+    width: 200,
     marginTop: 20
+  },
+  buttonplus2: {
+    backgroundColor: 'grey',
+    borderRadius: 5,
+    padding: 10,
+    alignSelf: 'center',
+    width: 200,
+    marginTop: 20,
+    marginRight: 10
   },
   buttonTextplus: {
     color: 'white',

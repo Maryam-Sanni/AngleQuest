@@ -5,9 +5,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 const onboardingData = [
   {
     id: '1',
-    title: 'Welcome to AngleQuest',
-    description: 'We are thrilled to have you here, Start by setting up your profile, it takes 10 minutes to complete.',
-    image: require("../assets/happywelcome.png")
+    title: 'Congrats, you have completed the first part.',
+    description: 'Now, the second part involves creating profile guide. Since you will be providing your service as a skill analysis expert, growth plan, creating a cohort (hub) to share your expertise and lastly help our users to resolve their issues – we have prepare forms that will enable you to create a guide that will serve as your template for such sessions. Think working smart!',
+    image: require("../assets/EmptySch.jpeg")
   },
   {
     id: '2',
@@ -42,18 +42,13 @@ const onboardingData = [
   }
 ];
 
-const Onboarding = ({ onFinish }) => {
+const Onboarding = ({ onGuide }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleNext = () => {
-    if (currentSlide === onboardingData.length - 1) {
-      if (onFinish) onFinish(); 
-    } else {
-      setCurrentSlide((prev) => (prev + 1) % onboardingData.length);
-      setSelectedOption(null); // Reset the selected option when moving to the next slide
-    }
-  };
+const handleNext = () => {
+  onGuide(); // Call the onFinish function
+};
 
   const handleBack = () => {
     setCurrentSlide((prev) => (prev - 1 + onboardingData.length) % onboardingData.length);
@@ -130,7 +125,6 @@ const Onboarding = ({ onFinish }) => {
 
   return (
     <View style={styles.container}>
-      {renderProgressBar()}
       <View style={styles.slideContainer}>{renderSlide()}</View>
       <View style={styles.navigationContainer}>
         <View style={styles.buttonPlaceholder}>
@@ -143,7 +137,7 @@ const Onboarding = ({ onFinish }) => {
         </View>
         <TouchableOpacity onPress={handleNext} style={styles.button}>
           <Text style={styles.buttonText2}>
-            {currentSlide === onboardingData.length - 1 ? 'Next' : 'Continue'}
+            {currentSlide === onboardingData.length - 1 ? 'Next' : 'Proceed'}
           </Text>
           <MaterialIcons name="arrow-forward" size={16} color="white" />
         </TouchableOpacity>

@@ -363,8 +363,10 @@ const CreateCoachingHubForm = ({ onClose }) => {
         <View style={styles.greenBox}>
           
     <View style={styles.pageContainer}>
+      
       <View style={styles.formContainer}>
-        
+        <Text style={{ fontSize: 14, width: 700, marginBottom: 10, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide for organizing and running effective training sessions. This should cover topics like session objectives, scheduling, participant engagement, and material preparation. Make sure to fill all fields.
+          </Text>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
             selectedValue={specialization}
@@ -445,13 +447,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
               
 
         
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee (per meeting)")}</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="$40"
-          onChangeText={text => setfee(text)}
-          editable={false}
-        />
+      
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}
           onPress={handleSave}

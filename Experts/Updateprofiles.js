@@ -8,6 +8,7 @@ import OpenModal4 from '../components/Create-hub';
 import OpenModal5 from './PaymentDetails';
 import OpenModal6 from './RequestGuide';
 import OpenModal7 from './Onboard';
+import OpenModal8 from './Guideexplanation';
 import { Button } from "react-native-paper";
 
 const ProfilePage = ({ onClose }) => {
@@ -49,6 +50,26 @@ const ProfilePage = ({ onClose }) => {
   const handleFinishOnboarding = () => {
     setActiveSection("Personal Information");
   };
+
+  const handleGrowth = () => {
+    setActiveSection("Growth Plan Guide");
+  };
+
+  const handleHub = () => {
+    setActiveSection("Create a new Hub");
+  };
+
+  const handleSupport = () => {
+    setActiveSection("Support Request Guide");
+  };
+
+  const handleInterview = () => {
+    setActiveSection("Interview Guide");
+  };
+
+  const handleClose = () => {
+    onClose();
+  };
   
   return (
     <View style={styles.container}>
@@ -75,16 +96,21 @@ const ProfilePage = ({ onClose }) => {
         >
           Personal Information
         </Button>
-       
+
         <Button
           mode="text"
           textColor="#000000"
-          style={[
-            styles.button,
-            activeSection === 'Skill Analysis Guide' && styles.activeButton,
-          ]}
-          onPress={toggleSidebar}
-        >
+            style={[
+              styles.button,
+              (activeSection === 'Guide Explanation' || 
+               activeSection === 'Skill Analysis Guide' || 
+               activeSection === 'Growth Plan Guide' || 
+               activeSection === 'Create a new Hub' || 
+               activeSection === 'Support Request Guide' || 
+               activeSection === 'Interview Guide') && styles.activeButton
+            ]}
+          onPress={() => handleSectionClick("Guide Explanation")}
+          >
          Create Guides
         </Button>
         <Button
@@ -140,7 +166,7 @@ const ProfilePage = ({ onClose }) => {
         <View style={styles.content}>
           {activeSection === "Growth Plan Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal />
+              <OpenModal onHub={handleHub}/>
             </View>
           )}
 
@@ -152,19 +178,19 @@ const ProfilePage = ({ onClose }) => {
 
           {activeSection === "Skill Analysis Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal3 />
+              <OpenModal3 onGrowth={handleGrowth} />
             </View>
           )}
 
           {activeSection === "Create a new Hub" && (
             <View style={styles.modalContainer}>
-              <OpenModal4 />
+              <OpenModal4 onSupport={handleSupport}/>
             </View>
           )}
 
           {activeSection === "Withdrawal Details" && (
             <View style={styles.modalContainer}>
-              <OpenModal5 />
+               <OpenModal5 handleClose={handleClose} />
             </View>
           )}
 
@@ -176,7 +202,7 @@ const ProfilePage = ({ onClose }) => {
 
           {activeSection === "Support Request Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal6 />
+              <OpenModal6 onInterview={handleInterview}/>
             </View>
           )}
 
@@ -185,6 +211,13 @@ const ProfilePage = ({ onClose }) => {
               <OpenModal7 onFinish={handleFinishOnboarding} />
             </View>
           )}
+
+          {activeSection === "Guide Explanation" && (
+            <View style={styles.modalContainer}>
+              <OpenModal8 onGuide={toggleSidebar} />
+            </View>
+          )}
+
         </View>
       </View>
     </View>
@@ -265,4 +298,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfilePage;
+export default ProfilePage; 

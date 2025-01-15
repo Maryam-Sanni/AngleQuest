@@ -399,7 +399,8 @@ useEffect(() => {
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={styles.buttonTextDue}>Please fill in all fields</Text>
+              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Develop a guide to help users set clear, achievable objectives and map out actionable steps to reach their goals. Include sections on goal-setting, resource allocation, and tracking progress. Make sure to fill all fields.
+                </Text>
             </View>
           </View>
 
@@ -462,19 +463,7 @@ useEffect(() => {
                 </Picker>
               </View>
             </View>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Rate")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  placeholder="$20"
-                  placeholderTextColor="black"
-                  style={styles.input}
-                  editable={false} // Prevent manual input
-                />
-              </View>
-            </View>
+           
             <View style={styles.row}>
               <View style={[styles.cell, { flex: 1}]}>
                 <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Available Day(s) and Time")}</Text>

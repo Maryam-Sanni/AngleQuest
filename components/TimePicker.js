@@ -41,7 +41,8 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 
   return (
       <View style={styles.modalContainer}>
-        <Text style={{ marginBottom: 30, fontSize: 20, fontWeight: 'bold'}}>{t("Choose Availability")}</Text>
+        <Text style={{ marginBottom: 5, fontSize: 20, fontWeight: 'bold'}}>{t("Choose Availability")}</Text>
+        <Text style={{ marginBottom: 30, fontSize: 14}}>{t("Select the days and time that you will be available to attend to member of AngleQuest that needs your service.")}</Text>
         <Text style={styles.headerText}>{t("Days of the week")}</Text>
         <View style={styles.daysContainer}>
           {daysOfWeek.map((day) => (
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: 600,
-    height: 370
+    height: 400
   },
   headerText: {
     fontSize: 12,
