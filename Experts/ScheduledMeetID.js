@@ -15,6 +15,7 @@ import { BlurView } from "expo-blur";
 import OpenModal from './EditMeet';
 import moment from "moment-timezone";
 import { useNavigate } from "react-router-dom";
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const defaultAvatar = require("../assets/account.png");
 
@@ -136,16 +137,18 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
           const currentTime = new Date();
           const twentyFourHoursAgo = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000);
 
+          // Filter meetings based on hubId and the last 24 hours rule
           const filteredMeetings = NewMeeting.filter((meeting) => {
             const meetingDate = new Date(meeting.date);
             return (
-              String(meeting.hub_id) === String(hubId) &&
+              String(hubId) === String(meeting.hub_id) &&
               meetingDate >= twentyFourHoursAgo
             );
           });
 
+          // Sort the filtered meetings by date in ascending order (not more than 24 hours ago)
           const sortedMeetings = filteredMeetings.sort(
-            (a, b) => new Date(a.date) - new Date(b.date),
+            (a, b) => new Date(a.date) - new Date(b.date)
           );
 
           setMeetings(sortedMeetings);
@@ -161,6 +164,8 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
 
     fetchMeetingData();
   }, [hubId, apiUrl]);
+
+
 
 
   const handleJoinLink = async (meeting) => {
@@ -254,8 +259,6 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                 name: meeting.jobseeker_name,
             }));
 
-        setMeetings(formattedMeetings);
-
         // Calculate the number of unique names
         const uniqueNames = new Set(formattedMeetings.map(meeting => meeting.name));
         setUniqueNameCount(uniqueNames.size); // Update the state with the unique count
@@ -290,8 +293,55 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
   return (
     <View>
       <ScrollView contentContainerStyle={styles.cardContainer}>
+        {!meetings.length && !loading && (
+      <View
+         style={{
+           flex: 1,
+           justifyContent: "center",
+           alignItems: "center",
+           padding: 20,
+           backgroundColor: 'white'
+         }}
+       >
+         {/* Empty Schedule Image */}
+         <Image
+           source={EmptyScheduleImage}
+           style={{
+             width: 200,
+             height: 200,
+             marginBottom: 20,
+           }}
+         />
+
+         {/* Title */}
+         <Text
+           style={{
+             fontSize: 24,
+             fontWeight: 'bold',
+             color: '#333',
+             marginBottom: 10,
+           }}
+         >
+           No Upcoming Sessions
+         </Text>
+
+         {/* Explanation */}
+         <Text
+           style={{
+             fontSize: 16,
+             color: '#777',
+             textAlign: 'center',
+             marginBottom: 20,
+           }}
+         >
+           It seems there are no upcoming meetings right now. Use New Meetings to create a new meeting
+         </Text>
+
+
+       </View>
+        )}
         {(showAllMeetings ? meetings : meetings.slice(0, 2)).map((meeting) => (
-          <View key={meeting.id} style={styles.meetingContainer}>
+      <View key={meeting.meeting_id} style={styles.meetingContainer}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
                 source={{

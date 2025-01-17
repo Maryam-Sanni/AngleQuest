@@ -212,7 +212,7 @@ function MyComponent() {
   );
 }
 
-const ScheduledMeetingsTable = () => {
+const ScheduledMeetingsTable = ({onClose}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible6, setModalVisible6] = useState(false);
@@ -317,7 +317,7 @@ const ScheduledMeetingsTable = () => {
         }
 
         const response = await axios.get(
-          "https://recruitangle.com/api/expert/newhubmeeting/get",
+          `${apiUrl}/api/expert/newhubmeeting/get`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -357,7 +357,7 @@ const ScheduledMeetingsTable = () => {
         }
 
         const response = await fetch(
-          "https://recruitangle.com/api/jobseeker/meetings/get?type=hub",
+          `${apiUrl}/api/jobseeker/meetings/get?type=hub`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -443,8 +443,16 @@ const ScheduledMeetingsTable = () => {
 
   const handlePress = (buttonName, action) => {
     setSelectedButton(buttonName);
-    action();
+
+    // Check if the action exists before calling it
+    if (action && typeof action === 'function') {
+      action(); // Call the action if it exists
+    } else {
+      console.log(`No action provided for ${buttonName}`);
+      // Optionally, you can handle this case by showing an alert or taking another action
+    }
   };
+
 
   return (
     <View style={{ flex: 1 }}>

@@ -147,8 +147,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
       console.log(`Saved cost for ${sectionTitle}: ${costWithoutMonthly}`);
 
       // Retrieve necessary values from AsyncStorage
-      const selectedPlan = await AsyncStorage.getItem('selectedPlan'); // Stored as a JSON string
-      const file = await AsyncStorage.getItem('ndaFile'); // Assuming the file path or raw file is stored
+      const selectedPlanCost = await AsyncStorage.getItem('selectedPlanCost'); // Stored as a JSON string
       const token = await AsyncStorage.getItem('token');
 
       // Ensure all necessary data is available
@@ -158,19 +157,22 @@ const [selectedOptions, setSelectedOptions] = useState({});
         return;
       }
 
-      if (!selectedPlan) {
+      if (!selectedPlanCost) {
         console.error('Missing selected plan data');
         alert('Some required data is missing.');
         return;
       }
 
-      // Parse subscription data
-      const subscriptionData = JSON.parse(selectedPlan);
+      // Parse subscription data and dynamically create the array
+      const subscriptionData = [
+        {
+          type: sectionTitle, // Use the section title as the type
+          amount: selectedPlanCost, // Numeric amount of the plan
+        },
+      ];
 
       // Prepare form data for backend submission
       const formData = new FormData();
-
-
 
       // Append subscription data as an array
       formData.append('subscription', JSON.stringify(subscriptionData));
@@ -203,6 +205,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
       alert('An error occurred while handling your selection. Please try again.');
     }
   };
+
 
 
     const [totalPlanCost, setTotalPlanCost] = useState(0); // State to hold the total cost
@@ -347,7 +350,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
   
   const sections = [
     {
-      title: "Startup",
+      title: "Standard",
       options: [
         { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 24hrs", "Coaching hub - 1 hub access", "Best practice access - 30%"], cost: "No additional cost", isDefault: true },
         { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 12hrs", "Coaching hub - 2 hub access", "Best practice access - 60%"], cost: "$40 monthly" },
@@ -382,7 +385,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
 
   const plans = [
       {
-        id: "Startup",
+        id: "Standard",
         title: "Standard",
         topic:
           "Preserve your expertise effortlessly. Solve high-priority challenges while securing a solid knowledge foundation.",

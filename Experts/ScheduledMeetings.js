@@ -30,36 +30,47 @@ const ScheduledMeetingsTable = () => {
     Linking.openURL(googleCalendarUrl).catch(err => console.error('Failed to open URL:', err));
   };
   
-  const fetchMeetingData = async () => {
+  const fetchHubMeetings = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
+      const hubId = await AsyncStorage.getItem('hub_id');
+
+      if (!token || !hubId) {
+        console.error('Token or hub ID not found');
         return;
       }
 
-      const response = await axios.get(`${apiUrl}/api/expert/newhubmeeting/get`, {
+      const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status === 200) {
-        const { NewMeeting } = response.data;
-        if (NewMeeting && NewMeeting.length > 0) {
-          // Sort NewMeeting by date in ascending order (closest dates first)
-          const sortedMeetings = NewMeeting.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const { NewHub } = response.data;
+
+        // Find the hub by hub_id
+        const selectedHub = NewHub.find(hub => hub.id === parseInt(hubId));
+
+        if (selectedHub && selectedHub.meeting && selectedHub.meeting.length > 0) {
+          // Sort meetings by date in ascending order
+          const sortedMeetings = selectedHub.meeting.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
 
           setMeetings(sortedMeetings);
           setLoading(false);
         } else {
-          console.error('No meetings found');
+          console.error('No meetings found for the selected hub');
+          setMeetings([]);
+          setLoading(false);
         }
       } else {
-        console.error('Failed to fetch meeting data');
+        console.error('Failed to fetch hub data');
       }
     } catch (error) {
-      console.error('Error fetching meeting data:', error);
+      console.error('Error fetching hub meetings:', error);
     }
   };
+
 
 
   const handleJoinLink = async (meeting) => {
@@ -95,7 +106,7 @@ const ScheduledMeetingsTable = () => {
   };
 
   useEffect(() => {
-    fetchMeetingData();
+    fetchHubMeetings();
   }, []);
 
   if (error) return <Text>{error}</Text>;

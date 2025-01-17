@@ -133,7 +133,9 @@ import ContactSales from "./Screens/ContactSales";
 import AIScreen from "./Screens/AIscreen";
 import Welcome from "./Screens/LandingHome";
 import SignIn2 from "./Screens/SignIn";
+import MobileSignin from "./Screens/MobileSignIn";
 import SignUp2 from "./Screens/SignUp";
+import MobileSignUp from "./Screens/MobileSignUp";
 import Skillanalysis from "./Screens/Skillanalysis";
 import Individual from "./Screens/Individual";
 import Community from "./Screens/Community";
@@ -177,8 +179,8 @@ const App = () => {
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/join-recruitangle" element={<JoinAs />} />
         <Route path="/anglequest-ai" element={<AIScreen />} />
-        <Route path="/sign-in" element={<SignIn2 />} />
-        <Route path="/sign-up" element={<SignUp2 />} />
+        <Route path="/sign-in" element={isMobile ? <MobileSignin /> : <SignIn2 />} />
+        <Route path="/sign-up" element={isMobile ? <MobileSignUp /> : <SignUp2 />} />
         <Route path="/contact-sales" element={<ContactSales />} />
         <Route path="/home-experts" element={<Homepage />} />
         <Route path="/terms" element={<TermsofService />} />

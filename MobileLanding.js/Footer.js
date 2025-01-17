@@ -1,57 +1,279 @@
-import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, TextInput, Pressable } from "react-native";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
-const Footer = () => {
-  return (
-    <ImageBackground
-      source={require('../assets/footer.png')}
-      style={styles.imageBackground}
-    >
-      <View style={styles.footerContainer}>
-        <Text style={styles.heading}>This is the Heading</Text>
-        <Text style={styles.subheading}>Some subheading texts goes here</Text>
-        <TouchableOpacity style={styles.button} onPress={() => alert('Button Pressed')}>
-          <Text style={styles.buttonText}>Click Me</Text>
-        </TouchableOpacity>
+import Title from "../components/Title";
+import Row from "../components/Row";
+
+const Footer = ({ bgColor }) => {
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [changeBg, setChangeBg] = useState(bgColor ? bgColor : "#E0F8EC");
+
+  const handleBG = (val) => {
+    setChangeBg(val);
+  };
+
+  const handleSignUp = (option) => {
+    navigate('/sign-up', { state: { signUpOption: option } });
+  };
+
+    const handlePricing = () => {
+   navigate("/pricing");
+    };
+
+  const FooterList = ({
+    title,
+    item1,
+    item2,
+    item3,
+    item4,
+    item5,
+    onPress1,
+    onPress2,
+    onPress3,
+    onPress4,
+    onPress5,
+  }) => {
+    return (
+      <View style={{ gap: 16 }}>
+        {title && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "#135837"}
+            textWeight={"700"}
+            title={title}
+          />
+        )}
+        {item1 && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "black"}
+            textWeight={"400"}
+            title={item1}
+            onPress={onPress1}
+          />
+        )}
+        {item2 && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "black"}
+            textWeight={"400"}
+            title={item2}
+            onPress={onPress2}
+          />
+        )}
+        {item3 && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "black"}
+            textWeight={"400"}
+            title={item3}
+            onPress={onPress3}
+          />
+        )}
+        {item4 && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "black"}
+            textWeight={"400"}
+            title={item4}
+            onPress={onPress4}
+          />
+        )}
+        {item5 && (
+          <Title
+            textSize={16}
+            textColor={changeBg === "#084427" ? "white" : "black"}
+            textWeight={"400"}
+            title={item5}
+            onPress={onPress5}
+          />
+        )}
       </View>
-    </ImageBackground>
+    );
+  };
+  return (
+    <View
+      style={{
+        paddingVertical: 40,
+        width: "100%",
+        paddingHorizontal: 100,
+        backgroundColor: changeBg,
+        position: "relative",
+        alignItems: "center",
+      }}
+    >
+      <View style={{ width: "100%" }}>
+        <View style={{ marginBottom: 25 }}>
+          <Row style={{ justifyContent: "space-between" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                width: 475,
+                justifyContent: "space-between",
+              }}
+            >
+              <FooterList
+                title={"Product"}
+                item1={"Individual"}
+                item2={"Experts"}
+                item3={"Businesses"}
+                item4={"Pricing"}
+                onPress1={() => handleSignUp(1)}
+                onPress2={() => handleSignUp(2)}
+                onPress3={() => handleSignUp(3)} 
+                onPress4={handlePricing} 
+              />
+              <FooterList
+                title={"Information"}
+                item1={"FAQs"}
+                item2={"Blog"}
+                item3={"Support"}
+              />
+              <FooterList
+                title={"Company"}
+                item1={"About us"}
+                item2={"Careers"}
+                item3={"Contact us"}
+              />
+            </View>
+            
+          </Row>
+        </View>
+
+        <LinearGradient
+          colors={
+            changeBg === "#084427"
+              ? ["#79d164", "#E0F8EC"]
+              : ["#135837", "#29BE77"]
+          }
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{ padding: 20, gap: 16, borderRadius: 12 }}
+        >
+          <Row style={{ height: 50, marginTop: 20 }}>
+            <View
+              style={{
+                width: 320,
+                height: "100%",
+                backgroundColor: "#f5f5f5",
+                borderBottomLeftRadius: 6,
+                borderTopLeftRadius: 6,
+              }}
+            >
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email Address"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  paddingLeft: 16,
+                }}
+              />
+            </View>
+            <Pressable
+              style={{
+                width: 45,
+                height: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#135837",
+                borderBottomRightRadius: 6,
+                borderTopRightRadius: 6,
+              }}
+            >
+              <Image
+                source={{ uri: 'https://img.icons8.com/?size=100&id=85463&format=png&color=FFFFFF' }}
+                style={{ width: 20, height: 20 }}
+              />
+            </Pressable>
+          </Row>
+          <View>
+            <Title
+              textSize={12}
+              style={{ maxWidth: 364, lineHeight: 21 }}
+              textColor={"white"}
+              title={
+                "Hey there! Want to stay updated on our latest products, services, and news? Subscribe to our newsletter for all the updates and announcements!"
+              }
+            />
+          </View>
+        </LinearGradient>
+        <View style={{ gap: 25 }}>
+          <View
+            style={{
+              width: "100%",
+              height: 1,
+              backgroundColor: changeBg === "#084427" ? "white" : "black",
+            }}
+          />
+          <Row style={{ justifyContent: "space-between" }}>
+            <View />
+           
+            <Row style={{ gap: 16 }}>
+              <Pressable style={styles.socialIcon}>
+                <FontAwesome
+                  name="linkedin"
+                  size={14}
+                  color={changeBg === "#084427" ? "white" : "black"}
+                />
+              </Pressable>
+              <Pressable style={styles.socialIcon}>
+                <FontAwesome
+                  name="facebook"
+                  size={14}
+                  color={changeBg === "#084427" ? "white" : "black"}
+                />
+              </Pressable>
+              <Pressable style={styles.socialIcon}>
+                <FontAwesome
+                  name="twitter"
+                  size={14}
+                  color={changeBg === "#084427" ? "white" : "black"}
+                />
+              </Pressable>
+            </Row>
+          </Row>
+          <Row style={{ gap: 10, marginTop: -60 }}>
+            <Image
+              source={{
+                uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
+              }}
+              style={styles.logo}
+            />
+            <Title
+              textSize={20}
+              textWeight={"700"}
+              title={"AngleQuest"}
+              textColor={changeBg === "#084427" ? "white" : "black"}
+            />
+
+          </Row>
+        </View>
+      </View>
+    </View>
   );
 };
 
+export default Footer;
+
 const styles = StyleSheet.create({
-  imageBackground: {
-    width: '100%',
-    height: 400,
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center',     // Center content horizontally
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 5,
   },
-  footerContainer: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heading: {
-    color: 'white',
-    fontSize: 24,
-    marginTop: 220,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subheading: {
-    color: 'white',
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
+  socialIcon: {
+    borderWidth: 1,
+    borderRadius: 50,
+    borderColor: "black",
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
-
-export default Footer;

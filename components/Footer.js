@@ -106,7 +106,7 @@ const Footer = ({ bgColor }) => {
         alignItems: "center",
       }}
     >
-      <View style={{ width: 1400 }}>
+      <View style={{ width: "100%" }}>
         <View style={{ marginBottom: 25 }}>
           <Row style={{ justifyContent: "space-between" }}>
             <View

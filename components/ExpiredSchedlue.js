@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -85,25 +86,50 @@ const ScheduledMeetingsTable = () => {
 
         <ScrollView>
       {displayedMeetings.length === 0 ? (
-        <View
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 20,
+          backgroundColor: 'white'
+        }}
+      >
+        {/* Empty Schedule Image */}
+        <Image
+          source={EmptyScheduleImage}
           style={{
-            alignContent: "center",
-            justifyContent: "center",
-            alignSelf: "center",
+            width: 200,
+            height: 200,
+            marginBottom: 20,
+          }}
+        />
+
+        {/* Title */}
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: 10,
           }}
         >
-          <Image
-            source={{
-              uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-            }}
-            style={{
-              width: 50,
-              height: 50,
-              marginLeft: 100,
-            }}
-          />
-            <Text style={styles.noMeetings}>No scheduled meeting has expired</Text>
-        </View>
+          No Expired Meetings
+        </Text>
+
+        {/* Explanation */}
+        <Text
+          style={{
+            fontSize: 16,
+            color: '#777',
+            textAlign: 'center',
+            marginBottom: 20,
+          }}
+        >
+          It seems there are no scheduled meeting has expired. You can create new meetings anytime.
+        </Text>
+
+      </View>
             ) : (
          displayedMeetings.map((analysis, index) => (
             <View key={index} style={styles.meetingContainer}>

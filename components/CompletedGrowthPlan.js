@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const POLLING_INTERVAL = 5000;
 
@@ -145,24 +146,50 @@ const ScheduledMeetingsTable = () => {
           </View>
         ) : (
       <View
-        style={{
-          alignContent: "center",
-          justifyContent: "center",
-          alignSelf: "center",
-        }}
-      >
-        <Image
-          source={{
-            uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-          }}
-          style={{
-            width: 50,
-            height: 50,
-            marginLeft: 100,
-          }}
-        />
-          <Text style={styles.noMeetings}>No scheduled meeting has been completed</Text>
-      </View>
+         style={{
+           flex: 1,
+           justifyContent: "center",
+           alignItems: "center",
+           padding: 20,
+           backgroundColor: 'white'
+         }}
+       >
+         {/* Empty Schedule Image */}
+         <Image
+           source={EmptyScheduleImage}
+           style={{
+             width: 200,
+             height: 200,
+             marginBottom: 20,
+           }}
+         />
+
+         {/* Title */}
+         <Text
+           style={{
+             fontSize: 24,
+             fontWeight: 'bold',
+             color: '#333',
+             marginBottom: 10,
+           }}
+         >
+           No New Meetings Completed
+         </Text>
+
+         {/* Explanation */}
+         <Text
+           style={{
+             fontSize: 16,
+             color: '#777',
+             textAlign: 'center',
+             marginBottom: 20,
+           }}
+         >
+           It seems you have not completed any meetings right now, individuals will get notified when you mark a meeting as completed.
+         </Text>
+
+
+       </View>
         )}
 
         <Modal

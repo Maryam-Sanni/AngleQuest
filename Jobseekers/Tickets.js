@@ -548,7 +548,7 @@ const SupportRequestPage = () => {
         description: formData.description,
         prefmode: formData.preferredMode,
         priority: formData.priority,
-        deadline: formData.deadline,
+        deadline: selectedDateTime,
         videoCallDate: formData.videoCallDate || null,
         attachment: '',
       };

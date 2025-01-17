@@ -5,6 +5,7 @@ import { View, Image, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIn
 import { BlurView } from 'expo-blur';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const defaultAvatar = require("../assets/account.png");
 
@@ -92,16 +93,16 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
             return;
           }
 
-          // Get the current date and set it to the start of today (midnight)
-          const currentDate = new Date();
-          currentDate.setHours(0, 0, 0, 0); // Start of today, to exclude today's meetings
+          // Calculate the 24-hour threshold
+          const now = new Date();
+          const thresholdDate = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
 
-          // Filter by hub_id first, then by date
+          // Filter meetings by hub_id and date
           const filteredMeetings = NewMeeting
             .filter(meeting => String(meeting.hub_id) === String(hubId)) // Filter by hub_id
-            .filter(meeting => new Date(meeting.date) < currentDate); // Filter by past date (before today)
+            .filter(meeting => new Date(meeting.date) < thresholdDate); // Only past 24 hours
 
-          // Sort the filtered meetings by date in descending order (latest past meetings first)
+          // Sort the filtered meetings by date in descending order
           const sortedMeetings = filteredMeetings.sort((a, b) => new Date(b.date) - new Date(a.date));
 
           setMeetings(sortedMeetings);
@@ -111,12 +112,13 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
       } catch (error) {
         console.error('Error fetching meeting data:', error);
       } finally {
-        setLoading(false);  // Ensure loading stops on both success and error
+        setLoading(false); // Ensure loading stops on both success and error
       }
     };
 
     fetchMeetingData();
   }, [hubId, apiUrl]);
+
 
 
 
@@ -165,7 +167,51 @@ const ScheduledMeetingsTable = ({ hubId = '', coachingHubName = '' }) => {
     <View>
       <ScrollView contentContainerStyle={styles.cardContainer}>
         {meetings.length === 0 ? (
-          <Text style={{textAlign: 'center', color: 'white', fontSize: 16, fontWeight: '600'}}>No meetings have been done previously.</Text>
+      <View
+         style={{
+           flex: 1,
+           justifyContent: "center",
+           alignItems: "center",
+           padding: 20,
+           backgroundColor: 'white'
+         }}
+       >
+         {/* Empty Schedule Image */}
+         <Image
+           source={EmptyScheduleImage}
+           style={{
+             width: 200,
+             height: 200,
+             marginBottom: 20,
+           }}
+         />
+
+         {/* Title */}
+         <Text
+           style={{
+             fontSize: 24,
+             fontWeight: 'bold',
+             color: '#333',
+             marginBottom: 10,
+           }}
+         >
+           No Past Sessions
+         </Text>
+
+         {/* Explanation */}
+         <Text
+           style={{
+             fontSize: 16,
+             color: '#777',
+             textAlign: 'center',
+             marginBottom: 20,
+           }}
+         >
+           It seems there are no meetings have been previously done.
+         </Text>
+
+
+       </View>
         ) : (
           (showAllMeetings ? meetings : meetings.slice(0, 2)).map((meeting) => (
             <View key={meeting.id} style={styles.meetingContainer}>

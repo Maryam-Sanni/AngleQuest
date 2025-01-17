@@ -6,6 +6,7 @@ import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
 import OpenSchedule2 from '../components/Rating';
+import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const ScheduledMeetingsTable = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -72,22 +73,47 @@ const ScheduledMeetingsTable = () => {
           {skillanalysiss.length === 0 ? (
           <View
             style={{
-              alignContent: "center",
+              flex: 1,
               justifyContent: "center",
-              alignSelf: "center",
+              alignItems: "center",
+              padding: 20,
+              backgroundColor: 'white'
             }}
           >
+            {/* Empty Schedule Image */}
             <Image
-              source={{
-                uri: "https://img.icons8.com/?size=100&id=678&format=png&color=D3D3D3",
-              }}
+              source={EmptyScheduleImage}
               style={{
-                width: 50,
-                height: 50,
-                marginLeft: 150,
+                width: 200,
+                height: 200,
+                marginBottom: 20,
               }}
             />
-              <Text style={styles.noMeetings}>No scheduled meeting has been completed</Text>
+
+            {/* Title */}
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#333',
+                marginBottom: 10,
+              }}
+            >
+              No Completed Meetings
+            </Text>
+
+            {/* Explanation */}
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#777',
+                textAlign: 'center',
+                marginBottom: 20,
+              }}
+            >
+              It seems no scheduled meeting has been completed. You can create new meetings anytime.
+            </Text>
+
           </View>
           ) : (
             displayedMeetings.map((skillanalysis, index) => (

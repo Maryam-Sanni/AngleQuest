@@ -126,30 +126,6 @@ const ScheduledMeetingsTable = () => {
             It seems there are no upcoming meetings right now. You can create new ones anytime.
           </Text>
       
-          {/* Create New Button */}
-          <TouchableOpacity
-            style={{
-              backgroundColor: 'green', // Similar to Microsoft DevOps button color
-              paddingVertical: 12,
-              paddingHorizontal: 30,
-              borderRadius: 5,
-            }}
-            onPress={() => {
-              // Action for Create New button (like navigating to a new screen or opening a form)
-              console.log('Create New clicked!');
-            }}
-          >
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}
-            >
-              Create New
-            </Text>
-          </TouchableOpacity>
         </View>
           ) : (
        displayedMeetings.map((analysis, index) => (

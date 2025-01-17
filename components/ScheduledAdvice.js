@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Picker, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, Text, Linking, StyleSheet, Picker, TouchableOpacity, Modal, Image } from 'react-native';
 import OpenSchedule from '../Experts/OpenScheduledadvice';
 import OpenSchedule2 from '../Experts/AdviceResponse';
 import { BlurView } from 'expo-blur';
@@ -21,7 +21,7 @@ const ScheduledMeetingsTable = () => {
   const { t } = useTranslation();
 
   const apiUrl = process.env.REACT_APP_API_URL;
-
+ 
   useEffect(() => {
     const loadMeetings = async () => {
       try {
@@ -153,9 +153,18 @@ const ScheduledMeetingsTable = () => {
                   <TouchableOpacity style={styles.joinButton2} onPress={() => handleOpenPress(meeting)}>
                     <Text style={styles.buttonText2}>Give Feedback</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.joinButton} onPress={() => handleOpenPress2(meeting)}>
-                    <Text style={styles.buttonText}>Start Meeting</Text>
-                  </TouchableOpacity>
+                        <TouchableOpacity style={styles.joinButton}
+                          onPress={() => {
+                            const meetingLink = meeting.expert_link || 'https://default-meeting-link.com';
+                            if (meetingLink) {
+                              Linking.openURL(meetingLink).catch(err => console.error("Couldn't load page", err));
+                            } else {
+                              console.warn('No valid link available');
+                            }
+                          }}
+                        >
+                          <Text style={styles.buttonText}>{t("Start Meeting")}</Text>
+                        </TouchableOpacity>
                       </View>
                 </View>
                   </View>
