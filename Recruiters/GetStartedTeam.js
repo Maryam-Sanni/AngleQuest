@@ -174,8 +174,15 @@ const [selectedOptions, setSelectedOptions] = useState({});
       // Prepare form data for backend submission
       const formData = new FormData();
 
-      // Append subscription data as an array
+      // Append subscription data as a stringified array
       formData.append('subscription', JSON.stringify(subscriptionData));
+
+      // Optionally, you can log the FormData to verify its contents
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+
+
 
       // Append SLA and agreement
       formData.append('sla', costWithoutMonthly || "0"); // Default to "0" if SLA is missing

@@ -72,7 +72,7 @@ function AngleQuestPage({ onClose }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
-  const [cardType, setCardType] = useState('Master Card');
+  const [cardType, setCardType] = useState('User Card');
     const [cardName, setCardName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [cvv, setCvv] = useState('');
@@ -98,6 +98,73 @@ function AngleQuestPage({ onClose }) {
 
       const apiUrl = process.env.REACT_APP_API_URL;
 
+  const [cardImages, setCardImages] = useState({
+    visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+    mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+    amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+    discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+  });
+
+  const getCardType = (number) => {
+    const bin = number.slice(0, 6); // Get first 6 digits (BIN/IIN)
+
+    if (bin.startsWith('4')) {
+      return 'visa';
+    } else if (['51', '52', '53', '54', '55'].includes(bin.slice(0, 2))) {
+      return 'mastercard';
+    } else if (bin.startsWith('34') || bin.startsWith('37')) {
+      return 'amex';
+    } else if (bin.startsWith('6011') || bin.startsWith('65')) {
+      return 'discover';
+    }
+    return null; // No match
+  };
+
+  useEffect(() => {
+    const cardType = getCardType(cardNumber);
+    switch (cardType) {
+      case 'visa':
+        setCardImages({
+          visa: 'https://img.icons8.com/?size=100&id=13608&format=png&color=000000',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+        });
+        break;
+      case 'mastercard':
+        setCardImages({
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+          mastercard: 'https://img.icons8.com/?size=100&id=13610&format=png&color=000000',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+        });
+        break;
+      case 'amex':
+        setCardImages({
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+          amex: 'https://img.icons8.com/?size=100&id=13607&format=png&color=000000',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+        });
+        break;
+      case 'discover':
+        setCardImages({
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+          discover: 'https://img.icons8.com/?size=100&id=20798&format=png&color=000000',
+        });
+        break;
+      default:
+        setCardImages({
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+        });
+    }
+  }, [cardNumber]);
+  
     const [isChecked, setIsChecked] = useState(false);
      // Get today's date in the format: Monday, YYYY-MM-DD
      const today = new Date().toLocaleDateString('en-US', {
@@ -671,7 +738,7 @@ const saveToAsyncStorage = async (plan) => {
     getTotalCost();
   }, []);
 
-  const paystackPublicKey = "pk_live_969e99d7807594dc826cdced51d3fda3fc33e078"; // Replace with your actual Paystack public key
+  const paystackPublicKey = "pk_test_9e5da987777240cf8ea5e3dcd2e902f113d1251c"; // Replace with your actual Paystack public key
 
   // Step 1: Save Card Details and Proceed
   const saveCardDetails = () => {
@@ -698,7 +765,15 @@ const saveToAsyncStorage = async (plan) => {
     try {
       setIsLoading(true); // Start loading state
 
-      // Get the token from AsyncStorage for authorization
+      // Retrieve values from AsyncStorage
+      const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+
+      const firstName = values.find(item => item[0] === 'first_name')[1];
+      const lastName = values.find(item => item[0] === 'last_name')[1];
+      const email = values.find(item => item[0] === 'email')[1];
+      const fullName = `${firstName} ${lastName}`;
+
+      // Get token from AsyncStorage for authorization
       const token = await AsyncStorage.getItem("token");
       if (!token) {
         Alert.alert("Error", "Authorization token not found.");
@@ -706,7 +781,6 @@ const saveToAsyncStorage = async (plan) => {
         return;
       }
 
-      // Fetch the latest payment details from the API
       const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -716,7 +790,6 @@ const saveToAsyncStorage = async (plan) => {
       if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
         const details = response.data.PaystackDetail;
 
-        // Construct the payload
         const payload = {
           specialization: details.specialization || "",
           service: details.service || "",
@@ -728,14 +801,11 @@ const saveToAsyncStorage = async (plan) => {
           user_detail: [
             {
               fullname: fullName,
-              phone: phone,
               email: email,
-              billing_address: billingAddress,
             },
           ],
         };
 
-        // Post the payment details
         const postResponse = await axios.put(
           `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
           payload,
@@ -749,33 +819,40 @@ const saveToAsyncStorage = async (plan) => {
         if (postResponse.status === 200) {
           console.log("Payment details saved successfully:", postResponse.data);
 
+          // Prepare payment details
+          const cardInfo = {
+            cardName,
+            cardNumber,
+            cvv,
+            expMonth,
+            expYear,
+          };
+
+          const paymentData = {
+            fullName,
+            email,
+            cardDetails: cardInfo,
+            amount: totalPlanCost * 160000, // Dynamic amount in Kobo
+            reference: `ref_${Math.floor(Math.random() * 1000000)}`,
+            planId: "PLN_oajvfvbidtfy8gy",
+          };
+
           // Ensure Paystack script is loaded
           if (!window.PaystackPop) {
             alert("Paystack is not loaded");
             return;
           }
 
-          const dynamicAmount = totalPlanCost * 160000;
-
-          const paymentData = {
-            amount: dynamicAmount,
-            email,
-            reference: `ref_${Math.floor(Math.random() * 1000000)}`,
-            fullName,
-            phone,
-            planId: "PLN_oajvfvbidtfy8gy",
-          };
-
+          // Prepare data to send to Paystack Inline API
           const handler = window.PaystackPop.setup({
-            key: paystackPublicKey, // Your Paystack public key
+            key: "pk_test_9e5da987777240cf8ea5e3dcd2e902f113d1251c", // Your Paystack public key
             email: paymentData.email,
-            amount: paymentData.amount, // Dynamic amount in Kobo
+            amount: paymentData.amount, // Amount in Kobo (multiply by 100)
             reference: paymentData.reference,
             currency: "NGN", // Currency (NGN)
             metadata: {
               full_name: paymentData.fullName, // Pass Full Name in metadata
-              phone_number: paymentData.phone, // Pass Phone Number in metadata
-              plan_id: paymentData.planId, // Pass the static plan ID from Paystack
+              plan_id: paymentData.planId, // Pass the plan ID
             },
             onClose: () => alert("Payment window closed"),
             callback: (response) => {
@@ -789,7 +866,7 @@ const saveToAsyncStorage = async (plan) => {
             },
           });
 
-          // Open Paystack payment modal (iframe)
+          // Open Paystack payment modal (inline)
           handler.openIframe();
         } else {
           Alert.alert("Error", "Failed to save payment details.");
@@ -1062,10 +1139,10 @@ const saveToAsyncStorage = async (plan) => {
   <View style={styles.welcomeheader}>
     <View style={styles.whiteBox}>
       <Image 
-        source={{ uri: 'https://img.icons8.com/?size=100&id=FUZiNN6aw2Rb&format=png&color=000000' }} 
+        source={require('../assets/happywelcome.png')}
         style={styles.image}
       />
-      <Text style={styles.greetingText}>Hello John, Welcome to Anglequest</Text>
+      <Text style={styles.greetingText}>Hello {first_name}, Welcome to Anglequest</Text>
       <Text style={styles.subHeading}>Let's get your account setup. Takes a maximum of 5 minutes.</Text>
       {!showSetup && (
         <TouchableOpacity 
@@ -1550,7 +1627,7 @@ const saveToAsyncStorage = async (plan) => {
                               }}
                               style={{ width: 50, height: 50, alignSelf: 'center' }}
                             />
-                            <Text style={styles.buttonText}>Payment Details</Text>
+                            <Text style={styles.buttonText}>Credit Or Debit Card</Text>
                           </TouchableOpacity>
                 
                           {/* Contact Details Option */}
@@ -1560,18 +1637,6 @@ const saveToAsyncStorage = async (plan) => {
                        
                             {planTitle === "Pay as you go" ? (
                               <View style={styles.formcontainer}>
-                                <Text style={styles.label}>Card Type</Text>
-                                <Picker
-                                  style={styles.input}
-                                  selectedValue={cardType}
-                                  onValueChange={(itemValue) => setCardType(itemValue)}
-                                >
-                                  <Picker.Item label="Master Card" value="Master Card" />
-                                  <Picker.Item label="Visa" value="Visa" />
-                                  <Picker.Item label="Verve" value="Verve" />
-                                  <Picker.Item label="American Express" value="American Express" />
-                                  <Picker.Item label="UnionPay" value="UnionPay" />
-                                </Picker>
                                 <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
                                 <TextInput
                                   style={styles.input}
@@ -1590,15 +1655,24 @@ const saveToAsyncStorage = async (plan) => {
                                   onChangeText={setCardNumber}
                                   keyboardType="numeric"
                                 />
-
+<View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
+  <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+  <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
+  <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
+  <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
+</View>
                                 <Text style={styles.label}>CVV</Text>
                                 <TextInput
                                   style={styles.input}
                                   placeholder="123"
-                                   placeholderTextColor="grey"
+                                  placeholderTextColor="grey"
                                   value={cvv}
-                                  onChangeText={setCvv}
+                                  onChangeText={(text) => {
+                                    const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
+                                    setCvv(formattedText);
+                                  }}
                                   keyboardType="numeric"
+                                  maxLength={3} 
                                 />
 
                                 {/* Expiration Date */}
@@ -1609,16 +1683,24 @@ const saveToAsyncStorage = async (plan) => {
                                     placeholder="MM"
                                      placeholderTextColor="grey"
                                     value={expMonth}
-                                    onChangeText={setExpMonth}
+                                    onChangeText={(text) => {
+                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
+                                      setExpMonth(formattedText);
+                                    }}
                                     keyboardType="numeric"
+                                    maxLength={2} 
                                   />
                                   <TextInput
                                     style={[styles.input, styles.smallInput]}
                                     placeholder="YYYY"
                                      placeholderTextColor="grey"
                                     value={expYear}
-                                    onChangeText={setExpYear}
+                                    onChangeText={(text) => {
+                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
+                                      setExpYear(formattedText);
+                                    }}
                                     keyboardType="numeric"
+                                    maxLength={4} 
                                   />
                                 </View>
                                 <TouchableOpacity style={styles.buttonblack}
@@ -1634,43 +1716,72 @@ const saveToAsyncStorage = async (plan) => {
                               </View>
                             ) : (
                               <View style={styles.formcontainer}>
-                                <Text style={styles.label}>Full Name</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="George Karim"
-                                   placeholderTextColor="grey"
-                                  value={fullName}
-                                  onChangeText={setFullName}
-                                />
+                                <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                                                                <TextInput
+                                                                  style={styles.input}
+                                                                  placeholder="George Karim"
+                                                                   placeholderTextColor="grey"
+                                                                  value={cardName}
+                                                                  onChangeText={setCardName}
+                                                                />
 
-                                <Text style={styles.label}>Phone</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="+1 123 456 7890"
-                                   placeholderTextColor="grey"
-                                  value={phone}
-                                  onChangeText={setPhone}
-                                  keyboardType="phone-pad"
-                                />
+                                                                <Text style={styles.label}>Card Number</Text>
+                                                                <TextInput
+                                                                  style={styles.input}
+                                                                  placeholder="1234 5678 9012 3456"
+                                                                   placeholderTextColor="grey"
+                                                                  value={cardNumber}
+                                                                  onChangeText={setCardNumber}
+                                                                  keyboardType="numeric"
+                                                                />
+                                <View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
+                                  <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+                                  <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
+                                  <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
+                                  <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
+                                </View>
+                                                                <Text style={styles.label}>CVV</Text>
+                                                                <TextInput
+                                                                  style={styles.input}
+                                                                  placeholder="123"
+                                                                  placeholderTextColor="grey"
+                                                                  value={cvv}
+                                                                  onChangeText={(text) => {
+                                                                    const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
+                                                                    setCvv(formattedText);
+                                                                  }}
+                                                                  keyboardType="numeric"
+                                                                  maxLength={3} 
+                                                                />
 
-                                <Text style={styles.label}>Email</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="georgek@example.com"
-                                   placeholderTextColor="grey"
-                                  value={email}
-                                  onChangeText={setEmail}
-                                  keyboardType="email-address"
-                                />
-
-                                <Text style={styles.label}>Billing Address</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="123 Main St, City, State"
-                                  placeholderTextColor="grey"
-                                  value={billingAddress}
-                                  onChangeText={setBillingAddress}
-                                />
+                                                                {/* Expiration Date */}
+                                                                <Text style={styles.label}>Expiration Date</Text>
+                                                                <View style={styles.row}>
+                                                                  <TextInput
+                                                                    style={[styles.input, styles.smallInput]}
+                                                                    placeholder="MM"
+                                                                     placeholderTextColor="grey"
+                                                                    value={expMonth}
+                                                                    onChangeText={(text) => {
+                                                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
+                                                                      setExpMonth(formattedText);
+                                                                    }}
+                                                                    keyboardType="numeric"
+                                                                    maxLength={2} 
+                                                                  />
+                                                                  <TextInput
+                                                                    style={[styles.input, styles.smallInput]}
+                                                                    placeholder="YYYY"
+                                                                     placeholderTextColor="grey"
+                                                                    value={expYear}
+                                                                    onChangeText={(text) => {
+                                                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
+                                                                      setExpYear(formattedText);
+                                                                    }}
+                                                                    keyboardType="numeric"
+                                                                    maxLength={4} 
+                                                                  />
+                                                                </View>
                                 <TouchableOpacity style={styles.buttonblack}
                                   disabled={isLoading}
                                     onPress={initiatePayment}
@@ -2381,8 +2492,8 @@ padding: 5
     marginBottom: 30,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     marginBottom: 20,
   },
   whiteBox: {

@@ -262,7 +262,7 @@ const SupportRequestPage = () => {
 
         if (response.data?.status === 'failed' && response.data?.message === 'No responses found for this support request') {
           console.log('No responses found for this support request.');
-          setCurrentStep('assigned');
+          setCurrentStep('start');
           return; // Exit early if no responses are found
         }
 
@@ -290,7 +290,7 @@ const SupportRequestPage = () => {
         }
       } catch (error) {
         console.error('Error fetching support responses:', error);
-        setCurrentStep('assigned'); // Default to assigned if there's an error
+        setCurrentStep('start'); // Default to assigned if there's an error
       }
     };
 
@@ -602,7 +602,7 @@ const SupportRequestPage = () => {
         <Text style={styles.label}>Specialization</Text>
         <TextInput
           style={styles.input}
-          value={formData.specialization}
+          value={savedRole}
           editable={false}
         />
 
