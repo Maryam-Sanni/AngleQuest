@@ -11,7 +11,7 @@ const onboardingData = [
   },
   {
     id: '2',
-    title: 'How can I use AngleQuest',
+    title: 'How can I use AngleQuest?',
     description: 'AngleQuest is a tech support tool, enabling experts like you to assist others to reach their goals while making money and having impact.',
     options: [
       {

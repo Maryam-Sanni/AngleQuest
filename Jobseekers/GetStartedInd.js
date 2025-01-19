@@ -1038,6 +1038,165 @@ const saveToAsyncStorage = async (plan) => {
   const [customAmount, setCustomAmount] = useState("");
   const [activePrice, setActivePrice] = useState('monthly');
   const [selectedPlanId, setSelectedPlanId] = useState(null);
+
+  const onboardingData = [
+    {
+      id: '1',
+      title: `Hello ${first_name}, welcome to AngleQuest`,
+      description: 'Lets get your account setup. Takes a maximum of 5 minutes.',
+      image: require("../assets/happywelcome.png"),
+    },
+    {
+      id: '2',
+      title: "How can I use AngleQuest?",
+      description: "AngleQuest is your go-to tool for learning, growth, and achieving your goals with guidance from experienced experts.",
+      options: [
+        { name: "Get Support", explanation: "Receive personalized solutions to your specific challenges." },
+        { name: "Access Knowledge Hub", explanation: "Explore insights, resources, and valuable information shared by experts." },
+        { name: "Learn Best Practices", explanation: "Discover proven strategies to help you succeed." },
+        { name: "Skill Assessment", explanation: "Understand your strengths and areas to improve." },
+        { name: "Create a Growth Plan", explanation: "Work with experts to design a roadmap for achieving your goals." },
+        { name: "Prepare for Interviews", explanation: "Get guidance and practice to excel in job interviews." },
+      ],
+    },
+    {
+      id: '3',
+      title: "Choose Your Specialization",
+      description: "Which of these technologies do you specialize in, or which do you want to transition into? Make a selection below",
+      roles: [
+        "SAP FI", 
+        "SAP MM", 
+        "SAP SD", 
+        "SAP PP", 
+        "Microsoft Dynamics Sales", 
+        "Microsoft Dynamics Field Service", 
+        "Microsoft Dynamics Marketing", 
+        "Microsoft Dynamics Developer", 
+        "Microsoft Business Central", 
+        "Microsoft Dynamics F&O",
+      ],
+    },
+  ];
+  
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const [selectedSlide, setSelectedSlide] = useState(null);
+
+  const handleForward = () => {
+    if (currentSlide === onboardingData.length - 1) {
+      if (onFinish) onFinish(); 
+    } else {
+      setCurrentSlide((prev) => (prev + 1) % onboardingData.length);
+      setSelectedSlide(null); // Reset the selected option when moving to the next slide
+    }
+  };
+
+  const handleBehind = () => {
+    setCurrentSlide((prev) => (prev - 1 + onboardingData.length) % onboardingData.length);
+    setSelectedSlide(null); // Reset the selected option when moving to the previous slide
+  };
+
+  const handleSelectSlide = (Slide) => {
+    setSelectedSlide(Slide === selectedSlide ? null : Slide);
+  };
+
+  const renderSlide = () => {
+    const slide = onboardingData[currentSlide];
+    if (slide.id === '2') {
+      return (
+        <View >
+          <Text style={styles.greetingText}>{slide.title}</Text>
+          <Text style={styles.subHeading}>{slide.description}</Text>
+          <View style={styles.optionsRow}>
+            {slide.options.map((item) => (
+              <TouchableOpacity
+                key={item.name}
+                style={[
+                  styles.option,
+                  selectedSlide === item && styles.optionSelected
+                ]}
+                onPress={() => handleSelectSlide(item)}
+              >
+                <Text
+                  style={[
+                    styles.optionText,
+                    selectedSlide === item && styles.optionTextSelected
+                  ]}
+                >
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {selectedSlide && (
+            <Text style={styles.explanation}>{selectedSlide.explanation}</Text>
+          )}
+        </View>
+      );
+    }
+
+    if (slide.id === '1') {
+      return (
+        <View>
+          <Text style={styles.greetingText}>{slide.title}</Text>
+          <Text style={styles.subHeading}>{slide.description}</Text>
+          <Image source={slide.image} style={styles.image} />
+        </View>
+      );
+    }
+
+     if (slide.id === '3') {
+        return (
+          <View >
+            <Text style={styles.greetingText}>{slide.title}</Text>
+            <Text style={styles.subHeading}>{slide.description}</Text>
+            <View style={styles.rolesContainer}>
+              {slide.roles.map((role, index) => (
+                <TouchableOpacity 
+                  key={index} 
+                  style={[
+                    styles.roleButton, 
+                    selectedRole === role && styles.selectedRole,
+                  ]} 
+                  onPress={() => handleRoleSelection(role)}
+                >
+                  <Text style={styles.roleText}>{role}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TouchableOpacity 
+              style={[
+                styles.continueButton, 
+                !selectedRole && styles.disabledButton
+              ]} 
+              onPress={backendRole ? handlePutContinue : handleContinue}
+              disabled={!selectedRole} // Disable if no role is selected
+            >
+              <Text style={styles.continueButtonText}>Save Role</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }
+
+      return null;
+    };
+
+  
+  const renderProgressBar = () => {
+    return (
+      <View style={styles.progressBarContainer}>
+        {onboardingData.map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.progressBar,
+              index <= currentSlide && styles.progressBarActive
+            ]}
+          />
+        ))}
+      </View>
+    );
+  };
   
   const [plans, setPlans] = useState([
     {
@@ -1136,57 +1295,25 @@ const saveToAsyncStorage = async (plan) => {
       heading: t(" "),
       content: (
         <View>
-  <View style={styles.welcomeheader}>
-    <View style={styles.whiteBox}>
-      <Image 
-        source={require('../assets/happywelcome.png')}
-        style={styles.image}
-      />
-      <Text style={styles.greetingText}>Hello {first_name}, Welcome to Anglequest</Text>
-      <Text style={styles.subHeading}>Let's get your account setup. Takes a maximum of 5 minutes.</Text>
-      {!showSetup && (
-        <TouchableOpacity 
-          style={styles.startnowButton} 
-          onPress={() => setShowSetup(true)} // Switch to the setup view
-        >
-          <Text style={styles.continueButtonText}>Start Now</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-
-    {showSetup && (
-      <View style={{ flexDirection: 'column', marginLeft: 50 }}>
-        <Text style={{ fontSize: 20, fontWeight: '600', width: 600 }}>
-          Which of these technologies do you specialize in, or which do you want to transition into?
-        </Text>
-        <Text style={{ fontSize: 14, color: 'grey', marginTop: 5 }}>Make a selection below</Text>
-        <View style={styles.rolesContainer}>
-          {roles.map((role, index) => (
-            <TouchableOpacity 
-              key={index} 
-              style={[
-                styles.roleButton, 
-                selectedRole === role && styles.selectedRole
-              ]} 
-              onPress={() => handleRoleSelection(role)}
-            >
-              <Text style={styles.roleText}>{role}</Text>
+          {renderProgressBar()}
+          <View style={styles.slideContainer}>{renderSlide()}</View>
+          <View style={styles.navigationContainer}>
+            <View style={{marginleft: 70, marginRight: 70, marginTop: 20}}>
+              {currentSlide > 0 && (
+                <TouchableOpacity onPress={handleBehind} style={styles.buttonback}>
+                  <MaterialIcons name="arrow-back" size={16} color="white" />
+                  <Text style={styles.textbu}>Back</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <TouchableOpacity onPress={handleForward} style={styles.buttonfront}>
+              <Text style={styles.textbu}>
+                {currentSlide === onboardingData.length - 1 ? 'Next' : 'Continue'}
+              </Text>
+              <MaterialIcons name="arrow-forward" size={16} color="white" />
             </TouchableOpacity>
-          ))}
-        </View>
-        <TouchableOpacity 
-          style={[
-            styles.continueButton, 
-            !selectedRole && styles.disabledButton
-          ]} 
-          onPress={backendRole ? handlePutContinue : handleContinue}
-          disabled={!selectedRole} // Disable if no role is selected
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    )}
-  </View>
+          </View>
+ 
 </View>
 
       ),
@@ -1931,7 +2058,7 @@ const styles = StyleSheet.create({
   greenBox: {
     width: 1200,
     height: "90%",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "white",
     borderRadius: 15,
     elevation: 10,
   },
@@ -2492,8 +2619,8 @@ padding: 5
     marginBottom: 30,
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     marginBottom: 20,
   },
   whiteBox: {
@@ -2512,18 +2639,21 @@ padding: 5
   greetingText: {
     fontSize: 20,
     fontWeight: 'bold',
+    alignSelf: 'center'
   },
   subHeading: {
     fontSize: 16,
     color: '#777',
     marginTop: 10,
     textAlign: 'center',
+    alignSelf: 'center',
     width: 450
   },
   rolesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 600,
+    width: 700,
+    alignSelf: 'center',
     marginTop: 20,
   },
   roleButton: {
@@ -2542,10 +2672,10 @@ padding: 5
     color: '#333',
   },
   continueButton: {
-    padding: 15,
+    padding: 10,
     marginTop: 30,
     borderRadius: 5,
-    width: 100,
+    width: 150,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#206C00',
@@ -2661,6 +2791,85 @@ marginLeft: 15
   },
   valueText: { fontSize: 14, fontWeight: '600', marginBottom: 5, marginTop: 25, color: 'grey', textAlign: 'flex-start', alignSelf: 'flex-start' },
   descriptionText: { fontSize: 14, marginBottom: 5, color: '#333', textAlign: 'flex-start', alignSelf: 'flex-start'},
+  slideContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  optionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginLeft: 70,
+    marginRight: 70,
+    marginTop: 20
+  },
+  option: {
+    padding: 12,
+    margin: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    backgroundColor: '#fff'
+  },
+  optionSelected: {
+    borderColor: '#4caf50',
+    backgroundColor: '#e8f5e9'
+  },
+  optionText: {
+    textAlign: 'center',
+    color: '#333'
+  },
+  optionTextSelected: {
+    color: '#4caf50',
+    fontWeight: 'bold'
+  },
+  explanation: {
+    marginTop: 16,
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#555'
+  },
+  progressBarContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16
+  },
+  progressBar: {
+    height: 8,
+    width: 40,
+    borderRadius: 4,
+    backgroundColor: '#ccc',
+    marginHorizontal: 4
+  },
+  progressBarActive: {
+    backgroundColor: '#4caf50'
+  },
+  navigationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  buttonfront: {
+    padding: 12,
+    borderRadius: 5,
+    backgroundColor: '#4caf50',
+    marginHorizontal: 8,
+    flexDirection: 'row'
+  },
+  buttonback: {
+    padding: 12,
+    borderRadius: 5,
+    backgroundColor: 'grey',
+    marginHorizontal: 8,
+    flexDirection: 'row'
+  },
+  textbu: {
+    color: '#fff',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginRight: 10
+  },
 });
 
 export default AngleQuestPage;

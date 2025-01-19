@@ -164,10 +164,7 @@ useEffect(() => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
           <View style={styles.header}>
-            <Image
-              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
-              style={styles.logo}
-            />
+           
             <Text style={styles.headerText}>{t("Create Support Request Guide")}</Text>
 
 
@@ -424,7 +421,7 @@ marginTop: 10
     marginRight: 10
   },
   headerText: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   picker: {

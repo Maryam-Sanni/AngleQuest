@@ -214,6 +214,69 @@ const BillingsAndPayment = () => {
   const [currentPlan, setCurrentPlan] = useState(plans[0]);
   const [showAllPlans, setShowAllPlans] = useState(false);
 
+  const [sla, setSLA] = useState(0);
+  const [numberOfUsers, setNumberOfUsers] = useState(0);
+  const [createdDate, setCreatedDate] = useState("");
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+
+        const response = await axios.get(`${apiUrl}/api/business/get-business-nda`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data?.BNDA;
+        if (data?.subscription_type) {
+          // Map SLA values
+          const slaValue = parseInt(data.sla, 10);
+          const slaMapping = {
+            0: "Default",
+            40: "Standard",
+            100: "Advanced",
+          };
+
+          setSLA(slaMapping[slaValue] || "Unknown");
+
+          // Set number of users based on subscription type
+          const usersMapping = {
+            Standard: 5,
+            Professional: 25,
+            Premium: 50,
+          };
+
+          setNumberOfUsers(usersMapping[data.subscription_type] || 0);
+
+          // Set the active plan based on subscription type
+          const updatedPlans = plans.map((plan) => {
+            const isActive = plan.title === data.subscription_type;
+            if (isActive) {
+              setCurrentPlan(plan); // Update the current plan to the active one
+            }
+            return { ...plan, active: isActive };
+          });
+
+          setPlans(updatedPlans);
+
+          // Format and set created date
+          const formattedDate = new Date(data.created_at).toLocaleDateString();
+          setCreatedDate(formattedDate);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl, plans]);
+  
   const handleChangePlan = (selectedPlan) => {
     // Reorder plans to make the selected plan first
     const reorderedPlans = [selectedPlan, ...plans.filter(plan => plan.id !== selectedPlan.id)];
@@ -307,26 +370,7 @@ const BillingsAndPayment = () => {
       <Text style={styles.pricingInfo}>Learn more about our pricing</Text>
     </View>
 
-    {/* User Count */}
-    <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-      <Image
-        source={{ uri: 'https://img.icons8.com/?size=100&id=20750&format=png&color=000000' }}
-        style={{ width: 22, height: 22, marginLeft: 10 }}
-      />
-      <Image
-        source={{ uri: 'https://img.icons8.com/?size=100&id=20750&format=png&color=000000' }}
-        style={{ width: 22, height: 22, marginLeft: 5 }}
-      />
-      <Image
-        source={{ uri: 'https://img.icons8.com/?size=100&id=20750&format=png&color=000000' }}
-        style={{ width: 22, height: 22, marginLeft: 5 }}
-      />
-      <Image
-        source={{ uri: 'https://img.icons8.com/?size=100&id=20750&format=png&color=000000' }}
-        style={{ width: 22, height: 22, marginLeft: 5 }}
-      />
-      <Text style={{ fontSize: 18, marginLeft: 10 }}>out of 5 users</Text>
-    </View>
+   
 
     {/* Plan Details */}
     <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -421,7 +465,7 @@ const BillingsAndPayment = () => {
 
                            <Text style={styles.savedCardTitle}>Standard Plan</Text>  
                            <Text style={{ fontSize: 15, color: 'grey', width: 800, marginBottom: 10}}>You will no longer be able to add users when the user count for your subscription is filled, please change your plan to accomodate the number of users you will like to subscribe</Text> 
-                           <Text style={{position: 'absolute', right: 22, fontSize: 16}}>1 user remaining</Text>
+                           <Text style={{position: 'absolute', right: 22, fontSize: 16}}>{numberOfUsers} user remaining</Text>
 
         
 
@@ -430,8 +474,8 @@ const BillingsAndPayment = () => {
                <Image source={{ uri: 'https://img.icons8.com/?size=100&id=B2BCRf9ICcvF&format=png&color=000000' }} style={styles.cardIcon} />
                <View style={{flexDirection: 'column'}}>
               <Text style={{ fontSize: 18, fontWeight: 600,marginLeft: 10, marginBottom: 5}}>Next Billing Date</Text>
-              <Text style={{ fontSize: 16, marginLeft: 10}}>Current Plan: 24-01-2026</Text>
-                 <Text style={{ fontSize: 16, marginLeft: 10, marginBottom: 5}}>SLA: 24-02-2025 [Standard SLA]</Text>
+              <Text style={{ fontSize: 16, marginLeft: 10}}>Current Plan: {createdDate}</Text>
+                 <Text style={{ fontSize: 16, marginLeft: 10, marginBottom: 5}}>SLA: {createdDate} {sla} SLA</Text>
               </View>
               <TouchableOpacity style={{position: 'absolute', right: 5}} onPress={handleOpenPress2}>
                 <Text style={styles.addCardButton}>Pay Now</Text>
