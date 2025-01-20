@@ -107,16 +107,18 @@ const SupportRequestPage = () => {
 
       console.log('API Response:', response.data);
 
-      const supportData = response.data[0];
-      if (!supportData || !supportData.time) {
-        throw new Error('Invalid API response: missing time');
-      }
+      const supportData = response.data;
+        if (!supportData || !supportData.time) {
+          throw new Error('Invalid API response: missing time');
+        }
 
       const { time, user_id } = supportData;
 
       console.log('Raw Time:', JSON.stringify(time));
       console.log('User ID:', user_id);
 
+      setExpertId(user_id);
+      
       const timeEntries = time.split(',').map(entry => entry.trim());
       const daysList = [];
       const timeRanges = [];
@@ -159,7 +161,6 @@ const SupportRequestPage = () => {
       // Save all necessary data to AsyncStorage
       await AsyncStorage.setItem('selectedUserDays', formattedDays);
       await AsyncStorage.setItem('selectedUserTimes', selectedUserTimes);
-      setExpertId(user_id);
 
       Alert.alert('Success', 'Support request submitted and availability stored successfully!');
     } catch (error) {
@@ -566,8 +567,10 @@ const SupportRequestPage = () => {
 
       // Extract the support ID from the response
       const supportId = response.data?.data?.id;
+       const expertName = response.data?.data?.name;
 
-      console.log('Support ID:', supportId); // Check the value here
+      setExpertName(expertName);
+      console.log('Support ID:', supportId);
 
       if (supportId) {
         // Save the support ID to AsyncStorage
@@ -585,14 +588,17 @@ const SupportRequestPage = () => {
     }
   };
 
-  
-
-  
   useEffect(() => {
-    if (currentStep === 'assigned' && assignedContent === 'waiting') {
-      // You can add additional side effects here if needed
+    if (assignedContent === 'waiting') {
+      // Automatically switch content after 5 seconds
+      const timer = setTimeout(() => {
+        setAssignedContent('assigned');
+      }, 5000); // 5 seconds
+
+      // Cleanup timeout to avoid memory leaks
+      return () => clearTimeout(timer);
     }
-  }, [currentStep, assignedContent]);
+  }, [assignedContent]);
   
       const SupportForm = ({ formData, setFormData }) => {
        
