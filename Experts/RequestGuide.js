@@ -99,7 +99,7 @@ function MyComponent({ onClose }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         await AsyncStorage.setItem('InterviewFormData', JSON.stringify(data));
         setAlertMessage(t('Support request guide created successfully'));
       } else {

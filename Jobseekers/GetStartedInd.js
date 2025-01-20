@@ -319,11 +319,11 @@ function AngleQuestPage({ onClose }) {
 
         // Construct the payload with fetched details
         const payload = {
-          specialization: details.specialization || "", // Fallback to empty string if not found
-          service: details.service || "", // Fallback to empty string if not found
-          plan: details.plan || "", // Fallback to empty string if not found
-          sla: details.sla || "", // Processed SLA cost (use the fetched SLA)
-          agreement: "Yes", // Set agreement as "Yes"
+          specialization: details.specialization || "", 
+          service: details.service || "", 
+          plan: details.plan || "",
+          sla: "0" || "", 
+          agreement: "Yes", 
         };
 
         // Make the POST request with the constructed payload
@@ -381,7 +381,7 @@ function AngleQuestPage({ onClose }) {
           specialization: details.specialization || "",
           service: details.service || "",
           plan: details.plan || "",
-          sla: details.sla || "",
+          sla: "0",
           agreement: details.agreement || "Yes",
           payment_method: "Done",
           payment_detail: "Pay as you go",
@@ -460,7 +460,7 @@ function AngleQuestPage({ onClose }) {
 
           const now = new Date();
           if (now < oneMonthLater) {
-            console.log(`You are not allowed to change your specialization until ${oneMonthLater.toDateString()}`);
+            // Alert the user and stop further execution
             alert(`You are not allowed to change your specialization until ${oneMonthLater.toDateString()}`);
             return;
           }
@@ -476,7 +476,7 @@ function AngleQuestPage({ onClose }) {
           };
 
           // Make the PUT request to edit payment details
-          await axios.put(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, payload, {
+          const postResponse = await axios.put(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, payload, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -498,6 +498,7 @@ function AngleQuestPage({ onClose }) {
       console.log("Please select a role first.");
     }
   };
+
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -558,10 +559,10 @@ function AngleQuestPage({ onClose }) {
   
       // Construct the payload for the API request
       const payload = {
-        specialization: selectedRole || "", // Fallback to empty if not found
+        specialization: selectedRole || "", 
         service: service,
-        plan: planTitle || "", // Fallback to empty if not found
-        sla: sla, // Processed SLA cost
+        plan: planTitle || "", 
+        sla: "0", 
       };
   
       // Make the POST request to the API with token authentication
@@ -781,108 +782,41 @@ const saveToAsyncStorage = async (plan) => {
         return;
       }
 
-      const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+      // Define the card information to be sent to the backend
+      const cardInfo = {
+        cvv: cvv,
+        exp_date: `${expMonth}/${expYear}`, 
+        acc_num: "9505", 
+        cardnumber: cardNumber, 
+        cardholder_name: cardName,
+      };
+
+      // Make the payment request to the backend
+      const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/paystack`, cardInfo, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (response?.data?.status === "success" && response?.data?.PaystackDetail) {
-        const details = response.data.PaystackDetail;
+      if (paymentResponse?.data?.status === "success") {
+        alert("Success, Payment initiated successfully!", "Success");
+        console.log("Payment Response:", paymentResponse.data);
 
-        const payload = {
-          specialization: details.specialization || "",
-          service: details.service || "",
-          plan: details.plan || "",
-          sla: details.sla || "",
-          agreement: details.agreement || "Yes",
-          payment_method: "Done",
-          payment_detail: "Subscribed Monthly",
-          user_detail: [
-            {
-              fullname: fullName,
-              email: email,
-            },
-          ],
-        };
-
-        const postResponse = await axios.put(
-          `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (postResponse.status === 200) {
-          console.log("Payment details saved successfully:", postResponse.data);
-
-          // Prepare payment details
-          const cardInfo = {
-            cardName,
-            cardNumber,
-            cvv,
-            expMonth,
-            expYear,
-          };
-
-          const paymentData = {
-            fullName,
-            email,
-            cardDetails: cardInfo,
-            amount: totalPlanCost * 160000, // Dynamic amount in Kobo
-            reference: `ref_${Math.floor(Math.random() * 1000000)}`,
-            planId: "PLN_oajvfvbidtfy8gy",
-          };
-
-          // Ensure Paystack script is loaded
-          if (!window.PaystackPop) {
-            alert("Paystack is not loaded");
-            return;
-          }
-
-          // Prepare data to send to Paystack Inline API
-          const handler = window.PaystackPop.setup({
-            key: "pk_test_9e5da987777240cf8ea5e3dcd2e902f113d1251c", // Your Paystack public key
-            email: paymentData.email,
-            amount: paymentData.amount, // Amount in Kobo (multiply by 100)
-            reference: paymentData.reference,
-            currency: "NGN", // Currency (NGN)
-            metadata: {
-              full_name: paymentData.fullName, // Pass Full Name in metadata
-              plan_id: paymentData.planId, // Pass the plan ID
-            },
-            onClose: () => alert("Payment window closed"),
-            callback: (response) => {
-              if (response.status === "success") {
-                alert(`Payment Successful! Transaction reference: ${response.reference}`);
-                setCurrentStep(3); // Proceed to the next step
-                setActiveCard("Payment Details"); // Update UI
-              } else {
-                alert("Payment failed, please try again.");
-              }
-            },
-          });
-
-          // Open Paystack payment modal (inline)
-          handler.openIframe();
-        } else {
-          Alert.alert("Error", "Failed to save payment details.");
-          console.error("API error:", postResponse.statusText);
-        }
+        // Update UI or proceed to the next step
+        setCurrentStep(3); // Proceed to the next step
+        setActiveCard("Payment Details"); // Update active card
       } else {
-        Alert.alert("Error", "No payment details found or invalid API response.");
-        console.error("API response error:", response.data);
+        alert("Error", "Payment initiation failed.");
+        console.error("API Error:", paymentResponse.data);
       }
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || error.message);
-      console.error("Error during API request:", error.response?.data || error.message);
+      alert("Error", error.response?.data?.message || error.message);
+      console.error("Error during payment initiation:", error.response?.data || error.message);
     } finally {
       setIsLoading(false); // End the loading state
     }
   };
+
 
 
   // Payment success callback
@@ -905,7 +839,7 @@ const saveToAsyncStorage = async (plan) => {
 
   const sections = [
     {
-      title: "Knowledge Backup",
+      title: "Hello",
       options: [
         { title: "Default", details: ["Backup response time - 24hrs", "Best practice access - 30%"], cost: "No extra cost", isDefault: true },
         { title: "Standard", details: ["Backup response time - 12hrs", "Best practice access - 60%"], cost: "Extra $40 monthly" },
@@ -913,7 +847,7 @@ const saveToAsyncStorage = async (plan) => {
       ],
     },
     {
-      title: "Career Boost",
+      title: "Hello 1",
       options: [
         { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 1 hub access"], cost: "No extra cost", isDefault: true },
         { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Coaching hub - 2 hub access"], cost: "Extra $40 monthly" },
@@ -921,7 +855,7 @@ const saveToAsyncStorage = async (plan) => {
       ],
     },
     {
-      title: "Knowledge Backup + Career Boost",
+      title: "Hello 2",
       options: [
         { title: "Default", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 24hrs", "Coaching hub - 1 hub access", "Best practice access - 30%"], cost: "No extra cost", isDefault: true },
         { title: "Standard", details: ["Skill gap analysis (AI & expert)", "Growth plan", "Backup response time - 12hrs", "Coaching hub - 2 hub access", "Best practice access - 60%"], cost: "Extra $40 monthly" },
@@ -1298,7 +1232,7 @@ const saveToAsyncStorage = async (plan) => {
           {renderProgressBar()}
           <View style={styles.slideContainer}>{renderSlide()}</View>
           <View style={styles.navigationContainer}>
-            <View style={{marginleft: 70, marginRight: 70, marginTop: 20}}>
+            <View >
               {currentSlide > 0 && (
                 <TouchableOpacity onPress={handleBehind} style={styles.buttonback}>
                   <MaterialIcons name="arrow-back" size={16} color="white" />
@@ -2548,7 +2482,7 @@ fontWeight: 200
 alignSelf: 'center',
     marginBottom: 20,
     marginTop: 20,
-backgroundColor: 'white',
+backgroundColor: '#F4F4F4',
 borderRadius: 20,
 width: 860,
 padding: 5
@@ -2621,7 +2555,8 @@ padding: 5
   image: {
     width: 250,
     height: 250,
-    marginBottom: 20,
+    marginTop: 40,
+    alignSelf: 'center'
   },
   whiteBox: {
     backgroundColor: 'white',
@@ -2663,6 +2598,7 @@ padding: 5
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20
   },
   selectedRole: {
     backgroundColor: 'lightgreen',
@@ -2802,7 +2738,8 @@ marginLeft: 15
     justifyContent: 'center',
     marginLeft: 70,
     marginRight: 70,
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 150
   },
   option: {
     padding: 12,
@@ -2848,20 +2785,19 @@ marginLeft: 15
   navigationContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 70, marginRight: 70
   },
   buttonfront: {
     padding: 12,
     borderRadius: 5,
     backgroundColor: '#4caf50',
-    marginHorizontal: 8,
     flexDirection: 'row'
   },
   buttonback: {
     padding: 12,
     borderRadius: 5,
     backgroundColor: 'grey',
-    marginHorizontal: 8,
     flexDirection: 'row'
   },
   textbu: {
