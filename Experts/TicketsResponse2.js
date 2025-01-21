@@ -63,7 +63,7 @@ const handleImagePick = () => {
       }
 
       // API Request to get expert accepted requests
-      const response = await axios.get(`${apiUrl}/api/expert/get-expert-accepted-reqs`, {
+      const response = await axios.get(`${apiUrl}	/api/expert/accepted-request`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

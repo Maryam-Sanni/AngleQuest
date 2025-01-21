@@ -40,7 +40,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'rea
       {isLoading && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#206C00" />
-          <Text style={styles.authenticatingText}>Authenticating...</Text>
+          <Text style={styles.authenticatingText}>We are waiting to receive your bank transfer. This may take a while. We'll complete your transaction automatically once we confirm your transfer.</Text>
         </View>
       )}
     </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: 'white',
-    height: 500
+    height: 550
   },
   card: {
     backgroundColor: '#8FBF8F',
@@ -112,7 +112,9 @@ const styles = StyleSheet.create({
   authenticatingText: {
     marginTop: 10,
     fontSize: 16,
+    textAlign: 'center',
     color: '#444',
+    width: 400
   },
   closeButton: {
     position: "absolute",

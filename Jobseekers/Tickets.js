@@ -168,8 +168,24 @@ const SupportRequestPage = () => {
       Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
     }
   };
- 
 
+  const [jobSeekerData, setJobSeekerData] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchJobSeekerData = async () => {
+      try {
+        const data = await AsyncStorage.getItem("jobSeekerData");
+        if (data) {
+          setJobSeekerData(JSON.parse(data));
+        }
+      } catch (error) {
+        console.error("Error fetching job seeker data:", error);
+      }
+    };
+
+    fetchJobSeekerData();
+  }, []);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -192,7 +208,7 @@ const SupportRequestPage = () => {
         if (response.data && response.data.status === 'success' && Array.isArray(response.data.data)) {
           // Set the job seekers if it's the first fetch
           if (!acceptedRequests) {
-            setJobSeekers(response.data.data);  // Assuming you want to set job seekers initially
+            setJobSeekers(response.data.data);  
           }
 
           // Find the matching request that corresponds to the stored supportId
@@ -358,9 +374,12 @@ const SupportRequestPage = () => {
     }
 
     try {
+      // Convert selectedRating to numeric value
+      const ratingValue = 4 - selectedRating;
+
       const response = await axios.post(
-        `${apiUrl}/api/jobseeker/rate-response/${supportId}`,
-        { rating: ratings[selectedRating] },
+        `${apiUrl}/api/jobseeker/rate-req/${supportId}`,
+        { rating: ratingValue },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -369,7 +388,9 @@ const SupportRequestPage = () => {
       );
 
       if (response.status === 200) {
-        Alert.alert("Success", `Your rating "${ratings[selectedRating]}" has been submitted.`);
+        alert("Rating sent successfully and request closed.", "Success");
+        setCurrentStep("start");
+        setResponseType('text');
       } else {
         Alert.alert("Error", "Failed to submit rating.");
       }
@@ -567,7 +588,7 @@ const SupportRequestPage = () => {
 
       // Extract the support ID from the response
       const supportId = response.data?.data?.id;
-       const expertName = response.data?.data?.name;
+       const expertName = response.data?.data?.expert_name;
 
       setExpertName(expertName);
       console.log('Support ID:', supportId);
@@ -588,6 +609,17 @@ const SupportRequestPage = () => {
     }
   };
 
+  // Function to save data to AsyncStorage and navigate to the next step
+  const handleOpenPress = async (item) => {
+    try {
+      await AsyncStorage.setItem("jobSeekerData", JSON.stringify(item));
+      setCurrentStep("fetch");
+    } catch (error) {
+      console.error("Error saving job seeker data:", error);
+      Alert.alert("Error", "Failed to save data.");
+    }
+  };
+  
   useEffect(() => {
     if (assignedContent === 'waiting') {
       // Automatically switch content after 5 seconds
@@ -870,12 +902,9 @@ const SupportRequestPage = () => {
                       {expertName || 'Expert'}
                     </Text>
                     <Text style={styles.lightText2}>
-                      Has accepted your request
+                      Has been assigned to your request
                     </Text>
-                    <TouchableOpacity onPress={() => setCurrentStep('resolution')} // Navigate to Resolution
-                      >
                            <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20, color: 'white'}}>You will not be able to create a new support request until this has been resolved or has passed deadline.</Text>
-                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -1205,21 +1234,8 @@ const SupportRequestPage = () => {
                 </TouchableOpacity>
               ))}
             </View>
-           
-            
-
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginBottom: 10}}
-                onPress={() => {
-                    setCurrentStep('start'); 
-                    setResponseType('text');
-                  }}
-                >
-                <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Clear request</Text>
-                   </TouchableOpacity>
              
-            <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 200, alignSelf: 'center', marginTop: 10, marginBottom: 140}}>
-              <Text style={{textAlign: 'center', fontSize: 18, fontWeight: '500'}}>Recreate the request</Text>
-                 </TouchableOpacity>
+            
               
             <TouchableOpacity
               style={styles.submitButton}
@@ -1260,9 +1276,9 @@ const SupportRequestPage = () => {
                     <Text style={styles.cell}>{formatDate(item.created_at)}</Text>
                      <Text style={styles.cell}>{item.expert_name || '-'}</Text>
                     <Text style={styles.cell}>{item.deadline ? formatDate(item.deadline) : '-'}</Text>
-                    <TouchableOpacity onPress={() => setCurrentStep('fetch')} style={styles.cell2}>
-                    <Text style={{color: 'green', textDecorationLine: 'underline'}}>Open</Text>
-                      </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleOpenPress(item)} style={styles.cell2}>
+                      <Text style={{ color: "green", textDecorationLine: "underline" }}>Open</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               />
@@ -1277,20 +1293,20 @@ const SupportRequestPage = () => {
             {/* Review Section */}
               {currentStep === 'fetch' && (
             <View style={{flexDirection: 'column'}}>
-              <View style={{flexDirection: 'row', maxWidth: '100%'}}>
+              <View style={{flexDirection: 'row'}}>
               <View style={styles.smallstep0}>
-                 <Text style={{fontSize: 16, fontWeight: 'bold' }}>SAP FI</Text>
-                 <Text style={{fontSize: 14 }}>Unable to create master data for material posting expense</Text>
-                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>21/11/2024</Text>
+                 <Text style={{fontSize: 16, fontWeight: 'bold' }}>{jobSeekerData.specialization || '-'}</Text>
+                 <Text style={{fontSize: 14 }}>{jobSeekerData.description || '-'}</Text>
+                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>{jobSeekerData.deadline ? formatDate(jobSeekerData.deadline) : "-"}</Text>
 
-                <Text style={{fontSize: 14, color: 'white'}}>Your request will be assigned to the first one available</Text>
+                <Text style={{fontSize: 14, color: 'white'}}>Your request was assigned to</Text>
                 
               </View>
                   <View style={styles.smallstep}>
                     <View style={{flexDirection: 'row'}}>
                       
 
-                      <Text style={{fontSize: 18, fontWeight: '600', marginTop: 20}}>Patrick Oche</Text>
+                      <Text style={{fontSize: 18, fontWeight: '600', marginTop: 20}}>{jobSeekerData.expert_name || "No Expert Assigned"}</Text>
                       <Image
                         source={{
                           uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
@@ -1319,17 +1335,23 @@ const SupportRequestPage = () => {
                     }}
                   />
                 </View>
-                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>Solved 21/11/2024 2PM</Text>
+                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>Solved {formatDate(jobSeekerData.updated_at || new Date())}</Text>
               </View>
               <View style={styles.smallstep}>     
                    <Text style={styles.emoji}>😐</Text>
                    <Text style={styles.ratingText}>Satisfactory</Text>
               </View>
             </View>
+              <View style={{flexDirection: 'row'}}> 
+              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 100, marginRight: 10,  marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('all')} // Navigate to Resolution
+                >
+              <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>Back</Text>
+                 </TouchableOpacity>
               <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
                   >
                 <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>New Support Request</Text>
                    </TouchableOpacity>
+              </View>
             </View>
               )}
         </View>

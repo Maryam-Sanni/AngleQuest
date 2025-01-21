@@ -25,9 +25,9 @@ const TicketsPage = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
    const [currentTicketTitle, setCurrentTicketTitle] = useState('');
-   const [requests, setRequests] = useState([]); // Holds fetched data
-   const [activeRequests, setActiveRequests] = useState([]); // Requests available for action
-   const [acceptedRequests, setAcceptedRequests] = useState([]); // Requests that have been accepted
+   const [requests, setRequests] = useState([]);
+   const [activeRequests, setActiveRequests] = useState([]); 
+   const [acceptedRequests, setAcceptedRequests] = useState([]);   const [completedRequests, setCompletedRequests] = useState([]);
 
    const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -158,12 +158,13 @@ const TicketsPage = () => {
     } catch (error) {
       console.error('Error accepting request:', error.response?.data?.message || error.message);
     }
+    window.location.reload();
   };
 
 
   // Handle decline logic
   const handleDecline = async (requestId) => {
-    const url = `${apiUrl}/api/expert/support-requests/${requestId}`;
+    const url = `${apiUrl}/api/expert/decline-request/${requestId}`;
 
     try {
       const token = await AsyncStorage.getItem('token');
@@ -230,6 +231,44 @@ const TicketsPage = () => {
     setModalVisible(true);
   };
 
+  useEffect(() => {
+    const fetchCompletedRequests = async () => {
+      try {
+        // Get the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+
+        if (!token) {
+          console.error("Token not found in AsyncStorage.");
+          setError("Authentication token is missing.");
+          setLoading(false);
+          return;
+        }
+
+        // Fetch completed requests
+        const response = await axios.get(`${apiUrl}/api/expert/completed-request`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data && response.data.status === "success" && Array.isArray(response.data.data)) {
+          // Set completed requests
+          setCompletedRequests(response.data.data);
+        } else {
+          console.error("Unexpected response format:", response.data);
+          setError("Failed to fetch completed requests.");
+        }
+      } catch (error) {
+        console.error("Error fetching completed requests:", error);
+        setError("An error occurred while fetching completed requests.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompletedRequests();
+  }, []); 
+  
   const handleCloseModal = () => {
     setModalVisible(false);
   };
@@ -510,9 +549,56 @@ right: 10
                   
 
                   </View>
-                  <View style={styles.smallstep2}>
-                    
+                  <View style={{flexDirection: 'column', width: '24%'}}>
+                    {completedRequests.length > 0 ? (
+                      completedRequests.map((request) => (
+                        <View key={request.id} style={styles.smallstep2}>
+                          {/* Request Details */}
+                          <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                            Specialization: {request.specialization || "N/A"}
+                          </Text>
+                          <Text style={{ fontSize: 14 }}>
+                            Title: {request.title || "N/A"}
+                          </Text>
+                          <Text style={{ fontSize: 14 }}>
+                            Description: {request.description || "N/A"}
+                          </Text>
+                          <Text style={{ fontSize: 14 }}>
+                            Assigned From: {request.name || "N/A"}
+                          </Text>
+                          <Text style={{ fontSize: 14 }}>
+                            Completed At: {request.updated_at || "N/A"}
+                          </Text>
+
+                          {/* Rating */}
+                          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: "600", marginRight: 10 }}>Rating:</Text>
+                            <Text style={styles.emoji}>
+                              {request.rating === 4
+                                ? "😄"
+                                : request.rating === 3
+                                ? "😊"
+                                : request.rating === 2
+                                ? "😐"
+                                : "😞"}
+                            </Text>
+                            <Text style={styles.ratingText}>
+                              {request.rating === 4
+                                ? "Excellent"
+                                : request.rating === 3
+                                ? "Good"
+                                : request.rating === 2
+                                ? "Satisfactory"
+                                : "Poor"}
+                            </Text>
+                          </View>
+                        </View>
+                      ))
+                    ) : (
+                      <Text>No completed requests found.</Text>
+                    )}
                   </View>
+
               </View>
                 
               </View>
@@ -682,12 +768,24 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
       smallstep2: {
-        width: "24%", 
-      marginLeft: 15,
+        width: "100%", 
         height: 200,
+        marginLeft: 10,
+        justifyContent: 'center',
         marginBottom: 10,
+        borderWidth: 1,
+        borderColor: 'green',
         backgroundColor: "white",
         padding: 20,
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
       },
   container: {
     flex: 1,
