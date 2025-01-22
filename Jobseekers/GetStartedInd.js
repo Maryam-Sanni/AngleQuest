@@ -782,31 +782,39 @@ const saveToAsyncStorage = async (plan) => {
         return;
       }
 
-      // Define the card information to be sent to the backend
-      const cardInfo = {
-        cvv: cvv,
-        exp_date: `${expMonth}/${expYear}`, 
-        acc_num: "9505", 
-        cardnumber: cardNumber, 
-        cardholder_name: cardName,
+      // Multiply the amount by 1600
+      const amount = totalPlanCost * 1600;
+
+      // Define the payload to be sent to the backend
+      const paymentPayload = {
+        email: email,
+        amount: amount, // Updated amount
+        card_number: cardNumber, // Card number from the user input
+        cvv: cvv, // CVV from the user input
+        expiry_month: expMonth, // Expiry month from the user input
+        expiry_year: expYear, // Expiry year from the user input
       };
 
       // Make the payment request to the backend
-      const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/paystack`, cardInfo, {
+      const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (paymentResponse?.data?.status === "success") {
+      // Check if the response contains the success message
+      if (paymentResponse?.data?.message === "Charge successful") {
         alert("Success, Payment initiated successfully!", "Success");
         console.log("Payment Response:", paymentResponse.data);
+
+        // Reload the page upon success
+        window.location.reload();
 
         // Update UI or proceed to the next step
         setCurrentStep(3); // Proceed to the next step
         setActiveCard("Payment Details"); // Update active card
       } else {
-        alert("Error", "Payment initiation failed.");
+        alert("Error", `Payment initiation failed: ${paymentResponse?.data?.message || "Unknown error"}`);
         console.error("API Error:", paymentResponse.data);
       }
     } catch (error) {

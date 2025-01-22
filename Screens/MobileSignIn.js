@@ -264,7 +264,7 @@ const SignIn = () => {
                   width: "100%", marginTop: 120
                 }}
               />
-              <Footer />
+             
             </View>
           
         </View>

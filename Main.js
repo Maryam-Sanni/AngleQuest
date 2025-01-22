@@ -179,7 +179,16 @@ const App = () => {
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/join-recruitangle" element={<JoinAs />} />
         <Route path="/anglequest-ai" element={<AIScreen />} />
-        <Route path="/sign-in" element={isMobile ? <MobileSignin /> : <SignIn2 />} />
+        <Route
+          path="/sign-in"
+          element={
+            useEffect(() => {
+              if (isMobile) {
+                window.location.href = "https://anglequest-mobile.web.app/";
+              }
+            }, [isMobile]) || <SignIn2 />
+          }
+        />
         <Route path="/sign-up" element={isMobile ? <MobileSignUp /> : <SignUp2 />} />
         <Route path="/contact-sales" element={<ContactSales />} />
         <Route path="/home-experts" element={<Homepage />} />

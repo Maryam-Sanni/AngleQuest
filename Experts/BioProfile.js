@@ -118,10 +118,6 @@ const ProfileUpdate = () => {
       }
 
        // Check if all fields are filled
-    if (!location) {
-      alert('Location is missing.');
-      return;
-    }
     
     if (!specialization) {
       alert('Category (specialization) is missing.');
@@ -268,7 +264,7 @@ const ProfileUpdate = () => {
         if (data.status === 'success' && data.profile) {
           // Provide alternatives if certain fields are null or undefined
           setAboutMe(data.profile.about || ' ');
-          setLocation(data.profile.location || ' ');
+          setLocation(selectedCountry || ' ');
           setProfileImage(data.profile.image_url || 'default');
           setSelectedRoles(data.profile.specialization?.length > 0 ? data.profile.specialization : ['No roles selected']);
           setSpecialization(data.profile.category || 'No specialization');

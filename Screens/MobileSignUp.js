@@ -202,20 +202,21 @@ const SignUp = () => {
   };
 
   return (
-        <View style={{ }}>
-          
-          <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
-            <Top value={3} intensity={100} />
-          </View>
+    <View style={{  }}>
+
+        <Top />
+
+         
         <View style={styles.container}>
           <View
             style={{
+              marginVertical: 10,
               width: "100%",
+              paddingHorizontal: 10,
               alignItems: "center",
-              justifyContent: 'center',
             }}
           >
-            <View style={{ width: "100%", justifyContent: 'center', alignItems: "center" }}>
+            <View style={{ alignItems: "center" }}>
               {signUpOption === 0 ? (
                 <View style={styles.option1}>
                   <TouchableOpacity
@@ -276,7 +277,7 @@ const SignUp = () => {
                     width: "100%",
                     backgroundColor: "#fff",
                     paddingVertical: 60,
-                    paddingHorizontal: 140,
+                    paddingHorizontal: 150,
                     gap: 50,
                   }}
                 >
@@ -422,7 +423,7 @@ const SignUp = () => {
                     width: "100%",
                     backgroundColor: "#fff",
                     paddingVertical: 60,
-                    paddingHorizontal: 140,
+                    paddingHorizontal: 150,
                     gap: 50,
                   }}
                 >
@@ -569,7 +570,7 @@ const SignUp = () => {
                     width: "100%",
                     backgroundColor: "#fff",
                     paddingVertical: 60,
-                    paddingHorizontal: 140,
+                    paddingHorizontal: 150,
                     gap: 50,
                   }}
                 >
@@ -715,7 +716,7 @@ const SignUp = () => {
                 width: "100%", marginTop: 120,
               }}
             />
-            <Footer />
+     
           </View>
         </View>
 
@@ -745,7 +746,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-    marginTop: 100
+    marginTop: 20
   },
   header: {
     fontSize: 16,
@@ -763,7 +764,7 @@ const styles = StyleSheet.create({
   },
   option1: {
     marginTop: 80,
-    width: "80%",
+    width: "90%",
     backgroundColor: "#fff",
     paddingVertical: 60,
     gap: 50,

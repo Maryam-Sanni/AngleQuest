@@ -770,7 +770,6 @@ const styles = StyleSheet.create({
       smallstep2: {
         width: "100%", 
         height: 200,
-        marginLeft: 10,
         justifyContent: 'center',
         marginBottom: 10,
         borderWidth: 1,
