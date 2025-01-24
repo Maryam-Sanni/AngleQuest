@@ -35,6 +35,8 @@ const SupportRequestPage = () => {
   const [date, setDate] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [expertId, setExpertId] = useState(null);
+  const [isModalVisible3, setModalVisible3] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
     specialization: '',
@@ -344,8 +346,8 @@ const SupportRequestPage = () => {
       );
 
       // If matching request is found, open the meeting link
-      if (meetingRequest && meetingRequest.meeting_link) {
-        Linking.openURL(meetingRequest.meeting_link);
+      if (meetingRequest && meetingRequest.individual_link) {
+        Linking.openURL(meetingRequest.individual_link);
       } else {
         alert("Failed to retrieve the meeting link or request not found.");
       }
@@ -613,11 +615,18 @@ const SupportRequestPage = () => {
   const handleOpenPress = async (item) => {
     try {
       await AsyncStorage.setItem("jobSeekerData", JSON.stringify(item));
-      setCurrentStep("fetch");
+      setCurrentStep("all");
     } catch (error) {
       console.error("Error saving job seeker data:", error);
       Alert.alert("Error", "Failed to save data.");
     }
+    setSelectedItem(item); // Set the selected item's data
+    setModalVisible3(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible3(false); // Close the modal
+    setSelectedItem(null); // Clear the selected item
   };
   
   useEffect(() => {
@@ -1290,70 +1299,34 @@ const SupportRequestPage = () => {
       </View>
         )}
             
-            {/* Review Section */}
-              {currentStep === 'fetch' && (
-            <View style={{flexDirection: 'column'}}>
-              <View style={{flexDirection: 'row'}}>
-              <View style={styles.smallstep0}>
-                 <Text style={{fontSize: 16, fontWeight: 'bold' }}>{jobSeekerData.specialization || '-'}</Text>
-                 <Text style={{fontSize: 14 }}>{jobSeekerData.description || '-'}</Text>
-                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>{jobSeekerData.deadline ? formatDate(jobSeekerData.deadline) : "-"}</Text>
-
-                <Text style={{fontSize: 14, color: 'white'}}>Your request was assigned to</Text>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isModalVisible3}
+              onRequestClose={handleCloseModal}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                    Response from {selectedItem?.expert_name || "No Expert Assigned"}
+                  </Text>
+                  <Text style={{ fontSize: 14 }}> {selectedItem?.updated_at ? formatDate(selectedItem.updated_at) : "-"}</Text>
+ 
+                    <Text style={{marginTop: 30, fontSize: 14, fontStyle: 'italic'}}>
+                      Response..
+                    </Text>
+                    
                 
-              </View>
-                  <View style={styles.smallstep}>
-                    <View style={{flexDirection: 'row'}}>
-                      
 
-                      <Text style={{fontSize: 18, fontWeight: '600', marginTop: 20}}>{jobSeekerData.expert_name || "No Expert Assigned"}</Text>
-                      <Image
-                        source={{
-                          uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
-                        }}
-                        style={{
-                          width: 70,
-                          height: 70,
-                          marginLeft: 20,
-                        }}
-                      />
-                    </View>  
-              </View>
-              <View style={styles.smallstep}>
-                <View style={{flexDirection: 'row'}}>
-
-
-                  <Text style={{fontSize: 16, fontWeight: '600', marginTop: 20}}>Replay Anytime</Text>
-                  <Image
-                    source={{
-                      uri: "https://img.icons8.com/?size=100&id=103566&format=png&color=000000",
-                    }}
-                    style={{
-                      width: 70,
-                      height: 70,
-                      marginLeft: 20,
-                    }}
-                  />
-                </View>
-                 <Text style={{fontSize: 14, marginTop: 15, fontWeight: '600' }}>Solved {formatDate(jobSeekerData.updated_at || new Date())}</Text>
-              </View>
-              <View style={styles.smallstep}>     
-                   <Text style={styles.emoji}>😐</Text>
-                   <Text style={styles.ratingText}>Satisfactory</Text>
-              </View>
-            </View>
-              <View style={{flexDirection: 'row'}}> 
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 100, marginRight: 10,  marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('all')} // Navigate to Resolution
-                >
-              <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>Back</Text>
-                 </TouchableOpacity>
-              <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 50, backgroundColor: 'white', borderColor: '#206C00'}}               onPress={() => setCurrentStep('start')} // Navigate to Resolution
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={handleCloseModal}
                   >
-                <Text style={{textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#206C00'}}>New Support Request</Text>
-                   </TouchableOpacity>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-              )}
+            </Modal>
         </View>
         <DateTimePickerModal
           isVisible={isModalVisible2}

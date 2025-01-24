@@ -95,7 +95,12 @@ function AngleQuestPage({ onClose }) {
       const [isLoading, setIsLoading] = useState(false);
   const [createdAt, setCreatedAt] = useState(null);
   const [oneMonthLater, setOneMonthLater] = useState(null);
-
+  const [showAddBackupForm, setShowAddBackupForm] = useState(false);
+  const [showSection, setShowSection] = useState(false);
+  
+  const maskedCardNumber = `**** **** **** ${cardNumber.slice(-4)}`;
+  const expiryDate = `${expMonth}/${expYear}`;
+  
       const apiUrl = process.env.REACT_APP_API_URL;
 
   const [cardImages, setCardImages] = useState({
@@ -133,34 +138,34 @@ function AngleQuestPage({ onClose }) {
         break;
       case 'mastercard':
         setCardImages({
-          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F9F9F9',
           mastercard: 'https://img.icons8.com/?size=100&id=13610&format=png&color=000000',
-          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
-          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F9F9F9',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F9F9F9',
         });
         break;
       case 'amex':
         setCardImages({
-          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
-          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F9F9F9',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F9F9F9',
           amex: 'https://img.icons8.com/?size=100&id=13607&format=png&color=000000',
-          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F9F9F9',
         });
         break;
       case 'discover':
         setCardImages({
-          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
-          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
-          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F9F9F9',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F9F9F9',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F9F9F9',
           discover: 'https://img.icons8.com/?size=100&id=20798&format=png&color=000000',
         });
         break;
       default:
         setCardImages({
-          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F5F5F5',
-          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F5F5F5',
-          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F5F5F5',
-          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F5F5F5',
+          visa: 'https://img.icons8.com/?size=100&id=11079&format=png&color=F9F9F9',
+          mastercard: 'https://img.icons8.com/?size=100&id=11080&format=png&color=F9F9F9',
+          amex: 'https://img.icons8.com/?size=100&id=11081&format=png&color=F9F9F9',
+          discover: 'https://img.icons8.com/?size=100&id=23670&format=png&color=F9F9F9',
         });
     }
   }, [cardNumber]);
@@ -178,6 +183,17 @@ function AngleQuestPage({ onClose }) {
       setIsChecked(!isChecked);
     };
 
+  const handleToggleForm = () => {
+    setShowAddBackupForm(!showAddBackupForm);
+
+    // Clear all form fields
+    setCardName("");
+    setCvv("");
+    setCardNumber("");
+    setExpMonth("");
+    setExpYear("");
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -213,7 +229,7 @@ function AngleQuestPage({ onClose }) {
             setCardName(cardDetails.cardholder_name || "");
             setCardNumber(cardDetails.cardnumber || "");
             setCvv(cardDetails.cvv || "");
-
+            setShowSection(true);
             // Extract expMonth and expYear from exp_date (e.g., "10/2026")
             if (cardDetails.exp_date) {
               const [month, year] = cardDetails.exp_date.split("/");
@@ -761,14 +777,13 @@ const saveToAsyncStorage = async (plan) => {
     Alert.alert('Success', 'Card details saved. Proceed to billing details.');
     setSelectedOption('BillingDetails');
   };
-
+  
   const initiatePayment = async () => {
     try {
       setIsLoading(true); // Start loading state
 
       // Retrieve values from AsyncStorage
       const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
-
       const firstName = values.find(item => item[0] === 'first_name')[1];
       const lastName = values.find(item => item[0] === 'last_name')[1];
       const email = values.find(item => item[0] === 'email')[1];
@@ -788,11 +803,11 @@ const saveToAsyncStorage = async (plan) => {
       // Define the payload to be sent to the backend
       const paymentPayload = {
         email: email,
-        amount: amount, // Updated amount
-        card_number: cardNumber, // Card number from the user input
-        cvv: cvv, // CVV from the user input
-        expiry_month: expMonth, // Expiry month from the user input
-        expiry_year: expYear, // Expiry year from the user input
+        amount: amount,
+        card_number: cardNumber,
+        cvv: cvv,
+        expiry_month: expMonth,
+        expiry_year: expYear,
       };
 
       // Make the payment request to the backend
@@ -802,24 +817,23 @@ const saveToAsyncStorage = async (plan) => {
         },
       });
 
-      // Check if the response contains the success message
+      // Check if the charge was successful
       if (paymentResponse?.data?.message === "Charge successful") {
-        alert("Success, Payment initiated successfully!", "Success");
-        console.log("Payment Response:", paymentResponse.data);
-
-        // Reload the page upon success
-        window.location.reload();
-
-        // Update UI or proceed to the next step
-        setCurrentStep(3); // Proceed to the next step
-        setActiveCard("Payment Details"); // Update active card
+        // Show a success alert
+       alert("Success, Payment initiated successfully!", "Payment initiated successfully!");
+        // Only call handleFinish if the payment was successful
+        handleFinish({
+          success: true,
+          data: paymentResponse.data,
+          message: "Payment initiated successfully!",
+        });
       } else {
-        alert("Error", `Payment initiation failed: ${paymentResponse?.data?.message || "Unknown error"}`);
-        console.error("API Error:", paymentResponse.data);
+        // Handle case where charge is unsuccessful
+       alert("Error", "Payment initiation failed. Please check card details.");
       }
     } catch (error) {
-      alert("Error", error.response?.data?.message || error.message);
-      console.error("Error during payment initiation:", error.response?.data || error.message);
+      // Handle error and show an error alert
+     alert("An error occurred. Please check card details.", error.response?.data?.message || "Error");
     } finally {
       setIsLoading(false); // End the loading state
     }
@@ -1658,28 +1672,33 @@ const saveToAsyncStorage = async (plan) => {
       heading: t(" "),
       content: (
         <View>
-            <View style={styles.Paymentheader}>
-          <Text style={styles.mainHeading2}>Payment Method</Text>
-              {planTitle === "Pay as you go" ? (
-                <>
-                  <Text style={styles.subHeading2}>
-                    You will only be charged for the service you use.
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text style={styles.subHeading2}>
-                    This is the primary payment method that ${totalPlanCost} will be charged from.
-                  </Text>
-                </>
-              )}
-                </View>
-          
-                <View style={{marginLeft: 40, marginRight: 40}}>
-                <View style={styles.buttonContainer}>
+                  {!showSection && (
+                    <>
+                      <View style={styles.Paymentheader}>
+                        <Text style={styles.mainHeading2}>Payment Method</Text>
+                        {planTitle === "Pay as you go" ? (
+                          <>
+                            <Text style={styles.subHeading2}>
+                              You will only be charged for the service you use.
+                            </Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text style={styles.subHeading2}>
+                              This is the primary payment method that ${totalPlanCost} will be charged from.
+                            </Text>
+                          </>
+                        )}
+                      </View>
+
+                      <View style={{ marginLeft: 40, marginRight: 40 }}>
+                        <View style={styles.buttonContainer}>
                           {/* Credit or Debit Card Option */}
                           <TouchableOpacity
-                            style={[styles.button, selectedOption === 'CreditOrDebitCard' && styles.selectedButton]}
+                            style={[
+                              styles.button,
+                              selectedOption === 'CreditOrDebitCard' && styles.selectedButton,
+                            ]}
                             onPress={() => setSelectedOption('CreditOrDebitCard')}
                           >
                             {selectedOption === 'CreditOrDebitCard' && (
@@ -1698,181 +1717,287 @@ const saveToAsyncStorage = async (plan) => {
                             />
                             <Text style={styles.buttonText}>Credit Or Debit Card</Text>
                           </TouchableOpacity>
-                
-                          {/* Contact Details Option */}
-                         
                         </View>
-                
-                       
-                            {planTitle === "Pay as you go" ? (
-                              <View style={styles.formcontainer}>
-                                <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="George Karim"
-                                   placeholderTextColor="grey"
-                                  value={cardName}
-                                  onChangeText={setCardName}
-                                />
 
-                                <Text style={styles.label}>Card Number</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="1234 5678 9012 3456"
-                                   placeholderTextColor="grey"
-                                  value={cardNumber}
-                                  onChangeText={setCardNumber}
-                                  keyboardType="numeric"
-                                />
-<View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
-  <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
-  <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
-  <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
-  <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
-</View>
-                                <Text style={styles.label}>CVV</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  placeholder="123"
-                                  placeholderTextColor="grey"
-                                  value={cvv}
-                                  onChangeText={(text) => {
-                                    const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
-                                    setCvv(formattedText);
-                                  }}
-                                  keyboardType="numeric"
-                                  maxLength={3} 
-                                />
+                        {/* More content based on the condition */}
+                        {planTitle === "Pay as you go" ? (
+                      <View style={styles.formcontainer}>
+                        <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="George Karim"
+                           placeholderTextColor="grey"
+                          value={cardName}
+                          onChangeText={setCardName}
+                        />
 
-                                {/* Expiration Date */}
-                                <Text style={styles.label}>Expiration Date</Text>
-                                <View style={styles.row}>
-                                  <TextInput
-                                    style={[styles.input, styles.smallInput]}
-                                    placeholder="MM"
-                                     placeholderTextColor="grey"
-                                    value={expMonth}
-                                    onChangeText={(text) => {
-                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
-                                      setExpMonth(formattedText);
-                                    }}
-                                    keyboardType="numeric"
-                                    maxLength={2} 
-                                  />
-                                  <TextInput
-                                    style={[styles.input, styles.smallInput]}
-                                    placeholder="YYYY"
-                                     placeholderTextColor="grey"
-                                    value={expYear}
-                                    onChangeText={(text) => {
-                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
-                                      setExpYear(formattedText);
-                                    }}
-                                    keyboardType="numeric"
-                                    maxLength={4} 
-                                  />
-                                </View>
-                                <TouchableOpacity style={styles.buttonblack}
-                                  disabled={isLoading}
-                                    onPress={handleFinish}
-                                  >
-                                    {isLoading ? (
-                                      <ActivityIndicator color="white" />
-                                    ) : (
-                                  <Text style={styles.buttonsaveText}>{t("Save Card Details")}</Text>
-                                     )}
-                                </TouchableOpacity>
-                              </View>
+                        <Text style={styles.label}>Card Number</Text>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="1234 5678 9012 3456"
+                           placeholderTextColor="grey"
+                          value={cardNumber}
+                          onChangeText={setCardNumber}
+                          keyboardType="numeric"
+                        />
+                      <View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
+                      <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+                      <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
+                      <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
+                      <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
+                      </View>
+                        <Text style={styles.label}>CVV</Text>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="123"
+                          placeholderTextColor="grey"
+                          value={cvv}
+                          onChangeText={(text) => {
+                            const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
+                            setCvv(formattedText);
+                          }}
+                          keyboardType="numeric"
+                          maxLength={3} 
+                        />
+
+                        {/* Expiration Date */}
+                        <Text style={styles.label}>Expiration Date</Text>
+                        <View style={styles.row}>
+                          <TextInput
+                            style={[styles.input, styles.smallInput]}
+                            placeholder="MM"
+                             placeholderTextColor="grey"
+                            value={expMonth}
+                            onChangeText={(text) => {
+                              const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
+                              setExpMonth(formattedText);
+                            }}
+                            keyboardType="numeric"
+                            maxLength={2} 
+                          />
+                          <TextInput
+                            style={[styles.input, styles.smallInput]}
+                            placeholder="YYYY"
+                             placeholderTextColor="grey"
+                            value={expYear}
+                            onChangeText={(text) => {
+                              const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
+                              setExpYear(formattedText);
+                            }}
+                            keyboardType="numeric"
+                            maxLength={4} 
+                          />
+                        </View>
+                        <TouchableOpacity style={styles.buttonblack}
+                          disabled={isLoading}
+                            onPress={handleFinish}
+                          >
+                            {isLoading ? (
+                              <ActivityIndicator color="white" />
                             ) : (
-                              <View style={styles.formcontainer}>
-                                <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
-                                                                <TextInput
-                                                                  style={styles.input}
-                                                                  placeholder="George Karim"
-                                                                   placeholderTextColor="grey"
-                                                                  value={cardName}
-                                                                  onChangeText={setCardName}
-                                                                />
+                          <Text style={styles.buttonsaveText}>{t("Save Card Details")}</Text>
+                             )}
+                        </TouchableOpacity>
+                      </View>
+                        ) : (
+                          <View style={styles.formcontainer}>
+                            <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                                                            <TextInput
+                                                              style={styles.input}
+                                                              placeholder="George Karim"
+                                                               placeholderTextColor="grey"
+                                                              value={cardName}
+                                                              onChangeText={setCardName}
+                                                            />
 
-                                                                <Text style={styles.label}>Card Number</Text>
-                                                                <TextInput
-                                                                  style={styles.input}
-                                                                  placeholder="1234 5678 9012 3456"
-                                                                   placeholderTextColor="grey"
-                                                                  value={cardNumber}
-                                                                  onChangeText={setCardNumber}
-                                                                  keyboardType="numeric"
-                                                                />
-                                <View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
-                                  <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
-                                  <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
-                                  <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
-                                  <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
-                                </View>
-                                                                <Text style={styles.label}>CVV</Text>
-                                                                <TextInput
-                                                                  style={styles.input}
-                                                                  placeholder="123"
-                                                                  placeholderTextColor="grey"
-                                                                  value={cvv}
-                                                                  onChangeText={(text) => {
-                                                                    const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
-                                                                    setCvv(formattedText);
-                                                                  }}
-                                                                  keyboardType="numeric"
-                                                                  maxLength={3} 
-                                                                />
+                                                            <Text style={styles.label}>Card Number</Text>
+                                                            <TextInput
+                                                              style={styles.input}
+                                                              placeholder="1234 5678 9012 3456"
+                                                               placeholderTextColor="grey"
+                                                              value={cardNumber}
+                                                              onChangeText={setCardNumber}
+                                                              keyboardType="numeric"
+                                                            />
+                            <View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
+                              <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+                              <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
+                              <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
+                              <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
+                            </View>
+                                                            <Text style={styles.label}>CVV</Text>
+                                                            <TextInput
+                                                              style={styles.input}
+                                                              placeholder="123"
+                                                              placeholderTextColor="grey"
+                                                              value={cvv}
+                                                              onChangeText={(text) => {
+                                                                const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
+                                                                setCvv(formattedText);
+                                                              }}
+                                                              keyboardType="numeric"
+                                                              maxLength={3} 
+                                                            />
 
-                                                                {/* Expiration Date */}
-                                                                <Text style={styles.label}>Expiration Date</Text>
-                                                                <View style={styles.row}>
-                                                                  <TextInput
-                                                                    style={[styles.input, styles.smallInput]}
-                                                                    placeholder="MM"
-                                                                     placeholderTextColor="grey"
-                                                                    value={expMonth}
-                                                                    onChangeText={(text) => {
-                                                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
-                                                                      setExpMonth(formattedText);
-                                                                    }}
-                                                                    keyboardType="numeric"
-                                                                    maxLength={2} 
-                                                                  />
-                                                                  <TextInput
-                                                                    style={[styles.input, styles.smallInput]}
-                                                                    placeholder="YYYY"
-                                                                     placeholderTextColor="grey"
-                                                                    value={expYear}
-                                                                    onChangeText={(text) => {
-                                                                      const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
-                                                                      setExpYear(formattedText);
-                                                                    }}
-                                                                    keyboardType="numeric"
-                                                                    maxLength={4} 
-                                                                  />
-                                                                </View>
-                                <TouchableOpacity style={styles.buttonblack}
-                                  disabled={isLoading}
-                                    onPress={initiatePayment}
-                                  >
-                                    {isLoading ? (
-                                      <ActivityIndicator color="white" />
-                                    ) : (
-                                    <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
-                                     )}
-                                </TouchableOpacity>
-                               
-                              </View>
-                                     
-                            )}
+                                                            {/* Expiration Date */}
+                                                            <Text style={styles.label}>Expiration Date</Text>
+                                                            <View style={styles.row}>
+                                                              <TextInput
+                                                                style={[styles.input, styles.smallInput]}
+                                                                placeholder="MM"
+                                                                 placeholderTextColor="grey"
+                                                                value={expMonth}
+                                                                onChangeText={(text) => {
+                                                                  const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
+                                                                  setExpMonth(formattedText);
+                                                                }}
+                                                                keyboardType="numeric"
+                                                                maxLength={2} 
+                                                              />
+                                                              <TextInput
+                                                                style={[styles.input, styles.smallInput]}
+                                                                placeholder="YYYY"
+                                                                 placeholderTextColor="grey"
+                                                                value={expYear}
+                                                                onChangeText={(text) => {
+                                                                  const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
+                                                                  setExpYear(formattedText);
+                                                                }}
+                                                                keyboardType="numeric"
+                                                                maxLength={4} 
+                                                              />
+                                                            </View>
+                             <TouchableOpacity style={styles.buttonblack}
+                               disabled={isLoading}
+                                 onPress={initiatePayment}
+                               >
+                                 {isLoading ? (
+                                   <ActivityIndicator color="white" />
+                                 ) : (
+                                 <Text style={styles.buttonsaveText}>{t("Proceed to Pay")}</Text>
+                                  )}
+                             </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </>
+                  )}
+
                   
-                      
-        
-            
+                  {showSection && (
+                    <>
+                      <View style={{marginLeft: 20, marginRight: 20}}>
+                      <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Payment Method</Text>
+                        <View style={{flexDirection: 'row'}}>
+                        <View style={styles.cardInfo}>
+                           <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+                          <View style={{flexDirection: 'column', marginLeft: 10}}>
+                          <Text style={styles.cardNumber}>{maskedCardNumber} (Primary)</Text>
+                          <Text style={styles.expiryDate}>Expires on {expiryDate}</Text>
+                          </View>
+                        </View>
+                            <TouchableOpacity onPress={handleToggleForm} style={styles.addBackupButton}>
+                          <Text style={styles.addBackupButtonText}>+ Add backup payment method</Text>
+                        </TouchableOpacity>
+                      </View>
+                      </View>
+
+                  {/* Show Add Backup Form */}
+                  {showAddBackupForm && (
+                    <View style={styles.formcontainer}>
+                      <Text style={styles.label}>Cardholder Name (exactly as printed on card)</Text>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="George Karim"
+                        placeholderTextColor="grey"
+                        value={cardName}
+                        onChangeText={setCardName}
+                      />
+
+                      <Text style={styles.label}>Card Number</Text>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="1234 5678 9012 3456"
+                        placeholderTextColor="grey"
+                        value={cardNumber}
+                        onChangeText={setCardNumber}
+                        keyboardType="numeric"
+                      />
+                      <View style ={{flexDirection: 'row', alignSelf: 'flex-start', marginTop: -15}}>
+                        <Image source={{ uri: cardImages.visa }} style={{ width: 50, height: 50 }} />
+                        <Image source={{ uri: cardImages.mastercard }} style={{ width: 50, height: 50 }} />
+                        <Image source={{ uri: cardImages.amex }} style={{ width: 50, height: 50 }} />
+                        <Image source={{ uri: cardImages.discover }} style={{ width: 50, height: 50 }} />
+                        </View>
+
+                      <Text style={styles.label}>CVV</Text>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="123"
+                        placeholderTextColor="grey"
+                        value={cvv}
+                        onChangeText={(text) => {
+                          const formattedText = text.replace(/[^0-9]/g, '').slice(0, 3);
+                          setCvv(formattedText);
+                        }}
+                        keyboardType="numeric"
+                        maxLength={3}
+                      />
+
+                      <Text style={styles.label}>Expiration Date</Text>
+                      <View style={styles.row}>
+                        <TextInput
+                          style={[styles.input, styles.smallInput]}
+                          placeholder="MM"
+                          placeholderTextColor="grey"
+                          value={expMonth}
+                          onChangeText={(text) => {
+                            const formattedText = text.replace(/[^0-9]/g, '').slice(0, 2);
+                            setExpMonth(formattedText);
+                          }}
+                          keyboardType="numeric"
+                          maxLength={2}
+                        />
+                        <TextInput
+                          style={[styles.input, styles.smallInput]}
+                          placeholder="YYYY"
+                          placeholderTextColor="grey"
+                          value={expYear}
+                          onChangeText={(text) => {
+                            const formattedText = text.replace(/[^0-9]/g, '').slice(0, 4);
+                            setExpYear(formattedText);
+                          }}
+                          keyboardType="numeric"
+                          maxLength={4}
+                        />
+                      </View>
+                      <TouchableOpacity style={styles.buttonblack} disabled={isLoading} onPress={handleFinish}>
+                        {isLoading ? (
+                          <ActivityIndicator color="white" />
+                        ) : (
+                          <Text style={styles.buttonsaveText}>Save Card</Text>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  
+                      {/* Contact Information Section */}
+                      <View style={styles.section}>
+                        <Text style={styles.sectionTitle2}>Contact Information</Text>   
+                        <View style={styles.contactInfo}>
+                          <Text style={styles.infoText}>Name: {fullName}</Text>
+                          <Text style={styles.infoText}>Email Address: {email}</Text>
+                        </View>
+                       
+                      </View>
+                      </View>
+                        </>
+                      )}
           
 
 </View>
-        </View>
+
       ),
     },
    
@@ -2265,7 +2390,7 @@ color: 'black',
     color: '#333333',
   },
   formcontainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#F6F6F6',
     padding: 30,
     marginTop: 30,
     marginBottom: 30
@@ -2813,6 +2938,81 @@ marginLeft: 15
     fontWeight: 'bold',
     marginLeft: 10,
     marginRight: 10
+  },
+  section: {
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 10,
+     backgroundColor: "white",
+    shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2, }, 
+      shadowOpacity: 0.25, 
+      shadowRadius: 3.84,
+       elevation: 5, 
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 30,
+  },
+  sectionTitle2: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 30,
+  },
+  cardInfo: {
+    marginBottom: 12,
+    borderWidth: 1,
+    width: "49%",
+    borderColor: '#CCC',
+    padding: 10,
+     borderRadius: 5,
+    flexDirection: 'row',
+  },
+  cardBrand: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cardNumber: {
+    fontSize: 14,
+    color: '#555',
+    marginVertical: 4,
+  },
+  expiryDate: {
+    fontSize: 14,
+    color: '#555',
+  },
+  addBackupButton: {
+    marginBottom: 12,
+    width: "49%",
+    alignItems: 'center',
+    JustifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: '#206C00',
+    padding: 20,
+    borderRadius: 5,
+    marginLeft: 15,
+  },
+  addBackupButtonText: {
+    color: '#206C00',
+    marginTop: 7,
+    alignSelf: 'center',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  contactInfo: {
+    marginBottom: 12,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
+  },
+  editText: {
+    color: '#007BFF',
+    fontSize: 14,
+    fontWeight: '600',
+    alignSelf: 'flex-end',
   },
 });
 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ImageBackground, ScrollView, Picker, Modal, Image } from 'react-native';
+import { Button } from 'react-native-paper';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import OpenModal from '../Experts/TicketsResponse';
 import OpenModal2 from '../Experts/TicketsResponse2';
 import OpenModal3 from '../Experts/TicketsResponse3';
+import OpenModal4 from '../Experts/RequestGuideEdit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -24,6 +26,7 @@ const TicketsPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
    const [currentTicketTitle, setCurrentTicketTitle] = useState('');
    const [requests, setRequests] = useState([]);
    const [activeRequests, setActiveRequests] = useState([]); 
@@ -231,6 +234,14 @@ const TicketsPage = () => {
     setModalVisible(true);
   };
 
+  const handleOpenPress4 = () => {
+    setModalVisible4(true);
+  };
+
+  const handleCloseModal4 = () => {
+    setModalVisible4(false);
+  };
+  
   useEffect(() => {
     const fetchCompletedRequests = async () => {
       try {
@@ -292,32 +303,50 @@ const TicketsPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+    source={require ('../assets/backgroundimg2.png') }
+    style={{ height: '100%', width: '100%',flex: 1}}
+    >
       <View style={{ flex: 1 }}>
         <Topbar />
         <View style={styles.mainContainer}>
           <Sidebar />
           <View style={styles.content}>
-            <View style={styles.filterContainer}>
+            <View style={styles.header}>
+              <Button mode="text" 
+                textColor="#000000"
+                style={styles.button} 
+                onPress={handleOpenPress4}
+                icon={() => (
+                  <Image
+                    source={{
+                      uri: 'https://img.icons8.com/?size=100&id=Da9Xe1TFL49g&format=png&color=000000',
+                    }}
+                    style={{ width: 20, height: 20 }}
+                  />
+                )}>Edit Guide</Button>
+
               <Picker
                 selectedValue={selectedCategory}
                 style={styles.picker}
                 onValueChange={(value) => setSelectedCategory(value)}
               >
                 <Picker.Item label="All Category" value="" />
-  <Picker.Item label="SAP FI" value="SAP FI" />
-  <Picker.Item label="SAP MM" value="SAP MM" />
-  <Picker.Item label="SAP SD" value="SAP SD" />
-  <Picker.Item label="SAP PP" value="SAP PP" />
-  <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
-  <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
-  <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
-  <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
-  <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
-  <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
-  <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
+              <Picker.Item label="SAP FI" value="SAP FI" />
+              <Picker.Item label="SAP MM" value="SAP MM" />
+              <Picker.Item label="SAP SD" value="SAP SD" />
+              <Picker.Item label="SAP PP" value="SAP PP" />
+              <Picker.Item label="Microsoft Dynamics Sales" value="Microsoft Dynamics Sales" />
+              <Picker.Item label="Microsoft Dynamics Customer Service" value="Microsoft Dynamics Customer Service" />
+              <Picker.Item label="Microsoft Dynamics Field Service" value="Microsoft Dynamics Field Service" />
+              <Picker.Item label="Microsoft Dynamics CRM Developer" value="Microsoft Dynamics CRM Developer" />
+              <Picker.Item label="Microsoft Business Central" value="Microsoft Business Central" />
+              <Picker.Item label="Microsoft Power Platform Developer" value="Microsoft Power Platform Developer" />
+              <Picker.Item label="Microsoft Dynamics F&O" value="Microsoft Dynamics F&O" />
               </Picker>
+              
             </View>
+            
             <View style={styles.progressBar}>
               <View style={styles.progressStep}>
                 <Text style={styles.stepText}>New Request</Text>
@@ -604,8 +633,7 @@ right: 10
               </View>
             </ScrollView>
           </View>
-        </View>
-      </View>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -636,7 +664,19 @@ right: 10
           <OpenModal3 onClose={handleCloseModal3} />
         </View>
       </Modal>
-    </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible4}
+            onRequestClose={handleCloseModal4}
+          >
+              <View style={styles.modalContent}>
+                <OpenModal4 onClose={() => handleCloseModal4()} />
+              </View>
+          </Modal>
+            </View>
+          </View>
+    </ImageBackground>
   );
 };
 
@@ -661,14 +701,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     marginLeft: 200,
-    backgroundColor: 'white'
   },
   picker: {
-    height: 50,
+    height: 40,
     width: "24%",
-    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#206C00',
+    position: 'absolute',
+    right: 20,
     backgroundColor: 'white',
-    marginBottom: 30
   },
   smallstep0: {
     width: "100%", 
@@ -770,6 +811,7 @@ const styles = StyleSheet.create({
       smallstep2: {
         width: "100%", 
         height: 200,
+        marginLeft: 20,
         justifyContent: 'center',
         marginBottom: 10,
         borderWidth: 1,
@@ -793,8 +835,8 @@ const styles = StyleSheet.create({
   progressBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#F5F5F5',
     marginBottom: 10,
+    marginTop: 40,
   },
   progressStep: {
     flex: 1,
@@ -845,6 +887,32 @@ const styles = StyleSheet.create({
     marginLeft: 10 ,
     marginRight: 10,
     justifyContent: 'center'
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 10,
+    marginTop: -20,
+    marginLeft: -10,
+    marginRight: -20,
+    marginBottom: 10,
+    shadowColor: '#FFFFFF', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5, 
+  }, 
+  item: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  headertext: {
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: '500',
+    marginTop: 7,
+    color: '#666',
+    fontFamily:"Roboto-Light"
   },
 });
 
