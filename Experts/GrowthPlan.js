@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, Picker, ImageBackground } from 'react-native';
 import Topbar from '../components/expertstopbar';
 import Sidebar from '../components/expertssidebar';
 import ScheduledGrowthPlan from '../components/ScheduledGrowthPlan';
@@ -24,6 +24,9 @@ function MyComponent() {
      const [pendingCount, setPendingCount] = useState(0);
      const [reviewedCount, setReviewedCount] = useState(0);
    const [activeTab, setActiveTab] = useState('Scheduled');
+  const [selectedGuide, setSelectedGuide] = useState(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false); 
+  const [skillAnalysisGuides, setSkillAnalysisGuides] = useState([]); // Store fetched guides
   
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -176,6 +179,62 @@ function MyComponent() {
     return timeLeft;
   };
 
+  // Handle Dropdown Item Selection
+  const handleSaveToStorage = async (selectedGuide) => {
+    try {
+      await AsyncStorage.setItem('selectedGuide', JSON.stringify(selectedGuide));
+      console.log('Saved to storage:', selectedGuide);
+
+      // Perform additional action: handleOpenPress2
+      handleOpenPress2();
+
+      setDropdownVisible(false); // Close dropdown
+    } catch (error) {
+      console.error('Failed to save data to storage', error);
+    }
+  };
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) throw new Error('No token found');
+
+        const response = await axios.get(`${apiUrl}/api/expert/growthplan/get`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 200) {
+          const fetchedGuides = response.data.growthPlan.map((guide) => ({
+            ...guide,
+            combinedName: `${guide.level} ${guide.specialization}`, // Combine level and specialization
+          }));
+
+          const newGuide = {
+            id: 'new',
+            role: '',
+            level: '',
+            rate: '',
+            specialization: '',
+            available_days: [],
+            available_times: '',
+            category: '',
+            topics: [],
+            combinedName: 'Select a guide',
+          };
+
+          setSkillAnalysisGuides([newGuide, ...fetchedGuides]);
+        } else {
+          console.error('Failed to fetch data', response);
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadFormData();
+  }, []);
+  
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
@@ -239,23 +298,69 @@ const {t}=useTranslation()
               onPress={handleOpenPress}
               icon={() => (
                 <Image 
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=20324&format=png&color=000000' }} 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50' }} 
                   style={{ width: 20, height: 20 }} 
                 />
-              )}>Create Profile</Button>
+              )}>Create New Guide</Button>
 
-            <Button mode="text" 
-              textColor="#000000"
-              style={styles.button} 
-              onPress={handleOpenPress2}
-              icon={() => (
-                <Image 
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=Da9Xe1TFL49g&format=png&color=000000' }} 
-                  style={{ width: 20, height: 20 }} 
-                />
+          <View>
+              <Button
+                mode="text"
+                textColor="#000000"
+                style={{ marginBottom: 10 }}
+                onPress={() => setDropdownVisible(!dropdownVisible)} // Toggle dropdown visibility
+                contentStyle={{ alignItems: 'center' }}
+                icon={() => (
+                  <Image
+                    source={{
+                      uri: 'https://img.icons8.com/?size=100&id=Da9Xe1TFL49g&format=png&color=000000',
+                    }}
+                    style={{ width: 20, height: 20 }}
+                  />
+                )}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 5 }}>Edit Guides</Text>
+                  <Image
+                    source={{
+                      uri: 'https://img.icons8.com/?size=100&id=85018&format=png&color=000000',
+                    }}
+                    style={{ width: 20, height: 20 }}
+                  />
+                </View>
+              </Button>
+
+              {/* Dropdown Section */}
+              {dropdownVisible && (
+                <View
+                  style={{
+                    marginTop: -45,
+                    backgroundColor: 'white',
+                  }}
+                >
+                  <Picker
+                    selectedValue={selectedGuide}
+                    onValueChange={(itemValue) => {
+                      const selectedItem = skillAnalysisGuides.find(
+                        (item) => item.combinedName === itemValue
+                      );
+                      setSelectedGuide(itemValue);
+                      handleSaveToStorage(selectedItem); 
+                    }}
+                    style={{ height: 30, width: '100%', padding: 5, borderWidth: 0, outline: 'none', fontSize: 14, fontWeight: 600 }}
+                  >
+
+                    {skillAnalysisGuides.map((item) => (
+                      <Picker.Item
+                        key={item.id}
+                        label={item.combinedName}
+                        value={item.combinedName}
+                      />
+                    ))}
+                  </Picker>
+                </View>
               )}
-              >Edit Profile</Button>
-
+            </View>
           </View>
                        
 

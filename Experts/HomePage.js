@@ -154,17 +154,47 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const modalShown = localStorage.getItem("modalShown");
-    if (!modalShown) {
-      // If the modal hasn't been shown, show the modal
-      setCustomModalVisible(true);
-      localStorage.setItem("modalShown", "true");
-    } else {
-      // If modal has been shown before, ensure modalVisible is false
-      setCustomModalVisible(false);
-    }
-  }, []);
+    const checkLastPaymentMethod = async () => {
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
 
+        // Fetch payment details from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-withdrawal-details`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Extract PaystackDetail object from the response
+        const paystackDetails = response?.data?.WithdrawalDetail;
+
+        if (paystackDetails) {
+          // Check the payment method
+          if (paystackDetails.bank_name === "Done") {
+            setModalVisible2(false); // Payment is completed; hide the modal
+          } else {
+            setModalVisible2(true); // Payment is not completed; show the modal
+          }
+        } else {
+          console.warn("No payment details found in the response.");
+          setModalVisible2(true); // Show the modal if no payment details are found
+        }
+      } catch (error) {
+        console.error("Error fetching payment details: ", error);
+        setModalVisible2(true); // Show the modal in case of an error
+      }
+    };
+
+    // Call the function immediately
+    checkLastPaymentMethod();
+  }, [apiUrl, setModalVisible2]); // Dependencies
+
+  
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
     const retrieveData = async () => {
@@ -410,7 +440,7 @@ const HomePage = () => {
                             }}
                           >
                             {t(
-                              "Are you passionate about lifting others in your field to their next level?",
+                              "By supporting others we lift their life's work"
                             )}
                           </Text>
                           <TouchableOpacity
@@ -423,7 +453,7 @@ const HomePage = () => {
                             onMouseLeave={() => setIsHovered2(false)}
                           >
                             <Text style={styles.touchableTextbegin}>
-                              {t("Get Started")}
+                              {t("My Profile")}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -866,9 +896,16 @@ const HomePage = () => {
                 </View>
               </View>
             </View>
-            {customModalVisible && (
-              <CustomModal onClose={() => setCustomModalVisible(false)} />
-            )}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={customModalVisible}
+              onRequestClose={handleCloseModal2}
+            >
+              <View style={styles.modalContent}>
+                <CustomModal onClose={() => setCustomModalVisible(false)} /> 
+              </View>
+            </Modal>
           </ScrollView>
         </View>
 

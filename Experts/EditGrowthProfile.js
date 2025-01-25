@@ -49,6 +49,7 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [rate, setRate] = useState('$30'); // Initial value includes $
   const [id, setID] = useState(null);
+  const [selectedGuide, setSelectedGuide] = useState(null);
 
   const handleRateChange = (text) => {
     // Remove non-numeric characters except for the decimal point
@@ -144,52 +145,27 @@ useEffect(() => {
 }, []);
 
   useEffect(() => {
-    const loadFormData = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            if (!token) throw new Error('No token found');
-
-            const response = await axios.get(`${apiUrl}/api/expert/growthplan/get`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            if (response.status === 200 && response.data.status === 'success') {
-                const fetchedGuides = response.data.growthPlan;
-                const newGuide = {
-                    id: 'new',
-                    role: '',
-                    level: '',
-                    rate: '',
-                    available_days: [],
-                    available_times: '',
-                    category: '',
-                    guides: []
-                };
-
-                setSkillAnalysisGuides([newGuide, ...fetchedGuides]);
-                updateFormFields(0);  // Initialize form with the first guide (New)
-            } else {
-                console.error('Failed to fetch data', response);
-            }
-        } catch (error) {
-             console.error('Failed to load form data', error);
+    const loadSelectedGuide = async () => {
+      try {
+        const storedGuide = await AsyncStorage.getItem('selectedGuide');
+        if (storedGuide) {
+          const parsedGuide = JSON.parse(storedGuide);
+          setSelectedGuide(parsedGuide); 
+          setID(parsedGuide.id);
+          setCategory(parsedGuide.category);
+          setLevel(parsedGuide.level);
+          setGuides(parsedGuide.guides);
+          setSelectedRole(parsedGuide.specialization);
+          setAvailableDays(parsedGuide.available_days);
+          setAvailableTimes(parsedGuide.available_times);
         }
+      } catch (error) {
+        console.error('Failed to retrieve guide from storage', error);
+      }
     };
 
-    loadFormData();
+    loadSelectedGuide();
   }, []);
-
-  const updateFormFields = (index) => {
-    const guide = skillAnalysisGuides[index];
-    setCategory(guide.category);
-    setSelectedRole(guide.specialization);
-    setLevel(guide.level);
-    setRate(guide.rate);
-    setAvailableDays(guide.available_days);
-    setAvailableTimes(guide.available_times);
-    setGuides(guide.guides);
-    setID(guide.id);
-  };
 
   const handleNextGuide = () => {
     if (selectedGuideIndex < skillAnalysisGuides.length - 1) {
@@ -369,34 +345,11 @@ useEffect(() => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.navigationContainer}>
-              <TouchableOpacity
-                  style={styles.navButton}
-                  onPress={handleNewGuide}
-              >
-                  <Text style={styles.navButtonText}>New</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
-                  onPress={handlePreviousGuide}
-                  disabled={selectedGuideIndex === 1}
-              >
-                  <Text style={styles.navButtonText}>Previous</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === skillAnalysisGuides.length - 1 && styles.disabledNavButton]}
-                  onPress={handleNextGuide}
-                  disabled={selectedGuideIndex === skillAnalysisGuides.length - 1}
-              >
-                  <Text style={styles.navButtonText}>Next</Text>
-              </TouchableOpacity>
-          </View>
+         
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={styles.buttonTextDue}>Please fill in all fields</Text>
+              <Text style={styles.buttonTextDue}>Create a guide (template) that helps you effectively ellicit users knowledge gap. Include questions, examples or any mode of communication to find this out.  Make sure to fill all fields.</Text>
             </View>
           </View>
 
@@ -563,11 +516,11 @@ useEffect(() => {
           </TouchableOpacity>
           
           <TouchableOpacity
-            onPress={selectedGuideIndex === 0 ? handleSave : handlePut} // Assuming the new guide is always at index 0
+            onPress={handlePut} 
             style={styles.buttonsave}
           >
             <Text style={styles.buttonTextsave}>
-                {selectedGuideIndex === 0 ? t("Save") : t("Update")} {/* Change text based on context */}
+              Update
             </Text>
           </TouchableOpacity>
         

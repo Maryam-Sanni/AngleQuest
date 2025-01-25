@@ -6,7 +6,7 @@ const onboardingData = [
   {
     id: '1',
     title: 'Welcome to AngleQuest',
-    description: 'We are thrilled to have you here, Start by setting up your profile, it takes 10 minutes to complete.',
+    description: 'We are thrilled to have you here, Start by setting up your profile, it takes 10 minutes.',
     image: require("../assets/happywelcome.png")
   },
   {
@@ -28,15 +28,15 @@ const onboardingData = [
       },
       {
         name: 'Skill Analysis',
-        explanation: 'Assess and identify areas for improvement.'
+        explanation: 'Assess and identify areas of improvement for others.'
       },
       {
         name: 'Growth Plan',
-        explanation: 'Develop roadmaps for achieving personal or professional goals.'
+        explanation: 'Develop roadmaps for achieving professional and team goals for others.'
       },
       {
         name: 'Interview Sessions',
-        explanation: 'Help individuals prepare for job opportunities.'
+        explanation: 'Help individuals prepare for job opportunities by interviewing them first.'
       }
     ]
   }
@@ -164,21 +164,22 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginTop: -50,
     marginBottom: 16
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     marginBottom: 16,
-    width: 600,
+    width: 700,
     alignSelf: 'center'
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 350,
+    height: 350,
     marginBottom: 16,
     alignSelf: 'center'
   },

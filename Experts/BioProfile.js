@@ -281,7 +281,7 @@ const ProfileUpdate = () => {
   }, []);
 
   const countries = [
-    { label: 'Netherlands', value: 'NL' },
+    { label: ' ', value: ' ' },
     { label: 'Afghanistan', value: 'AF' },
     { label: 'Albania', value: 'AL' },
     { label: 'Algeria', value: 'DZ' },

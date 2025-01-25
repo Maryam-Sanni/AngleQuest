@@ -396,7 +396,7 @@ useEffect(() => {
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Develop a guide to help users set clear, achievable objectives and map out actionable steps to reach their goals. Include sections on goal-setting, resource allocation, and tracking progress. Make sure to fill all fields.
+              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively ellicit users knowledge gap. Include questions, examples or any mode of communication to find this out.  Make sure to fill all fields.
                 </Text>
             </View>
           </View>

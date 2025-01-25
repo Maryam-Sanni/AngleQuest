@@ -397,7 +397,7 @@ useEffect(() => {
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide that helps users assess their skill levels effectively. This guide should include instructions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.
+              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively assess user skill set. This guide should include steps or questions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.
               </Text>
             </View>
           </View>

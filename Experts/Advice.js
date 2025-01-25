@@ -466,10 +466,10 @@ function MyComponent() {
               onPress={handleOpenPress}
               icon={() => (
                 <Image 
-                  source={{ uri: 'https://img.icons8.com/?size=100&id=20324&format=png&color=000000' }} 
+                  source={{ uri: 'https://img.icons8.com/?size=100&id=3220&format=png&color=4CAF50' }} 
                   style={{ width: 20, height: 20 }} 
                 />
-              )}>Create Profile</Button>
+              )}>Create New Guide</Button>
 
             <View>
               <Button
@@ -488,7 +488,7 @@ function MyComponent() {
                 )}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ marginRight: 5 }}>Edit Profile</Text>
+                  <Text style={{ marginRight: 5 }}>Edit Guides</Text>
                   <Image
                     source={{
                       uri: 'https://img.icons8.com/?size=100&id=85018&format=png&color=000000',
