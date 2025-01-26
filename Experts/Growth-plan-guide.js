@@ -10,7 +10,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 const MAX_GUIDES = 15;
 
-function MyComponent({ onClose }) {
+function MyComponent({ onClose, onDone }) {
   const [checkedItems, setCheckedItems] = useState([]);
 
   const toggleCheckbox = (idx) => {
@@ -281,6 +281,7 @@ useEffect(() => {
       setAlertMessage(t('Failed to create growth plan profile'));
     }
     setAlertVisible(true);
+    onDone();
   };
 
   const handlePut = async () => {
@@ -326,6 +327,7 @@ useEffect(() => {
       setAlertMessage(t('Failed to update growth plan profile'));
     }
     setAlertVisible(true);
+    onDone();
   };
   
   const addGuide = () => {

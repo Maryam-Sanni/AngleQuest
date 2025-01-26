@@ -10,7 +10,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 const MAX_TOPICS = 15;
 
-function MyComponent({ onClose, onGuide }) {
+function MyComponent({ onClose, onGuide, onDone }) {
   const [checkedItems, setCheckedItems] = useState([]);
 
   const toggleCheckbox = (idx) => {
@@ -281,7 +281,7 @@ useEffect(() => {
       setAlertMessage(t('Failed to create skill analysis profile'));
     }
     setAlertVisible(true);
-    onGuide();
+    onDone();
   };
 
   const handlePut = async () => {
@@ -327,6 +327,7 @@ useEffect(() => {
       setAlertMessage(t('Failed to update skill analysis profile'));
     }
     setAlertVisible(true);
+    onDone();
   };
   
   const addTopic = () => {
@@ -372,7 +373,7 @@ useEffect(() => {
 
           <View style={styles.navigationContainer}>
               <TouchableOpacity
-                  style={styles.navButton}
+                style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
                   onPress={handleNewGuide}
               >
                   <Text style={styles.navButtonText}>New</Text>
@@ -716,10 +717,10 @@ marginTop: 10
   },
   placeholderText: {
     color: 'grey',
-    fontSize: 12, // Adjust size as needed
+    fontSize: 12,
     position: 'absolute',
     left: 10,
-    top: 15, // Adjust position as needed
+    top: 15,
   },
   navigationContainer: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, FlatList, Picker, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal, FlatList, CheckBox, Picker, ScrollView } from 'react-native';
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +12,79 @@ const MAX_QUESTIONS = 15;
 
 function MyComponent({ onClose }) {
 
+  const specializationRoles = {
+    'Select a Category': ['No category selected'],
+    SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
+    Microsoft: [
+      'Dynamics Sales',
+      'Dynamics Customer Service',
+      'Dynamics Field Service',
+      'Dynamics CRM Developer',
+      'Business Central',
+      'Power Platform Developer',
+      'Dynamics F&O',
+    ],
+  };
+
+  const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
+    const toggleSelection = (id) => {
+      if (selectedItems.includes(id)) {
+        // Remove the item if it's already selected
+        onSelectedItemsChange(selectedItems.filter((item) => item !== id));
+      } else {
+        // Add the item if it's not selected
+        onSelectedItemsChange([...selectedItems, id]);
+      }
+    };
+
+    return (
+      <View style={styles.container2}>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                value={selectedItems.includes(item.id)}
+                onValueChange={() => toggleSelection(item.id)}
+                tintColors={{ true: 'green', false: 'gray' }}
+                style={styles.checkbox}
+              />
+              <Text
+                style={
+                  selectedItems.includes(item.id)
+                    ? styles.selectedText
+                    : styles.unselectedText
+                }
+              >
+                {item.name}
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+    );
+  };
+
+  const [isSelectVisible, setSelectVisible] = useState(false);
+  const [currentSelectedRoles, setCurrentSelectedRoles] = useState([]);
+
+  // Effect to clear selected roles when category changes
+  useEffect(() => {
+    setCurrentSelectedRoles([]);
+  }, [category]);
+
+  // Function to handle click on the input box
+  const handleInputClick = () => {
+    setSelectVisible((prevState) => !prevState);
+  };
+
+  // Update the selected roles and synchronize with selectedSpecializations
+  const handleSelectedItemsChange = (items) => {
+    setCurrentSelectedRoles(items);
+    setSelectedSpecializations(items); // Update the parent state
+  };
+  
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
   });
@@ -185,38 +258,60 @@ useEffect(() => {
             </View>
           </View>
 
-          <View style={styles.container}>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <Picker
-                                selectedValue={category}
-                                style={styles.picker}
-                                onValueChange={(value) => setCategory(value)}
-                              >
-                                <Picker.Item label="All Category" value="" />
-                                <Picker.Item label="SAP" value="SAP" />
-                                <Picker.Item label="Microsoft" value="Microsoft" />
-                              </Picker>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={[styles.cell, { flex: 1}]}>
-                <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
-              </View>
-              <View style={[styles.cell, { flex: 2}]}>
-                <TouchableOpacity
-                style={styles.dropdownButton}
-                onPress={() => setPickerVisible(true)}
-              >
-                <Text style={styles.dropdownButtonText}>
-                  {selectedSpecializations.length > 0
-                    ? selectedSpecializations.join(', ')
-                    : 'Select Specializations'}
-                </Text>
-              </TouchableOpacity>
+                <View style={styles.container}>
+                  <View style={styles.row}>
+                    <View style={[styles.cell, { flex: 1}]}>
+                      <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Category")}</Text>
+                    </View>
+                    <View style={[styles.cell, { flex: 2}]}>
+                      <Picker
+                                      selectedValue={category}
+                                      style={styles.picker}
+                                      onValueChange={(value) => setCategory(value)}
+                                    >
+                                      <Picker.Item label="All Category" value="" />
+                                      <Picker.Item label="SAP" value="SAP" />
+                                      <Picker.Item label="Microsoft" value="Microsoft" />
+                                    </Picker>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <View style={[styles.cell, { flex: 1}]}>
+                      <Text style={{ fontWeight: 'bold', fontFamily: "Roboto-Light" }}>{t("Specialization")}</Text>
+                    </View>
+                    <View style={[styles.cell, { flex: 2}]}>
+                      <TouchableOpacity onPress={handleInputClick} style={styles.inputContainer}>
+                        <TextInput
+                          style={styles.input}
+                          value={
+                            currentSelectedRoles.length > 0
+                              ? currentSelectedRoles.join(', ')
+                              : 'Select specialization...'
+                          }
+                          editable={false}
+                        />
+                        <Image
+                          source={{
+                            uri: 'https://img.icons8.com/?size=100&id=39942&format=png&color=000000',
+                          }}
+                          style={styles.arrowIcon}
+                        />
+                      </TouchableOpacity>
+
+                      {/* Conditionally render CustomMultiSelect */}
+                      {isSelectVisible && category && specializationRoles[category] && (
+                        <CustomMultiSelect
+                          items={specializationRoles[category].map((role) => ({
+                            id: role,
+                            name: role,
+                          }))}
+                          selectedItems={currentSelectedRoles}
+                          onSelectedItemsChange={handleSelectedItemsChange}
+                        />
+                      )}
+
+                        </View>
+                      </View>
 
              {/* Modal for Picker */}
       <Modal
@@ -254,8 +349,6 @@ useEffect(() => {
           </View>
         </View>
       </Modal>
-              </View>
-            </View>
 
 
             <View style={styles.row}>
@@ -507,6 +600,21 @@ top: 350,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
+  },
+  checkboxContainer: {
+    flexDirection: 'row', // Align checkbox and text in a row
+    alignItems: 'center', // Center them vertically
+    marginVertical: 5, 
+    marginTop: 7,
+    marginLeft: 10
+  },
+  checkbox: {
+    color: 'green', 
+    backgroundColor: 'green'
+  },
+  selectedText: {
+    color: 'green', // Text color for selected items
+    marginLeft: 10
   },
   checkboxText: {
     fontSize: 16,

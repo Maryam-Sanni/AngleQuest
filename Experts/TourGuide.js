@@ -58,13 +58,13 @@ function MyComponent({ onClose, handleClose }) {
             <TouchableOpacity onPress={handleCloseMainModal} style={styles.buttonplus2}>
               <Text style={styles.buttonTextplus}>Close</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity onPress={handleOpenPress} style={styles.buttonplus}>
               <Text style={styles.buttonTextplus}>Start Tour</Text>
             </TouchableOpacity>
 
             </View>
-            
+
           </View>
         </View>
       </Modal>

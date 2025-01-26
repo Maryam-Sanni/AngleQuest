@@ -34,13 +34,10 @@ const ProfilePage = ({ onClose }) => {
       "Interview Guide",
     ];
 
-    // Show sidebar only if the clicked section is in the list
-    if (showSidebarSections.includes(section)) {
-      setShowSidebar(true);
-    } else {
-      setShowSidebar(false); // Hide the sidebar for other sections
-    }
+    setShowSidebar(showSidebarSections.includes(section));
   };
+
+
 
   const toggleSidebar = () => {
     setShowSidebar(true);
@@ -67,6 +64,27 @@ const ProfilePage = ({ onClose }) => {
     setActiveSection("Interview Guide");
   };
 
+  const sectionOrder = {
+    "Welcome Onboard": "Personal Information",
+    "Personal Information": "Guide Explanation",
+    "Guide Explanation": "Skill Analysis Guide",
+    "Skill Analysis Guide": "Growth Plan Guide",
+    "Growth Plan Guide": "Create a new Hub",
+    "Create a new Hub": "Support Request Guide",
+    "Support Request Guide": "Withdrawal Details",
+    "Withdrawal Details": null, // End of the flow
+  };
+
+  const handleSectionDone = () => {
+    const nextSection = sectionOrder[activeSection];
+    if (nextSection) {
+      handleSectionClick(nextSection); // Use handleSectionClick for consistency
+    } else {
+      console.log("All sections are completed.");
+    }
+  };
+
+  
   const handleClose = () => {
     onClose();
   };
@@ -139,7 +157,7 @@ const ProfilePage = ({ onClose }) => {
       </View>
 
       <View style={{ flexDirection: 'row', flex: 1 }}>
-        {showSidebar && (
+        {showSidebar && activeSection !== "Withdrawal Details" && (
           <View style={styles.sidebar}>
             {sections.map((section) => (
               <TouchableOpacity
@@ -166,43 +184,43 @@ const ProfilePage = ({ onClose }) => {
         <View style={styles.content}>
           {activeSection === "Growth Plan Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal onHub={handleHub}/>
+              <OpenModal onDone={handleSectionDone}/>
             </View>
           )}
 
           {activeSection === "Interview Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal2 />
+              <OpenModal2 onDone={handleSectionDone}/>
             </View>
           )}
 
           {activeSection === "Skill Analysis Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal3 onGrowth={handleGrowth} />
+              <OpenModal3 onDone={handleSectionDone} />
             </View>
           )}
 
           {activeSection === "Create a new Hub" && (
             <View style={styles.modalContainer}>
-              <OpenModal4 onSupport={handleSupport}/>
+              <OpenModal4 onDone={handleSectionDone}/>
             </View>
           )}
 
           {activeSection === "Withdrawal Details" && (
             <View style={styles.modalContainer}>
-               <OpenModal5 handleClose={handleClose} />
+               <OpenModal5 onClose={onClose} />
             </View>
           )}
 
           {activeSection === "Personal Information" && (
             <View style={styles.modalContainer}>
-              <OpenModal1 />
+              <OpenModal1 onDone={handleSectionDone}/>
             </View>
           )}
 
           {activeSection === "Support Request Guide" && (
             <View style={styles.modalContainer}>
-              <OpenModal6 onInterview={handleInterview}/>
+              <OpenModal6 onDone={handleSectionDone}/>
             </View>
           )}
 

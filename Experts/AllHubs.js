@@ -227,6 +227,8 @@ const ScheduledMeetingsTable = ({onClose}) => {
   const [selectedHub, setSelectedHub] = useState(null);
   const [lastCandidateLink, setLastCandidateLink] = useState(null);
   const [hubId, setHubId] = useState(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedHubId, setSelectedHubId] = useState(null);
   const [showPastSession, setShowPastSession] = useState(false);
   const [meetingData, setMeetingData] = useState({
     date: "",
@@ -235,6 +237,15 @@ const ScheduledMeetingsTable = ({onClose}) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const handleSaveToStorage = async (hubId) => {
+    try {
+      await AsyncStorage.setItem('editable hub', hubId.toString());
+      console.log('Hub saved to AsyncStorage');
+    } catch (error) {
+      console.error('Error saving to AsyncStorage', error);
+    }
+  };
+  
   const handleNext = () => {
     if (currentIndex + 3 < hubs.length) {
       setCurrentIndex(currentIndex + 3);

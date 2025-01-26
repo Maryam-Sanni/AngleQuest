@@ -16,10 +16,11 @@ import { BlurView } from "expo-blur";
 import Sidebar from "../components/expertssidebar";
 import Topbar from "../components/expertstopbar";
 import SuggestionModal from "../components/Suggestion";
-import HelpModal from "../components/Help";
+import HelpModal from "../components/Suggestion";
 import OpenModal2 from "../Experts/Updateprofiles";
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 import { useTranslation } from "react-i18next";
 import CustomModal from "../Experts/Updateprofiles";
 import { api_url, AuthContext } from "../Messaging/AuthProvider";
@@ -52,6 +53,7 @@ const HomePage = () => {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [data, setData] = useState([]);
+  const [helpModalVisible, setHelpModalVisible] = useState(false);
   const [plandata, setplanData] = useState({
     latestGrowthPlan: {},
     latestInterview: {},
@@ -153,6 +155,16 @@ const HomePage = () => {
     navigate("/chats", { activeRoom: room });
   };
 
+  const handleCloseModal2 = () => {
+    setModalVisible2(false);
+  };
+
+  // Function to close the HelpModal
+  const handleCloseHelpModal = () => {
+    setHelpModalVisible(false);
+  };
+
+  // UseEffect to check payment status (this runs only on page load)
   useEffect(() => {
     const checkLastPaymentMethod = async () => {
       try {
@@ -176,23 +188,26 @@ const HomePage = () => {
         if (paystackDetails) {
           // Check the payment method
           if (paystackDetails.bank_name === "Done") {
-            setModalVisible2(false); // Payment is completed; hide the modal
+            setModalVisible2(false); 
+            
           } else {
-            setModalVisible2(true); // Payment is not completed; show the modal
+            setModalVisible2(true); 
+            
           }
         } else {
           console.warn("No payment details found in the response.");
-          setModalVisible2(true); // Show the modal if no payment details are found
+          setModalVisible2(true); 
+          
         }
       } catch (error) {
         console.error("Error fetching payment details: ", error);
-        setModalVisible2(true); // Show the modal in case of an error
+        setModalVisible2(true);
       }
     };
 
-    // Call the function immediately
+  
     checkLastPaymentMethod();
-  }, [apiUrl, setModalVisible2]); // Dependencies
+  }, []); 
 
   
   useEffect(() => {
@@ -251,9 +266,7 @@ const HomePage = () => {
     setModalVisible2(true);
   };
 
-  const handleCloseModal2 = () => {
-    setModalVisible2(false);
-  };
+
 
   const [fontsLoaded] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
@@ -896,16 +909,7 @@ const HomePage = () => {
                 </View>
               </View>
             </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={customModalVisible}
-              onRequestClose={handleCloseModal2}
-            >
-              <View style={styles.modalContent}>
-                <CustomModal onClose={() => setCustomModalVisible(false)} /> 
-              </View>
-            </Modal>
+            
           </ScrollView>
         </View>
 
@@ -913,10 +917,7 @@ const HomePage = () => {
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
         />
-        <HelpModal
-          visible={helpmodalVisible}
-          onClose={() => sethelpModalVisible(false)}
-        />
+         <HelpModal visible={helpModalVisible} onClose={handleCloseHelpModal} />
         <Modal
           animationType="slide"
           transparent={true}

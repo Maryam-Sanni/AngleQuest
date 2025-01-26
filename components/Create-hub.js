@@ -50,7 +50,7 @@ const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
 };
 
 
-const CustomTimePicker = ({ initialValue, onChange }) => {
+const CustomTimePicker = ({ initialValue, onChange, onDone }) => {
   const [hour, setHour] = useState(initialValue.split(':')[0]);
   const [minute, setMinute] = useState(initialValue.split(':')[1]);
   const [isPM, setIsPM] = useState(initialValue.includes('PM'));
@@ -148,7 +148,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
   );
 };
 
-const CreateCoachingHubForm = ({ onClose }) => {
+const CreateCoachingHubForm = ({ onClose, onDone }) => {
   const navigate = useNavigate();
   const [from, setStartTime] = useState('12:00');
   const [to, setEndTime] = useState('12:00');
@@ -327,6 +327,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
       setIsSuccess(false); // Mark failure
     }
     setAlertVisible(true);
+    onDone();
   };  
 
   // Modified hideAlert function to handle success/failure logic

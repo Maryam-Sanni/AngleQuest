@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Picker, Image, TouchableOpacity, Alert, StyleSheet, ScrollView, Modal } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
 import OpenModal from '../Experts/TourGuide';
 
-const PaymentDetailsForm = ({ handleClose }) => {
+const PaymentDetailsForm = ({ onClose }) => {
   const [bankName, setBankName] = useState('');
   const [sortCode, setSortCode] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -32,7 +32,7 @@ const PaymentDetailsForm = ({ handleClose }) => {
 
     try {
       const response = await axios.post(
-        `${apiUrl}/api/jobseeker/payment-details`,  // Update to the correct endpoint
+        `${apiUrl}/api/jobseeker/payment-details`,
         {
           bank_name: bankName,
           sort_code: sortCode || 'Not Applicable',
@@ -48,21 +48,38 @@ const PaymentDetailsForm = ({ handleClose }) => {
       );
 
       if (response.status === 201) {
-        setAlertMessage('Payment details saved successsfully');
+        setAlertMessage('Payment details saved successfully');
       } else {
-         setAlertMessage('Failed to save payment details');
+        setAlertMessage('Failed to save payment details');
       }
     } catch (error) {
       console.error('Error saving payment details:', error);
-       setAlertMessage('An error occured');
+      setAlertMessage('An error occurred');
     }
+     await AsyncStorage.setItem('formSubmitted', 'true');
+    // Close the profile modal and open the TourGuide modal
     setAlertVisible(true);
-    setModalVisible(true);
   };
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // When the form is submitted, wait 3 seconds and then reopen the modal
+  useEffect(() => {
+    if (formSubmitted) {
+      const timer = setTimeout(() => {
+        setModalVisible(true); // Open the modal after 3 seconds
+        setFormSubmitted(false); // Reset the form submission state
+      }, 3000); // 3-second delay after form submission
+
+      return () => clearTimeout(timer); // Cleanup timeout on unmount or if formSubmitted changes
+    }
+  }, [formSubmitted]); // This effect will run whenever formSubmitted is true
+
 
   const hideAlert = () => {
     setAlertVisible(false);
     setIsVisible(false);
+    onClose();  
   };
 
   const handleOpenPress = () => {
@@ -348,7 +365,7 @@ const PaymentDetailsForm = ({ handleClose }) => {
         onRequestClose={handleCloseModal}
       >
         <View style={styles.modalContent}>
-          <OpenModal onClose={handleClose} />
+          <OpenModal/>
         </View>
       </Modal>
     </View>
@@ -408,7 +425,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 16
+    marginBottom: 10
   },
   description: {
     fontSize: 16,

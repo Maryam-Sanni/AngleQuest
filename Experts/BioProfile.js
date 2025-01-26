@@ -47,7 +47,7 @@ const CustomMultiSelect = ({ items, selectedItems, onSelectedItemsChange }) => {
   );
 };
 
-const ProfileUpdate = () => {
+const ProfileUpdate = ({ onDone }) => {
   const [profileImage, setProfileImage] = useState(null);
   const [aboutMe, setAboutMe] = useState('');
   const [technicalSkills, setTechnicalSkills] = useState(['']); 
@@ -207,6 +207,7 @@ const ProfileUpdate = () => {
       console.error('Save Error:', error.response ? error.response.data : error);
       alert('Failed to save. Please check that all fields are filled.');
     }
+    onDone();
   };
 
 
@@ -483,6 +484,11 @@ const ProfileUpdate = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{maxHeight: 500}}>
 
+        <Text style={styles.title}>My Profile</Text>
+         <Text style={styles.description}>
+          Provide your personal information, let us know you...
+         </Text>
+        
       {/* Profile Image */}
         <View style={styles.field}>
           <TouchableOpacity onPress={handleImageUpload} style={styles.imageUploadButton}>
@@ -622,7 +628,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 30,
+    width: 800,
+    alignSelf: 'center'
   },
   field: {
     marginBottom: 20,

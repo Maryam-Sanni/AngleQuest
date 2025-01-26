@@ -226,22 +226,30 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
    const apiUrl = process.env.REACT_APP_API_URL;
 
-   useEffect(() => {
+  useEffect(() => {
     const loadFormData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
-        
+
         const response = await axios.get(`${apiUrl}/api/expert/hubs/get`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-  
+
         if (response.status === 200 && response.data.status === 'success') {
           const data = response.data.NewHub;
-          setHubs(data); // Store the array of hubs
-          if (data.length > 0) {
-            // Set the first hub details
-            setSelectedIndex(0);
+          const savedHubId = await AsyncStorage.getItem('hub_id');
+
+          if (savedHubId && data.length > 0) {
+            const matchedHub = data.find(hub => hub.id.toString() === savedHubId);
+            if (matchedHub) {
+              setHubDetails(matchedHub);
+            } else {
+              // If no hub matches the savedHubId, you could set the first hub as default
+              setHubDetails(data[0]);
+            }
+          } else if (data.length > 0) {
+            // If no hub_id is stored, set the first hub as default
             setHubDetails(data[0]);
           }
         } else {
@@ -414,37 +422,23 @@ const CreateCoachingHubForm = ({ onClose }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center'  }}>
-      <View style={{flexDirection: 'row', marginBottom: 20, marginTop: 30}}>
-         <Text style={styles.headerText}>{t("Edit Hub Details")}</Text>
-         <TouchableOpacity onPress={onClose}>
-            <Text style={{ fontSize: 18, color:'black', marginLeft: 450,fontWeight: 'bold', fontFamily:"Roboto-Light"}}>
-                            ✕
-                        </Text>
-                        </TouchableOpacity>
-                        </View>
+      
         <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
-        
+          <View style={styles.header}>
+            <Image
+              source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }}
+              style={styles.logo}
+            />
+            <Text style={styles.headerText}>{t("Edit Hub Details")}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold', fontFamily: "Roboto-Light" }}>✕</Text>
+            </TouchableOpacity>
+          </View>
     <View style={styles.pageContainer}>
       <View style={styles.formContainer}>
       
-                        <View style={styles.navigationContainer}>
-        <TouchableOpacity
-          style={[styles.navButton, selectedIndex === 0 && styles.disabledNavButton]}
-          onPress={handlePreviousHub}
-          disabled={selectedIndex === 0}
-        >
-          <Text style={styles.navButtonText}>Previous</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.navButton, selectedIndex === hubs.length - 1 && styles.disabledNavButton]}
-          onPress={handleNextHub}
-          disabled={selectedIndex === hubs.length - 1}
-        >
-          <Text style={styles.navButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+                       
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
             selectedValue={specialization}
@@ -590,7 +584,6 @@ const styles = StyleSheet.create({
     width: 820,
     height:850,
     backgroundColor: 'white',
-    marginTop: 40
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -657,10 +650,24 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    marginBottom: 20
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
   headerText: {
     fontSize: 22,
     fontWeight: 'bold',
-    },
+  },
     multiSelect: {
       borderWidth: 1,
       borderColor: 'gray',
@@ -736,6 +743,10 @@ const styles = StyleSheet.create({
       color: 'black',
       textAlign: 'center',
     },
+  closeButton: {
+    position: 'absolute',
+    right: 20,
+  },
 });
 
 export default CreateCoachingHubForm;

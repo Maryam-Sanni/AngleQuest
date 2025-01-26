@@ -148,7 +148,7 @@ const CustomTimePicker = ({ initialValue, onChange }) => {
   );
 };
 
-const CreateCoachingHubForm = ({ onClose }) => {
+const CreateCoachingHubForm = ({ onClose, onDone }) => {
   const navigate = useNavigate();
   const [from, setStartTime] = useState('12:00');
   const [to, setEndTime] = useState('12:00');

@@ -38,9 +38,14 @@ const CustomModal = ({ visible, onClose }) => {
               </TouchableOpacity>
             </View>
             <Text style={{ marginBottom: 20 }}>Provide needed assistance to users query/complaint/guide need.</Text>
+             <View style={{flexDirection: "row" } }>
             <TouchableOpacity onPress={handleOpenPress} style={{ marginBottom: 10, padding: 8, backgroundColor: 'coral', borderRadius: 5, width: 100  }}>
-              <Text style={{ color: 'white', textAlign: 'center' }}>Next</Text>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Restart</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={onClose} style={{ marginBottom: 10, padding: 8, backgroundColor: 'grey', borderRadius: 5, width: 100, marginLeft: 10  }}>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Close</Text>
+            </TouchableOpacity>
+             </View>
           </View>
           </View>
         </View>
