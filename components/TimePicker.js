@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,21 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
     );
   };
 
+  const [previousState, setPreviousState] = useState({
+    selectedDays: [],
+    startTime: { hour: "01", minute: "00", period: "AM" },
+    endTime: { hour: "02", minute: "00", period: "AM" },
+  });
+  
+  // Automatically trigger handleConfirm when any state changes
+  useEffect(() => {
+    const currentState = { selectedDays, startTime, endTime };
+    if (JSON.stringify(currentState) !== JSON.stringify(previousState)) {
+      handleConfirm(); // Call the confirm logic
+      setPreviousState(currentState); // Update the previous state
+    }
+  }, [selectedDays, startTime, endTime]); // Dependencies: Runs when these change
+  
   const handleConfirm = () => {
     onConfirm({ selectedDays, startTime, endTime });
   };
@@ -101,9 +116,9 @@ const TimePicker = ({ label, time, onTimeChange, onConfirm }) => {
   const handlePeriodChange = (period) => {
     const newTime = { ...time, period };
     onTimeChange(newTime);
-    handleConfirm(newTime); // Pass the new time to confirm immediately
+    handleConfirm(newTime); 
   };
-
+  
   const handleConfirm = (currentTime) => {
     const date = new Date(); // Replace with your actual date input
     onConfirm({

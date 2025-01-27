@@ -287,6 +287,40 @@ const PaymentDetailsForm = ({ onClose }) => {
     { label: 'Zambia', value: 'ZM' },
     { label: 'Zimbabwe', value: 'ZW' }
   ];
+
+  const fetchPaymentDetails = async () => {
+    try {
+      // Get token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+
+      // API call
+      const response = await axios.get(`${apiUrl}/api/jobseeker/get-payment-details`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.status === 'success') {
+        const { bank_name, sort_code, acc_num, mobile_num, country: backendCountry } = response.data.PaymentDetail;
+
+        // Update state with the response data
+        setBankName(bank_name || '');
+        setSortCode(sort_code === 'Not Applicable' ? '' : sort_code);
+        setAccountNumber(acc_num || '');
+        setMobileNumber(mobile_num || '');
+        setCountry(backendCountry || '');
+      }
+    } catch (error) {
+      console.error('Error fetching payment details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPaymentDetails();
+  }, []);
   
   return (
     <View style={styles.container}>

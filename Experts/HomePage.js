@@ -176,28 +176,25 @@ const HomePage = () => {
         }
 
         // Fetch payment details from the API
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-withdrawal-details`, {
+        const response = await axios.get(`${apiUrl}/api/jobseeker/get-payment-details`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         // Extract PaystackDetail object from the response
-        const paystackDetails = response?.data?.WithdrawalDetail;
+        const paystackDetails = response?.data?.PaymentDetail;
 
         if (paystackDetails) {
-          // Check the payment method
-          if (paystackDetails.bank_name === "Done") {
+          // Check if acc_num is not null
+          if (paystackDetails.acc_num !== null) {
             setModalVisible2(false); 
-            
           } else {
             setModalVisible2(true); 
-            
           }
         } else {
           console.warn("No payment details found in the response.");
           setModalVisible2(true); 
-          
         }
       } catch (error) {
         console.error("Error fetching payment details: ", error);
@@ -205,9 +202,9 @@ const HomePage = () => {
       }
     };
 
-  
     checkLastPaymentMethod();
-  }, []); 
+  }, []);
+
 
   
   useEffect(() => {
