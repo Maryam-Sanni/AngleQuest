@@ -63,7 +63,7 @@ const SupportRequestPage = () => {
   const [savedRole, setSavedRole] = useState(""); 
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+   
   // Fetch saved specialization from AsyncStorage
   useEffect(() => {
     const fetchSavedRole = async () => {

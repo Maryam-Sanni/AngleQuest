@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import OpenModal from './Growth-plan-guide';
 import OpenModal1 from './BioProfile';
@@ -10,11 +10,15 @@ import OpenModal6 from './RequestGuide';
 import OpenModal7 from './Onboard';
 import OpenModal8 from './Guideexplanation';
 import { Button } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 const ProfilePage = ({ onClose }) => {
   const [activeSection, setActiveSection] = useState("Welcome Onboard");
   const [showSidebar, setShowSidebar] = useState(false);
-
+   const [paymentDone, setPaymentDone] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const sections = [
     { id: 1, title: "Skill Analysis Guide" },
     { id: 2, title: "Growth Plan Guide" },
@@ -22,7 +26,7 @@ const ProfilePage = ({ onClose }) => {
     { id: 4, title: "Support Request Guide" },
     { id: 5, title: "Interview Guide" },
   ];
-
+ 
   const handleSectionClick = (section) => {
     setActiveSection(section);
 
@@ -37,6 +41,40 @@ const ProfilePage = ({ onClose }) => {
     setShowSidebar(showSidebarSections.includes(section));
   };
 
+  useEffect(() => {
+    const checkLastPaymentMethod = async () => {
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+
+        // Fetch payment details from the API
+        const response = await axios.get(
+          `${apiUrl}/api/jobseeker/get-payment-details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Extract PaystackDetail object from the response
+        const paystackDetails = response?.data?.PaymentDetail;
+
+        if (paystackDetails && paystackDetails.acc_num !== null) {
+          setActiveSection("Personal Information"); 
+          setPaymentDone(true);
+        }
+      } catch (error) {
+        console.error("Error fetching payment details: ", error);
+      }
+    };
+
+    checkLastPaymentMethod();
+  }, []);
 
 
   const toggleSidebar = () => {
@@ -92,17 +130,19 @@ const ProfilePage = ({ onClose }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Button
-          mode="text"
-          textColor="#000000"
-          style={[
-            styles.button,
-            activeSection === 'Welcome Onboard' && styles.activeButton,
-          ]}
-          onPress={() => handleSectionClick("Welcome Onboard")}
-        >
-          Welcome
-        </Button>
+        {!paymentDone && (
+          <Button
+            mode="text"
+            textColor="#000000"
+            style={[
+              styles.button,
+              activeSection === "Welcome Onboard" && styles.activeButton,
+            ]}
+            onPress={() => setActiveSection("Welcome Onboard")}
+          >
+            Welcome
+          </Button>
+        )}
         <Button
           mode="text"
           textColor="#000000"
@@ -118,19 +158,20 @@ const ProfilePage = ({ onClose }) => {
         <Button
           mode="text"
           textColor="#000000"
-            style={[
-              styles.button,
-              (activeSection === 'Guide Explanation' || 
-               activeSection === 'Skill Analysis Guide' || 
-               activeSection === 'Growth Plan Guide' || 
-               activeSection === 'Create a new Hub' || 
-               activeSection === 'Support Request Guide' || 
-               activeSection === 'Interview Guide') && styles.activeButton
-            ]}
-          onPress={() => handleSectionClick("Guide Explanation")}
-          >
-         Create Guides
+          style={[
+            styles.button,
+            (activeSection === "Guide Explanation" ||
+              activeSection === "Skill Analysis Guide" ||
+              activeSection === "Growth Plan Guide" ||
+              activeSection === "Create a new Hub" ||
+              activeSection === "Support Request Guide" ||
+              activeSection === "Interview Guide") && styles.activeButton
+          ]}
+          onPress={() => handleSectionClick(paymentDone ? "Skill Analysis Guide" : "Guide Explanation")}
+        >
+          Create Guides
         </Button>
+
         <Button
           mode="text"
           textColor="#000000"

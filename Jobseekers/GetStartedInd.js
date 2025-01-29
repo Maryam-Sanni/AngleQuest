@@ -193,6 +193,42 @@ function AngleQuestPage({ onClose }) {
     setExpMonth("");
     setExpYear("");
   };
+  const [paymentDone, setPaymentDone] = useState(false);
+
+  useEffect(() => {
+    const checkLastPaymentMethod = async () => {
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+
+        // Fetch payment details from the API
+        const response = await axios.get(
+          `${apiUrl}/api/jobseeker/get-paystack-payment-details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Extract PaystackDetail object from the response
+        const paystackDetails = response?.data?.PaystackDetail;
+
+        if (paystackDetails && paystackDetails.payment_method === "Done") {
+          setPaymentDone(true);
+          setCurrentSlide(2); // Jump to Slide 3
+        }
+      } catch (error) {
+        console.error("Error fetching payment details: ", error);
+      }
+    };
+
+    checkLastPaymentMethod();
+  }, []);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -1058,6 +1094,44 @@ const saveToAsyncStorage = async (plan) => {
 
   const renderSlide = () => {
     const slide = onboardingData[currentSlide];
+
+    // Ensure only Slide 3 is rendered if payment is done
+    if (paymentDone) {
+      return onboardingData[2] && (
+        <View>
+          <Text style={styles.greetingText}>{onboardingData[2].title}</Text>
+          <Text style={styles.subHeading}>{onboardingData[2].description}</Text>
+          <View style={styles.rolesContainer}>
+            {onboardingData[2].roles.map((role, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.roleButton,
+                  selectedRole === role && styles.selectedRole,
+                ]}
+                onPress={() => handleRoleSelection(role)}
+              >
+                <Text style={styles.roleText}>{role}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.continueButton,
+              !selectedRole && styles.disabledButton,
+            ]}
+            onPress={backendRole ? handlePutContinue : handleContinue}
+            disabled={!selectedRole} // Disable if no role is selected
+          >
+            <Text style={styles.continueButtonText}>Save Role</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    // Normal onboarding flow
+    if (!slide) return null;
+    
     if (slide.id === '2') {
       return (
         <View >
@@ -1253,25 +1327,31 @@ const saveToAsyncStorage = async (plan) => {
         <View>
           {renderProgressBar()}
           <View style={styles.slideContainer}>{renderSlide()}</View>
-          <View style={styles.navigationContainer}>
-            <View >
-              {currentSlide > 0 && (
-                <TouchableOpacity onPress={handleBehind} style={styles.buttonback}>
-                  <MaterialIcons name="arrow-back" size={16} color="white" />
-                  <Text style={styles.textbu}>Back</Text>
-                </TouchableOpacity>
-              )}
+          {!paymentDone && (
+            <View style={styles.navigationContainer}>
+              <View>
+                {currentSlide > 0 && (
+                  <TouchableOpacity
+                    onPress={handleBehind}
+                    style={styles.buttonback}
+                  >
+                    <MaterialIcons name="arrow-back" size={16} color="white" />
+                    <Text style={styles.textbu}>Back</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <TouchableOpacity
+                onPress={handleForward}
+                style={styles.buttonfront}
+              >
+                <Text style={styles.textbu}>
+                  {currentSlide === onboardingData.length - 1 ? "Next" : "Continue"}
+                </Text>
+                <MaterialIcons name="arrow-forward" size={16} color="white" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleForward} style={styles.buttonfront}>
-              <Text style={styles.textbu}>
-                {currentSlide === onboardingData.length - 1 ? 'Next' : 'Continue'}
-              </Text>
-              <MaterialIcons name="arrow-forward" size={16} color="white" />
-            </TouchableOpacity>
-          </View>
- 
-</View>
-
+          )}
+        </View>
       ),
     },
     {
