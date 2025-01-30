@@ -38,7 +38,7 @@ const LineBoxWithText = () => {
     <View style={styles.container}>
       <View style={styles.lineBox}>
         <Text style={styles.headerText}>
-          We've got you covered, <Text style={{ color: 'darkgreen' }}>from expert advice to solving complex problems.</Text>
+          We’ve got you covered on the <Text style={{ color: 'darkgreen' }}>top ERP solutions</Text>
         </Text>
 
         <View style={styles.borderBox}>

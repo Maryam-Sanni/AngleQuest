@@ -29,7 +29,7 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const maskedPassword = passwordVisible ? password : '*'.repeat(password.length);
-  const [topPosition, setTopPosition] = useState(20); 
+  const [topPosition, setTopPosition] = useState(-30); 
 
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
@@ -38,7 +38,7 @@ const SignIn = () => {
     if (scrollY > 0) { 
       setTopPosition(-30); 
     } else {
-      setTopPosition(20); 
+      setTopPosition(-30); 
     }
   };
   
@@ -136,10 +136,17 @@ const SignIn = () => {
   
   return (
         <View style={{ flex: 1, }}>
-          <Top2 tint={"dark"} />
-              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
-                <Top value={3} intensity={100} />
-              </View>
+          <View
+            style={{
+              position: "absolute",
+              top: topPosition,
+              left: 0,
+              right: 0,
+              zIndex: 100,
+            }}
+          >
+            <Top value={3} intensity={100} />
+          </View>
               <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}
                 onScroll={handleScroll}  // Attach scroll listener

@@ -212,7 +212,7 @@ const PriceCard = ({
 const Pricing = () => {
   const [activeBtn, setActiveBtn] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [topPosition, setTopPosition] = useState(20);
+  const [topPosition, setTopPosition] = useState(-30);
 
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
@@ -221,7 +221,7 @@ const Pricing = () => {
     if (scrollY > 0) {
       setTopPosition(-30);
     } else {
-      setTopPosition(20);
+      setTopPosition(-30);
     }
   };
 
@@ -230,7 +230,6 @@ const Pricing = () => {
   };
   return (
           <View style={{ flex: 1 }}>
-            <Top2 />
             <View
               style={{
                 position: "absolute",

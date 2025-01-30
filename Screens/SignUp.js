@@ -42,7 +42,7 @@ const SignUp = () => {
    const location = useLocation();
   const { signUpOption: routeSignUpOption } = location.state || { signUpOption: 0 }; // Get from location
   const [signUpOption, setSignUpOption] = useState(routeSignUpOption); // Initialize state
-  const [topPosition, setTopPosition] = useState(20); 
+  const [topPosition, setTopPosition] = useState(-30); 
   const [ModalVisible, setModalVisible] = useState(false);
 
   const handleOpenPress = () => {
@@ -60,7 +60,7 @@ const SignUp = () => {
     if (scrollY > 0) { 
       setTopPosition(-30); 
     } else {
-      setTopPosition(20); 
+      setTopPosition(-30); 
     }
   };
 
@@ -203,10 +203,17 @@ const SignUp = () => {
   
   return (
         <View style={{ flex: 1, }}>
-          <Top2 tint={"dark"} />
-              <View style={{ position: 'absolute', top: topPosition, left: 0, right: 0, zIndex: 100 }}>
-                <Top value={3} intensity={100} />
-              </View>
+          <View
+            style={{
+              position: "absolute",
+              top: topPosition,
+              left: 0,
+              right: 0,
+              zIndex: 100,
+            }}
+          >
+            <Top value={3} intensity={100} />
+          </View>
               <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}
                 onScroll={handleScroll}  // Attach scroll listener

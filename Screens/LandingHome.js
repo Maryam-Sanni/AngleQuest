@@ -23,6 +23,7 @@ import LineBox from "../LandingPage/Linebox";
 import { LinearGradient } from "expo-linear-gradient";
 import Title from "../components/Title";
 import Row from "../components/Row";
+import CicleLand from "./CircleLand";
 
 import carta from "../assets/carta.png";
 import heineken from "../assets/heineken.png";
@@ -37,6 +38,7 @@ const cardSliderData = [
   {
     id: 1,
     color: "#094A2B",
+    top: "As a professional ",
     text: "New Skills Acquisition",
     personImg: require("../assets/person1.png"),
     cardImg: require("../assets/card1.png"),
@@ -49,7 +51,8 @@ const cardSliderData = [
   {
     id: 2,
     color: "#4E33D3",
-    text: "Support a New Employee",
+    top: "As a professional ",
+    text: "Professional Backup On Role",
     personImg: require("../assets/person2.png"),
     cardImg: require("../assets/card2.png"),
     navigationTarget: "/business",
@@ -61,10 +64,11 @@ const cardSliderData = [
   {
     id: 3,
     color: "#DE7423",
-    text: "Cross Community Learning",
+    top: "As a professional ",
+    text: "Get Assistance On Blockers Anytime",
     personImg: require("../assets/person3.png"),
     cardImg: require("../assets/card3.png"),
-    navigationTarget: "/community",
+    navigationTarget: "/individual",
     rowItem1: "Interest based discovery & Partner Integration",
     rowItem2: "⁠Drive symphony of connections and growth",
     rowItem3: "⁠Cross-Pollination Cultivator",
@@ -73,7 +77,8 @@ const cardSliderData = [
   {
     id: 4,
     color: "#6EA84F",
-    text: "Boost Under- performers",
+    top: "As a business",
+    text: "Support New Employee",
     personImg: require("../assets/person4.png"),
     cardImg: require("../assets/card4.png"),
     navigationTarget: "/business",
@@ -85,10 +90,11 @@ const cardSliderData = [
   {
     id: 5,
     color: "#6E1D1A",
-    text: "Career          Mentoring",
+    top: "As a business",
+    text: "Support Your Entire Team",
     personImg: require("../assets/person5.png"),
     cardImg: require("../assets/card5.png"),
-    navigationTarget: "/individual",
+    navigationTarget: "/business",
     rowItem1: "Connect with an expert for questions and support",
     rowItem2: "Get one-on-one performance assessments",
     rowItem3: "Receive insights before manager meetings",
@@ -97,7 +103,8 @@ const cardSliderData = [
   {
     id: 6,
     color: "#292929",
-    text: "Organizational Knowledge",
+    top: "As a professional ",
+    text: "Close Your Knowledge Gap",
     personImg: require("../assets/success.png"),
     cardImg: require("../assets/card3.png"),
     navigationTarget: "/individual",
@@ -109,26 +116,15 @@ const cardSliderData = [
   {
     id: 7,
     color: "#D33336",
-    text: "Team Knowledge management",
-    personImg: require("../assets/person4.png"),
-    cardImg: require("../assets/card3.png"),
+    top: "As a business",
+    text: "Boost an Underperformer",
+    personImg: require("../assets/person1.png"),
+    cardImg: require("../assets/card1.png"),
     navigationTarget: "/business",
     rowItem1: "Facilitate knowledge sharing within teams",
     rowItem2: "Strengthen team cohesion and understanding of tasks",
     rowItem3: "Stay informed about new features and releases",
     rowItem4: "Keep the team updated on industry trends",
-  },
-  {
-    id: 8,
-    color: "#D3336B",
-    text: "Skill Gap         Analysis",
-    personImg: require("../assets/person4.png"),
-    cardImg: require("../assets/card3.png"),
-    navigationTarget: "/community",
-    rowItem1: "Identify skill gaps with Angle Quest AI",
-    rowItem2: "Match with an expert for personalized growth planning",
-    rowItem3: "Focus on key areas with a prioritized plan",
-    rowItem4: "Align efforts with personal and career goals",
   },
 ];
 
@@ -212,6 +208,7 @@ const DottedImage = ({ style }) => {
 
 const CardItem = ({
   title,
+  top,
   cardImg,
   rowItem1,
   rowItem2,
@@ -247,7 +244,7 @@ const CardItem = ({
       style={{
         width: 320,
         backgroundColor: bgColor ? bgColor : "white",
-        height: 400,
+        height: 411,
         position: "relative",
         borderRadius: 20,
       }}
@@ -313,6 +310,9 @@ const CardItem = ({
           height: "100%",
         }}
       >
+        <Text style={{ fontSize: 14, color: 'white', marginBottom: 10}}>
+          {top}
+        </Text>
         <Title
           title={title}
           textSize={32}
@@ -386,7 +386,7 @@ const MyComponent = () => {
   const [ModalVisible, setModalVisible] = useState(false);
   const scrollRef = useRef(null);
   const videoRef = useRef(null);
-  const [topPosition, setTopPosition] = useState(20);
+  const [topPosition, setTopPosition] = useState(-30);
 
   const handleScroll = (event) => {
     const scrollY = event.nativeEvent.contentOffset.y;
@@ -395,7 +395,7 @@ const MyComponent = () => {
     if (scrollY > 0) {
       setTopPosition(-30);
     } else {
-      setTopPosition(20);
+      setTopPosition(-30);
     }
   };
 
@@ -403,6 +403,10 @@ const MyComponent = () => {
     setModalVisible(true);
   };
 
+    const handlePricing = () => {
+   navigate("/pricing");
+    };
+  
   const { width: screenWidth } = Dimensions.get("window");
 
   const fadeWidth = 60;
@@ -485,7 +489,6 @@ const MyComponent = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Top2 />
       <View
         style={{
           position: "absolute",
@@ -530,21 +533,36 @@ const MyComponent = () => {
                   fontFamily: "arial",
                 }}
               >
-                Top Performers Have a Team Working On Their{" "}
-                <Text style={{ color: "darkgreen" }}>Growth</Text>, Do You?{" "}
-              </Text>
+              Uplift Your Performance, by Strengthening Your Work.</Text>
               <Text
                 style={{
-                  marginTop: 30,
+                  marginTop: 20,
                   color: "black",
                   fontSize: 22,
                   fontWeight: "400",
                   maxWidth: 646,
                 }}
               >
-                Accelerate growth with our dedicated on-the-job support, career
-                transition guidance, and tailored knowledge sharing
-                collaboration
+                We serve as your knowledge backup to Complete Task Faster and Grow Faster.
+              </Text>
+              <Text
+                style={{
+                  marginTop: 20,
+                  color: "black",
+                  fontSize: 18,
+                  fontWeight: "400",
+                  maxWidth: 646,
+                }}
+              >
+                - Standby expert to assist you with impediments
+                 {'\n'}
+                - Access best practices to produce standard work
+                 {'\n'}
+                - Specialized AI Agent for your ERP
+                 {'\n'}
+                - Personalized growth plan and lessons
+                 {'\n'}
+                - And other tailored benefits.
               </Text>
               <Row style={{ gap: 20, alignItems: "center", marginTop: 30 }}>
                 <BlurView
@@ -557,7 +575,7 @@ const MyComponent = () => {
                     borderWidth: 1,
                     borderColor: "white",
                     paddingHorizontal: 20,
-                    maxWidth: 500,
+                    maxWidth: 350,
                   }}
                 >
                   <Row
@@ -566,23 +584,19 @@ const MyComponent = () => {
                       height: 74,
                       gap: 10,
                       justifyContent: "space-between",
-                      width: 460,
+                      width: 300,
                     }}
                   >
                     <Row
                       style={{ alignItems: "center", gap: 10, marginRight: 40 }}
                     >
                       <SpecialBtn
-                        text={"Individual"}
-                        onPress={handleIndividualSignUp}
+                        text={"Get Started"}
+                        onPress={handlecontact}
                       />
                       <SpecialBtn
-                        text={"Business"}
-                        onPress={handleBusinessSignUp}
-                      />
-                      <SpecialBtn
-                        text={"Community"}
-                        onPress={handleIndividualSignUp}
+                        text={"Find Your Plan"}
+                        onPress={handlePricing}
                       />
                     </Row>
                   </Row>
@@ -607,10 +621,10 @@ const MyComponent = () => {
                 <Title
                   textSize={22}
                   title={
-                    "Your success is our priority, and we've made it our mission to provide the tools, guidance, and expertise you need to excel."
+                    "A unique suite of tools to be future proof"
                   }
                 />
-                <Row style={{ gap: 10 }}>
+                <Row style={{ gap: 5 }}>
                   <Image
                     source={{
                       uri: "https://img.icons8.com/?size=100&id=86517&format=png&color=135837",
@@ -619,15 +633,23 @@ const MyComponent = () => {
                   />
                   <TouchableOpacity onPress={handlecontact}>
                     <Title
-                      textSize={20}
+                      textSize={18}
                       textColor={"#135837"}
                       style={{ textDecorationLine: "underline" }}
                       textWeight={"bold"}
                       title={
-                        "Subscribe as individual, team, organization or community"
+                        " Subscribe as Individual or for Your Team"
                       }
                     />
                   </TouchableOpacity>
+                   <Text
+                     style={{
+                       color: "black",
+                       fontSize: 18,
+                     }}
+                   >
+                      for this use cases…
+                   </Text>
                 </Row>
               </View>
               <View
@@ -691,6 +713,7 @@ const MyComponent = () => {
                       <CardItem
                         key={item?.id}
                         bgColor={item?.color}
+                        top={item?.top}
                         title={item?.text}
                         rowItem1={item?.rowItem1}
                         rowItem2={item?.rowItem2}
@@ -726,7 +749,7 @@ const MyComponent = () => {
                   center={true}
                   textWeight={"400"}
                   title={
-                    "Leading professionals globally work more efficiently with expert guidance from anglequest ensuring they never get stuck"
+                    "Leading professionals and global teams use AngleQuest to boost efficiency"
                   }
                 />
               </View>
@@ -755,6 +778,8 @@ const MyComponent = () => {
 
           {<LineBox />}
 
+          {<CicleLand />}
+          
           <View
             style={{
               marginVertical: -15,
