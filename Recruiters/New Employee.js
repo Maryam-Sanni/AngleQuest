@@ -17,8 +17,8 @@ function MyComponent({ onClose }) {
     email_address: '',
     specialization: '',
     type: 'service',
-    current_role: '',
-    target_role: '',
+    current_role: ''|| 'Beginner',
+    target_role: '' || 'Junior',
   });
 
   const apiUrl = `${process.env.REACT_APP_API_URL}/api/business/create-employee`;
@@ -46,11 +46,18 @@ function MyComponent({ onClose }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('Employee created successfully:', response.data);
-      onClose();
+      window.location.reload();
     } catch (error) {
-      console.error('Error creating employee:', error.response?.data || error.message);
+      const errorMessage = error.response?.data?.message;
+
+      if (errorMessage === 'Email already exist') {
+        alert('This email is taken');
+      } else {
+        console.error('Error creating employee:', errorMessage || error.message);
+      }
     }
   };
+
 
   const handleChange = (field, value) => {
     setEmployeeData((prev) => ({ ...prev, [field]: value }));
