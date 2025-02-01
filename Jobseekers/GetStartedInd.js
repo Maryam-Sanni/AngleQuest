@@ -72,7 +72,7 @@ function AngleQuestPage({ onClose }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
-  const [cardType, setCardType] = useState('User Card');
+  const [cardType, setCardType] = useState('');
     const [cardName, setCardName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [cvv, setCvv] = useState('');
@@ -260,7 +260,7 @@ function AngleQuestPage({ onClose }) {
 
           // Handle card_detail
           if (details.card_detail) {
-            const cardDetails = JSON.parse(details.card_detail)[0]; // Assuming it's an array with a single object
+            const cardDetails = JSON.parse(details.card_detail)[0]; 
             setCardType(cardDetails.card_type || "");
             setCardName(cardDetails.cardholder_name || "");
             setCardNumber(cardDetails.cardnumber || "");
@@ -436,10 +436,10 @@ function AngleQuestPage({ onClose }) {
           sla: "0",
           agreement: details.agreement || "Yes",
           payment_method: "Done",
-          payment_detail: "Pay as you go",
+          payment_detail: planTitle,
           card_detail: [
             {
-              card_type: cardType, // Use the state variable for selected card type
+              card_type: planTitle,
               cardholder_name: cardName,
               cardnumber: cardNumber,
               cvv: cvv,
@@ -447,7 +447,7 @@ function AngleQuestPage({ onClose }) {
             },
           ],
         };
-
+        
         // Post the payment details
         const postResponse = await axios.put(
           `${apiUrl}/api/jobseeker/edit-paystack-payment-details`,
@@ -524,7 +524,7 @@ function AngleQuestPage({ onClose }) {
             plan: details.plan || "",
             sla: details.sla || "",
             agreement: details.agreement || "Yes",
-            payment_method: "Done", // Set the payment method
+            payment_method: "Done", 
           };
 
           // Make the PUT request to edit payment details
@@ -575,13 +575,13 @@ function AngleQuestPage({ onClose }) {
     try {
       // Retrieve the token from AsyncStorage
       const token = await AsyncStorage.getItem("token");
-  
+
       // Ensure token is available
       if (!token) {
         console.error("Token not found in AsyncStorage");
         return false; // Exit if there's no token
       }
-  
+
       // Determine the `service` based on `activePrice`
       let service = "";
       if (activePrice === "monthly") {
@@ -591,34 +591,77 @@ function AngleQuestPage({ onClose }) {
       } else if (activePrice === "annually") {
         service = "Knowledge Backup + Career Support";
       }
-  
+
       // Retrieve `selectedRole`, `selectedPlan`, and `sla-cost` from AsyncStorage
       const selectedRole = await AsyncStorage.getItem("selectedRole");
       const selectedPlan = JSON.parse(await AsyncStorage.getItem("selectedPlan"));
-      const slaCost = await AsyncStorage.getItem("sla-cost"); // SLA cost from `handleSelect`
-  
+      const slaCost = await AsyncStorage.getItem("sla-cost");
+
       // Process the SLA cost to remove non-numeric parts (e.g., "$", "monthly", "No additional cost")
-      let sla = "0"; // Default to "0" if no valid SLA is found
+      let sla = "0";
       if (slaCost) {
         if (slaCost === "No additional cost") {
-          sla = "0"; // If it's "No additional cost", set SLA to "0"
+          sla = "0";
         } else {
-          // Remove any non-numeric characters like "$", "monthly", etc.
-          sla = slaCost.replace(/[^0-9.-]+/g, ""); // Remove everything except digits, dot, and minus sign
-          if (sla === "") sla = "0"; // In case the SLA contains only non-numeric characters
+          sla = slaCost.replace(/[^0-9.-]+/g, "");
+          if (sla === "") sla = "0";
         }
       }
-  
-      // Construct the payload for the API request
+
+      // Get the email from AsyncStorage
+      const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+      const email = values.find(item => item[0] === 'email')[1];
+
+      // Define the amount to be paid (multiply by 1600 if needed)
+      const amount = totalPlanCost; // Adjust this as per your business logic
+
+      let paymentResponse = null; // Define paymentResponse here
+
+      // If the plan title is "Monthly" and the card type is not "Monthly", charge the user
+      if (planTitle === "Monthly" && cardType !== "Monthly") {
+        const paymentPayload = {
+          email: email,
+          plan: planTitle, // Assume this is set elsewhere in your code
+          amount: amount,
+          card_number: cardNumber, // Card number should be defined or fetched
+          cvv: cvv, // CVV should be defined or fetched
+          expiry_month: expMonth, // Expiry month should be defined or fetched
+          expiry_year: expYear, // Expiry year should be defined or fetched
+        };
+
+        // Proceed with the payment
+        paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in the authorization header
+          },
+        });
+
+        // If payment was successful, update the payload with "Monthly"
+        if (paymentResponse?.data?.message === "Charge successful") {
+          console.log("Payment successful");
+          alert("Payment processed successfully!", "Success");
+        } else {
+          console.error("Payment failed:", paymentResponse.data.message);
+          alert("Payment failed. Please try again.", "Error");
+        }
+      } else {
+        console.log("No payment needed.");
+      }
+
+      // Construct the payload for the API request to save payment details
       const payload = {
-        specialization: selectedRole || "", 
+        specialization: selectedRole || "",
         service: service,
-        plan: planTitle || "", 
-        payment_detail: planTitle || "", 
-        sla: "0", 
+        plan: planTitle || "",
+        sla: sla || "0",
       };
-  
-      // Make the POST request to the API with token authentication
+
+      // If payment was successful and plan is "Monthly", include "Monthly" in the payload
+      if (planTitle === "Monthly" && cardType !== "Monthly" && paymentResponse?.data?.message === "Charge successful") {
+        payload.payment_detail = "Monthly";
+      }
+
+      // Make the PUT request to save the payment details
       const response = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
         method: "PUT",
         headers: {
@@ -627,20 +670,28 @@ function AngleQuestPage({ onClose }) {
         },
         body: JSON.stringify(payload),
       });
-  
-      if (response.ok) {
-        const data = await response.json();
-        console.log("API Response:", data);
-        return true; // Return true if the request was successful
-      } else {
+
+      // Check if the payment details were successfully saved
+      if (!response.ok) {
         console.error("Failed to save payment details:", response.statusText);
-        return false; // Return false if the request failed
+        return false; // Exit if saving payment details failed
       }
+
+      const data = await response.json();
+      console.log("Payment details saved:", data);
+
+      // Set the active card after PUT request is successful
+      setActiveCard("AngleQuest Agreement");
+
+      return true; // Return true if everything went smoothly
     } catch (error) {
       console.error("Error during API request:", error);
-      return false; // Return false in case of any error
+      Alert.alert("Error", "An error occurred while processing the requests.");
+      return false;
     }
   };
+
+
 
   const roles = [
     "SAP FI", "SAP MM", "SAP SD", "SAP PP", 
@@ -824,7 +875,14 @@ const saveToAsyncStorage = async (plan) => {
       const firstName = values.find(item => item[0] === 'first_name')[1];
       const lastName = values.find(item => item[0] === 'last_name')[1];
       const email = values.find(item => item[0] === 'email')[1];
+
+      // Combine first and last name
       const fullName = `${firstName} ${lastName}`;
+
+      // Set state with the retrieved values
+      setFullName(fullName);
+      setEmail(email);
+
 
       // Get token from AsyncStorage for authorization
       const token = await AsyncStorage.getItem("token");
@@ -1980,7 +2038,7 @@ const saveToAsyncStorage = async (plan) => {
                           </View>
                         </View>
                             <TouchableOpacity onPress={handleToggleForm} style={styles.addBackupButton}>
-                          <Text style={styles.addBackupButtonText}>+ Add backup payment method</Text>
+                          <Text style={styles.addBackupButtonText}>Change primary payment method</Text>
                         </TouchableOpacity>
                       </View>
                       </View>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Alert 
+  View, Text, Image, TouchableOpacity, Modal, ScrollView, StyleSheet, Alert 
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -15,6 +15,14 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
   const { t } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const openModal = () => {
+    setShowSubscribeModal(true);
+  };
+
+  const closeModal = () => {
+    setShowSubscribeModal(false);
+  };
+  
   // Fetch payment details when the component mounts
   useEffect(() => {
     fetchPaymentDetails();
@@ -138,7 +146,7 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
               >
                 <Text style={styles.saveButtonText}>{t("Subscribe Now")}</Text>
               </TouchableOpacity>
-
+ 
               <TouchableOpacity 
                 style={[styles.saveButton, loading && { opacity: 0.6 }]} 
                 onPress={initiatePayment}
@@ -151,7 +159,16 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
             </View>
           </View>
 
-      {showSubscribeModal && <GetStartedInd onClose={() => setShowSubscribeModal(false)} />}
+        <Modal
+          visible={showSubscribeModal}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={closeModal}
+        >
+            <View style={styles.modalContent}>
+              <GetStartedInd onClose={closeModal} />
+          </View>
+        </Modal>
     </View>
   );
 }
@@ -169,7 +186,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 10
   },
   closeButton: {
     position: 'absolute',
