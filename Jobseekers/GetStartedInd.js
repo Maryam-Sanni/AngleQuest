@@ -614,6 +614,7 @@ function AngleQuestPage({ onClose }) {
         specialization: selectedRole || "", 
         service: service,
         plan: planTitle || "", 
+        payment_detail: planTitle || "", 
         sla: "0", 
       };
   
@@ -834,11 +835,12 @@ const saveToAsyncStorage = async (plan) => {
       }
 
       // Multiply the amount by 1600
-      const amount = totalPlanCost * 1600;
+      const amount = totalPlanCost;
 
       // Define the payload to be sent to the backend
       const paymentPayload = {
         email: email,
+        plan: selectedPlanId,
         amount: amount,
         card_number: cardNumber,
         cvv: cvv,

@@ -1,29 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, ImageBackground, Image, StyleSheet } from 'react-native';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import { BlurView } from 'expo-blur';
 import OpenModal from '../Jobseekers/Pickyourhub';
 import OpenModal2 from '../Jobseekers/Newgrowth';
+import PaymentDetails from './PaymentDetails';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
+
+
 function MyComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
     const { t } = useTranslation()
 
-    const handleOpenPress = () => {
-        setModalVisible(true);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+    const [paymentRequired, setPaymentRequired] = useState(false);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+      const fetchPaymentDetails = async () => {
+          try {
+              const token = await AsyncStorage.getItem('token'); 
+              if (!token) {
+                  console.error('No authentication token found');
+                  return;
+              }
+
+              const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                  method: 'GET',
+                  headers: {
+                      'Authorization': `Bearer ${token}`, 
+                      'Content-Type': 'application/json',
+                  },
+              });
+
+              const data = await response.json();
+
+              // Check if "Pay as you go" is set in the response
+              if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                  setPaymentRequired(true);
+              }
+          } catch (error) {
+              console.error('Error fetching payment details:', error);
+          }
       };
-    
+
+      fetchPaymentDetails();
+  }, []);
+
+  const handlePaymentSuccess = () => {
+      setPaymentModalVisible(false);
+      setPaymentRequired(false);
+  };
+
+
+  const handleOpenPress = () => {
+      if (paymentRequired) {
+          setPaymentModalVisible(true);
+      } else {
+          setModalVisible(true);
+      }
+  };
+
+  const handleOpenPress2 = () => {
+    if (paymentRequired) {
+        setPaymentModalVisible(true);
+    } else {
+        setModalVisible2(true);
+    }
+  };
+
       const handleCloseModal = () => {
         setModalVisible(false);
       };
 
-      const handleOpenPress2 = () => {
-        setModalVisible2(true);
-      };
-    
       const handleCloseModal2 = () => {
         setModalVisible2(false);
       };
@@ -91,6 +146,20 @@ function MyComponent() {
           </View>
       </Modal>
 
+  <Modal
+    animationType="slide"
+    transparent={true}
+    visible={paymentModalVisible}
+    onRequestClose={() => setPaymentModalVisible(false)}
+  >
+      <View style={styles.modalContent}>
+        <PaymentDetails 
+          onClose={() => setPaymentModalVisible(false)} 
+          onPaymentSuccess={handlePaymentSuccess} 
+        />
+    </View>
+  </Modal>
+  
       </BlurView>
     
     </ImageBackground>

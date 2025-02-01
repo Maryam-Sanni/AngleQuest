@@ -1,107 +1,157 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import {useFonts} from "expo-font"
+import React, { useState, useEffect } from 'react';
+import { 
+  View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Alert 
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import GetStartedInd from './GetStartedInd';
+import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
 
+function PaymentDetails({ onClose, onPaymentSuccess }) {
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const { t } = useTranslation();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
-function MyComponent({ onClose }) {
-  const navigation = useNavigation();
+  // Fetch payment details when the component mounts
+  useEffect(() => {
+    fetchPaymentDetails();
+  }, []); // Empty dependency array to only run once on mount
+  
+  const fetchPaymentDetails = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No authentication token found');
+        return;
+      }
 
-  const goToPlans = () => {
-    // Navigate to ExpertsProfile screen when the button is clicked
-    navigation.navigate('Coaching Hub Sessions');
-    onClose(); // Close the modal
+      const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      console.log("API Response:", data); // Log the full response
+
+      if (data?.PaystackDetail?.card_detail) {
+        try {
+          if (typeof data.PaystackDetail.card_detail === "string") {
+            data.PaystackDetail.card_detail = JSON.parse(data.PaystackDetail.card_detail);
+          }
+          console.log("Parsed Card Details:", data.PaystackDetail.card_detail);
+        } catch (error) {
+          console.error("Error parsing card details:", error);
+          data.PaystackDetail.card_detail = [];
+        }
+      }
+
+      setPaymentDetails(data?.PaystackDetail);
+    } catch (error) {
+      console.error('Error fetching payment details:', error);
+    }
   };
-  const [fontsLoaded]=useFonts({
-    'Roboto-Light':require("../assets/fonts/Roboto-Light.ttf"),
-  })
-  const {t}=useTranslation()
+
+
+  const initiatePayment = async () => {
+    try {
+      setLoading(true);
+
+      const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+      const firstName = values.find(item => item[0] === 'first_name')[1];
+      const lastName = values.find(item => item[0] === 'last_name')[1];
+      const email = values.find(item => item[0] === 'email')[1];
+
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Error", "Authorization token not found.");
+        setLoading(false);
+        return;
+      }
+
+      const cardDetails = paymentDetails?.card_detail || [];
+      console.log("Card Details:", cardDetails); // Debugging
+
+      const paymentPayload = {
+        email: email,
+        plan: paymentDetails?.plan || 'Pay as you go',
+        amount: 40,
+        card_number: cardDetails.length > 0 ? cardDetails[0].cardnumber : '',
+        cvv: cardDetails.length > 0 ? cardDetails[0].cvv : '',
+        expiry_month: cardDetails.length > 0 ? cardDetails[0].exp_date.split('/')[0] : '',
+        expiry_year: cardDetails.length > 0 ? cardDetails[0].exp_date.split('/')[1] : '',
+      };
+
+      console.log("Payment Payload:", paymentPayload); // Debugging
+
+      const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Payment Response:", paymentResponse.data);
+
+      if (paymentResponse?.data?.message === "Charge successful") {
+        Alert.alert("Success", "Payment initiated successfully!");
+        onPaymentSuccess({ success: true, data: paymentResponse.data });
+      } else {
+        Alert.alert("Error", "Payment failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      Alert.alert("Error", "Payment could not be processed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
-    <View style={{  flex: 1, backgroundColor: "white", marginTop: 40, alignItems: 'center' }}>
-    <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
         <View style={styles.greenBox}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&' }} 
-            style={styles.logo}
-          />
-          <Text style={styles.headerText}>{t("Pay")}</Text>
-       
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ fontSize: 18, color: '#3F5637', fontWeight: 'bold',fontFamily:"Roboto-Light"}}>
-            ✕
-          </Text>
-        </TouchableOpacity>
-        </View> 
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.section}>
-             <TouchableOpacity onPress={goToPlans} style={styles.saveButton}>
-              <View style={styles.buttonContent}>
-                <Text style={styles.saveButtonText}>{t("Pay with Billing Info")}</Text>
-              </View>
+          <View style={styles.header}>
+            <Image 
+              source={{ uri: 'https://img.icons8.com/?size=100&id=84025&format=png&color=000000' }} 
+              style={styles.logo} 
+            />
+            <Text style={styles.headerText}>{t("You are not a subscribed user")}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={styles.closeText}>✕</Text>
             </TouchableOpacity>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 10, marginRight: 50, marginBottom: 5}} />
-           <Text style={{ fontSize: 14, fontWeight: "bold", color: "black", marginBottom: 30, alignText: 'center', alignSelf: 'center',fontFamily:"Roboto-Light"}}>{t("Or")}</Text>
-             <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Email")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="titiana@stripe.com" />
-            </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Card Number")}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput style={styles.input} placeholder="1111 2222 3333 4444" />
+          </View>
+
+          <View style={styles.container}>
+            <View style={styles.content}>
+              <View style={styles.section}>
+                <Text style={styles.description}>
+                  {t("Don't worry about service interruptions when you are a subscribed user")}
+                </Text>
+                <Text style={styles.description}>{t("You will need to pay for this service, it costs $40 only")}</Text>
               </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Expiration Month")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="MM" />
-              </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Expiration Year")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="YY" />
-              </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Security Code")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="123" />
-              </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Name on card")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="" />
-            </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Country or region")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="United States" />
-            </View>
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.label}>{t("Zip Code")}</Text>
-              <View style={styles.inputContainer}>
-              <TextInput style={styles.input} placeholder="00000" />
-            </View>
+
+              <TouchableOpacity 
+                style={styles.saveButton1} 
+                onPress={() => setShowSubscribeModal(true)}
+              >
+                <Text style={styles.saveButtonText}>{t("Subscribe Now")}</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.saveButton, loading && { opacity: 0.6 }]} 
+                onPress={initiatePayment}
+                disabled={loading}
+              >
+                <Text style={styles.saveButtonText}>
+                  {loading ? t("Processing...") : t("Pay $40 only")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity onPress={goToPlans} style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>{t("Pay")}</Text>
-          </TouchableOpacity>
-        </View>
-  
-    </View>
-    </View>
-      </ScrollView>
+
+      {showSubscribeModal && <GetStartedInd onClose={() => setShowSubscribeModal(false)} />}
     </View>
   );
 }
@@ -109,37 +159,47 @@ function MyComponent({ onClose }) {
 const styles = StyleSheet.create({
   greenBox: {
     width: 600,
-    height: 700,
-    backgroundColor: '#F8F8F8',
+    marginTop: 40,
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    alignSelf: 'center'
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
   },
   closeButton: {
     position: 'absolute',
-    top: 20,
     right: 20,
+  },
+  closeText: {
+    fontSize: 18,
+    color: '#3F5637',
+    fontWeight: 'bold',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'white',
+    padding: 20,
+    backgroundColor: '#E8A09A',
     borderBottomWidth: 1,
     borderBottomColor: '#CCC',
     marginBottom: 20
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 20,
     marginRight: 10
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#3F5637',
-    fontFamily:"Roboto-Light"
+    color: 'black',
   },
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
     marginLeft: 50,
     marginRight: 50
   },
@@ -150,49 +210,33 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 20,
   },
-  inputField: {
-    marginBottom: 20,
+  description: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 30,
+    textAlign: 'center',
   },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#000',
-    fontFamily:"Roboto-Light"
-  },
-  inputContainer: {
-    flexDirection: 'row',
-  },
-  input: {
-    flex: 1,
-    marginLeft: 0,
-    color: 'black', 
-    paddingHorizontal: 10,
+  saveButton1: {
+    marginBottom: 30,
+    paddingHorizontal: 20,
     paddingVertical: 10,
+    backgroundColor: 'lightgrey',
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    marginTop: 5,
-
+    alignItems: 'center',
   },
   saveButton: {
     marginBottom: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: 'black',
+    backgroundColor: '#E8A09A',
     borderRadius: 5,
+    alignItems: 'center',
   },
   saveButtonText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
-    color: '#fff',
-    textAlign: 'center',
-    fontFamily:"Roboto-Light"
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    color: 'black',
   },
 });
 
-export default MyComponent;
+export default PaymentDetails;

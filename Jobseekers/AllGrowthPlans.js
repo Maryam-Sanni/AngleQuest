@@ -7,6 +7,7 @@ import GrowthPlantype from '../components/growthplantype';
 import Scheduledgrowth from '../components/Scheduledgrowth';
 import GrowthPlanreview from '../components/gpexpertreview';
 import OpenModal from '../Jobseekers/Pickyourcoach';
+import PaymentDetails from './PaymentDetails';
 import { useNavigate } from 'react-router-dom';
 import {useFonts} from "expo-font"
 import { useTranslation } from 'react-i18next';
@@ -23,8 +24,46 @@ function MyComponent() {
   const [meetingData, setMeetingData] = useState({ date: '', time: '' });
 
   const [activeTab, setActiveTab] = useState('Scheduled');
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+    const [paymentRequired, setPaymentRequired] = useState(false);
   
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+  }, []);
+
+  const handlePaymentSuccess = () => {
+    setPaymentModalVisible(false);
+    setPaymentRequired(false);
+  };
   
   useEffect(() => {
     const loadFormData = async () => {
@@ -155,9 +194,13 @@ function MyComponent() {
     fetchMeetingData();
   }, []);
   
-    const handleOpenPress = () => {
-      setModalVisible(true);
-    };
+  const handleOpenPress = () => {
+      if (paymentRequired) {
+          setPaymentModalVisible(true);
+      } else {
+          setModalVisible(true);
+      }
+  };
   
     const handleCloseModal = () => {
       setModalVisible(false);
@@ -302,7 +345,20 @@ function MyComponent() {
           </View>
       </Modal>
                        
-                       
+                       <Modal
+                         animationType="slide"
+                         transparent={true}
+                         visible={paymentModalVisible}
+                         onRequestClose={() => setPaymentModalVisible(false)}
+                       >
+                           <View style={styles.modalContent}>
+                             <PaymentDetails 
+                               onClose={() => setPaymentModalVisible(false)} 
+                               onPaymentSuccess={handlePaymentSuccess} 
+                             />
+                         </View>
+                       </Modal>
+                      
                     </View>
                 </ScrollView>
             </View>

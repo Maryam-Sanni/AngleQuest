@@ -16,6 +16,7 @@ import CustomAlert from "../components/CustomAlert";
 import Video from 'react-native-video';
 import moment from "moment-timezone";
 import OpenModal from "../Jobseekers/Pickyourhub";
+import PaymentDetails from './PaymentDetails';
 import EmptyScheduleImage from '../assets/EmptySch.jpeg';
 
 const HubMeeting = () => {
@@ -40,7 +41,45 @@ const HubMeeting = () => {
   const [videoUrl, setVideoUrl] = useState(null); // State to hold the video URL
   const [isLoading, setIsLoading] = useState(true); // State for loading indicator
   const [isBuffering, setIsBuffering] = useState(true);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+    const [paymentRequired, setPaymentRequired] = useState(false);
 
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+  }, []);
+
+  const handlePaymentSuccess = () => {
+    setPaymentModalVisible(false);
+    setPaymentRequired(false);
+  };
+  
   useEffect(() => {
     const fetchRecording = async () => {
       if (!selectedMeeting) return;
@@ -74,7 +113,11 @@ const HubMeeting = () => {
   }, [selectedMeeting]);  
 
   const handleOpenPress = () => {
-    setModalVisible(true);
+      if (paymentRequired) {
+          setPaymentModalVisible(true);
+      } else {
+          setModalVisible(true);
+      }
   };
 
   const handleCloseModal = () => {
@@ -894,7 +937,21 @@ const handlePickerChange = (index) => {
               />
           </View>
         </Modal>
-      
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={paymentModalVisible}
+          onRequestClose={() => setPaymentModalVisible(false)}
+        >
+            <View style={styles.modalContent}>
+              <PaymentDetails 
+                onClose={() => setPaymentModalVisible(false)} 
+                onPaymentSuccess={handlePaymentSuccess} 
+              />
+          </View>
+        </Modal>
+        
       </View>
       <CustomAlert
         visible={alertVisible}

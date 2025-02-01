@@ -11,6 +11,7 @@ import {
 import TopBar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import DateTimePickerModal from "../components/DateTimePickerModal";
+import PaymentDetails from './PaymentDetails';
 import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,6 +38,8 @@ const SupportRequestPage = () => {
   const [expertId, setExpertId] = useState(null);
   const [isModalVisible3, setModalVisible3] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+    const [paymentRequired, setPaymentRequired] = useState(false);
   const ratings = ["excellent", "good", "satisfactory", "poor"];
   const [formData, setFormData] = useState({
     specialization: '',
@@ -56,14 +59,50 @@ const SupportRequestPage = () => {
     setIsModalVisible2(false);
   };
 
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+  }, []);
+
+  const handlePaymentSuccess = () => {
+    setPaymentModalVisible(false);
+    setPaymentRequired(false);
+  };
+  
   const handleCancelModal = () => {
     setIsModalVisible2(false);
   };
-  
+
   const [savedRole, setSavedRole] = useState(""); 
 
   const apiUrl = process.env.REACT_APP_API_URL;
-   
+
   // Fetch saved specialization from AsyncStorage
   useEffect(() => {
     const fetchSavedRole = async () => {
@@ -109,18 +148,25 @@ const SupportRequestPage = () => {
 
       console.log('API Response:', response.data);
 
-      const supportData = response.data;
-        if (!supportData || !supportData.time) {
-          throw new Error('Invalid API response: missing time');
-        }
+      const supportData = response.data[0];  // Access the data inside the '0' key
+      if (!supportData || !supportData.user_id) {
+        throw new Error('Invalid API response: missing user_id');
+      }
 
-      const { time, user_id } = supportData;
+      const { user_id } = supportData;
+      setExpertId(user_id);
 
-      console.log('Raw Time:', JSON.stringify(time));
       console.log('User ID:', user_id);
 
-      setExpertId(user_id);
-      
+      const { time } = supportData;
+      if (!time) {
+        console.warn('API response missing time, but proceeding with expert ID:', user_id);
+        Alert.alert('Warning', 'Missing time data, but expert ID saved.');
+        return;
+      }
+
+      console.log('Raw Time:', JSON.stringify(time));
+
       const timeEntries = time.split(',').map(entry => entry.trim());
       const daysList = [];
       const timeRanges = [];
@@ -171,6 +217,8 @@ const SupportRequestPage = () => {
     }
   };
 
+
+
   const [jobSeekerData, setJobSeekerData] = React.useState(null);
 
   React.useEffect(() => {
@@ -187,7 +235,7 @@ const SupportRequestPage = () => {
 
     fetchJobSeekerData();
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -317,7 +365,7 @@ const SupportRequestPage = () => {
     fetchData();
   }, []); // Empty dependency array ensures it runs only once after initial render
 
-  
+
   // Show or hide the modal
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -401,7 +449,7 @@ const SupportRequestPage = () => {
       Alert.alert("Error", "An error occurred while submitting your rating.");
     }
   };
-  
+
   const renderResponse = () => {
     if (responseType === 'text') {
       return (
@@ -545,7 +593,7 @@ const SupportRequestPage = () => {
   };
 
   const formatDate = (date) => new Date(date).toLocaleDateString();
-  
+
   const handleSubmit = async () => {
     try {
       // API URL
@@ -628,7 +676,7 @@ const SupportRequestPage = () => {
     setModalVisible3(false); // Close the modal
     setSelectedItem(null); // Clear the selected item
   };
-  
+
   useEffect(() => {
     if (assignedContent === 'waiting') {
       // Automatically switch content after 5 seconds
@@ -640,9 +688,9 @@ const SupportRequestPage = () => {
       return () => clearTimeout(timer);
     }
   }, [assignedContent]);
-  
+
       const SupportForm = ({ formData, setFormData }) => {
-       
+
 
     return (
       <View>
@@ -713,7 +761,7 @@ const SupportRequestPage = () => {
       </View>
     );
   };
- 
+
   return (
       <View style={{ flex: 1}}>
         <TopBar />
@@ -806,22 +854,28 @@ const SupportRequestPage = () => {
                             <TouchableOpacity
                               style={styles.input}
                               onPress={async () => {
-                                // Show the modal first
-                                setIsModalVisible2(true);
+                                // Check if payment is required
+                                if (paymentRequired) {
+                                  setPaymentModalVisible(true);  // Show the payment modal first
+                                } else {
+                                  // Show the modal2 only if payment is not required
+                                  setIsModalVisible2(true);
 
-                                // Make the API call
-                                await handleSupportRequest();
+                                  // Make the API call
+                                  await handleSupportRequest();
+                                }
                               }}
                             >
                               <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
                                 {selectedDateTime ? selectedDateTime.toLocaleString() : 'Select date and time'}
                               </Text>
                             </TouchableOpacity>
+
                           </View>
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                   <Text style={styles.submitButtonText}>Submit Request</Text>
                 </TouchableOpacity>
-               
+
               </View>    
           <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, padding: 10, width: 180, marginTop: 20, backgroundColor: 'white', borderColor: '#206C00', marginLeft: '15%'}}  onPress={() => setCurrentStep('all')} 
             >
@@ -845,8 +899,8 @@ const SupportRequestPage = () => {
                   <Text style={{fontSize: 16, textAlign: 'center', marginTop: 20, color: 'green',  textDecorationLine: 'underline'}}>Create New Request</Text>
            </TouchableOpacity>
         </View>
-          
-       
+
+
         {/* Dynamically Update Assigned Content */}
               <View style={styles.step2}>
                 {assignedContent === 'waiting' ? (
@@ -1166,7 +1220,7 @@ const SupportRequestPage = () => {
               </View>
             </View>
               )}
-            
+
           {/* Review Section */}
           {currentStep === 'review' && (
         <View style={{flexDirection: 'row', maxWidth: '100%'}}>
@@ -1243,16 +1297,16 @@ const SupportRequestPage = () => {
                 </TouchableOpacity>
               ))}
             </View>
-             
-            
-              
+
+
+
             <TouchableOpacity
               style={styles.submitButton}
               onPress={sendRating} // Submit the rating on press
             >
               <Text style={styles.submitButtonText}>Send Rating</Text>
             </TouchableOpacity>
-              
+
           </View>
         </View>
           )}
@@ -1298,7 +1352,7 @@ const SupportRequestPage = () => {
            </TouchableOpacity>
       </View>
         )}
-            
+
             <Modal
               animationType="slide"
               transparent={true}
@@ -1311,12 +1365,12 @@ const SupportRequestPage = () => {
                     Response from {selectedItem?.expert_name || "No Expert Assigned"}
                   </Text>
                   <Text style={{ fontSize: 14 }}> {selectedItem?.updated_at ? formatDate(selectedItem.updated_at) : "-"}</Text>
- 
+
                     <Text style={{marginTop: 30, fontSize: 14, fontStyle: 'italic'}}>
                       Response..
                     </Text>
-                    
-                
+
+
 
                   <TouchableOpacity
                     style={styles.closeButton}
@@ -1349,6 +1403,19 @@ const SupportRequestPage = () => {
             </View>
           </View>
         </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={paymentModalVisible}
+          onRequestClose={() => setPaymentModalVisible(false)}
+        >
+            <View style={styles.modalOverlay}>
+              <PaymentDetails 
+                onClose={() => setPaymentModalVisible(false)} 
+                onPaymentSuccess={handlePaymentSuccess} 
+              />
+          </View>
+        </Modal>
       </ScrollView>
     </View>
       </View>
@@ -1361,6 +1428,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     marginLeft: 210
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10
   },
   progressBar: {
     marginTop: 20,

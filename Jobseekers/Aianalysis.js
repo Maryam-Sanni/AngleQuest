@@ -1459,29 +1459,7 @@ const AIScreen = () => {
                                 It seems there is no data. You can try again later or check your settings.
                               </Text>
                               {/* Create New Button */}
-                              <TouchableOpacity
-                                style={{
-                                  backgroundColor: "green", // Similar to Microsoft DevOps button color
-                                  paddingVertical: 12,
-                                  paddingHorizontal: 30,
-                                  borderRadius: 5,
-                                }}
-                                onPress={() => {
-                                  console.log("Create New clicked!");
-                                  // Action for Create New button (like navigating to a new screen or opening a form)
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    color: "white",
-                                    fontSize: 16,
-                                    fontWeight: "bold",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  Create New
-                                </Text>
-                              </TouchableOpacity>
+                              
                             </View>
                           ) : (
                         

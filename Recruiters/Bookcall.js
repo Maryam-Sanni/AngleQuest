@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function BookingModal({ onClose }) {
   const [email, setEmail] = useState('');
@@ -9,46 +10,52 @@ function BookingModal({ onClose }) {
   const [startDate, setStartDate] = useState('');
   const [bestTime, setBestTime] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [token, setToken] = useState(null);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      setToken(storedToken);
+    };
+    fetchToken();
+  }, []);
 
   const handleSubmit = async () => {
+    if (!token) {
+      Alert.alert('Error', 'Authentication token is missing. Please log in again.');
+      return;
+    }
+
     const bookingData = {
-      email,
-      phone,
-      location,
-      capacity,
-      startDate,
-      bestTime,
-      additionalInfo,
+      email: email || 'Not provided',
+      contact: phone || 'Not provided',
+      location: location || 'Not specified',
+      users: capacity || 'Not specified',
+      start_date: startDate || 'Not specified',
+      time_of_calling: bestTime || 'Anytime',
+      note: additionalInfo || 'No additional info',
     };
 
     try {
-      // Simulate sending email using a placeholder API (use your real backend/email API here)
-      const response = await fetch('https://example.com/send-email', {
+      const response = await fetch(`${apiUrl}/api/jobseeker/book-a-call`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: 'ask@anglequest.com',
-          subject: 'New Booking Inquiry',
-          message: `
-            Email: ${email}
-            Phone: ${phone}
-            Location: ${location}
-            Capacity: ${capacity}
-            Start Date: ${startDate}
-            Best Time to Call: ${bestTime}
-            Additional Info: ${additionalInfo}
-          `,
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(bookingData),
       });
 
       if (response.ok) {
-        Alert.alert('Success', 'Your booking request has been sent!');
+       alert('Your request has been sent!', 'Success');
         onClose();
       } else {
-        Alert.alert('Error', 'Failed to send booking request. Please try again.');
+     alert('Failed to send request. Please try again.', 'Error');
       }
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error sending request:', error);
       Alert.alert('Error', 'Failed to send booking request. Please try again.');
     }
   };
@@ -60,52 +67,13 @@ function BookingModal({ onClose }) {
       </TouchableOpacity>
       <Text style={styles.heading}>Book a Call</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email Address"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Where are you calling from?"
-        value={location}
-        onChangeText={setLocation}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Number of Users"
-        value={capacity}
-        onChangeText={setCapacity}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="When do you intend to start?"
-        value={startDate}
-        onChangeText={setStartDate}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="When is the best time to call you"
-        value={bestTime}
-        onChangeText={setBestTime}
-      />
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Additional Information"
-        value={additionalInfo}
-        onChangeText={setAdditionalInfo}
-        multiline
-      />
+      <TextInput style={styles.input} placeholder="Email Address" value={email} placeholderTextColor= "grey" onChangeText={setEmail} keyboardType="email-address" />
+      <TextInput style={styles.input} placeholder="Phone Number" value={phone} placeholderTextColor= "grey" onChangeText={setPhone} keyboardType="phone-pad" />
+      <TextInput style={styles.input} placeholder="Where are you calling from?" value={location} placeholderTextColor= "grey" onChangeText={setLocation} />
+      <TextInput style={styles.input} placeholder="Number of Users" value={capacity} placeholderTextColor= "grey" onChangeText={setCapacity} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="When do you intend to start?" value={startDate} placeholderTextColor= "grey"  onChangeText={setStartDate} />
+      <TextInput style={styles.input} placeholder="When is the best time to call you?" value={bestTime} placeholderTextColor= "grey" onChangeText={setBestTime} />
+      <TextInput style={[styles.input, { height: 100 }]} placeholder="Additional Information" placeholderTextColor= "grey" value={additionalInfo} onChangeText={setAdditionalInfo} multiline />
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Submit</Text>
