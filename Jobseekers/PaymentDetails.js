@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   greenBox: {
     width: 600,
     marginTop: 40,
-    flex: 1,
+    height: 400,
     backgroundColor: '#F5F5F5',
     alignSelf: 'center'
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: 18,
-    color: '#3F5637',
+    color: 'black',
     fontWeight: 'bold',
   },
   header: {

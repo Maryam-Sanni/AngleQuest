@@ -265,6 +265,7 @@ function AngleQuestPage({ onClose }) {
             setCardName(cardDetails.cardholder_name || "");
             setCardNumber(cardDetails.cardnumber || "");
             setCvv(cardDetails.cvv || "");
+            setFullName(cardDetails.cardholder_name || "");
             setShowSection(true);
             // Extract expMonth and expYear from exp_date (e.g., "10/2026")
             if (cardDetails.exp_date) {
@@ -485,9 +486,6 @@ function AngleQuestPage({ onClose }) {
   const handlePutContinue = async () => {
     if (selectedRole) {
       try {
-        // Save the selected role to AsyncStorage
-        await AsyncStorage.setItem("selectedRole", selectedRole);
-
         // Get the token from AsyncStorage
         const token = await AsyncStorage.getItem("token");
         if (!token) {
@@ -516,6 +514,9 @@ function AngleQuestPage({ onClose }) {
             alert(`You are not allowed to change your specialization until ${oneMonthLater.toDateString()}`);
             return;
           }
+
+          // Save the selected role to AsyncStorage only if it's allowed
+          await AsyncStorage.setItem("selectedRole", selectedRole);
 
           // Construct the payload
           const payload = {
@@ -550,6 +551,7 @@ function AngleQuestPage({ onClose }) {
       console.log("Please select a role first.");
     }
   };
+
 
 
   useEffect(() => {
