@@ -188,9 +188,9 @@ function MyComponent({ onClose }) {
           </View>
 
 <View style={{ flexDirection: "row", marginBottom: 10 }}>
-  <View style={styles.buttonDue}>
-    <Text style={styles.buttonTextDue}>Please fill in all fields</Text>
-  </View>
+ <View style={styles.buttonDue}>
+               <Text style={styles.buttonTextDue}>Create a guide (template) that helps you effectively assess user skill set. This guide should include steps or questions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.</Text>
+             </View>
 </View>
 
   <View style={styles.container}>
@@ -417,6 +417,7 @@ marginTop: 5,
 buttonTextDue: {
 color: 'black',
 fontSize: 12,
+width: 700,
 fontFamily: "Roboto-Light",
 fontStyle: 'italic'
 },

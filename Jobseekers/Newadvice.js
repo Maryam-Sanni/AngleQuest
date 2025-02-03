@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from "expo-font";
 import { useTranslation } from 'react-i18next';
+import PaymentDetails from './PaymentDetails';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
@@ -33,6 +34,8 @@ function MyComponent({ onClose }) {
    const [meetingtype, setmeetType] = useState("advice");
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
+    const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+      const [paymentRequired, setPaymentRequired] = useState(false);
 
       // Get user's timezone
       const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -46,6 +49,42 @@ function MyComponent({ onClose }) {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+}, []);
+
+const handlePaymentSuccess = () => {
+    setPaymentModalVisible(false);
+    setPaymentRequired(false);
+};
 
   useEffect(() => {
     // Retrieve first_name and last_name from AsyncStorage
@@ -115,6 +154,11 @@ function MyComponent({ onClose }) {
   };
 
   const goToPlan = async () => {
+    if (paymentRequired) {
+        setPaymentModalVisible(true);
+        return; // Stop execution here and wait until modal is closed
+    }
+    
     try {
         // Validate the form data before making the API request
         if (!role || !challenge || !targetLevel || !selectedDateTime) {
@@ -189,30 +233,15 @@ function MyComponent({ onClose }) {
 
         if (response.status === 201) {
             await AsyncStorage.setItem('SkillAnalysisFormData', JSON.stringify(formData));
-
-            // Check if there is data from get-payment
-            const paymentResponse = await axios.get(
-                `${apiUrl}/api/expert/get-payment`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-
-            // Debugging: Log the payment response
-            console.log('Payment Response:', paymentResponse.data);
-
-            // Navigate based on the presence of data in get-payment response
-            if (paymentResponse.data && paymentResponse.data.paymentOption && paymentResponse.data.paymentOption.length > 0) {
-                navigate('/skill-analysis-sessions');
-            } else {
-                handleOpenPress();
-            }
+            navigate('/skill-analysis-sessions');
         }
     } catch (error) {
         console.error('Error during save:', error);
-        setAlertMessage('Failed to create Skill Analysis Session');
+        console.log('Server Response:', error.response?.data);
+        setAlertMessage(error.response?.data?.message || 'Failed to create Skill Analysis Session');
         setAlertVisible(true);
     }
 };
-    
 
   const hideAlert = () => {
     setAlertVisible(false);
@@ -404,6 +433,19 @@ function MyComponent({ onClose }) {
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
       </Modal>
+      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={paymentModalVisible}
+                        onRequestClose={() => setPaymentModalVisible(false)}
+                      >
+                          <View style={styles.modalContent}>
+                            <PaymentDetails 
+                              onClose={() => setPaymentModalVisible(false)} 
+                              onPaymentSuccess={handlePaymentSuccess} 
+                            />
+                        </View>
+                      </Modal>
     </View>
   );
 }

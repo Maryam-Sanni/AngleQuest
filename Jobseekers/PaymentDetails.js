@@ -125,7 +125,7 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
               source={{ uri: 'https://img.icons8.com/?size=100&id=84025&format=png&color=000000' }} 
               style={styles.logo} 
             />
-            <Text style={styles.headerText}>{t("You are not a subscribed user")}</Text>
+            <Text style={styles.headerText}>{t("Pay as you go")}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeText}>✕</Text>
             </TouchableOpacity>
@@ -135,16 +135,16 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
             <View style={styles.content}>
               <View style={styles.section}>
                 <Text style={styles.description}>
-                  {t("Don't worry about service interruptions when you are a subscribed user")}
+                  {t("You are not a subscribed user")}
                 </Text>
-                <Text style={styles.description}>{t("You will need to pay for this service, it costs $40 only")}</Text>
+                <Text style={styles.description}>{t("")}</Text>
               </View>
 
               <TouchableOpacity 
                 style={styles.saveButton1} 
                 onPress={() => setShowSubscribeModal(true)}
               >
-                <Text style={styles.saveButtonText}>{t("Subscribe Now")}</Text>
+                <Text style={styles.saveButtonText}>{t(" Switch to subscription")}</Text>
               </TouchableOpacity>
  
               <TouchableOpacity 
@@ -153,7 +153,7 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
                 disabled={loading}
               >
                 <Text style={styles.saveButtonText}>
-                  {loading ? t("Processing...") : t("Pay $40 only")}
+                  {loading ? t("Processing...") : t("Costs $40")}
                 </Text>
               </TouchableOpacity>
             </View>

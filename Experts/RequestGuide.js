@@ -150,6 +150,31 @@ function MyComponent({ onClose, onDone }) {
     'Microsoft Dynamics F&O',
   ];
 
+  useEffect(() => {
+    const fetchPreferences = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+
+            const response = await axios.get(`${apiUrl}/api/expert/get-preference`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 200 && response.data?.ExpertPreference) {
+                const { category, specialization, time } = response.data.ExpertPreference;
+
+                setCategory(category || '');
+                setCurrentSelectedRoles(specialization || []);
+                setAvailableTimes(time || '');
+            }
+        } catch (error) {
+            console.error('Error fetching preferences:', error);
+        }
+    };
+
+    fetchPreferences();
+}, []);
+
   const handleSave = async () => {
     if (!category || !available_days || !available_times) {
       setAlertMessage(t('Please fill all fields'));
@@ -207,8 +232,8 @@ const fetchExpertProfile = async () => {
       // Set the specialization array
       setSelectedRoles(specialization);
 
-      // Set the category value
-      setCategory(category);
+                // Only set category if it's currently null
+      setCategory(prevCategory => prevCategory === null ? category : prevCategory);
     }
   } catch (error) {
     console.error('Error fetching profile data:', error);

@@ -1322,6 +1322,7 @@ const SupportRequestPage = () => {
                 <Text style={styles.headerCell}>Created At</Text>
                 <Text style={styles.headerCell}>Accepted by</Text>
                 <Text style={styles.headerCell}>Deadline</Text>
+                <Text style={styles.headerCell}>Status</Text>
                 <Text style={styles.headerCell}> </Text>
               </View>
               <View
@@ -1339,8 +1340,9 @@ const SupportRequestPage = () => {
                     <Text style={styles.cell}>{formatDate(item.created_at)}</Text>
                      <Text style={styles.cell}>{item.expert_name || '-'}</Text>
                     <Text style={styles.cell}>{item.deadline ? formatDate(item.deadline) : '-'}</Text>
+                    <Text style={styles.cell}>{item.status || '-'}</Text>
                     <TouchableOpacity onPress={() => handleOpenPress(item)} style={styles.cell2}>
-                      <Text style={{ color: "green", textDecorationLine: "underline" }}>Open</Text>
+                      <Text style={{ color: "green", textDecorationLine: "underline" }}>View response</Text>
                     </TouchableOpacity>
                   </View>
                 )}

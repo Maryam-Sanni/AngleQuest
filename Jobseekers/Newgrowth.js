@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
 import { useTranslation } from 'react-i18next';
+import PaymentDetails from './PaymentDetails';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomAlert from '../components/CustomAlert';
@@ -13,6 +14,8 @@ function MyComponent({ onClose }) {
    const navigate = useNavigate();
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+      const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+        const [paymentRequired, setPaymentRequired] = useState(false);
   
   const [token, setToken] = useState("");
   const [type, setSelectedType] = useState('Personal');
@@ -43,6 +46,42 @@ function MyComponent({ onClose }) {
   const gotoCV = () => {
       navigate('/growth-plan-sessions');
   };
+
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+}, []);
+
+const handlePaymentSuccess = () => {
+    setPaymentModalVisible(false);
+    setPaymentRequired(false);
+};
 
   useEffect(() => {
       const getTokenAndUser = async () => {
@@ -123,6 +162,11 @@ function MyComponent({ onClose }) {
   }, []);
   
   const goToPlan = async () => {
+    if (paymentRequired) {
+      setPaymentModalVisible(true);
+      return; // Stop execution here and wait until modal is closed
+  }
+
     try {
       // Validate the form data before making the API request
       if ( !role || !title || !expert_available_days) {
@@ -377,6 +421,19 @@ function MyComponent({ onClose }) {
           message={alertMessage}
           onConfirm={hideAlert}
         />
+          <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={paymentModalVisible}
+                        onRequestClose={() => setPaymentModalVisible(false)}
+                      >
+                          <View style={styles.modalContent}>
+                            <PaymentDetails 
+                              onClose={() => setPaymentModalVisible(false)} 
+                              onPaymentSuccess={handlePaymentSuccess} 
+                            />
+                        </View>
+                      </Modal>
       </ScrollView>
     </View>
   );

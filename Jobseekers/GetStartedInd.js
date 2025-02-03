@@ -573,6 +573,17 @@ function AngleQuestPage({ onClose }) {
     retrieveData();
   }, []);
 
+  useEffect(() => {
+    // Get the total plan cost from AsyncStorage
+    const getTotalCost = async () => {
+      const cost = await AsyncStorage.getItem('totalPlanCost');
+      if (cost) {
+        setTotalPlanCost(parseFloat(cost)); // Set the value as numeric
+      }
+    };
+    getTotalCost();
+  }, []);
+
   const handleNext = async () => {
     try {
       // Retrieve the token from AsyncStorage
@@ -614,8 +625,8 @@ function AngleQuestPage({ onClose }) {
       const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
       const email = values.find(item => item[0] === 'email')[1];
 
-      // Define the amount to be paid (multiply by 1600 if needed)
-      const amount = totalPlanCost; // Adjust this as per your business logic
+
+      const amount = selectedPlan; 
 
       let paymentResponse = null; // Define paymentResponse here
 
@@ -655,6 +666,7 @@ function AngleQuestPage({ onClose }) {
         specialization: selectedRole || "",
         service: service,
         plan: planTitle || "",
+        payment_detail: planTitle || "",
         sla: sla || "0",
       };
 
@@ -834,17 +846,6 @@ const saveToAsyncStorage = async (plan) => {
    const [paymentDetails, setPaymentDetails] = useState(null);
   const [paystackData, setPaystackData] = useState(null);
 
-  useEffect(() => {
-    // Get the total plan cost from AsyncStorage
-    const getTotalCost = async () => {
-      const cost = await AsyncStorage.getItem('totalPlanCost');
-      if (cost) {
-        setTotalPlanCost(parseFloat(cost)); // Set the value as numeric
-      }
-    };
-    getTotalCost();
-  }, []);
-
   const paystackPublicKey = "pk_test_9e5da987777240cf8ea5e3dcd2e902f113d1251c"; // Replace with your actual Paystack public key
 
   // Step 1: Save Card Details and Proceed
@@ -877,6 +878,7 @@ const saveToAsyncStorage = async (plan) => {
       const firstName = values.find(item => item[0] === 'first_name')[1];
       const lastName = values.find(item => item[0] === 'last_name')[1];
       const email = values.find(item => item[0] === 'email')[1];
+      const selectedPlan = JSON.parse(await AsyncStorage.getItem("selectedPlan"));
 
       // Combine first and last name
       const fullName = `${firstName} ${lastName}`;
@@ -895,7 +897,7 @@ const saveToAsyncStorage = async (plan) => {
       }
 
       // Multiply the amount by 1600
-      const amount = totalPlanCost;
+      const amount = selectedPlan;
 
       // Define the payload to be sent to the backend
       const paymentPayload = {

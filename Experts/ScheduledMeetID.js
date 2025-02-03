@@ -218,6 +218,8 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
         `${apiUrl}/api/expert/newhubmeeting/delete`,
         {
           meeting_id, // Include the meeting_id in the request body
+          topic: meeting.meeting_topic,
+          meeting_description: meeting.meeting_description
         },
         {
           headers: {
@@ -232,11 +234,11 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
         window.location.reload(); // Reload the current page
       } else {
         // Handle error in response
-        alert('Error', 'Failed to delete the meeting.');
+        alert('Failed to delete the meeting.', 'Error');
       }
     } catch (error) {
       // Handle any errors (e.g., network issues)
-      alert('Error', 'An error occurred. Please try again later.');
+      alert('An error occurred. Please try again later.', 'Error');
     }
   };
 
@@ -406,22 +408,24 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
                     alignSelf: "flex-end",
                   }}
                 >
-                  <View style={styles.joinButton3}>
-                    {[...Array(Math.min(uniqueNameCount, 5))].map((_, index) => (
-                      <Image
-                        key={index}
-                        source={{
-                          uri: "https://img.icons8.com/?size=100&id=34105&format=png&color=206C00",
-                        }}
-                        style={{ width: 25, height: 25, marginRight: 5 }}
-                      />
-                    ))}
-                    {uniqueNameCount > 5 && (
-                      <Text style={{ fontSize: 16, marginTop: 3 }}>
-                        +{uniqueNameCount - 5}
-                      </Text>
-                    )}
-                  </View>
+                 {uniqueNameCount > 0 && (
+  <View style={styles.joinButton3}>
+    {[...Array(Math.min(uniqueNameCount, 5))].map((_, index) => (
+      <Image
+        key={index}
+        source={{
+          uri: "https://img.icons8.com/?size=100&id=34105&format=png&color=206C00",
+        }}
+        style={{ width: 25, height: 25, marginRight: 5 }}
+      />
+    ))}
+    {uniqueNameCount > 5 && (
+      <Text style={{ fontSize: 16, marginTop: 3 }}>
+        +{uniqueNameCount - 5}
+      </Text>
+    )}
+  </View>
+)}
                   <TouchableOpacity
                     onPress={() => handleAddToCalendar(meeting)}
                     style={styles.joinButton2}

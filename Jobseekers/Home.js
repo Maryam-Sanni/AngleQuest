@@ -190,7 +190,7 @@ const HomePage = () => {
   };
 
   const goToAI = () => {
-    navigate("/ai-result");
+    navigate("/ai-analysis");
   };
 
   const goTopay = () => {
@@ -431,39 +431,20 @@ const HomePage = () => {
               <View style={styles.mainContent}>
                 <View style={styles.messageBox}>
                   <BlurView intensity={50} style={styles.blurBackground}>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: "#63EC55",
-                        marginTop: 25,
-                        marginLeft: 10,
-                        fontWeight: "bold",
-                        fontFamily: "Roboto-Light",
-                      }}
-                    >
-                      {t("My Angle Badge")}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: 10,
-                        marginBottom: 10,
-                      }}
-                    >
-                      <Image
-                        source={require("../assets/useravatar2.png")}
-                        style={styles.profile}
-                      />
-                      <View
-                        style={{
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginRight: 20,
-                        }}
-                      >
-                        <CustomPercentageChart percentage={45} />
-                      </View>
-                    </View>
+                    
+                    <View style={styles.card}>
+                    <Image
+                                source={require("../assets/AI.jpg")}
+        style={styles.image}
+      />
+      <Text style={styles.title}>Work smarter with <Text style={styles.highlight}>ERP AI</Text></Text>
+      <Text style={styles.description}>
+        Automated request responses based on user-defined researches, using AI algorithms.
+      </Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Coming Soon!</Text>
+      </TouchableOpacity>
+    </View>
                     <Text
                       style={{
                         fontSize: 14,
@@ -484,7 +465,7 @@ const HomePage = () => {
                         fontSize: 20,
                         color: "#63EC55",
                         marginTop: 25,
-                        marginLeft: 10,
+                        marginLeft: 20,
                         fontWeight: "bold",
                         fontFamily: "Roboto-Light",
                       }}
@@ -556,23 +537,21 @@ const HomePage = () => {
 
                       </View>
                     </TouchableOpacity>
+                   
                     <TouchableOpacity
-                       onPress={goTopay}
+                      onPress={() => setModalVisible(true)}
                       style={[
                         styles.touchablechat,
-                        isHovered5 && styles.touchableOpacityHovered,
+                        isHovered13 && styles.touchableOpacityHovered,
                       ]}
-                      onMouseEnter={() => setIsHovered5(true)}
-                      onMouseLeave={() => setIsHovered5(false)}
+                      onMouseEnter={() => setIsHovered13(true)}
+                      onMouseLeave={() => setIsHovered13(false)}
                     >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Payment Status")}
-                        </Text>
-                        
-                      </View>
+                      <Text style={styles.touchableTextchat}>
+                        {t("Make a suggestion")}
+                      </Text>
                     </TouchableOpacity>
-                    
+
                   </BlurView>
                 </View>
                 <View style={styles.sideColumn}>
@@ -621,7 +600,7 @@ const HomePage = () => {
                             onMouseLeave={() => setIsHovered2(false)}
                           >
                             <Text style={styles.touchableText}>
-                              {t("Get Started")}
+                              {t("Account Setup")}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -892,89 +871,11 @@ const HomePage = () => {
                  
                 </View>
 
-                <View style={styles.whiteBoxesContainer}>
-                  {/* White boxes will go here */}
-                  <View style={styles.whiteBox}>
-                    <View style={{ flexDirection: "row", marginBottom: 10 }}>
-                      <Image
-                        source={require("../assets/chat.png")}
-                        style={styles.boxicon}
-                      />
-                      
-                       <TouchableOpacity onPress={goToHubs}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: "#63EC55",
-                          marginTop: 30,
-                          marginLeft: 10,
-                          fontWeight: "bold",
-                          fontFamily: "Roboto-Light",
-                        }}
-                      >
-                      Upcoming Hub Sessions
-                      </Text>
-                       </TouchableOpacity>
-                    </View>
-     
-                    <FlatList
-                      data={conversations.slice(0, 4)}
-                      keyExtractor={(item) => item?.room?.id.toString()}
-                      renderItem={({ item }) => (
-                        <View
-                          style={{
-                            backgroundColor: "#A2BE95",
-                            padding: 10,
-                            marginTop: 10,
-                            marginLeft: 10,
-                            marginRight: 10,
-                            borderRadius: 5,
-                          }}
-                        >
-                          <TouchableOpacity
-                            style={styles.conversation}
-                            onPress={() =>
-                              handleSelectRoom({
-                                id: item?.room?.id,
-                                name: item?.room?.displayName,
-                                image: item?.room?.roomIcon,
-                              })
-                            }
-                          >
-                            <Image
-                              source={{ uri: item?.room?.roomIcon || ico }}
-                              style={styles.avatar}
-                            />
-                            <View style={styles.conversationInfo}>
-                              <Text style={styles.conversationName}>
-                                {item?.room?.displayName}
-                              </Text>
-                              <Text style={styles.conversationLastMessage}>
-                                {item?.room?.lastMessage}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
-                      )}
-                    />
-      )}
+                
                     
-                    <TouchableOpacity
-                      onPress={() => setModalVisible(true)}
-                      style={[
-                        styles.touchablecoach,
-                        isHovered13 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered13(true)}
-                      onMouseLeave={() => setIsHovered13(false)}
-                    >
-                      <Text style={styles.touchableTextcoach}>
-                        {t("Suggestion")}
-                      </Text>
-                    </TouchableOpacity>
+
                    
-                  </View>
-                </View>
+            
                
               </View>
              
@@ -1048,7 +949,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    marginLeft: 210,
+    marginLeft: 50,
     marginTop: 100,
   },
   greeting: {
@@ -1102,7 +1003,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   messageBox: {
-    width: 220,
+    width: 300,
     height: 670,
     backgroundColor: "rgba(125,125,125,0.3)",
     borderRadius: 20,
@@ -1165,8 +1066,8 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingHorizontal: 20,
     marginTop: 15,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 20,
+    marginRight: 20,
     backgroundColor: "rgba(200,200,125,0.3)",
     borderRadius: 5,
     shadowColor: "#000",
@@ -1484,6 +1385,56 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 400,
     backgroundColor: 'white'
+  },
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 15,
+    height: 280,
+    marginLeft: 20,
+    marginTop: 20,
+    width: 260,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  image: {
+    width: 260,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: -15,
+    height: 120,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 10,
+  },
+  highlight: {
+    color: 'darkgreen', 
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+    marginVertical: 8,
+  },
+  button: {
+    backgroundColor: 'darkgreen',
+    width: 230,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#FFF',
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
