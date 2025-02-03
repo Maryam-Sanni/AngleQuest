@@ -588,13 +588,13 @@ function AngleQuestPage({ onClose }) {
     try {
       // Retrieve the token from AsyncStorage
       const token = await AsyncStorage.getItem("token");
-
+  
       // Ensure token is available
       if (!token) {
         console.error("Token not found in AsyncStorage");
         return false; // Exit if there's no token
       }
-
+  
       // Determine the `service` based on `activePrice`
       let service = "";
       if (activePrice === "monthly") {
@@ -604,12 +604,12 @@ function AngleQuestPage({ onClose }) {
       } else if (activePrice === "annually") {
         service = "Knowledge Backup + Career Support";
       }
-
+  
       // Retrieve `selectedRole`, `selectedPlan`, and `sla-cost` from AsyncStorage
       const selectedRole = await AsyncStorage.getItem("selectedRole");
       const selectedPlan = JSON.parse(await AsyncStorage.getItem("selectedPlan"));
       const slaCost = await AsyncStorage.getItem("sla-cost");
-
+  
       // Process the SLA cost to remove non-numeric parts (e.g., "$", "monthly", "No additional cost")
       let sla = "0";
       if (slaCost) {
@@ -620,16 +620,44 @@ function AngleQuestPage({ onClose }) {
           if (sla === "") sla = "0";
         }
       }
-
+  
       // Get the email from AsyncStorage
       const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
       const email = values.find(item => item[0] === 'email')[1];
-
-
+  
       const amount = selectedPlan; 
-
+  
+      // Construct the payload for the initial PUT request to save payment details
+      const payload = {
+        specialization: selectedRole || "",
+        service: service,
+        plan: planTitle || "",
+        payment_detail: planTitle || "",
+        sla: sla || "0",
+      };
+  
+      // Make the first PUT request to save the payment details
+      const response = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add token to Authorization header
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      // Check if the payment details were successfully saved
+      if (!response.ok) {
+        console.error("Failed to save payment details:", response.statusText);
+        return false; // Exit if saving payment details failed
+      }
+  
+      const data = await response.json();
+      console.log("Payment details saved:", data);
+  
+      // Now, proceed with the payment if necessary
       let paymentResponse = null; // Define paymentResponse here
-
+  
       // If the plan title is "Monthly" and the card type is not "Monthly", charge the user
       if (planTitle === "Monthly" && cardType !== "Monthly") {
         const paymentPayload = {
@@ -641,18 +669,51 @@ function AngleQuestPage({ onClose }) {
           expiry_month: expMonth, // Expiry month should be defined or fetched
           expiry_year: expYear, // Expiry year should be defined or fetched
         };
-
+  
         // Proceed with the payment
         paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
           headers: {
             Authorization: `Bearer ${token}`, // Include token in the authorization header
           },
         });
-
+  
         // If payment was successful, update the payload with "Monthly"
         if (paymentResponse?.data?.message === "Charge successful") {
           console.log("Payment successful");
           alert("Payment processed successfully!", "Success");
+  
+          // After successful payment, repeat the PUT request to include card_detail
+          const updatedPayload = {
+            ...payload,
+            card_detail: [
+              {
+                card_type: planTitle,
+                cardholder_name: cardName,
+                cardnumber: cardNumber,
+                cvv: cvv,
+                exp_date: `${expMonth}/${expYear}`, // Combine month and year for expiration date
+              },
+            ],
+          };
+  
+          // Make the second PUT request to save the updated payment details with card_type
+          const updatedResponse = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // Add token to Authorization header
+            },
+            body: JSON.stringify(updatedPayload),
+          });
+  
+          // Check if the updated payment details were successfully saved
+          if (!updatedResponse.ok) {
+            console.error("Failed to update payment details:", updatedResponse.statusText);
+            return false; // Exit if saving updated payment details failed
+          }
+  
+          const updatedData = await updatedResponse.json();
+          console.log("Updated payment details saved:", updatedData);
         } else {
           console.error("Payment failed:", paymentResponse.data.message);
           alert("Payment failed. Please try again.", "Error");
@@ -660,51 +721,18 @@ function AngleQuestPage({ onClose }) {
       } else {
         console.log("No payment needed.");
       }
-
-      // Construct the payload for the API request to save payment details
-      const payload = {
-        specialization: selectedRole || "",
-        service: service,
-        plan: planTitle || "",
-        payment_detail: planTitle || "",
-        sla: sla || "0",
-      };
-
-      // If payment was successful and plan is "Monthly", include "Monthly" in the payload
-      if (planTitle === "Monthly" && cardType !== "Monthly" && paymentResponse?.data?.message === "Charge successful") {
-        payload.payment_detail = "Monthly";
-      }
-
-      // Make the PUT request to save the payment details
-      const response = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Add token to Authorization header
-        },
-        body: JSON.stringify(payload),
-      });
-
-      // Check if the payment details were successfully saved
-      if (!response.ok) {
-        console.error("Failed to save payment details:", response.statusText);
-        return false; // Exit if saving payment details failed
-      }
-
-      const data = await response.json();
-      console.log("Payment details saved:", data);
-
+  
       // Set the active card after PUT request is successful
       setActiveCard("AngleQuest Agreement");
-
+  
       return true; // Return true if everything went smoothly
     } catch (error) {
       console.error("Error during API request:", error);
       Alert.alert("Error", "An error occurred while processing the requests.");
       return false;
     }
-  };
-
+  };  
+  
 
 
   const roles = [

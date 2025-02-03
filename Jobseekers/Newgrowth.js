@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
@@ -405,7 +405,7 @@ const handlePaymentSuccess = () => {
           </View>
           
           <TouchableOpacity onPress={goToPlan} style={styles.buttonplus}>
-            <Text style={styles.buttonTextplus}>{t('Next')}</Text>
+            <Text style={styles.buttonTextplus}>{t('Save & Create Session')}</Text>
           </TouchableOpacity>
           
         </View>

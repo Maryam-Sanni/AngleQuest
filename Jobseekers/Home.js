@@ -575,7 +575,7 @@ const HomePage = () => {
                               fontFamily: "Roboto-Light",
                             }}
                           >
-                            {t("What is next for you")} {first_name}?
+                            {t("What are your upcoming goals,")} {first_name}?
                           </Text>
                           <Text
                             style={{
@@ -587,7 +587,7 @@ const HomePage = () => {
                             }}
                           >
                             {t(
-                              "Reaching your next career milstone is important to us",
+                              "Helping you achieve your next career milestone is our",
                             )}
                           </Text>
                           <TouchableOpacity

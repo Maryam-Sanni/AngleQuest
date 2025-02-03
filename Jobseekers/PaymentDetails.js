@@ -135,7 +135,7 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
             <View style={styles.content}>
               <View style={styles.section}>
                 <Text style={styles.description}>
-                  {t("You are not a subscribed user")}
+                  {t("To access this feature, you must be a subscribed user.")}
                 </Text>
                 <Text style={styles.description}>{t("")}</Text>
               </View>
@@ -144,7 +144,7 @@ function PaymentDetails({ onClose, onPaymentSuccess }) {
                 style={styles.saveButton1} 
                 onPress={() => setShowSubscribeModal(true)}
               >
-                <Text style={styles.saveButtonText}>{t(" Switch to subscription")}</Text>
+                <Text style={styles.saveButtonText}>{t("Switch to subscription")}</Text>
               </TouchableOpacity>
  
               <TouchableOpacity 
