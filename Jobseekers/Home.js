@@ -466,8 +466,7 @@ const HomePage = () => {
                         color: "#63EC55",
                         marginTop: 25,
                         marginLeft: 20,
-                        fontWeight: "bold",
-                        fontFamily: "Roboto-Light",
+                        fontWeight: "600",
                       }}
                     >
                       {t("Quick Links")}
@@ -572,7 +571,6 @@ const HomePage = () => {
                               color: "darkgreen",
                               fontWeight: "bold",
                               marginTop: 10,
-                              fontFamily: "Roboto-Light",
                             }}
                           >
                             {t("What are your upcoming goals,")} {first_name}?
@@ -583,11 +581,10 @@ const HomePage = () => {
                               color: "#63EC55",
                               fontWeight: "bold",
                               marginTop: 5,
-                              fontFamily: "Roboto-Light",
                             }}
                           >
                             {t(
-                              "Helping you achieve your next career milestone is our",
+                              "Helping you achieve your next career milestone is our priority",
                             )}
                           </Text>
                           <TouchableOpacity
@@ -640,7 +637,6 @@ const HomePage = () => {
                                   marginTop: 15,
                                   marginLeft: 10,
                                   fontWeight: "bold",
-                                  fontFamily: "Roboto-Light",
                                 }}
                               >
                                 {t("Upcoming")}
@@ -660,7 +656,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Growth Plan Review")}{" "}
@@ -673,7 +668,6 @@ const HomePage = () => {
                                 position: "absolute",
                                 right: 20,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestGrowthPlan.dateTime ||
@@ -731,7 +725,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Skill Analysis Session")}
@@ -744,7 +737,6 @@ const HomePage = () => {
                                 position: "absolute",
                                 right: 20,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestSkillAnalysis.dateTime ||
@@ -770,7 +762,6 @@ const HomePage = () => {
                                 marginTop: 20,
                                 marginLeft: 10,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestSkillAnalysis.expertName ||
@@ -802,7 +793,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Hub Sessions")}{" "}
@@ -815,7 +805,6 @@ const HomePage = () => {
                                 position: "absolute",
                                 right: 20,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestInterview.dateTime ||
@@ -843,7 +832,6 @@ const HomePage = () => {
                                 marginTop: 20,
                                 marginLeft: 10,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestInterview.expertName ||
@@ -958,7 +946,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "white",
     marginLeft: 3,
-    fontFamily: "Roboto-Light",
   },
   icon: {
     width: 30,
@@ -1089,7 +1076,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "flex-start",
     fontSize: 16,
-    fontFamily: "Roboto-Light",
   },
   touchableOpacityHovered: {
     backgroundColor: "coral",

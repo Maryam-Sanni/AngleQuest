@@ -26,8 +26,8 @@ const SupportRequestPage = () => {
    const [assignedContent, setAssignedContent] = useState('waiting');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [textResponse, setTextResponse] = useState('');
-  const [voiceResponse, setVoiceResponse] = useState('');
-  const [videoSession, setVideoSession] = useState('');
+  const [supportId, setSupportId] = useState('');
+  const [specialization, setSpecialization] = useState('');
   const [responseType, setResponseType] = useState('');
   const [responseData, setResponseData] = useState({});
   const [jobSeekers, setJobSeekers] = useState([]);
@@ -35,6 +35,7 @@ const SupportRequestPage = () => {
   const [expertName, setExpertName] = useState('');
   const [date, setDate] = useState('');
   const [attachments, setAttachments] = useState([]);
+  const [hyperlink, setHyperlink] = useState(null);
   const [expertId, setExpertId] = useState(null);
   const [isModalVisible3, setModalVisible3] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -134,7 +135,7 @@ const SupportRequestPage = () => {
         return;
       }
 
-      const payload = { specialization: savedRole };
+      const payload = { specialization: savedRole || specialization };
       const response = await axios.post(
         `${apiUrl}/api/jobseeker/support-req`,
         payload,
@@ -239,74 +240,90 @@ const SupportRequestPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get the token and support_id from AsyncStorage
+        // Get the token from AsyncStorage
         const token = await AsyncStorage.getItem('token');
-        const supportId = await AsyncStorage.getItem('support_id');
-
-        if (!token || !supportId) {
-          console.error('Token or Support ID not found in AsyncStorage.');
+  
+        if (!token) {
+          console.error('Token not found in AsyncStorage.');
           return;
         }
-
-        // Fetch job seekers and accepted requests from the same URL
-        const response = await axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.data && response.data.status === 'success' && Array.isArray(response.data.data)) {
-          // Set the job seekers if it's the first fetch
-          if (!acceptedRequests) {
-            setJobSeekers(response.data.data);  
-          }
-
-          // Find the matching request that corresponds to the stored supportId
-          const matchingRequest = response.data.data.find(
-            (request) => request.id.toString() === supportId
-          );
-
-          if (matchingRequest) {
-            // Set the accepted requests and other related states
-            setAcceptedRequests(response.data.data);
-            setAssignedContent('assigned');
-            setIsAcceptedRequestFetched(true);
-            const name = matchingRequest.expert_name || 'N/A';
-            setExpertName(name);
-            const date = matchingRequest.deadline || 'N/A';
-            setDate(date);
-
-            // Check if prefmode is video and update the current step
-            if (matchingRequest.prefmode === 'video') {
-              setResponseType('video');
-              setCurrentStep('resolution');
-            } else {
-              setCurrentStep('assigned');
-            }
-
-            // Set the form data with matching request details
-            setFormData({
-              specialization: matchingRequest.specialization || '',
-              title: matchingRequest.title || '',
-              description: matchingRequest.description || '',
-              priority: matchingRequest.priority || '',
-              preferredMode: matchingRequest.prefmode || '',
-              videoCallDate: matchingRequest.videoCallDate || '',
-              deadline: matchingRequest.deadline || '',
-            });
+  
+        // Fetch both accepted and declined requests
+        const [acceptedResponse, declinedResponse] = await Promise.all([
+          axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${apiUrl}/api/jobseeker/decline-req`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+  
+        let allRequests = [];
+  
+        if (acceptedResponse.data?.status === 'success' && Array.isArray(acceptedResponse.data.data)) {
+          allRequests = [...acceptedResponse.data.data];
+        }
+  
+        if (declinedResponse.data?.status === 'success' && Array.isArray(declinedResponse.data.data)) {
+          allRequests = [...allRequests, ...declinedResponse.data.data];
+        }
+  
+        if (allRequests.length === 0) {
+          console.log('No requests found.');
+          return;
+        }
+  
+        // Sort all requests by `updated_at` in descending order (newest first)
+        const sortedRequests = allRequests.sort(
+          (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        );
+  
+        const mostRecentRequest = sortedRequests[0];
+  
+        if (mostRecentRequest) {
+          const supportId = mostRecentRequest.id.toString();
+  
+          // Save support ID to AsyncStorage
+          await AsyncStorage.setItem('support_id', supportId);
+  
+          // Set state with the most recent request details
+          setSupportId(supportId);
+          setAcceptedRequests(allRequests);
+          setExpertName(mostRecentRequest.expert_name || 'N/A');
+          setDate(mostRecentRequest.deadline || 'N/A');
+          setSpecialization(mostRecentRequest.specialization || 'N/A');
+  
+          // Determine the step based on whether it's an accepted or declined request
+          if (declinedResponse.data?.data?.some(req => req.id === mostRecentRequest.id)) {
+            setCurrentStep('declined');
+          } else if (mostRecentRequest.prefmode === 'video') {
+            setResponseType('video');
+            setCurrentStep('resolution');
           } else {
-            console.log('No request found matching the stored support ID.');
+            setCurrentStep('accepted');
           }
-        } else {
-          console.error('Unexpected response format:', response.data);
+  
+          // Set form data with matching request details
+          setFormData({
+            specialization: mostRecentRequest.specialization || '',
+            title: mostRecentRequest.title || '',
+            description: mostRecentRequest.description || '',
+            priority: mostRecentRequest.priority || '',
+            preferredMode: mostRecentRequest.prefmode || '',
+            videoCallDate: mostRecentRequest.videoCallDate || '',
+            deadline: mostRecentRequest.deadline || '',
+          });
+  
+          console.log('Most recent request:', mostRecentRequest);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchData();
-  }, []); // Empty dependency array to fetch only once
+  }, []);  
+  
 
 
   useEffect(() => {
@@ -329,7 +346,7 @@ const SupportRequestPage = () => {
 
         if (response.data?.status === 'failed' && response.data?.message === 'No responses found for this support request') {
           console.log('No responses found for this support request.');
-          setCurrentStep('start');
+
           return; // Exit early if no responses are found
         }
 
@@ -351,13 +368,13 @@ const SupportRequestPage = () => {
               setResponseType(value);
               setCurrentStep(value === 'video' ? 'resolution' : 'resolution');
               setTextResponse(firstResponse.text_response);
+              setHyperlink(firstResponse.hyperlink);
               break; // Stop once we find a matching response type
             }
           }
         }
       } catch (error) {
         console.error('Error fetching support responses:', error);
-        setCurrentStep('start'); // Default to assigned if there's an error
       }
     };
 
@@ -615,7 +632,7 @@ const SupportRequestPage = () => {
       const payload = {
         name,
         expert_id: expertId,
-        specialization: savedRole,
+        specialization: savedRole || specialization,
         title: formData.title,
         description: formData.description,
         prefmode: formData.preferredMode,
@@ -697,7 +714,7 @@ const SupportRequestPage = () => {
         <Text style={styles.label}>Specialization</Text>
         <TextInput
           style={styles.input}
-          value={savedRole}
+          value={savedRole || specialization}
           editable={false}
         />
 
@@ -773,7 +790,7 @@ const SupportRequestPage = () => {
         <View style={[styles.progressStep, currentStep === 'start' && styles.activeStep]}>
           <Text style={styles.stepText}>Start</Text>
         </View>
-        <View style={[styles.progressStep, currentStep === 'assigned' && styles.activeStep]}>
+        <View style={[styles.progressStep, (currentStep === 'assigned' || currentStep === 'accepted') && styles.activeStep]}>
           <Text style={styles.stepText}>Assigned to Expert</Text>
         </View>
         <View style={[styles.progressStep, currentStep === 'resolution' && styles.activeStep]}>
@@ -796,7 +813,7 @@ const SupportRequestPage = () => {
                             <Text style={styles.label}>Specialization</Text>
                             <TextInput
                             style={styles.input}
-                            value={savedRole} 
+                            value={savedRole || specialization} 
                             editable={false}
                             onChangeText={(text) => setFormData({ ...formData, specialization: text })}
                           />
@@ -967,12 +984,149 @@ const SupportRequestPage = () => {
                     <Text style={styles.lightText2}>
                       Has been assigned to your request
                     </Text>
-                           <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20, color: 'white'}}>You will not be able to create a new support request until this has been resolved or has passed deadline.</Text>
+                           <Text style={{fontSize: 14, marginBottom: 80, marginTop: 20, color: 'white'}}> </Text>
                   </View>
                 )}
               </View>
             </View>
           )}
+
+ {/* Resolution Section */}
+ {currentStep === 'accepted' && (
+              <View style={{ flexDirection: 'row', maxWidth: '75%' }}>
+                <View style={styles.step}>
+                  <Text style={styles.header}>Create Support Request</Text>
+                  <SupportForm formData={formData} setFormData={setFormData} />
+                    <TouchableOpacity 
+                      onPress={() => {
+                        setCurrentStep('start'); 
+                        setResponseType('text'); 
+                      }}
+                    >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        marginTop: 20,
+                        color: 'green',
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      Create New Request
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.step2}>
+                  <Text style={styles.header}>Found an expert for you!</Text>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                    }}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      marginTop: 20,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 90,
+                      height: 90,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 20,
+                      fontWeight: '500',
+                      marginTop: 10,
+                    }}
+                  >
+                     {expertName || 'Expert'}
+                  </Text>
+                  <Text style={styles.lightText2}>Has accepted your request</Text>
+                  <Text style={{ fontSize: 16, color: 'white' }}>
+                 
+                  </Text>
+                </View>
+
+              </View>
+            )}
+
+{currentStep === 'declined' && (
+              <View style={{ flexDirection: 'row', maxWidth: '75%' }}>
+                <View style={styles.step}>
+                  <Text style={styles.header}>Create Support Request</Text>
+                  <SupportForm formData={formData} setFormData={setFormData} />
+                    <TouchableOpacity 
+                      onPress={() => {
+                        setCurrentStep('start'); 
+                        setResponseType('text'); 
+                      }}
+                    >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        marginTop: 20,
+                        color: 'green',
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      Create New Request
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.step2}>
+                  <Text style={styles.header}>Found an expert for you!</Text>
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
+                    }}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      marginTop: 20,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Image
+                    source={{
+                      uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                    }}
+                    style={{
+                      width: 90,
+                      height: 90,
+                      marginBottom: 20,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 20,
+                      fontWeight: '500',
+                      marginTop: 10,
+                    }}
+                  >
+                     {expertName || 'Expert'}
+                  </Text>
+                  <Text style={styles.lightText2}>Has accepted your request</Text>
+                  <Text style={{ fontSize: 16, color: 'white' }}>
+                 
+                  </Text>
+                </View>
+
+              </View>
+            )}
 
             {/* Resolution Section */}
             {currentStep === 'resolution' && (
@@ -1399,6 +1553,7 @@ const SupportRequestPage = () => {
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={styles.modalText}>{textResponse || "No response available"}</Text>
+              <Text style={styles.modalText}>{hyperlink || "No response available"}</Text>
               <TouchableOpacity onPress={toggleModal}>
                 <Text style={styles.closeButton}>Close</Text>
               </TouchableOpacity>
