@@ -38,6 +38,7 @@ const SupportRequestPage = () => {
   const [hyperlink, setHyperlink] = useState(null);
   const [expertId, setExpertId] = useState(null);
   const [isModalVisible3, setModalVisible3] = useState(false);
+  const [modalResponse, setModalResponse] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [paymentModalVisible, setPaymentModalVisible] = useState(false);
     const [paymentRequired, setPaymentRequired] = useState(false);
@@ -237,93 +238,105 @@ const SupportRequestPage = () => {
     fetchJobSeekerData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Get the token from AsyncStorage
-        const token = await AsyncStorage.getItem('token');
-  
-        if (!token) {
-          console.error('Token not found in AsyncStorage.');
-          return;
-        }
-  
-        // Fetch both accepted and declined requests
-        const [acceptedResponse, declinedResponse] = await Promise.all([
-          axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${apiUrl}/api/jobseeker/decline-req`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-  
-        let allRequests = [];
-  
-        if (acceptedResponse.data?.status === 'success' && Array.isArray(acceptedResponse.data.data)) {
-          allRequests = [...acceptedResponse.data.data];
-        }
-  
-        if (declinedResponse.data?.status === 'success' && Array.isArray(declinedResponse.data.data)) {
-          allRequests = [...allRequests, ...declinedResponse.data.data];
-        }
-  
-        if (allRequests.length === 0) {
-          console.log('No requests found.');
-          return;
-        }
-  
-        // Sort all requests by `updated_at` in descending order (newest first)
-        const sortedRequests = allRequests.sort(
-          (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-        );
-  
-        const mostRecentRequest = sortedRequests[0];
-  
-        if (mostRecentRequest) {
-          const supportId = mostRecentRequest.id.toString();
-  
-          // Save support ID to AsyncStorage
-          await AsyncStorage.setItem('support_id', supportId);
-  
-          // Set state with the most recent request details
-          setSupportId(supportId);
-          setAcceptedRequests(allRequests);
-          setExpertName(mostRecentRequest.expert_name || 'N/A');
-          setDate(mostRecentRequest.deadline || 'N/A');
-          setSpecialization(mostRecentRequest.specialization || 'N/A');
-  
-          // Determine the step based on whether it's an accepted or declined request
-          if (declinedResponse.data?.data?.some(req => req.id === mostRecentRequest.id)) {
-            setCurrentStep('declined');
-          } else if (mostRecentRequest.prefmode === 'video') {
-            setResponseType('video');
-            setCurrentStep('resolution');
-          } else {
-            setCurrentStep('accepted');
-          }
-  
-          // Set form data with matching request details
-          setFormData({
-            specialization: mostRecentRequest.specialization || '',
-            title: mostRecentRequest.title || '',
-            description: mostRecentRequest.description || '',
-            priority: mostRecentRequest.priority || '',
-            preferredMode: mostRecentRequest.prefmode || '',
-            videoCallDate: mostRecentRequest.videoCallDate || '',
-            deadline: mostRecentRequest.deadline || '',
-          });
-  
-          console.log('Most recent request:', mostRecentRequest);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // Get the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('Token not found in AsyncStorage.');
+        return;
       }
-    };
-  
-    fetchData();
-  }, []);  
-  
+
+      // Fetch both accepted and declined requests
+      const [acceptedResponse, declinedResponse] = await Promise.all([
+        axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get(`${apiUrl}/api/jobseeker/decline-req`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      let allRequests = [];
+
+      // Handle accepted requests and set their status
+      if (acceptedResponse.data?.status === 'success' && Array.isArray(acceptedResponse.data.data)) {
+        const acceptedRequests = acceptedResponse.data.data.map(request => ({
+          ...request,
+          status: 'accepted', // Add status as 'accepted'
+        }));
+        allRequests = [...allRequests, ...acceptedRequests];
+      }
+
+      // Handle declined requests and set their status
+      if (declinedResponse.data?.status === 'success' && Array.isArray(declinedResponse.data.data)) {
+        const declinedRequests = declinedResponse.data.data.map(request => ({
+          ...request,
+          status: 'declined', // Add status as 'declined'
+        }));
+        allRequests = [...allRequests, ...declinedRequests];
+      }
+
+      if (allRequests.length === 0) {
+        console.log('No requests found.');
+        return;
+      }
+
+      // Sort all requests by `updated_at` in descending order (newest first)
+      const sortedRequests = allRequests.sort(
+        (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      );
+
+      const mostRecentRequest = sortedRequests[0];
+
+      setJobSeekers(sortedRequests);
+
+      if (mostRecentRequest) {
+        const supportId = mostRecentRequest.id.toString();
+
+        // Save support ID to AsyncStorage
+        await AsyncStorage.setItem('support_id', supportId);
+
+        // Set state with the most recent request details
+        setSupportId(supportId);
+        setAcceptedRequests(allRequests);
+        setExpertName(mostRecentRequest.expert_name || 'N/A');
+        setDate(mostRecentRequest.deadline || 'N/A');
+        setSpecialization(mostRecentRequest.specialization || 'N/A');
+
+        // Determine the step based on whether it's an accepted or declined request
+        if (mostRecentRequest.status === 'declined') {
+          setCurrentStep('declined');
+        } else if (mostRecentRequest.prefmode === 'video') {
+          setResponseType('video');
+          setCurrentStep('resolution');
+        } else {
+          setCurrentStep('accepted');
+        }
+
+        // Set form data with matching request details
+        setFormData({
+          specialization: mostRecentRequest.specialization || '',
+          title: mostRecentRequest.title || '',
+          description: mostRecentRequest.description || '',
+          priority: mostRecentRequest.priority || '',
+          preferredMode: mostRecentRequest.prefmode || '',
+          videoCallDate: mostRecentRequest.videoCallDate || '',
+          deadline: mostRecentRequest.deadline || '',
+        });
+
+        console.log('Most recent request:', mostRecentRequest);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
 
   useEffect(() => {
@@ -677,18 +690,47 @@ const SupportRequestPage = () => {
   };
 
   // Function to save data to AsyncStorage and navigate to the next step
+
   const handleOpenPress = async (item) => {
     try {
+      // Save the item data to AsyncStorage
       await AsyncStorage.setItem("jobSeekerData", JSON.stringify(item));
-      setCurrentStep("all");
+      setSelectedItem(item); // Set the selected item's data
+      setModalVisible3(true); // Open the modal
+  
+      // Get the token from AsyncStorage
+      const token = await AsyncStorage.getItem("token");
+  
+      if (!token) {
+        console.error("Token not found in AsyncStorage.");
+        Alert.alert("Error", "Authentication token is missing.");
+        return;
+      }
+  
+      if (item.prefmode === "video") {
+        // Set the response to the individual link if prefmode is video
+        setModalResponse(item.individual_link || "No individual link provided");
+      } else if (item.prefmode === "text") {
+        // If prefmode is text, fetch the response from the API
+        const response = await axios.get(`${apiUrl}/api/jobseeker/view-responses/${item.id}`, {
+          headers: { Authorization: `Bearer ${token}` }, // Pass token for authentication
+        });
+  
+        if (response.data?.status === 'success' && response.data.data.length > 0) {
+          const responseData = response.data.data[0]; // Get the first response from the data array
+          setModalResponse(responseData.text_response || "No response available");
+        } else {
+          setModalResponse("Failed to fetch response.");
+        }
+      }
     } catch (error) {
       console.error("Error saving job seeker data:", error);
       Alert.alert("Error", "Failed to save data.");
     }
-    setSelectedItem(item); // Set the selected item's data
-    setModalVisible3(true); // Open the modal
   };
-
+  
+  
+  
   const handleCloseModal = () => {
     setModalVisible3(false); // Close the modal
     setSelectedItem(null); // Clear the selected item
@@ -1085,26 +1127,16 @@ const SupportRequestPage = () => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.step2}>
-                  <Text style={styles.header}>Found an expert for you!</Text>
+                  <Text style={styles.header}>Searching for another expert!</Text>
+                 
                   <Image
                     source={{
-                      uri: "https://img.icons8.com/?size=100&id=59757&format=png&color=206C00",
-                    }}
-                    style={{
-                      width: 35,
-                      height: 35,
-                      marginTop: 20,
-                      marginBottom: 20,
-                      alignSelf: 'center',
-                    }}
-                  />
-                  <Image
-                    source={{
-                      uri: "https://img.icons8.com/?size=100&id=5491&format=png&color=000000",
+                      uri: "https://img.icons8.com/?size=100&id=25168&format=png&color=000000",
                     }}
                     style={{
                       width: 90,
                       height: 90,
+                      marginTop: 30,
                       marginBottom: 20,
                       alignSelf: 'center',
                     }}
@@ -1119,9 +1151,17 @@ const SupportRequestPage = () => {
                   >
                      {expertName || 'Expert'}
                   </Text>
-                  <Text style={styles.lightText2}>Has accepted your request</Text>
-                  <Text style={{ fontSize: 16, color: 'white' }}>
-                 
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 20,
+                      fontWeight: '500',
+                    }}
+                  >
+                    declined your request
+                  </Text>
+                  <Text style={{ fontSize: 16, width: 200, textAlign: 'center', marginTop: 10 }}>
+                 Do you want to cancel this request and create a new request?
                   </Text>
                 </View>
 
@@ -1474,7 +1514,7 @@ const SupportRequestPage = () => {
                 <Text style={styles.headerCell}>Description</Text>
                 <Text style={styles.headerCell}>Preferred Mode</Text>
                 <Text style={styles.headerCell}>Created At</Text>
-                <Text style={styles.headerCell}>Accepted by</Text>
+                <Text style={styles.headerCell}>Assigned to</Text>
                 <Text style={styles.headerCell}>Deadline</Text>
                 <Text style={styles.headerCell}>Status</Text>
                 <Text style={styles.headerCell}> </Text>
@@ -1544,22 +1584,36 @@ const SupportRequestPage = () => {
           onConfirm={handleConfirmDateTime}
           onCancel={handleCancelModal}
         />
+       
         <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={toggleModal}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>{textResponse || "No response available"}</Text>
-              <Text style={styles.modalText}>{hyperlink || "No response available"}</Text>
-              <TouchableOpacity onPress={toggleModal}>
-                <Text style={styles.closeButton}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+  animationType="slide"
+  transparent={true}
+  visible={isModalVisible3}
+  onRequestClose={handleCloseModal}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContent}>
+      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+        Response from {selectedItem?.expert_name || "No Expert Assigned"}
+      </Text>
+      <Text style={{ fontSize: 14 }}>
+        {selectedItem?.updated_at ? formatDate(selectedItem.updated_at) : "-"}
+      </Text>
+
+      <Text style={{ marginTop: 20, fontSize: 14, width: 480, textAlign: 'center', height: 300, marginBottom: 20 }}>
+        {modalResponse || "Loading response..."}
+      </Text>
+
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={handleCloseModal}
+      >
+        <Text style={{textDecorationLine: 'underline', color: 'green'}}>Close</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -1870,7 +1924,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    width: '40%',
+    width: 540,
     alignItems: 'center',
   },
   modalText: {

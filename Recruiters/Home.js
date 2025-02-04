@@ -11,6 +11,7 @@ import OpenModal3 from './New Employee';
 import OpenModal4 from '../Jobseekers/Pickyourhub';
 import { useTranslation } from 'react-i18next';
 import {useFonts} from "expo-font"
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePage = () => {
@@ -37,6 +38,8 @@ const HomePage = () => {
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState(''); 
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const goToEmployees = () => {
     navigate('/employees');
   };
@@ -61,6 +64,45 @@ const HomePage = () => {
   navigate('/subscription');
   };
 
+  useEffect(() => {
+    const checkSubscriptionType = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          console.error("Token not found in AsyncStorage");
+          return;
+        }
+  
+        const response = await axios.get(`${apiUrl}/api/business/get-business-nda`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        console.log("API Response:", response.data); // Log full response
+  
+        const bndaDetails = response.data?.BNDA;
+  
+        if (bndaDetails) {
+          console.log("BNDA Details:", bndaDetails); // Log BNDA to verify
+  
+          if (bndaDetails.subscription_type) {
+            setModalVisible2(false); // Close modal if subscription exists
+          } else {
+            setModalVisible2(true); // Show modal if no subscription
+          }
+        } else {
+          console.warn("No BNDA details found in the response.");
+          setModalVisible2(true);
+        }
+      } catch (error) {
+        console.error("Error fetching subscription details:", error);
+        setModalVisible2(true);
+      }
+    };
+  
+    checkSubscriptionType();
+  }, []);  
+  
+  
   const handleOpenPress2 = () => {
     setModalVisible2(true);
   };
@@ -220,7 +262,7 @@ const {t}=useTranslation()
           <BlurView intensity={80} style={styles.blurBackground}>
           <View style={{flexDirection: 'row', }}>
           <View style={{flexDirection: 'column', marginTop: 20, width: 350, marginLeft: 30 }}>
-          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12,fontFamily:"Roboto-Light" }}>{t("Orchestrate the growth of everyone in your team")}</Text>
+          <Text style={{fontSize: 24, color: '#63EC55', fontWeight: 'bold', marginTop: 12, }}>{t("Orchestrate the growth of everyone in your team")}</Text>
           <TouchableOpacity onPress={handleOpenPress2} 
           style={[
           styles.touchablebegin,
@@ -255,7 +297,7 @@ const {t}=useTranslation()
          
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}> 
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold',fontFamily:"Roboto-Light"}}>{t("Quick Actions")}</Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 20, fontWeight: 'bold'}}>{t("Quick Actions")}</Text>
 <View style={{flexDirection: 'row', marginLeft: 10 }}>
 <TouchableOpacity onPress={goToEmployees} 
  style={[
@@ -295,15 +337,15 @@ onMouseLeave={() => setIsHovered5(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Skill Analysis Session")} </Text>
-<Text style={{fontSize: 12, color: 'white',marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>{t("Upcoming Skill Analysis Session")} </Text>
+<Text style={{fontSize: 12, color: 'white',marginTop: 15, position: "absolute", right: 20, fontWeight: '600' }}></Text>
 </View>
 <View style={{flexDirection: 'row', }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -320,15 +362,15 @@ onMouseLeave={() => setIsHovered7(false)}
 <View style={{flexDirection: 'row' }}>
 <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Growth Plan Session")}</Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>{t("Upcoming Growth Plan Session")}</Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15, position: "absolute", right: 20, fontWeight: '600' }}></Text>
 </View>
 <View style={{flexDirection: 'row' }}>
 <Image
               source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600' }}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -345,14 +387,14 @@ onMouseLeave={() => setIsHovered8(false)}
  <View style={{flexDirection: 'row' }}>
           <View style={styles.greenwhitebox}>
 <View style={{flexDirection: 'row'}}>
-<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Upcoming Hub Session")} </Text>
-<Text style={{fontSize: 12, color: 'white', marginTop: 15,  position: "absolute", right: 20, fontWeight: '600',fontFamily:"Roboto-Light" }}></Text>
+<Text style={{fontSize: 16, color: '#63EC55', marginTop: 15, marginLeft: 30, fontWeight: 'bold' }}>{t("Upcoming Hub Session")} </Text>
+<Text style={{fontSize: 12, color: 'white', marginTop: 15,  position: "absolute", right: 20, fontWeight: '600' }}></Text>
 </View>
 <View style={{flexDirection: 'row', marginBottom: 10 }}>
 <Image source={{ uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/96214782d7fee94659d7d6b5a7efe737b14e6f05a42e18dc902e7cdc60b0a37b' }}
               style={{ width: 30, height: 30,  marginLeft: 30, marginTop: 15,}}
             />
-              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600',fontFamily:"Roboto-Light" }}>You are all caught up! You have no pending action</Text>
+              <Text style={{fontSize: 14, color: 'white', marginTop: 20, marginLeft: 10, fontWeight: '600'}}>You are all caught up! You have no pending action</Text>
 <TouchableOpacity 
 style={[
   styles.touchablestart,
@@ -380,9 +422,9 @@ onMouseLeave={() => setIsHovered9(false)}
        source={require('../assets/question.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Have a question?")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>{t("Have a question?")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light" }}>{t("Do you have an idea you will like to share with us?")}</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20}}>{t("Do you have an idea you will like to share with us?")}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -401,9 +443,9 @@ onMouseLeave={() => setIsHovered9(false)}
        source={require('../assets/QandA.png')}
         style={styles.boxicon}
       />
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Need Help?")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold' }}>{t("Need Help?")}</Text>
           </View>
-          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("Do you have an issue you would like us to assist you with?")}</Text>
+          <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 35,marginRight: 20, marginBottom: 20 }}>{t("Do you have an issue you would like us to assist you with?")}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)}
           style={[
             styles.touchablecoach,
@@ -422,9 +464,9 @@ onMouseLeave={() => setIsHovered9(false)}
         source={require('../assets/money (2).png')}
         style={styles.boxicon}
       />
-           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("SLA Subscription")}</Text>
+           <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 10,  fontWeight: 'bold'}}>{t("SLA Subscription")}</Text>
            </View>
-           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25,fontFamily:"Roboto-Light"  }}>{t("SLA for 8 users due in 13 days")}</Text>
+           <Text style={{fontSize: 14, color: 'white', marginTop: 10, marginLeft: 25,marginRight: 20, marginBottom: 25 }}>{t("SLA for 8 users due in 13 days")}</Text>
           <TouchableOpacity onPress={goToSubscription}
           style={[
             styles.touchablecoach,
@@ -440,9 +482,9 @@ onMouseLeave={() => setIsHovered9(false)}
 
 
           <View style={styles.whiteBox}>
-          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold',fontFamily:"Roboto-Light" }}>{t("Plan Count")}</Text>
+          <Text style={{fontSize: 18, color: '#63EC55', marginTop: 25, marginLeft: 20,  fontWeight: 'bold'}}>{t("Plan Count")}</Text>
           <View style={{flexDirection: 'row' }}>
-          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20,fontFamily:"Roboto-Light"  }}>{t("You have 1 employee(s) left to fill up your standard plan ")}</Text>
+          <Text style={{fontSize: 16, color: 'white', marginTop: 10, marginLeft: 20,marginRight: 20, marginBottom: 20 }}>{t("You have 1 employee(s) left to fill up your standard plan ")}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 20, marginTop: -30 }}>
       <CustomPercentageChart percentage={90} />
       </View>
@@ -512,7 +554,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: 'white',
     marginLeft: 3,
-    fontFamily:"Roboto-Light"
   },
   icon: {
     width: 15,
@@ -644,14 +685,12 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
   touchableTextbegin: {
     color: 'darkgreen',
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily:"Roboto-Light"
   },
   touchablecoach: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -674,7 +713,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
    touchableall: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -697,7 +735,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
    touchablehub: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -719,7 +756,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
   touchablejoinsession: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -741,7 +777,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
   touchablerate: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -764,7 +799,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 12,
-    fontFamily:"Roboto-Light"
   },
   touchablesession: {
     backgroundColor: 'rgba(200,200,125,0.3)',
@@ -787,7 +821,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
     touchablestart: {
       backgroundColor: 'rgba(200,200,125,0.3)',
@@ -819,7 +852,6 @@ blurBackground: {
     color: 'white',
     textAlign: 'center',
     fontSize: 13,
-    fontFamily:"Roboto-Light"
   },
     verticalLine: {
     height: 60,

@@ -389,44 +389,21 @@ const HomePage = () => {
           <Sidebar />
           <ScrollView contentContainerStyle={{ flexGrow: 1, maxHeight: 500 }}>
             <View style={styles.container}>
-              <View style={{ flexDirection: "row", marginBottom: 20 }}>
+              <View style={{ flexDirection: "row", marginBottom: 20, marginLeft: -300 }}>
                 <Image
                   source={{
                     uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f2d38e99b0016f2bd167d2cfd38ff0d43c9f94a93c84b4e04a02d32658fb401?apiKey=7b9918e68d9b487793009b3aea5b1a32&",
                   }}
                   style={{ width: 40, height: 40, marginTop: -5 }}
                 />
-                `{" "}
+        
                 <Text style={styles.greeting}>
                   {t("Good Day")}, {first_name} {last_name}
                 </Text>
                 `
               </View>
               <View style={styles.mainContent}>
-                <View style={styles.messageBox}>
-                  <BlurView intensity={50} style={styles.blurBackground}>
-                    <View style={{ flexDirection: "row" }}>
-                      <Image
-                        source={require("../assets/chat.png")}
-                        style={styles.boxicon}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: "#63EC55",
-                          marginTop: 25,
-                          marginLeft: 10,
-                          fontWeight: "bold",
-                          fontFamily: "Roboto-Light",
-                        }}
-                      >
-                        {t("Upcoming Hub Sessions")}
-                      </Text>
-                    </View>
-
-                  
-                  </BlurView>
-                </View>
+                
 
                 <View style={styles.sideColumn}>
                   <View style={styles.greenBorderedBox}>
@@ -446,11 +423,10 @@ const HomePage = () => {
                               color: "#63EC55",
                               fontWeight: "bold",
                               marginTop: 12,
-                              fontFamily: "Roboto-Light",
                             }}
                           >
                             {t(
-                              "By supporting others we lift their life's work"
+                              "By supporting others, we empower them and elevate the impact of their life's work."
                             )}
                           </Text>
                           <TouchableOpacity
@@ -484,7 +460,6 @@ const HomePage = () => {
                           marginTop: 50,
                           marginLeft: 50,
                           fontWeight: "bold",
-                          fontFamily: "Roboto-Light",
                         }}
                       >
                         {t("Quick links")}
@@ -573,7 +548,6 @@ const HomePage = () => {
                                   marginTop: 30,
                                   marginLeft: 10,
                                   fontWeight: "bold",
-                                  fontFamily: "Roboto-Light",
                                 }}
                               >
                                 {t("Upcoming Sessions")}
@@ -593,7 +567,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Growth Plan Review")}
@@ -606,7 +579,6 @@ const HomePage = () => {
                                 position: "absolute",
                                 right: 20,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {" "}
@@ -633,7 +605,6 @@ const HomePage = () => {
                                 marginTop: 20,
                                 marginLeft: 10,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestGrowthPlan.name ||
@@ -665,7 +636,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Skill Analysis Session")}
@@ -678,7 +648,6 @@ const HomePage = () => {
                                 position: "absolute",
                                 right: 20,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestSkillAnalysis.dateTime ||
@@ -704,7 +673,6 @@ const HomePage = () => {
                                 marginTop: 20,
                                 marginLeft: 10,
                                 fontWeight: "600",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {plandata.latestSkillAnalysis.name ||
@@ -736,7 +704,6 @@ const HomePage = () => {
                                 marginTop: 15,
                                 marginLeft: 30,
                                 fontWeight: "bold",
-                                fontFamily: "Roboto-Light",
                               }}
                             >
                               {t("Interview Session")}
@@ -817,7 +784,6 @@ const HomePage = () => {
                             marginTop: 25,
                             marginLeft: 10,
                             fontWeight: "bold",
-                            fontFamily: "Roboto-Light",
                           }}
                         >
                           {t("Have a question?")}
@@ -831,7 +797,6 @@ const HomePage = () => {
                           marginLeft: 35,
                           marginRight: 20,
                           marginBottom: 20,
-                          fontFamily: "Roboto-Light",
                         }}
                       >
                         {t(
@@ -870,7 +835,6 @@ const HomePage = () => {
                             marginTop: 25,
                             marginLeft: 10,
                             fontWeight: "bold",
-                            fontFamily: "Roboto-Light",
                           }}
                         >
                           {t("Income Overview")}
@@ -883,7 +847,6 @@ const HomePage = () => {
                           marginTop: 10,
                           marginLeft: 35,
                           marginRight: 20,
-                          fontFamily: "Roboto-Light",
                         }}
                       >
                         View your earnings and available balance
@@ -950,7 +913,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: "white",
     marginLeft: 3,
-    fontFamily: "Roboto-Light",
   },
   icon: {
     width: 15,
@@ -963,7 +925,7 @@ const styles = StyleSheet.create({
     height: 28,
     marginRight: 10,
     marginTop: 20,
-    marginLeft: -300,
+    marginLeft: -500,
   },
   boxicon: {
     width: 25,
@@ -1072,14 +1034,12 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 13,
-    fontFamily: "Roboto-Light",
   },
   touchableTextbegin: {
     color: "darkgreen",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily: "Roboto-Light",
   },
   touchablecoach: {
     backgroundColor: "rgba(200,200,125,0.3)",
@@ -1102,7 +1062,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 13,
-    fontFamily: "Roboto-Light",
   },
   touchableall: {
     backgroundColor: "rgba(200,200,125,0.3)",
@@ -1177,8 +1136,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 10,
     marginRight: 5,
-    marginLeft: 20,
-    width: 100,
+    marginLeft: 10,
+    width: 110,
     height: 40,
     overflow: "hidden",
     borderRadius: 10,
@@ -1195,7 +1154,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 13,
-    fontFamily: "Roboto-Light",
   },
   touchablesession: {
     backgroundColor: "rgba(200,200,125,0.3)",
@@ -1218,7 +1176,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 13,
-    fontFamily: "Roboto-Light",
   },
   greenwhitebox: {
     width: 510,
@@ -1275,7 +1232,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 13,
-    fontFamily: "Roboto-Light",
   },
   touchablejoinrate: {
     backgroundColor: "rgba(200,200,125,0.3)",
@@ -1322,7 +1278,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "500",
     fontSize: 16,
-    fontFamily: "Roboto-Light",
   },
   image: {
     width: 35,
@@ -1362,7 +1317,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 15,
     fontWeight: "bold",
-    fontFamily: "Roboto-Light",
   },
   image: {
     width: 30,

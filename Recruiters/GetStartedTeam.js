@@ -18,6 +18,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import OpenModal2 from './PaytoBank';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -69,6 +70,15 @@ function AngleQuestPage({ onClose }) {
     const [activePlan, setActivePlan] = useState(null);
       const [selectedSection, setSelectedSection] = useState(null);
       const [activePrice, setActivePrice] = useState('monthly');
+         const [ModalVisible2, setModalVisible2] = useState(false);
+
+         const handleOpenPress2 = () => {
+          setModalVisible2(true);
+        };
+      
+        const handleCloseModal2 = () => {
+          setModalVisible2(false);
+        };
 
       // Function to save selected plan pricing to AsyncStorage
 const saveToAsyncStorage = async (plan) => {
@@ -111,9 +121,6 @@ const saveToAsyncStorage = async (plan) => {
       await AsyncStorage.setItem('selectedPlanCost', costWithoutPrefix);
 
 
-      // Proceed to the next step
-      setCurrentStep(3);
-      setActiveCard("Service Level Agreement");
     } catch (error) {
       console.error('Error handling plan selection:', error);
       alert('An error occurred while selecting the plan. Please try again.');
@@ -203,16 +210,11 @@ const [selectedOptions, setSelectedOptions] = useState({});
       console.log('Data uploaded successfully:', response.data);
       alert('Data uploaded successfully!');
 
-      // Optionally, proceed to the next step
-      setCurrentStep(3);
-      setActiveCard("Service Level Agreement");
-
     } catch (error) {
       console.error('Error in handleSelect:', error.response?.data || error.message);
       alert('An error occurred while handling your selection. Please try again.');
     }
   };
-
 
 
     const [totalPlanCost, setTotalPlanCost] = useState(0); // State to hold the total cost
@@ -740,7 +742,11 @@ Governing Law
              )}
            </View>
          ))}
+
        </View>
+       <TouchableOpacity onPress={handleOpenPress2} style={styles.buttonpay}>
+                            <Text style={styles.buttonsaveText}>{t("Proceed")}</Text>
+                          </TouchableOpacity>
        </View>
       ),
     },
@@ -888,10 +894,6 @@ Governing Law
       title: t("Subscriptions"),
       icon: "https://img.icons8.com/?size=100&id=SazSfIWdDmr2&format=png&color=000000",
     },
-    {
-      title: t("Service Level Agreement"),
-      icon: "https://img.icons8.com/?size=100&id=48354&format=png&color=000000",
-    },
   ];
 
   return (
@@ -950,6 +952,16 @@ Governing Law
                 <OpenModal onClose={handleCloseModal} />
               </View>
             </Modal>
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={ModalVisible2}
+        onRequestClose={handleCloseModal2}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal2 onClose={handleCloseModal2} />
+        </View>
+      </Modal>
           </ScrollView>
         </View>
     </View>
@@ -1142,6 +1154,16 @@ borderRadius: 30
     borderRadius: 5,
     marginTop: 20,
     marginLeft: 1000,
+    elevation: 5,
+  },
+  buttonpay: {
+    backgroundColor: "darkgreen",
+    padding: 10,
+    width: 120,
+    borderRadius: 5,
+    marginTop: 20,
+    marginBottom: 30,
+    marginLeft: 1100,
     elevation: 5,
   },
   buttonText: {
