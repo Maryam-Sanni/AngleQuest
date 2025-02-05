@@ -4,7 +4,7 @@ import { Button, Checkbox, Switch } from 'react-native-paper';
 import Topbar from '../components/Recruiterstopbar';
 import Sidebar from '../components/Recruiterssidebar';
 import OpenModal from './New Employee';
-import OpenModal2 from './PaytoBank';
+import OpenModal2 from './PaymentCard';
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,65 +23,30 @@ const BillingsAndPayment = () => {
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
-   const apiUrl = process.env.REACT_APP_API_URL;
-  
   useEffect(() => {
-    const fetchBusinessProfile = async () => {
+    const fetchUserData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          Alert.alert('Error', 'No authentication token found.');
-          return;
-        }
+        // Retrieve values from AsyncStorage
+        const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+        
+        // Find values or set defaults if not available
+        const firstName = values.find(item => item[0] === 'first_name')?.[1] || '';
+        const lastName = values.find(item => item[0] === 'last_name')?.[1] || '';
+        const email = values.find(item => item[0] === 'email')?.[1] || '';
 
-        // Try fetching business profile data from the API
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/business/get-business-profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const { profile } = response.data;
-        console.log(response.data); // Log the entire response data
-
-        // Check if the profile is available
-        if (profile) {
-          // Set profile data from the API response
-          setProfile(profile);
-          setUserName(profile.business_name);
-          setUserEmail(profile.business_email);
-          setPhone(profile.phone_no || "No phone number available");
-
-          // Optionally, save the business profile data to AsyncStorage if not already saved
-          await AsyncStorage.multiSet([
-            ['first_name', profile.administrator_name || ''],
-            ['email', profile.business_email || ''],
-          ]);
-        } else {
-          // Fallback to AsyncStorage if no profile is available
-          const values = await AsyncStorage.multiGet(['first_name', 'email', 'phone_no']);
-          const firstName = values[0][1];  // first_name value
-          const email = values[1][1];  // email value
-          const storedPhone = values[2][1];  // phone_no value
-
-          if (firstName && email) {
-            setUserName(firstName);
-            setUserEmail(email);
-          } else {
-            Alert.alert('Error', 'No user data found.');
-          }
-
-          // Use the phone number from AsyncStorage, or default to "No phone number available"
-          setPhone(storedPhone || "No phone number available");
-        }
+        // Update the state with the retrieved values
+        setUserName(`${firstName} ${lastName}`);
+        setUserEmail(email);
       } catch (error) {
-        console.error('Error fetching business profile:', error);
-        Alert.alert('Error', 'Failed to fetch business profile.');
+        console.error('Failed to fetch user data from AsyncStorage', error);
       }
     };
 
-    fetchBusinessProfile();
-  }, []); // Runs once when the component mounts
+    fetchUserData();
+  }, []); // Empty dependency array means it runs only once when the component mounts
+
+
+   const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Fallback in case both AsyncStorage and API request fail
@@ -164,7 +129,7 @@ const BillingsAndPayment = () => {
         quarterly: "$85",
         annually: "$75",
       },
-      price: "$3,900",
+      price: "$325",
       plan: "5 users plan",
       color: "#FFFFFF",
     },
@@ -181,11 +146,11 @@ const BillingsAndPayment = () => {
         "Knowledge sharing Hub",
       ],
       pricing: {
-        monthly: "$15500",
+        monthly: "$1,200",
         quarterly: "$85",
         annually: "$75",
       },
-      price: "$15,500",
+      price: "$1,200",
       plan: "25 users plan",
       color: "#FFFFFF",
     },
@@ -202,13 +167,34 @@ const BillingsAndPayment = () => {
         "Knowledge sharing Hub",
       ],
       pricing: {
-        monthly: "$25500",
+        monthly: "$2,000",
         quarterly: "$85",
         annually: "$75",
       },
-      price: "$25,500",
+      price: "$2,000",
       plan: "50 users plan",
       color: "#FFFFFF",
+    },
+    {
+      id: "Custom",
+      title: "Custom",
+      topic:
+        "If these plans don't fit, let's create one that suits you, customoze your subscription for a perfect fit, bigger is better.",
+      description: [
+        "51+ subscribed employees",
+        "Priority access to expert support",
+        "AI Skill analysis",
+        "Monthly strategy growth plan",
+        "Knowledge sharing Hub",
+      ],
+      pricing: {
+        monthly: "$25500",
+        quarterly: "$170",
+        annually: "$150",
+      },
+      price: "Custom",
+      plan: "unlimited users plan",
+      color: "#F3E5F5"
     },
   ]);
   const [currentPlan, setCurrentPlan] = useState(plans[0]);
@@ -387,7 +373,7 @@ const BillingsAndPayment = () => {
           <Text style={styles.planTopic}>{item.topic}</Text>
           <Text style={styles.planPrice}>
             {item.price}
-            <Text style={{ fontSize: 12, color: 'grey' }}>/year</Text>
+            <Text style={{ fontSize: 12, color: 'grey' }}>/month</Text>
           </Text>
           <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginVertical: 15 }} />
           <View style={styles.description}>
@@ -426,7 +412,7 @@ const BillingsAndPayment = () => {
           <Text style={styles.planTopic}>{currentPlan.topic}</Text>
           <Text style={styles.planPrice}>
             {currentPlan.price}
-            <Text style={{ fontSize: 12, color: 'grey' }}>/year</Text>
+            <Text style={{ fontSize: 12, color: 'grey' }}>/month</Text>
           </Text>
                            <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
           <View style={styles.description}>
@@ -465,20 +451,21 @@ const BillingsAndPayment = () => {
 
                            <Text style={styles.savedCardTitle}>Standard Plan</Text>  
                            <Text style={{ fontSize: 15, color: 'grey', width: 800, marginBottom: 10}}>You will no longer be able to add users when the user count for your subscription is filled, please change your plan to accomodate the number of users you will like to subscribe</Text> 
-                           <Text style={{position: 'absolute', right: 22, fontSize: 16}}>{numberOfUsers} user remaining</Text>
+                           <Text style={{position: 'absolute', right: 22, fontSize: 16}}>{numberOfUsers} user(s) remaining</Text>
 
         
 
           <View style={{backgroundColor: '#F0F0F0', padding: 20, borderRadius: 10, marginTop: 10}}>
           <View style={{flexDirection: 'row', marginTop: 10}}>
-               <Image source={{ uri: 'https://img.icons8.com/?size=100&id=B2BCRf9ICcvF&format=png&color=000000' }} style={styles.cardIcon} />
-               <View style={{flexDirection: 'column'}}>
-              <Text style={{ fontSize: 18, fontWeight: 600,marginLeft: 10, marginBottom: 5}}>Next Billing Date</Text>
-              <Text style={{ fontSize: 16, marginLeft: 10}}>Current Plan: {createdDate}</Text>
-                 <Text style={{ fontSize: 16, marginLeft: 10, marginBottom: 5}}>SLA: {createdDate} {sla} SLA</Text>
-              </View>
+                <View style={styles.cardInfo}>
+                <Image source={{ uri: 'https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000' }} style={styles.cardIcon} />
+                                         <View style={{flexDirection: 'column', marginLeft: 10}}>
+                                         <Text style={styles.cardNumber}>**** **** **** 3241 (Primary)</Text>
+                                         <Text style={styles.expiryDate}>Expires on 01/2026</Text>
+                                         </View>
+                                       </View>
               <TouchableOpacity style={{position: 'absolute', right: 5}} onPress={handleOpenPress2}>
-                <Text style={styles.addCardButton}>Pay Now</Text>
+                <Text style={styles.addCardButton}>Change card details</Text>
               </TouchableOpacity>
               </View>
             </View>
@@ -1020,6 +1007,26 @@ padding: 10, backgroundColor: 'white',
   getStartedText2: {
     color: "white",
     fontWeight: "bold",
+  },
+  cardInfo: {
+    marginBottom: 12,
+    width: "70%",
+    padding: 10,
+     borderRadius: 5,
+    flexDirection: 'row',
+  },
+  cardBrand: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  cardNumber: {
+    fontSize: 15,
+    color: '#555',
+    marginVertical: 4,
+  },
+  expiryDate: {
+    fontSize: 15,
+    color: '#555',
   },
 });
 

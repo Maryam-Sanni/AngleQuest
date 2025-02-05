@@ -45,6 +45,7 @@ const MyComponent = () => {
         await AsyncStorage.setItem('user_id', id.toString());
         await AsyncStorage.setItem('first_name', first_name);
         await AsyncStorage.setItem('last_name', last_name);
+        await AsyncStorage.setItem('email', email);
 
         // Check if the balance was already sent
         const balanceSent = await AsyncStorage.getItem('balanceSent');

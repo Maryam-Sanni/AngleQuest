@@ -18,7 +18,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
-import OpenModal2 from './PaytoBank';
+import OpenModal2 from './PaymentCard';
 
 function ServiceCard({ title, description, isStartPressed, activeCard, setActiveCard }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -98,34 +98,42 @@ const saveToAsyncStorage = async (plan) => {
   }
 };
 
-      // Handle button press to select a plan
-  const handlePress = async (plan) => {
-    try {
-      setSelectedPlan(plan); // Set the selected plan
-      setSelectedSection(plan.id); // Set the selected section to the plan id
-      await saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
+const handlePress = async (plan) => {
+  try {
+    // Update colors in the plans array
+    const updatedPlans = plans.map((p) => ({
+      ...p,
+      color: p.id === plan.id ? "#F3E5F5" : "#FFFFFF", // Change color of selected plan
+    }));
 
-      // Prepare the subscription data
-      const selectedPrice = plan.pricing[activePrice];
-      const costWithoutPrefix = selectedPrice.replace(/[^0-9.-]+/g, '');
+    // Update plans state to trigger re-render
+    setPlans(updatedPlans);
 
-      const subscriptionData = [
-        {
-          type: plan.title, // Assuming plan.title holds the type of the plan
-          amount: costWithoutPrefix, // Numeric amount of the plan
-        },
-      ];
+    // Set the selected plan and section
+    setSelectedPlan(plan); // Set the selected plan
+    setSelectedSection(plan.id); // Set the selected section to the plan id
+    await saveToAsyncStorage(plan); // Save the selected plan's pricing to AsyncStorage
 
-      // Store the subscription data as a stringified array in AsyncStorage
-      await AsyncStorage.setItem('selectedPlan', JSON.stringify(subscriptionData));
-      await AsyncStorage.setItem('selectedPlanCost', costWithoutPrefix);
+    // Prepare the subscription data
+    const selectedPrice = plan.pricing[activePrice];
+    const costWithoutPrefix = selectedPrice.replace(/[^0-9.-]+/g, '');
 
+    const subscriptionData = [
+      {
+        type: plan.title, // Assuming plan.title holds the type of the plan
+        amount: costWithoutPrefix, // Numeric amount of the plan
+      },
+    ];
 
-    } catch (error) {
-      console.error('Error handling plan selection:', error);
-      alert('An error occurred while selecting the plan. Please try again.');
-    }
-  };
+    // Store the subscription data as a stringified array in AsyncStorage
+    await AsyncStorage.setItem('selectedPlan', JSON.stringify(subscriptionData));
+    await AsyncStorage.setItem('selectedPlanCost', costWithoutPrefix);
+
+  } catch (error) {
+    console.error('Error handling plan selection:', error);
+    alert('An error occurred while selecting the plan. Please try again.');
+  }
+};
 
 
 const [selectedOptions, setSelectedOptions] = useState({});
@@ -208,7 +216,6 @@ const [selectedOptions, setSelectedOptions] = useState({});
       );
 
       console.log('Data uploaded successfully:', response.data);
-      alert('Data uploaded successfully!');
 
     } catch (error) {
       console.error('Error in handleSelect:', error.response?.data || error.message);
@@ -392,7 +399,7 @@ const [selectedOptions, setSelectedOptions] = useState({});
     },
   ];
 
-  const plans = [
+  const [plans, setPlans] = useState([
       {
         id: "Standard",
         title: "Standard",
@@ -406,11 +413,13 @@ const [selectedOptions, setSelectedOptions] = useState({});
           "Knowledge sharing Hub",
         ],
         pricing: {
-          monthly: "$3900",
+          monthly: "$325",
           quarterly: "$85",
           annually: "$75",
         },
-        price: "$3,900",
+        price: "$325",
+        type: "/month",
+        button: "Get Started",
         plan: "5 users pack",
         color: "#FFFFFF",
       },
@@ -427,11 +436,13 @@ const [selectedOptions, setSelectedOptions] = useState({});
           "Knowledge sharing Hub",
         ],
         pricing: {
-          monthly: "$15500",
+          monthly: "$1200",
           quarterly: "$85",
           annually: "$75",
         },
-        price: "$15,500",
+        price: "$1,200",
+        type: "/month",
+        button: "Get Started",
         plan: "25 users pack",
         color: "#FFFFFF",
       },
@@ -448,11 +459,13 @@ const [selectedOptions, setSelectedOptions] = useState({});
           "Knowledge sharing Hub",
         ],
         pricing: {
-          monthly: "$25500",
+          monthly: "$2000",
           quarterly: "$85",
           annually: "$75",
         },
-        price: "$25,500",
+        price: "$2,000",
+        type: "/month",
+        button: "Get Started",
         plan: "50 users pack",
         color: "#FFFFFF",
       },
@@ -474,10 +487,12 @@ const [selectedOptions, setSelectedOptions] = useState({});
           annually: "$150",
         },
         price: "Let's Talk!",
+        type: " ",
+        button: "Book a call",
         plan: "Up to 5 users",
         color: "#F3E5F5"
       },
-    ];
+    ]);
   
       // Function to handle the price tab selection
       const handlePriceSelect = (priceType) => {
@@ -683,7 +698,7 @@ Governing Law
                >
                  <Text style={styles.planTitle2}>{plan.title}</Text>
                  <Text style={styles.planTopic}>{plan.topic}</Text>
-                 <Text style={styles.planPrice}>{plan.price}</Text>
+                 <Text style={styles.planPrice}>{plan.price}<Text style={{fontSize: 12, color: 'grey'}}>{plan.type}</Text></Text>
                  <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
                  <View style={styles.description}>
                    {plan.description.map((item, index) => (
@@ -698,19 +713,26 @@ Governing Law
                  </View>
                  <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 10, marginBottom: 10 }} />
                  {activePlan === plan.id ? (
-                   renderPlanDetails(plan)
-                 ) : (
-                   <TouchableOpacity onPress={handleOpenPress} style={styles.getStartedButton2}>
-                              <Text style={styles.getStartedText2}>Book a call</Text>
-                            </TouchableOpacity>
-                 )}
+  renderPlanDetails(plan)
+) : (
+  // Check if the button label is "Book a call"
+  plan.button === "Book a call" ? (
+    <TouchableOpacity onPress={handleOpenPress} style={styles.getStartedButton2}>
+      <Text style={styles.getStartedText2}>{plan.button}</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity style={styles.getStartedButton2}>
+      <Text style={styles.getStartedText2}>{plan.button}</Text>
+    </TouchableOpacity>
+  )
+)}
                </LinearGradient>
              ) : (
                <View style={[styles.card, { borderRadius: 10 }]}>
                 <View style={{flexDirection: 'row'}}>
                  <Text style={styles.planTitle}>{plan.title}</Text><Text style={{fontSize: 12, marginLeft: 5, marginTop: 15, color: 'darkgreen'}}>{plan.plan}</Text>  </View>
                  <Text style={styles.planTopic}>{plan.topic}</Text>
-                 <Text style={styles.planPrice}>{plan.price}<Text style={{fontSize: 12, color: 'grey'}}>/year</Text></Text>
+                 <Text style={styles.planPrice}>{plan.price}<Text style={{fontSize: 12, color: 'grey'}}>{plan.type}</Text></Text>
                  <View style={{ width: '100%', borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 15, marginBottom: 15 }} />
                  <View style={styles.description}>
                    {plan.description.map((item, index) => (
@@ -735,7 +757,7 @@ Governing Law
                        
                      }}
                    >
-                     <Text style={styles.getStartedText}>Get Started</Text>
+                     <Text style={styles.getStartedText}>{plan.button}</Text>
                    </TouchableOpacity>
                  )}
                </View>

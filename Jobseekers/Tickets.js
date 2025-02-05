@@ -238,105 +238,110 @@ const SupportRequestPage = () => {
     fetchJobSeekerData();
   }, []);
 
- useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // Get the token from AsyncStorage
-      const token = await AsyncStorage.getItem('token');
-
-      if (!token) {
-        console.error('Token not found in AsyncStorage.');
-        return;
-      }
-
-      // Fetch both accepted and declined requests
-      const [acceptedResponse, declinedResponse] = await Promise.all([
-        axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`${apiUrl}/api/jobseeker/decline-req`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
-      let allRequests = [];
-
-      // Handle accepted requests and set their status
-      if (acceptedResponse.data?.status === 'success' && Array.isArray(acceptedResponse.data.data)) {
-        const acceptedRequests = acceptedResponse.data.data.map(request => ({
-          ...request,
-          status: 'accepted', // Add status as 'accepted'
-        }));
-        allRequests = [...allRequests, ...acceptedRequests];
-      }
-
-      // Handle declined requests and set their status
-      if (declinedResponse.data?.status === 'success' && Array.isArray(declinedResponse.data.data)) {
-        const declinedRequests = declinedResponse.data.data.map(request => ({
-          ...request,
-          status: 'declined', // Add status as 'declined'
-        }));
-        allRequests = [...allRequests, ...declinedRequests];
-      }
-
-      if (allRequests.length === 0) {
-        console.log('No requests found.');
-        return;
-      }
-
-      // Sort all requests by `updated_at` in descending order (newest first)
-      const sortedRequests = allRequests.sort(
-        (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      );
-
-      const mostRecentRequest = sortedRequests[0];
-
-      setJobSeekers(sortedRequests);
-
-      if (mostRecentRequest) {
-        const supportId = mostRecentRequest.id.toString();
-
-        // Save support ID to AsyncStorage
-        await AsyncStorage.setItem('support_id', supportId);
-
-        // Set state with the most recent request details
-        setSupportId(supportId);
-        setAcceptedRequests(allRequests);
-        setExpertName(mostRecentRequest.expert_name || 'N/A');
-        setDate(mostRecentRequest.deadline || 'N/A');
-        setSpecialization(mostRecentRequest.specialization || 'N/A');
-
-        // Determine the step based on whether it's an accepted or declined request
-        if (mostRecentRequest.status === 'declined') {
-          setCurrentStep('declined');
-        } else if (mostRecentRequest.prefmode === 'video') {
-          setResponseType('video');
-          setCurrentStep('resolution');
-        } else {
-          setCurrentStep('accepted');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get the token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+  
+        if (!token) {
+          console.error('Token not found in AsyncStorage.');
+          return;
         }
-
-        // Set form data with matching request details
-        setFormData({
-          specialization: mostRecentRequest.specialization || '',
-          title: mostRecentRequest.title || '',
-          description: mostRecentRequest.description || '',
-          priority: mostRecentRequest.priority || '',
-          preferredMode: mostRecentRequest.prefmode || '',
-          videoCallDate: mostRecentRequest.videoCallDate || '',
-          deadline: mostRecentRequest.deadline || '',
-        });
-
-        console.log('Most recent request:', mostRecentRequest);
+  
+        // Fetch accepted, declined, and completed requests
+        const [acceptedResponse, declinedResponse, completedResponse] = await Promise.all([
+          axios.get(`${apiUrl}/api/jobseeker/get-accepted-reqs`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${apiUrl}/api/jobseeker/decline-req`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${apiUrl}/api/jobseeker/completed-req`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+  
+        let sortedRequests = [];
+        let completedRequests = [];
+  
+        // Handle accepted requests
+        if (acceptedResponse.data?.status === 'success' && Array.isArray(acceptedResponse.data.data)) {
+          const acceptedRequests = acceptedResponse.data.data.map(request => ({
+            ...request,
+            status: 'accepted',
+          }));
+          sortedRequests = [...sortedRequests, ...acceptedRequests];
+        }
+  
+        // Handle declined requests
+        if (declinedResponse.data?.status === 'success' && Array.isArray(declinedResponse.data.data)) {
+          const declinedRequests = declinedResponse.data.data.map(request => ({
+            ...request,
+            status: 'declined',
+          }));
+          sortedRequests = [...sortedRequests, ...declinedRequests];
+        }
+  
+        // Sort accepted and declined requests by `updated_at`
+        sortedRequests.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+  
+        // Handle completed requests (without sorting)
+        if (completedResponse.data?.status === 'success' && Array.isArray(completedResponse.data.data)) {
+          completedRequests = completedResponse.data.data.map(request => ({
+            ...request,
+            status: 'completed',
+          }));
+        }
+  
+        // Set jobSeekers with all requests (sorted accepted/declined + unsorted completed)
+        setJobSeekers([...sortedRequests, ...completedRequests]);
+  
+        if (sortedRequests.length > 0) {
+          const mostRecentRequest = sortedRequests[0];
+          const supportId = mostRecentRequest.id.toString();
+  
+          // Save support ID to AsyncStorage
+          await AsyncStorage.setItem('support_id', supportId);
+  
+          // Set state with the most recent request details
+          setSupportId(supportId);
+          setAcceptedRequests(sortedRequests);
+          setExpertName(mostRecentRequest.expert_name || 'N/A');
+          setDate(mostRecentRequest.deadline || 'N/A');
+          setSpecialization(mostRecentRequest.specialization || 'N/A');
+  
+          // Determine the step based on request status
+          if (mostRecentRequest.status === 'declined') {
+            setCurrentStep('declined');
+          } else if (mostRecentRequest.prefmode === 'video') {
+            setResponseType('video');
+            setCurrentStep('resolution');
+          } else {
+            setCurrentStep('accepted');
+          }
+  
+          // Set form data with matching request details
+          setFormData({
+            specialization: mostRecentRequest.specialization || '',
+            title: mostRecentRequest.title || '',
+            description: mostRecentRequest.description || '',
+            priority: mostRecentRequest.priority || '',
+            preferredMode: mostRecentRequest.prefmode || '',
+            videoCallDate: mostRecentRequest.videoCallDate || '',
+            deadline: mostRecentRequest.deadline || '',
+          });
+  
+          console.log('Most recent request:', mostRecentRequest);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  fetchData();
-}, []);
-
+    };
+  
+    fetchData();
+  }, []);
+  
 
 
   useEffect(() => {
@@ -1160,9 +1165,13 @@ const SupportRequestPage = () => {
                   >
                     declined your request
                   </Text>
-                  <Text style={{ fontSize: 16, width: 200, textAlign: 'center', marginTop: 10 }}>
+                  <Text style={{ fontSize: 16, width: 200, marginBottom: 250, textAlign: 'center', marginTop: 10 }}>
                  Do you want to cancel this request and create a new request?
                   </Text>
+                  <TouchableOpacity onPress={() => setCurrentStep('start')}
+               style={styles.submitButton}>
+              <Text style={styles.submitButtonText}>Cancel Request</Text>
+            </TouchableOpacity>
                 </View>
 
               </View>
@@ -1549,34 +1558,22 @@ const SupportRequestPage = () => {
       </View>
         )}
 
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={isModalVisible3}
-              onRequestClose={handleCloseModal}
-            >
-              <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                    Response from {selectedItem?.expert_name || "No Expert Assigned"}
-                  </Text>
-                  <Text style={{ fontSize: 14 }}> {selectedItem?.updated_at ? formatDate(selectedItem.updated_at) : "-"}</Text>
-
-                    <Text style={{marginTop: 30, fontSize: 14, fontStyle: 'italic'}}>
-                      Response..
-                    </Text>
-
-
-
-                  <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={handleCloseModal}
-                  >
-                    <Text style={styles.closeButtonText}>Close</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
+<Modal
+          visible={isModalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={toggleModal}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>{textResponse || "No response available"}</Text>
+              <Text style={styles.modalText}>{hyperlink || "No response available"}</Text>
+              <TouchableOpacity onPress={toggleModal}>
+                <Text style={styles.closeButton}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         </View>
         <DateTimePickerModal
           isVisible={isModalVisible2}
