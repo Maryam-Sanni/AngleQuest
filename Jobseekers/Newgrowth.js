@@ -16,10 +16,10 @@ function MyComponent({ onClose }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
       const [paymentModalVisible, setPaymentModalVisible] = useState(false);
         const [paymentRequired, setPaymentRequired] = useState(false);
-  
+        const [specialization, setSpecialization] = useState('');
   const [token, setToken] = useState("");
   const [type, setSelectedType] = useState('Personal');
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('Advancing in my current career path');
   const [role, setRole] = useState('');
   const [result_description, setResultDescription] = useState('');
   const [how_to_achieve, setHowToAchieve] = useState('');
@@ -47,10 +47,25 @@ function MyComponent({ onClose }) {
       navigate('/growth-plan-sessions');
   };
 
+  // Options for the picker (goals someone might want to achieve with expert help)
+  const goals = [
+    'Advancing in my current career path',
+    'Shifting to a new career or industry',
+    'Improving technical skills',
+    'Enhancing leadership or management skills',
+    'Learning a new skill',
+    'Expert Guidance on career growth or promotion',
+  ];
+
+  // Handle selection change from the picker
+  const handlePickerChange = (value) => {
+    setTitle(value); // Set the goal state when a goal is selected
+  };
+
   useEffect(() => {
     const fetchPaymentDetails = async () => {
         try {
-            const token = await AsyncStorage.getItem('token'); 
+            const token = await AsyncStorage.getItem('token');
             if (!token) {
                 console.error('No authentication token found');
                 return;
@@ -59,7 +74,7 @@ function MyComponent({ onClose }) {
             const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`, 
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -70,13 +85,19 @@ function MyComponent({ onClose }) {
             if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
                 setPaymentRequired(true);
             }
+
+            // Set the specialization from the response
+            if (data?.PaystackDetail?.specialization) {
+              setRole(data.PaystackDetail.specialization);
+            }
+
         } catch (error) {
             console.error('Error fetching payment details:', error);
         }
     };
 
     fetchPaymentDetails();
-}, []);
+}, []); // Empty dependency array to run this effect only once on mount
 
 const [isLoading, setIsLoading] = useState(false);
 const [email, setEmail] = useState(false);
@@ -399,13 +420,15 @@ const handlePaymentSuccess = () => {
                 <Text style={{ fontFamily: 'Roboto-Light' }}>{t('Goal')}</Text>
               </View>
               <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  placeholder={t('Example: Become SAP FI Medior expert in 6 months')}
-                  placeholderTextColor="grey"
-                  style={styles.input}
-                  value={title}
-                  onChangeText={setTitle}
-                />
+              <Picker
+        selectedValue={title}
+        onValueChange={handlePickerChange}
+        style={styles.picker}
+      >
+        {goals.map((goalOption, index) => (
+          <Picker.Item key={index} label={goalOption} value={goalOption} />
+        ))}
+      </Picker>
               </View>
             </View>
             <View style={styles.row}>

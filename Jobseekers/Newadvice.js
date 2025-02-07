@@ -19,7 +19,7 @@ function MyComponent({ onClose }) {
 
   const [type, setType] = useState("Optimize Productivity");
   const [role, setRole] = useState("");
-  const [challenge, setChallenge] = useState("");
+  const [challenge, setChallenge] = useState("Changing to a new career path due to industry shifts");
   const [startingLevel, setStartingLevel] = useState("Beginner");
   const [targetLevel, setTargetLevel] = useState("Junior");
   const [status, setStatus] = useState("Active");
@@ -36,6 +36,7 @@ function MyComponent({ onClose }) {
   const [last_name, setLastName] = useState('');
     const [paymentModalVisible, setPaymentModalVisible] = useState(false);
       const [paymentRequired, setPaymentRequired] = useState(false);
+      const [specialization, setSpecialization] = useState('');
 
       // Get user's timezone
       const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -53,7 +54,7 @@ function MyComponent({ onClose }) {
   useEffect(() => {
     const fetchPaymentDetails = async () => {
         try {
-            const token = await AsyncStorage.getItem('token'); 
+            const token = await AsyncStorage.getItem('token');
             if (!token) {
                 console.error('No authentication token found');
                 return;
@@ -62,7 +63,7 @@ function MyComponent({ onClose }) {
             const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`, 
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -73,13 +74,19 @@ function MyComponent({ onClose }) {
             if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
                 setPaymentRequired(true);
             }
+
+            // Set the specialization from the response
+            if (data?.PaystackDetail?.specialization) {
+              setRole(data.PaystackDetail.specialization);
+            }
+
         } catch (error) {
             console.error('Error fetching payment details:', error);
         }
     };
 
     fetchPaymentDetails();
-}, []);
+}, []); // Empty dependency array to run this effect only once on mount
 
 const [isLoading, setIsLoading] = useState(false);
 const [email, setEmail] = useState(false);
@@ -256,6 +263,22 @@ const handlePaymentSuccess = () => {
     setIsModalVisible(false);
   };
 
+  // Options for the picker (challenges someone might face that requires expert help)
+  const challenges = [
+    'Changing to a new career path due to industry shifts',
+    'Seeking help to advance in my current career',
+    'Looking to improve specific skills (e.g., technical, leadership)',
+    'Need guidance on career growth or promotion',
+    'Transitioning to a new role or industry',
+    'Need expertise in a specific field',
+    'Facing challenges in current job role',
+  ];
+
+  // Handle selection change from the picker
+  const handlePickerChange = (value) => {
+    setChallenge(value); // Set the challenge state when a reason is selected
+  };
+
   const goToPlan = async () => {
     if (paymentRequired) {
       const paymentSuccessful = await initiatePayment(); // Wait for payment to complete
@@ -339,6 +362,7 @@ const handlePaymentSuccess = () => {
         if (response.status === 201) {
             await AsyncStorage.setItem('SkillAnalysisFormData', JSON.stringify(formData));
             navigate('/skill-analysis-sessions');
+            onClose();
         }
     } catch (error) {
         console.error('Error during save:', error);
@@ -418,14 +442,15 @@ const handlePaymentSuccess = () => {
                 <Text style={{ fontFamily: "Roboto-Light" }}>{t("Tell us why you are taking this step")}</Text>
               </View>
                <View style={[styles.cell, { flex: 2}]}>
-                <TextInput
-                  placeholder={t("Example: ‘Changing to SAP FI because of the direction of the job market’")}
-                  placeholderTextColor="grey"
-                  multiline
-                  style={[styles.input, { height: 100 }]}
-                  value={challenge}
-                  onChangeText={setChallenge}
-                />
+               <Picker
+        selectedValue={challenge}
+        onValueChange={handlePickerChange}
+        style={styles.picker}
+      >
+        {challenges.map((challengeOption, index) => (
+          <Picker.Item key={index} label={challengeOption} value={challengeOption} />
+        ))}
+      </Picker>
               </View>
             </View>
             <View style={styles.row}>
