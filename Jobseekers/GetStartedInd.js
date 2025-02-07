@@ -609,6 +609,8 @@ function AngleQuestPage({ onClose }) {
       const selectedRole = await AsyncStorage.getItem("selectedRole");
       const selectedPlan = JSON.parse(await AsyncStorage.getItem("selectedPlan"));
       const slaCost = await AsyncStorage.getItem("sla-cost");
+
+      setTotalPlanCost(selectedPlan);
   
       // Process the SLA cost to remove non-numeric parts (e.g., "$", "monthly", "No additional cost")
       let sla = "0";
@@ -658,69 +660,76 @@ function AngleQuestPage({ onClose }) {
       // Now, proceed with the payment if necessary
       let paymentResponse = null; // Define paymentResponse here
   
-      // If the plan title is "Monthly" and the card type is not "Monthly", charge the user
       if (planTitle === "Monthly" && cardType !== "Monthly") {
-        const paymentPayload = {
-          email: email,
-          plan: planTitle, // Assume this is set elsewhere in your code
-          amount: amount,
-          card_number: cardNumber, // Card number should be defined or fetched
-          cvv: cvv, // CVV should be defined or fetched
-          expiry_month: expMonth, // Expiry month should be defined or fetched
-          expiry_year: expYear, // Expiry year should be defined or fetched
-        };
-  
-        // Proceed with the payment
-        paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token in the authorization header
-          },
-        });
-  
-        // If payment was successful, update the payload with "Monthly"
-        if (paymentResponse?.data?.message === "Charge successful") {
-          console.log("Payment successful");
-          alert("Payment processed successfully!", "Success");
-  
-          // After successful payment, repeat the PUT request to include card_detail
-          const updatedPayload = {
-            ...payload,
-            card_detail: [
-              {
-                card_type: planTitle,
-                cardholder_name: cardName,
-                cardnumber: cardNumber,
-                cvv: cvv,
-                exp_date: `${expMonth}/${expYear}`, // Combine month and year for expiration date
-              },
-            ],
-          };
-  
-          // Make the second PUT request to save the updated payment details with card_type
-          const updatedResponse = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Add token to Authorization header
-            },
-            body: JSON.stringify(updatedPayload),
-          });
-  
-          // Check if the updated payment details were successfully saved
-          if (!updatedResponse.ok) {
-            console.error("Failed to update payment details:", updatedResponse.statusText);
-            return false; // Exit if saving updated payment details failed
-          }
-  
-          const updatedData = await updatedResponse.json();
-          console.log("Updated payment details saved:", updatedData);
+        // Ensure card details are available before proceeding
+        if (!cardNumber || !cvv || !expMonth || !expYear) {
+          console.warn("Card details are missing. Skipping payment process.");
         } else {
-          console.error("Payment failed:", paymentResponse.data.message);
-          alert("Payment failed. Please try again.", "Error");
+          const paymentPayload = {
+            email: email,
+            plan: planTitle, 
+            amount: amount,
+            card_number: cardNumber,
+            cvv: cvv,
+            expiry_month: expMonth,
+            expiry_year: expYear,
+          };
+      
+          try {
+            // Proceed with the payment
+            paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+      
+            if (paymentResponse?.data?.message === "Charge successful") {
+              console.log("Payment successful");
+              alert("Payment processed successfully!", "Success");
+      
+              // After successful payment, update payment details with card info
+              const updatedPayload = {
+                ...payload,
+                card_detail: [
+                  {
+                    card_type: planTitle,
+                    cardholder_name: cardName,
+                    cardnumber: cardNumber,
+                    cvv: cvv,
+                    exp_date: `${expMonth}/${expYear}`,
+                  },
+                ],
+              };
+      
+              // Save updated payment details
+              const updatedResponse = await fetch(`${apiUrl}/api/jobseeker/edit-paystack-payment-details`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(updatedPayload),
+              });
+      
+              if (!updatedResponse.ok) {
+                console.error("Failed to update payment details:", updatedResponse.statusText);
+                return false;
+              }
+      
+              const updatedData = await updatedResponse.json();
+              console.log("Updated payment details saved:", updatedData);
+            } else {
+              console.error("Payment failed:", paymentResponse.data.message);
+              alert("Payment failed. Please try again.", "Error");
+            }
+          } catch (error) {
+            console.error("Payment request error:", error);
+            alert("An error occurred while processing the payment.", "Error");
+          }
         }
       } else {
         console.log("No payment needed.");
-      }
+      }      
   
       // Set the active card after PUT request is successful
       setActiveCard("AngleQuest Agreement");
@@ -930,7 +939,7 @@ const saveToAsyncStorage = async (plan) => {
       // Define the payload to be sent to the backend
       const paymentPayload = {
         email: email,
-        plan: selectedPlanId,
+        plan: planTitle,
         amount: amount,
         card_number: cardNumber,
         cvv: cvv,
@@ -1133,7 +1142,7 @@ const saveToAsyncStorage = async (plan) => {
     {
       id: '2',
       title: "How can I use AngleQuest?",
-      description: "AngleQuest is your go-to tool for learning, growth, and achieving your goals with guidance from experienced experts.",
+      description: "AngleQuest serve as knowledge backup for professionals. Your confidant tool that ensures your deliver your work and grow in the right path.",
       options: [
         { name: "Get Support", explanation: "Receive personalized solutions to your specific challenges." },
         { name: "Access Knowledge Hub", explanation: "Explore insights, resources, and valuable information shared by experts." },
@@ -1448,7 +1457,7 @@ const saveToAsyncStorage = async (plan) => {
     },
     {
         heading: t(
-          "Choose a service, plan and SLA ",
+          "Choose a service and subscription plan",
         ),
         content: (
           <View>
@@ -3044,7 +3053,6 @@ marginLeft: 15
     marginLeft: 70,
     marginRight: 70,
     marginTop: 20,
-    marginBottom: 150
   },
   option: {
     padding: 12,
@@ -3070,8 +3078,8 @@ marginLeft: 15
     marginTop: 16,
     fontSize: 14,
     textAlign: 'center',
-    color: '#555'
-  },
+    color: '#555',
+    },
   progressBarContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -3089,15 +3097,18 @@ marginLeft: 15
   },
   navigationContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginLeft: 70, marginRight: 70
+    alignItems: 'flex-end',
+    marginLeft: 70, marginRight: 70,
+    position: 'absolute',
+    right: 10,
+    marginTop: 400
   },
   buttonfront: {
     padding: 12,
     borderRadius: 5,
     backgroundColor: '#4caf50',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginLeft: 20
   },
   buttonback: {
     padding: 12,

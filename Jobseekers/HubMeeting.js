@@ -44,37 +44,6 @@ const HubMeeting = () => {
   const [paymentModalVisible, setPaymentModalVisible] = useState(false);
     const [paymentRequired, setPaymentRequired] = useState(false);
 
-  useEffect(() => {
-    const fetchPaymentDetails = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token'); 
-            if (!token) {
-                console.error('No authentication token found');
-                return;
-            }
-
-            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`, 
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            const data = await response.json();
-
-            // Check if "Pay as you go" is set in the response
-            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
-                setPaymentRequired(true);
-            }
-        } catch (error) {
-            console.error('Error fetching payment details:', error);
-        }
-    };
-
-    fetchPaymentDetails();
-  }, []);
-
   const handlePaymentSuccess = () => {
     setPaymentModalVisible(false);
     setPaymentRequired(false);
@@ -113,11 +82,7 @@ const HubMeeting = () => {
   }, [selectedMeeting]);  
 
   const handleOpenPress = () => {
-      if (paymentRequired) {
-          setPaymentModalVisible(true);
-      } else {
-          setModalVisible(true);
-      }
+    setModalVisible(true);
   };
 
   const handleCloseModal = () => {
@@ -242,7 +207,146 @@ const HubMeeting = () => {
     fetchMeetings();
   }, [apiUrl]);
 
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token'); 
+            if (!token) {
+                console.error('No authentication token found');
+                return;
+            }
+
+            const response = await fetch(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            // Check if "Pay as you go" is set in the response
+            if (data?.PaystackDetail?.payment_detail === 'Pay as you go') {
+                setPaymentRequired(true);
+            }
+        } catch (error) {
+            console.error('Error fetching payment details:', error);
+        }
+    };
+
+    fetchPaymentDetails();
+  }, []);
+
+const [email, setEmail] = useState(false);
+const initiatePayment = async () => {
+  try {
+    // Retrieve values from AsyncStorage
+    const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+    const firstName = values.find(item => item[0] === 'first_name')?.[1] || "";
+    const lastName = values.find(item => item[0] === 'last_name')?.[1] || "";
+    const email = values.find(item => item[0] === 'email')?.[1] || "";
+
+    // Combine first and last name
+    const fullName = `${firstName} ${lastName}`;
+    setEmail(email);
+
+    // Get token from AsyncStorage for authorization
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      Alert.alert("Error", "Authorization token not found.");
+      return false; // Indicate failure
+    }
+
+    // Fetch payment details from backend
+    const paymentDetailsResponse = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Check if response is successful
+    if (paymentDetailsResponse?.data?.status !== "success") {
+      Alert.alert("Error", "Failed to retrieve payment details.");
+      return false; // Indicate failure
+    }
+
+    // Extract and parse card details
+    const rawCardDetails = paymentDetailsResponse.data.PaystackDetail.card_detail;
+    console.log("Raw Card Details:", rawCardDetails); // Debugging
+
+    // Check if rawCardDetails exists and is a valid JSON string
+    let cardDetailsArray;
+    try {
+      cardDetailsArray = JSON.parse(rawCardDetails);
+    } catch (parseError) {
+      console.error("Error parsing card details:", parseError);
+      Alert.alert("Error", "Failed to parse card details.");
+      return false;
+    }
+
+    // Ensure we have at least one card
+    if (!Array.isArray(cardDetailsArray) || cardDetailsArray.length === 0) {
+      Alert.alert("Error", "No card details found.");
+      return false;
+    }
+
+    const cardDetails = cardDetailsArray[0]; // Get first card
+    console.log("Extracted Card Details:", cardDetails);
+
+    // Extract expiry month and year correctly
+    const [expMonth, expYear] = cardDetails.exp_date.split("/");
+
+    // Construct payment payload
+    const paymentPayload = {
+      email: email,
+      name: fullName,
+      plan: "pay_as_you_go",
+      amount: "40",
+      card_number: cardDetails.cardnumber,
+      cvv: cardDetails.cvv,
+      expiry_month: expMonth,
+      expiry_year: expYear,
+    };
+
+    console.log("Final Payment Payload:", paymentPayload); // Debugging
+
+    // Log headers and payload before making the request
+    console.log("Making payment request with token:", token);
+    console.log("Payment URL:", `${apiUrl}/api/jobseeker/charge-card`);
+
+    // Make the payment request to the backend
+    const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Log the full payment response for debugging
+    console.log("Payment Response:", paymentResponse);
+
+    // Check if the HTTP status code is 200 (successful)
+    if (paymentResponse.status === 200) {
+      return true; // Indicate success
+    } else {
+      console.error("Payment Response Data:", paymentResponse?.data); // Log more details
+      alert("We were unable to charge your card", "Payment initiation failed. Please check card details.");
+      return false; // Indicate failure
+    }
+  } catch (error) {
+    console.error("Payment Error:", error);
+
+    // If error.response is undefined or null, handle it
+    const errorMessage = error.response?.data?.message || error.message || "Please try again.";
+    Alert.alert("An error occurred", errorMessage);
+    return false; // Indicate failure
+  }
+};
+
   const handleJoinMeeting = async (meeting) => {
+    if (paymentRequired) {
+      const paymentSuccessful = await initiatePayment(); // Wait for payment to complete
+      if (!paymentSuccessful) {
+        return; // Stop execution if payment failed
+      }
+    }
+
     try {
       const token = await AsyncStorage.getItem("token");
       const firstName = await AsyncStorage.getItem("first_name");
@@ -287,7 +391,7 @@ const HubMeeting = () => {
       } else {
         // Check if registration was successful (201 Created)
         if (response.status === 201) {
-          setAlertMessage("You have successfully joined the meeting");
+          setAlertMessage("You have successfully registered for this meeting");
           // Update the registration status locally by adding the meeting_id
           setRegistrationStatus((prevStatus) => [...prevStatus, meeting_id]);
         } else {
@@ -347,6 +451,8 @@ const HubMeeting = () => {
   }, []);
 
   const handleJoinLink = async (meeting) => {
+
+
     try {
       // Check if the user is registered for this meeting
       const meeting_id = String(meeting.meeting_id);

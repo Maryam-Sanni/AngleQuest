@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ActivityIndicator, TextInput, Image, ScrollView, Picker, Alert } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import DateTimePickerModal from "../components/DateTimePickerModal";
 import { useFonts } from 'expo-font';
@@ -77,6 +77,109 @@ function MyComponent({ onClose }) {
 
     fetchPaymentDetails();
 }, []);
+
+const [isLoading, setIsLoading] = useState(false);
+const [email, setEmail] = useState(false);
+const initiatePayment = async () => {
+  try {
+    // Retrieve values from AsyncStorage
+    const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+    const firstName = values.find(item => item[0] === 'first_name')?.[1] || "";
+    const lastName = values.find(item => item[0] === 'last_name')?.[1] || "";
+    const email = values.find(item => item[0] === 'email')?.[1] || "";
+
+    // Combine first and last name
+    const fullName = `${firstName} ${lastName}`;
+    setEmail(email);
+
+    // Get token from AsyncStorage for authorization
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      Alert.alert("Error", "Authorization token not found.");
+      return false; // Indicate failure
+    }
+
+    // Fetch payment details from backend
+    const paymentDetailsResponse = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Check if response is successful
+    if (paymentDetailsResponse?.data?.status !== "success") {
+      Alert.alert("Error", "Failed to retrieve payment details.");
+      return false; // Indicate failure
+    }
+
+    // Extract and parse card details
+    const rawCardDetails = paymentDetailsResponse.data.PaystackDetail.card_detail;
+    console.log("Raw Card Details:", rawCardDetails); // Debugging
+
+    // Check if rawCardDetails exists and is a valid JSON string
+    let cardDetailsArray;
+    try {
+      cardDetailsArray = JSON.parse(rawCardDetails);
+    } catch (parseError) {
+      console.error("Error parsing card details:", parseError);
+      Alert.alert("Error", "Failed to parse card details.");
+      return false;
+    }
+
+    // Ensure we have at least one card
+    if (!Array.isArray(cardDetailsArray) || cardDetailsArray.length === 0) {
+      Alert.alert("Error", "No card details found.");
+      return false;
+    }
+
+    const cardDetails = cardDetailsArray[0]; // Get first card
+    console.log("Extracted Card Details:", cardDetails);
+
+    // Extract expiry month and year correctly
+    const [expMonth, expYear] = cardDetails.exp_date.split("/");
+
+    // Construct payment payload
+    const paymentPayload = {
+      email: email,
+      name: fullName,
+      plan: "pay_as_you_go",
+      amount: "40",
+      card_number: cardDetails.cardnumber,
+      cvv: cardDetails.cvv,
+      expiry_month: expMonth,
+      expiry_year: expYear,
+    };
+
+    console.log("Final Payment Payload:", paymentPayload); // Debugging
+
+    // Log headers and payload before making the request
+    console.log("Making payment request with token:", token);
+    console.log("Payment URL:", `${apiUrl}/api/jobseeker/charge-card`);
+
+    // Make the payment request to the backend
+    const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Log the full payment response for debugging
+    console.log("Payment Response:", paymentResponse);
+
+    // Check if the HTTP status code is 200 (successful)
+    if (paymentResponse.status === 200) {
+      return true; // Indicate success
+    } else {
+      console.error("Payment Response Data:", paymentResponse?.data); // Log more details
+      alert("We were unable to charge your card", "Payment initiation failed. Please check card details.");
+      return false; // Indicate failure
+    }
+  } catch (error) {
+    console.error("Payment Error:", error);
+
+    // If error.response is undefined or null, handle it
+    const errorMessage = error.response?.data?.message || error.message || "Please try again.";
+    Alert.alert("An error occurred", errorMessage);
+    return false; // Indicate failure
+  }
+};
+
 
 const handlePaymentSuccess = () => {
     setPaymentModalVisible(false);
@@ -163,9 +266,11 @@ const handlePaymentSuccess = () => {
   
   const goToPlan = async () => {
     if (paymentRequired) {
-      setPaymentModalVisible(true);
-      return; // Stop execution here and wait until modal is closed
-  }
+      const paymentSuccessful = await initiatePayment(); // Wait for payment to complete
+      if (!paymentSuccessful) {
+        return; // Stop execution if payment failed
+      }
+    }
 
     try {
       // Validate the form data before making the API request
@@ -404,9 +509,13 @@ const handlePaymentSuccess = () => {
             </View>
           </View>
           
-          <TouchableOpacity onPress={goToPlan} style={styles.buttonplus}>
-            <Text style={styles.buttonTextplus}>{t('Save & Create Session')}</Text>
-          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonplus} onPress={goToPlan} disabled={isLoading}>
+  {isLoading ? (
+    <ActivityIndicator size="small" color="#fff" /> // Show loading indicator while processing
+  ) : (
+    <Text style={styles.buttonTextplus}>{t("Save & Create Session")}</Text>
+  )}
+</TouchableOpacity>
           
         </View>
         <DateTimePickerModal
@@ -474,9 +583,9 @@ const styles = StyleSheet.create({
   buttonplus: {
     backgroundColor: 'coral',
     borderRadius: 5,
-    padding: 5,
-    marginLeft: 750,
-    width: 100,
+    padding: 10,
+    marginLeft: 650,
+    width: 200,
     paddingHorizontal: 20,
     marginTop: 50,
   },

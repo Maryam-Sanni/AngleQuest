@@ -92,6 +92,88 @@ const SupportRequestPage = () => {
     fetchPaymentDetails();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(false);
+const [email, setEmail] = useState(false);
+const initiatePayment = async () => {
+  try {
+    setIsLoading(true); // Start loading state
+
+    // Retrieve values from AsyncStorage
+    const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+    const firstName = values.find(item => item[0] === 'first_name')?.[1] || "";
+    const lastName = values.find(item => item[0] === 'last_name')?.[1] || "";
+    const email = values.find(item => item[0] === 'email')?.[1] || "";
+
+    // Combine first and last name
+    const fullName = `${firstName} ${lastName}`;
+
+    setEmail(email);
+
+    // Get token from AsyncStorage for authorization
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      Alert.alert("Error", "Authorization token not found.");
+      setIsLoading(false);
+      return false; // Indicate failure
+    }
+
+    // Fetch payment details from backend
+    const paymentDetailsResponse = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Check if response is successful
+    if (paymentDetailsResponse?.data?.status !== "success") {
+      Alert.alert("Error", "Failed to retrieve payment details.");
+      setIsLoading(false);
+      return false; // Indicate failure
+    }
+
+    // Extract card details
+    const cardDetails = JSON.parse(paymentDetailsResponse.data.PaystackDetail.card_detail)[0];
+
+    if (!cardDetails) {
+      Alert.alert("Error", "Card details not found.");
+      setIsLoading(false);
+      return false; // Indicate failure
+    }
+
+    // Extract and format expiry month and year
+    const [expMonth, expYear] = cardDetails.exp_date.split("/");
+
+    // Define payment payload
+    const paymentPayload = {
+      email: email,
+      name: firstName,
+      plan: "pay_as_you_go",
+      amount: "40",
+      card_number: cardDetails.cardnumber,
+      cvv: cardDetails.cvv,
+      expiry_month: expMonth,
+      expiry_year: expYear,
+    };
+
+    // Make the payment request to the backend
+    const paymentResponse = await axios.post(`${apiUrl}/api/expert/charge-card`, paymentPayload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Check if the charge was successful
+    if (paymentResponse?.data?.message === "Charge successful") {
+      return true; // Indicate success
+    } else {
+      alert("We were unable to charge your card", "Payment initiation failed. Please check card details.");
+      return false; // Indicate failure
+    }
+  } catch (error) {
+    console.error("Payment Error:", error);
+    Alert.alert("An error occurred", error.response?.data?.message || "Please try again.");
+    return false; // Indicate failure
+  } finally {
+    setIsLoading(false); // End loading state
+  }
+};
+
   const handlePaymentSuccess = () => {
     setPaymentModalVisible(false);
     setPaymentRequired(false);
@@ -215,7 +297,12 @@ const SupportRequestPage = () => {
       Alert.alert('Success', 'Support request submitted and availability stored successfully!');
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', error.message || 'Failed to submit support request or store data.');
+      const errorMessage =
+      error.response?.data?.message || // Backend error message
+      (error.response?.status === 404 ? "No expert found for this field." : null) || // Custom message for 404
+      "An unexpected error occurred."; // Fallback message
+    
+    alert(errorMessage, "Error");
     }
   };
 
@@ -318,7 +405,7 @@ const SupportRequestPage = () => {
             setResponseType('video');
             setCurrentStep('resolution');
           } else {
-            setCurrentStep('accepted');
+            setCurrentStep('resolution');
           }
   
           // Set form data with matching request details
@@ -343,13 +430,13 @@ const SupportRequestPage = () => {
   }, []);
   
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Get the token and support_id from AsyncStorage
         const token = await AsyncStorage.getItem('token');
         const supportId = await AsyncStorage.getItem('support_id');
+
 
         if (!token || !supportId) {
           console.error('Token or Support ID not found in AsyncStorage.');
@@ -365,9 +452,10 @@ const SupportRequestPage = () => {
         if (response.data?.status === 'failed' && response.data?.message === 'No responses found for this support request') {
           console.log('No responses found for this support request.');
 
+
+
           return; // Exit early if no responses are found
         }
-
         const firstResponse = response.data?.data?.[0];
 
         if (firstResponse) {
@@ -399,7 +487,6 @@ const SupportRequestPage = () => {
     // Call the fetchData function
     fetchData();
   }, []); // Empty dependency array ensures it runs only once after initial render
-
 
   // Show or hide the modal
   const toggleModal = () => {
@@ -783,21 +870,7 @@ const SupportRequestPage = () => {
           onChangeText={(text) => setFormData({ ...formData, description: text })}
         />
 
-      <Text style={styles.label}>Attachment (Optional)</Text>
-          <TouchableOpacity 
-            style={[styles.input, { overflow: 'hidden' }]} 
-            onPress={handleImagePick}
-          >
-            {attachments.length === 0 ? (
-              <Text style={{ color: 'black' }}>Add image or document...</Text>
-            ) : (
-              attachments.map((attachment, index) => (
-                <Text key={index} style={{ color: '#555', marginBottom: 5, width: 600, maxHeight: 30, textAlign: 'center' }}>
-                  {attachment.name || attachment.uri}
-                </Text>
-              ))
-            )}
-        </TouchableOpacity>
+    
 
         <Text style={styles.label}>Your Preferred Mode of Response</Text>
         <Picker
@@ -883,21 +956,7 @@ const SupportRequestPage = () => {
                             onChangeText={(text) => setFormData({ ...formData, description: text })}
                           />
 
-                            <Text style={styles.label}>Attachment (Optional)</Text>
-                            <TouchableOpacity 
-                              style={[styles.input, { overflow: 'hidden' }]} 
-                              onPress={handleImagePick}
-                            >
-                                {attachments.length === 0 ? (
-                                  <Text style={{ color: 'black' }}>Add image or document...</Text>
-                                ) : (
-                                  attachments.map((attachment, index) => (
-                                    <Text key={index} style={{ color: '#555', marginBottom: 5, width: 600, maxHeight: 30, textAlign: 'center' }}>
-                                      {attachment.name || attachment.uri}
-                                    </Text>
-                                  ))
-                                )}
-                            </TouchableOpacity>
+                          
 
                             <Text style={styles.label}>Your Preferred Mode of Response</Text>
                             <Picker
@@ -916,24 +975,19 @@ const SupportRequestPage = () => {
                              Select a date
                             </Text>
                             <TouchableOpacity
-                              style={styles.input}
-                              onPress={async () => {
-                                // Check if payment is required
-                                if (paymentRequired) {
-                                  setPaymentModalVisible(true);  // Show the payment modal first
-                                } else {
-                                  // Show the modal2 only if payment is not required
-                                  setIsModalVisible2(true);
+  style={styles.input}
+  onPress={async () => {
+    // Show the modal2 directly, skipping the payment modal
+    setIsModalVisible2(true);
 
-                                  // Make the API call
-                                  await handleSupportRequest();
-                                }
-                              }}
-                            >
-                              <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
-                                {selectedDateTime ? selectedDateTime.toLocaleString() : 'Select date and time'}
-                              </Text>
-                            </TouchableOpacity>
+    // Make the API call
+    await handleSupportRequest();
+  }}
+>
+  <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
+    {selectedDateTime ? selectedDateTime.toLocaleString() : 'Select date and time'}
+  </Text>
+</TouchableOpacity>
 
                           </View>
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
@@ -1040,7 +1094,7 @@ const SupportRequestPage = () => {
 
  {/* Resolution Section */}
  {currentStep === 'accepted' && (
-              <View style={{ flexDirection: 'row', maxWidth: '75%' }}>
+              <View style={{ flexDirection: 'row', maxWidth: '50%' }}>
                 <View style={styles.step}>
                   <Text style={styles.header}>Create Support Request</Text>
                   <SupportForm formData={formData} setFormData={setFormData} />
@@ -1566,8 +1620,10 @@ const SupportRequestPage = () => {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
+            <View style={{borderWidth: 1, padding:10}}>
               <Text style={styles.modalText}>{textResponse || "No response available"}</Text>
-              <Text style={styles.modalText}>{hyperlink || "No response available"}</Text>
+              <Text style={styles.modalText2}>{hyperlink || "No url available"}</Text>
+              </View>
               <TouchableOpacity onPress={toggleModal}>
                 <Text style={styles.closeButton}>Close</Text>
               </TouchableOpacity>
@@ -1597,7 +1653,7 @@ const SupportRequestPage = () => {
         {selectedItem?.updated_at ? formatDate(selectedItem.updated_at) : "-"}
       </Text>
 
-      <Text style={{ marginTop: 20, fontSize: 14, width: 480, textAlign: 'center', height: 300, marginBottom: 20 }}>
+      <Text style={{ marginTop: 20, fontSize: 14, borderWidth: 1, width: 480, textAlign: 'center', height: 300, marginBottom: 20 }}>
         {modalResponse || "Loading response..."}
       </Text>
 
@@ -1857,7 +1913,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20
+    alignSelf: 'center',
+  position: 'absolute',
+  bottom: 30
   },
   submitButton2: {
     backgroundColor: 'grey',
@@ -1926,6 +1984,12 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalText2: {
+    fontSize: 14,
+    fontStyle: 'italic',
     marginBottom: 20,
     textAlign: 'center',
   },

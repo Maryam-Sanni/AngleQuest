@@ -363,7 +363,7 @@ const CreateCoachingHubForm = ({ onClose, onDone }) => {
     <View style={styles.pageContainer}>
       
       <View style={styles.formContainer}>
-        <Text style={{ fontSize: 14, width: 700, marginBottom: 10, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide for organizing and running effective training sessions. This should cover topics like session objectives, scheduling, participant engagement, and material preparation. Make sure to fill all fields.
+        <Text style={{ fontSize: 15, width: 700, marginBottom: 10, fontFamily: "Roboto-Light" }}>Create a guide for organizing and running effective training sessions. This should cover topics like session objectives, scheduling, participant engagement, and material preparation. Make sure to fill all fields.
           </Text>
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Category")}*</Text>
         <Picker
@@ -419,6 +419,7 @@ const CreateCoachingHubForm = ({ onClose, onDone }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter hub name"
+            placeholderTextColor="grey"
           value={coaching_hub_name}
           onChangeText={text => setGroupName(text)}
         />

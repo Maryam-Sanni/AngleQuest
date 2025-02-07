@@ -416,10 +416,9 @@ marginTop: 5,
 },
 buttonTextDue: {
 color: 'black',
-fontSize: 12,
+fontSize: 15,
 width: 700,
 fontFamily: "Roboto-Light",
-fontStyle: 'italic'
 },
   buttonplus: {
     backgroundColor: 'white', 

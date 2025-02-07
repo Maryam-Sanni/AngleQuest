@@ -367,11 +367,11 @@ marginLeft: 50,
 marginTop: 5,
 },
 buttonTextDue: {
-color: 'black',
-fontSize: 12,
-fontFamily: "Roboto-Light",
-fontStyle: 'italic'
-},
+  color: 'black',
+  fontSize: 15,
+  width: 700,
+  fontFamily: "Roboto-Light",
+  },
 buttonplus: {
 backgroundColor: 'white', 
 padding: 10,

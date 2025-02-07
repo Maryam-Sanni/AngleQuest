@@ -30,6 +30,8 @@ const HubMeeting = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [currentIndex, setCurrentIndex] = useState(0);
+      const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+        const [paymentRequired, setPaymentRequired] = useState(false);
 
   // Move to the previous set of hubs
   const handlePrev = () => {
@@ -117,8 +119,96 @@ const HubMeeting = () => {
     fetchMeetings();
   }, [apiUrl]);
 
+  const [isRLoading, setIsRLoading] = useState(false);
+  const [email, setEmail] = useState(false);
+  const initiatePayment = async () => {
+    try {
+      setIsRLoading(true); // Start loading state
+  
+      // Retrieve values from AsyncStorage
+      const values = await AsyncStorage.multiGet(['first_name', 'last_name', 'email']);
+      const firstName = values.find(item => item[0] === 'first_name')?.[1] || "";
+      const lastName = values.find(item => item[0] === 'last_name')?.[1] || "";
+      const email = values.find(item => item[0] === 'email')?.[1] || "";
+  
+      // Combine first and last name
+      const fullName = `${firstName} ${lastName}`;
+  
+      setEmail(email);
+  
+      // Get token from AsyncStorage for authorization
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        Alert.alert("Error", "Authorization token not found.");
+        setIsRLoading(false);
+        return false; // Indicate failure
+      }
+  
+      // Fetch payment details from backend
+      const paymentDetailsResponse = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // Check if response is successful
+      if (paymentDetailsResponse?.data?.status !== "success") {
+        Alert.alert("Error", "Failed to retrieve payment details.");
+        setIsRLoading(false);
+        return false; // Indicate failure
+      }
+  
+      // Extract card details
+      const cardDetails = JSON.parse(paymentDetailsResponse.data.PaystackDetail.card_detail)[0];
+  
+      if (!cardDetails) {
+        Alert.alert("Error", "Card details not found.");
+        setIsRLoading(false);
+        return false; // Indicate failure
+      }
+  
+      // Extract and format expiry month and year
+      const [expMonth, expYear] = cardDetails.exp_date.split("/");
+  
+      // Define payment payload
+      const paymentPayload = {
+        email: email,
+        name: firstName,
+        plan: "pay_as_you_go",
+        amount: "40",
+        card_number: cardDetails.cardnumber,
+        cvv: cardDetails.cvv,
+        expiry_month: expMonth,
+        expiry_year: expYear,
+      };
+  
+      // Make the payment request to the backend
+      const paymentResponse = await axios.post(`${apiUrl}/api/expert/charge-card`, paymentPayload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // Check if the charge was successful
+      if (paymentResponse?.data?.message === "Charge successful") {
+        return true; // Indicate success
+      } else {
+        alert("We were unable to charge your card", "Payment initiation failed. Please check card details.");
+        return false; // Indicate failure
+      }
+    } catch (error) {
+      console.error("Payment Error:", error);
+      Alert.alert("An error occurred", error.response?.data?.message || "Please try again.");
+      return false; // Indicate failure
+    } finally {
+      setIsRLoading(false); // End loading state
+    }
+  };
+  
+    const handleJoinMeeting = async (meeting) => {
+      if (paymentRequired) {
+        const paymentSuccessful = await initiatePayment(); // Wait for payment to complete
+        if (!paymentSuccessful) {
+          return; // Stop execution if payment failed
+        }
+      }
 
-  const handleJoinMeeting = async (meeting) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const firstName = await AsyncStorage.getItem("first_name");

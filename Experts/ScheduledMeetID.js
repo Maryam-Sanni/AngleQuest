@@ -16,6 +16,7 @@ import OpenModal from './EditMeet';
 import moment from "moment-timezone";
 import { useNavigate } from "react-router-dom";
 import EmptyScheduleImage from '../assets/EmptySch.jpeg';
+import OpenModal4 from "./SetMeet";
 
 const defaultAvatar = require("../assets/account.png");
 
@@ -28,7 +29,17 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
   const [showAllMeetings, setShowAllMeetings] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [uniqueNameCount, setUniqueNameCount] = useState(0);
+    const [modalVisible4, setModalVisible4] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  const handleOpenPress4 = () => {
+    setModalVisible4(true);
+  };
+
+  const handleCloseModal4 = () => {
+    setModalVisible4(false);
+    onClose();
+  };
 
   // Updated handleOpenPress function to accept the meeting details and save to AsyncStorage
   const handleOpenPress = async (meeting) => {
@@ -336,9 +347,14 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
              marginBottom: 20,
            }}
          >
-           It seems there are no upcoming meetings right now. Use New Meetings to create a new meeting
+           It seems there are no upcoming meetings right now. Create a new meeting to get started
          </Text>
-
+  <TouchableOpacity
+        style={{backgroundColor: '#206C00', padding:10, borderRadius: 5}}
+        onPress={handleOpenPress4}
+      >
+        <Text style={{color: 'white', fontWeight: 600}}>New Meeting</Text>
+      </TouchableOpacity>
 
        </View>
         )}
@@ -462,6 +478,16 @@ const ScheduledMeetingsTable = ({ hubId = "", coachingHubName = "" }) => {
           <View style={styles.modalContent}>
           <OpenModal onClose={() => handleCloseModal()} />
           </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible4}
+        onRequestClose={handleCloseModal4}
+      >
+        <View style={styles.modalContent}>
+          <OpenModal4 onClose={() => handleCloseModal4()} />
+        </View>
       </Modal>
     </View>
   );

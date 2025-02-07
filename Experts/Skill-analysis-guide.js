@@ -145,7 +145,7 @@ useEffect(() => {
   fetchSpecialization();
 }, []);
 
-  useEffect(() => {
+
     const loadFormData = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -178,9 +178,6 @@ useEffect(() => {
         }
     };
 
-    loadFormData();
-  }, []);
-
   const updateFormFields = (index) => {
     const guide = skillAnalysisGuides[index];
     setCategory(guide.category);
@@ -211,32 +208,36 @@ useEffect(() => {
 
 
   
-  const handleNewGuide = async () => {
+  useEffect(() => {
+    const handleNewGuide = async () => {
       try {
-          // Fetch the latest category from AsyncStorage
-          const storedCategory = await AsyncStorage.getItem('category');
-        
-          const newGuide = {
-              id: 'new',
-              role: '',
-              level: '',
-              rate: '$0',
-            specialization: '',
-              available_days: [],
-              available_times: '',
-              category: storedCategory || '',
-              topics: []
-          };
-
-          // Update the skill analysis guides state
-          setSkillAnalysisGuides([newGuide, ...skillAnalysisGuides]);
-          setSelectedGuideIndex(0); // Set to the new guide
-          updateFormFields(0); // Initialize form fields with the new guide
-
+        // Fetch the latest category from AsyncStorage
+        const storedCategory = await AsyncStorage.getItem("category");
+  
+        const newGuide = {
+          id: "new",
+          role: "",
+          level: "",
+          rate: "$0",
+          specialization: "",
+          available_days: [],
+          available_times: "",
+          category: storedCategory || "",
+          topics: [],
+        };
+  
+        // Update the skill analysis guides state
+        setSkillAnalysisGuides((prevGuides) => [newGuide, ...prevGuides]);
+        setSelectedGuideIndex(0); // Set to the new guide
+        updateFormFields(0); // Initialize form fields with the new guide
       } catch (error) {
-          console.error('Failed to create new guide', error);
+        console.error("Failed to create new guide", error);
       }
-  };
+    };
+  
+    handleNewGuide();
+  }, []); // Empty dependency array ensures this runs only once on mount
+  
   
   
   const handleSave = async () => {
@@ -371,34 +372,11 @@ useEffect(() => {
 
           </View>
 
-          <View style={styles.navigationContainer}>
-              <TouchableOpacity
-                style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
-                  onPress={handleNewGuide}
-              >
-                  <Text style={styles.navButtonText}>New</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
-                  onPress={handlePreviousGuide}
-                  disabled={selectedGuideIndex === 1}
-              >
-                  <Text style={styles.navButtonText}>Previous</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === skillAnalysisGuides.length - 1 && styles.disabledNavButton]}
-                  onPress={handleNextGuide}
-                  disabled={selectedGuideIndex === skillAnalysisGuides.length - 1}
-              >
-                  <Text style={styles.navButtonText}>Next</Text>
-              </TouchableOpacity>
-          </View>
+          
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively assess user skill set. This guide should include steps or questions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.
+              <Text style={{ fontSize: 15, width: 700, fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively assess user skill set. This guide should include steps or questions on identifying core competencies, measuring proficiency, and setting improvement goals. Make sure to fill all fields.
               </Text>
             </View>
           </View>

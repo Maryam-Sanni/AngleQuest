@@ -62,11 +62,7 @@ function MyComponent() {
   };
   
   const handleOpenPress = () => {
-    if (paymentRequired) {
-        setPaymentModalVisible(true);
-    } else {
-        setModalVisible(true);
-    }
+    setModalVisible(true);
   };
 
       const handleCloseModal = () => {

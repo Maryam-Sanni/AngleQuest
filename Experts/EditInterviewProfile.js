@@ -359,10 +359,10 @@ const styles = StyleSheet.create({
   },
   buttonTextDue: {
     color: 'black',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily:"Roboto-Light"
-  },
+    fontSize: 15,
+    width: 700,
+    fontFamily: "Roboto-Light",
+    },
   buttonAcc: {
     borderWidth: 2,
     borderColor: '#CCC',

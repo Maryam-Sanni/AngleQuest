@@ -59,6 +59,7 @@ const PaymentDetailsForm = ({ onClose }) => {
      await AsyncStorage.setItem('formSubmitted', 'true');
     // Close the profile modal and open the TourGuide modal
     setAlertVisible(true);
+    window.location.reload();
   };
 
   const [formSubmitted, setFormSubmitted] = useState(false);

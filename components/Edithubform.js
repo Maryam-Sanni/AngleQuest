@@ -504,15 +504,7 @@ const CreateCoachingHubForm = ({ onClose }) => {
           value={coaching_hub_description}
           onChangeText={handleDescriptionChange}
         />
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee")} (per meeting)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="$40"
-          value={coaching_hub_fee}
-          onChangeText={text => setfee(text)}
-          editable={false}
-        />
-        
+       
 
         <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Objectives")}* ({maxObjectiveLength - objectiveLength} characters remaining)</Text>
         <TextInput

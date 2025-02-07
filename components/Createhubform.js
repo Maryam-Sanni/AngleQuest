@@ -419,6 +419,7 @@ const CreateCoachingHubForm = ({ onClose, onDone }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter hub name"
+            placeholderTextColor="grey"
           value={coaching_hub_name}
           onChangeText={text => setGroupName(text)}
         />
@@ -444,15 +445,6 @@ const CreateCoachingHubForm = ({ onClose, onDone }) => {
         />
 
               
-
-        
-        <Text style={{ fontWeight: 600, color: 'black', marginTop: 10,fontFamily:"Roboto-Light" }}>{t("Training Hub Fee (per meeting)")}</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="$40"
-          onChangeText={text => setfee(text)}
-          editable={false}
-        />
       
         <TouchableOpacity
           style={{ backgroundColor: 'coral', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 25, marginBottom: 30 }}

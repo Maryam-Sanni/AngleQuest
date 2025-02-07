@@ -145,7 +145,7 @@ useEffect(() => {
   fetchSpecialization();
 }, []);
 
-  useEffect(() => {
+
     const loadFormData = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -178,8 +178,6 @@ useEffect(() => {
         }
     };
 
-    loadFormData();
-  }, []);
 
   const updateFormFields = (index) => {
     const guide = skillAnalysisGuides[index];
@@ -210,7 +208,7 @@ useEffect(() => {
   };
 
 
-  
+    useEffect(() => {
   const handleNewGuide = async () => {
       try {
           // Fetch the latest category from AsyncStorage
@@ -238,7 +236,9 @@ useEffect(() => {
       }
   };
   
-  
+  handleNewGuide();
+}, []); // Empty dependency array ensures this runs only once on mount
+
   const handleSave = async () => {
     if ( !level || !rate || !availableDays || !availableTimes) {
       setAlertMessage(t('Please fill all fields'));
@@ -371,34 +371,11 @@ useEffect(() => {
 
           </View>
 
-          <View style={styles.navigationContainer}>
-              <TouchableOpacity
-                  style={styles.navButton}
-                  onPress={handleNewGuide}
-              >
-                  <Text style={styles.navButtonText}>New</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === 1 && styles.disabledNavButton]}
-                  onPress={handlePreviousGuide}
-                  disabled={selectedGuideIndex === 1}
-              >
-                  <Text style={styles.navButtonText}>Previous</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                  style={[styles.navButton, selectedGuideIndex === skillAnalysisGuides.length - 1 && styles.disabledNavButton]}
-                  onPress={handleNextGuide}
-                  disabled={selectedGuideIndex === skillAnalysisGuides.length - 1}
-              >
-                  <Text style={styles.navButtonText}>Next</Text>
-              </TouchableOpacity>
-          </View>
+         
           
           <View style={{ flexDirection: "row", marginBottom: 10 }}>
             <View style={styles.buttonDue}>
-              <Text style={{ fontSize: 14, width: 700, fontStyle: 'italic', fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively ellicit users knowledge gap. Include questions, examples or any mode of communication to find this out.  Make sure to fill all fields.
+              <Text style={{ fontSize: 15, width: 700, fontFamily: "Roboto-Light" }}>Create a guide (template) that helps you effectively ellicit users knowledge gap. Include questions, examples or any mode of communication to find this out.  Make sure to fill all fields.
                 </Text>
             </View>
           </View>

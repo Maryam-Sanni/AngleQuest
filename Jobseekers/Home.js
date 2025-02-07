@@ -122,6 +122,8 @@ const HomePage = () => {
     navigate("/chat", { activeRoom: room });
   };
 
+  const [service, setService] = useState(""); // State to store the service
+
   useEffect(() => {
     const checkLastPaymentMethod = async () => {
       try {
@@ -131,18 +133,20 @@ const HomePage = () => {
           console.error("Token not found in AsyncStorage");
           return;
         }
-
+  
         // Fetch payment details from the API
         const response = await axios.get(`${apiUrl}/api/jobseeker/get-paystack-payment-details`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         // Extract PaystackDetail object from the response
         const paystackDetails = response?.data?.PaystackDetail;
-
+  
         if (paystackDetails) {
+          setService(paystackDetails.service); // Store the service from the response
+  
           // Check the payment method
           if (paystackDetails.payment_method === "Done") {
             setModalVisible2(false); // Payment is completed; hide the modal
@@ -158,10 +162,9 @@ const HomePage = () => {
         setModalVisible2(true); // Show the modal in case of an error
       }
     };
-
-    // Call the function immediately
-    checkLastPaymentMethod();
-  }, [apiUrl, setModalVisible2]); // Dependencies
+  
+    checkLastPaymentMethod(); // Call the function immediately
+  }, [apiUrl, setModalVisible2]);
 
 
 
@@ -390,6 +393,33 @@ const HomePage = () => {
     return `${month} ${day} | ${time}`;
   }
 
+  const [countdown, setCountdown] = useState("");
+
+  useEffect(() => {
+    const targetDate = new Date("April 1, 2025 00:00:00").getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
+
+      if (timeLeft <= 0) {
+        setCountdown("Launching Today!");
+        return;
+      }
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    };
+
+    updateCountdown(); // Call immediately
+    const timer = setInterval(updateCountdown, 1000); // Update every second
+
+    return () => clearInterval(timer); // Cleanup on unmount
+  }, []);
 
   useEffect(() => {
     fetchAllData().then((fetchedData) => {
@@ -441,115 +471,175 @@ const HomePage = () => {
       <Text style={styles.description}>
         Automated request responses based on user-defined researches, using AI algorithms.
       </Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Coming Soon!</Text>
-      </TouchableOpacity>
+      <View style={{backgroundColor: '#F5F5F5', padding: 10, borderRadius: 5, marginTop: 10,}}>
+        <Text style={{fontSize: 20, fontWeight: 600, color: 'darkgreen'}}>Coming Soon!</Text>
+        <Text style={{ fontSize: 16, fontWeight: "500", marginTop: 5 }}>{countdown}</Text>
+        </View>
     </View>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        marginTop: 10,
-                        marginLeft: 20,
-                        marginRight: 20,
-                        marginBottom: 20,
-                        fontFamily: "Roboto-Light",
-                      }}
-                    >
-                      {t(
-                        "",
-                      )}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: "#63EC55",
-                        marginTop: 25,
-                        marginLeft: 20,
-                        fontWeight: "600",
-                      }}
-                    >
-                      {t("Quick Links")}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={goToAI}
-                      style={[
-                        styles.touchablechat,
-                        isHovered4 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered4(true)}
-                      onMouseLeave={() => setIsHovered4(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("AI Analysis")}
-                        </Text>
-                        
-                      </View>
-                    </TouchableOpacity>
-                   
-                    <TouchableOpacity
-                      onPress={goToAdvice}
-                      style={[
-                        styles.touchablechat,
-                        isHovered1 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered1(true)}
-                      onMouseLeave={() => setIsHovered1(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Update Skill Analysis")}
-                        </Text>
-                       
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                       onPress={goToGrowth}
-                      style={[
-                        styles.touchablechat,
-                        isHovered6 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered6(true)}
-                      onMouseLeave={() => setIsHovered6(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Update Growth Plan")}
-                        </Text>
-                        
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={goToHubs}
-                      style={[
-                        styles.touchablechat,
-                        isHovered3 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered3(true)}
-                      onMouseLeave={() => setIsHovered3(false)}
-                    >
-                      <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.touchableTextchat}>
-                          {t("Join a Hub")}
-                        </Text>
+                  
+    <Text
+  style={{
+    fontSize: 20,
+    color: "#63EC55",
+    marginTop: 25,
+    marginLeft: 20,
+    fontWeight: "600",
+  }}
+>
+  {t("Quick Links")}
+</Text>
 
-                      </View>
-                    </TouchableOpacity>
-                   
-                    <TouchableOpacity
-                      onPress={() => setModalVisible(true)}
-                      style={[
-                        styles.touchablechat,
-                        isHovered13 && styles.touchableOpacityHovered,
-                      ]}
-                      onMouseEnter={() => setIsHovered13(true)}
-                      onMouseLeave={() => setIsHovered13(false)}
-                    >
-                      <Text style={styles.touchableTextchat}>
-                        {t("Make a suggestion")}
-                      </Text>
-                    </TouchableOpacity>
+{/* Show Support Request, Hubs, and Make a Suggestion if service is "Knowledge Backup" */}
+{service === "Knowledge Backup" && (
+  <>
+    <TouchableOpacity
+      onPress={goToAI}
+      style={[styles.touchablechat, isHovered4 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered4(true)}
+      onMouseLeave={() => setIsHovered4(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Support Request")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToHubs}
+      style={[styles.touchablechat, isHovered3 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered3(true)}
+      onMouseLeave={() => setIsHovered3(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Join a Hub")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={() => setModalVisible(true)}
+      style={[styles.touchablechat, isHovered13 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered13(true)}
+      onMouseLeave={() => setIsHovered13(false)}
+    >
+      <Text style={styles.touchableTextchat}>{t("Make a suggestion")}</Text>
+    </TouchableOpacity>
+  </>
+)}
+
+{/* Show Skill Analysis, Growth Plan, Hubs, and Make a Suggestion if service is "Career Support" */}
+{service === "Career Support" && (
+  <>
+      <TouchableOpacity
+      onPress={goToAI}
+      style={[styles.touchablechat, isHovered4 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered4(true)}
+      onMouseLeave={() => setIsHovered4(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("AI Analysis")}</Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      onPress={goToAdvice}
+      style={[styles.touchablechat, isHovered1 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered1(true)}
+      onMouseLeave={() => setIsHovered1(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Update Skill Analysis")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToGrowth}
+      style={[styles.touchablechat, isHovered6 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered6(true)}
+      onMouseLeave={() => setIsHovered6(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Update Growth Plan")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToHubs}
+      style={[styles.touchablechat, isHovered3 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered3(true)}
+      onMouseLeave={() => setIsHovered3(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Join a Hub")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={() => setModalVisible(true)}
+      style={[styles.touchablechat, isHovered13 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered13(true)}
+      onMouseLeave={() => setIsHovered13(false)}
+    >
+      <Text style={styles.touchableTextchat}>{t("Make a suggestion")}</Text>
+    </TouchableOpacity>
+  </>
+)}
+
+{/* Show All Options if service is "Knowledge Backup + Career Support" */}
+{service === "Knowledge Backup + Career Support" && (
+  <>
+    <TouchableOpacity
+      onPress={goToAI}
+      style={[styles.touchablechat, isHovered4 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered4(true)}
+      onMouseLeave={() => setIsHovered4(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("AI Analysis")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToAdvice}
+      style={[styles.touchablechat, isHovered1 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered1(true)}
+      onMouseLeave={() => setIsHovered1(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Update Skill Analysis")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToGrowth}
+      style={[styles.touchablechat, isHovered6 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered6(true)}
+      onMouseLeave={() => setIsHovered6(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Update Growth Plan")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={goToHubs}
+      style={[styles.touchablechat, isHovered3 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered3(true)}
+      onMouseLeave={() => setIsHovered3(false)}
+    >
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.touchableTextchat}>{t("Join a Hub")}</Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      onPress={() => setModalVisible(true)}
+      style={[styles.touchablechat, isHovered13 && styles.touchableOpacityHovered]}
+      onMouseEnter={() => setIsHovered13(true)}
+      onMouseLeave={() => setIsHovered13(false)}
+    >
+      <Text style={styles.touchableTextchat}>{t("Make a suggestion")}</Text>
+    </TouchableOpacity>
+  </>
+)}
+
 
                   </BlurView>
                 </View>
@@ -699,19 +789,7 @@ const HomePage = () => {
                                 "You are all caught up! You have no pending action"}
                             </Text>
                             
-                            <TouchableOpacity
-  style={[
-    styles.touchablestart,
-    isHovered10 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
-  ]}
-  onMouseEnter={() => setIsHovered10(true)}
-  onMouseLeave={() => setIsHovered10(false)}
-  onPress={goToGrowth}
->
-  <Text style={styles.touchableTextjoinreview}>
-    {t("Open")}
-  </Text>
-</TouchableOpacity>
+
                           </View>
                         </View>
                       </View>
@@ -767,19 +845,7 @@ const HomePage = () => {
                               {plandata.latestSkillAnalysis.expertName ||
                                 "You are all caught up! You have no pending action"}
                             </Text>
-                            <TouchableOpacity
-  style={[
-    styles.touchablestart,
-    isHovered11 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
-  ]}
-  onMouseEnter={() => setIsHovered11(true)}
-  onMouseLeave={() => setIsHovered11(false)}
-  onPress={goToAdvice}
->
-  <Text style={styles.touchableTextjoinreview}>
-    {t("Open")}
-  </Text>
-</TouchableOpacity>
+
                           </View>
                         </View>
                       </View>
@@ -837,19 +903,7 @@ const HomePage = () => {
                               {plandata.latestInterview.expertName ||
                                 "You are all caught up! You have no pending action"}
                             </Text>
-                            <TouchableOpacity
-  style={[
-    styles.touchablestart,
-    isHovered12 && styles.touchableOpacityHovered,  // Ensure you're using the right hover state
-  ]}
-  onMouseEnter={() => setIsHovered12(true)}
-  onMouseLeave={() => setIsHovered12(false)}
-  onPress={goToHubs}
->
-  <Text style={styles.touchableTextjoinreview}>
-    {t("Open")}
-  </Text>
-</TouchableOpacity>
+
                           </View>
                         </View>
                       </View>
@@ -1376,7 +1430,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,
-    height: 280,
+    height: 310,
+    marginBottom: 20,
     marginLeft: 20,
     marginTop: 20,
     width: 260,

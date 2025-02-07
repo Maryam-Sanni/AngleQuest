@@ -6,8 +6,8 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedDays, setSelectedDays] = useState([]);
-  const [startTime, setStartTime] = useState({ hour: "01", minute: "00", period: "AM" });
-  const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "AM" });
+  const [startTime, setStartTime] = useState({ hour: "01", minute: "00", period: "PM" });
+  const [endTime, setEndTime] = useState({ hour: "02", minute: "00", period: "PM" });
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -35,8 +35,8 @@ const DaysTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
 
   const [previousState, setPreviousState] = useState({
     selectedDays: [],
-    startTime: { hour: "01", minute: "00", period: "AM" },
-    endTime: { hour: "02", minute: "00", period: "AM" },
+    startTime: { hour: "01", minute: "00", period: "PM" },
+    endTime: { hour: "02", minute: "00", period: "PM" },
   });
   
   // Automatically trigger handleConfirm when any state changes
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: 600,
-    height: 400
+    height: 420
   },
   headerText: {
     fontSize: 12,

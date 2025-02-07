@@ -16,13 +16,13 @@ function MyComponent({ onClose }) {
     'Select a Category': ['No category selected'],
     SAP: ['SAP FI', 'SAP MM', 'SAP SD', 'SAP PP'],
     Microsoft: [
-      'Dynamics Sales',
-      'Dynamics Customer Service',
-      'Dynamics Field Service',
-      'Dynamics CRM Developer',
-      'Business Central',
-      'Power Platform Developer',
-      'Dynamics F&O',
+      'Microsoft Dynamics Sales',
+      'Microsoft Dynamics Customer Service',
+      'Microsoft Dynamics Field Service',
+      'Microsoft Dynamics CRM Developer',
+      'Microsoft Business Central',
+      'Microsoft Power Platform Developer',
+      'Microsoft Dynamics F&O',
     ],
   };
 
@@ -483,11 +483,10 @@ marginTop: 10
   },
   buttonTextDue: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 15,
     width: 700,
     fontFamily: "Roboto-Light",
-    fontStyle: 'italic'
-  },
+    },
   buttonplus: {
     backgroundColor: 'white', 
     padding: 10,

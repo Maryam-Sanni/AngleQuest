@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Switch, CheckBox, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, Switch, CheckBox, Image, ScrollView } from 'react-native';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -64,7 +64,7 @@ function PaymentForm({ onClose }) {
       };
   
       // Make the payment request to the backend
-      const paymentResponse = await axios.post(`${apiUrl}/api/jobseeker/charge-card`, paymentPayload, {
+      const paymentResponse = await axios.post(`${apiUrl}/api/expert/charge-card`, paymentPayload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,20 +72,19 @@ function PaymentForm({ onClose }) {
   
       // Check if the charge was successful
       if (paymentResponse?.data?.message === "Charge successful") {
-        Alert.alert("Success", "Payment initiated successfully!");
-        
+       alert("Success", "Payment initiated successfully!");
+       window.location.reload();
         // You can navigate the user instead of reloading the app
         // Example: navigation.navigate("SuccessScreen");
   
       } else {
-        Alert.alert("Error", "Payment initiation failed. Please check card details.");
+       alert("Error", "Payment initiation failed. Please check card details.");
       }
     } catch (error) {
       console.error("Payment Error:", error);
       Alert.alert("An error occurred", error.response?.data?.message || "Please try again.");
     } finally {
       setIsLoading(false); // End loading state
-      window.location.reload();
     }
   };
   

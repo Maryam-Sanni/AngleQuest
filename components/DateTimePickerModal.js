@@ -10,7 +10,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState("01");
   const [selectedMinute, setSelectedMinute] = useState("00");
-  const [selectedPeriod, setSelectedPeriod] = useState("AM");
+  const [selectedPeriod, setSelectedPeriod] = useState("PM");
   const [availableDays, setAvailableDays] = useState([]);
   const [availableTimes, setAvailableTimes] = useState({});
   const [StoredTimes, setStoredTimes] = useState({});
@@ -58,7 +58,7 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
       setSelectedDate(day.dateString);
       setSelectedHour("01");
       setSelectedMinute("00");
-      setSelectedPeriod("AM");
+      setSelectedPeriod("PM");
       setAvailabilityNotice("");  // Clear notice when a new date is selected
     }
   };
@@ -238,8 +238,8 @@ const DateTimePickerModal = ({ isVisible, onConfirm, onCancel }) => {
             selectedValue={selectedPeriod}
             onValueChange={(itemValue) => setSelectedPeriod(itemValue)}
           >
-            <Picker.Item label="AM" value="AM" />
             <Picker.Item label="PM" value="PM" />
+            <Picker.Item label="AM" value="AM" />
           </Picker>
         </View>
 

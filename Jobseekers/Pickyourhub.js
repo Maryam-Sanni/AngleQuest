@@ -137,6 +137,7 @@ function MyComponent({ onClose }) {
     fetchSubscriptionStatus();
   }, []);
 
+  
   const handleOpenPress3 = async () => {
     try {
       if (!subscriptionStatus) {

@@ -123,42 +123,8 @@ function MyComponent() {
                 <Text style={styles.buttonText}>{t("Save Changes")}</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginTop: 20, marginLeft: 20, marginRight: 30 }} />
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>{t("Phone Verification")}</Text>
-              <Text style={styles.sectionText}>
-                {t("Your phone number is not yet verified, verify now to secure your account.")}
-              </Text>
-              <View style={styles.verifyButton}>
-                <Text style={styles.buttonText}>{t("Verify Now")}</Text>
-              </View>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>{t("Security Question")}</Text>
-              <Text style={styles.sectionText}>
-                {t("Add an additional layer of security to your account by creating a security question.")}
-              </Text>
-              <View style={styles.setButton}>
-                <Text style={styles.buttonText}>{t("Set")}</Text>
-              </View>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>{t("Two-factor Authentication")}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.sectionText}>
-                  {t("Turn on two-factor authentication to help keep your account secure. We’ll send a code via email which will be submitted when using a new device to login.")}
-                </Text>
-                <View style={{ marginRight: 10, marginTop: -20 }}>
-                  <Switch
-                    trackColor={{ false: "grey", true: "coral" }}
-                    thumbColor={twoFactorAuthEnabled ? "#fff" : "white"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleTwoFactorAuth}
-                    value={twoFactorAuthEnabled}
-                  />
-                </View>
-              </View>
-            </View>
+            
+       
           </View>
         </View>
       </View>

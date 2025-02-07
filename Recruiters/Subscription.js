@@ -20,6 +20,7 @@ const BillingsAndPayment = () => {
   const [userName, setUserName] = useState(''); 
   const [userEmail, setUserEmail] = useState('')
   const [phone, setPhone] = useState(''); 
+  const [cardDetails, setCardDetails] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -89,7 +90,41 @@ const BillingsAndPayment = () => {
     fetchPaymentHistory();
   }, []);
 
-  
+  useEffect(() => {
+    const fetchCardDetails = async () => {
+      try {
+        // Retrieve the token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+
+        // Make the API request with authentication
+        const response = await fetch(`${apiUrl}/api/expert/card-details`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Attach the token
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setCardDetails(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCardDetails();
+  }, []); // Runs once when the component mounts
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedTab(tab);
